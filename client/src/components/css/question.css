@@ -1,0 +1,43 @@
+.container{
+    width:60%;
+    margin:auto;
+    margin-top:30px;
+}
+.question{
+    width:100%;
+background-color: #ddd;
+padding:15px;
+}
+.explaintool{
+    width:100%;
+    margin:0px;
+}
+.explain{
+    width:100%; 
+   
+}
+.ProjText{
+    margin:10px;
+}
+.projectsList{
+    margin-top:40px;
+    padding-top:20px;
+    width:100%;
+    background-color: #eee;
+
+}
+.ProjImage{
+    width:80%;
+    height:250px;
+    margin:auto;
+}
+.audio{
+    width:80%;
+    margin:auto;
+}
+.partProject{
+    margin:20px;
+    
+    
+    background-color: White;
+}

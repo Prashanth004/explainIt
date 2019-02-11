@@ -1,0 +1,36 @@
+.logout{
+    background-color: rgb(27, 54, 173);
+    border-style: none;
+    border-width: 0.5px;
+    border-radius: 2px;
+    padding:5px;
+    color:black;
+    font-size: 12px;
+    height:25px;
+    color:white;
+    width:50px;
+  
+    padding-bottom:30px;
+    /* padding-right:60px; */
+    padding-right: 50px;
+
+}
+.LinkBtn{
+    color:white;
+    padding-top:5px;
+}
+.LinkBtn:hover{
+    background-color: none;
+}
+
+.nav{
+    /* background-color: rgb(36, 93, 185); */
+   
+    background-color: white;
+    height:50px;
+    padding-bottom:-0px;
+
+}
+.navItem{
+    color:black
+}

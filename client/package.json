@@ -1,0 +1,52 @@
+{
+  "name": "arc-tool",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.2.1",
+    "html2canvas": "^1.0.0-alpha.12",
+    "konva": "^2.6.0",
+    "peer": "^0.2.10",
+    "pretty-ms": "^4.0.0",
+    "querystring": "^0.2.0",
+    "react": "^16.6.3",
+    "react-audio-recorder": "^2.2.0",
+    "react-countdown-now": "^2.1.0",
+    "react-dom": "^16.6.3",
+    "react-google-login": "^5.0.0",
+    "react-konva": "^16.6.31",
+    "react-media-recorder": "^0.7.1",
+    "react-redux": "^6.0.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.4.0-beta.6",
+    "react-scripts": "2.1.1",
+    "react-twitter-auth": "0.0.12",
+    "reactstrap": "^6.5.0",
+    "recorder-js": "^1.0.7",
+    "recordrtc": "^5.5.3",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "webrtc-screen-capturing": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:9000/",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "file-loader": "^2.0.0",
+    "url-loader": "^1.1.2"
+  }
+}

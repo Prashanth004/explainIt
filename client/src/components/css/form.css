@@ -1,0 +1,180 @@
+
+.canv{
+  
+    border-style:none;
+    border-color:rgb(192, 190, 190);
+    border-width: 0.5px;
+    margin-top:10px;
+    height:350px;
+    width:510px;
+    margin-left:10px;
+    border-radius:3px;
+    background-color: white;
+
+
+
+}
+
+.canvasToRecord{
+    position:absolute;
+     top:-99999999px; 
+     left:-9999999999px;
+}
+.canvOut{
+    margin:auto;
+     border-style:solid;
+     border-color:rgb(192, 190, 190);
+     border-width: 0.5px;
+     margin-top:10px;
+     height:370px;
+     width:525px;
+     margin-left:20px;
+     border-radius:3px;
+     background-color: white;
+ 
+ 
+ 
+ }
+.canvasTool{
+    width:100%;
+    margin:auto;
+    display:grid;
+    grid-template-columns: 85% 15%;
+
+}
+.explainText{
+
+    width:90%;
+    margin:auto;
+    margin-top:25px;
+    border-style:none;
+}
+.btn{
+    /* background-color: rgb(90, 178, 236); */
+}
+.backgorund{
+    background-color: rgb(63, 93, 141);
+
+}
+.lftBtn{
+    width:30%;
+    float:left;
+    background-color: rgb(90, 178, 236);
+}
+.rghtBtn{
+float:right;
+position:relative;
+top:-100px;
+width:30%;
+background-color: rgb(90, 178, 236);
+
+}
+.logo{
+    margin:auto;
+    width:95%;
+ 
+    align-content: center;
+    align-self: center;
+
+}
+.floating{
+    float:right;
+    margin:10px
+}
+.audio{
+    width:100%;
+    
+}
+.grid-container-buttons {
+   width:90%;
+   margin:auto;
+    display: grid;
+    grid-template-columns: auto auto ;
+    grid-gap: 10px;
+ 
+    /* padding: 10px; */
+    /* height:280px; */
+  }
+  .textExplainDiv{
+    width:95%;
+  
+    margin:auto;
+    
+  }
+  .logoSrchGrp{
+    display: grid;
+    grid-template-columns: 80% 20% ;
+  
+  }
+  .textExplain{
+width:100%;
+border-style:solid;
+border-color:rgb(192, 190, 190);
+border-width:0.5px;
+border-radius:3px;
+padding:10px;
+
+
+  }
+  .inputText{
+      padding:0px 10px 0px 10px;
+      border-radius:3px;
+      border-style:solid;
+      border-color:rgb(192, 190, 190);
+      border-width:0.5px;
+      font-size:14px;
+      height:30px;
+  }
+  .inputText:focus{
+    outline: 0px;
+    outline-style: none;
+    outline-width:0px;
+
+  }
+  .textExplain:focus{
+      outline: 0px;
+      outline-style: none;
+      outline-width:0px;
+  }
+
+.btns{
+    
+   width:90%;
+   margin:auto;
+   margin-top:20px;
+}
+.container{
+    background-color:white;
+}
+.formContainer{
+    width:100%;
+    margin:auto;
+    padding:5px;
+}
+.images{
+    width:10px;
+    height:10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto ;
+    grid-gap: 10px;
+    background-color:#ddd;
+   
+  }
+.imag{
+    margin:20px;
+
+
+    width: 75px;
+    height: 75px;
+    border-style:solid;
+    border-color:black;
+    border-width:1px;
+  }
+  .footer{
+    width:100%
+    
+  }
+ 

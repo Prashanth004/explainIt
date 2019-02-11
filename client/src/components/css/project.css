@@ -1,0 +1,102 @@
+.wrapper{
+    width:75%;
+  
+   color:black;
+    display:grid;
+    grid-template-columns:33.33% 33.33% 33.33%;
+    grid-column-gap: 10px;
+    margin:auto;
+    
+    margin-top:50px;
+
+}
+.wrapper > div{
+    margin:10px;
+    padding-top: 20px;
+}
+
+.wrapper > div:nth-child(old){
+    /* background:#969595; */
+    background-color: white;
+}
+.text{
+    padding:0px;
+    margin:0px;
+    font-size: 14px;
+    color:rgb(73, 73, 73);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    /* padding-top */
+}
+.shrBtn{
+    background-color: rgb(42, 118, 218);
+    border-style: none;
+    border-width: 0.5px;
+    border-radius: 5px;
+    padding:5px;
+    color:black;
+    font-size: 12px;
+    height:32px;
+    color:white;
+    width:70px;
+}
+
+.dltBtn{
+    background-color: rgb(218, 63, 42);
+    border-style: none;
+    border-width: 0.5px;
+    border-radius: 5px;
+    padding:5px;
+    color:black;
+    font-size: 12px;
+    height:32px;
+    color:white;
+    width:70px;
+    margin-left:20px;
+}
+.container{
+    width:60%;
+}
+.card{
+    width:280px;
+    height:150px;
+    border-style:none;
+    border-bottom-style:solid;
+    border-bottom-color:#ddd;
+background-color: #fff;
+    margin:auto;
+    padding:0;
+    border-radius:0px;
+    /* background-color: aqua */
+
+}
+.finecard{
+    background-color: white;
+    border-radius:5px;
+    border-style:solid;
+    border-color:#ddd;
+    border-width:1px;
+    /* box-shadow: 0px 0px 3px 1px rgba(236, 236, 236, 0.911); */
+
+
+}
+
+.btn{
+    padding-left:20px;
+    padding-top:10px;
+}
+.backgorund{
+    /* background-color: rgb(36, 93, 185); */
+    background-color:white;
+    
+    border-radius:5px;
+
+}
+.imgs{
+    width:80%;
+    height:100%;
+    border-radius:5px;
+    max-height: 100%;
+     max-width: 100%; 
+     margin:auto;
+     border-style: none;
+}

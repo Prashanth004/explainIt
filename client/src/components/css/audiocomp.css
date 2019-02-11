@@ -1,0 +1,20 @@
+.AudioComp{
+    width:85%;
+    margin:auto;
+    display:inline-block;
+}
+.Controls{
+    display: grid;
+    grid-template-columns:auto auto auto auto auto auto auto auto;
+}
+.btnss{
+    float:right;
+    margin:2px;
+}
+.btnsss{
+   
+    margin:2px;
+}
+.mainBtns{
+    
+}

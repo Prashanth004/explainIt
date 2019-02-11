@@ -1,0 +1,61 @@
+.loginContain{
+ 
+  height:100vh;
+  width:100%;
+     display: grid;
+     grid-template-columns: 50% 50% ;
+    
+}
+.ShapeImage{
+    height:100vh;
+background-color: blue;
+
+background-image: url('../images/login_back.jpg') ;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+
+}
+.Logininfo{
+    height:50%;
+ 
+    margin:auto;
+    margin-top:25%;
+    text-align: center;
+    width:65%;
+   
+}
+.loginSection{
+    height:100vh;
+}
+.loginButton{
+    display: grid;
+    grid-template-columns: 33.33% 33.33% 33.33%;
+}
+.actualButton{
+    width:100px;
+    height:30px;
+    border-radius:5px;
+    border-style:solid;
+    border-width:2px;
+    color:rgb(27, 27, 99);
+    border-color:rgb(27, 27, 99);
+
+
+}
+.buttonDiv{
+    align-items: center;
+    text-align:center;
+}
+.actualButton2{
+    width:100px;
+    height:30px;
+    border-radius:15px;;
+    border-style:solid;
+    border-width:2px;
+    background-color: rgb(27, 27, 99);
+    color:white;
+    border-color:rgb(27, 27, 99);
+
+
+}

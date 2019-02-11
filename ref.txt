@@ -1,0 +1,39 @@
+https://mherman.org/blog/designing-a-restful-api-with-node-and-postgres/
+
+https://www.npmjs.com/package/pg-promise#usage
+
+https://www.tech-recipes.com/rx/56738/one-to-one-one-to-many-table-relationships-in-sql-server/
+
+
+https://github.com/adcentury/socketio-jwt-auth
+
+https://www.valentinog.com/blog/socket-io-node-js-react/
+
+https://www.npmjs.com/package/socketio-jwt
+
+https://github.com/JoelCodes/Socket-Tag
+
+
+psql dbname username
+psql toolArchi bookmane
+
+pg_dump -U bookmane -d toolArchi > dump.sql
+
+
+SERVER
+sudo -u postgres -i
+psql
+
+\list
+
+\q
+Crt+D
+\connect <dbname>
+ALTER DATABASE explain OWNER TO bookmane
+CREATE DATABASE <dbname> OWNER <ownername> 
+\dt
+psql dbname < dump.sql
+ 
+
+
+

@@ -1,0 +1,145 @@
+{
+    "shapeitems": {
+        "attrs": {
+            "width": 720,
+            "height": 540,
+            "opacity": "1"
+        },
+        "className": "Stage",
+        "children": [
+            {
+                "attrs": {},
+                "className": "Layer",
+                "children": [
+                    {
+                        "attrs": {
+                            "x": 220.80831363850228,
+                            "y": 163.87899846698704,
+                            "width": 140,
+                            "height": 60,
+                            "rotation": 2140.7364358263544,
+                            "scaleX": 1.0428863016300123,
+                            "scaleY": 1.0428863016300127,
+                            "stroke": true,
+                            "name": "0.3014833676028852",
+                            "draggable": true,
+                            "fill": "white"
+                        },
+                        "className": "Rect"
+                    },
+                    {
+                        "attrs": {
+                            "x": 75,
+                            "y": 214,
+                            "crossOrigin": "anonymous",
+                            "name": "0.9481114617024518",
+                            "draggable": true
+                        },
+                        "className": "Image"
+                    },
+                    {
+                        "attrs": {
+                            "x": 152,
+                            "y": 184,
+                            "crossOrigin": "anonymous",
+                            "name": "0.6242166416477595",
+                            "draggable": true
+                        },
+                        "className": "Image"
+                    },
+                    {
+                        "attrs": {
+                            "x": 368,
+                            "y": 104,
+                            "crossOrigin": "anonymous",
+                            "name": "0.46682986874243126",
+                            "draggable": true
+                        },
+                        "className": "Image"
+                    },
+                    {
+                        "attrs": {
+                            "x": 443,
+                            "y": 81,
+                            "crossOrigin": "anonymous",
+                            "name": "0.21867830141262545",
+                            "draggable": true
+                        },
+                        "className": "Image"
+                    },
+                    {
+                        "attrs": {
+                            "x": 308.03068462862495,
+                            "y": 192.03068462862515,
+                            "radius": 50,
+                            "scaleX": 1.8241310711495133,
+                            "stroke": true,
+                            "name": "0.9155875377130349",
+                            "draggable": true,
+                            "scaleY": 1.8241310711495133
+                        },
+                        "className": "Circle"
+                    },
+                    {
+                        "attrs": {},
+                        "className": "Transformer"
+                    }
+                ]
+            }
+        ]
+    },
+    "images": [
+        {
+            "x": 75,
+            "y": 214,
+            "width": 60,
+            "height": 60,
+            "scaleX": 1,
+            "scaleY": 1,
+            "image": {},
+            "imageSrc": "https://cdn4.iconfinder.com/data/icons/logos-3/600/React.js_logo-512.png",
+            "crossOrigin": "anonymous",
+            "name": "0.9481114617024518",
+            "draggable": true
+        },
+        {
+            "x": 152,
+            "y": 184,
+            "width": 60,
+            "height": 60,
+            "scaleX": 1,
+            "scaleY": 1,
+            "image": {},
+            "imageSrc": "https://cdn-images-1.medium.com/max/1200/1*YsPpBr_PgtyTR6CFDmKU9g.png",
+            "crossOrigin": "anonymous",
+            "name": "0.6242166416477595",
+            "draggable": true
+        },
+        {
+            "x": 368,
+            "y": 104,
+            "width": 60,
+            "height": 60,
+            "scaleX": 1,
+            "scaleY": 1,
+            "image": {},
+            "imageSrc": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1000px-React-icon.svg.png",
+            "crossOrigin": "anonymous",
+            "name": "0.46682986874243126",
+            "draggable": true
+        },
+        {
+            "x": 443,
+            "y": 81,
+            "width": 60,
+            "height": 60,
+            "scaleX": 1,
+            "scaleY": 1,
+            "image": {},
+            "imageSrc": "https://cdn4.iconfinder.com/data/icons/logos-3/426/react_js-512.png",
+            "crossOrigin": "anonymous",
+            "name": "0.21867830141262545",
+            "draggable": true
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+.videoPlayer{
+    width:100%
+}
+
+.screenShareDiv{
+    width:80%;
+    margin:auto;
+    margin-top:20px;
+}
+.VideoElement{
+    width:100%;
+    height:100%;
+    margin:auto;
+}

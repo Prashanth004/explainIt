@@ -1,0 +1,26 @@
+.container{
+    width:60%;
+    margin:auto;
+    margin-top:30px;
+   
+    padding:10px;
+}
+.question{
+    width:55%;
+background-color: #ddd;
+padding:15px;
+margin:auto;
+margin-top:20px;
+border-radius:5px;
+
+}
+
+.searchQuestion{
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    width:58%;
+    margin:auto;
+    margin-top:20px;
+    margin-bottom:20px;
+}

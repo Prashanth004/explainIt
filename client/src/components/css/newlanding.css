@@ -1,0 +1,160 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(192, 190, 190);
+    height:50px;
+    border-bottom-width: 1px;
+
+  }
+  
+.bodyWhole{
+    background-color:rgb(220, 220, 250);
+}
+  li {
+    float: right;
+  }
+  .navButton1{
+     
+    
+padding-top:-10px;
+      margin:10px;
+    
+  }
+  .navButton2{
+  
+padding-top:-10px;
+    margin:10px;
+  
+}
+
+.LinkBtn{
+  color:white;
+
+}
+  li a {
+  
+    color:rgb(78, 78, 78);
+  
+  }
+
+  
+  
+.addBtn{
+  width:100%;
+text-align: center;
+  margin:auto;
+}
+  .containerHome{
+      width:40%;
+      margin:auto;
+      
+  }
+  .issueCard{
+      width:90%;
+      margin:auto;
+      min-height: 135px;
+    
+      background-color:white;
+      margin-top:20px;
+      border-radius:3px;
+      border-style:none;
+      border-width:0.5px;
+      border-color: rgb(192, 190, 190);
+  }
+  .modalBody{
+    /* background-color: #111; */
+    padding:0px;
+    width:110%;
+    margin:auto;
+    align-self: center;
+    position:absolute;
+
+    /* padding:0px; */
+  }
+  .modalBodyTool{
+    /* background-color: #111; */
+    padding:0px;
+    width:130%;
+    margin:auto;
+    align-self: center;
+    position:absolute;
+
+    /* padding:0px; */
+  }
+  .topButtons{
+      width:100%;
+      padding:7px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    border-bottom-style:solid;
+    color:rgb(192, 190, 190);
+    border-bottom-width: 0.2px;
+  }
+  .tweetButton{
+    height:25px;
+      float:right;
+  }
+  .sharBtn{
+    height:25px;
+    border-style:none;
+  }
+  .questionText{
+width:100%;
+min-height: 60px;
+/* background-color: blue; */
+padding:05px 25px 05px 25px;
+font-size:13px;
+background-color: white;
+border-style: none;
+
+  }
+  .modalBtns{
+    width:100%;
+  }
+
+  .cardAudio{
+   text-align:center;
+  }
+  .orginCard{
+    border-bottom-style:solid;
+    border-bottom-color:rgb(192, 190, 190);
+    border-bottom-width: 0.5px;
+  }
+  .explainAnswer{
+    height: 45px;
+    background-color: #fff;
+    display:grid;
+    grid-template-columns: 75% 25%;
+    padding:5px;
+
+  }
+  .explainItBtn{
+   
+    float:right;
+  }
+  .imagePeopleDiv{
+    display: inline-block;
+    height:25px;
+    width:25px;
+    margin:2px;
+
+  }
+  .peopleImage{
+    border-radius: 50%;
+    width:100%;
+    height:100%;
+   
+  }
+  .likes{
+    display: inline-block;
+  }
+  .toolContainer{
+    background-color: white;
+    padding:10px;
+    border-radius:2px;
+
+  }

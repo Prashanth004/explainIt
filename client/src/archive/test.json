@@ -1,0 +1,89 @@
+{
+    "attrs": {
+        "width": 720,
+        "height": 540,
+        "opacity": "1"
+    },
+    "className": "Stage",
+    "children": [
+        {
+            "attrs": {},
+            "className": "Layer",
+            "children": [
+                {
+                    "attrs": {
+                        "x": -5,
+                        "y": -5,
+                        "width": 800,
+                        "height": 580,
+                        "stroke": true,
+                        "name": "0.9361105162117602",
+                        "fill": "white"
+                    },
+                    "className": "Rect"
+                },
+                {
+                    "attrs": {
+                        "x": 159.78706685880923,
+                        "y": 235.7107838360754,
+                        "width": 140,
+                        "height": 60,
+                        "rotation": -78.62852535897804,
+                        "cornerRadius": 50,
+                        "stroke": true,
+                        "name": "0.40371111392651504",
+                        "draggable": true,
+                        "fill": "white"
+                    },
+                    "className": "Rect"
+                },
+                {
+                    "attrs": {
+                        "x": 20,
+                        "y": 200,
+                        "points": [
+                            0,
+                            0,
+                            50,
+                            0,
+                            50,
+                            50
+                        ],
+                        "stroke": true,
+                        "name": "0.8067119918933254",
+                        "draggable": true,
+                        "fill": "black"
+                    },
+                    "className": "Arrow"
+                },
+                {
+                    "attrs": {
+                        "x": 50,
+                        "y": 50,
+                        "radius": 50,
+                        "stroke": true,
+                        "name": "0.971414554210468",
+                        "draggable": true
+                    },
+                    "className": "Circle"
+                },
+                {
+                    "attrs": {
+                        "x": 499.25,
+                        "y": 110,
+                        "radius": 50,
+                        "scaleX": 2.906862745098039,
+                        "stroke": true,
+                        "name": "0.23096048808662517",
+                        "draggable": true
+                    },
+                    "className": "Circle"
+                },
+                {
+                    "attrs": {},
+                    "className": "Transformer"
+                }
+            ]
+        }
+    ]
+}
