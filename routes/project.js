@@ -47,7 +47,7 @@ router.post('/',upload.single('audioData'), passport.authenticate('jwt', { sessi
 router.get('/', passport.authenticate('jwt', { session: false }),project.getAllProject)
 router.get('/:id', passport.authenticate('jwt', { session: false }),project.getProjectById)
 // router.get('/issue/allissues/', passport.authenticate('jwt', { session: false }),project.getIssueProjects)
-router.get('/issues/:issueid', passport.authenticate('jwt', { session: false }),project.getAllProjectByIssue)
+router.get('/issues/:issueid',project.getAllProjectByIssue)
 router.post('/items', passport.authenticate('jwt', { session: false }), project.storeItems)
 router.get('/items/:id', passport.authenticate('jwt', { session: false }), project.retrieveItems)
 

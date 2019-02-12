@@ -7,7 +7,7 @@ export default class componentName extends Component {
     return (
       <div>
             <div className="issueCard paddings">
-            <h5>Login to view</h5>
+            <h5>Login to Continue</h5>
             
             </div>
 

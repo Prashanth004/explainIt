@@ -55,6 +55,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
                     if(response.status==200){
                         const newTestJson = JSON.parse(JSON.stringify(answerProject));
                         newTestJson[index]['profilepic']=response.data.data.profilepic;
+                        newTestJson[index]['username']=response.data.data.username;
                         answerProject =newTestJson
                     }
                     dispatch({
@@ -162,11 +163,13 @@ export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
             method:'get',
             url:config.base_dir+'/users/email/'+projects[item].email,
         }).then(response=>{
-        
+            console.log("response : ",response)
             if(response.status==200){
                 console.log("response.data.data.profilepic : ",response.data.data.profilepic)
+                console.log("response.data.data.username : ",response.data.data.username)
                 console.log("item : ",key)
-               projects[key]["profilepic"]=response.data.data.profilepic
+               projects[key]["profilepic"]=response.data.data.profilepic;
+               projects[key]["username"]=response.data.data.username;
                key=key+1;
             }
         }).catch(err=>{

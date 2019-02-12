@@ -1,5 +1,6 @@
 import {FETCH_ISSUE} from '../actions/types';
 import {SET_ISUUE_ID, 
+    FETCH_DETAILS_OF_EXPLAINED,
     CANCEL_PROJ_CREATION_SUCCESS,
     CREATE_ISSUE_PROJECT,
     CANCEL_PROJ_CREATION_ERROR , 
@@ -11,7 +12,8 @@ const initialState ={
     newissueIem:{},
     currentIssueId:null,
     error:false,
-    successCreation : false
+    successCreation : false,
+    detailsOfExplained:[]
 }  
 
 export default function(state = initialState, action){
@@ -44,10 +46,16 @@ export default function(state = initialState, action){
                 successCreation:action.payload
             }
         case CANCEL_PROJ_CREATION_ERROR:
-        return{
-            ...state,
-            error:action.payload
-        }
+            return{
+                ...state,
+                error:action.payload
+            }
+        case FETCH_DETAILS_OF_EXPLAINED:
+            return{
+                ...state,
+                detailsOfExplained: state.detailsOfExplained.push([action.payload])
+            }
+
         default:
             return state;
     }

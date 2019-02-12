@@ -28,7 +28,7 @@ passport.deserializeUser((id, done) => {
         })
         .catch(function (err) {
             console.log(err)
-            return ({ msg: err.message });
+         
 
         });
 });
@@ -40,6 +40,7 @@ passport.use(new GoogleTokenStrategy({
     clientSecret: keys.google.clientSecret
   },
   function(accessToken, refreshToken, email, done)  {
+      console.log("sfnfnksdnfksbk")
       console.log("email : ",email)
       if(email._json.image){
             var profile_image =email._json.image.url
@@ -92,13 +93,14 @@ passport.use(new GoogleTokenStrategy({
 
                         }).catch(function (err) {
                             console.log("error : ",err)
-                            done(err, false)
+                            // done(err, false)
 
                         });
                   
                     }
                     })
                     .catch(function (err) {
+                        console.log(err)
                     })
           
 

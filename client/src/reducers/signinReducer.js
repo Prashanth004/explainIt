@@ -6,7 +6,9 @@ const initialState = {
     isAuthenticated:false,
     domainName :null,
     error :null,
-    token:null
+    token:null,
+    userName:null,
+    profilePic:null
 }
 
 export default function(state = initialState, action){
@@ -22,7 +24,9 @@ export default function(state = initialState, action){
         case CHECK_TOKEN_VALIDIDTY:
             return{
                 ...state,
-                isAuthenticated :action.payload
+                isAuthenticated :action.payload,
+                profilePic:action.profilePic,
+                userName:action.userName
             }
         case SIGN_IN_WITH_TWITTER :
            
@@ -36,6 +40,8 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 isAuthenticated:action.payload,
+                profilePic:null,
+                userName:null,
                 domainName: null,
                 token:null,
                 error : action.error

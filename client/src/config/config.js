@@ -6,7 +6,7 @@ var time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds(
 var token = JSON.parse(localStorage.getItem("token"))
 
 const conf = {
-    base_dir:"http://localhost:9000/api",
+    base_dir:"http://localhost:9000",
     react_url:"http://localhost:3000",
     dataTime : date+"__"+time,
     token:token,

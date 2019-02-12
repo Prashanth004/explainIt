@@ -80,8 +80,11 @@ export const stillAuthenicated = () => (dispatch) => {
         }
     }).then(response => {
         if (response.status == 200 || response.status == 304) {
+            console.log(response.data)
             dispatch({
                 type: CHECK_TOKEN_VALIDIDTY,
+                userName:response.data.user.username,
+                profilePic:response.data.user.profilepic,
                 payload: true
             })
         }

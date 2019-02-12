@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "client-install":"nmp install --prefix client",  
+    "client-install":"npm install --prefix client",  
     "start": "node ./app",
     "server": "nodemon app.js",
     "client":  "npm start --prefix client",

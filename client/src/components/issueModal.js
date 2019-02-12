@@ -26,6 +26,7 @@ class issueDetails extends Component {
         this.setState({ state: this.state });
       var clickedProj = this.props.answerProject.find(proj=>proj.projectid == e.target.id)
         this.textExplain.textContent = clickedProj.textexplain;
+        this.userName.textContent = clickedProj.username;
        
         if(clickedProj.videofilepath){
             if(!this.videoExplain){
@@ -87,7 +88,7 @@ class issueDetails extends Component {
             emailOfanswers.push(projects[proj].email)
       }
       console.log("emailOfanswers",emailOfanswers)
-      this.props.getImagesByemail(emailOfanswers,projects)
+    //   this.props.getImagesByemail(emailOfanswers,projects)
         // projects.ForEach((projects)=>{
         //    
         // })
@@ -125,6 +126,9 @@ class issueDetails extends Component {
                     <div className="topButtons ">
                         <div>
                             <button className="buttonLight sharBtn" >Share Screen</button>
+                        </div>
+                        <div className="userName">
+                           <p ref={p => this.userName = p}> </p>
                         </div>
                         <div >
                             <button className="buttonLight tweetButton">Tweet</button>

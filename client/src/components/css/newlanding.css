@@ -1,23 +1,51 @@
-ul {
+/* ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: white;
-    border-bottom-style: solid;
+   
     border-bottom-color: rgb(192, 190, 190);
     height:50px;
+   
+  } */
+  .navBar{
+    background-color:white;
+    border-bottom-color : rgb(192, 190, 190);
     border-bottom-width: 1px;
+    border-bottom-style: solid;
 
   }
   
 .bodyWhole{
     background-color:rgb(220, 220, 250);
+  
+     
+    
+  
 }
-  li {
-    float: right;
+.profileImages{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+}
+.profileImagesDiv{
+  margin:0px 10px 0px 10px;
+  height:37px;
+  width:37px;
+  border-radius:50%;
+ 
+}
+  /* li {
+    margin:10px 10px 0px 10px;
+   float:right;
   }
-  .navButton1{
+
+ 
+  .navLeft{
+float:left;
+  } */
+  /* .navButton1{
      
     
 padding-top:-10px;
@@ -29,7 +57,7 @@ padding-top:-10px;
 padding-top:-10px;
     margin:10px;
   
-}
+} */
 
 .LinkBtn{
   color:white;
@@ -89,10 +117,13 @@ text-align: center;
       width:100%;
       padding:7px;
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33.33% 33.33% 33.33%;
     border-bottom-style:solid;
     color:rgb(192, 190, 190);
     border-bottom-width: 0.2px;
+  }
+  .userName{
+    text-align: center;
   }
   .tweetButton{
     height:25px;

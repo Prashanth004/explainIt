@@ -60,7 +60,7 @@ export default class DisplayShare extends Component {
     render() {
         return (
             <div className="screenShareDiv">
-                <video className="VideoElement"controls={true} autoplay ={true}id="video" srcObject=" " ></video>
+                <video className="VideoElement" autoplay ={true}id="video" srcObject=" " ></video>
             </div>
         )
     }

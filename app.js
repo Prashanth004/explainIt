@@ -10,14 +10,11 @@ var http = require('http');
 var promise = require('bluebird');
 var port = normalizePort(process.env.PORT || '9000');
 var logger = require('morgan');
-var issueRouter = require('./routes/issues')
-var twitterAuthRouter = require('./routes/auth')
-var indexRouter = require('./routes/tech');
-var usersRouter = require('./routes/users');
-var projectRouter = require('./routes/project')
-var basic = require('./routes/basic.routes')
+
 const passport = require('passport');
 require('./config/passport')(passport);
+require('./config/passport-setup.js')
+// require('./config/passport-setup')(passport);
 
 
 var options = {
@@ -39,6 +36,42 @@ const connectionString = {
 
 
 var app = express();
+
+
+//body parsers
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+// for data base
+app.use(passport.initialize());
+app.use(passport.session());
+var db = pgp(connectionString);
+
+//cors 
+app.use(cors());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+var issueRouter = require('./routes/issues')
+var twitterAuthRouter = require('./routes/auth')
+var indexRouter = require('./routes/tech');
+var usersRouter = require('./routes/users');
+var projectRouter = require('./routes/project')
+var basic = require('./routes/basic.routes')
+
+//routes
+app.use('/tech', indexRouter);
+app.use('/twitter', twitterAuthRouter);
+app.use('/users', usersRouter);
+app.use('/project', projectRouter);
+app.use('/issues',issueRouter);
+app.use('/', basic );
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 app.set('port', port);
 var server = http.createServer(app);
 server.listen(port);
@@ -48,37 +81,17 @@ server.on('listening', onListening);
 app.set( 'view engine', 'jade');
 app.set('views', path.join(__dirname, 'views'));
 
-// for data base
-app.use(passport.initialize());
-app.use(passport.session());
-var db = pgp(connectionString);
-console.log("db : ",db)
-
-//cors 
-app.use(cors());
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 //peerjs for screen sharing
 app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
 app.use(logger('dev'));
 
-//body parsers
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
 
 
-//routes
-app.use('/api/tech', indexRouter);
-app.use('/api/twitter', twitterAuthRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/project', projectRouter);
-app.use('/api/issues',issueRouter);
-app.use('/api/', basic );
-app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
