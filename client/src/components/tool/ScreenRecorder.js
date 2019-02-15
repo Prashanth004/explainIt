@@ -4,65 +4,42 @@ import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
 import html2canvas from 'html2canvas'
 import config from '../../config/config'
+import ProgressBar from 'progressbar.js'
+import Progress from './Progressbar'
+import {StartedRecording,
+    stopedRcording,discardAfterRecord} from'../../actions/toolActions'
+import {connect} from 'react-redux';
+import PropType from  'prop-types'; 
+
 
 export class ScreenRecorder extends Component {
     constructor(props) {
         super(props)
         this.state = {
             recorder: null,
+            downloadUrl:null,
             audioStream: null,
             canvasStream: null,
-            downloadUrl: null,
-            startBtn: false,
-            stopBtn: true,
-            isAudioRecStarted: false,
-            isAudioRecDone: false,
             blob: null,
             finalStream: null,
-            host: config.peerHost,
-            port: config.peerPort,
-            path: config.peerPath,
-            conn: null,
-            destkey: null,
-            streamvideo: null,
-            peer: null,
-            peerId: null,
-            connected: false
+            percentage:"0%"
         }
         this.recordScreenStop = this.recordScreenStop.bind(this);
-        this.recordScreenStart = this.recordScreenStart.bind(this);
         this.renderer = this.renderer.bind(this);
-        this.stopScreenShare = this.stopScreenShare.bind(this);
-        this.getMedia = this.getMedia.bind(this);
-        this.handle_dest = this.handle_dest.bind(this);
-        this.startScreenShareSend = this.startScreenShareSend.bind(this);
-        this.generateLink = this.generateLink.bind(this)
+        this.startBar =  this.startBar.bind(this);
+        this.startRecoding = this.startRecoding.bind(this);
+        this.toggle = this.toggle.bind(this);
+        this.savefile = this.savefile.bind(this);
+        this.discardChanges = this.discardChanges.bind(this)
+
     }
 
-    getMedia() {
-        var states = this
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
-            var finalStream = new MediaStream();
-            window.getTracks(audioStream, 'audio').forEach(function (track) {
-                finalStream.addTrack(track);
-            });
-            var canvasStream = " "
-            var canvas = document.querySelector('canvas');
-            canvasStream = canvas.captureStream(25);
-            window.getTracks(canvasStream, 'video').forEach(function (track) {
-                finalStream.addTrack(track);
-            });
-            states.setState({
-                audioStream: audioStream,
-                canvasStream: canvasStream,
-                finalStream: finalStream
-            })
-        }).catch(err => {
-            console.log("error ouucres : ", err)
-        })
-    }
-
-    startScreenShareSend() {
+    startRecoding(){
+        var self = this
+        this.props.StartedRecording();
+        var mainBtn = document.querySelector('.mainBtn');
+        mainBtn.style.backgroundColor="rgb(133, 39, 39)";
+        this.convey.innerText="Stop"
         var self = this
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             var finalStream = new MediaStream();
@@ -75,137 +52,93 @@ export class ScreenRecorder extends Component {
             window.getTracks(canvasStream, 'video').forEach(function (track) {
                 finalStream.addTrack(track);
             });
-            var peer = self.state.peer
-            console.log("peer :", peer)
-            console.log("destKey : ", self.state.destkey)
-            console.log("finalStream : ", finalStream)
-            var call = peer.call(self.state.destkey, finalStream);
-            console.log("call : ", call)
-            if (call) {
-                call.on('stream', function (remoteStream) {
-                    self.props.draRect();
-                    console.log("call answer recieved : ", remoteStream)
-                    var audio = document.querySelector('#video');
-                    audio.srcObject = remoteStream
-                    audio.play()
-                    self.setState({
-                        connected: true
-                    })
-                }, function (err) {
-                    console.log('Failed to get local stream', err);
-                });
-            }
+            var recorder1 = RecordRTC(finalStream, {
+                type: 'video'
+            });
+            recorder1.startRecording();
             self.setState({
+                recorder:recorder1,
                 audioStream: audioStream,
                 canvasStream: canvasStream,
                 finalStream: finalStream
             })
+            self.props.startDraw()
+
+           
+          
+           
         }).catch(err => {
             console.log("error ouucres : ", err)
         })
     }
-
-    componentWillMount() {
-        var self = this;
-        var peer = new window.Peer()
-        this.setState({
-            peer: peer
-        })
-        peer.on('open', (id) => {
-            console.log('My peer ID is: ' + id);
-            self.setState({
-                peerId: id
-            })
-        });
-        peer.on('connection', (conn) => {
-            conn.on('open', () => {
-                console.log("got some data")
-                conn.on('data', (data) => {
-                    console.log("data : ", data)
-                    self.setState({
-                        destkey: data.clientId
-                    })
-                    self.startScreenShareSend()
-                });
-            });
-        });
-        this.setState({
-            peer: peer
-        })
-    }
-
-    recordScreenStart() {
-        this.getMedia()
-        console.log(this.state.finalStream)
-        var recorder1 = RecordRTC(this.state.finalStream, {
-            type: 'video'
-        });
-        recorder1.startRecording();
-        this.props.draRect();
-        this.setState({
-            isAudioRecStarted: true,
-            startBtn: true,
-            stopBtn: false,
-            recorder: recorder1
-        })
-    }
-
-
-    stopScreenShare() {
-
-    }
-    handle_dest(e) {
-        this.setState({
-            destkey: e.target.value
-        })
+    
+    startBar(){
+       var self = this;
+        var progressbar = document.querySelector('#pbar');
+        var progresDiv = document.querySelector(".progresDiv")
+        progresDiv.style.display = "block";
+        var width = 0;
+        var id = setInterval(frame, 2000);
+        function frame() {
+          if (width >= 100) {
+            clearInterval(id);
+          } else {
+            width= width+(100/90); 
+            console.log("......")
+            progressbar.style.width=width+'%';
+                  }
+        }   
     }
 
     renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            // Render a completed state
-            this.stopRec()
+            this.recordScreenStop()
             return (<Dummy></Dummy>)
 
         } else {
-            // Render a countdown
             return <span>{hours}:{minutes}:{seconds}</span>;
         }
     };
+    discardChanges(){
+        this.props.clearCanvas();
+        this.props.discardAfterRecord();
 
-    generateLink() {
-        var peerId = this.state.peerId;
-        var shareScreenLink = config.react_url + '/connect/' + peerId;
-        this.setState({
-            shareScreenLink: shareScreenLink
-        })
     }
 
+    toggle(){
+        if(this.props.isScreenRecording){
+            this. recordScreenStop()
+        }
+        else{
+            this.startRecoding()
+        }
+    }
+    savefile(){
+    this.props.savefile(this.state.blob)
+
+}
     recordScreenStop() {
-        var states = this;
+        var self = this;
         var recorder1 = this.state.recorder;
         var audioStream = this.state.audioStream;
         var canvasStream = this.state.canvasStream;
+        console.log("recording : ",recorder1)
         if (recorder1) {
             recorder1.stopRecording(function () {
                 var blob = recorder1.getBlob();
-                states.setState({
+                self.setState({
                     downloadUrl: URL.createObjectURL(blob),
                     blob: blob
                 })
                 audioStream.stop();
                 canvasStream.stop();
-                states.props.assignAudioUrl(states.state.blob)
+                self.props.stopedRcording()
             });
         }
         else {
             alert("Some thign went wrong")
         }
         this.setState({
-            startBtn: false,
-            stopBtn: true,
-            isAudioRecDone: true,
-            isRecording: "",
-            isAudioRecStarted: false,
             recorder: null,
             audioStream: null,
             canvasStream: null,
@@ -213,29 +146,79 @@ export class ScreenRecorder extends Component {
     }
 
     render() {
-        var timer = null;
-        if (this.state.isAudioRecStarted) {
-            timer = (<Countdown
+        var videoplayer = " ";
+        var downLinkAudio = " ";
+        var linkElement = " ";
+        var convey = (<p ref={a=>this.convey=a}>Start</p>)
+       
+        if (this.state.downloadUrl) {
+            videoplayer = (<video src={this.state.downloadUrl} controls={true}></video>)
+           
+        }
+     
+
+        if (this.props.isScreenRecording) {
+            this.startBar()
+            var timer = (<Countdown
                 date={Date.now() + 180000}
                 renderer={this.renderer}
             />)
         }
-        var videoplayer = " ";
-        var downLinkAudio = " ";
-        var linkElement = " ";
-        if (this.state.downloadUrl) {
-            videoplayer = (<video src={this.state.downloadUrl} controls={true}></video>)
-
-            downLinkAudio = (<div>
-                <a href={this.state.downloadUrl} download="dmkmdvkmdkm">Download</a>
-            </div>)
+        if(this.props.isRecordingCompleted ===false){
+        var recordingElements = (<div>
+            <div className="progresDiv">
+                 <div  className="progress" id="pbar" ></div>
+             </div>
+             {timer}
+             <div className="btDiv">
+                     <button className="mainBtn" onClick={this.toggle}></button>
+             </div>
+             <div className="convey">
+                 {convey}
+             </div>
+             </div>
+        )
+    }
+        else{
+            var recordingElements = null;
         }
+    
+       
+        // var timer = null;
+     
+        if(this.props.isRecordingCompleted === true){
+            var postShareElements= (<div className = "postRecord">
+            {videoplayer}
+                 <p>Do you want to sav it?</p>
+                 <button onClick={this.savefile} className="buttonLight save">
+                   Save
+                 </button>
+                 <button onClick={this.discardChanges} className="buttonDark save">
+                     Discard
+                 </button>
+             </div>)
+         }
+       
         if (this.state.shareScreenLink) {
             linkElement = (<p>{this.state.shareScreenLink}</p>)
         }
         return (
             <div>
-                <div>
+               {recordingElements}
+                {postShareElements}
+          
+
+                {/* <div class="container">
+  <div class="progress" id="progress"></div>
+  <audio id="audio" src="https://www.freesound.org/data/previews/338/338825_1648170-lq.mp3"></audio>
+  <button class="togglePlay" onClick="togglePlay()">Play/Pause</button>
+</div> */}
+
+
+
+
+
+                {/* <div>
                     {timer}
                 </div>
                 <div className="Btns">
@@ -257,11 +240,24 @@ export class ScreenRecorder extends Component {
                     {linkElement}
                     {videoplayer}
                     <audio id="video" controls={true} ref={a => this.videoTag} srcObject=" " ></audio>
-                    {/* {downLinkAudio} */}
-                </div>
+                    {/* {downLinkAudio} 
+                    </div>
+                    */}
+            
             </div>
         )
     }
 }
+ScreenRecorder.PropType={
+    StartedRecording : PropType.func.isRequired,
+    stopedRcording :PropType.func.isRequired,
+    discardAfterRecord :PropType.func.isRequired,
+    
+}
+const mapStateToProps = state =>({
+    isScreenRecording :state.tools.isScreenRecording,
+    isRecordingCompleted : state.tools.isRecordingCompleted
+}) 
 
-export default ScreenRecorder
+export default connect(mapStateToProps,{StartedRecording,discardAfterRecord, stopedRcording})(ScreenRecorder)
+

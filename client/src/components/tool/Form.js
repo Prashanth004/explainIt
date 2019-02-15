@@ -1,13 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import { Layer, Stage } from 'react-konva';
-import { Button, Col, Container, Input, InputGroup, Row } from 'reactstrap';
 import '../css/form.css';
 import '../css/home.css';
 import Arrow from "./Arrow";
 import Circle from "./Circle";
-import AudioRec from './AudioRecord'
-import ScreenRecorder from './ScreenRecorder'
 import Image from "./Image";
 import Rectangle from "./Reactangle";
 import Shapes from './Shapes';
@@ -19,11 +16,13 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import config from '../../config/config';
 import '../ErrorHnadle'
-import { setIssueId } from '../../actions/types'
 import { creatAnsProject } from '../../actions/projectActions'
-import html2canvas from 'html2canvas'
-import RecordRTC from 'recordrtc'
-
+import '../css/hint.css'
+import ScreenShare from './ScreenShare'
+import ScreenRecorder from './ScreenRecorder'
+import {SCREEN_SHARE,SCREEN_RECORD} from '../../actions/types'
+import {displayShareScreen, displayScrenRecord} from '../../actions/toolActions'
+import AudioRec from './AudioRecord'
 
 class Forms extends Component {
     constructor(props) {
@@ -51,7 +50,8 @@ class Forms extends Component {
             audioData: null,
             textExplain: "",
             explainMod: true,
-            error: null, errorInfo: null,
+            error: null, 
+            errorInfo: null,
             canvas: this.canv,
             recorder: null,
             video:'',
@@ -59,7 +59,8 @@ class Forms extends Component {
             canvasStream:null,  
             isRecordingStarted:false,
             isStoppedRecording:false,
-            initialsize:false
+            initialsize:false,
+            showForm:false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -85,7 +86,24 @@ class Forms extends Component {
         this.assignAudioUrl = this.assignAudioUrl.bind(this);
         this.upDateTxtExplain = this.upDateTxtExplain.bind(this);
         this.pushData = this.pushData.bind(this);
+        this.shareScreen = this.shareScreen.bind(this);
+        this.recordScreen = this.recordScreen.bind(this);
+        this.displayForm = this.displayForm.bind(this);
       
+    }
+    test(){
+        alert("sklmnfjngdf")
+    }
+    shareScreen(){
+      this.props.displayShareScreen()
+    }
+    displayForm(){
+        this.setState({
+          showForm:true
+        })
+    }
+    recordScreen(){
+        this.props.displayScrenRecord()
     }
 
     componentDidCatch(error, info) {
@@ -544,13 +562,18 @@ class Forms extends Component {
 
             }
             else {
-                this.addReactFull()
+                var self = this
+                setTimeout(()=>{
+                    self.addReactFull()
+                },2000)
+              
             }
 
         }
 
     }
     componentDidMount() {
+        this.props.onRef(this)
 
         this._isMounted = true
     }
@@ -620,6 +643,7 @@ class Forms extends Component {
     }
 
     componentWillUnmount() {
+        this.props.onRef(undefined)
         this._isMounted = false
     }
     addReact(event) {
@@ -762,14 +786,15 @@ class Forms extends Component {
             })
         }
     }
-    pushData() {
+    pushData(fileData) {
         if (this._isMounted) {
             console.log("clicked")
             var textExplain = this.state.textExplain
             var imgData = (this.canv).toDataURL()
             var isquestion = " "
             var shapeitems = (this.canv).toJSON();
-            var audioData = this.state.audioData;
+            var videoData = fileData;
+            console.log(" videoData : ",videoData)
             var isquestion = null;
             var issueIdThisCpm = null
             var items = {
@@ -793,7 +818,7 @@ class Forms extends Component {
             }
             console.log("clicked sending..")
 
-            this.props.creatAnsProject(textExplain, imgData, audioData, items, isquestion, issueIdThisCpm)
+            this.props.creatAnsProject(textExplain, imgData, videoData, items, isquestion, issueIdThisCpm)
 
         }
     }
@@ -931,172 +956,164 @@ class Forms extends Component {
 
 
     render() {
-     
+        if(this.props.ShareAction){
+
+       this.test()
+
+        }
+        else{
+
+        }
+        var shareElement = null;
+        const imgurl = this.state.imgData.map((imgs, i) => (
+            <div key={i} className="imag">
+                <img id={imgs.name}
+                    ref={imgs.name}
+                    alt=" "
+                    onClick={this.assignImageUrl} dragable={true} height="100%" width="100%" object-fit="contain" src={imgs.url} ></img>
+            </div>
+        ));
+ 
+        if(this.props.shareAction === true){
+        var form =(
+            <div>
+            <div className="logo" >
+            <div className="logoSrchGrp">
+                <input className="inputText" placeholder="Technology name" value={this.state.value} onChange={this.handleChange} />
+                <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
+            </div>
+            <div className="grid-container">
+                {imgurl}
+            </div>
+
+        </div>
+        <div className="canvasTool">
+            <div className="canvOut">
+                <div className="canv" ref={a => this.DivToRecord = a} id="canv">
+                    <Stage
+                        container="canv"
+                        width={this.state.stateWidth}
+                        height={this.state.stageHeight}
+                        opacity={1}
+                        ref={stage => this.canv = stage}
+                        onMouseDown={this.handleStageMouseDown}>
+
+                        <Layer>
+                            {this.state.rectangles.map((rect, i) => (
+                                <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />
+                            ))}
+                            {this.state.images.map((img, i) => (
+                                <Image onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...img} crossoOrigin={true} />
+                            ))}
+                            {this.state.arrows.map((lns, i) => (
+                                <Arrow onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...lns} />
+                            ))}
+                            {this.state.circles.map((crc, i) => (
+                                <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                            ))}
+                            {this.state.texts.map((crc, i) => (
+                                <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                            ))}
+                            <TransformerComponent
+                                selectedShapeName={this.state.selectedShapeName}
+                                updateWH={this.updateWH}
+                            />
+                        </Layer>
+                    </Stage>
+                </div>
+            </div>
+            <div>
+                <Shapes
+                    addRightArrow={this.addRightArrow}
+                    addcrc={this.addCircle}
+                    addrect={this.addReact}
+                    addLefttArrow={this.addLefttArrow}
+                    addRigBotArrow={this.addRigBotArrow}
+                    addRigUpArrow={this.addRigUpArrow}
+                    addText={this.addText}
+                    handleText={this.handleText}
+                />
+            </div>
+        </div>
+        </div>
+        )
+    }
+    else{
+        var form =(
+            <div className="shareScreen">
+                <div className="screenShareBtn">
+                <span class="hint--bottom" aria-label="Share screen!">
+               
+                <img onClick={this.shareScreen} height="100%" width="100%" src={require('../images/screensharing.png')}/>
+
+               </span>
+                </div>
+                <div className="Drawing">
+                    <p>Drawing goes here</p>
+                </div>
+                <div className="recorderScreen">
+                <div clasName="recorderScreenBtn">
+                <span class="hint--bottom" aria-label="Record screen!">
+                <img onClick={this.recordScreen} height="60%" width="60%" src={require('../images/download.jpg')}/>
+                </span>
+                </div>
+
+                </div>
+            </div>
+        )
+    }
         if (this.state.errorInfo == null) {
             if (this.state.project === true) {
                 return <Redirect to='/projects' />
             }
-
-            const imgurl = this.state.imgData.map((imgs, i) => (
-
-                <div key={i} className="imag">
-                    <img id={imgs.name}
-                        ref={imgs.name}
-                        alt=" "
-
-
-                        onClick={this.assignImageUrl} dragable={true} height="100%" width="100%" object-fit="contain" src={imgs.url} ></img>
-                </div>
-
-            ));
-
+         
             var downLink = null
             if (this.state.canvasUrl) {
                 downLink = (<div>
                     <button className="lftBtn"><a href={this.state.canvasUrl} download={this.state.fileName}>Download</a></button>
                 </div>)
             }
-
             return (
 
                 <div className="formContainer">
-                    <Row>
+                  
                         <div className="textExplainDiv">
                             <textarea className="textExplain" placeholder="Explain in text" onChange={this.upDateTxtExplain} placeholder="type here to explain"></textarea>
-
                         </div>
-                    </Row>
-                    <Row>
-
-
-                        <div className="logo" >
-                            <div className="logoSrchGrp">
-                                <input className="inputText" placeholder="Technology name" value={this.state.value} onChange={this.handleChange} />
-                                <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
-                            </div>
-                            <div className="grid-container">
-                                {imgurl}
-                            </div>
-
-                        </div>
-                    </Row>
-                    <Row>
-
-
-
-                        <div className="canvasTool">
-
-                            <div className="canvOut">
-                                <div className="canv" ref={a => this.DivToRecord = a} id="canv">
-                                    <Stage
-                                        container="canv"
-                                        width={this.state.stateWidth}
-                                        height={this.state.stageHeight}
-                                        opacity={1}
-
-                                        ref={stage => this.canv = stage}
-                                        onMouseDown={this.handleStageMouseDown}
-                                    >
-                                        <Layer>
-                                            {this.state.rectangles.map((rect, i) => (
-                                                <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />
-                                            ))}
-                                            {this.state.images.map((img, i) => (
-                                                <Image onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...img} crossoOrigin={true} />
-                                            ))}
-                                            {this.state.arrows.map((lns, i) => (
-                                                <Arrow onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...lns} />
-                                            ))}
-                                            {this.state.circles.map((crc, i) => (
-                                                <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                                            ))}
-                                            {this.state.texts.map((crc, i) => (
-                                                <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                                            ))}
-
-
-                                            <TransformerComponent
-                                                selectedShapeName={this.state.selectedShapeName}
-                                                updateWH={this.updateWH}
-
-                                            />
-
-
-
-
-                                        </Layer>
-                                    </Stage>
-
-                                </div>
-                            </div>
-
-
-                            <div>
-
-
-                                <Shapes
-                                    addRightArrow={this.addRightArrow}
-                                    addcrc={this.addCircle}
-                                    addrect={this.addReact}
-                                    addLefttArrow={this.addLefttArrow}
-                                    addRigBotArrow={this.addRigBotArrow}
-                                    addRigUpArrow={this.addRigUpArrow}
-                                    addText={this.addText}
-                                    handleText={this.handleText}
-                                />
-                            </div>
-                        </div>
-                    </Row>
-                    <Row className="explainText">
-                    </Row>
-                    <Row>
-
-
-
-                       <div>
-                        <ScreenRecorder assignAudioUrl={this.assignAudioUrl} draRect={this.addReactFull }/>
-                            {/* <AudioRec assignAudioUrl={this.assignAudioUrl} canvass={this.recordScreen} stopRecord={this.stopRecord} /> */}
-                            </div>
-
-                    </Row>
-                    <div className="footer">
                   
+                        <div className="partTwoInput">
+                             {form}
+                        </div>
+
+                      
+                           
+                            {shareElement }                          
+                            {/* <AudioRec assignAudioUrl={this.assignAudioUrl} canvass={this.recordScreen} stopRecord={this.stopRecord} /> */}
+                      
+                  
+                    {/* <div className="footer">
                         <button className="buttonDark" onClick={this.clearAll}>Clear</button>
-
                         <button className="buttonDark" onClick={this.pushData}>Save</button>
-                    </div>
-
-
-
+                    </div> */}
                     {/* <Button onClick={this.newProj}>New Project</Button> */}
-
-
                     {/* <Button onClick={this.download}>Conver to Image</Button> */}
-
-
                     {/* {downLink} */}
-
                     {/* <Input onChange={this.handleProj} type="text" placeholder="Project Name"></Input> */}
-
-
-
-
                     <br />
-
-
-
-
                 </div >
             );
-            return this.props.children;
+           
         }
     }
 }
 Forms.PropType = {
     creatAnsProject: PropType.func.isRequired,
-
+    displayShareScreen : PropType.func.isRequired,
+    displayScrenRecord : PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
+    shareAction : state.tools.displayForm,
+    videoData: state.tools.videoBlob
 })
-export default connect(mapStateToProps, { creatAnsProject })(Forms)
+export default connect(mapStateToProps, { creatAnsProject,displayShareScreen,displayScrenRecord })(Forms)

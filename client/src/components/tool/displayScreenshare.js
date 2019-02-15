@@ -38,7 +38,7 @@ export default class DisplayShare extends Component {
                 conn.send({
                     clientId:self.state.clientPeerid
                 });
-            },2000)
+            },5000)
         })
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         peer.on('call', function (call) {

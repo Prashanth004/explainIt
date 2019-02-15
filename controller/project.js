@@ -26,7 +26,7 @@ id: rn(options),
         var videopathName = null;
         if (!req.file) {
            
-            console.log(" audio file not found")
+            console.log(" video file not found")
 
         }
         else if (req.file) {

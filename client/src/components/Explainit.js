@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { render } from 'react-dom';
 import Form from './tool/Form';
 import Navbar from './Navbar';
 import './css/explainit.css';
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
+import ScreenShare from './tool/ScreenShare'
+import ScreenRecorder from './tool/ScreenRecorder'
+import {SCREEN_SHARE,SCREEN_RECORD} from '../actions/types';
+import Swal from 'sweetalert2';
 import { setIssueId,cancelSuucessMessage, cancelValidationErrors } from '../actions/issueActions'
 
 
@@ -11,22 +16,54 @@ import { setIssueId,cancelSuucessMessage, cancelValidationErrors } from '../acti
 class Explainit extends Component {
   constructor(props){
     super(props)
+    // this.child = React.createRef();
     this.showErrorAlert = this.showErrorAlert.bind(this);
     this.showSuccessAlert = this.showSuccessAlert.bind(this);
+    this.drawRect = this.drawRect.bind(this);
+    this.savefile = this.savefile.bind(this);
+    this.clearCanvas = this.clearCanvas.bind(this)
   }
+  
     componentWillMount(){
       this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
        
     }
     showErrorAlert(){
-      alert("Some error has occured. Please try after some time")
+      Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
       this.props.cancelValidationErrors()
     
     }
+
+    clearCanvas(){
+      this.child.clearAll();
+    }
+   
+    savefile(data){
+      this.child.pushData(data);
+    }
+    drawRect =()=>{
+      this.child.addReactFull();
+    }
     showSuccessAlert(){
-      alert("Project Saved Successfully")
+    
+      Swal.fire({
+        type: 'success',   
+        title: 'Successfully saved!',
+        timer: 1500,
+        showConfirmButton: false,
+       
+      })
+
       this.props.cancelSuucessMessage()
+      setTimeout(()=>{
+        window.close()
   
+      },2000);
+   
      
     }
   render() {
@@ -36,11 +73,28 @@ class Explainit extends Component {
     if(this.props.success){
       this.showSuccessAlert()
     }
+    var shareElement = null;
+    if(this.props.screenAction == SCREEN_SHARE){
+      shareElement = (
+          <div className="shareControl">
+      <ScreenShare  savefile={this.savefile} startDraw = {this.drawRect} />
+      </div>)
+  }
+  else if (this.props.screenAction==SCREEN_RECORD){
+      shareElement =  (
+          <div className="shareControl">
+      <ScreenRecorder clearCanvas={this.clearCanvas} savefile={this.savefile} startDraw = {this.drawRect} />
+      </div>)
+  }
     return (
         <div>
             <Navbar />
       <div className="formContainer">
-        <Form />
+        <Form onRef={ref => (this.child = ref)}/>
+        <div className="shareElement">
+          {shareElement}
+        </div>
+      
       </div>
       </div>
     )
@@ -53,7 +107,8 @@ Explainit.PropType={
 }; 
 const mapStateToProps = state =>({
   error: state.issues.error,
-  success:state.issues.successCreation 
+  success:state.issues.successCreation ,
+  screenAction : state.tools.screenAction
 })
 export default connect(mapStateToProps, {setIssueId,cancelSuucessMessage,cancelValidationErrors})(Explainit)
 

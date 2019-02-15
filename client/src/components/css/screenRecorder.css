@@ -12,3 +12,44 @@
     height:100%;
     margin:auto;
 }
+.progresDiv{
+    display:none;
+height:05px;
+    width:100%;
+background-color: rgb(211, 207, 207);
+}
+.progress{
+    height:5px;
+background-color:rgb(6, 18, 128);
+    width:0px;
+}
+
+.btDiv{
+    width:100%;
+    text-align: center;
+margin-top:10px;
+}
+.postRecord{
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+}
+.convey{
+    width:100%;
+    text-align: center;
+}
+
+.mainBtn{
+    margin:auto;
+    background-color:rgb(41, 85, 41);
+    /* background-color: rgb(133, 39, 39); */
+    width:30px;
+    height:30px;
+    border-radius:50%;
+}
+.mainBtn :active{
+    border-style:none;
+}
+
+  

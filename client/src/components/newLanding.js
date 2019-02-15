@@ -11,6 +11,8 @@ import { stillAuthenicated } from '../actions/signinAction'
 import PropType from 'prop-types';
 import LoginMadal from './LoginModal'
 import ImagesOfExplainers from './DisplayExplained'
+import Swal from 'sweetalert2'
+import config from '../config/config'
 
 
 class NewHome extends Component {
@@ -43,12 +45,13 @@ class NewHome extends Component {
         if (this.props.isAauthenticated) {
             this.props.setIssueId(null)
             localStorage.setItem("issueId", null)
-            this.props.history.push('/explainIt')
+            window.open(config.react_url+'/explainIt', "_blank")
+            // this.props.history.push('/explainIt')
         }
         else {
-            this.setState({
-                modalTool: !this.state.modalTool
-            });
+            Swal.fire(
+                'You should login'
+              )
         }
 
 
@@ -71,12 +74,18 @@ class NewHome extends Component {
         if (this.props.isAauthenticated) {
             this.props.setIssueId(e.target.id)
             localStorage.setItem("issueId", e.target.id)
-            this.props.history.push('/explainIt')
+            // this.props.history.push('/explainIt')
+            window.open(config.react_url+'/explainIt', "_blank")
         }
         else {
-            this.setState({
-                modalTool: !this.state.modalTool
-            });
+            // this.setState({
+            //     modalTool: !this.state.modalTool
+            // });
+            Swal.fire(
+               
+                'You should login'
+               
+              )
         }
 
 

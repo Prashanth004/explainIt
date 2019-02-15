@@ -191,7 +191,7 @@ class Recoder extends Component {
         var downLinkAudio = null;
         var timer = null;
      if(this.state.isAudioRecStarted){
-         timer = ( <Countdown
+         timer = (<Countdown
             date={Date.now() + 180000}
             renderer={this.renderer}        
         />)
