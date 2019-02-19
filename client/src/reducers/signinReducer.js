@@ -1,6 +1,7 @@
 
 
-import {SIGN_IN_WITH_GOOGLE,SIGN_OUT,CHECK_TOKEN_VALIDIDTY,AUTH_FAIL,SIGN_IN_WITH_TWITTER} from '../actions/types'
+import {SIGN_IN_WITH_GOOGLE,
+    SIGN_IN_WITH_GIT,SIGN_OUT,CHECK_TOKEN_VALIDIDTY,AUTH_FAIL,SIGN_IN_WITH_TWITTER} from '../actions/types'
 
 const initialState = {
     isAuthenticated:false,
@@ -51,6 +52,14 @@ export default function(state = initialState, action){
                 ...state,
                 isAuthenticated:action.payload,
                 domainName:null,
+                token:action.token
+
+            }
+        case SIGN_IN_WITH_GIT:
+            return{
+                ...state,
+                isAuthenticated:action.payload,
+                domainName: "github",
                 token:action.token
 
             }

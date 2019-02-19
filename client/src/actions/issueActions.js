@@ -17,6 +17,7 @@ export const fetchIssues = () => dispatch => {
        
     }).then(response => {
         if (response.status == 200) {
+            console.log("length of issues : ",(response.data.data).length)
             dispatch({
                 type: FETCH_ISSUE,
                 payload: (response.data.data).reverse()

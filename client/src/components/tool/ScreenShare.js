@@ -10,7 +10,8 @@ import {StartedSharing,
     saveVideoBlob} from '../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap';
 
 
 class ScreenRecorder extends Component {
@@ -34,6 +35,7 @@ class ScreenRecorder extends Component {
             peerId: null,
             connected: false,
             shareScreenLink:null,
+            copyStatus:"copy link"
 
         }
         this.renderer = this.renderer.bind(this);
@@ -42,7 +44,20 @@ class ScreenRecorder extends Component {
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
+        this.copyToClipboard = this.copyToClipboard.bind(this)
         // this.recordScreenStop = this.recordScreenStop.bind(this);
+    }
+
+    copyToClipboard(){
+        var copyText = document.querySelector('.myInput');
+      
+  copyText.select();
+  document.execCommand("copy");
+  
+  this.setState({
+    copyStatus:"link copied"
+  })
+
     }
 
 
@@ -239,18 +254,15 @@ class ScreenRecorder extends Component {
        
         if (this.state.shareScreenLink && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
             linkElement = (
-                <div className="sharableLink">
-                    <p>Please share the link to connect</p>
-                    <div className = "linkOuter">
-                    <div className="link">
-                        <p>{this.state.shareScreenLink}</p>
-                    </div>
-                    <div className="button">
-                        <button className="cpyBtn">Copy</button>
-                    </div>
-                    </div>
-            </div>
-        )
+                <div>
+                <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
+                <span class="hint--bottom" aria-label={this.state.copyStatus}>
+                    <button className="buttonDark" onClick={this.copyToClipboard}>
+                    Copy text
+                    </button>
+                </span>
+             
+    </div>)
         }
         return (
             <div>

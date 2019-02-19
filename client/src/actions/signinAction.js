@@ -1,9 +1,8 @@
-import { SIGN_IN_WITH_GOOGLE, SIGN_IN_WITH_TWITTER, SIGN_OUT, AUTH_FAIL, CHECK_TOKEN_VALIDIDTY } from './types'
+import { SIGN_IN_WITH_GOOGLE,SIGN_IN_WITH_GIT, SIGN_IN_WITH_TWITTER, SIGN_OUT, AUTH_FAIL, CHECK_TOKEN_VALIDIDTY } from './types'
 import axios from 'axios'
 import config from '../config/config'
 
 export const signInWithGoogle = (tokenBlob) => (dispatch) => {
-
     const options = {
         method: 'POST',
         body: tokenBlob,
@@ -33,8 +32,39 @@ export const signInWithGoogle = (tokenBlob) => (dispatch) => {
                 token: null,
                 error: err
             })
-
         })
+}
+
+export const signInWithGitHub = (code) =>(dispatch)=>{
+   console.log("*************************code : ",code)
+    fetch( config.base_dir + '/users/git?code='+code)
+        .then(r => {
+            r.json().then(response => {
+                console.log("########### response ########",response)
+                var storeToken = new Promise(function (resolve, reject) {
+                    localStorage.setItem('token', JSON.stringify(response.token))
+                    var token1 = JSON.parse(localStorage.getItem('token'))
+                    resolve(token1)
+                });
+                storeToken.then(function (token) {
+                    dispatch({
+                        type: SIGN_IN_WITH_GIT,
+                        token: token,
+                        payload: true
+                    })
+                })
+            })
+        })
+        .catch(err => {
+            console.log("error", err)
+            dispatch({
+                type: AUTH_FAIL,
+                payload: false,
+                token: null,
+                error: err
+            })
+        })
+
 }
 
 export const signInWithTwitter = (response) => (dispatch) => {

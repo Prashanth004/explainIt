@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
+import GitHubLogin from 'react-github-login';
 import { Redirect, Link } from 'react-router-dom';
 import config from '../config/config';
 import { signInWithGoogle, stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../actions/signinAction';
@@ -8,17 +9,33 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import GoogleLogin from 'react-google-login'
 
+
 class Login extends Component {
     constructor() {
         super();
         this.state = { isAuthenticated: false, user: null, token: '' };
-        this.googleResponse = this.googleResponse.bind(this)
+        this.googleResponse = this.googleResponse.bind(this);
+        this.githubResponse = this.githubResponse.bind(this);
+        this.githubFailure = this.githubFailure.bind(this)
     }
     
     componentWillMount() {
         this.props.stillAuthenicated()
     }
+    componentDidMount(){
+      
+    }
+    handleGit(){
+        var url = `https://github.com/login/oauth/authorize?client_id=${config.gitHubClientId}&scope=user&redirect_uri=${config.react_url_git}`
+        window.open(url)
+    }
 
+    githubResponse(response){
+        console.log("github response : ",response)
+    }
+    githubFailure(response){
+        console.log("github error : ",response)
+    }
     googleResponse(response) {
         const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
         this.props.signInWithGoogle(tokenBlob)
@@ -59,13 +76,15 @@ class Login extends Component {
                                     onFailure={this.responseGoogle}
                                 />                       
                              </div>
-                            <div className="buttonDiv">
-                                <TwitterLogin className="actualButton2" loginUrl="http://localhost:9000/twitter/auth/twitter"
+                            {/* <div className="buttonDiv">
+                                <TwitterLogin className="actualButton2" loginUrl={config.base_dir+"/twitter/auth/twitter"}
                                     onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-                                    requestTokenUrl="http://localhost:9000/twitter/auth/twitter/reverse" />
-                            </div>
+                                    requestTokenUrl={config.base_dir+"/twitter/auth/twitter/reverse"} />
+                            </div> */}
                             <div className="buttonDiv">
-                                <button className="actualButton2">Github</button>
+                            <button className="actualButton2" onClick={this.handleGit}>Github</button>
+                        
+                               
                             </div>
                         </div>
                     </div>

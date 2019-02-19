@@ -1,8 +1,9 @@
 .App {
-  background-color:rgb(246, 246, 246);
+  background-color:rgb(243,243,243);
+  font-family: Helvetica;
 }
 body{
-  background-color:rgb(241, 241, 241);
+  background-color:rgb(231, 240, 248);
   
 }
 button:focus {outline:0;
@@ -16,11 +17,11 @@ outline-style: none}
   background-color:wihte;
   font-size: 15px;
   font-weight: 400;
-  height:30px;
+  height:27px;
   width:auto;
   padding: 0px 10px 0px 10px;
-  border-color:rgb(192, 190, 190);
-color:rgb(78, 78, 78);
+  border-color:rgb(153,153,153);
+color:rgb(153,153,153);
 outline:none;
 outline-style: none;
   border-radius:3px;
@@ -50,22 +51,24 @@ audio{
   margin-left:2px;
   margin-right:2px;
 
-  height:30px;
+  height:27px;
   width:auto;
   outline-style: none;
   outline: 0;
-  border-color:rgb(87, 87, 141);
+  border-color:rgb(52,161,165);
 color:white;
 
   border-radius:3px;
-  background-color:rgb(87, 87, 141);
+  background-color: rgb(52,161,165);
+  /* background-color: rgb(205, 243, 224); */
+ 
  
 }
 .buttonDark:focus{
   outline:0px;
 }
 .buttonDark:hover{
-background-color: rgb(125, 125, 165);
+background-color: rgb(44, 144, 148);
 }
 
 

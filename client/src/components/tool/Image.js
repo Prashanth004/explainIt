@@ -12,6 +12,7 @@ class Images extends React.Component {
                 scaleY = {this.props.scaleY}
                 width={this.props.width}
                 height={this.props.height}
+               
               image={this.props.image}
             //   imageSrc={this.stateimageSrc}
             

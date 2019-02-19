@@ -13,7 +13,13 @@ const conf = {
     googleClientId:"308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com",
     peerHost:'127.0.0.1',
     peerPort : 9000,
-    peerPath : '/peerjs'
+    peerPath : '/peerjs',
+    gitHubClientId:"5c7162c1bd8449fa8b00",
+    gitHubClientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947",
+    react_url_git:"http://localhost:3000/git",
+    canvBackground : "rgb(205, 243, 224)",
+    peopleDisplayLength:2
+
 
     
 }

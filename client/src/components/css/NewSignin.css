@@ -29,8 +29,10 @@ background-size: cover;
     height:100vh;
 }
 .loginButton{
+    width:55%;
+    margin:auto;
     display: grid;
-    grid-template-columns: 33.33% 33.33% 33.33%;
+    grid-template-columns: 50% 50%;
 }
 .actualButton{
     width:100px;

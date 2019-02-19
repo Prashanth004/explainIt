@@ -9,8 +9,17 @@ import config from '../config/config'
     constructor(props){
         super(props)
         this.state={
-            DetailsOfPeople : []
+            DetailsOfPeople : [],
+            showAllPeople : false
         }
+        this.toggleAllPeopleList = this.toggleAllPeopleList.bind(this
+        )
+    }
+
+    toggleAllPeopleList(){
+        this.setState({
+            showAllPeople : !this.state.showAllPeople
+        })
     }
     componentWillMount(){
         var self = this;
@@ -22,7 +31,6 @@ import config from '../config/config'
             headers: {
                 "Authorization": token,
             }
-    
         }).then((response)=>{
            
             if(response.status === 200){
@@ -32,7 +40,6 @@ import config from '../config/config'
                     axios({
                         method:'get',
                         url:config.base_dir+'/users/email/'+projects.email,
-    
                     }).then(response=>{
                         console.log("final response: ", response)
                         if(response.status==200){
@@ -50,8 +57,6 @@ import config from '../config/config'
                         console.log("error : ",err)
                     })
                 })
-               
-              
             }
     
         })
@@ -61,16 +66,48 @@ import config from '../config/config'
     }
   render() {
     //   console.log(this.state.DetailsOfPeople)
-      var images= this.state.DetailsOfPeople.map((People,index)=>(
-                    <div  className="imagePeopleDiv">
+    var limitPeople = this.state.DetailsOfPeople.slice(0,config.peopleDisplayLength)
+    var countElement = null;
+    var allPeopleImages = null;
+    if(this.state.showAllPeople){
+        allPeopleImages = this.state.DetailsOfPeople.map((people,index)=>(
+            <div className="listOfAllPeople">
+            <div key ={index}className="singleMember">
+                   <div className="imagePeopleDiv">
+                       <img width="100%" height="100%"src={people.profilepic} className="peopleImage"/>
+                   </div>
+                   <a href="" className="peopleName">
+                       {people.username}
+                   </a>
+               </div>
+               </div>
+    ))
+    }
+    else{
+        allPeopleImages = null;
+    }
+   
+    if(this.state.DetailsOfPeople.length >config.peopleDisplayLength){
+        var noOfPeople = (this.state.DetailsOfPeople.length)-config.peopleDisplayLength
+        countElement = (<p>+{noOfPeople}</p>)
+    }
+        console.log("limitPeople : ",limitPeople)
+      var images= limitPeople.map((People,index)=>(
+                    <div id={this.props.issueid}  className="imagePeopleDiv">
                             <img id="imageOfPeople" src={People.profilepic} className="peopleImage"></img>
                         </div>
       ))
     return (
-      <div>
-           <div className="likes">
+      <div id={this.props.issueid} className="displayPeople">
+           <div id={this.props.issueid} onClick={this.toggleAllPeopleList}className="likes">
                        {images}
+                    <div id={this.props.issueid} className="numberOfPeople">
+                             {countElement}                      
                     </div>
+            </div>
+           
+               {allPeopleImages}
+           
       </div>
     )
   }

@@ -13,6 +13,7 @@ import Newhome from './components/newLanding'
 import Explainit from './components/Explainit'
 import google from './components/testGoogle'
 import DisplayShare from './components/tool/displayScreenshare'
+import git from './components/git'
 class App extends Component {
   render() {
     return (
@@ -27,6 +28,7 @@ class App extends Component {
             <Route exact  path='/newhome' component={Newhome} />
             <Route exact  path='/explainIt' component={Explainit} />
             <Route exact  path='/google' component={google} />
+            <Route exact path='/git' component = {git} />
             {/* <Route exact path='/projects' component={Projects}/> */}
             <Route exact  path='/signup' component={Signup} />
             {/* <Route path ="/" component={}/> */}

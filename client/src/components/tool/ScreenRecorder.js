@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
-import html2canvas from 'html2canvas'
-import config from '../../config/config'
-import ProgressBar from 'progressbar.js'
-import Progress from './Progressbar'
 import {StartedRecording,
     stopedRcording,discardAfterRecord} from'../../actions/toolActions'
 import {connect} from 'react-redux';

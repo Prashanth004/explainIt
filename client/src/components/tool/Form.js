@@ -6,6 +6,8 @@ import '../css/home.css';
 import Arrow from "./Arrow";
 import Circle from "./Circle";
 import Image from "./Image";
+import Elipse from './Elipse'
+import Triangle from "./Triangle"
 import Rectangle from "./Reactangle";
 import Shapes from './Shapes';
 import Text from './Text';
@@ -24,6 +26,7 @@ import {SCREEN_SHARE,SCREEN_RECORD} from '../../actions/types'
 import {displayShareScreen, displayScrenRecord} from '../../actions/toolActions'
 import AudioRec from './AudioRecord'
 
+
 class Forms extends Component {
     constructor(props) {
         super(props);
@@ -33,10 +36,12 @@ class Forms extends Component {
             imageUrl: [],
             images: [],
             circles: [],
+            elipse:[],
             arrows: [],
             texts: [],
             textValue: null,
             rectangles: [],
+            triangle:[],
             stageHeight: 357,
             stateWidth: 507,
             imgWidth: 60,
@@ -67,6 +72,8 @@ class Forms extends Component {
         this.assignImageUrl = this.assignImageUrl.bind(this);
         this.addReact = this.addReact.bind(this);
         this.addCircle = this.addCircle.bind(this);
+        this.addElipse = this.addElipse.bind(this);
+        this.addTriangle = this.addTriangle.bind(this);
         this.addRightArrow = this.addRightArrow.bind(this);
         this.addLefttArrow = this.addLefttArrow.bind(this);
         this.addRigBotArrow = this.addRigBotArrow.bind(this);
@@ -89,6 +96,8 @@ class Forms extends Component {
         this.shareScreen = this.shareScreen.bind(this);
         this.recordScreen = this.recordScreen.bind(this);
         this.displayForm = this.displayForm.bind(this);
+        this.addRountRect = this.addRountRect.bind(this);
+        this.addDiamond = this.addDiamond.bind(this);
       
     }
     test(){
@@ -176,6 +185,49 @@ class Forms extends Component {
                 if (this._isMounted) {
                     this.setState({ rectangles });
                 }
+            }
+            if(shapes === "RegularPolygon"){
+                this.state.triangle.map(function (triangle, i) {
+                    if (triangle.name === name) {
+                        index = i;
+                    }
+                })
+                let triangleRep = [...this.state.triangle];
+                let trio = { ...triangleRep[index] };
+                trio.x = obbj.x();
+                trio.width = obbj.width()
+                trio.height = obbj.height()
+                trio.rotation = obbj.rotation()
+                trio.scaleX = obbj.scaleX()
+                trio.scaleY = obbj.scaleY()
+                trio.strokeWidth = 1;
+                trio.y = obbj.y();
+                triangleRep[index] = trio;
+                if (this._isMounted) {
+                    this.setState({ triangle:triangleRep });
+                }
+            }
+            if(shapes === "Ellipse"){
+                this.state.elipse.map(function (elipse, i) {
+                    if (elipse.name === name) {
+                        index = i;
+                    }
+                })
+                let elipseRep = [...this.state.elipse];
+                let eli = { ...elipseRep[index] };
+                eli.x = obbj.x();
+                eli.width = obbj.width()
+                eli.height = obbj.height()
+                eli.rotation = obbj.rotation()
+                eli.scaleX = obbj.scaleX()
+                eli.scaleY = obbj.scaleY()
+                eli.strokeWidth = 1;
+                eli.y = obbj.y();
+                elipseRep[index] = eli;
+                if (this._isMounted) {
+                    this.setState({ elipse:elipseRep });
+                }
+
             }
             if (shapes === "Arrow") {
                 this.state.arrows.map(function (arrow, i) {
@@ -294,8 +346,10 @@ class Forms extends Component {
             const cir = this.state.circles.find(c => c.name === name);
             const arr = this.state.arrows.find(a => a.name === name);
             const txt = this.state.texts.find(t => t.name === name);
-            const img = this.state.images.find(i => i.name === name)
-            if (rect || cir || arr || txt || img) {
+            const img = this.state.images.find(i => i.name === name);
+            const trio = this.state.triangle.find(tr=>tr.name===name);
+            const eli = this.state.elipse.find(el=>el.name===name);
+            if (rect || cir || arr || txt || img || trio || eli) {
                 if (this._isMounted) {
                     this.setState({
                         selectedShapeName: name
@@ -315,8 +369,8 @@ class Forms extends Component {
     addRightArrow(event) {
         let lne = null
         lne = {
-            x: 20,
-            y: 200,
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
             scaleX: 1,
             scaleY: 1,
             rotation: 0,
@@ -337,8 +391,8 @@ class Forms extends Component {
     addLefttArrow(event) {
         let lne = null
         lne = {
-            x: 20,
-            y: 200,
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
             scaleX: 1,
             scaleY: 1,
             rotation: 0,
@@ -372,8 +426,8 @@ class Forms extends Component {
     addRigBotArrow(event) {
         let lne = null
         lne = {
-            x: 20,
-            y: 200,
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
             draggable: true,
             scaleX: 1,
             strokeWidth: 4,
@@ -392,8 +446,8 @@ class Forms extends Component {
     addRigUpArrow(event) {
         let lne = null
         lne = {
-            x: 20,
-            y: 200,
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
             scaleX: 1,
             scaleY: 1,
             rotation: 0,
@@ -410,15 +464,34 @@ class Forms extends Component {
         }
     }
 
-
-
-
+    addElipse(){
+            let eli = null
+            eli = {
+                x:Math.floor((Math.random() * 350) + 50),
+                y: Math.floor((Math.random() * 250) + 50),
+                rotation: 0,
+                scaleX: 1,
+                scaleY: 1,
+                draggable: true,
+                strokeWidth: 1,
+                radius: {
+                    x : 50,
+                    y : 30
+                },
+                name: String(Math.random())
+            }
+            if (this._isMounted) {
+                this.setState({
+                    elipse: [...this.state.elipse, eli]
+                })
+            }
+    }
 
     addCircle(event) {
         let crcle = null
         crcle = {
-            x: 50,
-            y: 50,
+            x:Math.floor((Math.random() * 350) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
             rotation: 0,
             scaleX: 1,
             scaleY: 1,
@@ -438,8 +511,8 @@ class Forms extends Component {
         if (this._isMounted) {
             let txt = null
             txt = {
-                x: 50,
-                y: 50,
+                x:Math.floor((Math.random() * 320) + 50),
+                y: Math.floor((Math.random() * 250) + 50),
                 fontSize: 30,
                 scaleX: 1,
                 scaleY: 1,
@@ -458,15 +531,10 @@ class Forms extends Component {
     _isMounted = true
 
     componentWillMount() {
-        
-
-        // var _loaded = {}; function addScript(url) { if (!loaded[url]) { var s = document.createElement('script'); s.src = url; document.head.appendChild(s); _loaded[url] = true; } }
         if (this._isMounted) {
             document.addEventListener("keydown", this.deleteThis, false);
             console.log("prog  in url is :" + this.props.paramsProjId)
-
             var proID = localStorage.getItem("projectID")
-
             var token = JSON.parse(localStorage.getItem("token"))
             if (proID !== null) {
                 axios({
@@ -475,19 +543,16 @@ class Forms extends Component {
                     headers: {
                         "Authorization": token,
                     }
-
                 }).then(response => {
                     console.log(" proID : ", proID)
                     console.log("response.data : ", response.data)
                     if (response.status === 200) {
                         var items = (response.data.msg.items.shapeitems.children[0].children)
                         items.map(obg => {
-
                             if (obg.className === "Rect") {
                                 if (this._isMounted) {
                                     this.setState({
                                         rectangles: [...this.state.rectangles, obg.attrs]
-
                                     })
                                 }
                             }
@@ -495,7 +560,20 @@ class Forms extends Component {
                                 if (this._isMounted) {
                                     this.setState({
                                         circles: [...this.state.circles, obg.attrs]
-
+                                    })
+                                }
+                            }
+                            if (obg.className === "Ellipse") {
+                                if (this._isMounted) {
+                                    this.setState({
+                                        elipse: [...this.state.elipse, obg.attrs]
+                                    })
+                                }
+                            }
+                            if (obg.className === "RegularPolygon") {
+                                if (this._isMounted) {
+                                    this.setState({
+                                        trianlge: [...this.state.triangle, obg.attrs]
                                     })
                                 }
                             }
@@ -503,11 +581,9 @@ class Forms extends Component {
                                 if (this._isMounted) {
                                     this.setState({
                                         arrows: [...this.state.arrows, obg.attrs]
-
                                     })
                                 }
                             }
-
                             if (obg.className === "Text") {
                                 if (this._isMounted) {
                                     this.setState({
@@ -516,9 +592,7 @@ class Forms extends Component {
                                 }
                             }
                         })
-
                         var images_new = response.data.msg.items.images
-
                         images_new.map(img => {
                             let image2 = null;
                             image2 = new window.Image();
@@ -591,7 +665,9 @@ class Forms extends Component {
                     const cir = this.state.circles.find(c => c.name === name);
                     const arr = this.state.arrows.find(a => a.name === name);
                     const txt = this.state.texts.find(t => t.name === name);
-                    const img = this.state.images.find(i => i.name === name)
+                    const img = this.state.images.find(i => i.name === name);
+                    const tri = this.state.triangle.find(tr => tr.name === name);
+                    const eli = this.state.elipse.find(el=>el.name===name);
                     if (rect) {
                         array = [...this.state.rectangles]
                         index = array.indexOf(rect)
@@ -602,12 +678,31 @@ class Forms extends Component {
                             }
                         }
                     }
+                    else if(tri){
+                        array = [...this.state.triangle]
+                        index = array.indexOf(tri)
+                        if (index !== -1) {
+                            array.splice(index, 1);
+                            if (this._isMounted) {
+                                this.setState({ triangle: array });
+                            }
+                        }
+
+                    }
                     else if (cir) {
                         array = [...this.state.circles]
                         index = array.indexOf(cir)
                         if (index !== -1) {
                             array.splice(index, 1);
                             this.setState({ circles: array });
+                        }
+                    }
+                    else if (eli) {
+                        array = [...this.state.elipse]
+                        index = array.indexOf(eli)
+                        if (index !== -1) {
+                            array.splice(index, 1);
+                            this.setState({ elipse: array });
                         }
                     }
                     else if (arr) {
@@ -646,20 +741,20 @@ class Forms extends Component {
         this.props.onRef(undefined)
         this._isMounted = false
     }
-    addReact(event) {
+    addRountRect(){
         let recto = null
         recto = {
-            x: 10,
-            y: 10,
+            x:Math.floor((Math.random() * 300) + 50),
+                y: Math.floor((Math.random() * 250) + 50),
             rotation: 0,
             width: 140,
             height: 60,
             scaleX: 1,
             scaleY: 1,
             strokeWidth: 1,
-            fill: "white",
+            fill: "transparent",
             draggable: true,
-            connerRadius: 0,
+            connerRadius: 50,
             name: String(Math.random())
         }
         if (this._isMounted)
@@ -669,15 +764,87 @@ class Forms extends Component {
             })
 
     }
+    addTriangle(){
+
+        let trio = null;
+        trio={
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
+            rotation: 0,
+            sides:3,
+            radius:40,
+            scaleX: 1,
+            scaleY: 1,
+            strokeWidth: 1,
+            fill: "transparent",
+            draggable: true,
+            connerRadius: 0,
+            name: String(Math.random())
+        }
+        if (this._isMounted){
+            this.setState({
+                triangle: [...this.state.triangle, trio]
+
+            })
+        }
+    }
+    addDiamond(){
+        let recto = null
+        recto = {
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
+            rotation: 45,
+            width: 80,
+            height: 80,
+            scaleX: 1,
+            scaleY: 1,
+            strokeWidth: 1,
+            fill: "transparent",
+            draggable: true,
+            connerRadius: 0,
+            name: String(Math.random())
+        }
+        if (this._isMounted){
+            this.setState({
+                rectangles: [...this.state.rectangles, recto]
+
+            })
+        }
+
+    }
+    addReact(event) {
+        let recto = null
+        recto = {
+            x:Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
+            rotation: 0,
+            width: 100,
+            height: 60,
+            scaleX: 1,
+            scaleY: 1,
+            strokeWidth: 1,
+            fill: "transparent",
+            draggable: true,
+            connerRadius: 0,
+            name: String(Math.random())
+        }
+        if (this._isMounted){
+            this.setState({
+                rectangles: [...this.state.rectangles, recto]
+
+            })
+        }
+
+    }
     addReactFull() {
         let recto = null
         recto = {
             x: -6,
             y: -6,
-            width: 515.5,
+            width: 516,
             height: 420,
             strokeWidth: 0.5,
-            fill: "white",
+            fill: config.canvBackground,
             draggable: false,
             connerRadius: 0,
             name: String(Math.random())
@@ -709,8 +876,8 @@ class Forms extends Component {
 
             let img = null;
             img = {
-                x: 10,
-                y: 10,
+                x:Math.floor((Math.random() * 350) + 50),
+                y: Math.floor((Math.random() * 250) + 50),
                 width: this.state.imgWidth,
                 height: this.state.imgHeight,
                 scaleX: 1,
@@ -795,7 +962,7 @@ class Forms extends Component {
             var shapeitems = (this.canv).toJSON();
             var videoData = fileData;
             console.log(" videoData : ",videoData)
-            var isquestion = null;
+            isquestion = null;
             var issueIdThisCpm = null
             var items = {
                 shapeitems: JSON.parse(shapeitems),
@@ -867,6 +1034,21 @@ class Forms extends Component {
                 rectangles[index] = rect;
                 if (this._isMounted) {
                     this.setState({ rectangles });
+                }
+            }
+            if (shapes === "RegularPolygon") {
+                this.state.triangle.map(function (triangle, i) {
+                    if (triangle.name === name) {
+                        index = i;
+                    }
+                })
+                let triangle = [...this.state.triangle];
+                let trio = { ...triangle[index] };
+                trio.x = event.target.x();
+                trio.y = event.target.y();
+                triangle[index] = trio;
+                if (this._isMounted) {
+                    this.setState({ triangle });
                 }
             }
             if (shapes === "Arrow") {
@@ -979,7 +1161,7 @@ class Forms extends Component {
             <div>
             <div className="logo" >
             <div className="logoSrchGrp">
-                <input className="inputText" placeholder="Technology name" value={this.state.value} onChange={this.handleChange} />
+                <input className="inputText" placeholder="Search for the logo" value={this.state.value} onChange={this.handleChange} />
                 <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
             </div>
             <div className="grid-container">
@@ -1011,8 +1193,14 @@ class Forms extends Component {
                             {this.state.circles.map((crc, i) => (
                                 <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
                             ))}
+                             {this.state.elipse.map((eli, i) => (
+                                <Elipse onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...eli} />
+                            ))}
                             {this.state.texts.map((crc, i) => (
                                 <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                            ))}
+                             {this.state.triangle.map((crc, i) => (
+                                <Triangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
                             ))}
                             <TransformerComponent
                                 selectedShapeName={this.state.selectedShapeName}
@@ -1032,6 +1220,10 @@ class Forms extends Component {
                     addRigUpArrow={this.addRigUpArrow}
                     addText={this.addText}
                     handleText={this.handleText}
+                    addRountRect = {this.addRountRect}
+                    addTriangle = {this.addTriangle}
+                    addDiamond = {this.addDiamond}
+                    addElipse = {this.addElipse}
                 />
             </div>
         </div>
@@ -1042,7 +1234,7 @@ class Forms extends Component {
         var form =(
             <div className="shareScreen">
                 <div className="screenShareBtn">
-                <span class="hint--bottom" aria-label="Share screen!">
+                <span className="hint--bottom" aria-label="Share screen!">
                
                 <img onClick={this.shareScreen} height="100%" width="100%" src={require('../images/screensharing.png')}/>
 
@@ -1052,8 +1244,8 @@ class Forms extends Component {
                     <p>Drawing goes here</p>
                 </div>
                 <div className="recorderScreen">
-                <div clasName="recorderScreenBtn">
-                <span class="hint--bottom" aria-label="Record screen!">
+                <div >
+                <span className="hint--bottom" aria-label="Record screen!">
                 <img onClick={this.recordScreen} height="60%" width="60%" src={require('../images/download.jpg')}/>
                 </span>
                 </div>

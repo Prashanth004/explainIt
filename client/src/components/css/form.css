@@ -34,11 +34,11 @@
 }
 .canvOut{
     margin:auto;
-     border-style:solid;
+     border-style:none;
      border-color:rgb(192, 190, 190);
      border-width: 0.5px;
      margin-top:10px;
-     height:370px;
+     height:380px;
      width:525px;
      margin-left:20px;
      border-radius:3px;
@@ -82,7 +82,7 @@
     width:110%;
     margin:auto;
     display:grid;
-    grid-template-columns: 80% 25%;
+    grid-template-columns: 76% 15%;
 
 }
 .explainText{
@@ -114,7 +114,7 @@ background-color: rgb(90, 178, 236);
 }
 .logo{
     margin:auto;
-    width:95%;
+    width:90%;
  
     align-content: center;
     align-self: center;

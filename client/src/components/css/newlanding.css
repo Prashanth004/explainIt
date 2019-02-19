@@ -11,9 +11,10 @@
   } */
   .navBar{
     background-color:white;
-    border-bottom-color : rgb(192, 190, 190);
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
+     box-shadow: 0px 0px 3px 1px rgba(236, 236, 236, 0.911);
+     /* border-bottom-style:solid;
+     border-bottom-color:rgb(221,221,212);
+     border-bottom-width:1px; */
 
   }
   
@@ -77,21 +78,33 @@ text-align: center;
   margin:auto;
 }
   .containerHome{
-      width:40%;
+      width:43%;
       margin:auto;
       
   }
+  .questionImg{
+    height: 200px;
+    width:100%;
+  }
+  .twitter{
+    float:right;
+    height:27px;
+    width:27px
+  }
+  .twitterHolder{
+    padding-right:10%;
+  }
   .issueCard{
-      width:90%;
+      width:100%;
       margin:auto;
-      min-height: 135px;
-    
+     
+      box-shadow: 0px 0px 5px 1px rgba(236, 236, 236, 0.911);
       background-color:white;
-      margin-top:20px;
+      margin-top:40px;
       border-radius:3px;
       border-style:none;
-      border-width:0.5px;
-      border-color: rgb(192, 190, 190);
+      border-width:0.7px;
+      border-color: rgb(232,232,232);
   }
   .modalBody{
     /* background-color: #111; */
@@ -115,12 +128,13 @@ text-align: center;
   }
   .topButtons{
       width:100%;
-      padding:7px;
+      padding:7px 7px 0px 0px;
     display: grid;
     grid-template-columns: 33.33% 33.33% 33.33%;
     border-bottom-style:solid;
-    color:rgb(192, 190, 190);
-    border-bottom-width: 0.2px;
+    border-bottom-color: rgb(232,232,232);
+    border-bottom-width:0.5px;
+   
   }
   .userName{
     text-align: center;
@@ -134,7 +148,8 @@ text-align: center;
     border-style:none;
   }
   .questionText{
-width:100%;
+width:99%;
+margin:auto;
 min-height: 60px;
 /* background-color: blue; */
 padding:05px 25px 05px 25px;
@@ -152,11 +167,12 @@ border-style: none;
   }
   .orginCard{
     border-bottom-style:solid;
-    border-bottom-color:rgb(192, 190, 190);
-    border-bottom-width: 0.5px;
+    border-color:rgb(232,232,232);
+    border-width: 1px;
   }
   .explainAnswer{
-    height: 45px;
+    width:99%;
+    margin:auto;
     background-color: #fff;
     display:grid;
     grid-template-columns: 75% 25%;
@@ -169,10 +185,14 @@ border-style: none;
   }
   .imagePeopleDiv{
     display: inline-block;
-    height:25px;
-    width:25px;
+    height:27px;
+    width:27px;
     margin:2px;
 
+  }
+  .displayPeople{
+    display: inline-block;
+    /* background-color: blue; */
   }
   .peopleImage{
     border-radius: 50%;
@@ -180,8 +200,34 @@ border-style: none;
     height:100%;
    
   }
+  .listOfAllPeople{
+    /* padding:10px; */
+    width:60%;
+
+  }
+  .peopleName{
+    padding-top:5px;
+    font-size:12px;
+    color:rgb(153,153,153);
+  }
+  .singleMember{
+    width:80%;
+    margin:auto;
+    display:grid;
+    grid-template-columns:25% 75%
+  }
+  .numberOfPeople{
+    padding-left:65%;
+    padding-top:5px;
+    font-size:16px;
+    color:rgb(153,153,153)
+  }
   .likes{
+    width:75%;
     display: inline-block;
+    /* background-color:red; */
+    display:grid;
+    grid-template-columns: 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6%
   }
   .toolContainer{
     background-color: white;

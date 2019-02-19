@@ -6,6 +6,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var rn = require('random-number');
 var database = require('../app');
 var jwt = require('jsonwebtoken');
+var GitHubTokenStrategy = require('passport-github-token');
 
 
 var options = {
@@ -33,8 +34,6 @@ passport.deserializeUser((id, done) => {
         });
 });
 
-
-
 passport.use(new GoogleTokenStrategy({
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret
@@ -49,7 +48,6 @@ passport.use(new GoogleTokenStrategy({
         var profile_image =email._json.picture
       }
       console.log("as;kvncoajvzoljbdnvohaodbvsjodbiahdfib")
-
         var currentdate = new Date();
         var datetime = "Last Sync: " + currentdate.getDate() + "/"
             + (currentdate.getMonth() + 1) + "/"
@@ -62,12 +60,10 @@ passport.use(new GoogleTokenStrategy({
             .then((currentUser) => {
                 if (currentUser) {
                     console.log("current user : ",currentUser)
-                    
                     done(null, currentUser);
                   }
                   else{
                     console.log("no user")
-                 
                     database.db.none('insert into users(username, password, email, profilepic,date, payment, id)' +
                         'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id})',
                         {
@@ -77,11 +73,8 @@ passport.use(new GoogleTokenStrategy({
                             profilepic:profile_image,
                             date: datetime,
                             payment: 0,
-                            date: datetime,
-                            id:email.id
+                              id:email.id
                         })
-
-
                         .then(() => {
                             console.log("successfull !!!")
                             database.db.one('select * from users where email = $1', email.emails[0].value)
@@ -90,24 +83,80 @@ passport.use(new GoogleTokenStrategy({
                                 done(null, newUser);
                             })
 
-
                         }).catch(function (err) {
                             console.log("error : ",err)
                             // done(err, false)
 
                         });
-                  
                     }
                     })
                     .catch(function (err) {
                         console.log(err)
                     })
-          
-
-          
-
     })
 );
+
+
+passport.use(new GitHubTokenStrategy({
+    clientID: keys.gitHub.clientId,
+    clientSecret: keys.gitHub.clientSecret,
+    passReqToCallback: true
+}, function(req, accessToken, refreshToken, profile, done) {
+    console.log("profile : ", profile)
+    var currentdate = new Date();
+    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+        + (currentdate.getMonth() + 1) + "/"
+        + currentdate.getFullYear() + " @ "
+        + currentdate.getHours() + ":"
+        + currentdate.getMinutes() + ":"
+        + currentdate.getSeconds();
+        
+        database.db.oneOrNone('select * from users where email = $1', profile.emails[0].value)
+            .then((currentUser) => {
+                if (currentUser) {
+                    // already have this user
+console.log("existing user")
+                    done(null, currentUser);
+                }
+                else{
+                    console.log("new user")
+                    database.db.none('insert into users(username, password, email, profilepic,date, payment, id)' +
+                        'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id})',
+                        {
+                            name: profile.displayName,
+                            password: profile.id,
+                            email:profile.emails[0].value,
+                            profilepic: profile._json.avatar_url,
+                            date: datetime,
+                            payment: 0,
+                            id: profile.id,
+                        }).then(() => {
+                            console.log("saved New user")
+                            database.db.one('select * from users where email = $1', profile.emails[0].value)
+                                .then((newUser) => {
+                                    console.log("newUser !!!!!!" + newUser.username)
+                                    done(null, newUser);
+                                })
+
+                        }).catch(function (err) {
+
+                            console.log("error in saving ",err)
+                            done(err, false)
+
+                        });
+
+                }
+            }).catch((error)=>{
+                
+                console.log("error in saving ",error)
+                done(error, false)
+            })
+
+   
+   
+}))
+
+
 passport.use(new LocalStrategy(
     {
         usernameField: 'email',
