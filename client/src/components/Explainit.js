@@ -7,7 +7,8 @@ import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 import ScreenShare from './tool/ScreenShare'
 import ScreenRecorder from './tool/ScreenRecorder'
-import {SCREEN_SHARE,SCREEN_RECORD} from '../actions/types';
+import FullScreenShare from './tool/enitreScreenShare'
+import {SCREEN_SHARE,SCREEN_RECORD,FULL_SCREEN_SHARE} from '../actions/types';
 import Swal from 'sweetalert2';
 import { setIssueId,cancelSuucessMessage, cancelValidationErrors } from '../actions/issueActions'
 
@@ -16,6 +17,11 @@ import { setIssueId,cancelSuucessMessage, cancelValidationErrors } from '../acti
 class Explainit extends Component {
   constructor(props){
     super(props)
+    this.state={
+      sourceId:null,
+      origin:null,
+      gotmessage:false
+    }
     // this.child = React.createRef();
     this.showErrorAlert = this.showErrorAlert.bind(this);
     this.showSuccessAlert = this.showSuccessAlert.bind(this);
@@ -28,6 +34,38 @@ class Explainit extends Component {
       this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
        
     }
+ 
+      componentDidMount() {
+        console.log("asnckjadbskbsjfihb")
+        var self = this
+        // window.postMessage("world", '*');
+        function postMessageHandler(event) {
+
+            if (event.data.sourceId !== undefined) {
+                console.log("We've got a message!");
+                console.log("* Message:", event.data);
+                console.log("* Origin:", event.origin);
+                console.log("* Source:", event.source);
+                console.log("*event.data.message : ", event.data.sourceId)
+                self.setState({
+                    sourceId: event.data.sourceId
+                })
+            }
+            if (event.data === 'rtcmulticonnection-extension-loaded') {
+                self.setState({
+                    source: event.source,
+                    origin: event.origin,
+                    gotmessage: true
+                })
+            }
+        }
+        if (window.addEventListener) {
+            window.addEventListener("message", postMessageHandler, false);
+        } else {
+            window.attachEvent("onmessage", postMessageHandler);
+        }
+    }
+    
     showErrorAlert(){
       Swal.fire({
         type: 'error',
@@ -74,17 +112,29 @@ class Explainit extends Component {
       this.showSuccessAlert()
     }
     var shareElement = null;
-    if(this.props.screenAction == SCREEN_SHARE){
+    if(this.props.screenAction ===SCREEN_SHARE){
       shareElement = (
           <div className="shareControl">
       <ScreenShare  savefile={this.savefile} startDraw = {this.drawRect} />
       </div>)
   }
-  else if (this.props.screenAction==SCREEN_RECORD){
+  else if (this.props.screenAction===SCREEN_RECORD){
       shareElement =  (
           <div className="shareControl">
       <ScreenRecorder clearCanvas={this.clearCanvas} savefile={this.savefile} startDraw = {this.drawRect} />
       </div>)
+  }
+  else if(this.props.screenAction ===FULL_SCREEN_SHARE){
+    shareElement=(<div className="shareControl">
+    <FullScreenShare  
+    savefile={this.savefile} 
+    startDraw = {this.drawRect}
+    origin={this.state.origin}
+    sourceId={this.state.sourceId}
+    source={this.state.source}
+    gotmessage={this.state.gotmessage} />
+    </div>)
+
   }
     return (
         <div>

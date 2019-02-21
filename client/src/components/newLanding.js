@@ -53,8 +53,6 @@ class NewHome extends Component {
                 'You should login'
               )
         }
-
-
     }
     togglemodal = (e) => {
         var idOfClicked = e.target.id;
@@ -84,27 +82,20 @@ class NewHome extends Component {
             //     modalTool: !this.state.modalTool
             // });
             Swal.fire(
-               
                 'You should login'
-               
               )
         }
-
-
     }
 
     render() {
         var deatilsModal = null
-
         deatilsModal = (<IssueDetils />)
         console.log("length of the issues array",(this.props.issues).length);
         console.log("Issues list :",this.props.issues )
         var issueList = this.props.issues;
         console.log(issueList.length);
         console.log("issueList : ",issueList)
-        
         const issueItems = issueList.map((issue,index) => (
-           
             <div key={index} onClick={this.togglemodal} key={issue.issueid} className="issueCard">
                 <div className="orginCard">
                     <div id={issue.issueid} className="topButtons">
@@ -117,10 +108,10 @@ class NewHome extends Component {
                         <div id={issue.issueid} className="twitterHolder">
                             {/* <button id="tweet" className="buttonLight tweetButton">Tweet</button> */}
                             <div id={issue.issueid} className="twitter">
+                            {/* <ImageDisplay /> */}
                                 <img width="100%" height="100%" src={require('./images/twitter3.png')}/>
                             </div>
                         </div>
-
                     </div >
                     <div id={issue.issueid} className="questionText">
                         <p id={issue.issueid} >{issue.textexplain}</p>

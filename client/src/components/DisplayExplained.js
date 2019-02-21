@@ -32,7 +32,6 @@ import config from '../config/config'
                 "Authorization": token,
             }
         }).then((response)=>{
-           
             if(response.status === 200){
                 var allProjects = response.data.data
                 var answerProject = allProjects.filter(project => project.isquestion !="true")

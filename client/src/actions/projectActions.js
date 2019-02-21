@@ -91,6 +91,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
 export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion,issueIdFrmCpm)=> (dispatch) =>{
    console.log("got request")
    console.log("audio data : ", audioData)
+   console.log("imageData : ",imgData)
   
    var token = JSON.parse(localStorage.getItem('token'))
     if(isquestion === "false"){

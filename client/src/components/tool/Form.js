@@ -23,7 +23,7 @@ import '../css/hint.css'
 import ScreenShare from './ScreenShare'
 import ScreenRecorder from './ScreenRecorder'
 import {SCREEN_SHARE,SCREEN_RECORD} from '../../actions/types'
-import {displayShareScreen, displayScrenRecord} from '../../actions/toolActions'
+import {displayShareScreen, displayFullScrenRecord,displayScrenRecord} from '../../actions/toolActions'
 import AudioRec from './AudioRecord'
 
 
@@ -66,6 +66,7 @@ class Forms extends Component {
             isStoppedRecording:false,
             initialsize:false,
             showForm:false,
+            showShareBtns:false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -94,14 +95,21 @@ class Forms extends Component {
         this.upDateTxtExplain = this.upDateTxtExplain.bind(this);
         this.pushData = this.pushData.bind(this);
         this.shareScreen = this.shareScreen.bind(this);
+        this.shareFullScreen = this.shareFullScreen.bind(this)
         this.recordScreen = this.recordScreen.bind(this);
         this.displayForm = this.displayForm.bind(this);
         this.addRountRect = this.addRountRect.bind(this);
         this.addDiamond = this.addDiamond.bind(this);
+        this.displayShareOptions = this.displayShareOptions.bind(this)
       
     }
     test(){
         alert("sklmnfjngdf")
+    }
+    displayShareOptions(){
+        this.setState({
+            showShareBtns : !this.state.showShareBtns
+        })
     }
     shareScreen(){
       this.props.displayShareScreen()
@@ -113,6 +121,9 @@ class Forms extends Component {
     }
     recordScreen(){
         this.props.displayScrenRecord()
+    }
+    shareFullScreen(){
+        this.props.displayFullScrenRecord()
     }
 
     componentDidCatch(error, info) {
@@ -957,16 +968,21 @@ class Forms extends Component {
         if (this._isMounted) {
             console.log("clicked")
             var textExplain = this.state.textExplain
-            var imgData = (this.canv).toDataURL()
+            if(this.canv){
+                var imgData = (this.canv).toDataURL()
+            }
+            else{
+                var imgData = config.null
+            }
             var isquestion = " "
-            var shapeitems = (this.canv).toJSON();
+            // var shapeitems = (this.canv).toJSON();
             var videoData = fileData;
             console.log(" videoData : ",videoData)
             isquestion = null;
             var issueIdThisCpm = null
             var items = {
-                shapeitems: JSON.parse(shapeitems),
-                images: this.state.images
+                // shapeitems: JSON.parse(shapeitems),
+                // images: this.state.images
             }
             
           
@@ -1141,7 +1157,6 @@ class Forms extends Component {
         if(this.props.ShareAction){
 
        this.test()
-
         }
         else{
 
@@ -1155,8 +1170,25 @@ class Forms extends Component {
                     onClick={this.assignImageUrl} dragable={true} height="100%" width="100%" object-fit="contain" src={imgs.url} ></img>
             </div>
         ));
- 
-        if(this.props.shareAction === true){
+
+        var ShareBtns = null
+
+        if(this.state.showShareBtns){
+            ShareBtns=(<div classsName="Sharebtns">
+                    <button className="buttonDark" onClick={this.shareScreen}>
+                        Share canvas 
+                    </button>
+                    <button className="buttonDark"onClick={this.shareFullScreen}>
+                        Share entire screen 
+                    </button>
+
+                    </div>)
+        }
+        else{
+            ShareBtns=(<p>Drawing goes here</p>)
+
+        }
+    if(this.props.shareAction === true){
         var form =(
             <div>
             <div className="logo" >
@@ -1235,13 +1267,11 @@ class Forms extends Component {
             <div className="shareScreen">
                 <div className="screenShareBtn">
                 <span className="hint--bottom" aria-label="Share screen!">
-               
-                <img onClick={this.shareScreen} height="100%" width="100%" src={require('../images/screensharing.png')}/>
-
+                <img onClick={this.displayShareOptions} height="100%" width="100%" src={require('../images/screensharing.png')}/>
                </span>
                 </div>
                 <div className="Drawing">
-                    <p>Drawing goes here</p>
+                    {ShareBtns}
                 </div>
                 <div className="recorderScreen">
                 <div >
@@ -1308,4 +1338,4 @@ const mapStateToProps = state => ({
     shareAction : state.tools.displayForm,
     videoData: state.tools.videoBlob
 })
-export default connect(mapStateToProps, { creatAnsProject,displayShareScreen,displayScrenRecord })(Forms)
+export default connect(mapStateToProps, { creatAnsProject,displayFullScrenRecord,displayShareScreen,displayScrenRecord })(Forms)

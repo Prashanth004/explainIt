@@ -7,7 +7,11 @@ import {DISPLAY_SCREEN_SHARE,
     STOP_SHARING,
     STOP_RECORDING,
     SET_VIDEO_BLOB,
-    DISCARD_RECORD_CHANGES
+    DISCARD_RECORD_CHANGES,
+    FULL_SCREEN_SHARE,
+    FULL_START_SHARING,
+    FULL_STOP_SHARING,
+    DISPLAY_FULL_SHARE
 } from './types'
 
 
@@ -21,6 +25,13 @@ dispatch({
 export const displayScrenRecord=()=>(dispatch)=>{
     dispatch({
         type:DISPLAY_SCREEN_RECORD,
+        payload:SCREEN_RECORD
+    })
+
+}
+export const displayFullScrenRecord=()=>(dispatch)=>{
+    dispatch({
+        type:DISPLAY_FULL_SHARE,
         payload:SCREEN_RECORD
     })
 
@@ -42,6 +53,18 @@ export const StartedRecording=()=>(dispatch)=>{
 export const stopedSharing = () =>(dispatch)=>{
     dispatch({
         type:STOP_SHARING,
+        payload:false
+    })
+}
+export const fullStartedSharing = () =>(dispatch)=>{
+    dispatch({
+        type:FULL_START_SHARING,
+        payload:true
+    })
+}
+export const fullStopedSharing = () =>(dispatch)=>{
+    dispatch({
+        type:FULL_STOP_SHARING,
         payload:false
     })
 }

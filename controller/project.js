@@ -40,7 +40,11 @@ id: rn(options),
             }
            videopathName = config.domain + '/audio/' + req.body.projectName + '.webm'
         }
-        var imageBuffer = decodeBase64Image(req.body.imageData);
+        console.log("req.body.imageData:",req.body.imageData)
+        if(req.body.imageData!="null" ){
+            console.log("i am inside if")
+            var imageBuffer = decodeBase64Image(req.body.imageData);
+        }
         var rand2= rn(options)
 
         if (req.body.isquestion=="true" || req.body.issueID==null) {
@@ -60,6 +64,7 @@ id: rn(options),
                     })
                 }
                 else {
+                    if(req.body.imageData!="null"){
                     fs.writeFile('public/images/' + req.body.projectName + '.png', imageBuffer.data, function (err) {
                         if (err) {
                             console.log("error : ", err)
@@ -70,7 +75,11 @@ id: rn(options),
 
                         }
                     })
-                  
+                    var imgurl = config.domain + '/images/' + req.body.projectName + '.png';
+                }
+                else{
+                    var imgurl = config.domain + '/images/default.png'
+                }
                     var dateNow = new Date().toString()
                     var rand = rn(options)
                     database.db.oneOrNone('insert into projects(name,email, projectid,  date,textExplain ,issueid,isquestion, imgurl,videofilepath)' +
@@ -80,13 +89,14 @@ id: rn(options),
                             email: req.user.email,
                             projectid: rand,
                             date: dateNow,
+                            imgurl:imgurl,
                             textExplain: req.body.textExplain,
                             isquestion:req.body.isquestion,
                             issueid: issueID,
-                            imgurl: config.domain + '/images/' + req.body.projectName + '.png',
                             videofilepath: videopathName,
 
                         }).then((respponse) => {
+                            console.log("saving project successfull")
                             database.db.one('select * from projects where projectid = $1', rand)
                                     .then(data=>{
                              res.status(201).send({
@@ -103,6 +113,8 @@ id: rn(options),
                             res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
                         })
                 }
+            }).catch((error)=>{
+                console.log("error : ",error)
             })
 
     }
