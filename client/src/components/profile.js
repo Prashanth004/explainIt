@@ -1,22 +1,19 @@
 import React, { Component } from 'react'
 import './css/newlanding.css'
 import Navbar from '../components/Navbar'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import IssueDetils from './issueModal'
 import { connect } from 'react-redux';
-import Froms from './tool/Form';
 import { fetchIssues, setIssueId } from '../actions/issueActions';
 import { fetchProjectbyIssue ,clearAnswers } from '../actions/projectActions';
 import { stillAuthenicated } from '../actions/signinAction';
 import { getProfileDetails } from '../actions/profileAction'
 import PropType from 'prop-types';
 import LoginMadal from './LoginModal'
-// import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
 import config from '../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
-
 
 
 class NewHome extends Component {
@@ -30,13 +27,12 @@ class NewHome extends Component {
         this.explainTool = this.explainTool.bind(this)
     }
 
-
     componentWillMount() {
-
         this.props.fetchIssues()
+        var userId=this.props.match.params.userid;
+        this.props.getProfileDetails(userId)
     }
   
-
     toggleModalCreate = () => {
         if (this.props.isAauthenticated) {
             this.props.setIssueId(null)
@@ -54,7 +50,7 @@ class NewHome extends Component {
         var classOfClicked = e.target.className
         console.log("e.target.id : ",e.target.id)
 
-        if (classOfClicked!=="singleMember" && classOfClicked!=="explainAnswer" && classOfClicked!=="displayPeople" && classOfClicked!=="likes" && classOfClicked!== "numberOfPeople" &&idOfClicked !=="explainIt" && idOfClicked !=="audio" && idOfClicked !=="tweet" && idOfClicked !=="shareScreen" && idOfClicked !=="imageOfPeople" && classOfClicked !=="buttonDark explainItBtn") {
+        if ( classOfClicked!=="displayPeople" && classOfClicked!=="likes" && classOfClicked!== "numberOfPeople" &&idOfClicked !=="explainIt" && idOfClicked !=="audio" && idOfClicked !=="tweet" && idOfClicked !=="shareScreen" && idOfClicked !=="imageOfPeople" && classOfClicked !=="buttonDark explainItBtn") {
             if (this.state.modal === false) {
                 this.props.clearAnswers(e.target.id)
                 this.props.fetchProjectbyIssue(e.target.id);
@@ -79,22 +75,22 @@ class NewHome extends Component {
 
     render() {
 
-        if(this.props.isAauthenticated){
-            this.props.getProfileDetails(this.props.userId)
-            var profileCardElement = ( <ProfileCard  />
-            )
-        }
-        else{
-            var profileCardElement = null
-        }
+        
+        var profileCardElement = ( <ProfileCard  />)
         var deatilsModal = null
         deatilsModal = (<IssueDetils />)
         var issueList = this.props.issues;
-     
+        var personalIssues = null
         var self = this
-        const personalIssues = issueList.filter((issue)=>
+        var displayIssue = null;
+        if(this.props.email!==null){
+            personalIssues = issueList.filter((issue)=>
             issue.email=== self.props.email
         )
+        displayIssue =( <IssueDisplay togglemodal={this.togglemodal} explainTool = {this.explainTool} issueArray={personalIssues}/>)
+    }
+       
+      
 
         return (
             <div>
@@ -105,8 +101,7 @@ class NewHome extends Component {
                 </div>
                                    
                     <div >
-                    <IssueDisplay togglemodal={this.togglemodal} explainTool = {this.explainTool} issueArray={issueList}/>
-                    {/* {issueItems} */}
+                  {displayIssue} 
                     </div>
                 </div>
 
@@ -143,9 +138,8 @@ const mapStateToProps = state => ({
     issues: state.issues.items,
     newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
-    profilePic:state.auth.profilePic,
-    userName:state.auth.userName,
-    email:state.auth.email,
+    email:state.profile.email,
+    profilePic:state.profile.profilePic,
     userId :state.auth.id
     
 })

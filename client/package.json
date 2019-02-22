@@ -31,6 +31,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "sweetalert2": "^8.0.7",
+    "video-react": "^0.13.2",
     "webrtc-screen-capturing": "^1.0.1"
   },
   "scripts": {

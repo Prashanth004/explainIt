@@ -9,7 +9,9 @@ const initialState = {
     error :null,
     token:null,
     userName:null,
-    profilePic:null
+    profilePic:null,
+    email:null,
+    id:null
 }
 
 export default function(state = initialState, action){
@@ -27,7 +29,9 @@ export default function(state = initialState, action){
                 ...state,
                 isAuthenticated :action.payload,
                 profilePic:action.profilePic,
-                userName:action.userName
+                userName:action.userName,
+                email:action.email,
+                id:action.id
             }
         case SIGN_IN_WITH_TWITTER :
            

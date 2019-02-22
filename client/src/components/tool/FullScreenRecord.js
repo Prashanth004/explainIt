@@ -2,26 +2,24 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
-import {StartedRecording,
-    stopedRcording,discardAfterRecord} from'../../actions/toolActions'
+import {fullStartedRecording,
+    fullStopedRecording,discardAfterRecord} from'../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
-import config from '../../config/config'
-import '../css/shareScreen.css'
 
-
-export class ScreenRecorder extends Component {
+class FullScreenRecorder extends Component {
     constructor(props) {
         super(props)
         this.state = {
             recorder: null,
             downloadUrl:null,
             audioStream: null,
-            canvasStream: null,
+            screenStream: null,
             blob: null,
             finalStream: null,
             percentage:"0%",
             copyStatus:"copy link"
+            
         }
         this.recordScreenStop = this.recordScreenStop.bind(this);
         this.renderer = this.renderer.bind(this);
@@ -30,26 +28,36 @@ export class ScreenRecorder extends Component {
         this.toggle = this.toggle.bind(this);
         this.savefile = this.savefile.bind(this);
         this.discardChanges = this.discardChanges.bind(this);
-        this.copyToClipboard = this.copyToClipboard.bind(this)
+        this.receiveMessage = this.receiveMessage.bind(this);
+        this.copyToClipboard = this.copyToClipboard.bind(this);
 
     }
 
     startRecoding(){
         var self = this
-        this.props.StartedRecording();
-        var mainBtn = document.querySelector('.mainBtn');
-        mainBtn.style.backgroundColor="rgb(133, 39, 39)";
-        this.convey.innerText="Stop"
+      
         var self = this
+        var sourceId = this.props.sourceId
+        var constraints = { 
+            video: {
+                mandatory: {
+                  chromeMediaSource: 'desktop',
+                  maxWidth: 1720,
+                  maxHeight: 450,
+                  maxFrameRate: 100,
+                  minAspectRatio:1.75,
+                  chromeMediaSourceId: sourceId         
+                }
+            }};
+
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
+            navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
             var finalStream = new MediaStream();
             window.getTracks(audioStream, 'audio').forEach(function (track) {
                 finalStream.addTrack(track);
             });
-            var canvasStream = " "
-            var canvas = document.querySelector('canvas');
-            canvasStream = canvas.captureStream(25);
-            window.getTracks(canvasStream, 'video').forEach(function (track) {
+           
+            window.getTracks(screenStream, 'video').forEach(function (track) {
                 finalStream.addTrack(track);
             });
             var recorder1 = RecordRTC(finalStream, {
@@ -59,18 +67,30 @@ export class ScreenRecorder extends Component {
             self.setState({
                 recorder:recorder1,
                 audioStream: audioStream,
-                canvasStream: canvasStream,
-                finalStream: finalStream
+                screenStream: screenStream,
+                finalStream: finalStream,
+
             })
             self.props.startDraw()
 
            
-          
+        }).catch(err =>{
+            console.log(" error : ",err)
+        })
            
         }).catch(err => {
             console.log("error ouucres : ", err)
         })
     }
+    copyToClipboard(){
+        var copyText = document.querySelector('.myInput');
+        copyText.select();
+        document.execCommand("copy");
+        this.setState({
+            copyStatus:"link copied"
+        })
+    }
+
     
     startBar(){
        var self = this;
@@ -84,6 +104,7 @@ export class ScreenRecorder extends Component {
             clearInterval(id);
           } else {
             width= width+(100/90); 
+            console.log("......")
             progressbar.style.width=width+'%';
                   }
         }   
@@ -99,25 +120,34 @@ export class ScreenRecorder extends Component {
         }
     };
     discardChanges(){
-        this.props.clearCanvas();
-        this.props.discardAfterRecord();
+        // this.props.clearCanvas();
+        // this.props.discardAfterRecord();
+
+       window.location.reload();
 
     }
-    copyToClipboard(){
-        var copyText = document.querySelector('.myInput');
-        copyText.select();
-        document.execCommand("copy");
-        this.setState({
-            copyStatus:"link copied"
-        })
+    receiveMessage() {
+        
+        console.log("i reached insoide start Recording")
+        var mainBtn = document.querySelector('.mainBtn');
+        mainBtn.style.backgroundColor="rgb(133, 39, 39)";
+        this.convey.innerText="Stop"
+        var source = this.props.source
+        var origin = this.props.origin
+        if (this.props.gotmessage) {
+            alert("got message")
+            source.postMessage('audio-plus-tab', origin);
+        }
     }
 
     toggle(){
-        if(this.props.isScreenRecording){
-            this. recordScreenStop()
+        console.log("this.props.isFullScreenRecording : ",this.props.isFullScreenRecording)
+        if(this.props.isFullScreenRecording){
+            this.recordScreenStop()
         }
         else{
-            this.startRecoding()
+            this.receiveMessage()
+            this.props.fullStartedRecording();
         }
     }
     savefile(){
@@ -128,7 +158,7 @@ export class ScreenRecorder extends Component {
         var self = this;
         var recorder1 = this.state.recorder;
         var audioStream = this.state.audioStream;
-        var canvasStream = this.state.canvasStream;
+        var screenStream = this.state.screenStream;
         console.log("recording : ",recorder1)
         if (recorder1) {
             recorder1.stopRecording(function () {
@@ -138,8 +168,8 @@ export class ScreenRecorder extends Component {
                     blob: blob
                 })
                 audioStream.stop();
-                canvasStream.stop();
-                self.props.stopedRcording()
+                screenStream.stop();
+                self.props.fullStopedRecording()
             });
         }
         else {
@@ -148,11 +178,22 @@ export class ScreenRecorder extends Component {
         this.setState({
             recorder: null,
             audioStream: null,
-            canvasStream: null,
+            screenStream: null,
         })
     }
 
     render() {
+        if(this.props.sourceId!==null){
+            console.log("render source id calling function : ",this.props.sourceId)
+            this.startRecoding()
+        }
+        if (this.props.isFullScreenRecording) {
+            this.startBar()
+            var timer = (<Countdown
+                date={Date.now() + 180000}
+                renderer={this.renderer}
+            />)
+        }
         var videoplayer = " ";
         var downLinkAudio = " ";
         var linkElement = " ";
@@ -164,14 +205,8 @@ export class ScreenRecorder extends Component {
         }
      
 
-        if (this.props.isScreenRecording) {
-            this.startBar()
-            var timer = (<Countdown
-                date={Date.now() + 180000}
-                renderer={this.renderer}
-            />)
-        }
-        if(this.props.isRecordingCompleted ===false){
+     
+        if(this.props.isFullRecordCompleted ===false){
         var recordingElements = (<div>
             <div className="progresDiv">
                  <div  className="progress" id="pbar" ></div>
@@ -192,8 +227,8 @@ export class ScreenRecorder extends Component {
     
        
         // var timer = null;
-     console.log("this.props.isSaved : ",this.props.isSaved)
-        if(this.props.isRecordingCompleted === true && this.props.isSaved==false){
+     
+        if(this.props.isFullRecordCompleted === true && this.props.isSaved===false){
             var postShareElements= (<div className = "postRecord">
             {videoplayer}
                  <p>Do you want to sav it?</p>
@@ -227,23 +262,60 @@ export class ScreenRecorder extends Component {
             <div>
                {recordingElements}
                 {postShareElements}
+          
+
+                {/* <div class="container">
+  <div class="progress" id="progress"></div>
+  <audio id="audio" src="https://www.freesound.org/data/previews/338/338825_1648170-lq.mp3"></audio>
+  <button class="togglePlay" onClick="togglePlay()">Play/Pause</button>
+</div> */}
+
+
+
+
+
+                {/* <div>
+                    {timer}
+                </div>
+                <div className="Btns">
+                    <button className="buttonLight btnss" disabled={this.state.stopBtn} onClick={this.recordScreenStop}>
+                        Stop
+          </button>
+                    <button className="buttonLight btnss" disabled={this.state.startBtn} onClick={this.recordScreenStart}>
+                        Start
+          </button>
+                    <input type="text" onChange={this.handle_dest} />
+                    <button className="buttonLight btnss" disabled={this.state.startBtn} onClick={this.generateLink}>
+                        shareScreenLink
+          </button>
+                    <button className="buttonLight btnss" disabled={this.state.startBtn} onClick={this.startScreenShareSend}>
+                        Send
+          </button>
+                </div>
+                <div className="videoPlayer">
+                    {linkElement}
+                    {videoplayer}
+                    <audio id="video" controls={true} ref={a => this.videoTag} srcObject=" " ></audio>
+                    {/* {downLinkAudio} 
+                    </div>
+                    */}
+            
             </div>
         )
     }
 }
-ScreenRecorder.PropType={
-    StartedRecording : PropType.func.isRequired,
-    stopedRcording :PropType.func.isRequired,
+FullScreenRecorder.PropType={
+    fullStartedRecording : PropType.func.isRequired,
+    fullStopedRecording :PropType.func.isRequired,
     discardAfterRecord :PropType.func.isRequired,
     
 }
 const mapStateToProps = state =>({
-    isScreenRecording :state.tools.isScreenRecording,
-    isRecordingCompleted : state.tools.isRecordingCompleted,
+    isFullScreenRecording :state.tools.isFullScreenRecording,
+    isFullRecordCompleted : state.tools.isFullRecordCompleted,
     isSaved :state.issues.successCreation,
-    newProject:state.issues.newissueItem,
     sharablelink : state.issues.sharablelink
 }) 
 
-export default connect(mapStateToProps,{StartedRecording,discardAfterRecord, stopedRcording})(ScreenRecorder)
+export default connect(mapStateToProps,{fullStartedRecording,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
 

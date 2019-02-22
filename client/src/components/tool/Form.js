@@ -23,7 +23,7 @@ import '../css/hint.css'
 import ScreenShare from './ScreenShare'
 import ScreenRecorder from './ScreenRecorder'
 import {SCREEN_SHARE,SCREEN_RECORD} from '../../actions/types'
-import {displayShareScreen, displayFullScrenRecord,displayScrenRecord} from '../../actions/toolActions'
+import {displayShareScreen,displayFullScrenRecord, displayFullScreShare,displayScrenRecord} from '../../actions/toolActions'
 import AudioRec from './AudioRecord'
 
 
@@ -66,7 +66,8 @@ class Forms extends Component {
             isStoppedRecording:false,
             initialsize:false,
             showForm:false,
-            showShareBtns:false
+            showShareBtns:false,
+            showRecordBtns:false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -95,12 +96,15 @@ class Forms extends Component {
         this.upDateTxtExplain = this.upDateTxtExplain.bind(this);
         this.pushData = this.pushData.bind(this);
         this.shareScreen = this.shareScreen.bind(this);
-        this.shareFullScreen = this.shareFullScreen.bind(this)
+        this.shareFullScreenShare = this.shareFullScreenShare.bind(this)
         this.recordScreen = this.recordScreen.bind(this);
         this.displayForm = this.displayForm.bind(this);
         this.addRountRect = this.addRountRect.bind(this);
         this.addDiamond = this.addDiamond.bind(this);
-        this.displayShareOptions = this.displayShareOptions.bind(this)
+        this.displayShareOptions = this.displayShareOptions.bind(this);
+        this.displayRecordBtn = this.displayRecordBtn.bind(this);
+        this.recordFullScreen = this.recordFullScreen.bind(this);
+
       
     }
     test(){
@@ -108,23 +112,44 @@ class Forms extends Component {
     }
     displayShareOptions(){
         this.setState({
+            showRecordBtns:false,
             showShareBtns : !this.state.showShareBtns
         })
     }
     shareScreen(){
       this.props.displayShareScreen()
     }
-    displayForm(){
+    shareFullScreenShare(){
+        this.props.displayFullScreShare()
+    }
+
+
+    displayRecordBtn(){
         this.setState({
-          showForm:true
+            showShareBtns : false,
+            showRecordBtns: !this.state.showRecordBtns
         })
     }
     recordScreen(){
         this.props.displayScrenRecord()
     }
-    shareFullScreen(){
+    recordFullScreen(){
         this.props.displayFullScrenRecord()
     }
+
+
+
+
+
+
+
+    displayForm(){
+        this.setState({
+          showForm:true
+        })
+    }
+   
+  
 
     componentDidCatch(error, info) {
         // You can also log the error to an error reporting service
@@ -967,23 +992,25 @@ class Forms extends Component {
     pushData(fileData) {
         if (this._isMounted) {
             console.log("clicked")
+            var shapeitems = null
             var textExplain = this.state.textExplain
             if(this.canv){
                 var imgData = (this.canv).toDataURL()
+                var items = {
+                    shapeitems: JSON.parse(shapeitems),
+                    images: this.state.images
+                }
             }
             else{
                 var imgData = config.null
+                var items = {}
             }
             var isquestion = " "
-            // var shapeitems = (this.canv).toJSON();
             var videoData = fileData;
             console.log(" videoData : ",videoData)
             isquestion = null;
             var issueIdThisCpm = null
-            var items = {
-                // shapeitems: JSON.parse(shapeitems),
-                // images: this.state.images
-            }
+           
             
           
             if (this.props.issueId !== null) {
@@ -1171,21 +1198,33 @@ class Forms extends Component {
             </div>
         ));
 
-        var ShareBtns = null
+        var ShareRecordBtns = null
 
         if(this.state.showShareBtns){
-            ShareBtns=(<div classsName="Sharebtns">
+            ShareRecordBtns=(<div classsName="Sharebtns">
                     <button className="buttonDark" onClick={this.shareScreen}>
                         Share canvas 
                     </button>
-                    <button className="buttonDark"onClick={this.shareFullScreen}>
+                    <button className="buttonDark"onClick={this.shareFullScreenShare}>
                         Share entire screen 
                     </button>
 
                     </div>)
         }
+        else if(this.state.showRecordBtns){
+            ShareRecordBtns=(<div classsName="Sharebtns">
+            <button className="buttonDark" onClick={this.recordScreen}>
+                Record canvas 
+            </button>
+            <button className="buttonDark"onClick={this.recordFullScreen}>
+                Record entire screen 
+            </button>
+
+            </div>)
+        }
+        
         else{
-            ShareBtns=(<p>Drawing goes here</p>)
+            ShareRecordBtns=(<p>Drawing goes here</p>)
 
         }
     if(this.props.shareAction === true){
@@ -1271,12 +1310,12 @@ class Forms extends Component {
                </span>
                 </div>
                 <div className="Drawing">
-                    {ShareBtns}
+                    {ShareRecordBtns}
                 </div>
                 <div className="recorderScreen">
                 <div >
                 <span className="hint--bottom" aria-label="Record screen!">
-                <img onClick={this.recordScreen} height="60%" width="60%" src={require('../images/download.jpg')}/>
+                <img onClick={this.displayRecordBtn} height="60%" width="60%" src={require('../images/download.jpg')}/>
                 </span>
                 </div>
 
@@ -1331,11 +1370,12 @@ class Forms extends Component {
 Forms.PropType = {
     creatAnsProject: PropType.func.isRequired,
     displayShareScreen : PropType.func.isRequired,
-    displayScrenRecord : PropType.func.isRequired
+    displayScrenRecord : PropType.func.isRequired,
+    displayFullScrenRecord : PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
     shareAction : state.tools.displayForm,
     videoData: state.tools.videoBlob
 })
-export default connect(mapStateToProps, { creatAnsProject,displayFullScrenRecord,displayShareScreen,displayScrenRecord })(Forms)
+export default connect(mapStateToProps, {displayFullScrenRecord, creatAnsProject,displayFullScreShare,displayShareScreen,displayScrenRecord })(Forms)

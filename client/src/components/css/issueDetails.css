@@ -2,6 +2,9 @@
 margin-top:0;
 border-bottom-style: none;
 border-bottom-width: 0px;
+box-shadow: 0px 0px 0px 0px rgba(85, 85, 85, 0.329);
+width:100%;
+
 
 }
 .questionModal{
@@ -18,17 +21,24 @@ border-bottom-width: 0px;
     border-width:0.2px; */
 }
 .explainModal{
-    display:grid;
-    grid-template-columns: 16.66% 16.66% 16.66% 16.66% 16.66% 16.66% ;
+   margin-top:10px;
+   margin-bottom:10px;
     width:100%;
-    padding:15px;
+    display:grid;
+    /* grid-template-columns: 16.66% 16.66% 16.66% 16.66% 16.66% 16.66% ; */
+    grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%; 
+    grid-row-gap: 10px;
+    
+
+   
+  
 }
 .imagePeopleModal{
     /* background-color: #222222; */
     display: inline-block;
     height:55px;
     width:55px;
-    margin:2px;
+    margin:auto;
 
   }
   .audioModal{
@@ -36,7 +46,7 @@ border-bottom-width: 0px;
      margin:auto;
 
      width:100%;
-     height:200px;
+     height:260px;
      text-align: center;
      align-content: center;
      align-items: center;

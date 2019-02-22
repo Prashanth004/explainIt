@@ -36,6 +36,8 @@
     "peer": "^0.2.10",
     "pg-promise": "^5.9.7",
     "random-number": "0.0.9",
-    "react-pose": "^4.0.7"
+    "react-pose": "^4.0.7",
+    "video-react": "^0.13.2",
+    "video.js": "^7.4.1"
   }
 }

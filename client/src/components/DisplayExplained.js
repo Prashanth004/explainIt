@@ -12,14 +12,18 @@ import config from '../config/config'
             DetailsOfPeople : [],
             showAllPeople : false
         }
-        this.toggleAllPeopleList = this.toggleAllPeopleList.bind(this
-        )
-    }
+        this.toggleAllPeopleList = this.toggleAllPeopleList.bind(this)
+        this.openProfile = this.openProfile.bind(this)
+        }
 
     toggleAllPeopleList(){
         this.setState({
             showAllPeople : !this.state.showAllPeople
         })
+    }
+    openProfile(e){
+        // window.open(config.react_url+'/explainIt', "_blank")
+       window.open(config.react_url+'/profile/'+e.target.id, "_blank")
     }
     componentWillMount(){
         var self = this;
@@ -45,6 +49,7 @@ import config from '../config/config'
                         const newTestJson = JSON.parse(JSON.stringify(answerProject));
                         newTestJson[index]['profilepic']=response.data.data.profilepic;
                         newTestJson[index]['username']=response.data.data.username;
+                        newTestJson[index]['id']=response.data.data.id
                         answerProject =newTestJson
                         console.log(answerProject)
                         self.setState({
@@ -71,13 +76,13 @@ import config from '../config/config'
     if(this.state.showAllPeople){
         allPeopleImages = this.state.DetailsOfPeople.map((people,index)=>(
             <div className="listOfAllPeople">
-            <div key ={index}className="singleMember">
-                   <div className="imagePeopleDiv">
+            <div key ={people.id}className="singleMember">
+                   <div id={people.id} onClick={this.openProfile}className="imagePeopleDiv">
                        <img width="100%" height="100%"src={people.profilepic} className="peopleImage"/>
                    </div>
-                   <a href="" className="peopleName">
+                   <p id={people.id} onClick={this.openProfile} className="peopleName">
                        {people.username}
-                   </a>
+                   </p>
                </div>
                </div>
     ))

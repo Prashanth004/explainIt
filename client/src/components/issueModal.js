@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import './css/newlanding.css'
 import './css/issueDetails.css'
 import { connect } from 'react-redux';
+import { Player } from 'video-react';
 import PropType from 'prop-types';
 import {getImagesByemail} from '../actions/projectActions'
+import "../../node_modules/video-react/dist/video-react.css";
+
 
 
 class issueDetails extends Component {
@@ -15,7 +18,6 @@ class issueDetails extends Component {
             video:"video",
             element:null,
             src:null,
-
         }
         this.changeDisplay = this.changeDisplay.bind(this)
         this.getImages = this.getImages.bind(this)
@@ -27,7 +29,6 @@ class issueDetails extends Component {
       var clickedProj = this.props.answerProject.find(proj=>proj.projectid == e.target.id)
         this.textExplain.textContent = clickedProj.textexplain;
         this.userName.textContent = clickedProj.username;
-       
         if(clickedProj.videofilepath){
             if(!this.videoExplain){
                 this.setState({
@@ -67,7 +68,6 @@ class issueDetails extends Component {
         console.log("this.props.questionProject : ",this.props.questionProject)
         if(this.props.questionProject.videofilepath === null){
             console.log("this.props.questionProject.imgurl: ",this.props.questionProject.imgurl)
-
             this.setState({
                 element:this.state.image,
                 src : this.props.questionProject.imgurl
@@ -114,7 +114,16 @@ class issueDetails extends Component {
             console.log("this.state.element : ",this.state.element)
             console.log("this.state.video : ",this.state.video)
             displayElement  = (<div  ref={a=>this.imgDiv = a} className="audioModal">
-            <video src={this.props.questionProject.videofilepath}  className="videoPlayer" ref={vid => this.videoExplain = vid}autoPlay="true" ></video>
+            {/* <video  controls  src={this.props.questionProject.videofilepath}  >
+   
+</video> */}
+            <video src={this.props.questionProject.videofilepath} controls  className="videoPlayer" ref={vid => this.videoExplain = vid}autoPlay="true" ></video>
+            {/* <Player
+    className="videoPlayer"
+      ref={vid => this.videoExplain = vid}
+      src={this.props.questionProject.videofilepath}
+    /> */}
+        
         </div>)
         }
         else{
@@ -137,21 +146,15 @@ class issueDetails extends Component {
                         </div>
                     </div>
                     <div className="orginCard">
-
                         <div className="questionText questionModal">
-                       
                             <p  ref={p => this.textExplain = p}  >{this.props.questionProject.textexplain}</p>
-
                         </div>
-                       
                         {displayElement}
-                       
                     </div>
                 </div>
                 <div className="explainModal ">
                     {bottomImages}
-
- </div>
+                </div>
             </div>
         )
     }

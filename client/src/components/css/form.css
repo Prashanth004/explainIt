@@ -21,10 +21,15 @@
     margin-top:10px;
     padding:10px;
     background-color: white;
-    border-style: solid;
+    border-style: none;
+    box-shadow: 1px 1px 6px 3px rgba(204, 204, 204, 0.24);
+
     border-width:1px;
     border-radius:3px;
     border-color:rgb(192, 190, 190);
+}
+.shareControl:hover{
+    box-shadow: 0px 0px 0px 0px;
 }
 
 .canvasToRecord{
@@ -76,10 +81,14 @@
     background-color: white;
     padding:15px;
     border-radius:3px;
-    border-color:rgb(117, 117, 117);
-    border-style: solid;
-    border-width:1px;
-
+    box-shadow: 1px 1px 6px 3px rgba(204, 204, 204, 0.24);
+    /* border-color:rgb(117, 117, 117);
+    /* border-style: solid; */
+    /* border-width:1px;  */
+ }
+ .partTwoInput:hover{
+  
+  box-shadow: 0 0px 0px 0px rgba(53, 52, 52, 0.027);
  }
 .canvasTool{
     width:110%;
@@ -158,13 +167,16 @@ background-color: rgb(90, 178, 236);
   }
   .textExplain{
 width:100%;
-border-style:solid;
-border-color:rgb(131, 131, 131);
-border-width:0.5px;
+border-style:none;
+box-shadow: 1px 1px 6px 3px rgba(204, 204, 204, 0.24);
+
+/* border-color:rgb(131, 131, 131);
+border-width:0.5px; */
 border-radius:3px;
 padding:10px;
-
-
+  }
+  .textExplain:hover{
+    box-shadow:0px 0px 0px 0px;
   }
   .inputText{
       padding:0px 10px 0px 10px;

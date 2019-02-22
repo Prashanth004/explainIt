@@ -11,7 +11,8 @@
   } */
   .navBar{
     background-color:white;
-     box-shadow: 0px 0px 3px 1px rgba(236, 236, 236, 0.911);
+     box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329);
+     height:70px;
      /* border-bottom-style:solid;
      border-bottom-color:rgb(221,221,212);
      border-bottom-width:1px; */
@@ -29,6 +30,7 @@
   width:100%;
   height:100%;
   border-radius:50%;
+ 
 }
 .profileImagesDiv{
   margin:0px 10px 0px 10px;
@@ -77,9 +79,77 @@ padding-top:-10px;
 text-align: center;
   margin:auto;
 }
+.Profilecard{
+  width:80%;
+  height:200px;
+  margin:auto;
+  margin-top:40px;
+  background-color:rgb(52,161,165);
+  border-style:none;
+  border-radius:6px;
+  box-shadow: 0px 0px 5px 1px rgba(199, 199, 199, 0.527);
+ 
+}
+.Profilecard:hover{
+  box-shadow: 0px 0px 0px 0px rgba(143, 143, 143, 0.527);
+
+
+}
+.blackwhite{
+  text-align: right;
+  padding:10px;
+
+  height:50%;
+  background-color: white;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.displayNumber{
+  color:white;
+  text-align: center;
+  font-size: 12px;
+  margin-top:7px
+}
+.profileDetails{
+  display:grid;
+  grid-template-columns: 50% 25% 25%
+
+}
+.numberShow{
+  position: relative;
+  font-weight: bold;
+  top:-10px;
+  font-size:20px;
+}
+.profileImage{
+  height:125px;
+  width:125px;
+  border-radius:50%;
+  margin:auto;
+  background-color:white;
+  position:relative;
+  top:-50%;
+ 
+  text-align: center;
+  /* box-shadow: 0px 2px 5px 1px rgb(12, 7, 7) */
+}
+.profileImageElement{
+ 
+  height:120px;
+  width:120px;
+  border-radius:50%;
+  margin:auto;
+}
+
+
   .containerHome{
-      width:43%;
+      width:100%;
       margin:auto;
+      display:grid;
+      grid-template-columns: 30% 40% 30%;
+      grid-column-gap: 5px;
+
+
       
   }
   .questionImg{
@@ -98,7 +168,7 @@ text-align: center;
       width:100%;
       margin:auto;
      
-      box-shadow: 0px 0px 5px 1px rgba(236, 236, 236, 0.911);
+      box-shadow: 1px 1px 12px 1.5px rgba(226, 226, 226, 0.527);
       background-color:white;
       margin-top:40px;
       border-radius:3px;
@@ -106,10 +176,13 @@ text-align: center;
       border-width:0.7px;
       border-color: rgb(232,232,232);
   }
+  .issueCard:hover{
+    box-shadow: 0px 0px 0px 0px rgba(235, 235, 235, 0.911);
+  }
   .modalBody{
     /* background-color: #111; */
     padding:0px;
-    width:110%;
+    width:100%;
     margin:auto;
     align-self: center;
     position:absolute;
@@ -124,7 +197,7 @@ text-align: center;
     align-self: center;
     position:absolute;
 
-    /* padding:0px; */
+    /* paddincontainerHomecontainerHomeg:0px; */
   }
   .topButtons{
       width:100%;
@@ -134,7 +207,6 @@ text-align: center;
     border-bottom-style:solid;
     border-bottom-color: rgb(232,232,232);
     border-bottom-width:0.5px;
-   
   }
   .userName{
     text-align: center;

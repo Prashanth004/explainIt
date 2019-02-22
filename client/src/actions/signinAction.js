@@ -115,6 +115,8 @@ export const stillAuthenicated = () => (dispatch) => {
                 type: CHECK_TOKEN_VALIDIDTY,
                 userName:response.data.user.username,
                 profilePic:response.data.user.profilepic,
+                email:response.data.user.email,
+                id:response.data.user.id,
                 payload: true
             })
         }

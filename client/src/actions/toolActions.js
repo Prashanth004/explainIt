@@ -11,7 +11,12 @@ import {DISPLAY_SCREEN_SHARE,
     FULL_SCREEN_SHARE,
     FULL_START_SHARING,
     FULL_STOP_SHARING,
-    DISPLAY_FULL_SHARE
+    DISPLAY_FULL_SHARE,
+    FULL_START_RECORD,
+    FULL_STOP_RECORD,
+    DISPLAY_FULL_SCREEN_RECORD,
+    FULL_SCREEN_RECORD
+
 } from './types'
 
 
@@ -29,13 +34,23 @@ export const displayScrenRecord=()=>(dispatch)=>{
     })
 
 }
-export const displayFullScrenRecord=()=>(dispatch)=>{
+export const displayFullScreShare=()=>(dispatch)=>{
     dispatch({
         type:DISPLAY_FULL_SHARE,
-        payload:SCREEN_RECORD
+        payload:FULL_SCREEN_SHARE
     })
 
 }
+
+export const displayFullScrenRecord=()=>(dispatch)=>{
+    dispatch({
+        type:DISPLAY_FULL_SCREEN_RECORD,
+        payload:FULL_SCREEN_RECORD
+    })
+
+}
+
+
 export const StartedSharing=()=>(dispatch)=>{
     dispatch({
         type:START_SHARING,
@@ -74,6 +89,23 @@ export const stopedRcording = () =>(dispatch)=>{
         payload:false
     })
 }
+
+
+export const fullStartedRecording = () =>(dispatch)=>{
+    console.log("i am in action fullStaetedrecording")
+    dispatch({
+        type:FULL_START_RECORD,
+        payload:true
+    })
+}
+export const fullStopedRecording = () =>(dispatch)=>{
+    dispatch({
+        type:FULL_STOP_RECORD,
+        payload:false
+    })
+}
+
+
 
 export const saveVideoBlob = (videoBlob) => (dispatch)=>{
     console.log("videoBlob : ",videoBlob)

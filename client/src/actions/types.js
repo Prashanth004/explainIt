@@ -19,17 +19,32 @@ export const FETCH_DETAILS_OF_EXPLAINED = "FETCH_DETAILS_OF_EXPLAINED"
 
 
 //Tool related
-export const SCREEN_SHARE = "screenShare"
+
 export const DISPLAY_SCREEN_RECORD = "DISPLAY_SCREEN_RECORD"
 export const DISPLAY_SCREEN_SHARE ="DISPLAY_SCREEN_SHARE"
 export const DISPLAY_FULL_SHARE ="DISPLAY_FULL_SHARE";
-export const SCREEN_RECORD ="screenRecord";
-export const START_RECORDING = "START_RECORDING";
+export const DISPLAY_FULL_SCREEN_RECORD = "DISPLAY_FULL_SCREEN_RECORD"
+
+export const SCREEN_SHARE = "screenShare"
 export const START_SHARING = "START_SHARING";
 export const STOP_SHARING ="STOP_SHARING";
+
+export const SCREEN_RECORD ="screenRecord";
+export const START_RECORDING = "START_RECORDING";
 export const STOP_RECORDING = "STOP_RECORDING"
+
 export const SET_VIDEO_BLOB = "SET_VIDEO_BLOB"
 export const DISCARD_RECORD_CHANGES ="DISCARD_RECORD_CHANGES"
+
 export const FULL_SCREEN_SHARE ="fullScreenSharing";
 export const FULL_START_SHARING = "FULL_START_SHARING";
 export const FULL_STOP_SHARING ="FULL_STOP_SHARING";
+
+export const FULL_SCREEN_RECORD ="fullScreenRecording";
+export const FULL_START_RECORD = "FULL_START_RECORD";
+export const FULL_STOP_RECORD ="FULL_STOP_RECORD";
+
+//Profile action
+
+export const GET_PROFILE_DETAILS = "GET_PROFILE_DETAILS"
+export const GET_PROFILE_DETAILS_FAIL ="GET_PROFILE_DETAILS_FAIL"

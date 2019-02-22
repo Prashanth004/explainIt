@@ -18,8 +18,9 @@ const conf = {
     gitHubClientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947",
     react_url_git:"http://localhost:3000/git",
     canvBackground : "rgb(205, 243, 224)",
-    peopleDisplayLength:2,
-    null:"null"
+    peopleDisplayLength:8,
+    null:"null",
+    EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl"
 
 
     

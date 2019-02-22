@@ -11,7 +11,11 @@ import {DISPLAY_SCREEN_SHARE,
     FULL_START_SHARING,
     FULL_STOP_SHARING,
     DISPLAY_FULL_SHARE,
-    FULL_SCREEN_SHARE
+    FULL_SCREEN_SHARE,
+    FULL_START_RECORD,
+    FULL_STOP_RECORD,
+    FULL_SCREEN_RECORD,
+    DISPLAY_FULL_SCREEN_RECORD
 } from '../actions/types'
 
 const initialState ={
@@ -23,7 +27,10 @@ const initialState ={
     isRecordingCompleted:false,
     videoBlob:null,
     isFullScreenSharing:false,
-    isFullSharingCompleted:false
+    isFullSharingCompleted:false,
+    isFullScreenRecording:false,
+    isFullRecordCompleted:false,
+
 }
 
 export default (state=initialState, action)=>{
@@ -42,6 +49,11 @@ export default (state=initialState, action)=>{
             return{
                 ...state,
                 screenAction:FULL_SCREEN_SHARE,
+            }
+        case DISPLAY_FULL_SCREEN_RECORD:
+            return{
+                ...state,
+                screenAction:FULL_SCREEN_RECORD,
             }
         case START_SHARING:
             return{
@@ -86,11 +98,22 @@ export default (state=initialState, action)=>{
                 ...state,
                 isFullScreenSharing: action.payload,
             }
-            case FULL_STOP_SHARING:
+        case FULL_STOP_SHARING:
             return{
                 ...state,
                 isFullScreenSharing: action.payload,
                 isFullSharingCompleted:true
+            }
+            case FULL_START_RECORD:
+            return{
+                ...state,
+                isFullScreenRecording: true,
+            }
+        case FULL_STOP_RECORD:
+            return{
+                ...state,
+                isFullScreenRecording: false,
+                isFullRecordCompleted:true
             }
         default :
             return state

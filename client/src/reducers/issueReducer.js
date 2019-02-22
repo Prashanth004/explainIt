@@ -6,6 +6,8 @@ import {SET_ISUUE_ID,
     CANCEL_PROJ_CREATION_ERROR , 
     CREATE_ISSUE_PROJECT_FAILED} from '../actions/types'
 
+import config from '../config/config'
+
 
 const initialState ={
     items:[],
@@ -13,7 +15,8 @@ const initialState ={
     currentIssueId:null,
     error:false,
     successCreation : false,
-    detailsOfExplained:[]
+    detailsOfExplained:[],
+    sharablelink:null
 }  
 
 export default function(state = initialState, action){
@@ -27,6 +30,7 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 newissueIem:action.payload,
+                sharablelink:config.react_url+"/project/"+action.payload.issueid,
                 successCreation:true
             }
         case CREATE_ISSUE_PROJECT_FAILED :

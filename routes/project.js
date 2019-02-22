@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         cb(null, 'public/audio');
     },
     filename :  function(req, file, cb){
-        cb(null, req.body.projectName+'.webm')
+        cb(null, req.body.projectName+'.mp4')
     } 
 })
 // const fileFilter = (req, file, cb)=>{

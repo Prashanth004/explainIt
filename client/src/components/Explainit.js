@@ -8,9 +8,11 @@ import PropType from  'prop-types';
 import ScreenShare from './tool/ScreenShare'
 import ScreenRecorder from './tool/ScreenRecorder'
 import FullScreenShare from './tool/enitreScreenShare'
-import {SCREEN_SHARE,SCREEN_RECORD,FULL_SCREEN_SHARE} from '../actions/types';
+import FullScreenRecord from './tool/FullScreenRecord'
+import {SCREEN_SHARE,SCREEN_RECORD,FULL_SCREEN_SHARE,FULL_SCREEN_RECORD} from '../actions/types';
 import Swal from 'sweetalert2';
-import { setIssueId,cancelSuucessMessage, cancelValidationErrors } from '../actions/issueActions'
+import { setIssueId, cancelValidationErrors } from '../actions/issueActions'
+import config from '../config/config'
 
 
 
@@ -32,8 +34,28 @@ class Explainit extends Component {
   
     componentWillMount(){
       this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
+    //   window.chrome.runtime.sendMessage(config.EXTENSION_ID, 'version', response => {
+    //     console.log('Extension version: ', response);
+    //     if (!response) {
+    //       console.log('No extension');
+    //       alert(" no extension . Please install the extension")
+    //       return;
+    //     }
+    //     console.log('Extension version: ', response);
        
+    // })
+
+      var img; 
+      img = new Image(); 
+      img.src = "chrome-extension://" + config.EXTENSION_ID + "/test.png"; 
+      img.onload = function() { 
+       alert("done")
+      }; 
+      img.onerror = function() { 
+       alert("error")
+      };
     }
+  
  
       componentDidMount() {
         console.log("asnckjadbskbsjfihb")
@@ -51,6 +73,7 @@ class Explainit extends Component {
                     sourceId: event.data.sourceId
                 })
             }
+
             if (event.data === 'rtcmulticonnection-extension-loaded') {
                 self.setState({
                     source: event.source,
@@ -96,11 +119,11 @@ class Explainit extends Component {
        
       })
 
-      this.props.cancelSuucessMessage()
-      setTimeout(()=>{
-        window.close()
+      // this.props.cancelSuucessMessage()
+      // setTimeout(()=>{
+      //   window.close()
   
-      },2000);
+      // },2000);
    
      
     }
@@ -136,6 +159,18 @@ class Explainit extends Component {
     </div>)
 
   }
+
+  else if(this.props.screenAction ===FULL_SCREEN_RECORD){
+    shareElement=(<div className="shareControl">
+    <FullScreenRecord 
+    savefile={this.savefile} 
+    startDraw = {this.drawRect}
+    origin={this.state.origin}
+    sourceId={this.state.sourceId}
+    source={this.state.source}
+    gotmessage={this.state.gotmessage} />
+      </div>)
+  }
     return (
         <div>
             <Navbar />
@@ -153,12 +188,11 @@ class Explainit extends Component {
 Explainit.PropType={
     setIssueId : PropType.func.isRequired,
     cancelValidationErrors : PropType.func.issRequired,
-    cancelSuucessMessage : PropType.func
 }; 
 const mapStateToProps = state =>({
   error: state.issues.error,
   success:state.issues.successCreation ,
   screenAction : state.tools.screenAction
 })
-export default connect(mapStateToProps, {setIssueId,cancelSuucessMessage,cancelValidationErrors})(Explainit)
+export default connect(mapStateToProps, {setIssueId,cancelValidationErrors})(Explainit)
 

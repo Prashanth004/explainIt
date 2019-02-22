@@ -1,9 +1,13 @@
 .App {
   background-color:rgb(243,243,243);
   font-family: Helvetica;
+  height: '100vh';
 }
 body{
   background-color:rgb(231, 240, 248);
+ 
+  /* height: '100vh', */
+  /* min-height : '100vh' */
   
 }
 button:focus {outline:0;
@@ -11,7 +15,6 @@ outline-offset: 0px;
 outline-style: none}
 
 .buttonLight{
-  
   border-style: solid;
   border-width:0.5px;
   background-color:wihte;
@@ -21,9 +24,9 @@ outline-style: none}
   width:auto;
   padding: 0px 10px 0px 10px;
   border-color:rgb(153,153,153);
-color:rgb(153,153,153);
-outline:none;
-outline-style: none;
+  color:rgb(153,153,153);
+  outline:none;
+  outline-style: none;
   border-radius:3px;
   background-color:white;
 }

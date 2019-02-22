@@ -46,12 +46,12 @@ export const cancelValidationErrors = () =>dispath=>{
     })
 }
 
-export const cancelSuucessMessage =() =>dispatch=>{
-dispatch ({
-    type:CANCEL_PROJ_CREATION_SUCCESS,
-    payload:false
-})
-}
+// export const cancelSuucessMessage =() =>dispatch=>{
+// dispatch ({
+//     type:CANCEL_PROJ_CREATION_SUCCESS,
+//     payload:false
+// })
+// }
 
 export const getDetailsOfExplained =(issueId)=>(dispatch)=>{
     // console.log("even the actions is beig called")

@@ -36,6 +36,29 @@ exports.getUserByEmail = function(req,res){
         }
     })
 }
+exports.getUserById = function(req,res){
+    console.log("req.params.id : ",req.params.id)
+    database.db.oneOrNone('select * from users where id = $1', req.params.id)
+    .then(data=>{
+        console.log("data : ",data)
+        if(data){
+            res.status(200).send({
+                success:1,
+                data:data
+            })
+        }
+    }).catch(err =>{
+        console.log("error : ",err)
+        if(err){
+            res.status(500).send({
+                success:0,
+                msg:err
+            })
+        }
+    })
+}
+
+
 
 exports.authenticate = function(req, res) {
     database.db.oneOrNone('select * from users where email = $1', req.body.email)
