@@ -45,15 +45,15 @@ class Explainit extends Component {
        
     // })
 
-      var img; 
-      img = new Image(); 
-      img.src = "chrome-extension://" + config.EXTENSION_ID + "/test.png"; 
-      img.onload = function() { 
-       alert("done")
-      }; 
-      img.onerror = function() { 
-       alert("error")
-      };
+    //   var img; 
+    //   img = new Image(); 
+    //   img.src = "chrome-extension://" + config.EXTENSION_ID + "/test.png"; 
+    //   img.onload = function() { 
+    //    alert("done")
+    //   }; 
+    //   img.onerror = function() { 
+    //    alert("error")
+    //   };
     }
   
  
