@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
-import RecordRTC from 'recordrtc'
+import RecordRTC from 'recordrtc';
+import CopyToClipboard from './CopytoClipboard';
 import Dummy from './dummy'
 import {fullStartedRecording,
     fullStopedRecording,discardAfterRecord} from'../../actions/toolActions'
@@ -42,8 +43,8 @@ class FullScreenRecorder extends Component {
             video: {
                 mandatory: {
                   chromeMediaSource: 'desktop',
-                  maxWidth: 1720,
-                  maxHeight: 450,
+                  maxWidth: 2020,
+                  maxHeight: 600,
                   maxFrameRate: 100,
                   minAspectRatio:1.75,
                   chromeMediaSourceId: sourceId         
@@ -135,8 +136,7 @@ class FullScreenRecorder extends Component {
         var source = this.props.source
         var origin = this.props.origin
         if (this.props.gotmessage) {
-            alert("got message")
-            source.postMessage('audio-plus-tab', origin);
+             source.postMessage('audio-plus-tab', origin);
         }
     }
 
@@ -200,7 +200,7 @@ class FullScreenRecorder extends Component {
         var convey = (<p ref={a=>this.convey=a}>Start</p>)
        
         if (this.state.downloadUrl) {
-            videoplayer = (<video src={this.state.downloadUrl} controls={true}></video>)
+            videoplayer = (<video className="videoPlayer2" src={this.state.downloadUrl} controls={true}></video>)
            
         }
      
@@ -230,7 +230,10 @@ class FullScreenRecorder extends Component {
      
         if(this.props.isFullRecordCompleted === true && this.props.isSaved===false){
             var postShareElements= (<div className = "postRecord">
+            <div classNam="showVideoElement">
             {videoplayer}
+            </div>
+       
                  <p>Do you want to sav it?</p>
                  <button onClick={this.savefile} className="buttonLight save">
                    Save
@@ -245,12 +248,14 @@ class FullScreenRecorder extends Component {
             var postShareElements= (<div className = "postRecord">
             
                  <p>Link to access your saved project</p>
-                 <input className="myInput" type="text" value={this.props.sharablelink}/>
+                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
+
+                 {/* <input className="myInput" type="text" value={this.props.sharablelink}/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
                     <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
                     Copy text
                     </button>
-                </span>
+                </span> */}
              </div>)
 
          }

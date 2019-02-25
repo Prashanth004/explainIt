@@ -20,7 +20,8 @@ const conf = {
     canvBackground : "rgb(205, 243, 224)",
     peopleDisplayLength:8,
     null:"null",
-    EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl"
+    EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
+    EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2"
 
 
     

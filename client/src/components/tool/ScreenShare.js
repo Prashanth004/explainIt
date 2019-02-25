@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
+import CopyToClipboard from './CopytoClipboard';
 import html2canvas from 'html2canvas'
 import config from '../../config/config'
 import '../css/shareScreen.css'
@@ -10,9 +11,9 @@ import {StartedSharing,
     saveVideoBlob} from '../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
+
 import Swal from 'sweetalert2';
 import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap';
-
 class ScreenRecorder extends Component {
     constructor(props) {
         super(props)
@@ -34,7 +35,6 @@ class ScreenRecorder extends Component {
             peerId: null,
             connected: false,
             shareScreenLink:null,
-            copyStatus:"copy link",
             call:null,
             closedHere:false,
             showDisconectMessage:false
@@ -45,26 +45,26 @@ class ScreenRecorder extends Component {
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
-        this.copyToClipboard = this.copyToClipboard.bind(this);
+        // this.copyToClipboard = this.copyToClipboard.bind(this);
         this.endCall = this.endCall.bind(this);
         // this.recordScreenStop = this.recordScreenStop.bind(this);
     }
 
-    copyToClipboard(e){
-        if(e.target.id==="afterSave"){
-            var copyText = document.querySelector('#savedLink');
-            copyText.select();
-        }
-        else{
-            var copyText = document.querySelector('.myInput');
-            copyText.select();
-        }
+    // copyToClipboard(e){
+    //     if(e.target.id==="afterSave"){
+    //         var copyText = document.querySelector('#savedLink');
+    //         copyText.select();
+    //     }
+    //     else{
+    //         var copyText = document.querySelector('.myInput');
+    //         copyText.select();
+    //     }
         
-        document.execCommand("copy");
-        this.setState({
-            copyStatus:"link copied"
-        })
-    }
+    //     document.execCommand("copy");
+    //     this.setState({
+    //         copyStatus:"link copied"
+    //     })
+    // }
       startScreenShareSend() {
         var self = this
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
@@ -278,12 +278,13 @@ class ScreenRecorder extends Component {
             var postShareElements= (<div className = "postRecord">
             
                  <p>Link to access your saved project</p>
-                 <input id="savedLink" className="myInput" type="text" value={this.props.sharablelink}/>
+                 <CopyToClipboard sharablelink= {this.props.sharablelink} />
+                 {/* <input id="savedLink" className="myInput" type="text" value={this.props.sharablelink}/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
                     <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
                     Copy text
                     </button>
-                </span>
+                </span> */}
              </div>)
         }
         if (this.state.downloadUrl) {
@@ -295,21 +296,24 @@ class ScreenRecorder extends Component {
         }
        
         if (this.state.shareScreenLink && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
+        //    alert(this.state.sharablelink)
             linkElement = (
-                <div>
-                <p>Share the link below to get connected</p>
 
-                <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
+                <div>
+                <p>Share the link below to get connected </p>
+                <CopyToClipboard sharablelink = {this.state.shareScreenLink} />
+                {/* <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
                     <button className="buttonDark" onClick={this.copyToClipboard}>
                     Copy text
                     </button>
-                </span>
+                </span> */}
              
     </div>)
         }
         return (
             <div>
+
                 <div>
                   
                     {/* {Circle} */}

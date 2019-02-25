@@ -27,7 +27,7 @@ class Login extends Component {
     }
     handleGit(){
         var url = `https://github.com/login/oauth/authorize?client_id=${config.gitHubClientId}&scope=user&redirect_uri=${config.react_url_git}`
-        window.open(url)
+        window.open(url,'_self')
     }
 
     githubResponse(response){

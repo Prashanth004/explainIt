@@ -6,6 +6,7 @@ import {StartedRecording,
     stopedRcording,discardAfterRecord} from'../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
+import CopyToClipboard from './CopytoClipboard';
 import config from '../../config/config'
 import '../css/shareScreen.css'
 
@@ -30,7 +31,7 @@ export class ScreenRecorder extends Component {
         this.toggle = this.toggle.bind(this);
         this.savefile = this.savefile.bind(this);
         this.discardChanges = this.discardChanges.bind(this);
-        this.copyToClipboard = this.copyToClipboard.bind(this)
+        // this.copyToClipboard = this.copyToClipboard.bind(this)
 
     }
 
@@ -103,14 +104,14 @@ export class ScreenRecorder extends Component {
         this.props.discardAfterRecord();
 
     }
-    copyToClipboard(){
-        var copyText = document.querySelector('.myInput');
-        copyText.select();
-        document.execCommand("copy");
-        this.setState({
-            copyStatus:"link copied"
-        })
-    }
+    // copyToClipboard(){
+    //     var copyText = document.querySelector('.myInput');
+    //     copyText.select();
+    //     document.execCommand("copy");
+    //     this.setState({
+    //         copyStatus:"link copied"
+    //     })
+    // }
 
     toggle(){
         if(this.props.isScreenRecording){
@@ -210,12 +211,14 @@ export class ScreenRecorder extends Component {
             var postShareElements= (<div className = "postRecord">
             
                  <p>Link to access your saved project</p>
-                 <input className="myInput" type="text" value={this.props.sharablelink}/>
-                <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                    <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                    Copy text
-                    </button>
-                </span>
+                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
+
+                    {/* <input className="myInput" type="text" value={this.props.sharablelink}/>
+                    <span class="hint--bottom" aria-label={this.state.copyStatus}>
+                        <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
+                        Copy text
+                        </button>
+                    </span> */}
              </div>)
 
          }

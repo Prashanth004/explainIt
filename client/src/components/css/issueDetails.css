@@ -28,10 +28,25 @@ width:100%;
     /* grid-template-columns: 16.66% 16.66% 16.66% 16.66% 16.66% 16.66% ; */
     grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%; 
     grid-row-gap: 10px;
-    
-
-   
   
+}
+.profileNameDiv{
+    text-align: center;
+}
+.copyDisplay{
+        width:100%;
+        margin:auto;
+        /* background-color: red; */
+        text-align: center;
+}
+.topButtons{
+    width:100%;
+    padding:7px 7px 0px 0px;
+  display: grid;
+  grid-template-columns: 33.33% 33.33% 33.33%;
+  border-bottom-style:solid;
+  border-bottom-color: rgb(232,232,232);
+  border-bottom-width:0.5px;
 }
 .imagePeopleModal{
     /* background-color: #222222; */

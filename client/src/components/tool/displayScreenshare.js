@@ -3,6 +3,7 @@ import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css'
 
+
 export default class DisplayShare extends Component {
     constructor(props) {
         super(props)

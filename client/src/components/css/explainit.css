@@ -7,3 +7,20 @@
     width:69%;
     margin:auto;
 }
+.messageToDownload{
+    background-color:white;
+    border-radius: 5px;
+    width:55%;
+    margin:auto;
+    text-align: center;
+    margin-top:30px;
+    padding:30px;
+    box-shadow: 0px 2px 2px 1px rgba(85, 85, 85, 0.329);
+
+}
+.fullDiv{
+    height:100vh;
+}
+.mainContainer{
+    min-height:100vh;
+}

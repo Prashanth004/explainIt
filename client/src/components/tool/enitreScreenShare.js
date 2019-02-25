@@ -5,6 +5,8 @@ import Dummy from './dummy'
 import html2canvas from 'html2canvas'
 import config from '../../config/config'
 import '../css/shareScreen.css'
+import CopyToClipboard from './CopytoClipboard';
+
 import {fullStartedSharing,
     fullStopedSharing,
     saveVideoBlob} from '../../actions/toolActions'
@@ -46,26 +48,26 @@ class ScreenRecorder extends Component {
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
-        this.copyToClipboard = this.copyToClipboard.bind(this);
+        // this.copyToClipboard = this.copyToClipboard.bind(this);
         this.receiveMessage = this.receiveMessage.bind(this);
         this.endCall = this.endCall.bind(this)
     }
 
-    copyToClipboard(e){
-        if(e.target.id==="afterSave"){
-            var copyText = document.querySelector('#savedLink');
-            copyText.select();
-        }
-        else{
-            var copyText = document.querySelector('.myInput');
-            copyText.select();
-        }
+    // copyToClipboard(e){
+    //     if(e.target.id==="afterSave"){
+    //         var copyText = document.querySelector('#savedLink');
+    //         copyText.select();
+    //     }
+    //     else{
+    //         var copyText = document.querySelector('.myInput');
+    //         copyText.select();
+    //     }
         
-        document.execCommand("copy");
-        this.setState({
-            copyStatus:"link copied"
-        })
-    }
+    //     document.execCommand("copy");
+    //     this.setState({
+    //         copyStatus:"link copied"
+    //     })
+    // }
 
       startScreenShareSend() {
         var self = this
@@ -77,8 +79,8 @@ class ScreenRecorder extends Component {
             video: {
                 mandatory: {
                   chromeMediaSource: 'desktop',
-                  maxWidth: 1720,
-                  maxHeight: 450,
+                  maxWidth: 2020,
+                  maxHeight: 600,
                   maxFrameRate: 100,
                   minAspectRatio:1.75,
                   chromeMediaSourceId: sourceId         
@@ -330,12 +332,14 @@ class ScreenRecorder extends Component {
             var postShareElements= (<div className = "postRecord">
             
                  <p>Link to access your saved project</p>
-                 <input id="savedLink" className="myInput" type="text" value={this.props.sharablelink}/>
+                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
+
+                 {/* <input id="savedLink" className="myInput" type="text" value={this.props.sharablelink}/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
                     <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
                     Copy text
                     </button>
-                </span>
+                </span> */}
              </div>)
         }
         if (this.state.downloadUrl) {
@@ -350,12 +354,14 @@ class ScreenRecorder extends Component {
             linkElement = (
                 <div>
                     <p>Share the link below to get connected</p>
-                <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
+                    <CopyToClipboard sharablelink = {this.state.shareScreenLink} />
+
+                {/* <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
                     <button className="buttonDark" onClick={this.copyToClipboard}>
                     Copy text
                     </button>
-                </span>
+                </span> */}
              
     </div>)
         }

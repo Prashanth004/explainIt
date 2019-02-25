@@ -78,7 +78,7 @@ import config from '../config/config'
             <div className="listOfAllPeople">
             <div key ={people.id}className="singleMember">
                    <div id={people.id} onClick={this.openProfile}className="imagePeopleDiv">
-                       <img width="100%" height="100%"src={people.profilepic} className="peopleImage"/>
+                       <img id={people.id} width="100%" height="100%"src={people.profilepic} className="peopleImage"/>
                    </div>
                    <p id={people.id} onClick={this.openProfile} className="peopleName">
                        {people.username}

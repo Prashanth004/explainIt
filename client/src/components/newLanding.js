@@ -28,6 +28,7 @@ class NewHome extends Component {
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
+        this.toggleModalCreate = this.toggleModalCreate.bind(this)
     }
 
 
@@ -81,8 +82,12 @@ class NewHome extends Component {
 
         if(this.props.isAauthenticated){
             this.props.getProfileDetails(this.props.userId)
-            var profileCardElement = ( <ProfileCard  />
+            var profileCardElement = ( 
+            <div><ProfileCard  />
+                <button className="buttonDark explainBtn" onClick={this.toggleModalCreate}>Explain</button>
+                </div>
             )
+
         }
         else{
             var profileCardElement = null
@@ -97,7 +102,7 @@ class NewHome extends Component {
         )
 
         return (
-            <div>
+            <div >
                 <Navbar />
                 <div className="containerHome">
                 <div>

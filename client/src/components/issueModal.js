@@ -6,6 +6,8 @@ import { Player } from 'video-react';
 import PropType from 'prop-types';
 import {getImagesByemail} from '../actions/projectActions'
 import "../../node_modules/video-react/dist/video-react.css";
+import config from '../config/config';
+import CopyToClipboard from './tool/CopytoClipboard'
 
 
 
@@ -18,9 +20,17 @@ class issueDetails extends Component {
             video:"video",
             element:null,
             src:null,
+            displayCopyEle:false
         }
         this.changeDisplay = this.changeDisplay.bind(this)
-        this.getImages = this.getImages.bind(this)
+        this.getImages = this.getImages.bind(this);
+        this.showCopyEle = this.showCopyEle.bind(this)
+    }
+
+    showCopyEle(){
+        this.setState({
+            displayCopyEle : !this.state.displayCopyEle
+        })
     }
     
 
@@ -102,6 +112,15 @@ class issueDetails extends Component {
 
 
     render() {
+        var copyElement = null
+        if(this.state.displayCopyEle){
+            copyElement = ( <div className="copyDisplay">
+            <CopyToClipboard sharablelink = {config.react_url + '/project/' + this.props.questionProject.issueid} />
+            </div>)
+        }
+     
+
+
         var displayElement = ""
       console.log("videoSrc : ",this.state.src)
       console.log("element : ",this.state.element)
@@ -110,7 +129,7 @@ class issueDetails extends Component {
                 <img id={proj.projectid} onClick={this.changeDisplay} src={proj.profilepic} className="peopleImage"></img>
             </div>
         ))
-        if(this.state.element ===this.state.video){
+        if(this.state.element === this.state.video){
             console.log("this.state.element : ",this.state.element)
             console.log("this.state.video : ",this.state.video)
             displayElement  = (<div  ref={a=>this.imgDiv = a} className="audioModal">
@@ -136,15 +155,16 @@ class issueDetails extends Component {
                 <div >
                     <div className="topButtons ">
                         <div>
-                            <button className="buttonLight sharBtn" >Share Screen</button>
+                        <button className="buttonLight tweetButton" onClick={this.showCopyEle}>Get Sharable Link</button>
                         </div>
-                        <div className="userName">
-                           <p ref={p => this.userName = p}> </p>
+                        <div className="profileNameDiv">
+                            <p ref={p=>this.userName=p}></p>
                         </div>
                         <div >
                             <button className="buttonLight tweetButton">Tweet</button>
                         </div>
                     </div>
+                   {copyElement}
                     <div className="orginCard">
                         <div className="questionText questionModal">
                             <p  ref={p => this.textExplain = p}  >{this.props.questionProject.textexplain}</p>

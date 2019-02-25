@@ -22,39 +22,43 @@ class Explainit extends Component {
     this.state={
       sourceId:null,
       origin:null,
-      gotmessage:false
+      gotmessage:false,
+      isInstalled:true
     }
     // this.child = React.createRef();
     this.showErrorAlert = this.showErrorAlert.bind(this);
     this.showSuccessAlert = this.showSuccessAlert.bind(this);
     this.drawRect = this.drawRect.bind(this);
     this.savefile = this.savefile.bind(this);
-    this.clearCanvas = this.clearCanvas.bind(this)
+    this.clearCanvas = this.clearCanvas.bind(this);
+    this.downloadExtension = this.downloadExtension.bind(this)
   }
+  downloadExtension(){
+    window.open(config.EXTENSION_URL,"_self")
+  
+  }
+   
   
     componentWillMount(){
+      var self = this
       this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
-    //   window.chrome.runtime.sendMessage(config.EXTENSION_ID, 'version', response => {
-    //     console.log('Extension version: ', response);
-    //     if (!response) {
-    //       console.log('No extension');
-    //       alert(" no extension . Please install the extension")
-    //       return;
-    //     }
-    //     console.log('Extension version: ', response);
-       
-    // })
+    var ua = window.detect.parse(navigator.userAgent);
 
-    //   var img; 
-    //   img = new Image(); 
-    //   img.src = "chrome-extension://" + config.EXTENSION_ID + "/test.png"; 
-    //   img.onload = function() { 
-    //    alert("done")
-    //   }; 
-    //   img.onerror = function() { 
-    //    alert("error")
-    //   };
+    if(ua.browser.family === "Chrome"){
+
+      var img; 
+      img = new Image(); 
+      img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png"; 
+      img.onload = function() { 
+      
+      }; 
+      img.onerror = function() { 
+        self.setState({
+        isInstalled:false
+      })
+      };
     }
+  }
   
  
       componentDidMount() {
@@ -171,8 +175,8 @@ class Explainit extends Component {
     gotmessage={this.state.gotmessage} />
       </div>)
   }
-    return (
-        <div>
+    return (this.state.isInstalled)?(
+        <div className="mainContainer">
             <Navbar />
       <div className="formContainer">
         <Form onRef={ref => (this.child = ref)}/>
@@ -182,6 +186,13 @@ class Explainit extends Component {
       
       </div>
       </div>
+    ):(<div className="mainContainer">
+       <Navbar />
+      <div className="messageToDownload">
+      <h3>Please down the chrome extension to continue</h3>
+        <button className="buttonDark"onClick={this.downloadExtension}>Download Extension</button>
+    </div>
+    </div>
     )
   }
 }

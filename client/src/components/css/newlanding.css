@@ -104,6 +104,12 @@ text-align: center;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
+.explainBtn{
+  margin-top:15px;
+  margin-right:45px;
+  float:right;
+
+}
 .displayNumber{
   color:white;
   text-align: center;
@@ -199,15 +205,7 @@ text-align: center;
 
     /* paddincontainerHomecontainerHomeg:0px; */
   }
-  .topButtons{
-      width:100%;
-      padding:7px 7px 0px 0px;
-    display: grid;
-    grid-template-columns: 33.33% 33.33% 33.33%;
-    border-bottom-style:solid;
-    border-bottom-color: rgb(232,232,232);
-    border-bottom-width:0.5px;
-  }
+
   .userName{
     text-align: center;
   }
