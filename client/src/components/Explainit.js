@@ -12,7 +12,8 @@ import FullScreenRecord from './tool/FullScreenRecord'
 import {SCREEN_SHARE,SCREEN_RECORD,FULL_SCREEN_SHARE,FULL_SCREEN_RECORD} from '../actions/types';
 import Swal from 'sweetalert2';
 import { setIssueId, cancelValidationErrors } from '../actions/issueActions'
-import config from '../config/config'
+import config from '../config/config';
+import Home from './newLanding'
 
 
 
@@ -132,6 +133,7 @@ class Explainit extends Component {
      
     }
   render() {
+  
     if(this.props.error){
       this.showErrorAlert()
     }
@@ -175,7 +177,7 @@ class Explainit extends Component {
     gotmessage={this.state.gotmessage} />
       </div>)
   }
-    return (this.state.isInstalled)?(
+    return (this.props.isSignedIn)?((this.state.isInstalled)?(
         <div className="mainContainer">
             <Navbar />
       <div className="formContainer">
@@ -193,6 +195,8 @@ class Explainit extends Component {
         <button className="buttonDark"onClick={this.downloadExtension}>Download Extension</button>
     </div>
     </div>
+    )):(
+      <Home />
     )
   }
 }
@@ -203,7 +207,8 @@ Explainit.PropType={
 const mapStateToProps = state =>({
   error: state.issues.error,
   success:state.issues.successCreation ,
-  screenAction : state.tools.screenAction
+  screenAction : state.tools.screenAction,
+  isSignedIn: state.auth.isAuthenticated
 })
 export default connect(mapStateToProps, {setIssueId,cancelValidationErrors})(Explainit)
 

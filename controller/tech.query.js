@@ -1,6 +1,6 @@
 var promise = require('bluebird');
 var Scraper = require('images-scraper')
-  , bing = new Scraper.Bing();
+  , google = new Scraper.Google();
 
 var options = {
   // Initialization Options
@@ -14,11 +14,7 @@ var db = pgp(connectionString);
 
 function getSingleTechMiddle(req, res, next) {
   console.log(req.user)
-
   console.log("typeof(req.params.name)" + typeof (req.params.name))
-
-
-
   var techName = (req.params.name);
   db.one('select * from tech where name = $1', techName)
     .then(function (data) {
@@ -113,8 +109,8 @@ function createTech(images, name) {
 
 function getSingleTech(req, res, next) {
   console.log(req.user)
-  bing.list({
-    keyword: req.params.name + 'logo png',
+  google.list({
+    keyword: req.params.name + ' logo png',
     num: 20,
     detail: true,
     nightmare: {
@@ -122,6 +118,8 @@ function getSingleTech(req, res, next) {
     }
   })
     .then(function (data) {
+    console.log("data fro search : ", data)
+    console.log("data length : ", data.length)
       images = []
       var numImages = 0
       for (var img in data) {
@@ -138,15 +136,16 @@ function getSingleTech(req, res, next) {
       }
 
       }
+      console.log("images : ", images)
       console.log("I am sending data of " + req.params.name)
       res.status(200).send({
         success: 1,
         data: images
       })
-      result = createTech(images, req.params.name)
-      setTimeout(function () {
-        console.log(result)
-      }, 600);
+      // result = createTech(images, req.params.name)
+      // setTimeout(function () {
+      //   console.log(result)
+      // }, 600);
 
     }).catch(function (err) {
       console.log(err)

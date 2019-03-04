@@ -13,7 +13,7 @@ class Project extends Component {
   constructor(props){
     super(props)
     this.state={
-
+      issueId: null
     }
     this.toggleModalCreate = this.toggleModalCreate.bind(this)
   }
@@ -21,19 +21,22 @@ class Project extends Component {
       var issueId=this.props.match.params.projectid;
       this.props.clearAnswers(issueId)
       this.props.fetchProjectbyIssue(issueId);
+      this.setState({
+        issueId:issueId
+      })
 
   }
   toggleModalCreate = () => {
     if (this.props.isAauthenticated) {
-        this.props.setIssueId(null)
-        localStorage.setItem("issueId", null)
-        window.open(config.react_url+'/explainIt', "_blank")
-    }
-    else {
-        Swal.fire(
-            'You should login'
-          )
-    }
+      this.props.setIssueId(this.state.issueId)
+      localStorage.setItem("issueId", this.state.issueId)
+      window.open(config.react_url+'/explainIt', "_blank")
+  }
+  else {
+      Swal.fire(
+          'You should login'
+        )
+  }
 }
   render() {
     return (

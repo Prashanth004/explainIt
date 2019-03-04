@@ -92,6 +92,7 @@ export class ScreenRecorder extends Component {
 
     renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
+            console.log("123445")
             this.recordScreenStop()
             return (<Dummy></Dummy>)
 
@@ -143,9 +144,7 @@ export class ScreenRecorder extends Component {
                 self.props.stopedRcording()
             });
         }
-        else {
-            alert("Some thign went wrong")
-        }
+       
         this.setState({
             recorder: null,
             audioStream: null,

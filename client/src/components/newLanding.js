@@ -30,6 +30,9 @@ class NewHome extends Component {
         this.explainTool = this.explainTool.bind(this)
         this.toggleModalCreate = this.toggleModalCreate.bind(this)
     }
+    reloadPage(){
+        window.location.reload();
+    }
 
 
     componentWillMount() {
@@ -79,7 +82,12 @@ class NewHome extends Component {
     }
 
     render() {
-
+        var self = this
+        window.addEventListener('storage', function(event){
+            if (event.key == 'token') { 
+                self.reloadPage()
+            }
+        })
         if(this.props.isAauthenticated){
             this.props.getProfileDetails(this.props.userId)
             var profileCardElement = ( 

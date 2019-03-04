@@ -22,8 +22,8 @@ import { creatAnsProject } from '../../actions/projectActions'
 import '../css/hint.css'
 import ScreenShare from './ScreenShare'
 import ScreenRecorder from './ScreenRecorder'
-import {SCREEN_SHARE,SCREEN_RECORD} from '../../actions/types'
-import {displayShareScreen,displayFullScrenRecord, displayFullScreShare,displayScrenRecord} from '../../actions/toolActions'
+import { SCREEN_SHARE, SCREEN_RECORD } from '../../actions/types'
+import { displayShareScreen, displayFullScrenRecord, displayFullScreShare, displayScrenRecord } from '../../actions/toolActions'
 import AudioRec from './AudioRecord'
 
 
@@ -36,12 +36,12 @@ class Forms extends Component {
             imageUrl: [],
             images: [],
             circles: [],
-            elipse:[],
+            elipse: [],
             arrows: [],
             texts: [],
             textValue: null,
             rectangles: [],
-            triangle:[],
+            triangle: [],
             stageHeight: 357,
             stateWidth: 507,
             imgWidth: 60,
@@ -55,19 +55,19 @@ class Forms extends Component {
             audioData: null,
             textExplain: "",
             explainMod: true,
-            error: null, 
+            error: null,
             errorInfo: null,
             canvas: this.canv,
             recorder: null,
-            video:'',
-            audioStream:null,
-            canvasStream:null,  
-            isRecordingStarted:false,
-            isStoppedRecording:false,
-            initialsize:false,
-            showForm:false,
-            showShareBtns:false,
-            showRecordBtns:false
+            video: '',
+            audioStream: null,
+            canvasStream: null,
+            isRecordingStarted: false,
+            isStoppedRecording: false,
+            initialsize: false,
+            showForm: false,
+            showShareBtns: false,
+            showRecordBtns: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -105,35 +105,35 @@ class Forms extends Component {
         this.displayRecordBtn = this.displayRecordBtn.bind(this);
         this.recordFullScreen = this.recordFullScreen.bind(this);
 
-      
+
     }
-    test(){
+    test() {
         alert("sklmnfjngdf")
     }
-    displayShareOptions(){
+    displayShareOptions() {
         this.setState({
-            showRecordBtns:false,
-            showShareBtns : !this.state.showShareBtns
+            showRecordBtns: false,
+            showShareBtns: !this.state.showShareBtns
         })
     }
-    shareScreen(){
-      this.props.displayShareScreen()
+    shareScreen() {
+        this.props.displayShareScreen()
     }
-    shareFullScreenShare(){
+    shareFullScreenShare() {
         this.props.displayFullScreShare()
     }
 
 
-    displayRecordBtn(){
+    displayRecordBtn() {
         this.setState({
-            showShareBtns : false,
+            showShareBtns: false,
             showRecordBtns: !this.state.showRecordBtns
         })
     }
-    recordScreen(){
+    recordScreen() {
         this.props.displayScrenRecord()
     }
-    recordFullScreen(){
+    recordFullScreen() {
         this.props.displayFullScrenRecord()
     }
 
@@ -143,13 +143,13 @@ class Forms extends Component {
 
 
 
-    displayForm(){
+    displayForm() {
         this.setState({
-          showForm:true
+            showForm: true
         })
     }
-   
-  
+
+
 
     componentDidCatch(error, info) {
         // You can also log the error to an error reporting service
@@ -222,7 +222,7 @@ class Forms extends Component {
                     this.setState({ rectangles });
                 }
             }
-            if(shapes === "RegularPolygon"){
+            if (shapes === "RegularPolygon") {
                 this.state.triangle.map(function (triangle, i) {
                     if (triangle.name === name) {
                         index = i;
@@ -240,10 +240,10 @@ class Forms extends Component {
                 trio.y = obbj.y();
                 triangleRep[index] = trio;
                 if (this._isMounted) {
-                    this.setState({ triangle:triangleRep });
+                    this.setState({ triangle: triangleRep });
                 }
             }
-            if(shapes === "Ellipse"){
+            if (shapes === "Ellipse") {
                 this.state.elipse.map(function (elipse, i) {
                     if (elipse.name === name) {
                         index = i;
@@ -261,7 +261,7 @@ class Forms extends Component {
                 eli.y = obbj.y();
                 elipseRep[index] = eli;
                 if (this._isMounted) {
-                    this.setState({ elipse:elipseRep });
+                    this.setState({ elipse: elipseRep });
                 }
 
             }
@@ -383,8 +383,8 @@ class Forms extends Component {
             const arr = this.state.arrows.find(a => a.name === name);
             const txt = this.state.texts.find(t => t.name === name);
             const img = this.state.images.find(i => i.name === name);
-            const trio = this.state.triangle.find(tr=>tr.name===name);
-            const eli = this.state.elipse.find(el=>el.name===name);
+            const trio = this.state.triangle.find(tr => tr.name === name);
+            const eli = this.state.elipse.find(el => el.name === name);
             if (rect || cir || arr || txt || img || trio || eli) {
                 if (this._isMounted) {
                     this.setState({
@@ -405,7 +405,7 @@ class Forms extends Component {
     addRightArrow(event) {
         let lne = null
         lne = {
-            x:Math.floor((Math.random() * 300) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             scaleX: 1,
             scaleY: 1,
@@ -427,7 +427,7 @@ class Forms extends Component {
     addLefttArrow(event) {
         let lne = null
         lne = {
-            x:Math.floor((Math.random() * 300) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             scaleX: 1,
             scaleY: 1,
@@ -462,7 +462,7 @@ class Forms extends Component {
     addRigBotArrow(event) {
         let lne = null
         lne = {
-            x:Math.floor((Math.random() * 300) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             draggable: true,
             scaleX: 1,
@@ -482,7 +482,7 @@ class Forms extends Component {
     addRigUpArrow(event) {
         let lne = null
         lne = {
-            x:Math.floor((Math.random() * 300) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             scaleX: 1,
             scaleY: 1,
@@ -500,33 +500,33 @@ class Forms extends Component {
         }
     }
 
-    addElipse(){
-            let eli = null
-            eli = {
-                x:Math.floor((Math.random() * 350) + 50),
-                y: Math.floor((Math.random() * 250) + 50),
-                rotation: 0,
-                scaleX: 1,
-                scaleY: 1,
-                draggable: true,
-                strokeWidth: 1,
-                radius: {
-                    x : 50,
-                    y : 30
-                },
-                name: String(Math.random())
-            }
-            if (this._isMounted) {
-                this.setState({
-                    elipse: [...this.state.elipse, eli]
-                })
-            }
+    addElipse() {
+        let eli = null
+        eli = {
+            x: Math.floor((Math.random() * 350) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
+            rotation: 0,
+            scaleX: 1,
+            scaleY: 1,
+            draggable: true,
+            strokeWidth: 1,
+            radius: {
+                x: 50,
+                y: 30
+            },
+            name: String(Math.random())
+        }
+        if (this._isMounted) {
+            this.setState({
+                elipse: [...this.state.elipse, eli]
+            })
+        }
     }
 
     addCircle(event) {
         let crcle = null
         crcle = {
-            x:Math.floor((Math.random() * 350) + 50),
+            x: Math.floor((Math.random() * 350) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             rotation: 0,
             scaleX: 1,
@@ -547,7 +547,7 @@ class Forms extends Component {
         if (this._isMounted) {
             let txt = null
             txt = {
-                x:Math.floor((Math.random() * 320) + 50),
+                x: Math.floor((Math.random() * 320) + 50),
                 y: Math.floor((Math.random() * 250) + 50),
                 fontSize: 30,
                 scaleX: 1,
@@ -673,10 +673,10 @@ class Forms extends Component {
             }
             else {
                 var self = this
-                setTimeout(()=>{
+                setTimeout(() => {
                     self.addReactFull()
-                },2000)
-              
+                }, 2000)
+
             }
 
         }
@@ -703,7 +703,7 @@ class Forms extends Component {
                     const txt = this.state.texts.find(t => t.name === name);
                     const img = this.state.images.find(i => i.name === name);
                     const tri = this.state.triangle.find(tr => tr.name === name);
-                    const eli = this.state.elipse.find(el=>el.name===name);
+                    const eli = this.state.elipse.find(el => el.name === name);
                     if (rect) {
                         array = [...this.state.rectangles]
                         index = array.indexOf(rect)
@@ -714,7 +714,7 @@ class Forms extends Component {
                             }
                         }
                     }
-                    else if(tri){
+                    else if (tri) {
                         array = [...this.state.triangle]
                         index = array.indexOf(tri)
                         if (index !== -1) {
@@ -777,11 +777,11 @@ class Forms extends Component {
         this.props.onRef(undefined)
         this._isMounted = false
     }
-    addRountRect(){
+    addRountRect() {
         let recto = null
         recto = {
-            x:Math.floor((Math.random() * 300) + 50),
-                y: Math.floor((Math.random() * 250) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
+            y: Math.floor((Math.random() * 250) + 50),
             rotation: 0,
             width: 140,
             height: 60,
@@ -800,15 +800,15 @@ class Forms extends Component {
             })
 
     }
-    addTriangle(){
+    addTriangle() {
 
         let trio = null;
-        trio={
-            x:Math.floor((Math.random() * 300) + 50),
+        trio = {
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             rotation: 0,
-            sides:3,
-            radius:40,
+            sides: 3,
+            radius: 40,
             scaleX: 1,
             scaleY: 1,
             strokeWidth: 1,
@@ -817,17 +817,17 @@ class Forms extends Component {
             connerRadius: 0,
             name: String(Math.random())
         }
-        if (this._isMounted){
+        if (this._isMounted) {
             this.setState({
                 triangle: [...this.state.triangle, trio]
 
             })
         }
     }
-    addDiamond(){
+    addDiamond() {
         let recto = null
         recto = {
-            x:Math.floor((Math.random() * 300) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             rotation: 45,
             width: 80,
@@ -840,7 +840,7 @@ class Forms extends Component {
             connerRadius: 0,
             name: String(Math.random())
         }
-        if (this._isMounted){
+        if (this._isMounted) {
             this.setState({
                 rectangles: [...this.state.rectangles, recto]
 
@@ -851,7 +851,7 @@ class Forms extends Component {
     addReact(event) {
         let recto = null
         recto = {
-            x:Math.floor((Math.random() * 300) + 50),
+            x: Math.floor((Math.random() * 300) + 50),
             y: Math.floor((Math.random() * 250) + 50),
             rotation: 0,
             width: 100,
@@ -864,7 +864,7 @@ class Forms extends Component {
             connerRadius: 0,
             name: String(Math.random())
         }
-        if (this._isMounted){
+        if (this._isMounted) {
             this.setState({
                 rectangles: [...this.state.rectangles, recto]
 
@@ -912,7 +912,7 @@ class Forms extends Component {
 
             let img = null;
             img = {
-                x:Math.floor((Math.random() * 350) + 50),
+                x: Math.floor((Math.random() * 350) + 50),
                 y: Math.floor((Math.random() * 250) + 50),
                 width: this.state.imgWidth,
                 height: this.state.imgHeight,
@@ -994,25 +994,25 @@ class Forms extends Component {
             console.log("clicked")
             var shapeitems = null
             var textExplain = this.state.textExplain
-            if(this.canv){
+            if (this.canv) {
                 var imgData = (this.canv).toDataURL()
                 var items = {
                     shapeitems: JSON.parse(shapeitems),
                     images: this.state.images
                 }
             }
-            else{
+            else {
                 var imgData = config.null
                 var items = {}
             }
             var isquestion = " "
             var videoData = fileData;
-            console.log(" videoData : ",videoData)
+            console.log(" videoData : ", videoData)
             isquestion = null;
             var issueIdThisCpm = null
-           
-            
-          
+
+
+
             if (this.props.issueId !== null) {
                 console.log("stage 1")
 
@@ -1181,11 +1181,11 @@ class Forms extends Component {
 
 
     render() {
-        if(this.props.ShareAction){
+        if (this.props.ShareAction) {
 
-       this.test()
+            this.test()
         }
-        else{
+        else {
 
         }
         var shareElement = null;
@@ -1198,136 +1198,139 @@ class Forms extends Component {
             </div>
         ));
 
-        var ShareRecordBtns = null
+        var ShareBtns = null
+        var recordBtns = null;
 
-        if(this.state.showShareBtns){
-            ShareRecordBtns=(<div classsName="Sharebtns">
-                    <button className="buttonDark" onClick={this.shareScreen}>
-                        Share canvas 
+        if (this.state.showShareBtns) {
+            ShareBtns = (<div classsName="Sharebtns">
+                <button className="buttonDark" onClick={this.shareScreen}>
+                    Share canvas
                     </button>
-                    <button className="buttonDark"onClick={this.shareFullScreenShare}>
-                        Share entire screen 
+                <button className="buttonDark" onClick={this.shareFullScreenShare}>
+                    Share entire screen
                     </button>
 
-                    </div>)
+            </div>)
         }
-        else if(this.state.showRecordBtns){
-            ShareRecordBtns=(<div classsName="Sharebtns">
-            <button className="buttonDark" onClick={this.recordScreen}>
-                Record canvas 
+        else{
+            ShareBtns=(<div className="screenShareBtn">
+            <span className="hint--bottom" aria-label="Share screen!">
+                <img onClick={this.displayShareOptions} height="100%" width="100%" src={require('../images/screensharing.png')} />
+            </span>
+        </div> )
+        }
+         if (this.state.showRecordBtns) {
+            recordBtns = (<div classsName="Sharebtns">
+                <button className="buttonDark" onClick={this.recordScreen}>
+                    Record canvas
             </button>
-            <button className="buttonDark"onClick={this.recordFullScreen}>
-                Record entire screen 
+                <button className="buttonDark" onClick={this.recordFullScreen}>
+                    Record entire screen
             </button>
 
             </div>)
         }
-        
-        else{
-            ShareRecordBtns=(<p>Drawing goes here</p>)
+        else {
+            recordBtns = ( <div className="recorderScreen">
+            <div classsName="Sharebtns">
+                <span className="hint--bottom" aria-label="Record screen!">
+                    <img onClick={this.displayRecordBtn} height="100%" width="100%" src={require('../images/download.jpg')} />
+                </span>
+            </div>
+        </div>)
 
         }
-    if(this.props.shareAction === true){
-        var form =(
-            <div>
-            <div className="logo" >
-            <div className="logoSrchGrp">
-                <input className="inputText" placeholder="Search for the logo" value={this.state.value} onChange={this.handleChange} />
-                <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
-            </div>
-            <div className="grid-container">
-                {imgurl}
-            </div>
+        if (this.props.shareAction === true) {
+            var form = (
+                <div>
+                    <div className="logo" >
+                        <div className="logoSrchGrp">
+                            <input className="inputText" placeholder="Search for the logo" value={this.state.value} onChange={this.handleChange} />
+                            <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
+                        </div>
+                        <div className="grid-container">
+                            {imgurl}
+                        </div>
 
-        </div>
-        <div className="canvasTool">
-            <div className="canvOut">
-                <div className="canv" ref={a => this.DivToRecord = a} id="canv">
-                    <Stage
-                        container="canv"
-                        width={this.state.stateWidth}
-                        height={this.state.stageHeight}
-                        opacity={1}
-                        ref={stage => this.canv = stage}
-                        onMouseDown={this.handleStageMouseDown}>
+                    </div>
+                    <div className="canvasTool">
+                        <div className="canvOut">
+                            <div className="canv" ref={a => this.DivToRecord = a} id="canv">
+                                <Stage
+                                    container="canv"
+                                    width={this.state.stateWidth}
+                                    height={this.state.stageHeight}
+                                    opacity={1}
+                                    ref={stage => this.canv = stage}
+                                    onMouseDown={this.handleStageMouseDown}>
 
-                        <Layer>
-                            {this.state.rectangles.map((rect, i) => (
-                                <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />
-                            ))}
-                            {this.state.images.map((img, i) => (
-                                <Image onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...img} crossoOrigin={true} />
-                            ))}
-                            {this.state.arrows.map((lns, i) => (
-                                <Arrow onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...lns} />
-                            ))}
-                            {this.state.circles.map((crc, i) => (
-                                <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                            ))}
-                             {this.state.elipse.map((eli, i) => (
-                                <Elipse onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...eli} />
-                            ))}
-                            {this.state.texts.map((crc, i) => (
-                                <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                            ))}
-                             {this.state.triangle.map((crc, i) => (
-                                <Triangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                            ))}
-                            <TransformerComponent
-                                selectedShapeName={this.state.selectedShapeName}
-                                updateWH={this.updateWH}
+                                    <Layer>
+                                        {this.state.rectangles.map((rect, i) => (
+                                            <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />
+                                        ))}
+                                        {this.state.images.map((img, i) => (
+                                            <Image onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...img} crossoOrigin={true} />
+                                        ))}
+                                        {this.state.arrows.map((lns, i) => (
+                                            <Arrow onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...lns} />
+                                        ))}
+                                        {this.state.circles.map((crc, i) => (
+                                            <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                                        ))}
+                                        {this.state.elipse.map((eli, i) => (
+                                            <Elipse onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...eli} />
+                                        ))}
+                                        {this.state.texts.map((crc, i) => (
+                                            <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                                        ))}
+                                        {this.state.triangle.map((crc, i) => (
+                                            <Triangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                                        ))}
+                                        <TransformerComponent
+                                            selectedShapeName={this.state.selectedShapeName}
+                                            updateWH={this.updateWH}
+                                        />
+                                    </Layer>
+                                </Stage>
+                            </div>
+                        </div>
+                        <div>
+                            <Shapes
+                                addRightArrow={this.addRightArrow}
+                                addcrc={this.addCircle}
+                                addrect={this.addReact}
+                                addLefttArrow={this.addLefttArrow}
+                                addRigBotArrow={this.addRigBotArrow}
+                                addRigUpArrow={this.addRigUpArrow}
+                                addText={this.addText}
+                                handleText={this.handleText}
+                                addRountRect={this.addRountRect}
+                                addTriangle={this.addTriangle}
+                                addDiamond={this.addDiamond}
+                                addElipse={this.addElipse}
                             />
-                        </Layer>
-                    </Stage>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <Shapes
-                    addRightArrow={this.addRightArrow}
-                    addcrc={this.addCircle}
-                    addrect={this.addReact}
-                    addLefttArrow={this.addLefttArrow}
-                    addRigBotArrow={this.addRigBotArrow}
-                    addRigUpArrow={this.addRigUpArrow}
-                    addText={this.addText}
-                    handleText={this.handleText}
-                    addRountRect = {this.addRountRect}
-                    addTriangle = {this.addTriangle}
-                    addDiamond = {this.addDiamond}
-                    addElipse = {this.addElipse}
-                />
-            </div>
-        </div>
-        </div>
-        )
-    }
-    else{
-        var form =(
-            <div className="shareScreen">
-                <div className="screenShareBtn">
-                <span className="hint--bottom" aria-label="Share screen!">
-                <img onClick={this.displayShareOptions} height="100%" width="100%" src={require('../images/screensharing.png')}/>
-               </span>
+            )
+        }
+        else {
+            var form = (
+                <div className="shareScreen">
+                    <div className="btnContainers">
+                    {ShareBtns}
+                    </div>
+                    <div  className="btnContainers">
+                       {recordBtns}
+                    </div>
                 </div>
-                <div className="Drawing">
-                    {ShareRecordBtns}
-                </div>
-                <div className="recorderScreen">
-                <div >
-                <span className="hint--bottom" aria-label="Record screen!">
-                <img onClick={this.displayRecordBtn} height="60%" width="60%" src={require('../images/download.jpg')}/>
-                </span>
-                </div>
-
-                </div>
-            </div>
-        )
-    }
+            )
+        }
         if (this.state.errorInfo == null) {
             if (this.state.project === true) {
                 return <Redirect to='/projects' />
             }
-         
+
             var downLink = null
             if (this.state.canvasUrl) {
                 downLink = (<div>
@@ -1337,21 +1340,21 @@ class Forms extends Component {
             return (
 
                 <div className="formContainer">
-                  
-                        <div className="textExplainDiv">
-                            <textarea className="textExplain" placeholder="Explain in text" onChange={this.upDateTxtExplain} placeholder="type here to explain"></textarea>
-                        </div>
-                  
-                        <div className="partTwoInput">
-                             {form}
-                        </div>
 
-                      
-                           
-                            {shareElement }                          
-                            {/* <AudioRec assignAudioUrl={this.assignAudioUrl} canvass={this.recordScreen} stopRecord={this.stopRecord} /> */}
-                      
-                  
+                    <div className="textExplainDiv">
+                        <textarea className="textExplain" placeholder="Explain in text" onChange={this.upDateTxtExplain} placeholder="type here to explain"></textarea>
+                    </div>
+
+                    <div className="partTwoInput">
+                        {form}
+                    </div>
+
+
+
+                    {shareElement}
+                    {/* <AudioRec assignAudioUrl={this.assignAudioUrl} canvass={this.recordScreen} stopRecord={this.stopRecord} /> */}
+
+
                     {/* <div className="footer">
                         <button className="buttonDark" onClick={this.clearAll}>Clear</button>
                         <button className="buttonDark" onClick={this.pushData}>Save</button>
@@ -1363,19 +1366,19 @@ class Forms extends Component {
                     <br />
                 </div >
             );
-           
+
         }
     }
 }
 Forms.PropType = {
     creatAnsProject: PropType.func.isRequired,
-    displayShareScreen : PropType.func.isRequired,
-    displayScrenRecord : PropType.func.isRequired,
-    displayFullScrenRecord : PropType.func.isRequired
+    displayShareScreen: PropType.func.isRequired,
+    displayScrenRecord: PropType.func.isRequired,
+    displayFullScrenRecord: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
-    shareAction : state.tools.displayForm,
+    shareAction: state.tools.displayForm,
     videoData: state.tools.videoBlob
 })
-export default connect(mapStateToProps, {displayFullScrenRecord, creatAnsProject,displayFullScreShare,displayShareScreen,displayScrenRecord })(Forms)
+export default connect(mapStateToProps, { displayFullScrenRecord, creatAnsProject, displayFullScreShare, displayShareScreen, displayScrenRecord })(Forms)

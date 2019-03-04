@@ -24,14 +24,14 @@ var generateToken = function (req, res, next) {
 
 var sendToken = function (req, res) {
     res.setHeader('x-auth-token', req.token);
-    console.log(req.token)
+    // console.log(req.token)
     return res.status(200).send(JSON.stringify(req.user));
 };
 
 
 router.post('/auth/twitter/reverse', function (req, res) {
-    console.log("req.query.oauth_token :", req.query.oauth_token)
-    console.log("req.query.oauth_verifier :", req.query.oauth_verifier)
+    // console.log("req.query.oauth_token :", req.query.oauth_token)
+    // console.log("req.query.oauth_verifier :", req.query.oauth_verifier)
 
 
     var qs = require('querystring')
@@ -48,7 +48,7 @@ router.post('/auth/twitter/reverse', function (req, res) {
         if (err) {
             return res.send(500, { message: err.message });
         }
-        console.log("body : ", body)
+        // console.log("body : ", body)
         var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
         res.send(JSON.parse(jsonStr));
     })

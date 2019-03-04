@@ -36,11 +36,11 @@ getGitAccesstoken=(req,res,next)=>{
 
 
 router.use('/git',function(req,res,next){
-  console.log('Request sent by GitHub: ');
-  console.log(req.query);
+  // console.log('Request sent by GitHub: ');
+  // console.log(req.query);
   const code = req.query.code;
   const returnedState = req.query.state;
-  const redirect_uri ="http://localhost:3000/git"
+  const redirect_uri =frontEndDomain+"/git"
   request.post(
     {
       url:
@@ -57,11 +57,11 @@ router.use('/git',function(req,res,next){
       // The response will contain your new access token
       // this is where you store the token somewhere safe
       // for this example we're just storing it in session
-      console.log('Your Access Token: ');
-      console.log(qs.parse(body));
+      // console.log('Your Access Token: ');
+      // console.log(qs.parse(body));
       // req.access_token = qs.parse(body).access_token;
       req.body['access_token'] = qs.parse(body).access_token;
-      console.log("req.accesstoken ::: ",req.access_token);
+      // console.log("req.accesstoken ::: ",req.access_token);
      
 
       // Redirects user to /user page so we can use
@@ -78,14 +78,14 @@ router.use('/git',function(req,res,next){
 //Goolge authentication
 router.post('/google',  passport.authenticate('google-token'),function(req,res){
     var token = createToken(req.user);
-    console.log(token)
+    // console.log(token)
     res.json({ success: 1, token: 'JWT ' + token });
 });
 
 
 router.all('/git',  passport.authenticate('github-token'), function(req,res){
   var token = createToken(req.user);
-  console.log(token)
+  // console.log(token)
   res.json({ success: 1, token: 'JWT ' + token });
 } )
 

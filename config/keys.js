@@ -15,7 +15,9 @@ module.exports = {
     decryptKey:{
         key:"918027681781"
     },
-    domain:"http://localhost:9000"
+    domain:"http://localhost:9000",
+    frontEndDomain:"http:localhost:3000"
+
 };
 
 
