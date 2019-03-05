@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
-import CopyToClipboard from './CopytoClipboard';
-import Dummy from './dummy'
+import CopyToClipboard from '../CopytoClipboard';
+import Dummy from '../dummy'
 import {fullStartedRecording,
-    fullStopedRecording,discardAfterRecord} from'../../actions/toolActions'
+    fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 
@@ -36,9 +36,7 @@ class FullScreenRecorder extends Component {
 
     startRecoding(){
         var self = this
-      
-        var self = this
-        var sourceId = this.props.sourceId
+        var sourceId = this.props.extSourceId;
         var constraints = { 
             video: {
                 mandatory: {
@@ -133,10 +131,10 @@ class FullScreenRecorder extends Component {
         var mainBtn = document.querySelector('.mainBtn');
         mainBtn.style.backgroundColor="rgb(133, 39, 39)";
         this.convey.innerText="Stop"
-        var source = this.props.source
-        var origin = this.props.origin
-        if (this.props.gotmessage) {
-             source.postMessage('audio-plus-tab', origin);
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        if (this.props.extSource!==null) {
+            source.postMessage('audio-plus-tab', origin);
         }
     }
 
@@ -319,7 +317,10 @@ const mapStateToProps = state =>({
     isFullScreenRecording :state.tools.isFullScreenRecording,
     isFullRecordCompleted : state.tools.isFullRecordCompleted,
     isSaved :state.issues.successCreation,
-    sharablelink : state.issues.sharablelink
+    sharablelink : state.issues.sharablelink,
+    extSource:state.extension.source,
+    extOrigin:state.extension.origin,
+    extSourceId:state.extension.sourceId
 }) 
 
 export default connect(mapStateToProps,{fullStartedRecording,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)

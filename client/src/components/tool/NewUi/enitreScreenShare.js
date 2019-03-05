@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
-import Dummy from './dummy'
+import Dummy from '../dummy'
 import html2canvas from 'html2canvas'
-import config from '../../config/config'
-import '../css/shareScreen.css'
-import CopyToClipboard from './CopytoClipboard';
+import config from '../../../config/config'
+import '../../css/shareScreen.css'
+import CopyToClipboard from '../CopytoClipboard';
 
 import {fullStartedSharing,
     fullStopedSharing,
-    saveVideoBlob} from '../../actions/toolActions'
+    saveVideoBlob} from '../../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 import Swal from 'sweetalert2';
@@ -53,25 +53,9 @@ class ScreenRecorder extends Component {
         this.endCall = this.endCall.bind(this)
     }
 
-    // copyToClipboard(e){
-    //     if(e.target.id==="afterSave"){
-    //         var copyText = document.querySelector('#savedLink');
-    //         copyText.select();
-    //     }
-    //     else{
-    //         var copyText = document.querySelector('.myInput');
-    //         copyText.select();
-    //     }
-        
-    //     document.execCommand("copy");
-    //     this.setState({
-    //         copyStatus:"link copied"
-    //     })
-    // }
-
       startScreenShareSend() {
         var self = this
-        var sourceId = this.props.sourceId;
+        var sourceId = this.props.extSourceId;
         var ua = window.detect.parse(navigator.userAgent);
 
         if(ua.browser.family === "Chrome"){
@@ -90,9 +74,7 @@ class ScreenRecorder extends Component {
         else if(ua.browser.family ==="Firefox"){
             var constraints = {
                 video: {
-                    mediaSource: "screen", // whole screen sharing
-                    // mediaSource: "window", // choose a window to share
-                    // mediaSource: "application", // choose a window to share
+                    mediaSource: "screen", 
                     width: {max: '1920'},
                     height: {max: '1080'},
                     frameRate: {max: '10'}
@@ -158,9 +140,9 @@ class ScreenRecorder extends Component {
         
     }
     receiveMessage() {
-        var source = this.props.source
-        var origin = this.props.origin
-        if (this.props.gotmessage) {
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        if (this.props.extSource!==null) {
             source.postMessage('audio-plus-tab', origin);
         }
     }
@@ -197,11 +179,7 @@ class ScreenRecorder extends Component {
                     else if(ua.browser.family ==="Firefox"){
                         self.startScreenShareSend()
                     }
-                  
-                    
-
-                   
-                   
+            
                 });
             });
         });
@@ -286,7 +264,7 @@ class ScreenRecorder extends Component {
     }
 
     render() {
-        if(this.props.sourceId!==null){
+        if(this.props.extSourceId!==null){
             console.log("render source id calling function : ",this.props.sourceId)
             this.startScreenShareSend()
         }
@@ -366,14 +344,8 @@ class ScreenRecorder extends Component {
     </div>)
         }
         return (
-            <div>
-                <div>
-                  
-                    {/* {Circle} */}
-                </div>
-                <div className="Btns">
-          
-                </div>
+            // <div>
+              
                 <div className="LinkDisplay">
                     {linkElement}
                     {shareTimeElements}
@@ -381,7 +353,7 @@ class ScreenRecorder extends Component {
                     <audio id="video"  ref={a => this.videoTag=a} srcObject=" " ></audio>
                     {/* {downLinkAudio} */}
                 </div>
-            </div>
+            // </div>
         )
     }
 }
@@ -394,7 +366,10 @@ const mapStateToProps = state =>({
     isSharingCompleted : state.tools.isFullSharingCompleted,
     isSceenSharing : state.tools.isFullScreenSharing,
     isSaved :state.issues.successCreation,
-    sharablelink : state.issues.sharablelink
+    sharablelink : state.issues.sharablelink,
+    extSource:state.extension.source,
+    extOrigin:state.extension.origin,
+    extSourceId:state.extension.sourceId,
 }) 
 
 export default connect(mapStateToProps,{fullStartedSharing,fullStopedSharing,saveVideoBlob})(ScreenRecorder)

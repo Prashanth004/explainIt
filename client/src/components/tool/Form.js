@@ -1224,7 +1224,7 @@ class Forms extends Component {
                 <button className="buttonDark" onClick={this.recordScreen}>
                     Record canvas
             </button>
-                <button className="buttonDark" onClick={this.recordFullScreen}>
+                <button className="buttonDark" onClick={this.shareElement}>
                     Record entire screen
             </button>
 

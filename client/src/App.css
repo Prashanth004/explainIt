@@ -1,5 +1,7 @@
 .App {
-  background-color:rgb(243,243,243);
+  background-color:rgb(239,239,233);
+  /* background-color:rgb(255, 255, 255);  */
+
   font-family: Helvetica;
   height: '100vh';
 }
@@ -7,11 +9,14 @@
   min-height:100vh;
 }
 body{
-  background-color:rgb(231, 240, 248);
- 
+  /* background-color:rgb(79, 162, 235); */
+  /* background-color:rgb(116, 240, 171);  */
   /* height: '100vh', */
   /* min-height : '100vh' */
   
+}
+a{
+  color:white
 }
 button:focus {outline:0;
 outline-offset: 0px;
@@ -20,18 +25,20 @@ outline-style: none}
 .buttonLight{
   border-style: solid;
   border-width:0.5px;
-  background-color:wihte;
+  background-color:rgb(252, 252, 247);
   font-size: 15px;
   font-weight: 400;
   height:27px;
   width:auto;
   padding: 0px 10px 0px 10px;
-  border-color:rgb(153,153,153);
+  /* border-color:rgb(153,153,153); */
+  border-color:black;
   color:rgb(153,153,153);
   outline:none;
   outline-style: none;
   border-radius:3px;
-  background-color:white;
+  margin:5px;
+  /* background-color:white; */
 }
 .buttonLight:focus{
   outline:0px;

@@ -7,7 +7,8 @@ const initialState = {
     userName:null,
     noParticipated:null,
     noCreated:null,
-    errorFetchingProfileData:null
+    errorFetchingProfileData:null,
+    myIssues:null
 }
 
 export default function(state=initialState, action){
@@ -19,7 +20,8 @@ export default function(state=initialState, action){
                 userName:action.userName,
                 profilePic:action.profilePic,
                 noParticipated:action.noParticipated,
-                noCreated:action.noCreated
+                noCreated:action.noCreated,
+                myIssues:action.myIssue
             }
         case GET_PROFILE_DETAILS_FAIL:
             return {

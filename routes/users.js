@@ -79,14 +79,14 @@ router.use('/git',function(req,res,next){
 router.post('/google',  passport.authenticate('google-token'),function(req,res){
     var token = createToken(req.user);
     // console.log(token)
-    res.json({ success: 1, token: 'JWT ' + token });
+    res.json({ success: 1, token: 'JWT ' + token, user:req.user});
 });
 
 
 router.all('/git',  passport.authenticate('github-token'), function(req,res){
   var token = createToken(req.user);
   // console.log(token)
-  res.json({ success: 1, token: 'JWT ' + token });
+  res.json({ success: 1, token: 'JWT ' + token, user:req.user });
 } )
 
 // router.all('/git/redirect', function(req,res){

@@ -11,7 +11,9 @@ const initialState = {
     userName:null,
     profilePic:null,
     email:null,
-    id:null
+    id:null,
+    logoutSuccess:false
+
 }
 
 export default function(state = initialState, action){
@@ -20,13 +22,19 @@ export default function(state = initialState, action){
            
             return{
                 ...state,
+                logoutSuccess:false,
                 isAuthenticated:action.payload,
                 domainName: "google",
-                token:action.token
+                token:action.token,
+                profilePic:action.profilePic,
+                userName:action.userName,
+                email:action.email,
+                id:action.id
             }
         case CHECK_TOKEN_VALIDIDTY:
             return{
                 ...state,
+                logoutSuccess:false,
                 isAuthenticated :action.payload,
                 profilePic:action.profilePic,
                 userName:action.userName,
@@ -37,6 +45,7 @@ export default function(state = initialState, action){
            
             return{
                 ...state,
+                logoutSuccess:false,
                 isAuthenticated:action.payload,
                 domainName: "twitter",
                 token:action.token
@@ -45,8 +54,10 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 isAuthenticated:action.payload,
+                userName: null,
                 profilePic:null,
-                userName:null,
+                email:null,
+                id:null,
                 domainName: null,
                 token:null,
                 error : action.error
@@ -54,17 +65,27 @@ export default function(state = initialState, action){
         case SIGN_OUT :
             return{
                 ...state,
+                logoutSuccess:true,
                 isAuthenticated:action.payload,
                 domainName:null,
-                token:action.token
+                token:action.token,
+                userName: null,
+                profilePic:null,
+                email:null,
+                id:null
 
             }
         case SIGN_IN_WITH_GIT:
             return{
                 ...state,
+                logoutSuccess:false,
                 isAuthenticated:action.payload,
                 domainName: "github",
-                token:action.token
+                token:action.token,
+                profilePic:action.profilePic,
+                userName:action.userName,
+                email:action.email,
+                id:action.id
 
             }
         default :

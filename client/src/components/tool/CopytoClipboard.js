@@ -27,7 +27,7 @@ class copyToClipboard extends Component {
       <input id="Link" className="myInput" type="text" value={this.props.sharablelink}/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
                     <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                    Copy text
+                    Copy Link
                     </button>
             </span>
         

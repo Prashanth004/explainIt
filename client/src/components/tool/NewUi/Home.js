@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
-import './css/newlanding.css'
-import Navbar from '../components/Navbar'
+import '../../css/newlanding.css'
+import Navbar from './Navbar'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import IssueDetils from './issueModal'
+import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import Froms from './tool/Form';
-import { fetchIssues, setIssueId } from '../actions/issueActions';
-import { fetchProjectbyIssue ,clearAnswers } from '../actions/projectActions';
-import { stillAuthenicated } from '../actions/signinAction';
-import { getProfileDetails } from '../actions/profileAction'
+import Explain from './Explainit'
+import Froms from '../Form';
+import { fetchIssues, setIssueId } from '../../../actions/issueActions';
+import { fetchProjectbyIssue ,clearAnswers } from '../../../actions/projectActions';
+import { stillAuthenicated } from '../../../actions/signinAction';
+import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from './LoginModal'
+import LoginMadal from '../../LoginModal'
 // import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
-import config from '../config/config'
+import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
+import Content from './Content'
+import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 
 
 
@@ -24,20 +27,65 @@ class NewHome extends Component {
         super(props);
         this.state = {
             modal: false,
-            modalTool: false
+            modalTool: false,
+            openExplain : false,
+            showProjects:false
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
         this.toggleModalCreate = this.toggleModalCreate.bind(this)
+        this.toodleExplain = this.toodleExplain.bind(this);
+        this.toggleProjects = this.toggleProjects.bind(this);
     }
     reloadPage(){
         window.location.reload();
     }
+    componentWillMount() {
+        this.props.stillAuthenicated()
+      }
 
+    componentDidMount(){
+        var self = this
+        function postMessageHandler(event) {
+            if (event.data.sourceId !== undefined) {
+                console.log("We've got a message!");
+                console.log("* Message:", event.data);
+                console.log("* Origin:", event.origin);
+                console.log("* Source:", event.source);
+                console.log("*event.data.message__sourceId : ", event.data.sourceId)
+                self.props.saveSourceId(event.data.sourceId)
+            }
 
+            if (event.data === 'rtcmulticonnection-extension-loaded') {
+              console.log(" event.source :", event.source)
+                self.setState({
+                    source: event.source,
+                    origin: event.origin,
+                    gotmessage: true
+                })
+                self.props.saveExtensionDetails(event.source,event.origin)
+            }
+        }
+        if (window.addEventListener) {
+            window.addEventListener("message", postMessageHandler, false);
+        } else {
+            window.attachEvent("onmessage", postMessageHandler);
+        }
+    }
     componentWillMount() {
 
         this.props.fetchIssues()
+    }
+    toodleExplain(){
+        localStorage.setItem("issueId",null)
+        this.setState({
+            openExplain : !this.state.openExplain
+        })
+    }
+    toggleProjects(){
+        this.setState({
+            showProjects : !this.state.showProjects
+        })
     }
   
 
@@ -82,35 +130,48 @@ class NewHome extends Component {
     }
 
     render() {
+        var deatilsModal = null
+        deatilsModal = (<IssueDetils />)
+        var issueList = this.props.myissues;
+        
         var self = this
         window.addEventListener('storage', function(event){
             if (event.key == 'token') { 
                 self.reloadPage()
             }
         })
+        var explainDiv =null;
+        var feedDiv = null;
         if(this.props.isAauthenticated){
-            this.props.getProfileDetails(this.props.userId)
+        if(this.state.openExplain){
+            explainDiv = (<Explain />)
+        }
+        if(this.state.showProjects){
+            // var issueListRev = issueList.reverse()
+            feedDiv = ( <div >
+                <IssueDisplay togglemodal={this.togglemodal} explainTool = {this.explainTool} issueArray={issueList}/>
+                {/* {issueItems} */}
+                </div>)
+        }
+    }
+        if(this.props.isAauthenticated){
+           
+            // this.props.getProfileDetails(this.props.userId)
             var profileCardElement = ( 
-            <div><ProfileCard  />
-                <button className="buttonDark explainBtn" onClick={this.toggleModalCreate}>Explain</button>
+            <div><ProfileCard userId={this.props.userId} toggleProjects={this.toggleProjects} />
+                <button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>
                 </div>
             )
-
         }
         else{
-            var profileCardElement = null
+            var profileCardElement = (<Content />)
         }
-        var deatilsModal = null
-        deatilsModal = (<IssueDetils />)
-        var issueList = this.props.issues;
+   
      
         var self = this
-        const personalIssues = issueList.filter((issue)=>
-            issue.email=== self.props.email
-        )
-
+       
         return (
-            <div >
+            <div className="fullHome">
                 <Navbar />
                 <div className="containerHome">
                 <div>
@@ -118,8 +179,11 @@ class NewHome extends Component {
                 </div>
                                    
                     <div >
-                    <IssueDisplay togglemodal={this.togglemodal} explainTool = {this.explainTool} issueArray={issueList}/>
-                    {/* {issueItems} */}
+                 {explainDiv}
+                
+                    </div>
+                    <div>
+                    {feedDiv}
                     </div>
                 </div>
 
@@ -148,9 +212,12 @@ class NewHome extends Component {
 NewHome.PropType = {
     fetchIssues: PropType.func.isRequired,
     issues: PropType.array.isRequired,
+    
     fetchProjectbyIssue: PropType.func.isRequired,
     setIssueId: PropType.func.isRequired,
-    getProfileDetails:PropType.func.isRequired
+    getProfileDetails:PropType.func.isRequired,
+    saveExtensionDetails :PropType.func.isRequired,
+    saveSourceId : PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -158,9 +225,10 @@ const mapStateToProps = state => ({
     isAauthenticated: state.auth.isAuthenticated,
     profilePic:state.auth.profilePic,
     userName:state.auth.userName,
+    myissues : state.profile.myIssues,
     email:state.auth.email,
     userId :state.auth.id
     
 })
 
-export default connect(mapStateToProps, {fetchProjectbyIssue,setIssueId, fetchIssues, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {saveExtensionDetails, saveSourceId,fetchProjectbyIssue,setIssueId, fetchIssues, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)

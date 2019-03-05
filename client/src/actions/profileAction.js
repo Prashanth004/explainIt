@@ -7,9 +7,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
   var email = null;
   var userName = null;
   var profilepic =null;
- var noOfparticipation = null;
- var noOdprojectsCreated = null
- 
+
 
     axios({
         method: 'get',
@@ -29,15 +27,14 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
                 "Authorization": token,
             }
         }).then((response2)=>{
-            console.log("@@@@@@@@@@@@@@@",response2.data.data)
            
             var myProjects = (response2.data.data).filter(project=>(
                 project.email === response1.data.data.email
             ))
-            console.log("@@@@@@@@@@@@@@@",myProjects)
-            var myIssue = myProjects.filter(project=>(
+           var myIssue = myProjects.filter(project=>(
                 project.isquestion === "true"
             ))
+            // var issuIDMyProject = myProjects.map(project=>project.issueid)
             var noOdprojectsCreated = myIssue.length
             var noOfProj = myProjects.length
             var noOfparticipation = noOfProj - noOdprojectsCreated
@@ -46,6 +43,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
                 type:GET_PROFILE_DETAILS,
                 userName:userName,
                 email:email,
+                myIssue:myIssue,
                 profilePic:profilepic,
                 noParticipated:noOfparticipation,
                 noCreated:noOdprojectsCreated

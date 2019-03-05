@@ -18,6 +18,10 @@ export const signInWithGoogle = (tokenBlob) => (dispatch) => {
                 storeToken.then(function (token) {
                     dispatch({
                         type: SIGN_IN_WITH_GOOGLE,
+                        userName:response.user.username,
+                        profilePic:response.user.profilepic,
+                        email:response.user.email,
+                        id:response.user.id,
                         token: token,
                         payload: true
                     })
@@ -49,6 +53,10 @@ export const signInWithGitHub = (code) =>(dispatch)=>{
                 storeToken.then(function (token) {
                     dispatch({
                         type: SIGN_IN_WITH_GIT,
+                        userName:response.user.username,
+                        profilePic:response.user.profilepic,
+                        email:response.user.email,
+                        id:response.user.id,
                         token: token,
                         payload: true
                     })
@@ -135,17 +143,11 @@ export const stillAuthenicated = () => (dispatch) => {
 }
 
 export const signout =() => (dispatch)=>{
-    // var removeToken = new Promise(function (resolve, reject) {
-       
-    //     var token =null
-    //     resolve(token)
-    // })
-    // removeToken.then(function(token){
+
         localStorage.removeItem("token");
         dispatch({
             type:SIGN_OUT,
             payload:false,
             token:null
         })
-    // })
 }

@@ -37,7 +37,7 @@ id: rn(options),
             }
             videopathName = config.domain + '/audio/' + req.body.projectName + '.mp4'
         }
-        console.log("req.body.imageData:", req.body.imageData)
+        console.log("req.body.imageData:", typeof(req.body.imageData))
         if (req.body.imageData != "null") {
             console.log("i am inside if")
             var imageBuffer = decodeBase64Image(req.body.imageData);

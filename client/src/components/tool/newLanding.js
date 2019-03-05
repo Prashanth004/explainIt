@@ -1,21 +1,21 @@
 import React, { Component } from 'react'
 import './css/newlanding.css'
-import Navbar from '../components/Navbar'
+import Navbar from '../../Navbar'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import IssueDetils from './issueModal'
+import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import Froms from './tool/Form';
-import { fetchIssues, setIssueId } from '../actions/issueActions';
-import { fetchProjectbyIssue ,clearAnswers } from '../actions/projectActions';
-import { stillAuthenicated } from '../actions/signinAction';
-import { getProfileDetails } from '../actions/profileAction'
+import Froms from '../Form';
+import { fetchIssues, setIssueId } from '../../../actions/issueActions';
+import { fetchProjectbyIssue ,clearAnswers } from '../../../actions/projectActions';
+import { stillAuthenicated } from '../../../actions/signinAction';
+import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from './LoginModal'
+import LoginMadal from '../../LoginModal'
 // import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
-import config from '../config/config'
-import ProfileCard from './ProfileCard'
-import IssueDisplay from './DisplayIssues'
+import config from '../../../config/config'
+import ProfileCard from '../../ProfileCard'
+import IssueDisplay from '../../DisplayIssues'
 
 
 

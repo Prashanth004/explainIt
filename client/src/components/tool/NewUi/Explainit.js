@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import Form from './tool/Form';
+import Form from '../Form';
 import Navbar from './Navbar';
-import './css/explainit.css';
+import '../../css/explainit.css';
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
-import ScreenShare from './tool/ScreenShare'
-import ScreenRecorder from './tool/ScreenRecorder'
-import FullScreenShare from './tool/enitreScreenShare'
-import FullScreenRecord from './tool/FullScreenRecord'
-import {SCREEN_SHARE,SCREEN_RECORD,FULL_SCREEN_SHARE,FULL_SCREEN_RECORD} from '../actions/types';
+import ScreenShare from '../ScreenShare'
+import ScreenRecorder from '../ScreenRecorder'
+import FullScreenShare from './enitreScreenShare'
+import FullScreenRecord from './FullScreenRecord'
+import {SCREEN_SHARE,SCREEN_RECORD,FULL_SCREEN_SHARE,FULL_SCREEN_RECORD} from '../../../actions/types';
 import Swal from 'sweetalert2';
-import { setIssueId, cancelValidationErrors } from '../actions/issueActions'
-import config from '../config/config';
-import Home from './newLanding'
+import { setIssueId, cancelValidationErrors } from '../../../actions/issueActions'
+import {creatAnsProject} from '../../../actions/projectActions'
+import { displayFullScrenRecord, displayFullScreShare} from '../../../actions/toolActions'
+import config from '../../../config/config';
+import Home from './Home'
 
 
 
@@ -21,9 +23,6 @@ class Explainit extends Component {
   constructor(props){
     super(props)
     this.state={
-      sourceId:null,
-      origin:null,
-      gotmessage:false,
       isInstalled:true
     }
     // this.child = React.createRef();
@@ -32,14 +31,17 @@ class Explainit extends Component {
     this.drawRect = this.drawRect.bind(this);
     this.savefile = this.savefile.bind(this);
     this.clearCanvas = this.clearCanvas.bind(this);
-    this.downloadExtension = this.downloadExtension.bind(this)
+    this.downloadExtension = this.downloadExtension.bind(this);
+    this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
+    // this.displayFullScrenRecord = this.displayFullScrenRecord.bind(this);
+    this.recordFullScreen = this.recordFullScreen.bind(this);
+    this.saveVideoData = this.saveVideoData.bind(this)
   }
   downloadExtension(){
     window.open(config.EXTENSION_URL,"_self")
   
   }
    
-  
     componentWillMount(){
       var self = this
       this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
@@ -65,33 +67,7 @@ class Explainit extends Component {
       componentDidMount() {
         console.log("asnckjadbskbsjfihb")
         var self = this
-        // window.postMessage("world", '*');
-        function postMessageHandler(event) {
 
-            if (event.data.sourceId !== undefined) {
-                console.log("We've got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message : ", event.data.sourceId)
-                self.setState({
-                    sourceId: event.data.sourceId
-                })
-            }
-
-            if (event.data === 'rtcmulticonnection-extension-loaded') {
-                self.setState({
-                    source: event.source,
-                    origin: event.origin,
-                    gotmessage: true
-                })
-            }
-        }
-        if (window.addEventListener) {
-            window.addEventListener("message", postMessageHandler, false);
-        } else {
-            window.attachEvent("onmessage", postMessageHandler);
-        }
     }
     
     showErrorAlert(){
@@ -103,6 +79,12 @@ class Explainit extends Component {
       this.props.cancelValidationErrors()
     
     }
+    recordFullScreen() {
+      this.props.displayFullScrenRecord()
+  }
+  shareFullScreenShare() {
+    this.props.displayFullScreShare()
+}
 
     clearCanvas(){
       this.child.clearAll();
@@ -110,6 +92,21 @@ class Explainit extends Component {
    
     savefile(data){
       this.child.pushData(data);
+    }
+    saveVideoData(data){
+      var issueId= null
+      var textExplain = " "
+      var imgData = "null"
+      var items = {}
+    var isquestion= " "
+     if(this.props.issueId==null){
+      isquestion = "true"
+     }
+     else{
+      isquestion = "false"
+      issueId = this.props.issueId
+     }
+      this.props.creatAnsProject(textExplain,imgData,data,items,isquestion,issueId)
     }
     drawRect =()=>{
       this.child.addReactFull();
@@ -124,12 +121,6 @@ class Explainit extends Component {
        
       })
 
-      // this.props.cancelSuucessMessage()
-      // setTimeout(()=>{
-      //   window.close()
-  
-      // },2000);
-   
      
     }
   render() {
@@ -156,12 +147,8 @@ class Explainit extends Component {
   else if(this.props.screenAction ===FULL_SCREEN_SHARE){
     shareElement=(<div className="shareControl">
     <FullScreenShare  
-    savefile={this.savefile} 
-    startDraw = {this.drawRect}
-    origin={this.state.origin}
-    sourceId={this.state.sourceId}
-    source={this.state.source}
-    gotmessage={this.state.gotmessage} />
+    savefile={this.saveVideoData} 
+ />
     </div>)
 
   }
@@ -169,46 +156,49 @@ class Explainit extends Component {
   else if(this.props.screenAction ===FULL_SCREEN_RECORD){
     shareElement=(<div className="shareControl">
     <FullScreenRecord 
-    savefile={this.savefile} 
-    startDraw = {this.drawRect}
-    origin={this.state.origin}
-    sourceId={this.state.sourceId}
-    source={this.state.source}
-    gotmessage={this.state.gotmessage} />
+    savefile={this.saveVideoData} 
+    />
       </div>)
   }
-    return (this.props.isSignedIn)?((this.state.isInstalled)?(
-        <div className="mainContainer">
-            <Navbar />
+    return(this.state.isInstalled)?(
+        <div >
+           
       <div className="formContainer">
-        <Form onRef={ref => (this.child = ref)}/>
+      <div>
+        <button className="buttonLight" onClick={this.shareFullScreenShare}>Share Screen</button>
+        <button className="buttonLight" onClick={this.recordFullScreen}>Record Screen</button>
+      </div>
         <div className="shareElement">
           {shareElement}
         </div>
       
       </div>
       </div>
-    ):(<div className="mainContainer">
-       <Navbar />
+    ):(<div >
+       {/* <Navbar /> */}
       <div className="messageToDownload">
       <h3>Please down the chrome extension to continue</h3>
         <button className="buttonDark"onClick={this.downloadExtension}>Download Extension</button>
     </div>
     </div>
-    )):(
-      <Home />
     )
   }
 }
 Explainit.PropType={
     setIssueId : PropType.func.isRequired,
-    cancelValidationErrors : PropType.func.issRequired,
+    cancelValidationErrors : PropType.func.isRequired,
+    displayFullScrenRecord : PropType.func.isRequired,
+    displayFullScreShare :PropType.func.isRequired,
+    creatAnsProject: PropType.func.isRequired
+
 }; 
 const mapStateToProps = state =>({
   error: state.issues.error,
+  issueId: state.issues.currentIssueId,
   success:state.issues.successCreation ,
   screenAction : state.tools.screenAction,
-  isSignedIn: state.auth.isAuthenticated
+  isSignedIn: state.auth.isAuthenticated,
+ 
 })
-export default connect(mapStateToProps, {setIssueId,cancelValidationErrors})(Explainit)
+export default connect(mapStateToProps, { creatAnsProject, setIssueId,displayFullScreShare, displayFullScrenRecord, cancelValidationErrors})(Explainit)
 

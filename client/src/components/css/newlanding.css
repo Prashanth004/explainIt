@@ -10,12 +10,12 @@
    
   } */
   .navBar{
-    background-color:white;
-     box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329);
-     height:70px;
-     /* border-bottom-style:solid;
-     border-bottom-color:rgb(221,221,212);
-     border-bottom-width:1px; */
+    background-color:rgb(239,239,233);
+     /* box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329); */
+     min-height:70px;
+     border-bottom-style:solid;
+     border-bottom-color:rgb(207, 207, 207);
+     border-bottom-width:1px;
 
   }
   
@@ -80,13 +80,16 @@ text-align: center;
   margin:auto;
 }
 .Profilecard{
-  width:80%;
-  height:200px;
+  width:85%;
+  height:225px;
   margin:auto;
   margin-top:40px;
   background-color:rgb(52,161,165);
-  border-style:none;
-  border-radius:6px;
+  /* background-color:white; */
+  border-style:solid;
+  border-width:1px;
+  border-color:rgb(218, 216, 216);
+  border-radius:6.5px;
   box-shadow: 0px 0px 5px 1px rgba(199, 199, 199, 0.527);
  
 }
@@ -100,15 +103,18 @@ text-align: center;
   padding:10px;
 
   height:50%;
-  background-color: white;
+  background-color: rgb(239,239,233);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 .explainBtn{
   margin-top:15px;
-  margin-right:45px;
+  margin-right:65px;
   float:right;
 
+}
+.fullHome{
+  min-height:100vh;
 }
 .displayNumber{
   color:white;
@@ -118,7 +124,8 @@ text-align: center;
 }
 .profileDetails{
   display:grid;
-  grid-template-columns: 50% 25% 25%
+  grid-template-columns: 50% 25% 25%;
+  margin:auto;
 
 }
 .numberShow{
@@ -132,7 +139,7 @@ text-align: center;
   width:125px;
   border-radius:50%;
   margin:auto;
-  background-color:white;
+  background-color:rgb(239,239,233);
   position:relative;
   top:-50%;
  
@@ -149,11 +156,11 @@ text-align: center;
 
 
   .containerHome{
-      width:100%;
+      width:45%;
       margin:auto;
       display:grid;
-      grid-template-columns: 30% 40% 30%;
-      grid-column-gap: 5px;
+      /* grid-template-columns: 30% 40% 30%;
+      grid-column-gap: 5px; */
 
 
       
@@ -170,23 +177,43 @@ text-align: center;
   .twitterHolder{
     padding-right:10%;
   }
+  a:link {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: white;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: white;
+  }
+  
+  /* selected link */
+  a:active {
+    color: white;
+  }
   .issueCard{
-      width:100%;
+      width:85%;
       margin:auto;
      
       box-shadow: 1px 1px 12px 1.5px rgba(226, 226, 226, 0.527);
-      background-color:white;
+      background-color :rgb(239,239,233);
       margin-top:40px;
-      border-radius:3px;
-      border-style:none;
+      border-radius:6.5px;
+      border-style:solid;
       border-width:0.7px;
-      border-color: rgb(232,232,232);
+      border-color: rgb(219, 219, 219);
   }
   .issueCard:hover{
     box-shadow: 0px 0px 0px 0px rgba(235, 235, 235, 0.911);
   }
   .modalBody{
     /* background-color: #111; */
+    background-color :rgb(239,239,233);
     padding:0px;
     width:100%;
     margin:auto;
@@ -224,7 +251,7 @@ min-height: 60px;
 /* background-color: blue; */
 padding:05px 25px 05px 25px;
 font-size:13px;
-background-color: white;
+background-color :rgb(239,239,233);
 border-style: none;
 
   }
@@ -243,7 +270,7 @@ border-style: none;
   .explainAnswer{
     width:99%;
     margin:auto;
-    background-color: #fff;
+    background-color :rgb(239,239,233);
     display:grid;
     grid-template-columns: 75% 25%;
     padding:5px;
