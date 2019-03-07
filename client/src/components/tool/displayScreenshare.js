@@ -83,6 +83,7 @@ export default class DisplayShare extends Component {
         closedHere:true
     })
     setTimeout(()=>{
+        console.log("excecuting call close")
         call.close();
     },400)
      

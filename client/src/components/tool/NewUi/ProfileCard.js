@@ -21,14 +21,14 @@ componentWillMount(){
                     <img  src={this.props.profilePic} className="profileImageElement" ></img>
                 </div>
             </div>
-            <div  onClick={this.props.toggleProjects} className="displayNumber">
+            <div  onClick={this.props.toggleCreatedIssue} className="displayNumber">
             <p>Created</p>
             <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>        
 
             </div >
-            <div className="displayNumber">
+            <div onClick={this.props.toggleParticipatedIssue}className="displayNumber">
             <p>Participated</p>
-            <p className="numberShow">{this.props.noParticipated}</p>  
+            <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>  
 
             </div>
         </div>

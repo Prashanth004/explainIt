@@ -8,7 +8,7 @@ import Login from './components/tool/NewUi/Login'
 import Signup from './components/Signup'
 import Newlogin from './components/Newlogin'
 import Home from './components/tool/NewUi/Home'
-// import Explainit from './components/Explainit'
+import Explainit from './components/tool/NewUi/reExplain'
 import google from './components/testGoogle'
 import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
@@ -26,7 +26,7 @@ class App extends Component {
             <Route exact  path='/newlogin' component={Newlogin} />
             <Route exact path='/profile/:userid' component ={Profile} />
             {/* <Route exact  path='/newhome' component={Newhome} /> */}
-            {/* <Route exact  path='/explainIt' component={Explainit} /> */}
+            <Route exact  path='/explainIt' component={Explainit} />
             <Route exact  path='/google' component={google} />
             <Route exact path='/git' component = {git} />
             <Route exact path='/project/:projectid' component={Project}/>

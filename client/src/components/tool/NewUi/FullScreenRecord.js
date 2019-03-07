@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
 import CopyToClipboard from '../CopytoClipboard';
-import Dummy from '../dummy'
+import Dummy from './dummy'
 import {fullStartedRecording,
     fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
 import {connect} from 'react-redux';
@@ -19,7 +19,8 @@ class FullScreenRecorder extends Component {
             blob: null,
             finalStream: null,
             percentage:"0%",
-            copyStatus:"copy link"
+            copyStatus:"copy link",
+           
             
         }
         this.recordScreenStop = this.recordScreenStop.bind(this);
@@ -32,11 +33,14 @@ class FullScreenRecorder extends Component {
         this.receiveMessage = this.receiveMessage.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
 
+
     }
 
     startRecoding(){
         var self = this
         var sourceId = this.props.extSourceId;
+        var ua = window.detect.parse(navigator.userAgent);
+        if(ua.browser.family === "Chrome"){
         var constraints = { 
             video: {
                 mandatory: {
@@ -48,6 +52,17 @@ class FullScreenRecorder extends Component {
                   chromeMediaSourceId: sourceId         
                 }
             }};
+        }
+        else if(ua.browser.family ==="Firefox"){
+            var constraints = {
+                video: {
+                    mediaSource: "screen", 
+                    width: {max: '1920'},
+                    height: {max: '1080'},
+                    frameRate: {max: '10'}
+                  }
+                }
+        }
 
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
@@ -144,7 +159,9 @@ class FullScreenRecorder extends Component {
             this.recordScreenStop()
         }
         else{
+            
             this.receiveMessage()
+            this.startRecoding()
             this.props.fullStartedRecording();
         }
     }
@@ -181,10 +198,13 @@ class FullScreenRecorder extends Component {
     }
 
     render() {
+        var ua = window.detect.parse(navigator.userAgent);
+        if(ua.browser.family === "Chrome"){
         if(this.props.sourceId!==null){
             console.log("render source id calling function : ",this.props.sourceId)
             this.startRecoding()
         }
+    }
         if (this.props.isFullScreenRecording) {
             this.startBar()
             var timer = (<Countdown

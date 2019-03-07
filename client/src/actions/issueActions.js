@@ -4,6 +4,7 @@ import { FETCH_ISSUE,
      CANCEL_PROJ_CREATION_ERROR, 
      SET_ISUUE_ID, 
      FETCH_DETAILS_OF_EXPLAINED,
+     CANCEL_SUCCESS,
      IS_ISSUE} from './types'
 import axios from 'axios'
 import config from '../config/config'
@@ -32,6 +33,11 @@ export const fetchIssues = () => dispatch => {
     })
 } 
 
+export const cancelSuccess = () => dispatch =>{
+    dispatch({
+        type:CANCEL_SUCCESS
+    })
+}
 
 export const setIssueId = id => dispatch =>{
     dispatch({

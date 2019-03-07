@@ -4,7 +4,8 @@ import {SET_ISUUE_ID,
     CANCEL_PROJ_CREATION_SUCCESS,
     CREATE_ISSUE_PROJECT,
     CANCEL_PROJ_CREATION_ERROR , 
-    CREATE_ISSUE_PROJECT_FAILED} from '../actions/types'
+    CREATE_ISSUE_PROJECT_FAILED,
+    CANCEL_SUCCESS} from '../actions/types'
 
 import config from '../config/config'
 
@@ -37,6 +38,13 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 error:action.error
+            }
+        case CANCEL_SUCCESS:
+            return{
+                ...state,
+                error:false,
+                successCreation : false,
+
             }
         case SET_ISUUE_ID:
             return{

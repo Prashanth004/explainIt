@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
-import Dummy from './NewUi/dummy'
+import Dummy from './dummy'
 import {StartedRecording,
-    stopedRcording,discardAfterRecord} from'../../actions/toolActions'
+    stopedRcording,discardAfterRecord} from'../../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
-import CopyToClipboard from './CopytoClipboard';
-import config from '../../config/config'
-import '../css/shareScreen.css'
+import CopyToClipboard from '../CopytoClipboard';
+import config from '../../../config/config'
+import '../../css/shareScreen.css'
 
 
 export class ScreenRecorder extends Component {

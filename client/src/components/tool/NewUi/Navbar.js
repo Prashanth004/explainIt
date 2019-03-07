@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import config from '../../../config/config';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import '../../css/nav.css'
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
 
@@ -33,13 +34,13 @@ class Navigationbar extends React.Component {
     this.googleResponse = this.googleResponse.bind(this);
     this.handleGit = this.handleGit.bind(this)
   }
-  showLogoutSuccess(){
+  showLogoutSuccess() {
     Swal.fire({
-      type: 'success',   
+      type: 'success',
       title: 'Logout successful',
       timer: 1500,
       showConfirmButton: false,
-     
+
     })
 
 
@@ -62,32 +63,31 @@ class Navigationbar extends React.Component {
     });
   }
   render() {
-    if(this.props.logoutSuccess){
+    if (this.props.logoutSuccess) {
       this.showLogoutSuccess()
     }
     const content = !!this.props.isAuthenticated ?
       (
         <Navbar className="navBar" light expand="md">
-          <NavbarBrand href="/">Explain</NavbarBrand>
+          <NavbarBrand href="/"><a className="brandName">Explain</a></NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Options
-            </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    Settings
-              </DropdownItem>
-                  <DropdownItem>
-                    Option 2
-              </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem onClick={this.props.signout} >
-                    <button className=" buttonLight navButton1">logout</button>
-                  </DropdownItem>
-                </DropdownMenu>
+                <div className="dropdown">
+                  <div className="profileImagesDiv">
+                    <img className="profileImages" src={this.props.profilePic}></img>
+                  </div>
+                  <div className="dropdown-content">
+                  <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
+                  <div className="imageLogout">
+                  <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
+
+                  </div>
+
+                  </div>
+                </div>
+
               </UncontrolledDropdown>
             </Nav>
           </Collapse>
@@ -136,7 +136,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   userName: state.auth.userName,
   profilePic: state.auth.profilePic,
-  logoutSuccess:state.auth.logoutSuccess
+  logoutSuccess: state.auth.logoutSuccess
 
 })
 export default connect(mapStateToProps, { stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)

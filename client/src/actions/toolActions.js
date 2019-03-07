@@ -15,7 +15,8 @@ import {DISPLAY_SCREEN_SHARE,
     FULL_START_RECORD,
     FULL_STOP_RECORD,
     DISPLAY_FULL_SCREEN_RECORD,
-    FULL_SCREEN_RECORD
+    FULL_SCREEN_RECORD,
+    RESET_TOOL_STATES
 
 } from './types'
 
@@ -117,6 +118,12 @@ export const saveVideoBlob = (videoBlob) => (dispatch)=>{
 
     })
     
+}
+
+export const restAllToolValue = () =>(dispatch)=>{
+    dispatch({
+        type:RESET_TOOL_STATES
+    })
 }
 
 export const discardAfterRecord = () => (dispatch)=>

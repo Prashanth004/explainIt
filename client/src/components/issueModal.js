@@ -161,7 +161,6 @@ class issueDetails extends Component {
                             <p ref={p=>this.userName=p}></p>
                         </div>
                         <div >
-                            <button className="buttonLight tweetButton">Tweet</button>
                         </div>
                     </div>
                    {copyElement}

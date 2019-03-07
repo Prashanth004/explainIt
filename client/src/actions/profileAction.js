@@ -27,7 +27,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
                 "Authorization": token,
             }
         }).then((response2)=>{
-           
+           var participated = []
             var myProjects = (response2.data.data).filter(project=>(
                 project.email === response1.data.data.email
             ))
@@ -35,15 +35,25 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
                 project.isquestion === "true"
             ))
             // var issuIDMyProject = myProjects.map(project=>project.issueid)
+            const distinctIssueId = [...new Set(myProjects.map(proj=>proj.issueid))]
+            console.log("distinct IssueID : ",distinctIssueId)
+            response2.data.data.forEach(proj => {
+                if(distinctIssueId.includes(proj.issueid)&& proj.isquestion == "true"){
+                    participated.push(proj) 
+                }
+            });
+            console.log("participated :",participated)
             var noOdprojectsCreated = myIssue.length
             var noOfProj = myProjects.length
-            var noOfparticipation = noOfProj - noOdprojectsCreated
+            var noOfparticipation = participated.length
+            // var noOfparticipation = noOfProj - noOdprojectsCreated
 
             dispatch({
                 type:GET_PROFILE_DETAILS,
                 userName:userName,
                 email:email,
                 myIssue:myIssue,
+                participatedIssue : participated,
                 profilePic:profilepic,
                 noParticipated:noOfparticipation,
                 noCreated:noOdprojectsCreated

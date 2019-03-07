@@ -7,15 +7,16 @@ import Navbar from './Navbar';
 import '../../css/explainit.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import ScreenShare from './ScreenShare'
-import ScreenRecorder from './ScreenRecorder'
+import ScreenShare from '../ScreenShare'
+import ScreenRecorder from '../ScreenRecorder'
 import FullScreenShare from './enitreScreenShare'
 import FullScreenRecord from './FullScreenRecord'
 import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_SHARE, FULL_SCREEN_RECORD } from '../../../actions/types';
 import Swal from 'sweetalert2';
-import { setIssueId, cancelValidationErrors } from '../../../actions/issueActions'
+import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
+import { setIssueId, cancelValidationErrors,cancelSuccess} from '../../../actions/issueActions'
 import { creatAnsProject } from '../../../actions/projectActions'
-import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
+import { displayFullScrenRecord, restAllToolValue, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
 import config from '../../../config/config';
 import Home from './Home'
 
@@ -44,6 +45,7 @@ class Explainit extends Component {
     this.displayShareBtn = this.displayShareBtn.bind(this);
     this.shareCanvasScreen = this.shareCanvasScreen.bind(this);
     this.recordCanvasScreen = this.recordCanvasScreen.bind(this);
+    this.endEvrything = this.endEvrything.bind(this);
   }
   downloadExtension() {
     window.open(config.EXTENSION_URL, "_self")
@@ -73,7 +75,28 @@ class Explainit extends Component {
 
 
   componentDidMount() {
-    console.log("asnckjadbskbsjfihb")
+    var self = this
+    function postMessageHandler(event) {
+        if (event.data.sourceId !== undefined) {
+            console.log("We've got a message!");
+            console.log("* Message:", event.data);
+            console.log("* Origin:", event.origin);
+            console.log("* Source:", event.source);
+            console.log("*event.data.message__sourceId : ", event.data.sourceId)
+            self.props.saveSourceId(event.data.sourceId)
+        }
+
+        if (event.data === 'rtcmulticonnection-extension-loaded') {
+            console.log(" event.source :", event.source)
+          
+            self.props.saveExtensionDetails(event.source, event.origin)
+        }
+    }
+    if (window.addEventListener) {
+        window.addEventListener("message", postMessageHandler, false);
+    } else {
+        window.attachEvent("onmessage", postMessageHandler);
+    }
     var self = this
     this.setState({
       error:false,
@@ -103,6 +126,13 @@ class Explainit extends Component {
    
     this.props.cancelValidationErrors()
 
+  }
+  endEvrything(){
+      this.props.cancelSuccess()
+      this.props.restAllToolValue();
+    
+      
+  
   }
   shareCanvasScreen() {
     this.props.displayShareScreen()
@@ -231,9 +261,9 @@ class Explainit extends Component {
     if (this.props.error) {
       this.showErrorAlert()
     }
-    // if (this.props.success) {
-    //   this.showSuccessAlert()
-    // }
+    if (this.props.success) {
+      this.showSuccessAlert()
+    }
     var shareElement = null;
     if (this.props.screenAction === SCREEN_SHARE) {
       shareElement = (
@@ -264,13 +294,14 @@ class Explainit extends Component {
       </div>)
     }
     return (this.state.isInstalled) ? (
+      <div className="reExplainContainer">
       <div>
         {/* <div className="explainContainer"> */}
 
         {/* </div> */}
         <div className="explainContainer" style={{width : percentage}}>
-
-          <Button close onClick={this.props.reStoreDefault} />
+       
+          <Button close onClick={this.endEvrything} />
           {formDiv}
           <div className="formContainer">
 
@@ -280,6 +311,7 @@ class Explainit extends Component {
 
           </div>
         </div>
+      </div>
       </div>
     ) : (<div >
       {/* <Navbar /> */}
@@ -299,6 +331,10 @@ Explainit.PropType = {
   creatAnsProject: PropType.func.isRequired,
   displayShareScreen: PropType.func.isRequired,
   displayScrenRecord: PropType.func.isRequired,
+  cancelSuccess:PropType.func.isRequired,
+  restAllToolValue:PropType.func.isRequired,
+  saveExtensionDetails: PropType.func.isRequired,
+  saveSourceId: PropType.func.isRequired,
 
 
 };
@@ -310,5 +346,5 @@ const mapStateToProps = state => ({
   isSignedIn: state.auth.isAuthenticated,
 
 })
-export default connect(mapStateToProps, { displayScrenRecord, displayShareScreen, creatAnsProject, setIssueId, displayFullScreShare, displayFullScrenRecord, cancelValidationErrors })(Explainit)
+export default connect(mapStateToProps, {saveExtensionDetails, saveSourceId, restAllToolValue, cancelSuccess,displayScrenRecord, displayShareScreen, creatAnsProject, setIssueId, displayFullScreShare, displayFullScrenRecord, cancelValidationErrors })(Explainit)
 

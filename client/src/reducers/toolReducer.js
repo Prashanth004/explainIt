@@ -15,7 +15,8 @@ import {DISPLAY_SCREEN_SHARE,
     FULL_START_RECORD,
     FULL_STOP_RECORD,
     FULL_SCREEN_RECORD,
-    DISPLAY_FULL_SCREEN_RECORD
+    DISPLAY_FULL_SCREEN_RECORD,
+    RESET_TOOL_STATES
 } from '../actions/types'
 
 const initialState ={
@@ -114,6 +115,20 @@ export default (state=initialState, action)=>{
                 ...state,
                 isFullScreenRecording: false,
                 isFullRecordCompleted:true
+            }
+        case RESET_TOOL_STATES:
+            return{
+                ...state,
+                screenAction : null,
+                isScreenSharing :false,
+                isScreenRecording: false,
+                isSharingCompleted:false,
+                isRecordingCompleted:false,
+                videoBlob:null,
+                isFullScreenSharing:false,
+                isFullSharingCompleted:false,
+                isFullScreenRecording:false,
+                isFullRecordCompleted:false,
             }
         default :
             return state

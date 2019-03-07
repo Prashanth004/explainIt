@@ -20,8 +20,8 @@ import config from '../../config/config';
 import '../ErrorHnadle'
 import { creatAnsProject } from '../../actions/projectActions'
 import '../css/hint.css'
-import ScreenShare from './ScreenShare'
-import ScreenRecorder from './ScreenRecorder'
+import ScreenShare from './NewUi/ScreenShare'
+import ScreenRecorder from './NewUi/ScreenRecorder'
 import { SCREEN_SHARE, SCREEN_RECORD } from '../../actions/types'
 import { displayShareScreen, displayFullScrenRecord, displayFullScreShare, displayScrenRecord } from '../../actions/toolActions'
 import AudioRec from './AudioRecord'
@@ -1240,7 +1240,7 @@ class Forms extends Component {
         </div>)
 
         }
-        if (this.props.shareAction === true) {
+        // if (this.props.shareAction === true) {
             var form = (
                 <div>
                     <div className="logo" >
@@ -1313,19 +1313,19 @@ class Forms extends Component {
                     </div>
                 </div>
             )
-        }
-        else {
-            var form = (
-                <div className="shareScreen">
-                    <div className="btnContainers">
-                    {ShareBtns}
-                    </div>
-                    <div  className="btnContainers">
-                       {recordBtns}
-                    </div>
-                </div>
-            )
-        }
+        // }
+        // else {
+        //     var form = (
+        //         <div className="shareScreen">
+        //             <div className="btnContainers">
+        //             {ShareBtns}
+        //             </div>
+        //             <div  className="btnContainers">
+        //                {recordBtns}
+        //             </div>
+        //         </div>
+        //     )
+        // }
         if (this.state.errorInfo == null) {
             if (this.state.project === true) {
                 return <Redirect to='/projects' />
@@ -1339,7 +1339,7 @@ class Forms extends Component {
             }
             return (
 
-                <div className="formContainer">
+                <div className="formContainerTool">
 
                     <div className="textExplainDiv">
                         <textarea className="textExplain" placeholder="Explain in text" onChange={this.upDateTxtExplain} placeholder="type here to explain"></textarea>

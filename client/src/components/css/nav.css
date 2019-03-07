@@ -1,37 +1,31 @@
-.logout{
-    background-color: rgb(27, 54, 173);
-    border-style: none;
-    border-width: 0.5px;
-    border-radius: 2px;
-    padding:5px;
-    color:black;
-    font-size: 12px;
-    height:25px;
-    color:white;
-    width:50px;
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
   
-    padding-bottom:30px;
-    /* padding-right:60px; */
-    padding-right: 50px;
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right:7px;
+    background-color: #f9f9f9;
+    min-width: 115px;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+    padding: 10px 5px 5px 5px;
+    z-index: 1;
+  }
+  .navButton1{
+      border-style: none;
+      background-color:  #f9f9f9;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  .imageLogout{
+      width: 20px;
+      height:20px;
+      float:right;
+      margin-top:5px;
+      margin-right:5px;
 
-}
-.LinkBtn{
-    color:white;
-    padding-top:5px;
-}
-.LinkBtn:hover{
-    background-color: none;
-}
-
-.nav{
-    /* background-color: rgb(36, 93, 185); */
-   
-    background-color: rgb(239,239,233);
-    height:50px;
-    padding-bottom:-0px;
-    box-shadow: 10px 10px 10px 5px rgba(32, 32, 32, 0);
-
-}
-.navItem{
-    color:black
-}
+  }

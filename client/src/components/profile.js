@@ -99,7 +99,6 @@ class NewHome extends Component {
                 <div>
                         {profileCardElement}
                 </div>
-                                   
                     <div >
                   {displayIssue} 
                     </div>
