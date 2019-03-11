@@ -2,18 +2,16 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
-import html2canvas from 'html2canvas'
 import config from '../../../config/config'
 import '../../css/shareScreen.css'
 import CopyToClipboard from '../CopytoClipboard';
-
+import socketIOClient from "socket.io-client";
 import {fullStartedSharing,
     fullStopedSharing,
     saveVideoBlob} from '../../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
-import Swal from 'sweetalert2';
-import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap';
+import browser from 'browser-detect';
 
 class ScreenRecorder extends Component {
     constructor(props) {
@@ -32,6 +30,7 @@ class ScreenRecorder extends Component {
             conn: null,
             destkey: null,
             streamvideo: null,
+            socket:null,
             peer: null,
             peerId: null,
             connected: false,
@@ -42,7 +41,8 @@ class ScreenRecorder extends Component {
             call:null,
             closedHere:false,
             showDisconectMessage:false,
-            timerEnded: false
+            timerEnded: false,
+            answered:false,
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
@@ -57,22 +57,22 @@ class ScreenRecorder extends Component {
       startScreenShareSend() {
         var self = this
         var sourceId = this.props.extSourceId;
-        var ua = window.detect.parse(navigator.userAgent);
-
-        if(ua.browser.family === "Chrome"){
+        console.log("sourceId  : ", sourceId)
+        const result = browser();
+        if(result.name === "chrome"){
             var constraints = { 
-            video: {
-                mandatory: {
-                  chromeMediaSource: 'desktop',
-                  maxWidth: 2020,
-                  maxHeight: 600,
-                  maxFrameRate: 100,
-                  minAspectRatio:1.75,
-                  chromeMediaSourceId: sourceId         
-                }
-            }};
+                video: {
+                    mandatory: {
+                      chromeMediaSource: 'desktop',
+                      maxWidth: 2020,
+                      maxHeight: 600,
+                      maxFrameRate: 100,
+                      minAspectRatio:1.75,
+                      chromeMediaSourceId: sourceId         
+                    }
+                }};
         }
-        else if(ua.browser.family ==="Firefox"){
+        else if(result.name ==="firefox"){
             var constraints = {
                 video: {
                     mediaSource: "screen", 
@@ -82,8 +82,8 @@ class ScreenRecorder extends Component {
                   }
                 }
         }
-       
-          
+
+                
         console.log("constrain set")
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
@@ -151,6 +151,10 @@ class ScreenRecorder extends Component {
     }
 
     componentWillMount() {
+        const socket = socketIOClient(config.base_dir);
+        this.setState({
+            socket:socket
+        })
         var self = this;
         var peer = new window.Peer()
         this.setState({
@@ -168,18 +172,22 @@ class ScreenRecorder extends Component {
         peer.on('connection', (conn) => {
             conn.on('open', () => {
                 console.log("got some data")
+                this.setState({
+                    answered:true
+                })
                 conn.on('data', (data) => {
                     this.props.fullStartedSharing()
                     console.log("data : ", data)
                  
                     self.setState({
                         destkey: data.clientId,
+                        answered:false  
                     })
-                    var ua = window.detect.parse(navigator.userAgent);
-                    if(ua.browser.family === "Chrome"){
+                    const result = browser();
+                    if(result.name === "chrome"){
                         self.receiveMessage()
                     }
-                    else if(ua.browser.family ==="Firefox"){
+                    else if(result.name ==="firefox"){
                         self.startScreenShareSend()
                     }
             
@@ -216,6 +224,17 @@ class ScreenRecorder extends Component {
         this.setState({
             shareScreenLink: shareScreenLink
         })
+        var socket = this.state.socket
+        console.log("socket : ",socket)
+  
+             socket.emit(config.LINK_TO_CALL,{
+                 'link':shareScreenLink,
+                 'fromEmail' : this.props.email,
+                 'fromUserName' : this.props.userName,
+                 'fromProfilePic':this.props.profilePic,
+                 'fromUserId':this.props.id,
+                 'ToUserId':this.props.peerUserId
+             })
     }
 
     savefile(){
@@ -233,8 +252,13 @@ class ScreenRecorder extends Component {
         var recorder1 = this.state.recorder;
         var audioStream = this.state.audioStream;
         var  screenStream=this.state.screenStream;
-        audioStream.stop();
+        if(audioStream!==null){
+            audioStream.stop();
+        }
+       if(screenStream!==null){
         screenStream.stop();
+       }
+      
         var audio = document.querySelector('#video');
         audio.src = "";
         console.log("recorder1 : ",recorder1)
@@ -251,11 +275,7 @@ class ScreenRecorder extends Component {
             });
         }
         else {
-            // Swal.fire(
-               
-            //     'error occured while recodimg'
-               
-            //   )
+           
         }
         this.setState({
             isShareDone:true,
@@ -301,8 +321,14 @@ class ScreenRecorder extends Component {
                 </div>
             </div>
         )
-        // this.receiveMessage()
+    }
+        else if(this.state.answered && !this.props.isSceenSharing){
+            shareTimeElements=(<div>
+                <p>Call answered</p>
+                <p>Connecting ....</p>
+            </div>)
         }
+        
             if(this.props.isSharingCompleted  && this.props.isSaved==false){
            var postShareElements= (<div>
                {MessageDisconnected}
@@ -330,25 +356,21 @@ class ScreenRecorder extends Component {
             </div>)
         }
        
-        if (this.state.shareScreenLink && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
-            linkElement = (
-                <div>
-                    <p>Share the link below to get connected</p>
-                    <CopyToClipboard sharablelink = {this.state.shareScreenLink} />
+        if (this.state.shareScreenLink && !this.state.answered  && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
+            linkElement = (<div>
 
-    </div>)
+                <p>Waiting for the other peer to connect..</p>
+            </div>)
         }
         return (
-            // <div>
               
                 <div className="LinkDisplay">
                     {linkElement}
                     {shareTimeElements}
                     {postShareElements}
                     <audio id="video"  ref={a => this.videoTag=a} srcObject=" " ></audio>
-                    {/* {downLinkAudio} */}
                 </div>
-            // </div>
+           
         )
     }
 }
@@ -365,6 +387,11 @@ const mapStateToProps = state =>({
     extSource:state.extension.source,
     extOrigin:state.extension.origin,
     extSourceId:state.extension.sourceId,
+    userName:state.auth.userName,
+    id:state.auth.id,
+    email:state.auth.email,
+    profilePic:state.auth.profilePic,
+    peerUserId:state.visitProfile.id
 }) 
 
 export default connect(mapStateToProps,{fullStartedSharing,fullStopedSharing,saveVideoBlob})(ScreenRecorder)

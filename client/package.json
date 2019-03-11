@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
+    "browser-detect": "^0.2.28",
     "html2canvas": "^1.0.0-alpha.12",
     "konva": "^2.6.0",
     "peer": "^0.2.10",
@@ -19,6 +20,8 @@
     "react-dom": "^16.6.3",
     "react-github-login": "^1.0.3",
     "react-google-login": "^5.0.0",
+    "react-icon": "^1.0.0",
+    "react-icons": "^3.5.0",
     "react-konva": "^16.6.31",
     "react-media-recorder": "^0.7.1",
     "react-progressbar.js": "^0.2.0",
@@ -33,6 +36,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.85.0",
+    "socket.io-client": "^2.2.0",
     "sweetalert2": "^8.0.7",
     "video-react": "^0.13.2",
     "webrtc-screen-capturing": "^1.0.1"

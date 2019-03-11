@@ -18,6 +18,7 @@ import { creatAnsProject } from '../../../actions/projectActions'
 import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
 import config from '../../../config/config';
 import Home from './Home'
+import browser from 'browser-detect';
 
 
 
@@ -53,9 +54,17 @@ class Explainit extends Component {
   componentWillMount() {
     var self = this
     this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
-    var ua = window.detect.parse(navigator.userAgent);
+    const result = browser();
+  //   {
+  //     name: 'chrome',
+  //     version: '58.0.3029',
+  //     versionNumber: 58.03029,
+  //     mobile: false,
+  //     os: 'Windows NT 10.0'
+  // }
 
-    if (ua.browser.family === "Chrome") {
+
+    if (result.name === "chrome") {
 
       var img;
       img = new Image();

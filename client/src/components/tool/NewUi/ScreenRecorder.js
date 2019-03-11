@@ -7,8 +7,8 @@ import {StartedRecording,
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 import CopyToClipboard from '../CopytoClipboard';
-import config from '../../../config/config'
-import '../../css/shareScreen.css'
+import '../../css/shareScreen.css';
+import {sendMessage} from '../../../actions/messageAction'
 
 
 export class ScreenRecorder extends Component {
@@ -31,8 +31,7 @@ export class ScreenRecorder extends Component {
         this.toggle = this.toggle.bind(this);
         this.savefile = this.savefile.bind(this);
         this.discardChanges = this.discardChanges.bind(this);
-        // this.copyToClipboard = this.copyToClipboard.bind(this)
-
+        this.sendMessageLocal = this.sendMessageLocal.bind(this)
     }
 
     startRecoding(){
@@ -126,6 +125,11 @@ export class ScreenRecorder extends Component {
     this.props.savefile(this.state.blob)
 
 }
+sendMessageLocal(){
+    var subject = "default subject"
+    this.props.sendMessage(this.props.sharablelink,this.props.fromId,this.props.toId,subject)
+
+}
     recordScreenStop() {
         var self = this;
         var recorder1 = this.state.recorder;
@@ -154,6 +158,7 @@ export class ScreenRecorder extends Component {
 
     render() {
         var videoplayer = " ";
+        var sentMessage = false
         var downLinkAudio = " ";
         var linkElement = " ";
         var convey = (<p ref={a=>this.convey=a}>Start</p>)
@@ -189,37 +194,43 @@ export class ScreenRecorder extends Component {
         else{
             var recordingElements = null;
         }
+
+    if(this.props.isSaved && !this.props.sendSuccess){
+        console.log("i a, here twoice?")
+         if(!sentMessage){
+            sentMessage=true
+            this.sendMessageLocal() 
+         }
+          
+
+    }
     
-       
-        // var timer = null;
      console.log("this.props.isSaved : ",this.props.isSaved)
         if(this.props.isRecordingCompleted === true && this.props.isSaved==false){
             var postShareElements= (<div className = "postRecord">
             {videoplayer}
-                 <p>Do you want to sav it?</p>
-                 <button onClick={this.savefile} className="buttonLight save">
-                   Save
+                 <p>Do you want to send it?</p>
+                 <button onClick={this.savefile} className="buttonDark save">
+                   Send
                  </button>
-                 <button onClick={this.discardChanges} className="buttonDark save">
+                 <button onClick={this.discardChanges} className="buttonLoght save">
                      Discard
                  </button>
              </div>)
          }
-         else if(this.props.isSaved){
-            // elseif {
+        
+         else if(this.props.sendSuccess){
             var postShareElements= (<div className = "postRecord">
-            
-                 <p>Link to access your saved project</p>
-                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
+            <p><b>The recording successfully sent</b></p>
+            <p>Link to access your saved project</p>
+            <CopyToClipboard sharablelink = {this.props.sharablelink} />
 
-                    {/* <input className="myInput" type="text" value={this.props.sharablelink}/>
-                    <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                        <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                        Copy text
-                        </button>
-                    </span> */}
-             </div>)
-
+        </div>)
+         }
+         else if(this.props.isSaved) {
+             var postShareElements = (<div>
+                 <p>Send the message. Please wait..</p>
+                 </div>)
          }
        
         if (this.state.shareScreenLink) {
@@ -237,15 +248,19 @@ ScreenRecorder.PropType={
     StartedRecording : PropType.func.isRequired,
     stopedRcording :PropType.func.isRequired,
     discardAfterRecord :PropType.func.isRequired,
-    
+    sendMessage:PropType.func.isRequired
 }
 const mapStateToProps = state =>({
     isScreenRecording :state.tools.isScreenRecording,
     isRecordingCompleted : state.tools.isRecordingCompleted,
     isSaved :state.issues.successCreation,
     newProject:state.issues.newissueItem,
-    sharablelink : state.issues.sharablelink
+    sharablelink : state.issues.sharablelink,
+    fromId : state.auth.id,
+    toId:state.visitProfile.id,
+    sendSuccess:state.message.sendSuccess,
+    
 }) 
 
-export default connect(mapStateToProps,{StartedRecording,discardAfterRecord, stopedRcording})(ScreenRecorder)
+export default connect(mapStateToProps,{sendMessage,StartedRecording,discardAfterRecord, stopedRcording})(ScreenRecorder)
 

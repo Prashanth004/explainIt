@@ -75,7 +75,7 @@ router.post('/auth/twitter/', function (req, res, next) {
             form: { oauth_verifier: req.query.oauth_verifier }
         }, function (err, r, body) {
             if (err) {
-                return res.send(500, { message: err.message });
+                return res.status(500).send({ message: err.message });
             }
             const bodyString = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
             const parsedBody = JSON.parse(bodyString);

@@ -9,7 +9,9 @@ const initialState = {
     noCreated:null,
     errorFetchingProfileData:null,
     myIssues:null,
-    participatedIssue:null
+    participatedIssue:null,
+    twitterHandle:null,
+  
 }
 
 export default function(state=initialState, action){
@@ -23,7 +25,8 @@ export default function(state=initialState, action){
                 noParticipated:action.noParticipated,
                 noCreated:action.noCreated,
                 myIssues:action.myIssue,
-                participatedIssue : action.participatedIssue
+                participatedIssue : action.participatedIssue,
+                twitterHandle:action.twitterHandle
             }
         case GET_PROFILE_DETAILS_FAIL:
             return {

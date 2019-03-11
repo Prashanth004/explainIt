@@ -20,7 +20,7 @@ class Login extends Component {
     }
     
     componentWillMount() {
-        this.props.stillAuthenicated()
+        // this.props.stillAuthenicated()
     }
     componentDidMount(){
       
@@ -66,7 +66,15 @@ class Login extends Component {
                         </b>
                         </h5>
                         <br />
-                          
+                        <GoogleLogin
+                                    clientId={config.googleClientId}
+                                    render={renderProps => (
+                                        <button className="actualButton2"  onClick={renderProps.onClick}>Google</button>
+                                    )}
+                                    buttonText="Login"
+                                    onSuccess={this.googleResponse}
+                                    onFailure={this.responseGoogle}
+                                />      
                         
                            
                             <div className="buttonDiv">

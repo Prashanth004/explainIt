@@ -13,6 +13,8 @@ https://www.npmjs.com/package/socketio-jwt
 
 https://github.com/JoelCodes/Socket-Tag
 
+https://www.valentinog.com/blog/socket-io-node-js-react/
+
 
 psql dbname username
 psql toolArchi bookmane
@@ -33,6 +35,10 @@ ALTER DATABASE explain OWNER TO bookmane
 CREATE DATABASE <dbname> OWNER <ownername> 
 \dt
 psql dbname < dump.sql
+
+
+
+?
  
 
 

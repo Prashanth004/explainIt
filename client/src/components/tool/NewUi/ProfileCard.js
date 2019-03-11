@@ -4,30 +4,51 @@ import PropType from 'prop-types';
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
 
+import { IoIosLink } from "react-icons/io";
+
 class ProfileCard extends Component {
 componentWillMount(){
    this.props.getProfileDetails(this.props.userId) 
+     // this.props.stillAuthenicated();
+        // const cryptr = new Cryptr(config.SECRET);
+        // const decryptedTwitterHandle = cryptr.decrypt(this.props.match.params.encrTwitterHandle);
+        // console("decryptedTwitterHandle : ",decryptedTwitterHandle)
+        // this.setState({
+        //     twitterHandle:decryptedTwitterHandle
+        // })
+   
 }
  
   render() {
+      if(this.props.isHome){
+        var linkSymbol = (<IoIosLink onClick={this.props.toggleDisplayLink}/>)
+
+      }
+      else{
+        var linkSymbol = null
+
+      }
+    // var sharabeLink = config.base_dir+"/"+this.props.twitterHandle
     return (
         <div className="Profilecard">
         <div className="blackwhite">
-            <p><b>{this.props.userName}</b></p>
+           {linkSymbol}
         </div>
         <div className="profileDetails">
             <div>
                 <div className="profileImage">
                     <img  src={this.props.profilePic} className="profileImageElement" ></img>
                 </div>
+                <p className="profileName"><b>{this.props.userName}</b></p>
+                
             </div>
             <div  onClick={this.props.toggleCreatedIssue} className="displayNumber">
-            <p>Created</p>
+            <h6>Created</h6>
             <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>        
 
             </div >
             <div onClick={this.props.toggleParticipatedIssue}className="displayNumber">
-            <p>Participated</p>
+            <h6>Participated</h6>
             <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>  
 
             </div>

@@ -1,8 +1,9 @@
 .App {
-  background-color:#f6f8ff;
-  /* background-color: rgba(25, 71, 139, 0.829);  */
+  background-color:#f5f0f8;
+  /* background-color: white; */
 
-  font-family: Helvetica;
+
+  font-family: "Helvetica";
   height: '100vh';
 }
 .mainContainer{
@@ -57,22 +58,22 @@ audio{
   outline:25px;
   border-style: none;
   padding: 0px 12px 0px 12px;
-  border-width:0.5px;
   background-color:wihte;
-  border-width:2px;
+  border-width:0.5px;
   font-size: 13px;
   margin-left:2px;
   margin-right:2px;
 
   height:29px;
   width:auto;
-  outline-style: none;
+  outline-style: solid;
   outline: 0;
-  border-color:#1b2c48;
+  border-color:#929292;
 color:white;
 
   border-radius:3px;
-  background-color:#1b2c48;
+  /* background-color:#aac8db; */
+  background-color: #34a4a8;
 
   /* background-color: rgb(205, 243, 224); */
  
@@ -82,7 +83,7 @@ color:white;
   outline:0px;
 }
 .buttonDark:hover{
-background-color: #4b5b79;
+background-color: #247679;
 }
 
 

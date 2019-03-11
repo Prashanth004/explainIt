@@ -12,8 +12,10 @@ import Explainit from './components/tool/NewUi/reExplain'
 import google from './components/testGoogle'
 import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
+import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
-import Profile from './components/profile'
+import inbox from './components/tool/NewUi/Inbox'
+// import Profile from './components/tool/NewUi/connectProfile'
 class App extends Component {
   render() {
     return (
@@ -21,14 +23,16 @@ class App extends Component {
         <div className="App">
           <BrowserRouter>
           <Route path ="/connect/:callerid" component= {DisplayShare}/>
-            <Route path ="/"  exact component={Home}/>
+            <Route exact path ="/" component={Home}/>
+            <Route exact path = "/profile/:encrTwitterHandle"component = {visitProfile}/>
             <Route exact  path='/login' component={Login} />
             <Route exact  path='/newlogin' component={Newlogin} />
-            <Route exact path='/profile/:userid' component ={Profile} />
+            {/* <Route exact path='/profile/:encrTwitterHandle' component ={Profile} /> */}
             {/* <Route exact  path='/newhome' component={Newhome} /> */}
             <Route exact  path='/explainIt' component={Explainit} />
             <Route exact  path='/google' component={google} />
             <Route exact path='/git' component = {git} />
+            <Route exact path ='/inbox/:userid' component={inbox}/>
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact  path='/signup' component={Signup} />
           </BrowserRouter>

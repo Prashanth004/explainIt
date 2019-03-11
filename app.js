@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 const bodyParser = require('body-parser');
+const socketIo = require("socket.io");
 var path = require('path');
 var ExpressPeerServer = require('peer').ExpressPeerServer;
 var pgp = require('pg-promise')(options);
@@ -10,12 +11,10 @@ var http = require('http');
 var promise = require('bluebird');
 var port = normalizePort(process.env.PORT || '9000');
 var logger = require('morgan');
-
+const LINKTOCALL= "linkTocall"
 const passport = require('passport');
 require('./config/passport')(passport);
 require('./config/passport-setup.js')
-// require('./config/passport-setup')(passport);
-
 
 var options = {
     promiseLib: promise
@@ -32,15 +31,13 @@ const connectionString = {
     password: 'postgres'
 };
 
-
-
-
 var app = express();
 
 
-//body parsers
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+
+
+
+
 
 // for data base
 app.use(passport.initialize());
@@ -60,6 +57,14 @@ var indexRouter = require('./routes/tech');
 var usersRouter = require('./routes/users');
 var projectRouter = require('./routes/project')
 var basic = require('./routes/basic.routes')
+var messageRouter = require('./routes/message')
+
+
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 //routes
 app.use('/tech', indexRouter);
@@ -67,10 +72,9 @@ app.use('/twitter', twitterAuthRouter);
 app.use('/users', usersRouter);
 app.use('/project', projectRouter);
 app.use('/issues',issueRouter);
+app.use('/message',messageRouter);
 app.use('/', basic );
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 
 app.set('port', port);
 var server = http.createServer(app);
@@ -85,11 +89,27 @@ app.set('views', path.join(__dirname, 'views'));
 //peerjs for screen sharing
 app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
 app.use(logger('dev'));
+const io = socketIo(server);
 
+io.on("connection", socket => {
+  console.log("New client connected");
+  
+ 
+    socket.on(LINKTOCALL,(data)=>{
+      console.log("data : ",data)
+    io.emit(LINKTOCALL, data); // Emitting a new message. It will be consumed by the client
 
+    })
+    
+ 
+    // console.error(`Error: ${error}`);
+  
 
-
-
+ 
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 
 
@@ -103,15 +123,12 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
 
-
 exports.db = db;
-
 
 //server console functions
 function normalizePort(val) {
@@ -129,7 +146,6 @@ function normalizePort(val) {
 
   return false;
 }
-
 
 
 function onError(error) {
@@ -155,8 +171,6 @@ function onError(error) {
       throw error;
   }
 }
-
-
 
 function onListening() {
   var addr = server.address();

@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar'
-import socketIOClient from "socket.io-client";
-import { Redirect } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import { Button, Modal, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD } from '../../../actions/types';
 import CopyToClipboard from '../CopytoClipboard'
 import Explain from './Explainit'
-import { setIssueId } from '../../../actions/issueActions';
+import Froms from '../Form';
+import {  setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
 import LoginMadal from '../../LoginModal'
+// import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
@@ -24,9 +24,10 @@ import IssueDisplay from './DisplayIssues'
 import Content from './Content'
 import { Animated } from "react-animated-css";
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
-import { restAllToolValue } from "../../../actions/toolActions";
-import { acceptCallDetails } from '../../../actions/callAction';
-import { answerCall } from '../../../actions/callAction'
+import {restAllToolValue} from "../../../actions/toolActions";
+import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
+import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
+import  Cryptr from 'cryptr'
 
 
 
@@ -40,10 +41,8 @@ class NewHome extends Component {
             showCreatedIssue: false,
             showParticipatedIssue: false,
             showProjects: false,
-            displayLink: false,
-            isHome: true,
-            socket: null
-
+            isHome : false
+          
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -55,26 +54,23 @@ class NewHome extends Component {
         this.reStoreDefault = this.reStoreDefault.bind(this);
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
-        this.answerCall = this.answerCall.bind(this)
 
     }
-    toggleDisplayLink() {
-        this.setState({
-            displayLink: !this.state.displayLink
-        })
-    }
+    
     reloadPage() {
         window.location.reload();
     }
+    
+        // this.props.stillAuthenicated()
 
 
     closeParticipated() {
+
         this.setState({
             showProjects: false,
             showParticipatedIssue: false,
             showCreatedIssue: false,
-
+            
         })
     }
 
@@ -105,32 +101,13 @@ class NewHome extends Component {
         } else {
             window.attachEvent("onmessage", postMessageHandler);
         }
-
-        var socket = this.state.socket
-        console.log("sockets : ", socket)
-        socket.on(config.LINK_TO_CALL, data => {
-            console.log("data : ", data)
-            if (data.ToUserId === this.props.userId) {
-                this.props.acceptCallDetails(
-                    data.link,
-                    data.fromEmail,
-                    data.fromUserName,
-                    data.fromUserId,
-                    data.fromProfilePic
-                )
-            }
-
-        });
-
-
     }
     componentWillMount() {
-
-        const socket = socketIOClient(config.base_dir);
-        this.setState({
-            socket: socket
-        })
-
+        // this.props.stillAuthenicated();
+        console.log("this.props.match.params.encrTwitterHandle :",this.props.match.params.encrTwitterHandle)
+        this.props.getProfileByTwitterHandle(this.props.match.params.encrTwitterHandle)
+      
+       
     }
     toodleExplain() {
         localStorage.setItem("issueId", null)
@@ -145,12 +122,12 @@ class NewHome extends Component {
         this.setState({
             showProjects: true,
             showParticipatedIssue: false,
-
+            
         })
         setTimeout(() => {
             self.setState({
                 showCreatedIssue: true,
-                openExplain: false
+                openExplain:false
             })
         }, 200)
     }
@@ -159,12 +136,12 @@ class NewHome extends Component {
         this.setState({
             showProjects: true,
             showCreatedIssue: false,
-
+            
         })
         setTimeout(() => {
             self.setState({
                 showParticipatedIssue: true,
-                openExplain: false
+                openExplain:false
             })
         }, 200)
     }
@@ -197,35 +174,30 @@ class NewHome extends Component {
             });
         }
     }
-    answerCall(){
-        window.open(this.props.callActionLink);
-        this.props.answerCall();
-    }
-
-
-    
-    handleCancel() {
-
+  
+    handleCancel(){
+        
     }
     reStoreDefault = () => {
         confirmAlert({
             title: "Are you sure?",
             message: "You won't be able to revert this!",
             buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => this.handleConfirm()
-                },
-                {
-                    label: 'No',
-                    onClick: () => this.handleCancel()
-                }
+              {
+                label: 'Yes',
+                onClick: () => this.handleConfirm()
+              },
+              {
+                label: 'No',
+                onClick: () => this.handleCancel()
+              }
             ]
-        })
+          }) 
     }
 
-    handleConfirm() {
+    handleConfirm(){
         this.props.restAllToolValue();
+        this.props.cancelSuccess();
         this.setState({
             openExplain: false
         })
@@ -244,37 +216,22 @@ class NewHome extends Component {
     }
 
     render() {
-        var self = this
-        var sharabeLink = config.react_url + "/profile/" + this.props.twitterHandle
-        var deatilsModal = null
-        var issuesCreated = this.props.myissues;
-        var self = this
-        var explainDiv = null;
-        var feedDiv = null;
 
+        var open = this.state.openDialog
+        var deatilsModal = null
+        deatilsModal = (<IssueDetils />)
+        var issuesCreated = this.props.myissues;
+        var issuesParicipated = this.props.showProjects
+
+        var self = this
         window.addEventListener('storage', function (event) {
             if (event.key == 'token') {
                 self.reloadPage()
             }
         })
-
-        const callNotificationDiv = (this.props.incommingCall) ? (
-            <div className="callNotification">
-                <div>
-                    <div className="callerProfileImage">
-                        <img className="callerProfileImageElement" src={this.props.callerProfilePic}/>
-                    </div>
-                </div>
-                <div>
-                    <p>{this.props.callerName}</p>
-                    <p onClick={this.answerCall}>click to answer</p>
-                </div>
-            </div>
-        ) : (null)
-
-        deatilsModal = (<IssueDetils />)
-
-
+        var explainDiv = null;
+        var feedDiv = null;
+        var trueFalse = this.state.showParticipatedIssue;
         if (this.props.isAauthenticated) {
             if (this.state.openExplain) {
                 explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
@@ -307,83 +264,97 @@ class NewHome extends Component {
         }
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
-                this.props.screenAction === SCREEN_SHARE ||
+                this.props.screenAction === SCREEN_SHARE || 
                 this.state.showParticipatedIssue ||
                 this.state.showCreatedIssue) {
                 var profileCardElement = null
             }
             else {
-                if (this.state.displayLink) {
-                    var displayLinkDiv = (<div className="sharableLinkSection">
-                        <p>Your sharabel Link</p>
-                        <CopyToClipboard sharablelink={sharabeLink} />
-                    </div>)
+              
+                if(this.state.openExplain){
+                    var explainItBtn= null
                 }
-                else {
-                    var displayLinkDiv = null
+                else{
+                    var explainItBtn=(<button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>)
                 }
-                if (this.state.openExplain) {
-                    var explainItBtn = null
-                }
-                else {
-                    var explainItBtn = (<button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>)
-                }
-
-                var profileCardElement = (
+                if(this.props.userId!=null){
+                  var profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
-                        isHome={this.state.isHome}
+                    isHome={this.state.isHome}
                         userId={this.props.userId}
-                        toggleDisplayLink={this.toggleDisplayLink}
                         toggleCreatedIssue={this.toggleCreatedIssue}
                         toggleParticipatedIssue={this.toggleParticipatedIssue} />
-                        {displayLinkDiv}
+                       
                         {explainItBtn}
                     </div>
+                    
                 )
+                }
+              
             }
         }
         else {
             var profileCardElement = (<Content />)
         }
 
-        return ((this.props.isAauthenticated) ? (
+
+        var self = this
+
+        return (
             <div className="fullHome">
                 <Navbar />
-
                 <div className="containerHome">
-                    {callNotificationDiv}
                     <div>
                         {profileCardElement}
                     </div>
+
                     <div >
                         {explainDiv}
+
+
                     </div>
+
                     <div>
                         {feedDiv}
                     </div>
+
+
                 </div>
 
+
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
+
                     <ModalBody className="modalBody">
                         {deatilsModal}
                     </ModalBody>
+
                 </Modal>
+
+
+                <Modal isOpen={this.state.modalTool} toggle={this.explainTool} className={this.props.className}>
+
+                    <ModalBody className="modalBodyTool">
+                        <LoginMadal />
+                    </ModalBody>
+
+                </Modal>
+
             </div>
-        ) : (<Redirect to={{ pathname: './login' }} />))
-
-
+        )
     }
 }
 NewHome.PropType = {
+    fetchIssues: PropType.func.isRequired,
     issues: PropType.array.isRequired,
+
     fetchProjectbyIssue: PropType.func.isRequired,
     setIssueId: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
     saveExtensionDetails: PropType.func.isRequired,
     saveSourceId: PropType.func.isRequired,
-    restAllToolValue: PropType.func.isRequired,
-    acceptCallDetails: PropType.func.isRequired,
-    answerCall:PropType.func.isRequired
+    restAllToolValue:PropType.func.isRequired,
+    cancelSuccess:PropType.func.isRequired,
+    getProfileByTwitterHandle:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -394,13 +365,10 @@ const mapStateToProps = state => ({
     userName: state.auth.userName,
     myissues: state.profile.myIssues,
     participatedIssues: state.profile.participatedIssue,
-    twitterHandle: state.profile.twitterHandle,
+    twitterHandle :state.profile.twitterHandle,
     email: state.auth.email,
-    userId: state.auth.id,
-    callerName: state.call.userName,
-    callerProfilePic: state.call.profilePic,
-    callActionLink: state.call.link,
-    incommingCall: state.call.incommingCall
+    userId: state.visitProfile.id,
+
 })
 
-export default connect(mapStateToProps, {answerCall, restAllToolValue, acceptCallDetails, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {restAllToolValue,getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)

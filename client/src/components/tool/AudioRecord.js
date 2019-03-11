@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../css/audiocomp.css'
 import Countdown from 'react-countdown-now';
-import Dummy from './dummy'
+import Dummy from './NewUi/dummy'
 import RecordRTC from 'recordrtc'
 // import Recorder from 'recorder-js';
 // import app from '../app'

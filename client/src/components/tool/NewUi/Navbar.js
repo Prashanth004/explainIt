@@ -1,9 +1,10 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+
 import { Link } from 'react-router-dom';
 import config from '../../../config/config';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
+import TwitterLogin from 'react-twitter-auth';
 import Swal from 'sweetalert2';
 import '../../css/nav.css'
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
@@ -40,10 +41,7 @@ class Navigationbar extends React.Component {
       title: 'Logout successful',
       timer: 1500,
       showConfirmButton: false,
-
-    })
-
-
+   })
   }
   componentWillMount() {
     this.props.stillAuthenicated()
@@ -66,13 +64,19 @@ class Navigationbar extends React.Component {
     if (this.props.logoutSuccess) {
       this.showLogoutSuccess()
     }
-    const content = !!this.props.isAuthenticated ?
-      (
-        <Navbar className="navBar" light expand="md">
+ const content = 
+ !!this.props.isAuthenticated ?
+      
+        (<Navbar className="navBar" light expand="md">
           <NavbarBrand href="/"><a className="brandName">Explain</a></NavbarBrand>
+          
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
+            <NavItem>
+            <NavLink href={"/inbox/"+this.props.userId}>Inbox</NavLink>
+          </NavItem>
+         
               <UncontrolledDropdown nav inNavbar>
                 <div className="dropdown">
                   <div className="profileImagesDiv">
@@ -92,33 +96,41 @@ class Navigationbar extends React.Component {
             </Nav>
           </Collapse>
         </Navbar>
-      ) : (
-        <Navbar className="navBar" light expand="md">
-          <NavbarBrand href="/">Explain</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="#">Login with </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="#"><GoogleLogin
-                  clientId={config.googleClientId}
-                  render={renderProps => (
-                    <button className="buttonDark navButton2" onClick={renderProps.onClick}>Google</button>
-                  )}
-                  buttonText="Login"
-                  onSuccess={this.googleResponse}
-                  onFailure={this.responseGoogle}
-                />   </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="#"><button className="buttonDark navButton2" onClick={this.handleGit}>Github</button></NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Navbar>
-      )
+      ) 
+      : (
+        <div><p></p></div>
+       )
+        // <Navbar className="navBar" light expand="md">
+        //   <NavbarBrand href="/">Explain</NavbarBrand>
+        //   <NavbarToggler onClick={this.toggle} />
+        //   <Collapse isOpen={this.state.isOpen} navbar>
+        //     <Nav className="ml-auto" navbar>
+        //       <NavItem>
+        //         <NavLink href="#">Login with </NavLink>
+        //       </NavItem>
+        //       <NavItem>
+        //         <NavLink href="#"><GoogleLogin
+        //           clientId={config.googleClientId}
+        //           render={renderProps => (
+        //             <button className="buttonDark navButton2" onClick={renderProps.onClick}>Google</button>
+        //           )}
+        //           buttonText="Login"
+        //           onSuccess={this.googleResponse}
+        //           onFailure={this.responseGoogle}
+        //         />   </NavLink>
+        //       </NavItem>
+        //       <NavItem>
+        //         <NavLink href="#"><button className="buttonDark navButton2" onClick={this.handleGit}>Github</button></NavLink>
+        //       </NavItem>
+        //       <NavItem>
+        //           <TwitterLogin className="buttonDark navButton2" loginUrl={config.base_dir+"/twitter/auth/twitter"}
+        //               onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
+        //               requestTokenUrl={config.base_dir+"/twitter/auth/twitter/reverse"} />
+        //       </NavItem>
+        //     </Nav>
+        //   </Collapse>
+        // </Navbar>
+      // )
     return (
       <div>
         {content}
@@ -130,13 +142,16 @@ class Navigationbar extends React.Component {
 Navigationbar.PropType = {
   stillAuthenicated: PropType.func.isRequired,
   signout: PropType.func.isRequired,
-  signInWithGoogle: PropType.func.isRequired
+  signInWithGoogle: PropType.func.isRequired,
+  signInWithTwitter : PropType.func.isRequired,
+  twitterAuthFailure : PropType.func.isRequired
 };
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   userName: state.auth.userName,
   profilePic: state.auth.profilePic,
-  logoutSuccess: state.auth.logoutSuccess
+  logoutSuccess: state.auth.logoutSuccess,
+  userId : state.auth.id
 
 })
-export default connect(mapStateToProps, { stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+export default connect(mapStateToProps, { signInWithTwitter, twitterAuthFailure, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)

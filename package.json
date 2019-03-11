@@ -16,6 +16,7 @@
     "cookie-parser": "~1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.5",
+    "cryptr": "^4.0.2",
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
     "express": "~4.16.0",
@@ -37,6 +38,7 @@
     "pg-promise": "^5.9.7",
     "random-number": "0.0.9",
     "react-pose": "^4.0.7",
+    "socket.io": "^2.2.0",
     "video-react": "^0.13.2",
     "video.js": "^7.4.1"
   }

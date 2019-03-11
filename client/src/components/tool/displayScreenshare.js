@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css'
+import {answerCall} from '../../actions/callAction'
+import {connect} from 'react-redux';
+import PropType from  'prop-types'; 
 
 
-export default class DisplayShare extends Component {
+class DisplayShare extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -25,6 +28,7 @@ export default class DisplayShare extends Component {
         this.endCall = this.endCall.bind(this);
     }
     componentWillMount() {
+        this.props.answerCall()
         var peer = new window.Peer()
         var self = this
         this.setState({
@@ -122,3 +126,16 @@ export default class DisplayShare extends Component {
         )
     }
 }
+
+DisplayShare.PropType={
+    answerCall:PropType.func.isRequired
+}
+
+const mapStateToProps = state =>({
+    
+}) 
+
+export default connect(mapStateToProps,{answerCall})(DisplayShare)
+
+
+

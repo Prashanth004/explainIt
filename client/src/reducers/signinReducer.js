@@ -12,6 +12,7 @@ const initialState = {
     profilePic:null,
     email:null,
     id:null,
+    twitterHandle:null,
     logoutSuccess:false
 
 }
@@ -39,7 +40,8 @@ export default function(state = initialState, action){
                 profilePic:action.profilePic,
                 userName:action.userName,
                 email:action.email,
-                id:action.id
+                id:action.id,
+                twitterHandle:action.twitterHandle
             }
         case SIGN_IN_WITH_TWITTER :
            
@@ -47,6 +49,7 @@ export default function(state = initialState, action){
                 ...state,
                 logoutSuccess:false,
                 isAuthenticated:action.payload,
+                
                 domainName: "twitter",
                 token:action.token
             }

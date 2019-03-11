@@ -125,6 +125,7 @@ export const stillAuthenicated = () => (dispatch) => {
                 profilePic:response.data.user.profilepic,
                 email:response.data.user.email,
                 id:response.data.user.id,
+                twitterHandle: response.data.user.twitterhandle,
                 payload: true
             })
         }

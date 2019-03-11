@@ -56,3 +56,19 @@ export const GET_PROFILE_DETAILS_FAIL ="GET_PROFILE_DETAILS_FAIL"
 //Extension Action
 export const SAVE_EXTENSION_DETAILS="SAVE_EXTENSION_DETAILS"
 export const GET_SOURCE_ID = "SAVE_SOURCE_ID"
+
+//visitProfile Action
+
+export const GET_PROFILE_BY_TWITTER_HANDLE = "GET_PROFILE_BY_TWITTER_HANDLE"
+
+//callAction
+
+export const CALL_DETAILS_ACCEPT = "CALL_DETAILS_ACCEPT"
+export const ANSWER_CALL = "ANSWER_CALL" 
+
+//message Action
+
+export const SEND_MESSAGE = "SEND_MESSAGE"
+export const SEND_FAILED ="SEND_FAILED"
+export const FETCH_MESSAGES = "FETCH_MESSAGES"
+export const FETCH_FAILED ="FETCH_FAILED"

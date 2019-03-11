@@ -4,7 +4,8 @@ import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
 import CopyToClipboard from '../CopytoClipboard';
 import html2canvas from 'html2canvas'
-import config from '../../../config/config'
+import config from '../../../config/config';
+import socketIOClient from "socket.io-client";
 import '../../css/shareScreen.css'
 import {StartedSharing,
     stopedSharing,
@@ -38,34 +39,18 @@ class ScreenRecorder extends Component {
             call:null,
             closedHere:false,
             showDisconectMessage:false,
-            timerEnded:false
+            timerEnded:false,
+            socket:null,
+            answered:false
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
-        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
-        // this.copyToClipboard = this.copyToClipboard.bind(this);
         this.endCall = this.endCall.bind(this);
-        // this.recordScreenStop = this.recordScreenStop.bind(this);
     }
 
-    // copyToClipboard(e){
-    //     if(e.target.id==="afterSave"){
-    //         var copyText = document.querySelector('#savedLink');
-    //         copyText.select();
-    //     }
-    //     else{
-    //         var copyText = document.querySelector('.myInput');
-    //         copyText.select();
-    //     }
-        
-    //     document.execCommand("copy");
-    //     this.setState({
-    //         copyStatus:"link copied"
-    //     })
-    // }
       startScreenShareSend() {
         var self = this
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
@@ -117,6 +102,10 @@ class ScreenRecorder extends Component {
     }
 
     componentWillMount() {
+        const socket = socketIOClient(config.base_dir);
+        this.setState({
+            socket:socket
+        })
         var self = this;
         var peer = new window.Peer()
         this.setState({
@@ -136,12 +125,17 @@ class ScreenRecorder extends Component {
             conn.on('open', () => {
                
                 console.log("got some data")
+                this.setState({
+                    answered:true
+                })
+               
                 conn.on('data', (data) => {
                     this.props.StartedSharing()
                     console.log("data : ", data)
                     
                     self.setState({
                         destkey: data.clientId,
+                        answered:false
                     })
                     self.startScreenShareSend()
                 });
@@ -156,6 +150,10 @@ class ScreenRecorder extends Component {
             window.close()
       
           },1000);
+    }
+
+    componentDidMount(){
+       
     }
 
 
@@ -184,6 +182,19 @@ class ScreenRecorder extends Component {
         this.setState({
             shareScreenLink: shareScreenLink
         })
+       var socket = this.state.socket
+       console.log("socket : ",socket)
+ 
+            socket.emit(config.LINK_TO_CALL,{
+                'link':shareScreenLink,
+                'fromEmail' : this.props.email,
+                'fromUserName' : this.props.userName,
+                'fromProfilePic':this.props.profilePic,
+                'fromUserId':this.props.id,
+                'ToUserId':this.props.peerUserId
+            })
+        
+     
     }
     savefile(){
         this.props.savefile(this.state.blob)
@@ -280,6 +291,13 @@ class ScreenRecorder extends Component {
                 </div>
             </div>
         )
+       
+        }
+        else if(this.state.answered && !this.props.isSceenSharing){
+            shareTimeElements=(<div>
+                <p>Call answered</p>
+                <p>Connecting ....</p>
+            </div>)
         }
             if(this.props.isSharingCompleted && this.props.isSaved==false){
                 this.savefile()
@@ -289,14 +307,7 @@ class ScreenRecorder extends Component {
             {MessageAbtDisConect}
                 <p><b>The call has been successfuly saved in created list.</b></p>
                  <p>Link to access your saved project</p>
-                 <CopyToClipboard sharablelink= {this.props.sharablelink} />
-                 {/* <input id="savedLink" className="myInput" type="text" value={this.props.sharablelink}/>
-                <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                    <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                    Copy text
-                    </button>
-                </span> */}
-             </div>)
+              </div>)
         }
         if (this.state.downloadUrl) {
             videoplayer = (<video src={this.state.downloadUrl} controls={true}></video>)
@@ -306,21 +317,16 @@ class ScreenRecorder extends Component {
             </div>)
         }
        
-        if (this.state.shareScreenLink && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
-        //    alert(this.state.sharablelink)
-            linkElement = (
+        if (this.state.shareScreenLink && !this.state.answered && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
+    
 
-                <div>
-                <p>Share the link below to get connected </p>
-                <CopyToClipboard sharablelink = {this.state.shareScreenLink} />
-                {/* <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
-                <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                    <button className="buttonDark" onClick={this.copyToClipboard}>
-                    Copy text
-                    </button>
-                </span> */}
-             
-    </div>)
+            linkElement = (<div>
+
+                <p>Waiting for the other peer to connect..</p>
+            </div>)
+
+              
+   
         }
         return (
             <div>
@@ -352,7 +358,12 @@ const mapStateToProps = state =>({
     isSharingCompleted : state.tools.isSharingCompleted,
     isSceenSharing : state.tools.isScreenSharing,
     isSaved :state.issues.successCreation,
-    sharablelink : state.issues.sharablelink
+    sharablelink : state.issues.sharablelink,
+    userName:state.auth.userName,
+    id:state.auth.id,
+    email:state.auth.email,
+    profilePic:state.auth.profilePic,
+    peerUserId:state.visitProfile.id
 }) 
 
 export default connect(mapStateToProps,{StartedSharing,stopedSharing,saveVideoBlob})(ScreenRecorder)

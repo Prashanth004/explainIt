@@ -21,7 +21,9 @@ const conf = {
     peopleDisplayLength:8,
     null:"null",
     EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
-    EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2"
+    EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
+    SECRET : "thebookmaneisawesomeiguess",
+    LINK_TO_CALL: "linkTocall"
 
 
     

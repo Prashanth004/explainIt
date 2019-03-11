@@ -7,6 +7,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
   var email = null;
   var userName = null;
   var profilepic =null;
+  var twitterHandle = null;
 
 
     axios({
@@ -20,6 +21,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
         email = response1.data.data.email;
         userName = response1.data.data.username;
         profilepic = response1.data.data.profilepic;
+        twitterHandle = response1.data.data.twitterhandle
         axios({
             method:'get',
             url: config.base_dir+'/project/',
@@ -52,6 +54,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
                 type:GET_PROFILE_DETAILS,
                 userName:userName,
                 email:email,
+                twitterHandle:twitterHandle,
                 myIssue:myIssue,
                 participatedIssue : participated,
                 profilePic:profilepic,

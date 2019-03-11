@@ -11,6 +11,7 @@ var qs = require('querystring')
 //Basic login form authentication system
 router.get('/email/:email',user.getUserByEmail)
 router.get('/id/:id', passport.authenticate('jwt', { session: false }),user.getUserById)
+router.get('/twitterhandle/:enctwitterhandle', passport.authenticate('jwt', { session: false }),user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
 router.post('/authenticate',user.authenticate)
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {

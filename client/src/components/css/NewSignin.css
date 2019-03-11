@@ -41,6 +41,13 @@
 
 
 }
+.twitterButton{
+    height:50px;
+    font-size:18px;
+    border-radius:25px;
+    padding-left:20px;
+    padding-right:20px;
+}
 .buttonDiv{
     align-items: center;
     text-align:center;
