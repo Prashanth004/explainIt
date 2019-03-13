@@ -35,7 +35,7 @@ id: rn(options),
                     msg: " the audio exceeds 12 mb"
                 })
             }
-            videopathName = config.domain + '/audio/' + req.body.projectName + '.mp4'
+            videopathName = config.domain + '/public/audio/' + req.body.projectName + '.mp4'
         }
         console.log("req.body.imageData:", typeof(req.body.imageData))
         if (req.body.imageData != "null") {
@@ -60,10 +60,10 @@ id: rn(options),
                     })
                 }
             })
-            var imgurl = config.domain + '/images/' + req.body.projectName + '.png';
+            var imgurl = config.domain + '/public/images/' + req.body.projectName + '.png';
         }
         else {
-            var imgurl = config.domain + '/images/default.png'
+            var imgurl = config.domain + '/public/images/default.png'
         }
         var dateNow = new Date().toString()
         var rand = rn(options)

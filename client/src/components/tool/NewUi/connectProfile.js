@@ -15,7 +15,8 @@ import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActio
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from '../../LoginModal'
+import LoginMadal from '../../LoginModal';
+import { Redirect } from 'react-router-dom';
 // import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
@@ -28,6 +29,8 @@ import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
 import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import  Cryptr from 'cryptr'
+import { openParticipated,openCreated } from "../../../actions/navAction";
+
 
 
 
@@ -75,10 +78,11 @@ class NewHome extends Component {
     }
 
     componentDidMount() {
+        this.props.stillAuthenicated()
         var self = this
-        function postMessageHandler(event) {
+                function postMessageHandler(event) {
             if (event.data.sourceId !== undefined) {
-                console.log("We've got a message!");
+                console.log("epxlain got a message!");
                 console.log("* Message:", event.data);
                 console.log("* Origin:", event.origin);
                 console.log("* Source:", event.source);
@@ -106,8 +110,7 @@ class NewHome extends Component {
         // this.props.stillAuthenicated();
         console.log("this.props.match.params.encrTwitterHandle :",this.props.match.params.encrTwitterHandle)
         this.props.getProfileByTwitterHandle(this.props.match.params.encrTwitterHandle)
-      
-       
+        localStorage.setItem("peerId",JSON.stringify(this.props.match.params.encrTwitterHandle))
     }
     toodleExplain() {
         localStorage.setItem("issueId", null)
@@ -118,32 +121,19 @@ class NewHome extends Component {
         })
     }
     toggleCreatedIssue() {
-        var self = this
-        this.setState({
-            showProjects: true,
-            showParticipatedIssue: false,
-            
-        })
-        setTimeout(() => {
-            self.setState({
-                showCreatedIssue: true,
-                openExplain:false
-            })
-        }, 200)
+      var self = this
+      this.setState({
+          showProjects: true,
+          openExplain: false
+      })
+     this.props.openCreated()
     }
     toggleParticipatedIssue() {
-        var self = this
-        this.setState({
+       this.setState({
             showProjects: true,
-            showCreatedIssue: false,
-            
+            openExplain: false
         })
-        setTimeout(() => {
-            self.setState({
-                showParticipatedIssue: true,
-                openExplain:false
-            })
-        }, 200)
+       this.props.openParticipated()
     }
 
 
@@ -179,6 +169,7 @@ class NewHome extends Component {
         
     }
     reStoreDefault = () => {
+        if(this.props.screenAction!==null){
         confirmAlert({
             title: "Are you sure?",
             message: "You won't be able to revert this!",
@@ -193,6 +184,10 @@ class NewHome extends Component {
               }
             ]
           }) 
+        }
+        else{
+            this.handleConfirm()
+        }
     }
 
     handleConfirm(){
@@ -236,25 +231,23 @@ class NewHome extends Component {
             if (this.state.openExplain) {
                 explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
             }
-            if (this.state.showCreatedIssue) {
+            if (this.props.created) {
                 feedDiv = (
-                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.state.showCreatedIssue}>
+                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created}>
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
-                                <Button close onClick={this.closeParticipated} />
                             </div>
                             <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={issuesCreated} />
                         </div>
                     </Animated>)
             }
-            if (this.state.showParticipatedIssue) {
+            if (this.props.participated) {
                 feedDiv = (
-                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.state.showParticipatedIssue}>
+                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated}>
 
                         <div className="issueContainer" >
 
                             <div className="closeBtnHolder">
-                                <Button close onClick={this.closeParticipated} />
                             </div>
                             <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
                         </div>
@@ -265,8 +258,8 @@ class NewHome extends Component {
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE || 
-                this.state.showParticipatedIssue ||
-                this.state.showCreatedIssue) {
+                this.props.participated ||
+                this.props.created) {
                 var profileCardElement = null
             }
             else {
@@ -300,7 +293,7 @@ class NewHome extends Component {
 
         var self = this
 
-        return (
+        return (this.props.authAction)?((!this.props.isAauthenticated) ? (<Redirect to={{ pathname: '/login' }} />):(
             <div className="fullHome">
                 <Navbar />
                 <div className="containerHome">
@@ -320,6 +313,7 @@ class NewHome extends Component {
 
 
                 </div>
+         
 
 
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
@@ -340,7 +334,7 @@ class NewHome extends Component {
                 </Modal>
 
             </div>
-        )
+               )):(null)
     }
 }
 NewHome.PropType = {
@@ -354,7 +348,9 @@ NewHome.PropType = {
     saveSourceId: PropType.func.isRequired,
     restAllToolValue:PropType.func.isRequired,
     cancelSuccess:PropType.func.isRequired,
-    getProfileByTwitterHandle:PropType.func.isRequired
+    getProfileByTwitterHandle:PropType.func.isRequired,
+    openParticipated:PropType.func.isRequired,
+    openCreated:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -368,7 +364,10 @@ const mapStateToProps = state => ({
     twitterHandle :state.profile.twitterHandle,
     email: state.auth.email,
     userId: state.visitProfile.id,
+    participated : state.nav.openParticipated,
+    created : state.nav.openCreated,
+    authAction:state.auth.authAction
 
 })
 
-export default connect(mapStateToProps, {restAllToolValue,getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {restAllToolValue, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)

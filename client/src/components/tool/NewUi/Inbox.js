@@ -19,6 +19,7 @@ class Inbox extends Component {
        
     }
   render() {
+      console.log("this.props.allMessage : ",this.props.allMessage)
       if(this.props.allMessage!==null){
         var allMessageEle = this.props.allMessage.map(message=>(
             <div className="messageElementDiv">
@@ -45,7 +46,9 @@ class Inbox extends Component {
         ))
       }
       else{
-        var allMessageEle =null
+        var allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
+            <h4>Empty</h4>
+        </div>)
       }
      
     
@@ -54,7 +57,7 @@ class Inbox extends Component {
           <Navbar />
           <div className="inboxContainer">
           <div className="inboxText">
-          <h1 >Inbox</h1>
+          <h1>Inbox</h1>
           </div>
               
               <div>

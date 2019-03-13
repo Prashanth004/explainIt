@@ -8,8 +8,15 @@ class DisplayIssue extends Component {
 
 
     render() {
-      
-        const issueItems = this.props.issueArray.map((issue,index) => (
+        console.log("this.props.issueArray : ",(this.props.issueArray).length)
+        var issueItems = null
+      if((this.props.issueArray).length=== 0 ){
+        issueItems =(<div className="emptyIssues">
+            <p>Not participated in any discussions</p>
+        </div>)
+      }
+      else{
+        issueItems = this.props.issueArray.map((issue,index) => (
             <div key={index}  key={issue.issueid} className="issueCard">
                 <div className="orginCard">
                     <div id={issue.issueid} onClick={this.props.togglemodal} className="topButtons">
@@ -27,7 +34,7 @@ class DisplayIssue extends Component {
                         <p id={issue.issueid} >{issue.textexplain}</p>
                     </div>
                     <div id={issue.issueid} onClick={this.props.togglemodal} className="questionImg">
-                        <img id={issue.issueid} width="100%" height="100%"src={issue.imgurl} ></img>
+                        <video autoPlay="true" muted controls  id={issue.issueid} width="100%" height="100%" src={issue.videofilepath} ></video>
                     </div>
                     
                 </div>
@@ -39,6 +46,7 @@ class DisplayIssue extends Component {
                 </div>
             </div>
         ))
+    }
         return (
             <div>
 {issueItems}

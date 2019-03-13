@@ -26,7 +26,9 @@ import { Animated } from "react-animated-css";
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
-import { answerCall } from '../../../actions/callAction'
+import { answerCall, missCall } from '../../../actions/callAction';
+import { openParticipated, openCreated } from "../../../actions/navAction";
+import { cancelAllMessageAction } from '../../../actions/messageAction'
 
 
 
@@ -56,7 +58,8 @@ class NewHome extends Component {
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
-        this.answerCall = this.answerCall.bind(this)
+        this.answerCall = this.answerCall.bind(this);
+        this.rejectCall = this.rejectCall.bind(this)
 
     }
     toggleDisplayLink() {
@@ -110,6 +113,10 @@ class NewHome extends Component {
         console.log("sockets : ", socket)
         socket.on(config.LINK_TO_CALL, data => {
             console.log("data : ", data)
+            setTimeout(() => {
+                this.props.missCall();
+            }, 18000)
+            localStorage.setItem("profilePic", data.fromProfilePic)
             if (data.ToUserId === this.props.userId) {
                 this.props.acceptCallDetails(
                     data.link,
@@ -119,13 +126,12 @@ class NewHome extends Component {
                     data.fromProfilePic
                 )
             }
-
         });
 
 
     }
     componentWillMount() {
-
+        this.props.stillAuthenicated()
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket
@@ -144,29 +150,17 @@ class NewHome extends Component {
         var self = this
         this.setState({
             showProjects: true,
-            showParticipatedIssue: false,
-
+            openExplain: false
         })
-        setTimeout(() => {
-            self.setState({
-                showCreatedIssue: true,
-                openExplain: false
-            })
-        }, 200)
+        this.props.openCreated()
     }
     toggleParticipatedIssue() {
         var self = this
         this.setState({
             showProjects: true,
-            showCreatedIssue: false,
-
+            openExplain: false
         })
-        setTimeout(() => {
-            self.setState({
-                showParticipatedIssue: true,
-                openExplain: false
-            })
-        }, 200)
+        this.props.openParticipated()
     }
 
 
@@ -197,34 +191,47 @@ class NewHome extends Component {
             });
         }
     }
-    answerCall(){
+    answerCall() {
         window.open(this.props.callActionLink);
+        this.props.answerCall();
+    }
+    rejectCall() {
+        var socket = this.state.socket
+        socket.emit(config.REJECT_REPLY, {
+            'message': config.REPLY_TO_SHARE_REQ
+        })
         this.props.answerCall();
     }
 
 
-    
+
     handleCancel() {
 
     }
     reStoreDefault = () => {
-        confirmAlert({
-            title: "Are you sure?",
-            message: "You won't be able to revert this!",
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => this.handleConfirm()
-                },
-                {
-                    label: 'No',
-                    onClick: () => this.handleCancel()
-                }
-            ]
-        })
+        if(this.props.screenAction!==null){
+            confirmAlert({
+                title: "Are you sure?",
+                message: "You won't be able to revert this!",
+                buttons: [
+                    {
+                        label: 'Yes',
+                        onClick: () => this.handleConfirm()
+                    },
+                    {
+                        label: 'No',
+                        onClick: () => this.handleCancel()
+                    }
+                ]
+            })
+        }
+        else{
+            this.handleConfirm()
+        }
     }
 
     handleConfirm() {
+        this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
         this.setState({
             openExplain: false
@@ -244,6 +251,7 @@ class NewHome extends Component {
     }
 
     render() {
+        const externalCloseBtn = <button className="close modalClose" style={{ position: 'absolute', top: '25px', height: '45px', width: '45', right: '25px', color: 'white' }} onClick={this.toggle}>&times;</button>;
         var self = this
         var sharabeLink = config.react_url + "/profile/" + this.props.twitterHandle
         var deatilsModal = null
@@ -262,12 +270,14 @@ class NewHome extends Component {
             <div className="callNotification">
                 <div>
                     <div className="callerProfileImage">
-                        <img className="callerProfileImageElement" src={this.props.callerProfilePic}/>
+                        <img className="callerProfileImageElement" src={this.props.callerProfilePic} />
                     </div>
                 </div>
                 <div>
                     <p>{this.props.callerName}</p>
-                    <p onClick={this.answerCall}>click to answer</p>
+                    <p onClick={this.answerCall}><a href="#">Accept Screen-share Request</a></p>
+                    <p onClick={this.rejectCall}><a href="#">Ask to send the recording</a></p>
+
                 </div>
             </div>
         ) : (null)
@@ -279,25 +289,23 @@ class NewHome extends Component {
             if (this.state.openExplain) {
                 explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
             }
-            if (this.state.showCreatedIssue) {
+            if (this.props.created) {
                 feedDiv = (
-                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.state.showCreatedIssue}>
+                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created}>
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
-                                <Button close onClick={this.closeParticipated} />
                             </div>
                             <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={issuesCreated} />
                         </div>
                     </Animated>)
             }
-            if (this.state.showParticipatedIssue) {
+            if (this.props.participated) {
                 feedDiv = (
-                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.state.showParticipatedIssue}>
+                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated}>
 
                         <div className="issueContainer" >
 
                             <div className="closeBtnHolder">
-                                <Button close onClick={this.closeParticipated} />
                             </div>
                             <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
                         </div>
@@ -308,8 +316,8 @@ class NewHome extends Component {
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
-                this.state.showParticipatedIssue ||
-                this.state.showCreatedIssue) {
+                this.props.participated ||
+                this.props.created) {
                 var profileCardElement = null
             }
             else {
@@ -346,7 +354,7 @@ class NewHome extends Component {
             var profileCardElement = (<Content />)
         }
 
-        return ((this.props.isAauthenticated) ? (
+        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to={{ pathname: './login' }} />) : (
             <div className="fullHome">
                 <Navbar />
 
@@ -362,14 +370,13 @@ class NewHome extends Component {
                         {feedDiv}
                     </div>
                 </div>
-
-                <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
+                <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
                     <ModalBody className="modalBody">
                         {deatilsModal}
                     </ModalBody>
                 </Modal>
             </div>
-        ) : (<Redirect to={{ pathname: './login' }} />))
+        )) : (null)
 
 
     }
@@ -383,7 +390,11 @@ NewHome.PropType = {
     saveSourceId: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     acceptCallDetails: PropType.func.isRequired,
-    answerCall:PropType.func.isRequired
+    answerCall: PropType.func.isRequired,
+    missCall: PropType.func.isRequired,
+    openParticipated: PropType.func.isRequired,
+    openCreated: PropType.func.isRequired,
+    cancelAllMessageAction: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -400,7 +411,25 @@ const mapStateToProps = state => ({
     callerName: state.call.userName,
     callerProfilePic: state.call.profilePic,
     callActionLink: state.call.link,
-    incommingCall: state.call.incommingCall
+    incommingCall: state.call.incommingCall,
+    authAction: state.auth.authAction,
+    participated: state.nav.openParticipated,
+    created: state.nav.openCreated,
 })
 
-export default connect(mapStateToProps, {answerCall, restAllToolValue, acceptCallDetails, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {
+    answerCall,
+    openCreated,
+    cancelAllMessageAction,
+    openParticipated,
+    missCall,
+    restAllToolValue,
+    acceptCallDetails,
+    saveExtensionDetails,
+    saveSourceId,
+    fetchProjectbyIssue,
+    setIssueId, getProfileDetails,
+    clearAnswers, stillAuthenicated,
+    fetchProjectbyIssue,
+    setIssueId
+})(NewHome)

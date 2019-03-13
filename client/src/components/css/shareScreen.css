@@ -172,3 +172,31 @@
   box-shadow: 1px 3px 1px #CE152A;
   cursor: pointer;
 }
+
+.imageOfPeersDisplay{
+    width:100%;
+    display:grid;
+    grid-template-columns: 25% 50% 25%
+}
+
+
+  .burImage{
+    background-color:black;
+    opacity:0.5;
+    display:inline-block;
+  }
+  .callerImage{
+      align-items: right;
+      text-align: right;
+      padding:10px;
+
+  }
+  .recieverImage{
+      align-items:left;
+      text-align:left
+  }
+  .callImageDiv{
+      width:35%;
+      margin:auto;
+      margin-top:20px;
+  }

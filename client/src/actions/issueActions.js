@@ -14,7 +14,7 @@ export const fetchIssues = () => dispatch => {
     console.log("this is token i am passing : ",token)
     axios({
         method: 'get',
-        url: config.base_dir + '/issues',
+        url: config.base_dir + '/api/issues',
        
     }).then(response => {
         if (response.status == 200) {

@@ -4,6 +4,7 @@ import {SIGN_IN_WITH_GOOGLE,
     SIGN_IN_WITH_GIT,SIGN_OUT,CHECK_TOKEN_VALIDIDTY,AUTH_FAIL,SIGN_IN_WITH_TWITTER} from '../actions/types'
 
 const initialState = {
+    authAction:false,
     isAuthenticated:false,
     domainName :null,
     error :null,
@@ -23,6 +24,7 @@ export default function(state = initialState, action){
            
             return{
                 ...state,
+                authAction:true,
                 logoutSuccess:false,
                 isAuthenticated:action.payload,
                 domainName: "google",
@@ -35,6 +37,7 @@ export default function(state = initialState, action){
         case CHECK_TOKEN_VALIDIDTY:
             return{
                 ...state,
+                authAction:true,
                 logoutSuccess:false,
                 isAuthenticated :action.payload,
                 profilePic:action.profilePic,
@@ -56,6 +59,7 @@ export default function(state = initialState, action){
         case AUTH_FAIL : 
             return{
                 ...state,
+                authAction:true,
                 isAuthenticated:action.payload,
                 userName: null,
                 profilePic:null,

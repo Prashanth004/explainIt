@@ -206,6 +206,7 @@ sendMessageLocal(){
     }
     
      console.log("this.props.isSaved : ",this.props.isSaved)
+     console.log("this.props.sendSuccess : ", this.props.sendSuccess)
         if(this.props.isRecordingCompleted === true && this.props.isSaved==false){
             var postShareElements= (<div className = "postRecord">
             {videoplayer}

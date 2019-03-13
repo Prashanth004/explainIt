@@ -7,7 +7,7 @@ export const signInWithGoogle = (tokenBlob) => (dispatch) => {
         method: 'POST',
         body: tokenBlob,
     };
-    fetch( config.base_dir + '/users/google', options)
+    fetch( config.base_dir + '/api/users/google', options)
         .then(r => {
             r.json().then(response => {
                 var storeToken = new Promise(function (resolve, reject) {
@@ -41,7 +41,7 @@ export const signInWithGoogle = (tokenBlob) => (dispatch) => {
 
 export const signInWithGitHub = (code) =>(dispatch)=>{
    console.log("*************************code : ",code)
-    fetch( config.base_dir + '/users/git?code='+code)
+    fetch( config.base_dir + '/api/users/git?code='+code)
         .then(r => {
             r.json().then(response => {
                 console.log("########### response ########",response)
@@ -112,7 +112,7 @@ export const stillAuthenicated = () => (dispatch) => {
  console.log("this is getting called")
     axios({
         method: 'get',
-        url: config.base_dir + '/users/',
+        url: config.base_dir + '/api/users/',
         headers: {
             "Authorization": token,
         }
@@ -138,7 +138,10 @@ export const stillAuthenicated = () => (dispatch) => {
         }
     })
     .catch(err=>{
-        console.log("error",err)
+        dispatch({
+            type: AUTH_FAIL,
+            payload: false
+        })
     })
    
 }

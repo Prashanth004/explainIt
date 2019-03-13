@@ -1,7 +1,8 @@
 import {SEND_MESSAGE, 
     SEND_FAILED, 
     FETCH_MESSAGES,
-    FETCH_FAILED} from '../actions/types'
+    FETCH_FAILED,
+    CANCEL_MESSAGE_STATE} from '../actions/types'
 
 const initialState = {
     sendSuccess:false,
@@ -16,6 +17,14 @@ export default function(state=initialState, action){
         return{
             ...state,
             sendSuccess:true
+        }
+        case CANCEL_MESSAGE_STATE:
+        return{
+            ...state,
+            sendSuccess:false,
+            sendFail:false,
+            allMessage:null,
+            fetchFailed:false
         }
         case SEND_FAILED:
         return{

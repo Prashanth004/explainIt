@@ -1,4 +1,4 @@
-import {CALL_DETAILS_ACCEPT, ANSWER_CALL} from '../actions/types'
+import {CALL_DETAILS_ACCEPT, ANSWER_CALL,MISS_CALL} from '../actions/types'
 
 const initialState={
     link:null,
@@ -23,6 +23,11 @@ export default function(state= initialState, action){
             }
         case ANSWER_CALL:
             return {
+                ...state,
+                incommingCall:false
+            }
+        case MISS_CALL:
+            return{
                 ...state,
                 incommingCall:false
             }

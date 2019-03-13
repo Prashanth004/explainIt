@@ -1,64 +1,43 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
-import PropType from 'prop-types';
-import { getProfileDetails } from '../../../actions/profileAction';
-import '../../css/newlanding.css'
-import  Cryptr from 'cryptr'
-import { IoIosLink } from "react-icons/io";
+/* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
-class ProfileCard extends Component {
-componentWillMount(){
-   this.props.getProfileDetails(this.props.userId) 
-     // this.props.stillAuthenicated();
-        // const cryptr = new Cryptr(config.SECRET);
-        // const decryptedTwitterHandle = cryptr.decrypt(this.props.match.params.encrTwitterHandle);
-        // console("decryptedTwitterHandle : ",decryptedTwitterHandle)
-        // this.setState({
-        //     twitterHandle:decryptedTwitterHandle
-        // })
-   
-}
- 
+import React from 'react';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
+class ModalExample extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modal: false
+    };
+
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+
   render() {
-    var sharabeLink = config.base_dir+"/"+this.props.twitterHandle
+    const externalCloseBtn = <button className="close" style={{ position: 'absolute', top: '15px', right: '15px' }} onClick={this.toggle}>&times;</button>;
     return (
-        <div className="Profilecard">
-        <div className="blackwhite">
-            <p><b>{this.props.userName}</b><IoIosLink onClick={this.props.toggleDisplayLink}/></p>
-        </div>
-        <div className="profileDetails">
-            <div>
-                <div className="profileImage">
-                    <img  src={this.props.profilePic} className="profileImageElement" ></img>
-                </div>
-            </div>
-            <div  onClick={this.props.toggleCreatedIssue} className="displayNumber">
-            <p>Created</p>
-            <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>        
-
-            </div >
-            <div onClick={this.props.toggleParticipatedIssue}className="displayNumber">
-            <p>Participated</p>
-            <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>  
-
-            </div>
-        </div>
-    </div>
-    )
+      <div>
+        <Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} external={externalCloseBtn}>
+          <ModalHeader>Modal title</ModalHeader>
+          <ModalBody>
+            <b>Look at the top right of the page/viewport!</b><br />
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
+            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+    );
   }
 }
 
-ProfileCard.PropType = {
-    toggleProjects :  PropType.func.isRequired,
-    getProfileDetails: PropType.func.isRequired
-};
-const mapStateToProps = state => ({
-    userName:state.profile.userName,
-    email:state.profile.email,
-    profilePic:state.profile.profilePic,
-   noCreated:state.profile.noCreated,
-   noParticipated:state.profile.noParticipated
-})
-
-export default connect(mapStateToProps, {getProfileDetails})(ProfileCard)
-
+export default ModalExample;

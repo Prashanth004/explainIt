@@ -8,6 +8,7 @@ import extensionReducer from './extensionReducer'
 import visitProfileReducer from './visitProfileReducers'
 import callReducer from './callReducer'
 import messageReducer from './messageReducer'
+import navReducer from './navReducer'
  
 export default combineReducers({
     auth : signinReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
     extension:extensionReducer,
     visitProfile :visitProfileReducer,
     call : callReducer,
-    message:messageReducer
+    message:messageReducer,
+    nav:navReducer
 })

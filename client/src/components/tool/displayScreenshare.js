@@ -5,6 +5,11 @@ import '../css/shareScreen.css'
 import {answerCall} from '../../actions/callAction'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
+import Navbar from './NewUi/Navbar';
+import CallImage from'./NewUi/CallImage';
+import { stillAuthenicated } from '../../actions/signinAction';
+import {getProfileByTwitterHandle } from "../../actions/visitProfileAction";
+
 
 
 class DisplayShare extends Component {
@@ -22,12 +27,19 @@ class DisplayShare extends Component {
             stream:null,
             call:null,
             closedHere:false,
-            showDisconectMessage:false
+            showDisconectMessage:false,
+            connected:false,
+            peerProfilePic:null
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
     }
     componentWillMount() {
+        this.props.stillAuthenicated();
+        var profilePic = (localStorage.getItem("profilePic"))
+        this.setState({
+            peerProfilePic:profilePic
+        })
         this.props.answerCall()
         var peer = new window.Peer()
         var self = this
@@ -60,6 +72,9 @@ class DisplayShare extends Component {
               
                 call.answer(audiostream)
                 call.on('stream', function(stream){
+                    self.setState({
+                        connected:true
+                    })
                     console.log('Received', stream);
                     var divi = document.querySelector('.screenShareDiv')
                     divi.style.display="block"
@@ -104,38 +119,53 @@ class DisplayShare extends Component {
    }
 
     render() {
+        var callAnim=(this.state.connected)?
+        (<CallImage action="notWaiting" recieverImageUrl={this.state.peerProfilePic} callerImageUrl={this.props.profilePic}/>)
+        :(<CallImage action="waiting" recieverImageUrl={this.state.peerProfilePic} callerImageUrl={this.props.profilePic}/>)
+
         if(this.state.showDisconectMessage){
             var ShareElement=(<h3>
                 Disconnected from other peer
             </h3>)
         }
         else{
-            var ShareElement=(
-                <div>
-                    <video className="VideoElement" autoplay ={true}id="video" srcObject=" " ></video>
-                    <div id="main-circle">
-                        <div  onClick={this.endCall}id="inner-circle">END</div>
+                var ShareElement=(
+                    <div>
+                        <video className="VideoElement" autoplay ={true}id="video" srcObject=" " ></video>
+                        <div id="main-circle">
+                            <div  onClick={this.endCall}id="inner-circle">END</div>
+                        </div>
+                      
                     </div>
-                </div>
-            )
+                )
+           
         }
         return (
             <div className="screenShareDiv">
+          
                {ShareElement}
+               <div className="callImageDiv">
+               {callAnim}
+               </div>
+               
             </div>
         )
     }
 }
 
 DisplayShare.PropType={
-    answerCall:PropType.func.isRequired
+    answerCall:PropType.func.isRequired,
+    stillAuthenicated:PropType.func.isRequired,
+    getProfileByTwitterHandle:PropType.isRequired
 }
 
 const mapStateToProps = state =>({
+    profilePic:state.auth.profilePic,
+    peerProfilePic:state.visitProfile.profilePic
     
 }) 
 
-export default connect(mapStateToProps,{answerCall})(DisplayShare)
+export default connect(mapStateToProps,{answerCall, getProfileByTwitterHandle, stillAuthenicated})(DisplayShare)
 
 
 

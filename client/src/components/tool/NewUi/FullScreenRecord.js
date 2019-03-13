@@ -113,7 +113,7 @@ class FullScreenRecorder extends Component {
                 clearInterval(id);
             } else {
                 width = width + (100 / 90);
-                console.log("......")
+               
                 progressbar.style.width = width + '%';
             }
         }
@@ -185,9 +185,7 @@ class FullScreenRecorder extends Component {
                 self.props.fullStopedRecording()
             });
         }
-        else {
-            alert("Some thign went wrong")
-        }
+      
         this.setState({
             recorder: null,
             audioStream: null,

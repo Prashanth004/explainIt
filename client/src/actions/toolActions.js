@@ -16,7 +16,8 @@ import {DISPLAY_SCREEN_SHARE,
     FULL_STOP_RECORD,
     DISPLAY_FULL_SCREEN_RECORD,
     FULL_SCREEN_RECORD,
-    RESET_TOOL_STATES
+    RESET_TOOL_STATES,
+    CANCEL_MESSAGE_STATE
 
 } from './types'
 
@@ -124,6 +125,10 @@ export const restAllToolValue = () =>(dispatch)=>{
     dispatch({
         type:RESET_TOOL_STATES
     })
+    dispatch({
+        type:CANCEL_MESSAGE_STATE
+    })
+
 }
 
 export const discardAfterRecord = () => (dispatch)=>

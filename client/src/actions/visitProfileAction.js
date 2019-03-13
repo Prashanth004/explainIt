@@ -8,7 +8,7 @@ export const getProfileByTwitterHandle = (encTwitterHandle) => (dispatch)=>{
     console.log("visitProfileActiion is being visited")
     axios({
         method: 'get',
-        url: config.base_dir+'/users/twitterhandle/'+encTwitterHandle,
+        url: config.base_dir+'/api/users/twitterhandle/'+encTwitterHandle,
         headers: {
             "Authorization": token,
         }
@@ -19,7 +19,7 @@ export const getProfileByTwitterHandle = (encTwitterHandle) => (dispatch)=>{
             type:GET_PROFILE_BY_TWITTER_HANDLE,
             email : response1.data.data.email,
             userName : response1.data.data.username,
-            profilepic : response1.data.data.profilepic,
+            profilePic : response1.data.data.profilepic,
             id : response1.data.data.id
 
         })

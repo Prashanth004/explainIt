@@ -9,9 +9,11 @@ import socketIOClient from "socket.io-client";
 import '../../css/shareScreen.css'
 import {StartedSharing,
     stopedSharing,
-    saveVideoBlob} from '../../../actions/toolActions'
+    saveVideoBlob,
+    displayScrenRecord} from '../../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
+import CallImage from './CallImage'
 
 import Swal from 'sweetalert2';
 import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap';
@@ -41,7 +43,10 @@ class ScreenRecorder extends Component {
             showDisconectMessage:false,
             timerEnded:false,
             socket:null,
-            answered:false
+            answered:false,
+            timeOutNoAnswer:false,
+            messageFrmPeer:null,
+            answerFrmPeer:false
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
@@ -49,6 +54,7 @@ class ScreenRecorder extends Component {
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
         this.endCall = this.endCall.bind(this);
+        this.startCanvarRecord = this.startCanvarRecord.bind(this)
     }
 
       startScreenShareSend() {
@@ -145,6 +151,8 @@ class ScreenRecorder extends Component {
             peer: peer
         })
     }
+
+
     discard = ()=>{
         setTimeout(()=>{
             window.close()
@@ -153,7 +161,21 @@ class ScreenRecorder extends Component {
     }
 
     componentDidMount(){
-       
+        var self = this
+        setTimeout(()=>{
+            if(!this.state.answered){
+                self.setState({
+                    timeOutNoAnswer : true
+                })
+            }
+        },20000)
+       var socket = this.state.socket;
+       socket.on(config.REJECT_REPLY, data=>{
+           self.setState({
+               answerFrmPeer:true,
+               messageFrmPeer:data.message
+           })
+       })
     }
 
 
@@ -214,6 +236,9 @@ class ScreenRecorder extends Component {
         this.stopShare()
         
     }
+    startCanvarRecord(){
+        this.props.displayScrenRecord()
+    }
     stopShare() {
         if(!this.state.closedHere && !this.state.timerEnded){
             console.log("I am here to show message")
@@ -263,7 +288,9 @@ class ScreenRecorder extends Component {
     }
 
     render() {
-       
+       var callerImageUrl= (this.props.peerProfilePic!==null)?
+            (this.props.peerProfilePic):
+            (this.props.peerProfilePic)
         var timer = null;
        if(this.state.showDisconectMessage){
         var MessageAbtDisConect=(<p><b>Dissconected from other peer</b></p>)
@@ -284,6 +311,8 @@ class ScreenRecorder extends Component {
             />)
             var shareTimeElements = (
             <div>
+     <CallImage action="notWaiting" recieverImageUrl={callerImageUrl} callerImageUrl={this.props.profilePic}/>
+
                   {timer}
                 <button className="Rec"></button>
                 <div id="main-circle">
@@ -295,8 +324,10 @@ class ScreenRecorder extends Component {
         }
         else if(this.state.answered && !this.props.isSceenSharing){
             shareTimeElements=(<div>
+                <CallImage action="waiting" recieverImageUrl={callerImageUrl} callerImageUrl={this.props.profilePic}/>
                 <p>Call answered</p>
                 <p>Connecting ....</p>
+
             </div>)
         }
             if(this.props.isSharingCompleted && this.props.isSaved==false){
@@ -307,6 +338,8 @@ class ScreenRecorder extends Component {
             {MessageAbtDisConect}
                 <p><b>The call has been successfuly saved in created list.</b></p>
                  <p>Link to access your saved project</p>
+                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
+
               </div>)
         }
         if (this.state.downloadUrl) {
@@ -318,13 +351,31 @@ class ScreenRecorder extends Component {
         }
        
         if (this.state.shareScreenLink && !this.state.answered && (this.props.isSceenSharing!==true) && (this.props.isSharingCompleted!== true)) {
+            if(!this.state.timeOutNoAnswer && !this.state.answerFrmPeer){
+                linkElement = (<div>
+                  <CallImage action="waiting" recieverImageUrl={callerImageUrl} callerImageUrl={this.props.profilePic}/>
+                    <p>Waiting for the other peer to connect..</p>
+                </div>)
     
+            }
+            else if(this.state.answerFrmPeer){
+                linkElement = (<div>
+                    {/* <CallImage action="waiting" recieverImageUrl={callerImageUrl} callerImageUrl={this.props.profilePic}/> */}
+                      <p><b>Other Peer has responded with a message</b></p>
+                      <p>message : {this.state.messageFrmPeer}</p>
+                      <p>Do You wish to record the screen and send?</p>
+                    <button className="buttonDark" onClick={this.startCanvarRecord}>Record</button>
 
-            linkElement = (<div>
-
-                <p>Waiting for the other peer to connect..</p>
-            </div>)
-
+                  </div>)
+            }
+            else{
+                linkElement = (<div>
+                    <p>Other peer dint not accept the request for screen share.</p>
+                    <p>Do You wish to record the screen and send?</p>
+                    <button className="buttonDark" onClick={this.startCanvarRecord}>Record</button>
+                </div>)
+            }
+            
               
    
         }
@@ -332,8 +383,6 @@ class ScreenRecorder extends Component {
             <div>
 
                 <div>
-                  
-                    {/* {Circle} */}
                 </div>
                 <div className="Btns">
           
@@ -343,7 +392,6 @@ class ScreenRecorder extends Component {
                     {shareTimeElements}
                     {postShareElements}
                     <audio id="video"  ref={a => this.videoTag=a} srcObject=" " ></audio>
-                    {/* {downLinkAudio} */}
                 </div>
             </div>
         )
@@ -352,7 +400,8 @@ class ScreenRecorder extends Component {
 ScreenRecorder.PropType={
     StartedSharing: PropType.func.isRequired, 
     stopedSharing: PropType.func.isRequired,
-    saveVideoBlob: PropType.func.isRequired
+    saveVideoBlob: PropType.func.isRequired,
+    displayScrenRecord:PropType.func.isRequired
 }
 const mapStateToProps = state =>({
     isSharingCompleted : state.tools.isSharingCompleted,
@@ -363,7 +412,8 @@ const mapStateToProps = state =>({
     id:state.auth.id,
     email:state.auth.email,
     profilePic:state.auth.profilePic,
-    peerUserId:state.visitProfile.id
+    peerUserId:state.visitProfile.id,
+    peerProfilePic:state.visitProfile.profilePic
 }) 
 
-export default connect(mapStateToProps,{StartedSharing,stopedSharing,saveVideoBlob})(ScreenRecorder)
+export default connect(mapStateToProps,{StartedSharing,displayScrenRecord,stopedSharing,saveVideoBlob})(ScreenRecorder)

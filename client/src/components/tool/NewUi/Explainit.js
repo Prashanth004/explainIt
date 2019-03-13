@@ -30,7 +30,6 @@ class Explainit extends Component {
       showRecordBtns: false,
       showShareBtns: false
     }
-    // this.child = React.createRef();
     this.showErrorAlert = this.showErrorAlert.bind(this);
     this.showSuccessAlert = this.showSuccessAlert.bind(this);
     this.drawRect = this.drawRect.bind(this);
@@ -38,7 +37,6 @@ class Explainit extends Component {
     this.clearCanvas = this.clearCanvas.bind(this);
     this.downloadExtension = this.downloadExtension.bind(this);
     this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
-    // this.displayFullScrenRecord = this.displayFullScrenRecord.bind(this);
     this.recordFullScreen = this.recordFullScreen.bind(this);
     this.saveVideoData = this.saveVideoData.bind(this);
     this.displayRecordBtn = this.displayRecordBtn.bind(this);

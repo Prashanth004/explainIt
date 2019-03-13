@@ -8,6 +8,7 @@ import { IoIosLink } from "react-icons/io";
 
 class ProfileCard extends Component {
 componentWillMount(){
+    console.log("uswrID : ",this.props.userId)
    this.props.getProfileDetails(this.props.userId) 
      // this.props.stillAuthenicated();
         // const cryptr = new Cryptr(config.SECRET);

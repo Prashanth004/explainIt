@@ -16,14 +16,16 @@ const conf = {
     peerPath : '/peerjs',
     gitHubClientId:"5c7162c1bd8449fa8b00",
     gitHubClientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947",
-    react_url_git:"http://localhost:3000/git",
+    react_url_git:"https://explain.bookmane.in/git",
     canvBackground : "rgb(205, 243, 224)",
     peopleDisplayLength:8,
     null:"null",
     EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
     EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
     SECRET : "thebookmaneisawesomeiguess",
-    LINK_TO_CALL: "linkTocall"
+    LINK_TO_CALL: "linkTocall",
+    REJECT_REPLY:"rejectRepply",
+    REPLY_TO_SHARE_REQ:"Please send me the recoding."
 
 
     

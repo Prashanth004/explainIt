@@ -18,13 +18,7 @@ class Login extends Component {
         this.githubResponse = this.githubResponse.bind(this);
         this.githubFailure = this.githubFailure.bind(this)
     }
-    
-    componentWillMount() {
-        this.props.stillAuthenicated()
-    }
-    componentDidMount(){
-      
-    }
+  
     handleGit(){
         var url = `https://github.com/login/oauth/authorize?client_id=${config.gitHubClientId}&scope=user&redirect_uri=${config.react_url_git}`
         window.open(url,'_self')
@@ -46,7 +40,7 @@ class Login extends Component {
     };
 
     render() {
-        let content = !!this.props.isAuthenticated ? (<Redirect to={{ pathname: './' }} />) :
+        let content = !this.props.isAuthenticated ?
             (<div className="ShapeImage">
                 {/* <div className="ShapeImage">
                 </div> */}
@@ -70,16 +64,16 @@ class Login extends Component {
                         
                            
                             <div className="buttonDiv">
-                                <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/twitter/auth/twitter"}
+                                <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
                                     onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-                                    requestTokenUrl={config.base_dir+"/twitter/auth/twitter/reverse"} />
+                                    requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />
                             </div>
                            
                         
                     </div>
                 </div>
             </div>
-            )
+            ): (<Redirect to={{ pathname: './' }} />) 
         return (
             <div>
                 {content}

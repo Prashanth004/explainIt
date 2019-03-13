@@ -1,6 +1,10 @@
 import config from '../config/config'
 import axios from 'axios'
-import {SEND_MESSAGE, SEND_FAILED,FETCH_MESSAGES,FETCH_FAILED} from './types'
+import {SEND_MESSAGE,
+     SEND_FAILED,
+     FETCH_MESSAGES,
+     FETCH_FAILED,
+     CANCEL_MESSAGE_STATE} from './types'
 
 export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
     console.log(link, fromId, ToId, subject)
@@ -14,12 +18,11 @@ export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
       
       let axiosConfig = {
         headers: {
-            // 'Content-Type': 'application/x-www-form-urlencoded',
             "Authorization":token,
         }
       };
 
-      axios.post(config.base_dir+'/message', postData, axiosConfig).then(response=>{
+      axios.post(config.base_dir+'/api/message', postData, axiosConfig).then(response=>{
         if(response.status=== 201 || response.status === 301)
         {
             console.log(" response :", response.data)
@@ -37,13 +40,17 @@ export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
     })
 
 }
-
+export const cancelAllMessageAction=()=>(dispatch)=>{
+    dispatch({
+        type:CANCEL_MESSAGE_STATE
+    })
+}
 export const getAllMessages=(userId)=>(dispatch)=>{
     var allMessage = null
     var token = JSON.parse(localStorage.getItem('token'))
     axios({
         method:'get',
-        url:config.base_dir+'/message/'+userId,
+        url:config.base_dir+'/api/message/'+userId,
         headers:{
             "Authorization":token,
         }
@@ -58,7 +65,7 @@ export const getAllMessages=(userId)=>(dispatch)=>{
                 
                     axios({
                     method:'get',
-                    url:config.base_dir+"/users/id/"+message.fromuser,
+                    url:config.base_dir+"/api/users/id/"+message.fromuser,
                     headers:{
                         "Authorization":token,
                     }

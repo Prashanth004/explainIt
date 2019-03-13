@@ -35,7 +35,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
     })
     axios({
         method:'get',
-        url:config.base_dir+'/project/issues/'+issueId,
+        url:config.base_dir+'/api/project/issues/'+issueId,
         headers: {
             "Authorization": token,
         }
@@ -50,7 +50,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
              answerProject.forEach(function(projects, index){
                 axios({
                     method:'get',
-                    url:config.base_dir+'/users/email/'+projects.email,
+                    url:config.base_dir+'/api/users/email/'+projects.email,
                 }).then(response=>{
                     if(response.status==200){
                         const newTestJson = JSON.parse(JSON.stringify(answerProject));
@@ -114,7 +114,7 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
     console.log("the project getting saved : ",fd)
     axios({
         method: 'post',
-        url: config.base_dir + '/project',
+        url: config.base_dir + '/api/project',
         headers: {
             "Authorization":token,
         },
@@ -162,7 +162,7 @@ export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
         console.log("item first : ",item)
         axios({
             method:'get',
-            url:config.base_dir+'/users/email/'+projects[item].email,
+            url:config.base_dir+'/api/users/email/'+projects[item].email,
         }).then(response=>{
             console.log("response : ",response)
             if(response.status==200){

@@ -12,7 +12,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
 
     axios({
         method: 'get',
-        url: config.base_dir + '/users/id/'+userId,
+        url: config.base_dir + '/api/users/id/'+userId,
         headers: {
             "Authorization": token,
         }
@@ -24,7 +24,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
         twitterHandle = response1.data.data.twitterhandle
         axios({
             method:'get',
-            url: config.base_dir+'/project/',
+            url: config.base_dir+'/api/project/',
             headers: {
                 "Authorization": token,
             }
@@ -44,6 +44,7 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
                     participated.push(proj) 
                 }
             });
+            participated = participated.filter(x => !myIssue.includes(x));
             console.log("participated :",participated)
             var noOdprojectsCreated = myIssue.length
             var noOfProj = myProjects.length

@@ -1,8 +1,9 @@
 var createError = require('http-errors');
 var express = require('express');
+const path = require('path')
 const bodyParser = require('body-parser');
 const socketIo = require("socket.io");
-var path = require('path');
+const key = require('./config/keys')
 var ExpressPeerServer = require('peer').ExpressPeerServer;
 var pgp = require('pg-promise')(options);
 var cors = require('cors');
@@ -11,7 +12,7 @@ var http = require('http');
 var promise = require('bluebird');
 var port = normalizePort(process.env.PORT || '9000');
 var logger = require('morgan');
-const LINKTOCALL= "linkTocall"
+
 const passport = require('passport');
 require('./config/passport')(passport);
 require('./config/passport-setup.js')
@@ -67,14 +68,21 @@ app.use(bodyParser.urlencoded({
 }));
 
 //routes
-app.use('/tech', indexRouter);
-app.use('/twitter', twitterAuthRouter);
-app.use('/users', usersRouter);
-app.use('/project', projectRouter);
-app.use('/issues',issueRouter);
-app.use('/message',messageRouter);
-app.use('/', basic );
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/api/tech', indexRouter);
+app.use('/api/twitter', twitterAuthRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/project', projectRouter);
+app.use('/api/issues',issueRouter);
+app.use('/api/message',messageRouter);
+app.use("/public", express.static(__dirname + "/public"));
+// app.use('/', basic );
+app.use(express.static('client/build'))
+app.get('*', (req,res)=>{
+  res.sendFile(path.resolve(__dirname,'client', 'build', 'index.html'))
+})
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.set('port', port);
 var server = http.createServer(app);
@@ -95,10 +103,14 @@ io.on("connection", socket => {
   console.log("New client connected");
   
  
-    socket.on(LINKTOCALL,(data)=>{
+    socket.on(key.LINKTOCALL,(data)=>{
       console.log("data : ",data)
-    io.emit(LINKTOCALL, data); // Emitting a new message. It will be consumed by the client
+    io.emit(key.LINKTOCALL, data); // Emitting a new message. It will be consumed by the client
 
+    })
+
+    socket.on(key.REJECT_REPLY,(data)=>{
+      io.emit(key.REJECT_REPLY, data);
     })
     
  

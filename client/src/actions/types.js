@@ -72,3 +72,12 @@ export const SEND_MESSAGE = "SEND_MESSAGE"
 export const SEND_FAILED ="SEND_FAILED"
 export const FETCH_MESSAGES = "FETCH_MESSAGES"
 export const FETCH_FAILED ="FETCH_FAILED"
+export const MISS_CALL = "MISS_CALL"
+export const CANCEL_MESSAGE_STATE= "CANCEL_MESSAGE_STATE"
+
+
+//Nav action
+
+export const OPEN_HOME = "OPEN_HOME"
+export const OPEN_CREATED = "OPEN_CREATED"
+export const OPEN_PARTICIPATED = "OPEN_PARTICIPATED"
