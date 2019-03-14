@@ -323,7 +323,8 @@ class NewHome extends Component {
             else {
                 if (this.state.displayLink) {
                     var displayLinkDiv = (<div className="sharableLinkSection">
-                        <p>Your sharabel Link</p>
+                        <Button close onClick={this.toggleDisplayLink} />
+                        <p>Your shareable Link</p>
                         <CopyToClipboard sharablelink={sharabeLink} />
                     </div>)
                 }

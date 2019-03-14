@@ -37,7 +37,7 @@ router.post('/auth/twitter/reverse', function (req, res) {
     var qs = require('querystring')
         , oauth =
         {
-            callback: "http://localhost:3000"
+            callback: "http://localhost:9000"
             , consumer_key: key.twitter.key,
             consumer_secret: key.twitter.secret
         }

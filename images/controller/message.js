@@ -1,23 +1,14 @@
 var database = require('../app')
 var promise = require('bluebird');
-var rn = require('random-number');
-var options = {
-    min: 0
-    , max: 10000000
-    , integer: true
-}
-
 
 
 exports.saveMessage = function (req, res) {
-    var rand = rn(options)
     console.log(req)
     console.log("req.body : ", req.body)
     let dateNow = new Date().toString()
-    database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time)' +
-    'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time})',
+    database.db.oneOrNone('insert into message (link,subject,fromuser, touser,time)' +
+    'values(${link},${subject}, ${fromuser}, ${touser}, ${time})',
     {
-        id:rand,
         link: req.body.link,
         subject:req.body.subject,
         fromuser: req.body.fromUser,
