@@ -16,9 +16,14 @@ module.exports = {
         key:"918027681781"
     },
     domain:"http://localhost:9000",
-    frontEndDomain:"http://localhost:9000",
+    frontEndDomain:"http://localhost:3000",
     LINKTOCALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
+    CALL_ACK_MESSAGE : "callAckMessage",
+    END_CALL : "endCall",
+    CALL_ACK_MESSAGE : "callAckMessage",
+    CHECK_TOKEN_VALIDITY : "checkTokenValidity",
+    COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity"
 
 };
 

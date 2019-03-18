@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
-import Dummy from './dummy'
+import Dummy from './NewUi/dummy'
 import {StartedRecording,
-    stopedRcording,discardAfterRecord} from'../../../actions/toolActions'
+    stopedRcording,discardAfterRecord} from'../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
-import CopyToClipboard from '../CopytoClipboard';
-import config from '../../../config/config'
-import '../../css/shareScreen.css'
+import CopyToClipboard from './CopytoClipboard';
+import config from '../../config/config'
+import '../css/shareScreen.css'
 
 
 export class ScreenRecorder extends Component {
@@ -22,8 +22,7 @@ export class ScreenRecorder extends Component {
             blob: null,
             finalStream: null,
             percentage:"0%",
-            copyStatus:"copy link",
-            saveBtnClicked:false
+            copyStatus:"copy link"
         }
         this.recordScreenStop = this.recordScreenStop.bind(this);
         this.renderer = this.renderer.bind(this);
@@ -124,9 +123,6 @@ export class ScreenRecorder extends Component {
         }
     }
     savefile(){
-        this.setState({
-            saveBtnClicked :  true
-        })
     this.props.savefile(this.state.blob)
 
 }
@@ -174,10 +170,6 @@ export class ScreenRecorder extends Component {
                 date={Date.now() + 180000}
                 renderer={this.renderer}
             />)
-            var recordingEle = ( <p>Recording Screen</p>)
-        }
-        if(!this.props.isScreenRecording){
-            var recordingEle = ( null)
         }
         if(this.props.isRecordingCompleted ===false){
         var recordingElements = (<div>
@@ -185,8 +177,6 @@ export class ScreenRecorder extends Component {
                  <div  className="progress" id="pbar" ></div>
              </div>
              {timer}
-             {recordingEle}
-            
              <div className="btDiv">
                      <button className="mainBtn" onClick={this.toggle}></button>
              </div>
@@ -203,10 +193,10 @@ export class ScreenRecorder extends Component {
        
         // var timer = null;
      console.log("this.props.isSaved : ",this.props.isSaved)
-        if(this.props.isRecordingCompleted === true && !this.state.saveBtnClicked  && this.props.isSaved==false){
+        if(this.props.isRecordingCompleted === true && this.props.isSaved==false){
             var postShareElements= (<div className = "postRecord">
             {videoplayer}
-                 <p>Do you want to save it?</p>
+                 <p>Do you want to sav it?</p>
                  <button onClick={this.savefile} className="buttonLight save">
                    Save
                  </button>
@@ -230,11 +220,6 @@ export class ScreenRecorder extends Component {
                     </span> */}
              </div>)
 
-         }
-         else if(this.state.saveBtnClicked && !this.props.isSaved){
-            var postShareElements= (<div>
-                 <p>Save processing..</p>
-             </div>)
          }
        
         if (this.state.shareScreenLink) {

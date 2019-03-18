@@ -14,13 +14,13 @@ var createToken = function(auth) {
       id: auth.id
     },key.secret,
     {
-      expiresIn: 60 * 1200
+      expiresIn: 8*7*24*60*60*1000
     });
   };
 
 var generateToken = function (req, res, next) {
     var token = createToken(req.user);
-    res.json({ success: 1, token: 'JWT ' + token });};
+    res.json({ success: 1, token: 'JWT ' + token, user:req.user });};
 
 var sendToken = function (req, res) {
     res.setHeader('x-auth-token', req.token);
@@ -37,7 +37,7 @@ router.post('/auth/twitter/reverse', function (req, res) {
     var qs = require('querystring')
         , oauth =
         {
-            callback: "http://localhost:9000"
+            callback: "http://localhost:3000"
             , consumer_key: key.twitter.key,
             consumer_secret: key.twitter.secret
         }

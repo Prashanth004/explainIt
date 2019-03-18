@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar'
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
@@ -16,7 +16,6 @@ import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActio
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from '../../LoginModal'
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
@@ -84,14 +83,15 @@ class NewHome extends Component {
     componentDidMount() {
         var self = this
         function postMessageHandler(event) {
-            if (event.data.sourceId !== undefined) {
-                console.log("We've got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message__sourceId : ", event.data.sourceId)
-                self.props.saveSourceId(event.data.sourceId)
-            }
+            console.log(" event :", event)
+            // if (event.data.sourceId !== undefined) {
+            //     console.log("We've got a message!");
+            //     console.log("* Message:", event.data);
+            //     console.log("* Origin:", event.origin);
+            //     console.log("* Source:", event.source);
+            //     console.log("*event.data.message__sourceId : ", event.data.sourceId)
+            //     self.props.saveSourceId(event.data.sourceId)
+            // }
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
                 console.log(" event.source :", event.source)
@@ -109,33 +109,33 @@ class NewHome extends Component {
             window.attachEvent("onmessage", postMessageHandler);
         }
 
-        var socket = this.state.socket
-        console.log("sockets : ", socket)
-        socket.on(config.LINK_TO_CALL, data => {
-            console.log("data : ", data)
-            setTimeout(() => {
-                this.props.missCall();
-            }, 18000)
-            localStorage.setItem("profilePic", data.fromProfilePic)
-            if (data.ToUserId === this.props.userId) {
-                this.props.acceptCallDetails(
-                    data.link,
-                    data.fromEmail,
-                    data.fromUserName,
-                    data.fromUserId,
-                    data.fromProfilePic
-                )
-            }
-        });
+        // var socket = this.state.socket
+        // console.log("sockets : ", socket)
+        // socket.on(config.LINK_TO_CALL, data => {
+        //     console.log("data : ", data)
+        //     setTimeout(() => {
+        //         this.props.missCall();
+        //     }, 18000)
+        //     localStorage.setItem("profilePic", data.fromProfilePic)
+        //     if (data.ToUserId === this.props.userId) {
+        //         this.props.acceptCallDetails(
+        //             data.link,
+        //             data.fromEmail,
+        //             data.fromUserName,
+        //             data.fromUserId,
+        //             data.fromProfilePic
+        //         )
+        //     }
+        // });
 
 
     }
     componentWillMount() {
         this.props.stillAuthenicated()
-        const socket = socketIOClient(config.base_dir);
-        this.setState({
-            socket: socket
-        })
+        // const socket = socketIOClient(config.base_dir);
+        // this.setState({
+        //     socket: socket
+        // })
 
     }
     toodleExplain() {
@@ -180,8 +180,9 @@ class NewHome extends Component {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
         console.log("e.target.id : ", e.target.id)
+       
 
-        if (classOfClicked !== "singleMember" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
+        if (classOfClicked !== "singleMember"  && classOfClicked !== "sharableLink"&&  classOfClicked !== "linkElementSym" && classOfClicked !== "hint--top"   && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
             if (this.state.modal === false) {
                 this.props.clearAnswers(e.target.id)
                 this.props.fetchProjectbyIssue(e.target.id);
@@ -196,10 +197,10 @@ class NewHome extends Component {
         this.props.answerCall();
     }
     rejectCall() {
-        var socket = this.state.socket
-        socket.emit(config.REJECT_REPLY, {
-            'message': config.REPLY_TO_SHARE_REQ
-        })
+        // var socket = this.state.socket
+        // socket.emit(config.REJECT_REPLY, {
+        //     'message': config.REPLY_TO_SHARE_REQ
+        // })
         this.props.answerCall();
     }
 
@@ -209,7 +210,7 @@ class NewHome extends Component {
 
     }
     reStoreDefault = () => {
-        if(this.props.screenAction!==null){
+        if(this.props.screenAction!==null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted ){
             confirmAlert({
                 title: "Are you sure?",
                 message: "You won't be able to revert this!",
@@ -320,7 +321,7 @@ class NewHome extends Component {
                 this.props.created) {
                 var profileCardElement = null
             }
-            else {
+            else if(this.props.userId!==null){
                 if (this.state.displayLink) {
                     var displayLinkDiv = (<div className="sharableLinkSection">
                         <Button close onClick={this.toggleDisplayLink} />
@@ -355,7 +356,7 @@ class NewHome extends Component {
             var profileCardElement = (<Content />)
         }
 
-        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to={{ pathname: './login' }} />) : (
+        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to="/login" />) : (
             <div className="fullHome">
                 <Navbar />
 
@@ -400,6 +401,8 @@ NewHome.PropType = {
 const mapStateToProps = state => ({
     issues: state.issues.items,
     screenAction: state.tools.screenAction,
+    isSharingCompleted : state.tools.isSharingCompleted,
+    isFullSharingCompleted : state.tools.isFullSharingCompleted,
     newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
     profilePic: state.auth.profilePic,
@@ -416,6 +419,8 @@ const mapStateToProps = state => ({
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
+   
+
 })
 
 export default connect(mapStateToProps, {

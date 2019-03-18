@@ -27,6 +27,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "multer": "^1.4.1",
+    "oauth-signature": "^1.5.0",
     "passport": "^0.4.0",
     "passport-github-token": "^2.1.0",
     "passport-google-oauth20": "^1.0.0",
@@ -39,6 +40,7 @@
     "random-number": "0.0.9",
     "react-pose": "^4.0.7",
     "socket.io": "^2.2.0",
+    "twitter": "^1.7.1",
     "video-react": "^0.13.2",
     "video.js": "^7.4.1"
   }

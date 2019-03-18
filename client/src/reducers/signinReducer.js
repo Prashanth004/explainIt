@@ -51,11 +51,15 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 logoutSuccess:false,
-                isAuthenticated:action.payload,
-                
+                isAuthenticated:action.payload,                
                 domainName: "twitter",
-                token:action.token
-            }
+                token:action.token,
+                profilePic:action.profilePic,
+                userName:action.userName,
+                email:action.email,
+                id:action.id,
+                twitterHandle:action.twitterHandle
+ }
         case AUTH_FAIL : 
             return{
                 ...state,

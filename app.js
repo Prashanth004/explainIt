@@ -59,6 +59,7 @@ var usersRouter = require('./routes/users');
 var projectRouter = require('./routes/project')
 var basic = require('./routes/basic.routes')
 var messageRouter = require('./routes/message')
+var tweetRouter = require('./routes/tweetAction')
 
 
 app.use(bodyParser.json());
@@ -74,7 +75,9 @@ app.use('/api/users', usersRouter);
 app.use('/api/project', projectRouter);
 app.use('/api/issues',issueRouter);
 app.use('/api/message',messageRouter);
+app.use('/api/tweetactions', tweetRouter)
 app.use("/public", express.static(__dirname + "/public"));
+
 // app.use('/', basic );
 app.use(express.static('client/build'))
 app.get('*', (req,res)=>{
@@ -111,6 +114,25 @@ io.on("connection", socket => {
 
     socket.on(key.REJECT_REPLY,(data)=>{
       io.emit(key.REJECT_REPLY, data);
+    })
+
+    socket.on(key.END_CALL,(data)=>{
+      io.emit(key.END_CALL, data);
+    })
+
+    socket.on(key.CALL_ACK_MESSAGE,(data)=>{
+      console.log("ackmessage : ",data)
+      io.emit(key.CALL_ACK_MESSAGE, data);
+    })
+
+    socket.on(key.CHECK_TOKEN_VALIDITY, (data)=>{
+      console.log("#### request to check token validity send")
+      io.emit(key.CHECK_TOKEN_VALIDITY, data);
+    })
+
+    socket.on(key.COMFIRM_TOKEN_VALIDITY, (data)=>{
+      console.log("########eaiting for confirmation")
+      io.emit(key.COMFIRM_TOKEN_VALIDITY, data)
     })
     
  

@@ -9,6 +9,8 @@ import visitProfileReducer from './visitProfileReducers'
 import callReducer from './callReducer'
 import messageReducer from './messageReducer'
 import navReducer from './navReducer'
+import twitterApiReducer from './twitterApiReducer';
+import streamReducer from './streamReducer'
  
 export default combineReducers({
     auth : signinReducer,
@@ -20,5 +22,7 @@ export default combineReducers({
     visitProfile :visitProfileReducer,
     call : callReducer,
     message:messageReducer,
-    nav:navReducer
+    nav:navReducer,
+    twitterApi:twitterApiReducer,
+    stream:streamReducer
 })

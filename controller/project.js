@@ -60,10 +60,10 @@ id: rn(options),
                     })
                 }
             })
-            var imgurl = config.domain + '/public/images/' + req.body.projectName + '.png';
+            var imgurl = config.domain + '/images/' + req.body.projectName + '.png';
         }
         else {
-            var imgurl = config.domain + '/public/images/default.png'
+            var imgurl = config.domain + '/images/default.png'
         }
         var dateNow = new Date().toString()
         var rand = rn(options)
@@ -120,7 +120,22 @@ exports.storeItems = function (req, res) {
         )
 }
 
-
+exports.deleteItems = function(req, res){
+    database.db.query('delete from projects where issueid = $1', req.params.issueid)
+    .then(data =>{
+        res.status(200).send({
+            success:1,
+            msg:data
+        })
+    })
+    .catch(err=>{
+        console.log("error : ",err)
+        res.status(500).send({
+            success : 0,
+            msg:err
+        })
+    })
+}
 
 exports.retrieveItems = function (req, res) {
     database.db.oneOrNone('select * from canvitems  where projectid = $1', req.params.id)

@@ -61,7 +61,17 @@ class Navigationbar extends React.Component {
         }
         render() {
           var centreNav = null
-         
+         var profileImage = (this.props.authAction) ?(!this.props.isAuthenticated)?(null):( <div className="dropdown">
+         <div className="profileImagesDiv">
+           <img className="profileImages" src={this.props.profilePic}></img>
+         </div>
+         <div className="dropdown-content">
+           <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
+           <div className="imageLogout">
+             <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
+           </div>
+         </div>
+       </div>):(null)
           if (this.props.logoutSuccess) {
             this.showLogoutSuccess()
           }
@@ -81,44 +91,11 @@ class Navigationbar extends React.Component {
           }else{
             var explainLogo=( <p><a href="/">Explain</a></p>)
           }
-          const content =
-
-            // (<Navbar className="navBar" light expand="md">
-            //           <NavbarBrand href="/"><a className="brandName">Explain</a></NavbarBrand>
-
-            //           <NavbarToggler onClick={this.toggle} />
-            //           <Collapse isOpen={this.state.isOpen} navbar>
-            //             <Nav className="ml-auto" navbar>
-            //             <NavItem>
-            //             <NavLink href={"/inbox/"+this.props.userId}>Inbox</NavLink>
-            //           </NavItem>
-
-            //               <UncontrolledDropdown nav inNavbar>
-            //                 <div className="dropdown">
-            //                   <div className="profileImagesDiv">
-            //                     <img className="profileImages" src={this.props.profilePic}></img>
-            //                   </div>
-            //                   <div className="dropdown-content">
-            //                   <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
-            //                   <div className="imageLogout">
-            //                   <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
-
-            //                   </div>
-
-            //                   </div>
-            //                 </div>
-
-            //               </UncontrolledDropdown>
-            //             </Nav>
-            //           </Collapse>
-            //         </Navbar>)
-
-            (<div className="navBar">
+          const content =(<div className="navBar">
             <div className="logo">
             {explainLogo}
            
           </div>
-             
               <div >
                {centreNav}
 
@@ -129,56 +106,14 @@ class Navigationbar extends React.Component {
                 </div>
                 <div></div>
                 <div >
-                  <p><a href={"/inbox/"+this.props.userId}>Inbox</a></p>
                 </div>
                 <div>
-                  <div className="dropdown">
-                    <div className="profileImagesDiv">
-                      <img className="profileImages" src={this.props.profilePic}></img>
-                    </div>
-                    <div className="dropdown-content">
-                      <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
-                      <div className="imageLogout">
-                        <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
-                      </div>
-                    </div>
-                  </div>
+                {profileImage}
                 </div>
 
               </div>
             </div>)
 
-          // <Navbar className="navBar" light expand="md">
-          //   <NavbarBrand href="/">Explain</NavbarBrand>
-          //   <NavbarToggler onClick={this.toggle} />
-          //   <Collapse isOpen={this.state.isOpen} navbar>
-          //     <Nav className="ml-auto" navbar>
-          //       <NavItem>
-          //         <NavLink href="#">Login with </NavLink>
-          //       </NavItem>
-          //       <NavItem>
-          //         <NavLink href="#"><GoogleLogin
-          //           clientId={config.googleClientId}
-          //           render={renderProps => (
-          //             <button className="buttonDark navButton2" onClick={renderProps.onClick}>Google</button>
-          //           )}
-          //           buttonText="Login"
-          //           onSuccess={this.googleResponse}
-          //           onFailure={this.responseGoogle}
-          //         />   </NavLink>
-          //       </NavItem>
-          //       <NavItem>
-          //         <NavLink href="#"><button className="buttonDark navButton2" onClick={this.handleGit}>Github</button></NavLink>
-          //       </NavItem>
-          //       <NavItem>
-          //           <TwitterLogin className="buttonDark navButton2" loginUrl={config.base_dir+"/twitter/auth/twitter"}
-          //               onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-          //               requestTokenUrl={config.base_dir+"/twitter/auth/twitter/reverse"} />
-          //       </NavItem>
-          //     </Nav>
-          //   </Collapse>
-          // </Navbar>
-          // )
           return (
             <div>
               {content}
@@ -206,7 +141,9 @@ class Navigationbar extends React.Component {
           userId: state.auth.id,
           Home : state.nav.openHome,
           Created : state.nav.openCreated,
-          Participated :state.nav.openParticipated
+          Participated :state.nav.openParticipated,
+          authAction: state.auth.authAction,
+
 
 })
 export default connect(mapStateToProps, { signInWithTwitter,openHome, openCreated, openParticipated, twitterAuthFailure, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)

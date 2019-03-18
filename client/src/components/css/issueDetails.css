@@ -45,7 +45,7 @@ border-radius:10.5px;
     padding:7px 7px 0px 0px;
   display: grid;
   grid-template-columns: 33.33% 33.33% 33.33%;
-  border-bottom-style:solid;
+  border-bottom-style:none;
   border-bottom-color: rgb(232,232,232);
   border-bottom-width:0.5px;
 }

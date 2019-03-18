@@ -6,8 +6,8 @@ var time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds(
 var token = JSON.parse(localStorage.getItem("token"))
 
 const conf = {
-    base_dir:"https://explain.bookmane.in",
-    react_url:"https://explain.bookmane.in",
+    base_dir:"http://localhost:9000",
+    react_url:"http://localhost:3000",
     dataTime : date+"__"+time,
     token:token,
     googleClientId:"308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com",
@@ -25,7 +25,11 @@ const conf = {
     SECRET : "thebookmaneisawesomeiguess",
     LINK_TO_CALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
-    REPLY_TO_SHARE_REQ:"Please send me the recoding."
+    REPLY_TO_SHARE_REQ:"Please send me the recoding.",
+    CALL_ACK_MESSAGE : "callAckMessage",
+    END_CALL : "endCall",
+    CHECK_TOKEN_VALIDITY : "checkTokenValidity",
+    COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity"
 
 
     

@@ -1,6 +1,6 @@
 var promise = require('bluebird');
 var Scraper = require('images-scraper')
-  , google = new Scraper.Google();
+  , bing = new Scraper.Bing();
 
 var options = {
   // Initialization Options
@@ -109,9 +109,9 @@ function createTech(images, name) {
 
 function getSingleTech(req, res, next) {
   console.log(req.user)
-  google.list({
+  bing.list({
     keyword: req.params.name + ' logo png',
-    num: 20,
+    num: 30,
     detail: true,
     nightmare: {
       show: false

@@ -133,6 +133,7 @@ class Explainit extends Component {
     this.child.pushData(data);
   }
   saveVideoData(data) {
+    console.log("the data whcih is gonna get saved : ", data)
     var issueId = null
     var textExplain = " "
     var imgData = "null"

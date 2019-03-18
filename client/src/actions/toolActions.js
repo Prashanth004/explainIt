@@ -17,7 +17,8 @@ import {DISPLAY_SCREEN_SHARE,
     DISPLAY_FULL_SCREEN_RECORD,
     FULL_SCREEN_RECORD,
     RESET_TOOL_STATES,
-    CANCEL_MESSAGE_STATE
+    CANCEL_MESSAGE_STATE,
+    CANCEL_CREATION
 
 } from './types'
 
@@ -127,6 +128,9 @@ export const restAllToolValue = () =>(dispatch)=>{
     })
     dispatch({
         type:CANCEL_MESSAGE_STATE
+    })
+    dispatch({
+        type:CANCEL_CREATION
     })
 
 }

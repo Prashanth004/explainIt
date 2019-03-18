@@ -1,10 +1,14 @@
-import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER , UPDATE_ANSWER_WITH_IMAGE,FETCH_STARTED,CREATE_ANS_PROJECT} from '../actions/types'
+import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER , 
+    UPDATE_ANSWER_WITH_IMAGE,FETCH_STARTED,
+    CREATE_ANS_PROJECT, DELETE_SUCCESSFULL,
+    DELETE_FAILED} from '../actions/types'
 
 const initialState = {
     questProject:{},
     answerProject:[],
     newprojectIem :{},
     isFetchDone:false,
+    deleteSuccess :false
 }
 
 export default function(state = initialState, action){
@@ -32,6 +36,18 @@ export default function(state = initialState, action){
                 return{
                     ...state,
                     answerProject:action.payload
+                }
+        case DELETE_SUCCESSFULL:
+                return{
+                    ...state,
+                    deleteSuccess:true
+
+                }
+        case DELETE_FAILED:
+                return{
+                    ...state,
+                    deleteSuccess:false
+
                 }
         default :
             return state;

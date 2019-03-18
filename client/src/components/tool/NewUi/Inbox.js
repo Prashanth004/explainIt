@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import Navbar from './Navbar'
 import PropType from 'prop-types';
 import {getAllMessages} from '../../../actions/messageAction'
+import {stillAuthenicated} from '../../../actions/signinAction'
 import '../../css/inbox.css'
+import Login from './Login'
 class Inbox extends Component {
 
     constructor(props){
@@ -17,6 +19,9 @@ class Inbox extends Component {
             this.props.getAllMessages(this.props.match.params.userid)
       
        
+    }
+    componentWillMount(){
+        this.props.stillAuthenicated()
     }
   render() {
       console.log("this.props.allMessage : ",this.props.allMessage)
@@ -51,32 +56,35 @@ class Inbox extends Component {
         </div>)
       }
      
-    
-    return (
-      <div className="mainBodyContainer">
-          <Navbar />
-          <div className="inboxContainer">
-          <div className="inboxText">
-          <h1>Inbox</h1>
-          </div>
-              
-              <div>
-                  {allMessageEle}
-              </div>
-          </div>
+      return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Login />) : (
+        <div className="mainBodyContainer">
+    <Navbar />
+    <div className="inboxContainer">
+    <div className="inboxText">
+    <h1>Inbox</h1>
+    </div>
         
-      </div>
-    )
+        <div>
+            {allMessageEle}
+        </div>
+    </div>
+  
+</div>
+        )) : (null)
   }
 }
 
 Inbox.PropType = {
-    getAllMessages:PropType.func.isRequired
+    getAllMessages:PropType.func.isRequired,
+    stillAuthenicated:PropType.func.isRequired,
+   
    
   };
   const mapStateToProps = state => ({
     userId: state.auth.id,
-    allMessage:state.message.allMessage
+    allMessage:state.message.allMessage,
+    isAauthenticated: state.auth.isAuthenticated,
+    authAction: state.auth.authAction,
   
   })
-  export default connect(mapStateToProps, { getAllMessages })(Inbox)
+  export default connect(mapStateToProps, {stillAuthenicated, getAllMessages })(Inbox)

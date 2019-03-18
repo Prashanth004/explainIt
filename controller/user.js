@@ -16,10 +16,10 @@ var options = {
   , integer: true
   }
 exports.getUserByEmail = function(req,res){
-    console.log("req.params.email : ",req.params.email)
+    // console.log("req.params.email : ",req.params.email)
     database.db.oneOrNone('select * from users where email = $1', req.params.email)
     .then(data=>{
-        console.log("data : ",data)
+        // console.log("data : ",data)
         if(data){
             res.status(200).send({
                 success:1,
@@ -40,11 +40,19 @@ exports.getUserByEmail = function(req,res){
 exports.getUserByTwitteHandle = function(req, res){
     database.db.oneOrNone('select * from users where twitterhandle = $1', req.params.enctwitterhandle)
     .then(data=>{
-        console.log("data : ",data)
+      
+        // console.log("data : ",data)
         if(data){
+                res.status(200).send({
+                    success:1,
+                    data:data
+                })
+        }
+        else{
             res.status(200).send({
                 success:1,
-                data:data
+                data:null
+
             })
         }
     }).catch(err =>{
@@ -59,10 +67,10 @@ exports.getUserByTwitteHandle = function(req, res){
     
 }
 exports.getUserById = function(req,res){
-    console.log("req.params.id : ",req.params.id)
+    // console.log("req.params.id : ",req.params.id)
     database.db.oneOrNone('select * from users where id = $1', req.params.id)
     .then(data=>{
-        console.log("data : ",data)
+        // console.log("data : ",data)
         if(data){
             res.status(200).send({
                 success:1,
@@ -85,7 +93,7 @@ exports.getUserById = function(req,res){
 exports.authenticate = function(req, res) {
     database.db.oneOrNone('select * from users where email = $1', req.body.email)
     .then( function(user) {
-        console.log(user)
+        // console.log(user)
       
       if (!user) {
         res.status(401).send({ success: 0, message: 'Authentication failed. User not found.' });
@@ -142,7 +150,7 @@ exports.createUser = function (req, res, next) {
                           
                             
                         }).then(()=>{
-                            console.log("successfully created")
+                            // console.log("successfully created")
                             res.status(200).send({"success":1,msg:"successfully created"})
                         })
                         .catch((err)=>{

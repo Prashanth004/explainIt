@@ -575,7 +575,7 @@ class Forms extends Component {
             if (proID !== null) {
                 axios({
                     method: 'get',
-                    url: config.base_dir + '/project/items/' + proID,
+                    url: config.base_dir + '/api/project/items/' + proID,
                     headers: {
                         "Authorization": token,
                     }
@@ -1168,7 +1168,7 @@ class Forms extends Component {
             name: this.state.key
         };
 
-        fetch(config.base_dir + '/tech/' + this.state.name).then((res) =>
+        fetch(config.base_dir + '/api/tech/' + this.state.name).then((res) =>
             res.json()).then(data => {
                 if (this._isMounted) {
                     this.setState({ imgData: data.data });

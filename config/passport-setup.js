@@ -47,7 +47,7 @@ passport.use(new GoogleTokenStrategy({
       else{
         var profile_image =email._json.picture
       }
-      console.log("as;kvncoajvzoljbdnvohaodbvsjodbiahdfib")
+     
         var currentdate = new Date();
         var datetime = "Last Sync: " + currentdate.getDate() + "/"
             + (currentdate.getMonth() + 1) + "/"
@@ -70,10 +70,11 @@ passport.use(new GoogleTokenStrategy({
                             name: email.displayName,
                             password: email.id,
                             email: email.emails[0].value,
-                            profilepic:profile_image,
+                            profilepic:newProfilePic,
                             date: datetime,
                             payment: 0,
-                              id:email.id
+                              id:email.id,
+                             
                         })
                         .then(() => {
                             console.log("successfull !!!")
@@ -197,6 +198,11 @@ passport.use(new TwitterTokenStrategy({
             + currentdate.getHours() + ":"
             + currentdate.getMinutes() + ":"
             + currentdate.getSeconds();
+            var newProfilePic = profile._json.profile_image_url.replace("_normal","")
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+            console.log( " newProfilePic : ",newProfilePic)
+        
+            console.log("as;kvncoajvzoljbdnvohaodbvsjodbiahdfib")
 
         database.db.oneOrNone('select * from users where id = $1', profile.id)
             .then((currentUser) => {
@@ -206,19 +212,20 @@ console.log("existing user")
                     done(null, currentUser);
                 } else {
                     console.log("new user")
-                    database.db.none('insert into users(username, password, email, profilepic,date, payment, id)' +
-                        'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id})',
+                    database.db.none('insert into users(username, password, email, profilepic,date, payment, id, twitterhandle)' +
+                        'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id},${twitterhandle})',
                         {
                             name: profile.displayName,
                             password: profile.id,
                             email:rn(options),
-                            profilepic: profile._json.profile_image_url,
+                            profilepic: newProfilePic,
                             date: datetime,
                             payment: 0,
                             id: profile.id,
+                            twitterhandle:profile.username
                         }).then(() => {
                             console.log("saved New user")
-                            database.db.one('select * from users where email = $1', email.emails[0].value)
+                            database.db.oneOrNone('select * from users where twitterhandle = $1', profile.username)
                                 .then((newUser) => {
                                     console.log("newUser !!!!!!" + newUser.username)
                                     done(null, newUser);

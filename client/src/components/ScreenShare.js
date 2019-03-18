@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
-import Dummy from './dummy';
-import socketIOClient from "socket.io-client";
-
+import Dummy from './dummy'
 import CopyToClipboard from './CopytoClipboard';
 import html2canvas from 'html2canvas'
 import config from '../../config/config'
@@ -26,13 +24,11 @@ class ScreenRecorder extends Component {
             downloadUrl: null,
             isShareDone: false,
             blob: null,
-            manualClose:false,
             finalStream: null,
             host: config.peerHost,
             port: config.peerPort,
             path: config.peerPath,
             conn: null,
-            socket:null,
             destkey: null,
             streamvideo: null,
             peer: null,
@@ -45,12 +41,30 @@ class ScreenRecorder extends Component {
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
+        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
+        // this.copyToClipboard = this.copyToClipboard.bind(this);
         this.endCall = this.endCall.bind(this);
+        // this.recordScreenStop = this.recordScreenStop.bind(this);
     }
 
+    // copyToClipboard(e){
+    //     if(e.target.id==="afterSave"){
+    //         var copyText = document.querySelector('#savedLink');
+    //         copyText.select();
+    //     }
+    //     else{
+    //         var copyText = document.querySelector('.myInput');
+    //         copyText.select();
+    //     }
+        
+    //     document.execCommand("copy");
+    //     this.setState({
+    //         copyStatus:"link copied"
+    //     })
+    // }
       startScreenShareSend() {
         var self = this
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
@@ -98,54 +112,8 @@ class ScreenRecorder extends Component {
             console.log("error ouucres : ", err)
         })
     }
-    componentDidMount(){
-        var socket = this.state.socket;
-        var self = this
-        setTimeout(()=>{
-            if(!this.state.clickedOnLink){
-                self.setState({
-                    timeOutNoAnswer : true
-                })
-               
-            }
-        },3*60*1000)
-        //acceptinf acknowlegment from other peer for call starting
-        socket.on(config.CALL_ACK_MESSAGE, data=>{
-            console.log(" data from client ack : ", data)
-           if( data.clientId === self.state.peerId){
-            //    alert("got ack")
-               this.setState({
-                CallAck: true
-               })
-           }
-
-        })
-        // acepting message of ending call
-        socket.on(config.END_CALL, data=>{
-            console.log(" data from end call process : ", data)
-           if( data.clientId === self.state.destkey){
-                this.stopShare()
-           }
-           this.setState({
-            manualClose:true
-           })
-        })
-        socket.on(config.CHECK_TOKEN_VALIDITY, data=>{
-            if(data.clientId === self.peerId){
-                socket.emit(config.COMFIRM_TOKEN_VALIDITY,{
-                    success: 1,
-                    msg:"token valid"
-                })
-            }
-        })
-    }
 
     componentWillMount() {
-        const socket = socketIOClient(config.base_dir);
-        this.setState({
-            socket:socket
-        });
-
         var self = this;
         var peer = new window.Peer()
         this.setState({
@@ -211,15 +179,15 @@ class ScreenRecorder extends Component {
         this.props.savefile(this.state.blob)
     }
     endCall(){
-        var socket = this.state.socket
+        var call = this.state.call;
         this.setState({
-            closedHere:true,
-            manualClose:true
+            closedHere:true
         })
-        socket.emit(config.END_CALL,{
-            'peerId':this.state.peerId
-        })
-        this.stopShare()
+        setTimeout(()=>{
+            call.close();
+        },400)
+       
+        
     }
     stopShare() {
         if(!this.state.closedHere){
@@ -270,17 +238,11 @@ class ScreenRecorder extends Component {
     render() {
        
         var timer = null;
-        if(this.state.timerEnded){
-            var MessageDisconnected=(<p><b>Dissconected as the call exceded 3 mins</b></p>)
-        }
-       if(this.state.showDisconectMessage  && !this.state.closedHere && this.state.manualClose){
+       if(this.state.showDisconectMessage){
         var MessageAbtDisConect=(<p><b>Dissconected from other peer</b></p>)
        }
-       else if(!this.state.manualClose){
-        var MessageAbtDisConect =<p><b>Call ended due to network issues</b></p>
-    }
        else{
-        var MessageAbtDisConect =<p><b>Call ended</b></p>
+        var MessageAbtDisConect=null
        }
         var videoplayer = " ";
         var downLinkAudio = " ";

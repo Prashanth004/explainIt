@@ -44,7 +44,8 @@ router.all('/', function(req, res, next) {
 // 
 
 router.post('/',upload.single('audioData'), passport.authenticate('jwt', { session: false }), project.saveProject)
-router.get('/', passport.authenticate('jwt', { session: false }),project.getAllProject)
+router.delete('/:issueid', passport.authenticate('jwt', { session: false }),project.deleteItems )
+router.get('/',project.getAllProject)
 router.get('/:id', passport.authenticate('jwt', { session: false }),project.getProjectById)
 // router.get('/issue/allissues/', passport.authenticate('jwt', { session: false }),project.getIssueProjects)
 router.get('/issues/:issueid',project.getAllProjectByIssue)

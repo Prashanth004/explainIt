@@ -10,8 +10,8 @@ var qs = require('querystring')
 
 //Basic login form authentication system
 router.get('/email/:email',user.getUserByEmail)
-router.get('/id/:id', passport.authenticate('jwt', { session: false }),user.getUserById)
-router.get('/twitterhandle/:enctwitterhandle', passport.authenticate('jwt', { session: false }),user.getUserByTwitteHandle)
+router.get('/id/:id',user.getUserById)
+router.get('/twitterhandle/:enctwitterhandle', user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
 router.post('/authenticate',user.authenticate)
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -22,7 +22,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 	}
 });
 router.get('/logout', (req, res) => {
-    console.log(req.user)
+    // console.log(req.user)
     req.logout();
     res.send({ success: 1, msg: "logout successful" })
 });

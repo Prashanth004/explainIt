@@ -23,7 +23,7 @@ import config from '../config/config'
     }
     openProfile(e){
         // window.open(config.react_url+'/explainIt', "_blank")
-       window.open(config.react_url+'/profile/'+e.target.id, "_blank")
+    //    window.open(config.react_url+'/profile/'+e.target.id, "_blank")
     }
     componentWillMount(){
         var self = this;
@@ -31,7 +31,7 @@ import config from '../config/config'
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method:'get',
-            url:config.base_dir+'/project/issues/'+self.props.issueid,
+            url:config.base_dir+'/api/project/issues/'+self.props.issueid,
             headers: {
                 "Authorization": token,
             }
@@ -42,7 +42,7 @@ import config from '../config/config'
                 answerProject.forEach(function(projects, index){
                     axios({
                         method:'get',
-                        url:config.base_dir+'/users/email/'+projects.email,
+                        url:config.base_dir+'/api/users/email/'+projects.email,
                     }).then(response=>{
                         console.log("final response: ", response)
                         if(response.status==200){

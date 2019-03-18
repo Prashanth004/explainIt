@@ -113,11 +113,11 @@ class issueDetails extends Component {
 
     render() {
         var copyElement = null
-        if(this.state.displayCopyEle){
-            copyElement = ( <div className="copyDisplay">
-            <CopyToClipboard sharablelink = {config.react_url + '/project/' + this.props.questionProject.issueid} />
-            </div>)
-        }
+        // if(this.state.displayCopyEle){
+        //     copyElement = ( <div className="copyDisplay">
+        //     <CopyToClipboard sharablelink = {config.react_url + '/project/' + this.props.questionProject.issueid} />
+        //     </div>)
+        // }
      
 
 
@@ -155,7 +155,7 @@ class issueDetails extends Component {
                 <div >
                     <div className="topButtons ">
                         <div>
-                        <button className="buttonLight tweetButton" onClick={this.showCopyEle}>Get Sharable Link</button>
+                        {/* <button className="buttonLight tweetButton" onClick={this.showCopyEle}>Get Sharable Link</button> */}
                         </div>
                         <div className="profileNameDiv">
                             <p ref={p=>this.userName=p}></p>

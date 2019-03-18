@@ -77,6 +77,7 @@ export const signInWithGitHub = (code) =>(dispatch)=>{
 
 export const signInWithTwitter = (response) => (dispatch) => {
     response.json().then(body => {
+        console.log("response : ",body)
         var responseBody = (body);
         var token = JSON.stringify(responseBody.token)
 
@@ -86,10 +87,15 @@ export const signInWithTwitter = (response) => (dispatch) => {
             resolve(token1)
         });
         storeToken.then(function (token) {
-            console.log("i am getiing excevuted")
+            console.log("body.user : ", body.user.username)
             dispatch({
                 type: SIGN_IN_WITH_TWITTER,
                 token: token,
+                userName:body.user.username,
+                profilePic:body.user.profilepic,
+                email:body.user.email,
+                id:body.user.id,
+                twitterHandle:body.user.twitterhandle,
                 payload: true
             })
 
@@ -130,7 +136,7 @@ export const stillAuthenicated = () => (dispatch) => {
             })
         }
         else if (response.status == 401) {
-            localStorage.removeItem("token");
+            // localStorage.removeItem("token");
             dispatch({
                 type: AUTH_FAIL,
                 payload: false

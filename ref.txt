@@ -16,6 +16,10 @@ https://github.com/JoelCodes/Socket-Tag
 https://www.valentinog.com/blog/socket-io-node-js-react/
 
 
+https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup
+https://developer.twitter.com/en/docs/basics/authentication/guides/authorizing-a-request.html
+
+
 psql dbname username
 psql toolArchi bookmane
 

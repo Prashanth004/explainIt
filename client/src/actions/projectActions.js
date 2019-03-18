@@ -4,7 +4,9 @@ import {FETCH_PROJ_BY_ISSUE,
     UPDATE_ANSWER_WITH_IMAGE,
     CREATE_ISSUE_PROJECT_FAILED,
      CREATE_ISSUE_PROJECT,
-     FETCH_STARTED} from './types'
+     FETCH_STARTED,
+     DELETE_SUCCESSFULL,
+     DELETE_FAILED} from './types'
 import axios from 'axios'
 import config from '../config/config'
 
@@ -182,5 +184,28 @@ export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
            payload:projects
        })
     }
+}
+
+export const deleteProjects =(issueId)=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'))
+    axios({
+        method: 'delete',
+        url: config.base_dir + '/api/project/'+issueId,
+        headers: {
+            "Authorization":token,
+        },
+      
+    }) .then(response => {
+        dispatch({
+            type:DELETE_SUCCESSFULL
+        })
+    })
+    .catch(err=>{
+        dispatch({
+            type:DELETE_FAILED
+        })
+    })
+
+
 }
 

@@ -34,6 +34,12 @@
      border-bottom-width:0.7px;
 
   }
+  .sharableLink{
+    background-color: white;
+    text-align: left;
+    align-content: left;
+    align-items: left;
+  }
   
 .bodyWhole{
     background-color:rgb(255, 255, 255);
@@ -48,6 +54,14 @@
   border-radius:50%;
   /* background-color: #ffff; */
   /* box-shadow: 0px 0px 7px 1px rgb(136, 135, 135); */
+}
+.twitterBtnDiv{
+  width:100%;
+  text-align:center;
+  margin-top:25px;
+  align-content: center;
+
+
 }
 .profileImagesDiv{
   margin:0px 10px 0px 10px;
@@ -116,7 +130,26 @@ text-align: center;
 }
 .Profilecard:hover{
   box-shadow: 0px 0px 0px 0px rgba(143, 143, 143, 0.527);
-
+}
+.displayInvite{
+  min-height:100vh;
+}
+.inviteMagic{
+  min-width: 40px;
+  padding:30px;
+  margin-top:85px;
+  /* background-color:white; */
+  border-style:none;
+  border-width:0.5px;
+  border-radius:8px;
+  border-color:rgba(155, 153, 153, 0.609);
+}
+.inviteContainer{
+  width:40%;
+  margin:auto;
+  padding-top:105px;
+  text-align: center;
+  color:rgb(97, 96, 96);
 
 }
 .blackwhite{
@@ -226,7 +259,8 @@ margin-top:15px;
     width:27px
   }
   .twitterHolder{
-    padding-right:10%;
+    padding-right:5%;
+    text-align:right;
   }
   a:link {
     color: rgb(99, 99, 99);
@@ -428,3 +462,25 @@ border-style: none;
     border-radius:2px;
 
   }
+
+  .btn-twitter {
+      background: #00ACEE;
+      border-radius: 0;
+      color: #fff;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #0075a2;
+    }
+    .twitterBtn{
+      color:white;
+      height:25px;
+      padding-top: 2px;
+      
+    }
+    .btn-twitter:link, .btn-twitter:visited {
+      color: #fff; 
+    }
+    .btn-twitter:active, .btn-twitter:hover {
+      background: #0075a2;
+      color: #fff; 
+    }
