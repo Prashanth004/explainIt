@@ -1,4 +1,4 @@
-import {GOT_NO_PROFILE,GET_PROFILE_ID } from '../actions/types'
+import {GOT_NO_PROFILE,GET_PROFILE_ID , RESET_TWITTER_API_VALUES } from '../actions/types'
 
 const initialState = {
     twitterId:null,
@@ -22,6 +22,14 @@ export default (state=initialState, action)=>{
                 twitterId:null,
                 doneFetching:true,
                 profilePresent:false,
+            }
+        }
+        case RESET_TWITTER_API_VALUES:{
+            return{
+                ...state,
+                twitterId:null,
+                profilePresent:false,
+                doneFetching:false
             }
         }
         default :

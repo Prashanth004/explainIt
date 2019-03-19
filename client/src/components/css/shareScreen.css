@@ -1,4 +1,7 @@
 .LinkDisplay{
+    width:150%;
+    margin:auto;
+    margin-left:-25%;
     background-color: white;
     text-align: center;
     align-content: center;
@@ -216,4 +219,7 @@ border-color:#34a4a8;
       width:35%;
       margin:auto;
       padding-top: 50px;
+  }
+  .info{
+      font-size:13px;
   }

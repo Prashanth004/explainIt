@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import {GET_PROFILE_ID, GOT_NO_PROFILE} from './types'
+import {GET_PROFILE_ID, GOT_NO_PROFILE,RESET_TWITTER_API_VALUES} from './types'
 import config from '../config/config'
 
 
@@ -38,4 +38,9 @@ export const getRecpientId = (twitterHandle) =>(dispatch)=>{
 
 }
 
+export const resetValues =()=> (dispatch)=>{
+    dispatch({
+        type:RESET_TWITTER_API_VALUES
+    })
+}
   

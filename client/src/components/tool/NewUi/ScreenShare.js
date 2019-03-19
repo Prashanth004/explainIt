@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc'
 import Dummy from './dummy'
 import CopyToClipboard from '../CopytoClipboard';
-import html2canvas from 'html2canvas'
 import config from '../../../config/config'
 import '../../css/shareScreen.css';
 import socketIOClient from "socket.io-client";
 import { restAllToolValue } from "../../../actions/toolActions";
-import { displayScrenRecord} from '../../../actions/toolActions'
+import { displayScrenRecord} from '../../../actions/toolActions';
+import { getRecpientId, resetValues } from '../../../actions/twitterApiAction';
 
 
 import {
@@ -18,9 +17,6 @@ import {
 } from '../../../actions/toolActions'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-
-import Swal from 'sweetalert2';
-import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap';
 class ScreenRecorder extends Component {
     constructor(props) {
         super(props)
@@ -29,7 +25,6 @@ class ScreenRecorder extends Component {
             audioStream: null,
             canvasStream: null,
             downloadUrl: null,
-            isShareDone: false,
             blob: null,
             finalStream: null,
             host: config.peerHost,
@@ -53,36 +48,24 @@ class ScreenRecorder extends Component {
             timeOutNoAnswer:false,
             retryLimit:0,
             retry:false,
-            retryTimeOut:false
+            retryTimeOut:false,
+            noInternet:false,
+            twitterHandle: null,
+            tweetTested: false,
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
-        // this.stopScreenShare = this.stopScreenShare.bind(this);
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
         this.savefile = this.savefile.bind(this)
-        // this.copyToClipboard = this.copyToClipboard.bind(this);
         this.endCall = this.endCall.bind(this);
         this.retryCall = this.retryCall.bind(this);
         this.recordCall = this.recordCall.bind(this);
-        // this.recordScreenStop = this.recordScreenStop.bind(this);
+        this.testHandle = this.testHandle.bind(this);
+        this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this)
+
     }
 
-    // copyToClipboard(e){
-    //     if(e.target.id==="afterSave"){
-    //         var copyText = document.querySelector('#savedLink');
-    //         copyText.select();
-    //     }
-    //     else{
-    //         var copyText = document.querySelector('.myInput');
-    //         copyText.select();
-    //     }
-
-    //     document.execCommand("copy");
-    //     this.setState({
-    //         copyStatus:"link copied"
-    //     })
-    // }
     retryCall(){
         var socket = this.state.socket;
         var self = this
@@ -96,16 +79,21 @@ class ScreenRecorder extends Component {
         socket.emit(config.RETRYCALL,{
             "peerId" : self.state.peerId
         })
+        
         setTimeout(()=>{
             if(self.state.retry && !self.state.clickedOnLink){
                 alert("not connected")
                 self.setState({
                     retryTimeOut:true
                 })
-               
-
             }
         },10000)
+        if (!navigator.onLine) {
+            console.log("no intenet")
+            self.setState({
+                noInternet: true
+            })
+        }
     }
     recordCall(){
        
@@ -336,6 +324,43 @@ class ScreenRecorder extends Component {
         }
 
     }
+    testHandle() {
+        this.setState({
+            tweetTested: true
+        })
+        this.props.getRecpientId(this.state.twitterHandle)
+    }
+    updateTwitterHandleBox(e) {
+        this.setState({
+            twitterHandle: e.target.value
+        })
+    }
+    tweetTheMessage() {
+        var sharableURL = this.state.shareScreenLink
+        var text = "@" + this.state.twitterHandle + " This is an invite link to join my screen share";
+        var encSharableURL = encodeURI(sharableURL);
+        var encText = encodeURI(text);
+
+        var href = "https://twitter.com/intent/tweet?text=" + encText + "&url=" + encSharableURL
+        var width = 555,
+            height = 300,
+            top = window.innerHeight / 4,
+            left = window.innerWidth / 4,
+            url = href,
+            opts = 'status=1' +
+                ',width=' + width +
+                ',height=' + height +
+                ',top=' + top +
+                ',left=' + left;
+        window.open(url, 'twitter', opts);
+
+        this.props.resetValues();
+        this.setState({
+            tweetTested: false
+        })
+
+    }
+
     stopShare() {
         if (!this.state.closedHere && !this.state.timerEnded) {
             console.log("I am here to show message")
@@ -379,7 +404,6 @@ class ScreenRecorder extends Component {
 
         }
         this.setState({
-            isShareDone: true,
             isAudioRecDone: true,
             isRecording: "",
             recorder: null,
@@ -391,7 +415,27 @@ class ScreenRecorder extends Component {
     }
 
     render() {
-
+        var noInternet = null
+        var validatinginfo = null
+        if (this.state.noInternet) {
+            noInternet = "No Intenet conecticvity"
+        }
+        else {
+            noInternet = null
+        }
+        if (this.state.tweetTested && !this.props.doneFetching) {
+            validatinginfo = (<p className="info">checking handle validity</p>)
+        }
+        if (this.props.doneFetching && this.props.twitterHandleValid) {
+            this.tweetTheMessage()
+        }
+        if (this.state.tweetTested && this.props.doneFetching && !this.props.twitterHandleValid) {
+            validatinginfo = (<div>
+                <p className="info">Incorrect twitter handle<br />
+                    Please check and try again</p>
+            </div>
+            )
+        }
         var timer = null;
         if (this.state.timerEnded) {
             var MessageAbtDisConect = (<p><b>Dissconected as the call exceded 3 mins</b></p>)
@@ -419,7 +463,7 @@ class ScreenRecorder extends Component {
             </div>
             )
         }
-        else if(this.state.retry && !this.state.retryTimeOut){
+        else if (this.state.retry && !this.state.retryTimeOut && !this.state.noInternet) {
             var MessageAbtDisConect =(
                 <div>
             <p><b>Reconnecting..</b></p>
@@ -427,10 +471,10 @@ class ScreenRecorder extends Component {
             </div>
             )
         }
-        else if(this.state.retry && this.state.retryTimeOut){
+        else if (this.state.retry && (this.state.retryTimeOut || this.state.noInternet)) {
             var MessageAbtDisConect =(
                 <div>
-            <p><b>Retry failed.</b></p>
+            <p><b>Retry failed</b><br />{noInternet}</p>
             <p>You can reord the canvas and send it</p>
             <button className="buttonDark" onClick={this.recordCall}>Record</button>
             <button className="buttonDark"onClick={this.props.reStoreDefault}>Cancel</button>
@@ -534,12 +578,16 @@ class ScreenRecorder extends Component {
                     <p>The link expires in 3 minutes</p>
                     <p>You will be notified with a sound when peer clicks on the link</p>
                     <CopyToClipboard sharablelink={this.state.shareScreenLink} />
-                    {/* <input className="myInput" type="text" value={this.state.shareScreenLink} id="myInput"/>
-                <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                    <button className="buttonDark" onClick={this.copyToClipboard}>
-                    Copy text
-                    </button>
-                </span> */}
+                    <div>
+                        <p><b>Tweet it to twitter user to invite them to join the call</b></p>
+                        <input type="text"
+                            className="myInput"
+                            placeholder="Enter twitter handle"
+                            onChange={this.updateTwitterHandleBox}></input>
+                        <button className="buttonDark" onClick={this.testHandle}>Tweet</button>
+                        {validatinginfo}
+                    </div>
+               
 
                 </div>)
         }
@@ -570,12 +618,18 @@ ScreenRecorder.PropType = {
     saveVideoBlob: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     displayScrenRecord: PropType.func.isRequired,
+    getRecpientId: PropType.func.isRequired,
+    resetValues: PropType.func.isRequired
 }
 const mapStateToProps = state => ({
     isSharingCompleted: state.tools.isSharingCompleted,
     isSceenSharing: state.tools.isScreenSharing,
     isSaved: state.issues.successCreation,
-    sharablelink: state.issues.sharablelink
+    sharablelink: state.issues.sharablelink,
+    twitterHandleValid: state.twitterApi.profilePresent,
+    doneFetching: state.twitterApi.doneFetching
+
+
 })
 
-export default connect(mapStateToProps, { displayScrenRecord, restAllToolValue,StartedSharing, stopedSharing, saveVideoBlob })(ScreenRecorder)
+export default connect(mapStateToProps, {getRecpientId,resetValues, displayScrenRecord, restAllToolValue,StartedSharing, stopedSharing, saveVideoBlob })(ScreenRecorder)

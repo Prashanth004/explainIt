@@ -1,6 +1,6 @@
 .dropdown {
-    position: relative;
     display: inline-block;
+    margin-top:-55px;
   }
   
   .dropdown-content {
@@ -32,30 +32,33 @@
 
   .navBar{
     width:100%;
+  
     color:#454545;
     background-color: white;
     border-style:solid;
     border-bottom-color:rgba(179, 172, 172, 0.424);
     border-width:0px;
     border-bottom-width: 0.5px;
+    font-size:15px;
     padding :20px 0 0 0 ;
     display: grid;
-    grid-template-columns: 15% 60% 25%;
+    grid-template-columns: 15% 50% 35%;
+
 
   }
   .navgation{
-    width:60%;
-    margin-left:30%;
+    width:100%;
+   margin:auto;
     display:grid;
     grid-template-columns: 33.33% 33.33% 33.33%;
     grid-column-gap: 3px;
   }
   .logo{
-    font-size: 20px;
+    font-size: 17px;
   }
   .navItem{
     display:grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 50% 50%;
     text-align:center;
   }
   a:hover {
@@ -74,4 +77,33 @@
   .normalNav{
     margin-top:5px;
   }
+  @media (min-width: 700px) {
+
+    .navgation{
+      width:60%;
+     
+    }
+    .logo{
+      font-size: 20px;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .navgation{
+      width:60%;
+      margin-left:20%
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right:7px;
+    }
+    .navItem{
+      display:grid;
+      grid-template-columns: 25% 25% 25% 25%;
+      text-align:center;
+    }
+  
+  }
+
   

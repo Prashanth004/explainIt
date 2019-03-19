@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
-import GitHubLogin from 'react-github-login';
 import { Redirect, Link } from 'react-router-dom';
 import config from '../../../config/config';
 import { signInWithGoogle, stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import GoogleLogin from 'react-google-login'
 
 
 class Login extends Component {
@@ -22,6 +20,9 @@ class Login extends Component {
     handleGit(){
         var url = `https://github.com/login/oauth/authorize?client_id=${config.gitHubClientId}&scope=user&redirect_uri=${config.react_url_git}`
         window.open(url,'_self')
+    }
+    componentWillMount(){
+        this.props.stillAuthenicated()
     }
 
     githubResponse(response){
@@ -52,17 +53,13 @@ class Login extends Component {
                                 Get your personalised Link so that people you love can connect with you. 
                         </b>
                         </h3>
-                        
-                        <br />
+                        <br/>
                         <h5>
                             <b>
                                Grab your Link
                         </b>
                         </h5>
                         <br />
-                          
-                        
-                           
                             <div className="buttonDiv">
                                 <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
                                     onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}

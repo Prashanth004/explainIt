@@ -1,7 +1,7 @@
 .formContainer{
     background-color:white;
 
-    width:65%;
+    width:70%;
     margin:auto;
     margin-top:10px;
     margin-bottom:10px;
@@ -29,7 +29,7 @@
 }
 .explainContainer{
     padding:5px;
-    width:56%;
+    width:86%;
     margin:auto;
     margin-top:20px;
     border-style:solid;
@@ -96,4 +96,25 @@ margin-bottom:10px;
     margin:auto;
     margin-top:20px;
     display:inline;
+}
+
+
+@media (min-width: 700px) {
+    .formContainer{
+        background-color:white;
+    
+        width:70%;
+    }
+
+}
+@media (min-width: 1000px) {
+    .explainContainer{
+        padding:5px;
+        width:56%;
+    }
+    .formContainer{
+        background-color:white;
+    
+        width:65%;
+    }
 }

@@ -113,7 +113,7 @@ text-align: center;
   margin:auto;
 }
 .Profilecard{
-  width:70%;
+  width:95%;
   height:225px;
   margin:auto;
   margin-top:40px;
@@ -163,8 +163,10 @@ text-align: center;
   border-top-right-radius: 5px;
 }
 .ProfileDiv{
-  width:80%;
+  width:95%;
   margin:auto;
+  text-align: center;
+  align-items: center;
 }
 .explainBtn{
  
@@ -172,8 +174,7 @@ text-align: center;
   border-radius:20px;
   width:100px;
   height:40px;
-margin-left:315px;
-margin-top:15px;
+margin-top:10px;
 
 }
 .fullHome{
@@ -182,10 +183,11 @@ margin-top:15px;
 .displayNumber{
   color:black;
   text-align: center;
-  font-size: 12px;
+  font-size: 15px;
   margin-top:7px
 }
 .profileDetails{
+  padding:05px;
   display:grid;
   grid-template-columns: 50% 25% 25%;
   margin:auto;
@@ -200,8 +202,8 @@ margin-top:15px;
   font-size:20px;
 }
 .profileImage{
-  height:125px;
-  width:125px;
+  height:95px;
+  width:95px;
   border-radius:50%;
   margin:auto;
   background-color:white;
@@ -213,15 +215,30 @@ margin-top:15px;
 }
 .profileImageElement{
  /* background-color: #ffff; */
-  height:126px;
-  width:126px;
+  height:96px;
+  width:96px;
   border-radius:50%;
   margin:auto;
+}
+.profileImage{
+  height:125px;
+  width:125px;
+
+}
+.profileImageElement{
+ /* background-color: #ffff; */
+  height:126px;
+  width:126px;
+ 
+}
+.nameImageDiv{
+  text-align: center;
+
 }
 .profileName{
   position:relative;
   top:-40%;
-  left:85px;
+ 
 }
 .callerProfileImage{
   height:75px;
@@ -240,7 +257,7 @@ margin-top:15px;
 }
 
   .containerHome{
-      width:65%;
+      width:95%;
       margin:auto;
       display:grid;
       /* grid-template-columns: 30% 40% 30%;
@@ -250,7 +267,7 @@ margin-top:15px;
       
   }
   .questionImg{
-    height: 350px;
+    height: 200px;
     width:100%;
   }
   .twitter{
@@ -267,13 +284,13 @@ margin-top:15px;
     /* text-decoration: underline; */
   }
   .issueContainer{
-    border-style: solid;
+    border-style: none;
     border-radius: 8px;
     padding:5px;
-    width:65%;
+    width:95%;
     margin:auto;
     /* background-color: rgb(239,239,233); */
-    background-color: white;
+    /* background-color: white; */
     margin-top:20px;
     border-color:rgb(221, 220, 220);
     border-width:0.5px;
@@ -483,4 +500,84 @@ border-style: none;
     .btn-twitter:active, .btn-twitter:hover {
       background: #0075a2;
       color: #fff; 
+    }
+
+
+
+
+    @media (min-width: 700px) {
+      .issueContainer{
+        width:75%;
+      }
+      .containerHome{
+        width:85%;
+      }
+      .ProfileDiv{
+        width:95%;
+        margin:auto;
+      }
+      .Profilecard{
+        width:60%;
+      }
+      .questionImg{
+        height: 300px;
+        width:100%;
+      }
+      .profileImage{
+        height:105px;
+        width:105px;
+      
+      }
+      .profileImageElement{
+       /* background-color: #ffff; */
+        height:106px;
+        width:106px;
+       
+      }
+      .displayNumber{
+    
+        font-size: 13px;
+       
+      }
+    
+    }
+
+    @media (min-width: 1000px) {
+      .issueContainer{
+        width:65%;
+        border-style: solid;
+        border-radius: 8px;
+        background-color: white;
+      }
+      .containerHome{
+        width:65%;
+      }
+      .questionImg{
+        height: 350px;
+        width:100%;
+      }
+      .ProfileDiv{
+        width:80%;
+        margin:auto;
+      }
+      .Profilecard{
+        width:70%;
+      }
+      .profileImage{
+        height:125px;
+        width:125px;
+      
+      }
+      .profileImageElement{
+       /* background-color: #ffff; */
+        height:126px;
+        width:126px;
+       
+      }
+      .displayNumber{
+    
+        font-size: 18px;
+       
+      }
+    
     }

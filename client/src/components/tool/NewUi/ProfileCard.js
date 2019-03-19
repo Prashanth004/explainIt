@@ -36,7 +36,7 @@ componentWillMount(){
            {linkSymbol}
         </div>
         <div className="profileDetails">
-            <div>
+            <div className="nameImageDiv">
                 <div className="profileImage">
                     <img  src={this.props.profilePic} className="profileImageElement" ></img>
                 </div>
@@ -44,12 +44,12 @@ componentWillMount(){
                 
             </div>
             <div  onClick={this.props.toggleCreatedIssue} className="displayNumber">
-            <h6>Created</h6>
+            <p>Created</p>
             <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>        
 
             </div >
             <div onClick={this.props.toggleParticipatedIssue}className="displayNumber">
-            <h6>Participated</h6>
+            <p>Participated</p>
             <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>  
 
             </div>
