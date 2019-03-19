@@ -202,8 +202,7 @@ class FullScreenRecorder extends Component {
     recordScreenStop() {
         var self = this;
         var recorder1 = this.state.recorder;
-        // var audioStream = this.state.audioStream;
-        // var screenStream = this.state.screenStream;
+       
         var audioStream = this.props.audioStream;
         var  screenStream=this.props.screenStream;
         console.log("recording : ",recorder1)
@@ -220,6 +219,10 @@ class FullScreenRecorder extends Component {
                 self.props.fullStopedRecording()
             });
         }
+         var audioStream = this.state.audioStream;
+        var screenStream = this.state.screenStream;
+        audioStream.stop();
+        screenStream.stop();
       
         this.setState({
             recorder: null,

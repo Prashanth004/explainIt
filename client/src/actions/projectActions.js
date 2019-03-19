@@ -94,15 +94,19 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
    console.log("got request")
    console.log("audio data : ", audioData)
    console.log("imageData : ",imgData)
-  
+   var issueID
    var token = JSON.parse(localStorage.getItem('token'))
     if(isquestion === "false"){
         console.log("isquestion : ",isquestion)
         console.log("issueIdFrmCpm : ",issueIdFrmCpm)
-        var issueID = issueIdFrmCpm
+        issueID = issueIdFrmCpm
     }
     else{
-        var issueID = null
+        issueID = null
+    }
+    if(issueID === undefined ){
+        isquestion = "true";
+        issueID = null
     }
    console.log("issueId : ",issueID)
     var projectName = config.dataTime

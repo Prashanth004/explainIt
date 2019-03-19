@@ -134,6 +134,9 @@ io.on("connection", socket => {
       console.log("########eaiting for confirmation")
       io.emit(key.COMFIRM_TOKEN_VALIDITY, data)
     })
+    socket.on(key.RETRYCALL, (data)=>{
+      io.emit(key.RETRYCALL, data)
+    })
     
  
     // console.error(`Error: ${error}`);

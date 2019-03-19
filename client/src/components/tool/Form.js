@@ -1013,7 +1013,7 @@ class Forms extends Component {
 
 
 
-            if (this.props.issueId !== null) {
+            if (this.props.issueId !== null || this.props.issueId === undefined) {
                 console.log("stage 1")
 
                 console.log("ths is runnign")

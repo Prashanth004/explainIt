@@ -23,7 +23,9 @@ module.exports = {
     END_CALL : "endCall",
     CALL_ACK_MESSAGE : "callAckMessage",
     CHECK_TOKEN_VALIDITY : "checkTokenValidity",
-    COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity"
+    COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity",
+    RETRYCALL : "reTryCall"
+
 
 };
 

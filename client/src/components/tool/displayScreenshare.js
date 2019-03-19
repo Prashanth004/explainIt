@@ -19,7 +19,7 @@ class DisplayShare extends Component {
             port: config.peerPort,
             path: config.peerPath,
             stream: null,
-            peerIdFrmPeer:null,
+            peerIdFrmPeer: null,
             isConnPreasent: false,
             conn: null,
             socket: null,
@@ -49,15 +49,26 @@ class DisplayShare extends Component {
         setTimeout(() => {
             if (!self.state.validCheckComplete) {
                 self.setState({
-                    validCheckComplete:true,
+                    validCheckComplete: true,
                     isTokenValid: false
                 })
             }
         }, 4000)
-        socket.emit(config.CHECK_TOKEN_CALIDITY, {
+        socket.emit(config.CHECK_TOKEN_VALIDITY, {
             'clientId': peerIdFrmPeer
         })
+
+        socket.on(config.RETRYCALL, data => {
+            
+            if (data.peerId === self.state.peerIdFrmPeer) {
+                self.peerConnections()
+                self.setState({
+                    callEnded:false
+                })
+            }
+        })
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
+            // alert("success")
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
@@ -77,6 +88,10 @@ class DisplayShare extends Component {
     }
 
     componentWillMount() {
+        this.peerConnections();
+    }
+
+    peerConnections() {
         var peerIdFrmPeer = this.props.match.params.callerid
         const socket = socketIOClient(config.base_dir);
         this.setState({
@@ -107,6 +122,7 @@ class DisplayShare extends Component {
         });
         startConnection.then((conn) => {
             setTimeout(() => {
+                console.log("sending the data please wait")
                 conn.send({
                     clientId: self.state.clientPeerid
                 });
@@ -137,10 +153,10 @@ class DisplayShare extends Component {
 
                 call.on('close', function () {
                     // console.log("close connection   ")
-                    if(!self.state.callEnded){
+                    if (!self.state.callEnded) {
                         self.closeConnection()
                     }
-                   
+
                 })
                 self.setState({
                     stream: audiostream,
@@ -149,26 +165,26 @@ class DisplayShare extends Component {
             })
         })
         peer.on('close', () => {
-           
-            if(!self.state.callEnded){
+
+            if (!self.state.callEnded) {
                 self.closeConnection()
             }
         })
-        peer.on('disconnected', function() {
-            if(!self.state.callEnded){
+        peer.on('disconnected', function () {
+            if (!self.state.callEnded) {
                 self.closeConnection()
             }
-         });
-         peer.on('error', function(err) {
-            if(!self.state.callEnded){
+        });
+        peer.on('error', function (err) {
+            if (!self.state.callEnded) {
                 self.closeConnection()
             }
-          });
-         peer.on('close', function() {
-            if(!self.state.callEnded){
+        });
+        peer.on('close', function () {
+            if (!self.state.callEnded) {
                 self.closeConnection()
             }
-         });
+        });
     }
 
     openLogin() {
@@ -178,7 +194,7 @@ class DisplayShare extends Component {
         var call = this.state.call;
         this.setState({
             closedHere: true,
-            manualClose:true
+            manualClose: true
         })
         setTimeout(() => {
             call.close();
@@ -199,10 +215,10 @@ class DisplayShare extends Component {
             callEnded: true
         })
         var stream = this.state.stream
-        if(stream!== null){
+        if (stream !== null) {
             stream.stop()
         }
-        
+
     }
 
     render() {
@@ -213,17 +229,20 @@ class DisplayShare extends Component {
             (<div><h1>Login in to explain to be able initiate screen shares</h1>
                 <button onClick={this.openLogin} className="buttonDark btnGap">Login</button>
                 <button onClick={this.closeWindow} className="buttonLight">No I am fine</button></div>)
-        var displayMessage = (this.state.manualClose)?(
+        var displayMessage = (this.state.manualClose) ? (
             (this.state.closedHere) ?
-            (<h5>Call Ended</h5>) :
-            (<h5>
-                Disconnected from other peer
+                (<h5>Call Ended</h5>) :
+                (<h5>
+                    Disconnected from other peer
             </h5>)
-        ):(
-            (<h5>
-                <b>Call ended due to network issues</b>
-            </h5>)
-        )
+        ) : (
+                (
+                    <div><h5>
+                        <b>Call ended due to network issues</b>
+                    </h5>
+                        <p>Please wait.. Caller will retry to call you </p>
+                    </div>)
+            )
         if (!this.state.callEnded) {
             var ShareElement = (
                 <div>
@@ -247,23 +266,23 @@ class DisplayShare extends Component {
         var precallActivity = (!this.state.connected) ? (<div> <h2>Coneecting..</h2>
             <p>Please wait</p>
         </div>) : (null)
-        // return ((this.state.validCheckComplete) ? (
-        //     (this.state.isTokenValid) ? 
-           return (<div className="screenShareDiv">
-                {ShareElement}
-                <div className="callImageDiv">
-                    {/* {callAnim} */}
-                    {precallActivity}
-                </div>
-            </div>)
-        //      : (<div  className="callImageDiv">
-        //         <h2>The sharable lisk is expired</h2>
-        //         <h3>Please check with the caller</h3>
-        //     </div>)
+        return ((this.state.validCheckComplete) ? (
+            (this.state.isTokenValid) ?
+                (<div className="screenShareDiv">
+                    {ShareElement}
+                    <div className="callImageDiv">
+                        {/* {callAnim} */}
+                        {precallActivity}
+                    </div>
+                </div>)
+                : (<div className="callImageDiv">
+                    <h2>The sharable lisk is expired</h2>
+                    <h3>Please check with the caller</h3>
+                </div>)
 
-        // ) : ((<div  className="callImageDiv">
-        //     <h2>Testing tooken Validity...</h2>
-        //     </div>)))
+        ) : ((<div className="callImageDiv">
+            <h2>Testing Link Validity...</h2>
+        </div>)))
     }
 }
 DisplayShare.PropType = {

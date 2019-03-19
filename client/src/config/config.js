@@ -29,7 +29,8 @@ const conf = {
     CALL_ACK_MESSAGE : "callAckMessage",
     END_CALL : "endCall",
     CHECK_TOKEN_VALIDITY : "checkTokenValidity",
-    COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity"
+    COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity",
+    RETRYCALL : "reTryCall"
 
 
     

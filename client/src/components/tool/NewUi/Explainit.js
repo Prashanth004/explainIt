@@ -139,7 +139,7 @@ class Explainit extends Component {
     var imgData = "null"
     var items = {}
     var isquestion = " "
-    if (this.props.issueId == null) {
+    if (this.props.issueId == null || this.props.issueId === undefined) {
       isquestion = "true"
     }
     else {
@@ -246,7 +246,10 @@ class Explainit extends Component {
     if (this.props.screenAction === SCREEN_SHARE) {
       shareElement = (
         <div className="shareControl">
-          <ScreenShare savefile={this.savefile} startDraw={this.drawRect} />
+          <ScreenShare 
+          reStoreDefault={this.props.reStoreDefault}
+          savefile={this.savefile} 
+          startDraw={this.drawRect} />
         </div>)
     }
     else if (this.props.screenAction === SCREEN_RECORD) {
@@ -258,6 +261,7 @@ class Explainit extends Component {
     else if (this.props.screenAction === FULL_SCREEN_SHARE) {
       shareElement = (<div className="shareControl">
         <FullScreenShare
+        reStoreDefault={this.props.reStoreDefault}
           savefile={this.saveVideoData}
         />
       </div>)
@@ -313,7 +317,7 @@ Explainit.PropType = {
 const mapStateToProps = state => ({
   error: state.issues.error,
   issueId: state.issues.currentIssueId,
-  success: state.issues.successCreation,
+  success: state.issues.successCreation,  
   screenAction: state.tools.screenAction,
   isSignedIn: state.auth.isAuthenticated,
 
