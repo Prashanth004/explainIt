@@ -28,7 +28,8 @@ class Explainit extends Component {
     this.state = {
       isInstalled: true,
       showRecordBtns: false,
-      showShareBtns: false
+      showShareBtns: false,
+      reducedWidth:false
     }
     this.showErrorAlert = this.showErrorAlert.bind(this);
     this.showSuccessAlert = this.showSuccessAlert.bind(this);
@@ -43,6 +44,7 @@ class Explainit extends Component {
     this.displayShareBtn = this.displayShareBtn.bind(this);
     this.shareCanvasScreen = this.shareCanvasScreen.bind(this);
     this.recordCanvasScreen = this.recordCanvasScreen.bind(this);
+    this.resize = this.resize.bind(this)
   }
   downloadExtension() {
     window.open(config.EXTENSION_URL, "_self")
@@ -80,6 +82,8 @@ class Explainit extends Component {
 
 
   componentDidMount() {
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
     console.log("asnckjadbskbsjfihb")
     var self = this
     this.setState({
@@ -87,6 +91,10 @@ class Explainit extends Component {
       success:false
     })
 
+  }
+
+  resize(){
+    this.setState({reducedWidth: window.innerWidth <= 700});
   }
   displayRecordBtn() {
     this.setState({
@@ -162,6 +170,7 @@ class Explainit extends Component {
     })
   }
   render() {
+   
     var percentage = "85%"
     var CanvasScreenButton = null;
     var formDiv = null;
@@ -201,10 +210,23 @@ class Explainit extends Component {
       if (this.props.screenAction === FULL_SCREEN_SHARE ||
         this.props.screenAction === FULL_SCREEN_RECORD){
           formDiv = null
-          percentage = "56%";
+          if(this.state.reducedWidth){
+            percentage = "90%";
+          }
+          else{
+            percentage = "56%";
+          }
+        
         }
         else{
-          percentage = "56%";
+          if(this.state.reducedWidth){
+           
+            percentage = "90%";
+          }
+          else{
+            percentage = "56%";
+          }
+        
           formDiv = (
             <div className="formContainer">
               <div className="imageBtns">

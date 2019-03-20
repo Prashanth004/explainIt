@@ -8,7 +8,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import { Button, Modal, ModalBody } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import { SCREEN_SHARE, SCREEN_RECORD } from '../../../actions/types';
+import { SCREEN_SHARE, SCREEN_RECORD,FULL_SCREEN_RECORD,FULL_SCREEN_SHARE } from '../../../actions/types';
 import CopyToClipboard from '../CopytoClipboard'
 import Explain from './Explainit'
 import { setIssueId } from '../../../actions/issueActions';
@@ -28,6 +28,7 @@ import { acceptCallDetails } from '../../../actions/callAction';
 import { answerCall, missCall } from '../../../actions/callAction';
 import { openParticipated, openCreated } from "../../../actions/navAction";
 import { cancelAllMessageAction } from '../../../actions/messageAction'
+import FullScreenRecord from './FullScreenRecord';
 
 
 
@@ -290,9 +291,9 @@ class NewHome extends Component {
             if (this.state.openExplain) {
                 explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
             }
-            if (this.props.created) {
+            if (this.props.created && !this.props.participated ) {
                 feedDiv = (
-                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created}>
+                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}>
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
                             </div>
@@ -300,9 +301,10 @@ class NewHome extends Component {
                         </div>
                     </Animated>)
             }
-            if (this.props.participated) {
+            else if (this.props.participated && !this.props.created) {
+              
                 feedDiv = (
-                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated}>
+                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
 
                         <div className="issueContainer" >
 
@@ -317,6 +319,8 @@ class NewHome extends Component {
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
+                this.props.screenAction === FULL_SCREEN_SHARE ||
+                this.props.screenAction === FULL_SCREEN_RECORD ||
                 this.props.participated ||
                 this.props.created) {
                 var profileCardElement = null
