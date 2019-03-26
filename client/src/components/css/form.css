@@ -78,7 +78,7 @@
      font-size: 25px;
         }
  .partTwoInput{
-    width:95%;
+    min-width:95%;
     margin:auto;
     background-color: white;
     padding:15px;
@@ -106,7 +106,7 @@
   box-shadow: 0 0px 0px 0px rgba(53, 52, 52, 0.027);
  }
 .canvasTool{
-    width:110%;
+    min-width:110%;
     margin:auto;
     display:grid;
     grid-template-columns: 76% 15%;

@@ -19,17 +19,56 @@ var options = {
 
 id: rn(options),
 
+
+
+
+exports.updateProjectpublic = function(req, res){
+    database.db.none('update projects SET public = $1 WHERE issueid = $2', [1, req.body.projectId])
+    .then(data=>{
+        res.status(200).send({
+            success: 1,
+            data:data
+        })
+    })
+    .catch(err=>{
+        console.log("error : ", err)
+        res.status(500).send({
+            success: 0,
+           msg:err
+        })
+
+    })
+}
+
+exports.updateProjectprivate = function(req, res){
+    database.db.none('update projects SET public = $1 WHERE issueid = $2', [0, req.body.projectId])
+    .then(data=>{
+        res.status(200).send({
+            success: 1,
+            data:data
+        })
+    })
+    .catch(err=>{
+        console.log("error : ", err)
+        res.status(500).send({
+            success: 0,
+           msg:err
+        })
+
+    })
+}
+
     exports.saveProject = function (req, res) {
         console.log("request.body", req.body)
         var issueID = null
         var videopathName = null;
         if (!req.file) {
-            console.log(" video file not found")
         }
         else if (req.file) {
             console.log("req.file : ", req.file)
-            if (req.file.size > (1024 * 1024 * 12)) {
-                res.status(450).send({
+            if (req.file.size > (1024 * 1024 * 25)) {
+                console.log("file ttoooo largeeeee")
+                return res.status(450).send({
                     success: 0,
                     lengthExceeds: 1,
                     msg: " the audio exceeds 12 mb"
@@ -67,8 +106,9 @@ id: rn(options),
         }
         var dateNow = new Date().toString()
         var rand = rn(options)
-        database.db.oneOrNone('insert into projects(name,email, projectid,  date,textExplain ,issueid,isquestion, imgurl,videofilepath)' +
-            'values(${name},${email}, ${projectid},${date},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath})',
+        console.log("type of data : ",typeof(req.body.public))
+        database.db.oneOrNone('insert into projects(name,email, projectid,  date,textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
+            'values(${name},${email}, ${projectid},${date},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
             {
                 name: req.body.projectName,
                 email: req.user.email,
@@ -79,6 +119,7 @@ id: rn(options),
                 isquestion: req.body.isquestion,
                 issueid: issueID,
                 videofilepath: videopathName,
+                public : Number(req.body.public)
             }).then((respponse) => {
                 console.log("saving project successfull")
                 database.db.one('select * from projects where projectid = $1', rand)
@@ -168,14 +209,16 @@ exports.getAllProject = function (req, res) {
 }
 exports.getProjectById = function (req, res) {
 
-    database.db.manyOrNone('select * from projects where projectid = $1', req.params.id)
+    database.db.one('select * from projects where issueid = $1', req.params.id)
         .then(projects => {
+            console.log("projects : ",projects)
             res.status(200).send({
                 success: 1,
                 data: projects
             })
         })
         .catch(error => {
+            console.log("error : ",error)
             res.status(500).send({
                 sucess: 0,
                 msg: error

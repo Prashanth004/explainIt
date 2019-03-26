@@ -32,12 +32,12 @@
 
   }
   .loader{
-      text-align: centre;
-      padding-top:20px;
+      text-align:center;
+      padding-top:40px;
   }
-  .recieverImage{
-      align-items:left;
-      text-align:left;
+  .recieverImageDiv{
+    align-items: left;
+      text-align: left;
       padding:10px;
   }
 

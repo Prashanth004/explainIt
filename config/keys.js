@@ -24,7 +24,10 @@ module.exports = {
     CALL_ACK_MESSAGE : "callAckMessage",
     CHECK_TOKEN_VALIDITY : "checkTokenValidity",
     COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity",
-    RETRYCALL : "reTryCall"
+    RETRYCALL : "reTryCall",
+    ENDCALL_ACK:"endCallAck",
+    CLOSE_NETWORK_ISSUE : "closeDueToNetworkIssue"
+
 
 
 };

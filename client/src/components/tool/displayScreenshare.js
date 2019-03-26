@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
+import '../css/call.css'
 import { Redirect } from 'react-router-dom';
 import { answerCall } from '../../actions/callAction'
 import { connect } from 'react-redux';
+import { MdCallEnd } from "react-icons/md";
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { stillAuthenicated } from '../../actions/signinAction';
@@ -33,7 +35,10 @@ class DisplayShare extends Component {
             callEnded: false,
             manualClose: false,
             isTokenValid: false,
-            validCheckComplete: false
+            validCheckComplete: false,
+            picture: null,
+            twitterhandle: null,
+            timerEnded: false
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -58,12 +63,18 @@ class DisplayShare extends Component {
             'clientId': peerIdFrmPeer
         })
 
+        socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+            if (data.otherPeerId === self.state.peerIdFrmPeer) {
+                self.closeConnection()
+            }
+        })
+
         socket.on(config.RETRYCALL, data => {
-            
+
             if (data.peerId === self.state.peerIdFrmPeer) {
-                self.peerConnections()
+                self.peerConnections(socket)
                 self.setState({
-                    callEnded:false
+                    callEnded: false
                 })
             }
         })
@@ -72,28 +83,45 @@ class DisplayShare extends Component {
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
-                    isTokenValid: true
+                    isTokenValid: true,
+                    picture: data.profilePic,
+                    twitterhandle: data.twitterHandle
                 })
             }
         })
         socket.on(config.END_CALL, data => {
             console.log(" data from client ack : ", data)
-            if (data.peerId === peerIdFrmPeer) {
+            if (data.peerId === peerIdFrmPeer && data.timerEnded) {
+                self.closeConnection()
+                self.setState({
+                    timerEnded: true
+                })
+            }
+            else if (data.peerId === peerIdFrmPeer && !data.timerEnded) {
                 self.closeConnection()
                 self.setState({
                     manualClose: true
                 })
             }
+            socket.emit(config.ENDCALL_ACK, {
+                'clientId': self.state.clientPeerid,
+                'encCallAck': true
+            })
+
         })
     }
 
     componentWillMount() {
-        this.peerConnections();
+        const socket = socketIOClient(config.base_dir);
+        this.setState({
+            socket: socket
+        })
+        this.peerConnections(socket);
     }
 
-    peerConnections() {
+    peerConnections(socket) {
         var peerIdFrmPeer = this.props.match.params.callerid
-        const socket = socketIOClient(config.base_dir);
+
         this.setState({
             socket: socket,
             peerIdFrmPeer: peerIdFrmPeer
@@ -111,7 +139,8 @@ class DisplayShare extends Component {
         });
         peer.on('open', function (id) {
             self.setState({
-                clientPeerid: id
+                clientPeerid: id,
+                connected: true
             })
         });
         console.log(" this.props.match.params.callerid : ", this.props.match.params.callerid)
@@ -124,7 +153,8 @@ class DisplayShare extends Component {
             setTimeout(() => {
                 console.log("sending the data please wait")
                 conn.send({
-                    clientId: self.state.clientPeerid
+                    clientId: self.state.clientPeerid,
+
                 });
             }, 5000)
         });
@@ -139,7 +169,7 @@ class DisplayShare extends Component {
                         'clientId': self.state.clientPeerid
                     })
                     self.setState({
-                        connected: true
+                        connected: false
                     })
                     console.log('Received', stream);
                     var divi = document.querySelector('.screenShareDiv')
@@ -156,6 +186,9 @@ class DisplayShare extends Component {
                     if (!self.state.callEnded) {
                         self.closeConnection()
                     }
+                    socket.emit(config.CLOSE_NETWORK_ISSUE, {
+                        'otherPeerId': self.state.clientPeerid
+                    })
 
                 })
                 self.setState({
@@ -169,22 +202,21 @@ class DisplayShare extends Component {
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
+            socket.emit(config.ENDCALL_ACK, {
+                'clientId': self.state.clientPeerid,
+                'encCallAck': true
+            })
         })
         peer.on('disconnected', function () {
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
+            socket.emit(config.ENDCALL_ACK, {
+                'clientId': self.state.clientPeerid,
+                'encCallAck': true
+            })
         });
-        peer.on('error', function (err) {
-            if (!self.state.callEnded) {
-                self.closeConnection()
-            }
-        });
-        peer.on('close', function () {
-            if (!self.state.callEnded) {
-                self.closeConnection()
-            }
-        });
+
     }
 
     openLogin() {
@@ -199,11 +231,12 @@ class DisplayShare extends Component {
         setTimeout(() => {
             call.close();
         }, 400)
-        this.closeConnection()
+
         var socket = this.state.socket
         socket.emit(config.END_CALL, {
             'clientId': this.state.clientPeerid
         })
+        this.closeConnection()
     }
     closeConnection() {
         if (!this.state.closedHere === true) {
@@ -222,33 +255,56 @@ class DisplayShare extends Component {
     }
 
     render() {
+        var profileUrl = config.react_url + '/profile/' + this.state.twitterhandle
+
         // var callAnim=(this.state.connected)?
         // (<CallImage action="notWaiting" recieverImageUrl={this.state.peerProfilePic} callerImageUrl={this.props.profilePic}/>)
         // :(<CallImage action="waiting" recieverImageUrl={this.state.peerProfilePic} callerImageUrl={this.props.profilePic}/>)
         var displayLoginMessage = (!!this.props.isLoggedIn) ? (<div><p></p></div>) :
-            (<div><h1>Login in to explain to be able initiate screen shares</h1>
+            (<div><p><b>Login in to explain to be able initiate screen shares</b></p>
                 <button onClick={this.openLogin} className="buttonDark btnGap">Login</button>
                 <button onClick={this.closeWindow} className="buttonLight">No I am fine</button></div>)
         var displayMessage = (this.state.manualClose) ? (
             (this.state.closedHere) ?
-                (<h5>Call Ended</h5>) :
+                (<div>
+                    <h5>Call Ended</h5>
+                    <p>You can view this call in caller's profile created section</p>
+                    <p>URL to access prfoile is <a href={profileUrl}>{profileUrl}</a></p>
+                </div>) :
                 (<h5>
                     Disconnected from other peer
-            </h5>)
+                    <p>You can view this call in caller's profile created section</p>
+                    <p>URL to access prfoile is <a href={profileUrl}>{profileUrl}</a></p>
+                </h5>)
         ) : (
-                (
-                    <div><h5>
-                        <b>Call ended due to network issues</b>
-                    </h5>
-                        <p>Please wait.. Caller will retry to call you </p>
-                    </div>)
+                ((this.state.timerEnded) ? (
+                    <div>
+                        <h3>Call ended as the time exceeded 3 minutes</h3>
+                        <p>You can expect another link from the caller to continue the conversation</p>
+                    </div>
+                ) : (<div><h5>
+                    <b>Call ended due to network issues</b>
+                </h5>
+                    <p>Please wait.. Caller will retry to call you </p>
+                </div>))
             )
         if (!this.state.callEnded) {
             var ShareElement = (
-                <div>
-                    <video className="VideoElement" autoPlay={true} id="video" srcObject=" " ></video>
-                    <div id="main-circle">
-                        <div onClick={this.endCall} id="inner-circle">END</div>
+                <div className="shareVideoDisplay">
+                    <div className="videoContainer">
+                        <video className="VideoElementReciever" autoPlay={true} id="video" srcObject=" " ></video>
+                    </div>
+                    <div className="decreasePadding">
+                        <div className="callPage-recieverImageDiv">
+
+                            <MdCallEnd onClick={this.endCall} className="img__overlay" />
+
+                            <img className="callPage-recieverImage" src={this.state.picture}></img>
+                        </div>
+
+                        {/* <div class="overlayEndCall">
+                        {/* <div class="text">Hello World</div> */}
+                        {/* </div>  */}
                     </div>
                 </div>
             )
@@ -263,20 +319,38 @@ class DisplayShare extends Component {
                 </div>
             )
         }
-        var precallActivity = (!this.state.connected) ? (<div> <h2>Coneecting..</h2>
+        else {
+            var ShareElement = (
+                <div>
+                    <div className="postCalltextDisplay">
+                        <h4>Connecting..</h4>
+                        <h5>Please wait</h5>
+                    </div>
+                </div>
+            )
+        }
+        var precallActivity = (this.state.connected) ? (<div className="initialMessage">
+            <h2>Connecting..</h2>
             <p>Please wait</p>
+            <div className="callPage-recieverImageDiv">
+                <img className="callPage-recieverImage wait" src={this.state.picture}></img>
+            </div>
         </div>) : (null)
         return ((this.state.validCheckComplete) ? (
             (this.state.isTokenValid) ?
-                (<div className="screenShareDiv">
-                    {ShareElement}
-                    <div className="callImageDiv">
-                        {/* {callAnim} */}
-                        {precallActivity}
+                (<div>
+
+                    {precallActivity}
+                    <div className="screenShareDiv">
+                        {ShareElement}
+                        <div className="callImageDiv">
+                            {/* {callAnim} */}
+
+                        </div>
                     </div>
                 </div>)
                 : (<div className="callImageDiv">
-                    <h2>The sharable lisk is expired</h2>
+                    <h2>The sharable link is expired</h2>
                     <h3>Please check with the caller</h3>
                 </div>)
 

@@ -10,7 +10,8 @@ import callReducer from './callReducer'
 import messageReducer from './messageReducer'
 import navReducer from './navReducer'
 import twitterApiReducer from './twitterApiReducer';
-import streamReducer from './streamReducer'
+import streamReducer from './streamReducer';
+import canvasActionsReducer from './canvasActionReducer'
  
 export default combineReducers({
     auth : signinReducer,
@@ -24,5 +25,6 @@ export default combineReducers({
     message:messageReducer,
     nav:navReducer,
     twitterApi:twitterApiReducer,
-    stream:streamReducer
+    stream:streamReducer,
+    canvasActions:canvasActionsReducer
 })

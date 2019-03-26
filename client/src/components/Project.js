@@ -5,7 +5,7 @@ import PropType from 'prop-types';
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css'
 import {clearAnswers, fetchProjectbyIssue} from '../actions/projectActions'
-import Navbar from './Navbar';
+import Navbar from './tool/NewUi/Navbar';
 import Swal from 'sweetalert2';
 import config from '../config/config'
 

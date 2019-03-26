@@ -115,6 +115,14 @@ io.on("connection", socket => {
     socket.on(key.REJECT_REPLY,(data)=>{
       io.emit(key.REJECT_REPLY, data);
     })
+    
+    socket.on(key.CLOSE_NETWORK_ISSUE,(data)=>{
+      io.emit(key.CLOSE_NETWORK_ISSUE, data);
+    })
+
+    socket.on(key.ENDCALL_ACK,(data)=>{
+      io.emit(key.ENDCALL_ACK, data);
+    })
 
     socket.on(key.END_CALL,(data)=>{
       io.emit(key.END_CALL, data);

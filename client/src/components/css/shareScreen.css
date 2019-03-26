@@ -1,71 +1,54 @@
 .LinkDisplay{
-    width:150%;
+    width:90%;
     margin:auto;
-    margin-left:-25%;
+    min-height:60vh;
     background-color: white;
     text-align: center;
     align-content: center;
     align-items: center;
 
 }
-.save{
-    /* background-color: rgb(36, 105, 36);
-    border-style:none;
-    width:15%;
-    border-radius:3px;
-    padding:5px;
-    font-size: 14px; */
-    margin:10px;
-    /* color:white; */
+.DisconMessage{
+    width:80%;
+    margin:auto;
+    margin-top:10px;
+    padding-top:100px;
+    font-size:22px;
+    font-weight: 400;
+}
+/* .icons{
+    padding:3px;
+} */
+.clickedMessage{
+
+  padding-top:65px;
+}
+.twitter{
+  
+    height:27px;
+    width:27px;
+    margin:auto;
+  }
+.twitterLinkDiv{
+    width:100%;
+    margin-top:05px;
+    text-align: center;
+    align-content: center;
+
+}
+.twitterInput{
+    width:75%;
+    margin:auto;
+}
+.twitterBird{
+  width:100%;
+    padding-top:105px;
+    padding-bottom:60px;
+    text-align: center;
+    align-content: center;
+
 }
 
-
-.tooltip {
-   
-  }
-  
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 140px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 150%;
-    left: 50%;
-    margin-left: -75px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-  }
-  
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-/* .discard{
-    background-color:rgba(200, 54, 54, 0.959);
-    border-style:none;
-    width:15%;
-    border-radius:3px;
-    padding:5px;
-    font-size: 14px;
-    margin:10px;
-    color:white;
-} */
 .sharableLink{
     text-align: center;
     align-content: center;
@@ -202,6 +185,15 @@ border-color:#34a4a8;
     background-color:black;
     opacity:0.5;
     display:inline-block;
+  }
+  .waitMsg{
+      padding:20px;
+      margin-top:20px;
+      padding-bottom:40px;
+      
+  }
+  .callerImageDiv{
+      margin-top:50px;
   }
   .callerImage{
       align-items: right;

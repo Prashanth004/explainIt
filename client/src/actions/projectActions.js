@@ -10,6 +10,69 @@ import {FETCH_PROJ_BY_ISSUE,
 import axios from 'axios'
 import config from '../config/config'
 
+export const checkPublicValue = (issueId) =>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'))
+   
+    axios({
+        method:'get',
+        url:config.base_dir+'/api/project/'+issueId,
+        headers: {
+            "Authorization": token,
+        }
+    }).then(response=>{
+       
+        if(response.status === 200 || response.status === 304){
+          if(Number(response.data.data.public)){
+
+            console.log("Number(response.data.data.public) : ",Number(response.data.data.public))
+              axios({
+                  method:'put',
+                  url:config.base_dir+'/api/project/private',
+                  headers:{
+                    "Authorization": token,
+                  },
+                  data:{
+                    'projectId':issueId
+                  }
+
+              }).then(response=>{
+                  console.log(response)
+              }).catch(error=>{
+                  console.log(error)
+              })
+          }
+        
+        else{
+            console.log("Number(response.data.data.public) : ",Number(response.data.data.public))
+
+            axios({
+                method:'put',
+                url:config.base_dir+'/api/project/public',
+                headers:{
+                  "Authorization": token,
+                },
+                data:{
+                  'projectId':issueId
+                }
+
+            }).then(response=>{
+                console.log(response)
+            }).catch(error=>{
+                console.log(error)
+            })
+
+        }
+    }
+    else{
+        console.log(response.data.data.public)
+    }
+
+    }).catch(err=>{
+        console.log("error : ",err)
+
+    })
+}
+
 
 
 export const fetchProjectbyIssue = (issueId)=>dispatch =>{
@@ -90,7 +153,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
         console.log("error : ",err)
     })
 }
-export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion,issueIdFrmCpm)=> (dispatch) =>{
+export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion,issueIdFrmCpm,isPublic)=> (dispatch) =>{
    console.log("got request")
    console.log("audio data : ", audioData)
    console.log("imageData : ",imgData)
@@ -108,6 +171,7 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
         isquestion = "true";
         issueID = null
     }
+    console.log("type of is public : ",typeof(isPublic))
    console.log("issueId : ",issueID)
     var projectName = config.dataTime
     var fd = new FormData();
@@ -117,6 +181,7 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
     fd.append('issueID',issueID);
     fd.append('textExplain',textExplain);
     fd.append('isquestion',isquestion);
+    fd.append('public', isPublic);
     console.log("the project getting saved : ",fd)
     axios({
         method: 'post',

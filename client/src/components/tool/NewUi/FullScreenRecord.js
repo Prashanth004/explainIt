@@ -4,7 +4,11 @@ import RecordRTC from 'recordrtc';
 import CopyToClipboard from '../CopytoClipboard';
 import {setStream} from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
-import Dummy from './dummy'
+import Dummy from './dummy';
+import Form from '../Form'
+import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
+import { Button } from 'reactstrap';
+import { FiSave, FiX, FiTwitter, FiVideo } from "react-icons/fi";
 import {fullStartedRecording,
     fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
 import {connect} from 'react-redux';
@@ -22,7 +26,8 @@ class FullScreenRecorder extends Component {
             finalStream: null,
             percentage:"0%",
             copyStatus:"copy link",
-            saveBtnClicked:false
+            saveBtnClicked:false,
+            showCanvas:false
            
             
         }
@@ -35,7 +40,7 @@ class FullScreenRecorder extends Component {
         this.discardChanges = this.discardChanges.bind(this);
         this.receiveMessage = this.receiveMessage.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
-
+        this.toggleCanvas = this.toggleCanvas.bind(this)
 
     }
 
@@ -69,6 +74,7 @@ class FullScreenRecorder extends Component {
 
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
+            self.startBar()
             var finalStream = new MediaStream();
             window.getTracks(audioStream, 'audio').forEach(function (track) {
                 finalStream.addTrack(track);
@@ -139,12 +145,12 @@ class FullScreenRecorder extends Component {
         var progresDiv = document.querySelector(".progresDiv")
         progresDiv.style.display = "block";
         var width = 0;
-        var id = setInterval(frame, 2000);
+        var id = setInterval(frame,1000);
         function frame() {
           if (width >= 100) {
             clearInterval(id);
           } else {
-            width= width+(100/90); 
+            width= width+(100/180); 
             console.log("......")
             progressbar.style.width=width+'%';
                   }
@@ -192,12 +198,21 @@ class FullScreenRecorder extends Component {
             this.props.fullStartedRecording();
         }
     }
-    savefile(){
+savefile(){
     this.props.savefile(this.state.blob)
     this.setState({
         saveBtnClicked: true
     })
 
+}
+toggleCanvas(){
+    if(this.state.showCanvas)
+        this.props.hideCanvas()
+    else this.props.showCanvas()
+    this.setState({
+        showCanvas:!this.state.showCanvas
+    })
+    
 }
     recordScreenStop() {
         var self = this;
@@ -216,13 +231,14 @@ class FullScreenRecorder extends Component {
 
                 audioStream.stop();
                 screenStream.stop();
-                self.props.fullStopedRecording()
+                // 
             });
         }
          var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
         audioStream.stop();
         screenStream.stop();
+        self.props.fullStopedRecording()
       
         this.setState({
             recorder: null,
@@ -230,8 +246,42 @@ class FullScreenRecorder extends Component {
             screenStream: null,
         })
     }
+    componentWillUnmount(){
+        var audioStream = this.state.audioStream;
+        var screenStream = this.state.screenStream;
+        if(audioStream!==null && screenStream!== null)
+        {
+            audioStream.stop();
+            screenStream.stop();
+        }
+       
+    }
 
     render() {
+        if (this.props.isFullScreenRecording) {
+           
+            var timer = (<Countdown
+                date={Date.now() + 180000}
+                renderer={this.renderer}
+            />)
+            var recordingEle = ( <div >
+                <p>Recording screen</p>
+                </div>)
+        }
+        else{
+            var recordingEle = ( <div >
+                <p>Record the screen and share</p>
+            
+                </div>)
+        }
+        var showCanv = (this.state.showCanvas)?(
+            <div className="canvToolDivCall">
+            <Form onRef={ref => (this.child = ref)} />
+            <p>recording screen..</p>
+            </div>
+        ):(   <div className="recorderInfo">
+        {recordingEle}
+        </div>)
         var ua = window.detect.parse(navigator.userAgent);
     //     if(ua.browser.family === "Chrome"){
     //     if(this.props.sourceId!==null){
@@ -239,18 +289,11 @@ class FullScreenRecorder extends Component {
     //         this.startRecoding()
     //     }
     // }
-        if (this.props.isFullScreenRecording) {
-            this.startBar()
-            var timer = (<Countdown
-                date={Date.now() + 180000}
-                renderer={this.renderer}
-            />)
-            var recordingEle = ( <p>Recording screen</p>)
-        }
+     
         var videoplayer = " ";
         var downLinkAudio = " ";
         var linkElement = " ";
-        var convey = (<p ref={a=>this.convey=a}>Start</p>)
+        var convey ="Start"
        
         if (this.state.downloadUrl) {
             videoplayer = (<video className="videoPlayer2" src={this.state.downloadUrl} controls={true}></video>)
@@ -261,17 +304,31 @@ class FullScreenRecorder extends Component {
      
         if(this.props.isFullRecordCompleted ===false){
         var recordingElements = (<div>
-            <div className="progresDiv">
-                 <div  className="progress" id="pbar" ></div>
-             </div>
-             {timer}
-             {recordingEle}
-            
-             <div className="btDiv">
-                     <button className="mainBtn" onClick={this.toggle}></button>
-             </div>
-             <div className="convey">
-                 {convey}
+             <div className="statusBarCall">
+                <div className="timerDiv">
+                </div>
+                <div>
+
+                </div>
+                <div>
+                    {/* <p onClick={this.toggleCanvas}>Canvas</p> */}
+                </div>
+                
+            </div>
+            {showCanv}
+           
+            <div className="recorderfooter">
+                <div className="progresDiv">
+                    <div  className="progress" id="pbar" ></div>
+                </div>
+                {timer}
+                
+                <div className="btDiv">
+                        <button className="mainBtn" ref={a=>this.convey=a} onClick={this.toggle}>{convey}</button>
+                </div>
+                {/* <div className="convey">
+                    {convey}
+                </div> */}
              </div>
              </div>
         )
@@ -290,12 +347,18 @@ class FullScreenRecorder extends Component {
             </div>
        
                  <p>Do you want to sav it?</p>
-                 <button onClick={this.savefile} className="buttonLight save">
+                 <span className="hint--bottom" aria-label="Save Call">
+                <FiSave className="icons" onClick={this.savefile} />
+            </span>
+            <span className="hint--bottom" aria-label="Cancel">
+                <FiX className="icons" onClick={this.discardChanges} />
+            </span>
+                 {/* <button onClick={this.savefile} className="buttonLight save">
                    Save
                  </button>
                  <button onClick={this.discardChanges} className="buttonDark save">
                      Discard
-                 </button>
+                 </button> */}
              </div>)
          }
          else if(this.props.isSaved ){
@@ -325,48 +388,11 @@ class FullScreenRecorder extends Component {
             linkElement = (<p>{this.state.shareScreenLink}</p>)
         }
         return (
-            <div>
+            <div className="recordMainScreen">
+             {/* <Button close onClick={this.props.reStoreDefault} /> */}
                {recordingElements}
                 {postShareElements}
-          
-
-                {/* <div class="container">
-  <div class="progress" id="progress"></div>
-  <audio id="audio" src="https://www.freesound.org/data/previews/338/338825_1648170-lq.mp3"></audio>
-  <button class="togglePlay" onClick="togglePlay()">Play/Pause</button>
-</div> */}
-
-
-
-
-
-                {/* <div>
-                    {timer}
-                </div>
-                <div className="Btns">
-                    <button className="buttonLight btnss" disabled={this.state.stopBtn} onClick={this.recordScreenStop}>
-                        Stop
-          </button>
-                    <button className="buttonLight btnss" disabled={this.state.startBtn} onClick={this.recordScreenStart}>
-                        Start
-          </button>
-                    <input type="text" onChange={this.handle_dest} />
-                    <button className="buttonLight btnss" disabled={this.state.startBtn} onClick={this.generateLink}>
-                        shareScreenLink
-          </button>
-                    <button className="buttonLight btnss" disabled={this.state.startBtn} onClick={this.startScreenShareSend}>
-                        Send
-          </button>
-                </div>
-                <div className="videoPlayer">
-                    {linkElement}
-                    {videoplayer}
-                    <audio id="video" controls={true} ref={a => this.videoTag} srcObject=" " ></audio>
-                    {/* {downLinkAudio} 
-                    </div>
-                    */}
-            
-            </div>
+             </div>
         )
     }
 }
@@ -376,6 +402,8 @@ FullScreenRecorder.PropType={
     discardAfterRecord :PropType.func.isRequired,
     saveSourceId:PropType.func.isRequired,
     setStream: PropType.func.isRequired,
+    showCanvas: PropType.func.isRequired, 
+    hideCanvas: PropType.func.isRequired
 }
 const mapStateToProps = state =>({
     isFullScreenRecording :state.tools.isFullScreenRecording,
@@ -389,5 +417,5 @@ const mapStateToProps = state =>({
     screenStream : state.stream.screenStream,
 }) 
 
-export default connect(mapStateToProps,{saveSourceId,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
+export default connect(mapStateToProps,{saveSourceId, showCanvas, hideCanvas,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
 

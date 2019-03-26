@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import config from '../../../config/config'
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
 
@@ -9,7 +10,12 @@ import { IoIosLink } from "react-icons/io";
 class ProfileCard extends Component {
 componentWillMount(){
     console.log("uswrID : ",this.props.userId)
-   this.props.getProfileDetails(this.props.userId) 
+    if(this.props.userId === this.props.profileId)
+   this.props.getProfileDetails(this.props.userId, config.SELF) 
+   else 
+   this.props.getProfileDetails(this.props.userId, config. VISIT_PROF) 
+
+  
      // this.props.stillAuthenicated();
         // const cryptr = new Cryptr(config.SECRET);
         // const decryptedTwitterHandle = cryptr.decrypt(this.props.match.params.encrTwitterHandle);
@@ -68,7 +74,8 @@ const mapStateToProps = state => ({
     email:state.profile.email,
     profilePic:state.profile.profilePic,
    noCreated:state.profile.noCreated,
-   noParticipated:state.profile.noParticipated
+   noParticipated:state.profile.noParticipated,
+   profileId : state.auth.id
 })
 
 export default connect(mapStateToProps, {getProfileDetails})(ProfileCard)

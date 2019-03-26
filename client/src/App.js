@@ -8,7 +8,8 @@ import Login from './components/tool/NewUi/Login'
 import Signup from './components/Signup'
 import Newlogin from './components/Newlogin'
 import Home from './components/tool/NewUi/Home'
-import Explainit from './components/tool/NewUi/Explainit'
+import ShareWindow from './components/tool/NewUi/ShareWindow'
+import Explainit from './components/tool/NewUi/ExplainPage'
 import google from './components/testGoogle'
 import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
@@ -33,6 +34,7 @@ class App extends Component {
             <Route exact path ='/inbox/:userid' component={inbox}/>
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact  path='/signup' component={Signup} />
+            <Route exct path = '/sharescreen' component={ShareWindow}/>
           </BrowserRouter>
         </div>
       </Provider>

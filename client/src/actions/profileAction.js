@@ -2,7 +2,8 @@ import {GET_PROFILE_DETAILS,GET_PROFILE_DETAILS_FAIL } from './types'
 import config from '../config/config';
 import axios from 'axios';
 
-export const getProfileDetails=(userId)=>(dispatch)=>{
+
+export const getProfileDetails=(userId, profilePrivacy)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
   var email = null;
   var userName = null;
@@ -30,12 +31,27 @@ export const getProfileDetails=(userId)=>(dispatch)=>{
             }
         }).then((response2)=>{
            var participated = []
+           console.log("response2.data.data , ",response2.data.data)
+           if(profilePrivacy === config.SELF)
             var myProjects = (response2.data.data).filter(project=>(
-                project.email === response1.data.data.email
+                project.email === response1.data.data.email 
+              
             ))
+            else if(profilePrivacy === config.VISIT_PROF){
+                var myProjects = (response2.data.data).filter(project=>(
+                    project.email === response1.data.data.email &&
+                    project.public === "1"
+                  
+                ))
+               
+
+            }
+          
            var myIssue = myProjects.filter(project=>(
                 project.isquestion === "true"
+               
             ))
+         
             // var issuIDMyProject = myProjects.map(project=>project.issueid)
             const distinctIssueId = [...new Set(myProjects.map(proj=>proj.issueid))]
             console.log("distinct IssueID : ",distinctIssueId)

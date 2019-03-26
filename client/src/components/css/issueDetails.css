@@ -21,6 +21,13 @@ border-radius:10.5px;
     border-color:rgb(192, 190, 190);
     border-width:0.2px; */
 }
+.icons{
+    margin-left:10px;
+}
+.iconsright{
+    margin-left:10px;
+    float:right;
+}
 .explainModal{
    margin-top:10px;
    margin-bottom:10px;
@@ -40,12 +47,19 @@ border-radius:10.5px;
         /* background-color: red; */
         text-align: center;
 }
+.sharableLinkCard{
+    /* background-color:blue; */
+    display: grid;
+  grid-template-columns: 30% 30% 40%;
+}
+
+
 .topButtons{
     width:100%;
     padding:7px 7px 0px 0px;
   display: grid;
-  grid-template-columns: 33.33% 33.33% 33.33%;
-  border-bottom-style:none;
+  grid-template-columns: 30% 30% 40%;
+  border-bottom-style:solid;
   border-bottom-color: rgb(232,232,232);
   border-bottom-width:0.5px;
 }

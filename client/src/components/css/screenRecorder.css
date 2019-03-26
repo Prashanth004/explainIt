@@ -56,19 +56,45 @@ margin-top:10px;
     align-content: center;
     align-items: center;
     align-self: center;
+    padding-top:56px;
 }
 .convey{
     width:100%;
     text-align: center;
+    /* padding-top:200px; */
+}
+
+
+.recorderfooter{
+    height:20vh;
+    /* background-color:blue; */
+    float:bottom;
+    position:relative;
+
+}
+.recordMainScreen{
+    min-height:60vh;
+}
+.recorderInfo{
+    min-height:40vh;
+    text-align: center;
+    padding-top:150px;
+    padding-bottom: 60px;
+    font-size:22px;
+    font-weight:bold;
+}
+.statusBarCall{
+    display:grid;
+    grid-template-columns: 15% 70% 15%
 }
 
 .mainBtn{
-    margin:auto;
-    background-color:rgb(41, 85, 41);
-    /* background-color: rgb(133, 39, 39); */
-    width:30px;
-    height:30px;
-    border-radius:50%;
+   border-radius:15px;
+   width:65px;
+   height:30px;
+   border-style:none;
+   background-color: rgb(26, 66, 26);
+   color:white;
 }
 .mainBtn :active{
     border-style:none;

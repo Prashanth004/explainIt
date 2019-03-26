@@ -1,0 +1,106 @@
+.callImageDivAnwser{
+    /* position: absolute; */
+   /* bottom: 20px; */
+width:100%;
+margin:auto;
+margin-top:120px;
+}
+
+.canvToolDivCall{
+
+}
+.decreasePadding{
+    width:100%;
+margin:auto;
+    margin-top:40px;
+}
+.img__overlay {
+    padding:20px;
+    border-style:none;
+    height:65px;
+    width:65px;
+    border-radius:50%;
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    opacity: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+    background-color: rgb(184, 33, 6);
+    background: linear-gradient(65deg, rgb(233, 112, 13),rgb(248, 21, 5));
+    color: #fafafa;
+    font-size: 14px;
+  }
+  .img__overlay:hover {
+    opacity: 1;
+  }
+  .statusBarCall{
+      display:grid;
+      grid-template-columns: 15% 70% 15%
+  }
+
+
+  .shareVideoDisplay{
+      height:90vh;
+      width:90%;
+      margin:auto;
+      
+  }
+  .videoContainer{
+      width:100%;
+      height:80%;
+  }
+  
+
+  .VideoElementReciever{
+      width:100%;
+      height:100%;
+
+  }
+
+
+.callDiv{
+    width:95%;
+    /* height:60vh; */
+   
+}
+.callDetails{
+    padding-top:110px;
+    font-size:22px;
+    
+}
+
+.callPage-recieverImageDiv{
+    height:65px;
+    width:65px;
+    border-radius:50%;
+    margin:auto;
+   
+    text-align: center;
+    box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
+  
+}
+.callPage-recieverImage{
+    height:66px;
+    width:66px;
+    margin:auto;
+    margin-top:-92px;
+    border-radius:50%;
+   
+}
+.wait{
+    margin-top:0px;
+}
+
+.initialMessage{
+    min-height:100vh;
+    width:50%;
+    margin:auto;
+    padding-top:50px;
+    text-align: center;
+}

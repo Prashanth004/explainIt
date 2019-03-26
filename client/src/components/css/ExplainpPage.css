@@ -1,0 +1,15 @@
+.recorderConatainerPage{
+    width:45%;
+    margin:auto;
+    margin-top:55px;
+    background-color:white;
+    border-radius:8px;
+    border-style:solid;
+    border-width:0.5px;
+    border-color:rgb(109, 107, 107);
+    padding:15px;
+
+}
+.explainMain{
+    min-height:100vh;
+}

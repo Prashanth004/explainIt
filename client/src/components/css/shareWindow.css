@@ -1,0 +1,36 @@
+.containerWindow{
+    width:90%;
+    height:90%;
+    margin:auto;
+    background-color: white;
+    margin-top: 20px;
+    border-style:solid;
+    border-color:rgb(116, 115, 115);
+    border-width:0.5px;
+    border-radius:8px;
+}
+.sepWindow{
+    height:100vh;
+    padding-top:10px;
+}
+
+
+@media (min-width: 1000px) {
+
+    .containerWindow{
+        width:65%;
+    }
+}
+@media (min-width: 1200px) {
+
+    .containerWindow{
+        width:50%;
+    }
+}
+@media (min-width: 1200px) {
+
+    .containerWindow{
+        width:45%;
+    }
+}
+

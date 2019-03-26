@@ -51,6 +51,6 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),project.getP
 router.get('/issues/:issueid',project.getAllProjectByIssue)
 router.post('/items', passport.authenticate('jwt', { session: false }), project.storeItems)
 router.get('/items/:id', passport.authenticate('jwt', { session: false }), project.retrieveItems)
-
-
+router.put('/public',passport.authenticate('jwt', { session: false }), project.updateProjectpublic)
+router.put('/private',passport.authenticate('jwt', { session: false }), project.updateProjectprivate)
 module.exports = router;

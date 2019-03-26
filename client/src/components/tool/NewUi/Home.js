@@ -14,8 +14,10 @@ import Explain from './Explainit'
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
-import { getProfileDetails } from '../../../actions/profileAction'
+// import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
+import { resetValues } from '../../../actions/twitterApiAction'
+
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
@@ -231,16 +233,33 @@ class NewHome extends Component {
             this.handleConfirm()
         }
     }
+    screenShareWindow(){
+       
+        var href = config.react_url+"/sharescreen"
+        var width = window.innerHeight*(3/4),
+            height =  window.innerHeight*(3/4),
+            top =10,
+            left =10,
+            url = href,
+            opts = 'status=1' +
+                ',width=' + width +
+                ',height=' + height +
+                ',top=' + top +
+                ',left=' + left;
+        window.open(url, 'explain', opts);
+    }
 
     handleConfirm() {
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
+        this.props.resetValues();
         this.setState({
             openExplain: false
         })
     }
     explainTool = (e) => {
         if (this.props.isAauthenticated) {
+            alert(e.target.id)
             this.props.setIssueId(e.target.id)
             localStorage.setItem("issueId", e.target.id)
             window.open(config.react_url + '/explainIt', "_blank")
@@ -285,13 +304,14 @@ class NewHome extends Component {
         ) : (null)
 
         deatilsModal = (<IssueDetils />)
-
+        var explainDiv = (<Explain screenShareWindow={this.screenShareWindow} reStoreDefault={this.reStoreDefault} />)
 
         if (this.props.isAauthenticated) {
             if (this.state.openExplain) {
                 explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
             }
             if (this.props.created && !this.props.participated ) {
+                explainDiv = null
                 feedDiv = (
                     <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}>
                         <div className="issueContainer" >
@@ -302,7 +322,7 @@ class NewHome extends Component {
                     </Animated>)
             }
             else if (this.props.participated && !this.props.created) {
-              
+                explainDiv = null
                 feedDiv = (
                     <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
 
@@ -316,6 +336,8 @@ class NewHome extends Component {
 
             }
         }
+       
+
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
@@ -336,12 +358,13 @@ class NewHome extends Component {
                 else {
                     var displayLinkDiv = null
                 }
-                if (this.state.openExplain) {
-                    var explainItBtn = null
-                }
-                else {
-                    var explainItBtn = (<button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>)
-                }
+                // if (this.state.openExplain) {
+                //     var explainItBtn = null
+                // }
+                // else {
+                //     // var explainItBtn = (<button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>)
+
+                // }
 
                 var profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
@@ -351,7 +374,7 @@ class NewHome extends Component {
                         toggleCreatedIssue={this.toggleCreatedIssue}
                         toggleParticipatedIssue={this.toggleParticipatedIssue} />
                         {displayLinkDiv}
-                        {explainItBtn}
+                       
                     </div>
                 )
             }
@@ -368,6 +391,7 @@ class NewHome extends Component {
                     {callNotificationDiv}
                     <div>
                         {profileCardElement}
+                        {/* {explainItBt/n} */}
                     </div>
                     <div >
                         {explainDiv}
@@ -391,8 +415,8 @@ NewHome.PropType = {
     issues: PropType.array.isRequired,
     fetchProjectbyIssue: PropType.func.isRequired,
     setIssueId: PropType.func.isRequired,
-    getProfileDetails: PropType.func.isRequired,
-    saveExtensionDetails: PropType.func.isRequired,
+    // getProfileDetails: PropType.func.isRequired,
+    saveExtensionDetails: PropType.func.issaveExtensionDetailsRequired,
     saveSourceId: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     acceptCallDetails: PropType.func.isRequired,
@@ -400,7 +424,8 @@ NewHome.PropType = {
     missCall: PropType.func.isRequired,
     openParticipated: PropType.func.isRequired,
     openCreated: PropType.func.isRequired,
-    cancelAllMessageAction: PropType.func.isRequired
+    cancelAllMessageAction: PropType.func.isRequired,
+    resetValues:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -423,6 +448,7 @@ const mapStateToProps = state => ({
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
+
    
 
 })
@@ -438,8 +464,10 @@ export default connect(mapStateToProps, {
     saveExtensionDetails,
     saveSourceId,
     fetchProjectbyIssue,
-    setIssueId, getProfileDetails,
+    setIssueId, 
+    // getProfileDetails,
     clearAnswers, stillAuthenicated,
     fetchProjectbyIssue,
-    setIssueId
+    setIssueId,
+    resetValues
 })(NewHome)

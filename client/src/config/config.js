@@ -30,7 +30,11 @@ const conf = {
     END_CALL : "endCall",
     CHECK_TOKEN_VALIDITY : "checkTokenValidity",
     COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity",
-    RETRYCALL : "reTryCall"
+    RETRYCALL : "reTryCall",
+    ENDCALL_ACK:"endCallAck",
+    CLOSE_NETWORK_ISSUE : "closeDueToNetworkIssue",
+    SELF :"home",
+    VISIT_PROF : "notHome"
 
 
     

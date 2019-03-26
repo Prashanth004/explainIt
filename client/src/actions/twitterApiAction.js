@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import {GET_PROFILE_ID, GOT_NO_PROFILE,RESET_TWITTER_API_VALUES} from './types'
+import {GET_PROFILE_ID,SEND_TWEETS,SEND_TWEET_FAILED, GOT_NO_PROFILE,RESET_TWITTER_API_VALUES} from './types'
 import config from '../config/config'
 
 
@@ -17,7 +17,8 @@ export const getRecpientId = (twitterHandle) =>(dispatch)=>{
         if(res.data.success===1){
             dispatch({
                 type:GET_PROFILE_ID,
-                payload:res.data.id
+                payload:res.data,
+                twitterHandle :twitterHandle
             })
         }
         else{
@@ -35,6 +36,45 @@ export const getRecpientId = (twitterHandle) =>(dispatch)=>{
 
 
 
+
+}
+
+export const sendTweet=(sendTwHandle, 
+recTwiandle, ProjectAccessLink)=>(dispatch)=>{
+    console.log("sending tweetmessage")
+    var token = JSON.parse(localStorage.getItem('token'))
+    var postData = {
+        rectwiHandle: recTwiandle,
+        caltwiHandle:sendTwHandle,
+        LinktoAccess: ProjectAccessLink       
+      };
+      
+      let axiosConfig = {
+        headers: {
+            "Authorization":token,
+        }
+      };
+      axios.post(config.base_dir+'/api/tweetactions/tweet', postData, axiosConfig).then(response=>{
+        if(response.status=== 200 || response.status === 301)
+        {
+            dispatch({
+                type:SEND_TWEETS,
+                payload:true
+            })
+        }
+        else{
+            dispatch({
+                type:SEND_TWEET_FAILED,
+                payload:false
+            })
+
+        }
+    }).catch(err=>{
+        dispatch({
+            type:SEND_TWEET_FAILED,
+            payload:false
+        })
+    })
 
 }
 

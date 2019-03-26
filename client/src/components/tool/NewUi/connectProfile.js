@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import '../../css/newlanding.css'
+import '../../css/newlanding.css';
+import { Redirect } from 'react-router-dom';
+
 import Navbar from './Navbar'
 import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
@@ -70,6 +72,9 @@ class NewHome extends Component {
     }
 
     componentDidMount() {
+       
+       
+        
         if(!this.props.isPresentInExplain){
             this.props.getRecpientId(this.props.match.params.encrTwitterHandle)
         }
@@ -205,7 +210,11 @@ class NewHome extends Component {
     }
 
     render() {
-
+       
+        if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle){
+          
+             this.props.history.push("/");
+         }
         var open = this.state.openDialog
         var deatilsModal = null
         deatilsModal = (<IssueDetils />)
@@ -286,6 +295,7 @@ class NewHome extends Component {
         // }
         var self = this
         return (this.props.authAction)?(
+            // (!(this.props.twitterHandle===this.props.match.params.encrTwitterHandle))?(
             (!!this.props.fetchProfile)?(
             (!!this.props.isPresentInExplain)?(
             <div className="fullHome">
@@ -331,6 +341,7 @@ class NewHome extends Component {
                
             )
         ):(null)
+    // ):(<Redirect to="/"/>)
 
                ):(null)
     }
@@ -362,6 +373,7 @@ const mapStateToProps = state => ({
     myissues: state.profile.myIssues,
     participatedIssues: state.profile.participatedIssue,
     twitterHandle :state.profile.twitterHandle,
+    authTwitterHandle:state.auth.twitterHandle,
     email: state.auth.email,
     userId: state.visitProfile.id,
     fetchProfile:state.visitProfile.fetchProfile,

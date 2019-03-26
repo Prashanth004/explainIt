@@ -23,9 +23,9 @@ export default (props) => {
                             </div>
                         </div>
                         <div className="loader" >
-                        {loadingAnim}
+                      <p>Connecting...</p>
                         </div>
-                        <div className="recieverImage">
+                        <div className="recieverImageDiv">
                         <div className="profileImageCall">
                                 <img className={burProps} src={props.recieverImageUrl}/>
                             </div>

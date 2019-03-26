@@ -35,6 +35,8 @@
 
   }
   .sharableLink{
+    width:20%;
+    margin-left:0px;
     background-color: white;
     text-align: left;
     align-content: left;
@@ -135,7 +137,7 @@ text-align: center;
   min-height:100vh;
 }
 .inviteMagic{
-  min-width: 40px;
+ width: 40px;
   padding:30px;
   margin-top:85px;
   /* background-color:white; */
@@ -267,11 +269,11 @@ margin-top:10px;
       
   }
   .questionImg{
-    height: 200px;
+    height: 155 px;
     width:100%;
   }
   .twitter{
-    float:right;
+    /* float:right; */
     height:27px;
     width:27px
   }
@@ -520,7 +522,7 @@ border-style: none;
         width:60%;
       }
       .questionImg{
-        height: 300px;
+        height: 250px;
         width:100%;
       }
       .profileImage{
@@ -553,7 +555,7 @@ border-style: none;
         width:65%;
       }
       .questionImg{
-        height: 350px;
+        height: 300px;
         width:100%;
       }
       .ProfileDiv{

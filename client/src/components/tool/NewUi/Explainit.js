@@ -44,7 +44,8 @@ class Explainit extends Component {
     this.displayShareBtn = this.displayShareBtn.bind(this);
     this.shareCanvasScreen = this.shareCanvasScreen.bind(this);
     this.recordCanvasScreen = this.recordCanvasScreen.bind(this);
-    this.resize = this.resize.bind(this)
+    this.resize = this.resize.bind(this);
+    this.openScreenShare = this.openScreenShare.bind(this)
   }
   downloadExtension() {
     window.open(config.EXTENSION_URL, "_self")
@@ -107,6 +108,10 @@ class Explainit extends Component {
       showRecordBtns: false,
       showShareBtns: !this.state.showShareBtns
     })
+  }
+  openScreenShare(){
+    localStorage.setItem('issueId',null)
+    this.props.screenShareWindow()
   }
 
   showErrorAlert() {
@@ -174,30 +179,30 @@ class Explainit extends Component {
     var percentage = "85%"
     var CanvasScreenButton = null;
     var formDiv = null;
-    if (this.state.showShareBtns) {
-      CanvasScreenButton = (
-        <div className="divRecordOrShare">
-          <button className="buttonDark" onClick={this.shareCanvasScreen}>
-            ShareCanvas
-          </button>
-          <button className="buttonDark" onClick={this.shareFullScreenShare}>
-            ShareScreen
-            </button>
-        </div>
-      )
-    }
-    else if (this.state.showRecordBtns) {
-      CanvasScreenButton = (
-        <div className="divRecordOrShare">
-          <button className="buttonDark" onClick={this.recordCanvasScreen}>
-            RecordCanvas
-          </button>
-          <button className="buttonDark" onClick={this.recordFullScreen}>
-            RecordScreen
-            </button>
-        </div>
-      )
-    }
+    // if (this.state.showShareBtns) {
+    //   CanvasScreenButton = (
+    //     <div className="divRecordOrShare">
+    //       <button className="buttonDark" onClick={this.shareCanvasScreen}>
+    //         ShareCanvas
+    //       </button>
+    //       <button className="buttonDark" onClick={this.shareFullScreenShare}>
+    //         ShareScreen
+    //         </button>
+    //     </div>
+    //   )
+    // }
+    // else if (this.state.showRecordBtns) {
+    //   CanvasScreenButton = (
+    //     <div className="divRecordOrShare">
+    //       <button className="buttonDark" onClick={this.recordCanvasScreen}>
+    //         RecordCanvas
+    //       </button>
+    //       <button className="buttonDark" onClick={this.recordFullScreen}>
+    //         RecordScreen
+    //         </button>
+    //     </div>
+    //   )
+    // }
     if (this.props.screenAction === SCREEN_RECORD ||
       this.props.screenAction === SCREEN_SHARE) {
         percentage = "85%";
@@ -210,43 +215,44 @@ class Explainit extends Component {
       if (this.props.screenAction === FULL_SCREEN_SHARE ||
         this.props.screenAction === FULL_SCREEN_RECORD){
           formDiv = null
-          if(this.state.reducedWidth){
-            percentage = "90%";
+          if(this.state.reducedWidth || this.props.showCanvas){
+            percentage = "80%";
           }
           else{
-            percentage = "56%";
+            percentage = "65%";
           }
         
         }
         else{
-          if(this.state.reducedWidth){
+          if(this.state.reducedWidth || this.props.showCanvas){
            
-            percentage = "90%";
+            percentage = "80%";
           }
           else{
-            percentage = "56%";
+            percentage = "65%";
           }
         
           formDiv = (
             <div className="formContainer">
               <div className="imageBtns">
-    
+               
                 <div className="RecordBtn">
                   <span className="hint--bottom" aria-label="Record screen!">
-                    <img onClick={this.displayRecordBtn} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                    <img onClick={this.recordFullScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
                   </span>
                 </div>
     
                 <div className="screenShareBtn">
                   <span className="hint--bottom" aria-label="Share screen!">
-                    <img onClick={this.displayShareBtn} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                    <img onClick={this.openScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                   </span>
                 </div>
+              </div>
                 {/* <button className="buttonLight" onClick={this.shareFullScreenShare}>Share Screen</button> */}
                 {/* <button className="buttonLight" onClick={this.recordFullScreen}>Record Screen</button> */}
-              </div>
+            
               <div>
-                {CanvasScreenButton}
+                {/* {CanvasScreenButton} */}
               </div>
             </div>
           )
@@ -293,20 +299,23 @@ class Explainit extends Component {
     else if (this.props.screenAction === FULL_SCREEN_RECORD) {
       shareElement = (<div className="shareControl">
         <FullScreenRecord
+          reStoreDefault={this.props.reStoreDefault}
           savefile={this.saveVideoData}
         />
       </div>)
     }
+   
     return (this.state.isInstalled) ? (
+
       <div>
         {/* <div className="explainContainer"> */}
 
         {/* </div> */}
         <div className="explainContainer" style={{width : percentage}}>
 
-          <Button close onClick={this.props.reStoreDefault} />
+       
           {formDiv}
-          <div className="formContainer">
+          <div className="shareTime">
 
             <div className="shareElement">
               {shareElement}
@@ -342,6 +351,7 @@ const mapStateToProps = state => ({
   success: state.issues.successCreation,  
   screenAction: state.tools.screenAction,
   isSignedIn: state.auth.isAuthenticated,
+  showCanvas:state.canvasActions.showCanvas
 
 })
 export default connect(mapStateToProps, { displayScrenRecord, displayShareScreen, creatAnsProject, setIssueId, displayFullScreShare, displayFullScrenRecord, cancelValidationErrors })(Explainit)
