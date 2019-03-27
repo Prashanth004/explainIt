@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter, Route} from 'react-router-dom'
+import { BrowserRouter, Switch, Route} from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
 import Login from './components/tool/NewUi/Login'
 import Signup from './components/Signup'
+import NoMatch from './components/tool/NewUi/NoMatch'
 import Newlogin from './components/Newlogin'
 import Home from './components/tool/NewUi/Home'
 import ShareWindow from './components/tool/NewUi/ShareWindow'
@@ -23,6 +24,7 @@ class App extends Component {
       <Provider store={store}>
         <div className="App">
           <BrowserRouter>
+          <Switch>
           <Route path ="/connect/:callerid" component= {DisplayShare}/>
             <Route exact path ="/" component={Home}/>
             <Route exact path = "/profile/:encrTwitterHandle"component = {visitProfile}/>
@@ -35,6 +37,8 @@ class App extends Component {
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact  path='/signup' component={Signup} />
             <Route exct path = '/sharescreen' component={ShareWindow}/>
+            <Route component={NoMatch} />
+            </Switch>
           </BrowserRouter>
         </div>
       </Provider>

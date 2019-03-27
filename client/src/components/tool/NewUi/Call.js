@@ -37,7 +37,7 @@ class Call extends Component {
             <div className="statusBarCall">
                 <div className="timerDiv">
                 <Countdown
-                    date={Date.now() + 180000}
+                    date={Date.now() +  this.props.timeAloted*60*1000}
                     renderer={this.props.renderer}
                 />
                 </div>
@@ -58,10 +58,6 @@ class Call extends Component {
                   
                         <img className="callPage-recieverImage"  src={this.props.otherPersonPic}></img>
                     </div>
-                   
-                    {/* <div class="overlayEndCall">
-                        {/* <div class="text">Hello World</div> */}
-                    {/* </div>  */}
                 </div>
 
             </div>

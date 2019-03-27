@@ -222,12 +222,6 @@ export class ScreenRecorder extends Component {
                  <p>Link to access your saved project</p>
                  <CopyToClipboard sharablelink = {this.props.sharablelink} />
 
-                    {/* <input className="myInput" type="text" value={this.props.sharablelink}/>
-                    <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                        <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                        Copy text
-                        </button>
-                    </span> */}
              </div>)
 
          }

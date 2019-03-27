@@ -1,19 +1,14 @@
 import React, { Component } from 'react'
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import Switch from "react-switch"
 import ImagesOfExplainers from '../../DisplayExplained';
-import { IoIosLink } from "react-icons/io";
 import CopyToClipboard from '../CopytoClipboard'
 import config from '../../../config/config'
 import { deleteProjects, checkPublicValue } from '../../../actions/projectActions';
 import Swal from 'sweetalert2';
-import { MdDelete } from "react-icons/md";
-import Toggle from 'react-toggle';
 import '../../css/toggle.css'
 import { confirmAlert } from 'react-confirm-alert'; // Import4
-import { FiLink2, FiDelete } from "react-icons/fi";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import DisplayIssueTopBtns from './DisplayIssueTpBtns'
 
 
 
@@ -26,7 +21,8 @@ class DisplayIssue extends Component {
             projectId: null,
             deleteItemId: null,
             issueArray: null,
-            dropdownOpen: false
+            dropdownOpen: false,
+            itsHome: false
         }
         this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
         this.deleteProjects = this.deleteProjects.bind(this);
@@ -37,7 +33,16 @@ class DisplayIssue extends Component {
     componentWillMount() {
         this.setState({
             issueArray: this.props.issueArray
+
         })
+        if (this.props.home === config.HOME)
+            this.setState({
+                itsHome: true
+            })
+        else
+            this.setState({
+                itsHome: false
+            })
     }
 
     deleteProjects(e) {
@@ -66,7 +71,6 @@ class DisplayIssue extends Component {
     handleConfirm() {
         var id = this.state.deleteItemId
         this.props.deleteProjects(id);
-        // document.querySelector('#'+this.state.deleteItemId).style.display = "none"
         const newState = this.state;
         const index = newState.issueArray.findIndex(a => a.issueid === id);
 
@@ -118,17 +122,16 @@ class DisplayIssue extends Component {
         }));
     }
     toggleDisplayLink(e) {
-     console.log(e.currentTarget.id)
+        console.log(e.currentTarget.id)
         this.setState({
             projectId: e.currentTarget.id,
             displayCopyEle: !this.state.displayCopyEle,
         })
-        var element = document.querySelector('#clipboard_'+e.currentTarget.id)
-        if(element.style.display === 'none')
-        {
+        var element = document.querySelector('#clipboard_' + e.currentTarget.id)
+        if (element.style.display === 'none') {
             element.style.display = 'block'
         }
-        else{
+        else {
             element.style.display = 'none'
         }
     }
@@ -151,53 +154,17 @@ class DisplayIssue extends Component {
         }
         else {
             issueItems = this.state.issueArray.map((issue, index) => (
-                <div  key={issue.issueid} className="issueCard">
+                <div key={issue.issueid} className="issueCard">
                     <div className="orginCard">
-                        <div id={issue.issueid} className="topButtons">
-                            <div id={issue.issueid} className="sharableLinkCard">
-                                <div  id={issue.issueid} onClick={this.toggleDisplayLink} className="icons">
-                                    <span id={issue.issueid}  className="hint--top" aria-label="Get shareable Linkn">
-                                        <FiLink2 id={issue.issueid}  className="linkElementSym" id={issue.issueid}  />
-                                    </span>
-                                </div>
-                                <div>
-                                    <label id={issue.issueid}>
-                                        <span className="hint--top" aria-label="Public">
-
-                                            <Toggle
-                                                id={issue.issueid}
-                                                defaultChecked={Number(issue.public)}
-                                                className='custom-classname'
-                                                icons={false}
-                                                onChange={this.handlePublicPrives} />
-                                        </span>
-                                    </label>
-                                </div>
-                                <div>
-
-                                </div>
-
-                            </div>
-                            <div id={issue.issueid} >
-                                <div id={issue.issueid} className="twitter">
-                                    <img id={issue.issueid} width="100%" height="100%" onClick={this.tweetWindow} src={require('../../images/twitter3.png')} />
-                                </div>
-                            </div>
-                            <div id={issue.issueid} className="twitterHolder">
-
-                                <div className="iconsright">
-                                    <span className="hint--top" aria-label="Delete">
-                                        <FiDelete id={issue.issueid} onClick={this.deleteProjects} />
-                                    </span>
-                                </div>
-                                {/* <button  id={issue.issueid} className="buttonDark twitterBtn"
-                       onClick={this.tweetWindow}><i class="fa fa-twitter twitterBtn">  Tweet</i></button> */}
-
-                            </div>
-                        </div >
+                       <DisplayIssueTopBtns
+                       issue={issue}
+                       toggleDisplayLink={this.toggleDisplayLink} 
+                       tweetWindow = {this.tweetWindow}
+                       deleteProjects= {this.deleteProjects}
+                       itsHome = {this.state.itsHome}/>
                         {/* {copyElement} */}
-                        <div className="copyDisplay" id={"clipboard_"+issue.issueid} style={{display:"none"}}>
-                            <CopyToClipboard   sharablelink={config.react_url + '/project/' + this.state.projectId} />
+                        <div className="copyDisplay" id={"clipboard_" + issue.issueid} style={{ display: "none" }}>
+                            <CopyToClipboard sharablelink={config.react_url + '/project/' + this.state.projectId} />
                         </div>
                         <div id={issue.issueid} onClick={this.props.togglemodal} className="questionText">
                             <p id={issue.issueid} >{issue.textexplain}</p>

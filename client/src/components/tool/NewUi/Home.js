@@ -259,7 +259,7 @@ class NewHome extends Component {
     }
     explainTool = (e) => {
         if (this.props.isAauthenticated) {
-            alert(e.target.id)
+            // alert(e.target.id)
             this.props.setIssueId(e.target.id)
             localStorage.setItem("issueId", e.target.id)
             window.open(config.react_url + '/explainIt', "_blank")
@@ -317,7 +317,7 @@ class NewHome extends Component {
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
                             </div>
-                            <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={issuesCreated} />
+                            <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
                         </div>
                     </Animated>)
             }
@@ -330,7 +330,7 @@ class NewHome extends Component {
 
                             <div className="closeBtnHolder">
                             </div>
-                            <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                            <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
                         </div>
                     </Animated>)
 

@@ -5,6 +5,7 @@ import CopyToClipboard from '../CopytoClipboard';
 import {setStream} from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
 import Dummy from './dummy';
+import SaveElement from './Saveproject'
 import Form from '../Form'
 import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
 import { Button } from 'reactstrap';
@@ -27,16 +28,19 @@ class FullScreenRecorder extends Component {
             percentage:"0%",
             copyStatus:"copy link",
             saveBtnClicked:false,
-            showCanvas:false
+            showCanvas:false,
+           
            
             
         }
         this.recordScreenStop = this.recordScreenStop.bind(this);
+        this.savefilePrivate = this.savefilePrivate.bind(this);
+        this.savefilePublic = this.savefilePublic.bind(this);
         this.renderer = this.renderer.bind(this);
         this.startBar =  this.startBar.bind(this);
         this.startRecoding = this.startRecoding.bind(this);
         this.toggle = this.toggle.bind(this);
-        this.savefile = this.savefile.bind(this);
+        this.saveClicked = this.saveClicked.bind(this);
         this.discardChanges = this.discardChanges.bind(this);
         this.receiveMessage = this.receiveMessage.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
@@ -198,13 +202,22 @@ class FullScreenRecorder extends Component {
             this.props.fullStartedRecording();
         }
     }
-savefile(){
-    this.props.savefile(this.state.blob)
+    saveClicked(){
+    // this.props.savefile(this.state.blob)
     this.setState({
         saveBtnClicked: true
     })
-
 }
+
+savefilePublic(textData) {
+    this.props.savefile(this.state.blob, 1, textData)
+   
+}
+savefilePrivate(textData) {
+    var blob = this.state.blob
+    this.props.savefile(blob, 0, textData)
+}
+
 toggleCanvas(){
     if(this.state.showCanvas)
         this.props.hideCanvas()
@@ -212,7 +225,6 @@ toggleCanvas(){
     this.setState({
         showCanvas:!this.state.showCanvas
     })
-    
 }
     recordScreenStop() {
         var self = this;
@@ -340,25 +352,26 @@ toggleCanvas(){
        
         // var timer = null;
      
-        if(this.props.isFullRecordCompleted === true && !this.state.saveBtnClicked && this.props.isSaved===false){
+        if(this.props.isFullRecordCompleted === true && this.props.isSaved===false){
             var postShareElements= (<div className = "postRecord">
             <div classNam="showVideoElement">
             {videoplayer}
             </div>
+            <SaveElement
+            isSaveClicked={this.state.saveBtnClicked}
+            saveClicked={this.saveClicked}
+            discard={this.discardChanges}
+            savefilePublic={this.savefilePublic}
+            savefilePrivate={this.savefilePrivate} />
        
-                 <p>Do you want to sav it?</p>
+                 {/* <p>Do you want to sav it?</p>
                  <span className="hint--bottom" aria-label="Save Call">
                 <FiSave className="icons" onClick={this.savefile} />
             </span>
             <span className="hint--bottom" aria-label="Cancel">
                 <FiX className="icons" onClick={this.discardChanges} />
-            </span>
-                 {/* <button onClick={this.savefile} className="buttonLight save">
-                   Save
-                 </button>
-                 <button onClick={this.discardChanges} className="buttonDark save">
-                     Discard
-                 </button> */}
+            </span> */}
+                
              </div>)
          }
          else if(this.props.isSaved ){
@@ -368,20 +381,14 @@ toggleCanvas(){
                  <p>Link to access your saved project</p>
                  <CopyToClipboard sharablelink = {this.props.sharablelink} />
 
-                 {/* <input className="myInput" type="text" value={this.props.sharablelink}/>
-                <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                    <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                    Copy text
-                    </button>
-                </span> */}
              </div>)
 
          }
-         else if(this.state.saveBtnClicked && !this.props.isSaved){
-            var postShareElements= (<div>
-                 <p>Save processing..</p>
-             </div>)
-         }
+        //  else if(this.state.saveBtnClicked && !this.props.isSaved){
+        //     var postShareElements= (<div>
+        //          <p>Save processing..</p>
+        //      </div>)
+        //  }
        
        
         if (this.state.shareScreenLink) {
@@ -389,7 +396,7 @@ toggleCanvas(){
         }
         return (
             <div className="recordMainScreen">
-             {/* <Button close onClick={this.props.reStoreDefault} /> */}
+             <Button close onClick={this.props.reStoreDefault} />
                {recordingElements}
                 {postShareElements}
              </div>

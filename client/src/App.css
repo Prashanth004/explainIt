@@ -51,7 +51,7 @@ outline-style: none}
   padding: 0px 10px 0px 10px;
   /* border-color:rgb(153,153,153); */
   border-color:black;
-  color:rgb(153,153,153);
+  color:rgb(102, 102, 102);
   outline:none;
   outline-style: none;
   border-radius:3px;
@@ -64,6 +64,15 @@ outline-style: none}
 .buttonLight:hover{
   color:black;
   border-color:black;
+}
+
+a[href], input[type='submit'], input[type='image'], label[for],span, select, button, .pointer {
+  cursor: pointer;
+}
+
+.buttonLight:disabled{
+  color:rgb(211, 210, 210);
+  border-color:rgb(209, 209, 209)
 }
 audio{
   height:30px;

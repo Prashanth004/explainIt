@@ -42,10 +42,10 @@ class ShareWindow extends Component {
 
 
 
-    saveVideoData(data, isPublic) {
+    saveVideoData(data, isPublic,text) {
         console.log("the data whcih is gonna get saved : ", data)
         var issueId = JSON.parse(localStorage.getItem('issueId'))
-        var textExplain = " "
+        var textExplain = text
         var imgData = "null"
         var items = {}
         var isquestion = " "
@@ -64,7 +64,7 @@ class ShareWindow extends Component {
     if (this.props.screenAction === FULL_SCREEN_RECORD) {
         var shareElement = (<div className="containerWindow">
           <FullScreenRecord
-           
+            
             savefile={this.saveVideoData}
           />
         </div>)

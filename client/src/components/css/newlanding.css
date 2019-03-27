@@ -96,14 +96,16 @@ padding-top:-10px;
     margin:10px;
   
 }  */
-
+a{
+  color:rgb(12, 12, 53);
+}
 .LinkBtn{
   color:white;
 
 }
   li a {
   
-    color:rgb(78, 78, 78);
+    color:rgb(12, 12, 53);
   
   }
 
@@ -137,7 +139,7 @@ text-align: center;
   min-height:100vh;
 }
 .inviteMagic{
- width: 40px;
+
   padding:30px;
   margin-top:85px;
   /* background-color:white; */
@@ -156,13 +158,14 @@ text-align: center;
 }
 .blackwhite{
   text-align: right;
-  padding:10px;
+  padding:8px;
+  margin-top:0px;
 
   height:50%;
   /* background-color: rgb(252, 252, 250); */
   background-color: #dddd;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 6.5px;
+  border-top-right-radius: 6.5px;
 }
 .ProfileDiv{
   width:95%;
@@ -198,7 +201,7 @@ margin-top:10px;
 .numberShow{
   position: relative;
   font-weight: bold;
-
+  color:rgb(11, 11, 92);
   /* top:px; */
   /* color:black; */
   font-size:20px;
@@ -317,6 +320,9 @@ margin-top:10px;
 }
   
   /* visited link */
+  a{
+    color:blue;
+  }
   a:visited {
     color: rgb(68, 68, 68);
   }
@@ -329,7 +335,7 @@ margin-top:10px;
   
   /* selected link */
   a:active {
-    color: rgb(68, 68, 68);
+    color:blue;
   }
   .issueCard{
       width:93%;
@@ -537,7 +543,7 @@ border-style: none;
        
       }
       .displayNumber{
-    
+        
         font-size: 13px;
        
       }
@@ -563,18 +569,30 @@ border-style: none;
         margin:auto;
       }
       .Profilecard{
-        width:70%;
+        width:60%;
       }
       .profileImage{
-        height:125px;
-        width:125px;
+        height:115px;
+        width:115px;
       
       }
       .profileImageElement{
        /* background-color: #ffff; */
-        height:126px;
-        width:126px;
+        height:116px;
+        width:116px;
        
+      }
+      .float{
+        position:fixed;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        right:40px;
+        background-color:black;
+        color:#FFF;
+        border-radius:50px;
+        text-align:center;
+        box-shadow: 0px 0px 10px 2px rgb(150, 149, 149);
       }
       .displayNumber{
     

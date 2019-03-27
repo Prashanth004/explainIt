@@ -1,12 +1,26 @@
 .LinkDisplay{
-    width:90%;
+    width:100%;
     margin:auto;
     min-height:60vh;
     background-color: white;
     text-align: center;
     align-content: center;
     align-items: center;
+    border-radius:5px;
 
+}
+.inputTime{
+    width:60%;
+    margin:auto;
+}
+.timerDuration{
+    padding-top:20px;
+    padding-bottom:10px;
+    width:99%;
+    margin:auto;
+    margin-top:50px;
+    font-size:12px;
+    background-color: #eee;
 }
 .DisconMessage{
     width:80%;
@@ -42,8 +56,8 @@
 }
 .twitterBird{
   width:100%;
-    padding-top:105px;
-    padding-bottom:60px;
+    padding-top:45px;
+    padding-bottom:30px;
     text-align: center;
     align-content: center;
 

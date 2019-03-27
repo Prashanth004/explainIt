@@ -34,7 +34,11 @@ const conf = {
     ENDCALL_ACK:"endCallAck",
     CLOSE_NETWORK_ISSUE : "closeDueToNetworkIssue",
     SELF :"home",
-    VISIT_PROF : "notHome"
+    VISIT_PROF : "notHome",
+    HOME : "home",
+    NOT_HOME:"nothome",
+    PROJECT_TEXT_LIMIT:200,
+    MAX_VIDEO_TIME_LIMIT:20
 
 
     

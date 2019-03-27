@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { resetValues } from '../../../actions/twitterApiAction'
-import { Button } from 'reactstrap'
 import Dummy from './dummy'
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
 import config from '../../../config/config';
 import '../../css/shareScreen.css';
-import CopyToClipboard from '../CopytoClipboard'
 import { FaArrowLeft } from "react-icons/fa";
 import CallImage from './CallImage'
 import socketIOClient from "socket.io-client";
 import TweetSearch from './tweetSearch';
 import Call from './Call';
-import { FiSave, FiX, FiTwitter, FiVideo } from "react-icons/fi";
+import { FiX, FiTwitter, FiVideo } from "react-icons/fi";
 import { MdReplay, MdCallEnd } from "react-icons/md";
+import SaveElement from './Saveproject';
+import InputNumber from './InputNumber'
+
 import {
     fullStartedSharing,
     fullStopedSharing,
@@ -71,8 +72,12 @@ class ScreenRecorder extends Component {
             doneTweeting: false,
             stopedSharing: false,
             tweetBtnPressed: false,
-            isSaveClicked:false
-
+            isSaveClicked: false,
+            noOfMinutes: 3,
+            limitExce: false,
+            maxTimeForVideo: null,
+            emptyNumber: false,
+            negNumber: false
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
@@ -89,7 +94,32 @@ class ScreenRecorder extends Component {
         this.closeButton = this.closeButton.bind(this);
         this.tweetToParicipant = this.tweetToParicipant.bind(this);
         this.peerCall = this.peerCall.bind(this);
-        this.saveClicked = this.saveClicked.bind(this)
+        this.saveClicked = this.saveClicked.bind(this);
+        this.changeImputNumber = this.changeImputNumber.bind(this);
+
+    }
+    changeImputNumber(e) {
+        var noOfMinutestemp = e.target.value;
+        if (noOfMinutestemp !== null && noOfMinutestemp > this.state.maxTimeForVideo) {
+            this.setState({
+                limitExce: true
+            })
+        }
+        else if (noOfMinutestemp < 1) {
+            this.setState({
+                negNumber: true
+            })
+        }
+        else {
+            this.setState({
+                limitExce: false,
+                negNumber: false
+            })
+        }
+        this.setState({
+            noOfMinutes: e.target.value,
+            empty: false
+        })
 
     }
 
@@ -135,13 +165,6 @@ class ScreenRecorder extends Component {
                 window.getTracks(screenStream, 'video').forEach(function (track) {
                     finalStream.addTrack(track);
                 });
-                // console.log("peer : ", peer)
-                // var peer = self.state.peer
-                // var call = peer.call(self.state.destkey, finalStream);
-                // var recorder1 = RecordRTC(finalStream, {
-                //     type: 'video'
-                // });
-                // recorder1.startRecording();
                 self.props.setStream(audioStream, screenStream, finalStream)
                 self.setState({
                     audioStream: audioStream,
@@ -149,22 +172,6 @@ class ScreenRecorder extends Component {
                     finalStream: finalStream,
                     retry: false
                 })
-                // if (call) {
-                //     call.on('stream', function (remoteStream) {
-                //         console.log("call answer recieved : ", remoteStream)
-                //         var audio = document.querySelector('#video');
-                //         audio.srcObject = remoteStream
-                //         audio.play()
-                //         self.setState({
-                //             connected: true
-                //         })
-
-                //     }, function (err) {
-                //         console.log('Failed to get local stream', err);
-                //     });
-
-
-                // }
             }).catch(err => {
                 console.log("error ouucres : ", err)
             })
@@ -304,6 +311,9 @@ class ScreenRecorder extends Component {
     }
 
     componentWillMount() {
+        this.setState({
+            maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT
+        })
         this.props.stillAuthenicated()
         const socket = socketIOClient(config.base_dir);
         this.setState({
@@ -337,13 +347,6 @@ class ScreenRecorder extends Component {
                 else if (ua.browser.family === "Firefox") {
                     self.startScreenShareSend()
                 }
-                //    setTimeout(()=>{
-                //        if(!this.props.isSceenSharing && !self.props.isSharingCompleted && !self.props.CallAck){
-                //             self.setState({
-                //                 conDidNotInitiate: true
-                //             })
-                //        }
-                //    },20*1000)
                 conn.on('data', (data) => {
                     console.log("data : ", data)
 
@@ -417,7 +420,7 @@ class ScreenRecorder extends Component {
             type: 'video'
         });
         recorder1.startRecording();
-       
+
         if (call) {
             call.on('stream', function (remoteStream) {
                 console.log("call answer recieved : ", remoteStream)
@@ -447,7 +450,7 @@ class ScreenRecorder extends Component {
             })
         }
         this.setState({
-            recorder :recorder1
+            recorder: recorder1
         })
     }
 
@@ -465,8 +468,7 @@ class ScreenRecorder extends Component {
                 'peerId': this.state.peerId,
                 'timerEnded': true
             })
-            // Render a completed state
-            // this.stopShare()
+
             var peer = this.state.peer
             if (peer != null) {
                 peer.destroy()
@@ -534,8 +536,8 @@ class ScreenRecorder extends Component {
 
     }
 
-    savefilePublic() {
-        this.props.savefile(this.state.blob, 1)
+    savefilePublic(textData) {
+        this.props.savefile(this.state.blob, 1, textData)
         var peer = this.state.peer;
         if (peer !== null) {
             peer.destroy();
@@ -544,10 +546,10 @@ class ScreenRecorder extends Component {
             })
         }
     }
-    savefilePrivate(){
+    savefilePrivate(textData) {
         var blob = this.state.blob
         console.log("blob : ", blob)
-        this.props.savefile(blob, 0)
+        this.props.savefile(blob, 0, textData)
         var peer = this.state.peer;
         if (peer !== null) {
             peer.destroy();
@@ -561,9 +563,10 @@ class ScreenRecorder extends Component {
         this.props.restAllToolValue();
         this.props.displayFullScrenRecord()
     }
-    saveClicked(){
+    saveClicked() {
         this.setState({
-            isSaveClicked:true  })
+            isSaveClicked: true
+        })
     }
     componentWillUnmount() {
         var peer = this.state.peer
@@ -589,7 +592,7 @@ class ScreenRecorder extends Component {
 
     }
     tweetToParicipant() {
-        
+
         this.props.sendTweet(
             this.props.callerTwitterHandle,
             this.props.recieverTwitterHandle,
@@ -654,7 +657,7 @@ class ScreenRecorder extends Component {
             }
 
             console.log("recorder1 : ", recorder1)
-            // if (recorder1)
+            if (recorder1 != null)
                 recorder1.stopRecording(function () {
                     console.log("recorder 1 : ", recorder1)
                     var blob = recorder1.getBlob();
@@ -683,19 +686,12 @@ class ScreenRecorder extends Component {
     render() {
         var linkElement = " ";
         var backArrow = null
-        const saveBtns = (!this.state.isSaveClicked)?(<div>
-            <span className="hint--bottom" aria-label="Save Call">
-                <FiSave className="icons" onClick={this.saveClicked} />
-            </span>
-            <span className="hint--bottom" aria-label="Cancel">
-                <FiX className="icons" onClick={this.discard} />
-            </span>
-        </div>):(<div>
-            <button className="buttonDark" onClick={this.savefilePublic}>Public</button>
-            <button className="buttonDark" onClick={this.savefilePrivate}>Private</button>
-        </div>)
-       
-
+        const saveBtns = <SaveElement
+            isSaveClicked={this.state.isSaveClicked}
+            saveClicked={this.saveClicked}
+            discard={this.discard}
+            savefilePublic={this.savefilePublic}
+            savefilePrivate={this.savefilePrivate} />
         var noInternet = null
         if (this.state.noInternet)
             noInternet = "No Intenet conecticvity"
@@ -703,18 +699,15 @@ class ScreenRecorder extends Component {
         if (this.state.timerEnded && !this.props.isSaved)
             var MessageDisconnected = (
                 <div>
-                    <p><b>Dissconected as the call exceded 3 mins</b></p>
+                    <p><b>Dissconected as the call exceded {this.state.noOfMinutes} mins</b></p>
                     <p>You need to share a new link to connect again</p>
-
-
                     {saveBtns}
-                   
                 </div>)
         else if (this.state.showDisconectMessage && !this.props.isSaved && !this.state.closedHere && this.state.manualClose) {
             var MessageDisconnected = (<div>
                 <p><b>Disconnected from other peer</b></p>
                 {saveBtns}
-               
+
             </div>)
         }
         else if (!this.state.manualClose && !this.props.isSaved && !this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
@@ -728,7 +721,7 @@ class ScreenRecorder extends Component {
                         <FiVideo className="icons" onClick={this.recordCall} />
                     </span>
                     {saveBtns}
-                   
+
                 </div>
             )
         else if (!this.state.manualClose && !this.props.isSaved && this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
@@ -742,7 +735,7 @@ class ScreenRecorder extends Component {
                         <FiVideo className="icons" onClick={this.recordCall} />
                     </span>
                     {saveBtns}
-                   
+
                 </div>
             )
         else if (!this.state.manualClose && !this.props.isSaved && !this.state.retry)
@@ -755,7 +748,7 @@ class ScreenRecorder extends Component {
                         <FiVideo className="icons" onClick={this.recordCall} />
                     </span>
                     {saveBtns}
-                   
+
                 </div>
             )
         else if (this.state.retry && !this.props.isSaved && !this.state.retryTimeOut && !this.state.noInternet)
@@ -774,35 +767,26 @@ class ScreenRecorder extends Component {
                         <FiVideo className="icons" onClick={this.recordCall} />
                     </span>
                     {saveBtns}
-                   
+
                 </div>
             )
         else if (!this.props.isSaved) {
             var MessageDisconnected = (<div>
                 <p><b>Call ended</b></p>
                 {saveBtns}
-               
+
             </div>)
         }
 
         if (this.props.isSceenSharing) {
-            // timer = (<Countdown
-            //     date={Date.now() + 180000}
-            //     renderer={this.renderer}
-            // />)
             var shareTimeElements = (
                 <div>
-
-                    <Call renderer={this.renderer} endCall={this.endCall} otherPersonPic={this.props.twirecieverPrfilePic} />
-                    {/* <div className="recordHolder">
-                        {/* {timer} */}
-
-                    {/* <button className="Rec"></button>
-                    </div> */}
-
-                    {/* <div id="main-circle">
-                    <div onClick ={this.endCall}id="inner-circle">END</div>
-                </div> */}
+                    <Call
+                        renderer={this.renderer}
+                        endCall={this.endCall}
+                        otherPersonPic={this.props.twirecieverPrfilePic}
+                        timeAloted = {this.state.noOfMinutes}
+                    />
                 </div>
             )
         }
@@ -839,7 +823,7 @@ class ScreenRecorder extends Component {
                         <FiX className="icons" onClick={this.discard} onClick={this.discard} />
                     </span>
                 </div>)
-              else if (!this.props.tweetSuccess  && this.state.tweetBtnPressed && this.props.twitterSendDone) {
+            else if (!this.props.tweetSuccess && this.state.tweetBtnPressed && this.props.twitterSendDone) {
                 var postShareElements = (<div className="postRecord">
                     <p>Tweeted Failed.</p>
                     <p>This could had have happened due to the repeated tweeting the same kind of message</p>
@@ -852,13 +836,13 @@ class ScreenRecorder extends Component {
                 var postShareElements = (<div className="postRecord">
                     <p>processing ..</p>
                 </div>)
-          
+
             else if (this.props.tweetSuccess && this.props.twitterSendDone) {
                 var postShareElements = (<div className="postRecord">
                     <p>Tweeted successfully</p>
                 </div>)
             }
-           
+
         }
 
         if (!this.state.doneTweeting &&
@@ -875,6 +859,20 @@ class ScreenRecorder extends Component {
                     <br />You will be notified with a sound when peer clicks on the link</p>
                         {/* <CopyToClipboard sharablelink={this.state.shareScreenLink} /> */}
                     </div>
+                    <div className="timerDuration">
+                       
+                        <p>Time is very preciuos
+                       <br/> Please enter the duration of the call</p>
+                       <div className="inputTime">
+                        <InputNumber
+                            empty={this.state.emptyNumber}
+                            limitOfChar={this.state.maxTimeForVideo}
+                            limitExce={this.state.limitExce}
+                            changeInputValue={this.changeImputNumber}
+                            textValue={this.state.noOfMinutes}
+                            negNumber={this.state.negNumber} />
+                        </div>
+                    </div>
                     <div className="twitterLinkDiv">
                         <div className="twitterBird">
                             {/* <TiSocialTwitter /> */}
@@ -885,7 +883,11 @@ class ScreenRecorder extends Component {
                         {/* <p><b>Tweet it to twitter user to invite them to join the call</b></p> */}
 
                         <div className="twitterInput">
-                            <TweetSearch channgeTeet={this.changeTweetStatePos} doneTweeting={this.state.doneTweeting} shareScreenLink={this.state.shareScreenLink} />
+                            <TweetSearch
+                                limitExce={this.state.limitExce}
+                                negNumber={this.state.negNumber}
+                                channgeTeet={this.changeTweetStatePos}
+                                doneTweeting={this.state.doneTweeting} shareScreenLink={this.state.shareScreenLink} />
                         </div>
                     </div>
                 </div>)
@@ -986,7 +988,7 @@ const mapStateToProps = state => ({
     callerTwitterHandle: state.auth.twitterHandle,
     recieverTwitterHandle: state.twitterApi.twitterHandle,
     tweetSuccess: state.twitterApi.tweeetSent,
-    twitterSendDone :state.twitterApi.tweetDone
+    twitterSendDone: state.twitterApi.tweetDone
 
 
 })

@@ -245,7 +245,7 @@ class NewHome extends Component {
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
                             </div>
-                            <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={issuesCreated} />
+                            <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
                         </div>
                     </Animated>)
             }
@@ -257,7 +257,7 @@ class NewHome extends Component {
 
                             <div className="closeBtnHolder">
                             </div>
-                            <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                            <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
                         </div>
                     </Animated>)
 

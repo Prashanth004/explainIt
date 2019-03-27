@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import Navbar from './Navbar'
 import Screenrecorder from './FullScreenRecord';
 import { connect } from 'react-redux';
+import { confirmAlert } from 'react-confirm-alert'; // Import
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
-import { creatAnsProject } from '../../../actions/projectActions'
+import { creatAnsProject } from '../../../actions/projectActions';
+import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
+
 
 import '../../css/ExplainpPage.css'
 class ExplainPage extends Component {
@@ -17,8 +20,49 @@ class ExplainPage extends Component {
     }
 
 
+    componentDidMount(){
+      var self = this
+      function postMessageHandler(event) {
+          if (event.data === 'rtcmulticonnection-extension-loaded') {
+              console.log(" event.source :", event.source)
+              self.setState({
+                  source: event.source,
+                  origin: event.origin,
+                  gotmessage: true
+              })
+              self.props.saveExtensionDetails(event.source, event.origin)
+          }
+      }
+    
+      if (window.addEventListener) {
+          window.addEventListener("message", postMessageHandler, false);
+      } else {
+          window.attachEvent("onmessage", postMessageHandler);
+      }
+}
+reStoreDefault = () => {
+      confirmAlert({
+          title: "Are you sure?",
+          message: "You won't be able to revert this!",
+          buttons: [
+              {
+                  label: 'Yes',
+                  onClick: () => this.handleConfirm()
+              },
+              {
+                  label: 'No',
+                  onClick: () => this.handleCancel()
+              }
+          ]
+      })
+  }
+  handleCancel=()=>{
 
+  }
 
+      handleConfirm=()=>{
+        window.close()
+      }
     saveVideoData(data) {
         console.log("the data whcih is gonna get saved : ", data)
         var issueId = localStorage.getItem('issueId')
@@ -48,7 +92,9 @@ class ExplainPage extends Component {
       <div className="explainMain">
           <Navbar />
           <div className="recorderConatainerPage" style={{width:widthDiv}}>
-          <Screenrecorder savefile={this.saveVideoData} />
+          <Screenrecorder 
+          reStoreDefault={this.reStoreDefault}
+          savefile={this.saveVideoData} />
           </div>
         
         
@@ -59,7 +105,8 @@ class ExplainPage extends Component {
 
 ExplainPage.PropType = {
     creatAnsProject: PropType.func.isRequired,
- 
+    saveExtensionDetails: PropType.func.issaveExtensionDetailsRequired,
+
 };
 const mapStateToProps = state => ({
     error: state.issues.error,
@@ -69,6 +116,6 @@ const mapStateToProps = state => ({
    
 })
 
-export default connect(mapStateToProps, { creatAnsProject})(ExplainPage)
+export default connect(mapStateToProps, { saveExtensionDetails, creatAnsProject})(ExplainPage)
 
 

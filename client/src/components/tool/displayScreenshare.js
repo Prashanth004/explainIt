@@ -279,7 +279,7 @@ class DisplayShare extends Component {
         ) : (
                 ((this.state.timerEnded) ? (
                     <div>
-                        <h3>Call ended as the time exceeded 3 minutes</h3>
+                        <h3>Call ended as the time exceeded alloted time by the caller</h3>
                         <p>You can expect another link from the caller to continue the conversation</p>
                     </div>
                 ) : (<div><h5>

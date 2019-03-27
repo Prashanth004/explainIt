@@ -14,16 +14,19 @@ class tweetSearch extends Component {
         this.testHandle = this.testHandle.bind(this);
         this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this);
         this.tweetTheMessage = this.tweetTheMessage.bind(this)
-
     }
     componentWillMount(){
         this.props.resetValues();
     }
     testHandle() {
-        this.setState({
-            tweetTested: true
-        })
-        this.props.getRecpientId(this.state.twitterHandle)
+        if(!this.props.limitExce &&
+        !this.props.negNumber)
+        {
+            this.setState({
+                tweetTested: true
+            })
+            this.props.getRecpientId(this.state.twitterHandle)
+        }
     }
     updateTwitterHandleBox(e) {
         this.setState({

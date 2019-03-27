@@ -58,7 +58,7 @@
   }
   .navItem{
     display:grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 70% 30%;
     text-align:center;
   }
   a:hover {
@@ -98,11 +98,11 @@
       position: absolute;
       right:7px;
     }
-    .navItem{
-      display:grid;
-      grid-template-columns: 25% 25% 25% 25%;
-      text-align:center;
-    }
+      /* .navItem{
+        display:grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        text-align:center;
+      } */
   
   }
 

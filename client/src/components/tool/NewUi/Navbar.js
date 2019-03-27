@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import config from '../../../config/config';
 import PropType from 'prop-types';
+import SearchBar from './Search'
 import { connect } from 'react-redux';
 import TwitterLogin from 'react-twitter-auth';
 import Swal from 'sweetalert2';
@@ -42,7 +43,12 @@ class Navigationbar extends React.Component {
           this.props.openCreated()
         }
         openHome(){
-          this.props.openHome()
+          if((window.location.pathname).length >1)
+          window.open(config.react_url, '_self')
+          else{
+            this.props.openHome()
+          }
+         
         }
 
         handleGit() {
@@ -89,7 +95,7 @@ class Navigationbar extends React.Component {
                   </div>
                 </div>)
           }else{
-            var explainLogo=( <p><a href="/">Explain</a></p>)
+            var explainLogo=( <p onClick={this.openHome}><a href="#">Explain</a></p>)
           }
           const content =(<div className="navBar">
             <div className="logo">
@@ -106,6 +112,7 @@ class Navigationbar extends React.Component {
                 </div>
                 <div></div>
                 <div >
+                  <SearchBar />
                 </div>
                 <div>
                 {profileImage}
