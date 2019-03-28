@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import { getRecpientId, resetValues } from '../../../actions/twitterApiAction'
+import TweetSuggest from './TweetSug'
+import { getRecpientId,getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
 
 
 class tweetSearch extends Component {
     constructor(props){
         super(props)
         this.state={
-            twitterHandle: null,
+            twitterHandle: '',
             tweetTested: false,
+            
         }
         this.testHandle = this.testHandle.bind(this);
         this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this);
@@ -17,6 +19,8 @@ class tweetSearch extends Component {
     }
     componentWillMount(){
         this.props.resetValues();
+        this.props.getTwitterHandles();
+
     }
     testHandle() {
         if(!this.props.limitExce &&
@@ -28,9 +32,9 @@ class tweetSearch extends Component {
             this.props.getRecpientId(this.state.twitterHandle)
         }
     }
-    updateTwitterHandleBox(e) {
+    updateTwitterHandleBox(e,value) {
         this.setState({
-            twitterHandle: e.target.value,
+            twitterHandle: value,
             tweetTested: false
         })
         this.props.resetValues();
@@ -94,10 +98,15 @@ class tweetSearch extends Component {
     return (
       <div>
           <div></div>
-           <input type="text"
-                className="myInput"
-                placeholder="Enter @username"
-                onChange={this.updateTwitterHandleBox}></input>
+          <TweetSuggest
+           onChange={this.updateTwitterHandleBox}
+           placeholder="Enter @username"
+           classOfInput="myInput"
+           tweetTextvalue={this.state.twitterHandle}
+           array = {this.props.twiterHandleArray}
+
+           />
+         
                 <button className="buttonDark" onClick={this.testHandle}>Tweet</button>
                 {validatinginfo}
       </div>
@@ -107,13 +116,15 @@ class tweetSearch extends Component {
 
 tweetSearch.PropType = {
     getRecpientId: PropType.func.isRequired,
-    resetValues: PropType.func.isRequired
+    resetValues: PropType.func.isRequired,
+    getTwitterHandles:PropType.func.isRequired
 }
 const mapStateToProps = state => ({
 
 
 twitterHandleValid: state.twitterApi.profilePresent,
 doneFetching: state.twitterApi.doneFetching,
+twiterHandleArray : state.twitterApi.twitterHandle
 })
-export default connect(mapStateToProps, { getRecpientId, resetValues})(tweetSearch)
+export default connect(mapStateToProps, {getTwitterHandles, getRecpientId, resetValues})(tweetSearch)
 

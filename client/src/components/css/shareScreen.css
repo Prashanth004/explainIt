@@ -83,6 +83,9 @@
     height:35px;
     grid-template-columns: 80% 20%;
 }
+.myInput{
+    width:100%;
+}
 
 .link{
     height:35px;

@@ -4,7 +4,8 @@ const passport = require('passport');
 const twitteActionsController =  require('../controller/tweetAction.js');
 const bodyParser = require('body-parser');
 
-router.get('/getid/:twitterhandler', twitteActionsController.getid);
-router.post('/tweet', twitteActionsController.tweetRecoding)
+router.get('/getid/:twitterhandler', passport.authenticate('jwt', { session: false }), twitteActionsController.getid);
+router.post('/tweet', twitteActionsController.tweetRecoding);
+router.get('/twitterhandles', passport.authenticate('jwt', { session: false }),twitteActionsController.twitterlist)
 
 module.exports = router;

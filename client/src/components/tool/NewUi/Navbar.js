@@ -1,5 +1,5 @@
 import React from 'react';
-
+import BasicAutocomplete from './search3'
 import { Link } from 'react-router-dom';
 import config from '../../../config/config';
 import PropType from 'prop-types';
@@ -113,6 +113,10 @@ class Navigationbar extends React.Component {
                 <div></div>
                 <div >
                   <SearchBar />
+                  {/* <BasicAutocomplete
+      items={['apple', 'orange', 'carrot']}
+      onChange={selectedItem => console.log(selectedItem)}
+    /> */}
                 </div>
                 <div>
                 {profileImage}
@@ -154,3 +158,6 @@ class Navigationbar extends React.Component {
 
 })
 export default connect(mapStateToProps, { signInWithTwitter,openHome, openCreated, openParticipated, twitterAuthFailure, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+
+
+

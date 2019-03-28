@@ -1,7 +1,9 @@
 import {GOT_NO_PROFILE,
     GET_PROFILE_ID ,
      RESET_TWITTER_API_VALUES,
-     SEND_TWEETS,SEND_TWEET_FAILED } from '../actions/types'
+     SEND_TWEETS,SEND_TWEET_FAILED ,
+       GET_TWITTER_HANDLE,
+     GET_TWITTER_HANDLE_FAILED} from '../actions/types'
 
 const initialState = {
     twitterId:null,
@@ -10,7 +12,9 @@ const initialState = {
     twitterProfilePic:null,
     twitterHandle:null,
     name:null,
-    tweeetSent:false
+    tweeetSent:false,
+    twitterHandles:[],
+    fetchHanldesSuggest : false,
 }
 
 export default (state=initialState, action)=>{
@@ -48,16 +52,36 @@ export default (state=initialState, action)=>{
         }
         case SEND_TWEETS:
             return {
+                ...state,
                 tweeetSent:true,
                 tweetDone:true
                 
             }
         case SEND_TWEET_FAILED:
             return {
+                ...state,
                 tweeetSent:false,
                 tweetDone:true
                 
             }
+        case GET_TWITTER_HANDLE:
+        return{
+            ...state,
+            twitterHandles:action.payload,
+            fetchHanldesSuggest:true
+        }
+        case GET_TWITTER_HANDLE:
+        return{
+            ...state,
+            twitterHandles:action.payload,
+            fetchHanldesSuggest:true
+        }
+        case GET_TWITTER_HANDLE_FAILED:
+        return{
+            ...state,
+            twitterHandles:[],
+            fetchHanldesSuggest:true
+        }
         default :
             return{
                 ...state

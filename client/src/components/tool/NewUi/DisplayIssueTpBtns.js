@@ -40,7 +40,10 @@ export default (props) => {
                             </div>
                             <div id={props.issue.issueid} >
                                 <div id={props.issue.issueid} className="twitter">
+                                <span id={props.issue.issueid} className="hint--top" aria-label="Tweet it">
+
                                     <img id={props.issue.issueid} width="100%" height="100%" onClick={props.tweetWindow} src={require('../../images/twitter3.png')} />
+                                </span >
                                 </div>
                             </div>
                             <div id={props.issue.issueid} className="twitterHolder">

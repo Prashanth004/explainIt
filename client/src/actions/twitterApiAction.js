@@ -1,6 +1,12 @@
 
 import axios from 'axios'
-import {GET_PROFILE_ID,SEND_TWEETS,SEND_TWEET_FAILED, GOT_NO_PROFILE,RESET_TWITTER_API_VALUES} from './types'
+import {GET_PROFILE_ID,
+    SEND_TWEETS,
+    SEND_TWEET_FAILED,
+     GOT_NO_PROFILE,
+     RESET_TWITTER_API_VALUES,
+     GET_TWITTER_HANDLE,
+     GET_TWITTER_HANDLE_FAILED} from './types'
 import config from '../config/config'
 
 
@@ -36,6 +42,34 @@ export const getRecpientId = (twitterHandle) =>(dispatch)=>{
 
 
 
+
+}
+
+export const getTwitterHandles=()=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'))
+    
+    axios({
+        method:'get',
+        url:config.base_dir+'/api/tweetactions/twitterhandles',
+        headers: {
+            "Authorization":token,
+        }
+    })
+    .then(response=>{
+        if(response.status===200 || response.status ===304){
+        dispatch({
+            type:GET_TWITTER_HANDLE,
+            payload:response.data.data
+        })
+    }
+    })
+    .catch(err=>{
+        dispatch({
+            type:GET_TWITTER_HANDLE_FAILED
+         
+        })
+        console.log("respose from server error : ",err)
+    })
 
 }
 

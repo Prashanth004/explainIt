@@ -1,5 +1,6 @@
 var Twitter = require('twitter');
 var id = null
+var database = require('../app')
 const client = new Twitter({
     consumer_key: 'Auz3a4BeVAVKRcO1ZVvRvbJDa',
     consumer_secret: 'FDBIlsYilBeoAi2vZyZubM0qFEPtJeaPoPVQ6ki2g2M9xqTTiA',
@@ -9,7 +10,6 @@ const client = new Twitter({
 
   exports.getid = function (req, res) {
   
-    
      var params = {
         "screen_name":req.params.twitterhandler
      }
@@ -24,13 +24,38 @@ const client = new Twitter({
          }  
         
          else{
-            var newProfilePic = body. profile_image_url_https.replace("_normal","")
+            var newProfilePic = body.profile_image_url_https.replace("_normal","")
             res.status(200).send({
                 success:1,
                 id:body.id,
                 profilePic : newProfilePic,
                 name: body.name
             })
+            database.db.manyOrNone('select * from usertwitter where userid = $1 and twitterhandle = $2',[req.user.id,req.params.twitterhandler])
+            .then(data=>{
+                if(data.length=== 0){
+                    database.db.oneOrNone('insert into usertwitter (twitterhandle, userid)'+
+                    'values(${twitterhandle}, ${userid})',
+                    {
+                        twitterhandle:req.params.twitterhandler,
+                        userid:req.user.id
+                    })
+                    .then(data=>{
+                        console.log("done saving twitter handle")
+                    })
+                    .catch(error=>{
+                        console.log(error)
+                    })
+                }
+                else{
+                    console.log("data alreay exist")
+                }
+            })
+            .catch(err=>{
+                console.log("error in checking if present : ", err)
+            })
+           
+
          }
          
         //   window.open("https://twitter.com/messages/compose?recipient_id="+id, target="_blank")
@@ -84,4 +109,33 @@ const client = new Twitter({
 
       });
     
+  }
+
+
+  exports.twitterlist = (req, res)=>{
+      const user = req.user.id
+      console.log("user id : ", req.user.id)
+      database.db.manyOrNone('select * from usertwitter where userid = $1',user)
+      .then(data=>{
+          console.log("data : ",data)
+          if(data){
+              res.status(200).send({
+                  success:1,
+                  data:data
+              })
+          }
+          else{
+              res.status(200).send({
+                  success : 1,
+                  data:null
+              })
+          }
+      })
+      .catch(error=>{
+          console.log("error : ", error);
+          res.status(500).send({
+              success:0,
+              msg:error
+          })
+      })
   }
