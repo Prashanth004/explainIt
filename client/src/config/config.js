@@ -20,8 +20,9 @@ const conf = {
     canvBackground : "rgb(205, 243, 224)",
     peopleDisplayLength:8,
     null:"null",
-    EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
-    EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
+    EXTENSION_ID:"oglophlhfocijofdmgjplekohffphacl",
+    // EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
+    EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/oglophlhfocijofdmgjplekohffphacl?authuser=2",
     SECRET : "thebookmaneisawesomeiguess",
     LINK_TO_CALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
@@ -38,7 +39,11 @@ const conf = {
     HOME : "home",
     NOT_HOME:"nothome",
     PROJECT_TEXT_LIMIT:200,
-    MAX_VIDEO_TIME_LIMIT:20
+    MAX_VIDEO_TIME_LIMIT:20,
+    RECORDING:"recording",
+    SHARING : "sharing",
+    RECORD_TIME: 3,
+    LINK_EXPIRE_TIME:3
 
 
     

@@ -27,24 +27,14 @@ height:100%
 }
 .VideoElement{
   width:100%;
-  height:100vh;
+  /* height:100vh; */
    margin:auto;
 
 }
 .btnGap{
     margin:15px;
 }
-.progresDiv{
-    display:none;
-height:05px;
-    width:100%;
-background-color: rgb(211, 207, 207);
-}
-.progress{
-    height:5px;
-background-color:rgb(6, 18, 128);
-    width:0px;
-}
+
 
 .btDiv{
     width:100%;
@@ -66,21 +56,21 @@ margin-top:10px;
 
 
 .recorderfooter{
-    height:20vh;
+    /* height:20vh; */
     /* background-color:blue; */
     float:bottom;
     position:relative;
 
 }
 .recordMainScreen{
-    min-height:60vh;
+    /* min-height:60vh; */
 }
 .recorderInfo{
-    min-height:40vh;
+    /* min-height:40vh; */
     text-align: center;
-    padding-top:150px;
-    padding-bottom: 60px;
-    font-size:22px;
+    padding-top:10px;
+    padding-bottom: 10px;
+    font-size:17px;
     font-weight:bold;
 }
 .statusBarCall{

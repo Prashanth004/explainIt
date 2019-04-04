@@ -1,24 +1,19 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Button } from 'reactstrap';
-import Iframe from 'react-iframe'
-
-import Form from '../Form';
-import Navbar from './Navbar';
-import '../../css/explainit.css';
+import '../../../css/extension.css'
+import Form from '../../Form';
+import '../../../css/explainit.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import ScreenShare from './ScreenShare'
-import ScreenRecorder from './ScreenRecorder'
-import FullScreenShare from './enitreScreenShare'
-import FullScreenRecord from './FullScreenRecord'
-import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_SHARE, FULL_SCREEN_RECORD } from '../../../actions/types';
+import ScreenShare from '../ScreenShare'
+import ScreenRecorder from '../ScreenRecorder'
+import FullScreenShare from '../enitreScreenShare'
+import FullScreenRecord from '../FullScreenRecord'
+import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_SHARE, FULL_SCREEN_RECORD } from '../../../../actions/types';
 import Swal from 'sweetalert2';
-import { setIssueId, cancelValidationErrors } from '../../../actions/issueActions'
-import { creatAnsProject } from '../../../actions/projectActions'
-import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
-import config from '../../../config/config';
-import Home from './Home'
+import { setIssueId, cancelValidationErrors } from '../../../../actions/issueActions'
+import { creatAnsProject } from '../../../../actions/projectActions'
+import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../../actions/toolActions'
+import config from '../../../../config/config';
 import browser from 'browser-detect';
 
 
@@ -267,18 +262,18 @@ class Explainit extends Component {
           }
         
           formDiv = (
-            <div className="formContainer">
-              <div className="imageBtns">
+            <div className="formContainerExt" >
+              <div className="imgConainExt">
                
-                <div className="RecordBtn">
+                <div className="RecordBtnExt">
                   <span className="hint--bottom" aria-label="Record screen!">
-                    <img onClick={this.recordFullScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                    <img onClick={this.recordFullScreen} height="100%" width="100%" src={require('../../../images/download.jpg')} />
                   </span>
                 </div>
     
                 <div className="screenShareBtn">
                   <span className="hint--bottom" aria-label="Share screen!">
-                    <img onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                    <img onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../../images/screensharing.png')} />
                   </span>
                 </div>
               </div>
@@ -342,7 +337,7 @@ class Explainit extends Component {
       </div>)
     }
    
-    return (this.state.isInstalled) ? (
+    return (
 
       <div>
         {/* <div className="explainContainer"> */}
@@ -361,14 +356,7 @@ class Explainit extends Component {
           </div>
         </div>
       </div>
-    ) : (<div >
-      {/* <Navbar /> */}
-      <div className="messageToDownload">
-        <h3>Please down the chrome extension to continue</h3>
-        <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-      </div>
-    </div>
-      )
+    ) 
   }
 }
 Explainit.PropType = {

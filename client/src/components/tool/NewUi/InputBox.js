@@ -4,7 +4,7 @@ import '../../css/InputBox.css'
 
 export default (props) => {
     const spanElement= (props.empty)?(
-        <span className="spanElement">Cant be empty</span>
+        <span className="spanElement">Text box can't be empty</span>
       ):((props.limitExce)?(
         <span className="spanElement" >Only {props.limitOfChar} Caharcters</span>
       ):(null))

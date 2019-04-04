@@ -52,13 +52,24 @@ class Call extends Component {
            {showCanv}
             
               <div className="callImageDivAnwser">
+              
                     <div className="callPage-recieverImageDiv">
                    
-                    <MdCallEnd onClick={this.props.endCall} className="img__overlay"/>
-                  
+                    {/* <MdCallEnd onClick={this.props.endCall} className="img__overlay"/> */}
+                    
+                    <span className="hint--top" aria-label={this.props.otherPersonName}>
                         <img className="callPage-recieverImage"  src={this.props.otherPersonPic}></img>
+                        </span>
+                    </div>
+                    
+                    <div className="callPage-recieverImageDiv endCall">
+                    <span className="hint--top" aria-label="End Call">
+                        <MdCallEnd onClick={this.props.endCall} className="endButton"/>
+                    </span>
+                    {/* <span style={{fontSize:"12px"}}>End Call</span> */}
                     </div>
                 </div>
+              
 
             </div>
         )

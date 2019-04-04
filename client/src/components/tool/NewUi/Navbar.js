@@ -17,7 +17,7 @@ class Navigationbar extends React.Component {
             super(props);
             this.toggle = this.toggle.bind(this);
             this.state = {
-              isOpen: false
+              isOpen: false,
             };
             this.googleResponse = this.googleResponse.bind(this);
             this.handleGit = this.handleGit.bind(this);
@@ -38,9 +38,11 @@ class Navigationbar extends React.Component {
         }
         openParticipated(){
           this.props.openParticipated()
+          this.setState({ state: this.state });
         }
         openCreated(){
           this.props.openCreated()
+          this.setState({ state: this.state });
         }
         openHome(){
           if((window.location.pathname).length >1)
@@ -66,6 +68,20 @@ class Navigationbar extends React.Component {
           });
         }
         render() {
+          var createdStyle =  null;
+          var partiStyle = null
+          if(this.props.Created){
+            createdStyle={
+              color:"#d3a5cd",
+              
+            }
+          }
+          else if(this.props.Participated){
+            partiStyle={
+              color:"#d3a5cd",
+             
+            }
+          }
           var centreNav = null
          var profileImage = (this.props.authAction) ?(!this.props.isAuthenticated)?(null):( <div className="dropdown">
          <div className="profileImagesDiv">
@@ -85,17 +101,23 @@ class Navigationbar extends React.Component {
             var explainLogo = null
               centreNav =( <div className="navgation">
                   <div onClick={this.openCreated} className="normalNav">
-                    <button onCick={this.openCreated} className="noButtons"><a>Created</a></button>
+                    <button onClick={this.openCreated} style={createdStyle} className="noButtons"><a>Created</a></button>
                   </div>
                   <div className="logo">
-                  <button onClick={this.openHome} className="noButtons"><a>Explain</a></button>
+                  <button onClick={this.openHome}  className="noButtons"><a>Explain</a></button>
                   </div>
-                  <div onClick={this.openParticipated}className="normalNav">
-                  <button className="noButtons"><a>Participated</a></button>
+                  <div className="normalNav">
+                  <button  onClick={this.openParticipated} style={partiStyle} className="noButtons"><a>Participated</a></button>
                   </div>
                 </div>)
           }else{
-            var explainLogo=( <p onClick={this.openHome}><a href="#">Explain</a></p>)
+            var explainLogo=(
+               <div className="logoContainer" onClick={this.openHome}>
+               <img src={require('../../images/logo.png')} 
+               width="100%"
+               height="100%"></img>
+               </div>)
+            centreNav =( <SearchBar />)
           }
           const content =(<div className="navBar">
             <div className="logo">
@@ -112,7 +134,7 @@ class Navigationbar extends React.Component {
                 </div>
                 <div></div>
                 <div >
-                  <SearchBar />
+                 
                   {/* <BasicAutocomplete
       items={['apple', 'orange', 'carrot']}
       onChange={selectedItem => console.log(selectedItem)}

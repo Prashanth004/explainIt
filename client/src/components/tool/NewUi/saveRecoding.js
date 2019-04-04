@@ -101,14 +101,16 @@ class SaveProjects extends Component {
     (<div>
         <p>Do you want to save the {this.state.callRecText}?</p>
        
-        <span className="hint--top" aria-label="Save">
+        <span className="hint--bottom" aria-label="Save Recording">
             <FiSave className="icons" onClick={this.props.saveClicked} />
         </span>
         <span className="hint--bottom" aria-label="Cancel">
             <FiX className="icons" onClick={this.props.closeImidiate} />
         </span>
     </div>):
-    ((this.state.privatePublic)?(<div><p>saving..</p></div>):(<div>
+    ((this.state.privatePublic)?(<div><p>saving..</p></div>):(
+    <div style={{width:"70%",
+    margin:"auto"}}>
         <InputBox 
        limitExce={this.state.limitExce}
        empty={this.state.empty}
@@ -117,8 +119,8 @@ class SaveProjects extends Component {
        textValue={this.state.  textValue}
        />
        {/* <h8>Your privacy is important to use</h8> */}
-       <button className="buttonDark" onClick={this.savefilePu}>Public</button>
-       <button className="buttonDark" onClick={this.savefilePri}>Private</button>
+       <button className="buttonDark" onClick={this.savefilePri}
+       style={{marginTop:"30px"}}>Save</button>
    </div>))
   }
 }

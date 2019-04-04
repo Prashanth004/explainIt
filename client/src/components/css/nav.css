@@ -8,6 +8,7 @@
     position: absolute;
     right:7px;
     background-color: #f9f9f9;
+    /* background-color: #d3a5cd; */
     min-width: 115px;
     box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
     padding: 10px 5px 5px 5px;
@@ -56,6 +57,10 @@
   .logo{
     font-size: 17px;
   }
+  .logoContainer{
+    width:125px;
+    height:35px;
+  }
   .navItem{
     display:grid;
     grid-template-columns: 70% 30%;
@@ -91,7 +96,7 @@
   @media (min-width: 1000px) {
     .navgation{
       width:60%;
-      margin-left:20%
+      margin-left:40%
     }
     .dropdown-content {
       display: none;

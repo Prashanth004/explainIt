@@ -48,9 +48,14 @@ class ProfileCard extends Component {
                 <div className="profileDetails">
                     <div className="nameImageDiv">
                         <div className="profileImage">
+                        <a href={"https://twitter.com/"+this.props.twitterHandle}>
                             <img src={this.props.profilePic} className="profileImageElement" ></img>
+                            </a>    
                         </div>
-                        <p className="profileName"><b>{this.props.userName}</b></p>
+                        <div   className="profileName">
+                        <a href={"https://twitter.com/"+this.props.twitterHandle}
+                       ><b>{this.props.userName}</b></a>
+                      </div>
 
                     </div>
                     <div onClick={this.props.toggleCreatedIssue} className="displayNumber">
@@ -79,7 +84,8 @@ const mapStateToProps = state => ({
     profilePic: state.profile.profilePic,
     noCreated: state.profile.noCreated,
     noParticipated: state.profile.noParticipated,
-    profileId: state.auth.id
+    profileId: state.auth.id,
+    twitterHandle: state.profile.twitterHandle,
 })
 
 export default connect(mapStateToProps, { getProfileDetails })(ProfileCard)

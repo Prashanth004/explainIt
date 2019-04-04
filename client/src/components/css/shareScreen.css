@@ -1,7 +1,7 @@
 .LinkDisplay{
-    width:100%;
+    width:90%;
     margin:auto;
-    min-height:60vh;
+    /* min-height:60vh; */
     background-color: white;
     text-align: center;
     align-content: center;
@@ -10,23 +10,25 @@
 
 }
 .inputTime{
-    width:60%;
+    width:100%;
+    /* display:inline; */
+    /* background-color: #34a4a8; */
     margin:auto;
 }
 .timerDuration{
-    padding-top:20px;
+    padding-top:10px;
     padding-bottom:10px;
     width:99%;
     margin:auto;
-    margin-top:50px;
+    margin-top:10px;
     font-size:12px;
-    background-color: #eee;
+    /* background-color: #eee; */
 }
 .DisconMessage{
     width:80%;
     margin:auto;
     margin-top:10px;
-    padding-top:100px;
+    padding-top:20px;
     font-size:22px;
     font-weight: 400;
 }
@@ -44,22 +46,37 @@
     margin:auto;
   }
 .twitterLinkDiv{
-    width:100%;
-    margin-top:05px;
+    width:90%;
+    margin-top:10px;
+    margin-bottom:10px;
     text-align: center;
     align-content: center;
+    display:grid;
+    /* background-color:blue; */
+    grid-template-columns:50% 50%
+
 
 }
+.cpyNewBtnMain{
+width:25px;
+height:25;
+}
+.copyToClipBoard{
+    margin-top:20px;
+}
 .twitterInput{
-    width:75%;
+    width:100%;
     margin:auto;
+
 }
 .twitterBird{
-  width:100%;
-    padding-top:45px;
-    padding-bottom:30px;
-    text-align: center;
-    align-content: center;
+    text-align: right;
+    margin-left:50%;
+  /* width:50%;
+  margin-left:80%;
+/* text-align:right;
+    text-align: right;
+    align-content: right; */ 
 
 }
 

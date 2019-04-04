@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
+import config from '../../../config/config'
 import CopyToClipboard from '../CopytoClipboard';
 import {setStream} from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
 import Dummy from './dummy';
-import SaveElement from './Saveproject'
+import SaveElement from './saveRecoding'
 import Form from '../Form'
 import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
-import { Button } from 'reactstrap';
+import { Button } from 'reactstrap'; 
+import TimerBar from './TimerBar'
 import { FiSave, FiX, FiTwitter, FiVideo } from "react-icons/fi";
 import {fullStartedRecording,
     fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
@@ -47,6 +49,24 @@ class FullScreenRecorder extends Component {
         this.toggleCanvas = this.toggleCanvas.bind(this)
 
     }
+    startBar(){
+        var self = this;
+        var timeAloted = config.RECORD_TIME*60*16
+         var progressbar = document.querySelector('#pbar');
+         var progresDiv = document.querySelector(".progresDiv")
+         progresDiv.style.display = "block";
+         var width = 0;
+         var id = setInterval(frame,75);
+         function frame() {
+           if (width >= 100) {
+             clearInterval(id);
+           } else {
+             width= width+(100/timeAloted); 
+             console.log("width: ", width)
+             progressbar.style.width=width+'%';
+                   }
+         }   
+     }
 
     startRecoding(){
         var self = this
@@ -93,6 +113,7 @@ class FullScreenRecorder extends Component {
             self.props.setStream(audioStream,screenStream,finalStream)
 
             recorder1.startRecording();
+            self.props.fullStartedRecording();
 
             self.setState({
                 recorder:recorder1,
@@ -142,24 +163,7 @@ class FullScreenRecorder extends Component {
         })
     }
 
-    
-    startBar(){
-       var self = this;
-        var progressbar = document.querySelector('#pbar');
-        var progresDiv = document.querySelector(".progresDiv")
-        progresDiv.style.display = "block";
-        var width = 0;
-        var id = setInterval(frame,1000);
-        function frame() {
-          if (width >= 100) {
-            clearInterval(id);
-          } else {
-            width= width+(100/180); 
-            console.log("......")
-            progressbar.style.width=width+'%';
-                  }
-        }   
-    }
+   
 
     renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
@@ -199,7 +203,7 @@ class FullScreenRecorder extends Component {
             
             this.receiveMessage()
             this.startRecoding()
-            this.props.fullStartedRecording();
+           
         }
     }
     saveClicked(){
@@ -270,10 +274,15 @@ toggleCanvas(){
     }
 
     render() {
+       
+        const closeFunction=(this.props.isFullScreenRecording)?this.props.reStoreDefault:
+                this.props.closeImidiate
+        const closeBtn=(!this.props.isFullScreenRecording?
+            (<Button close onClick={closeFunction} />):(null))
         if (this.props.isFullScreenRecording) {
            
             var timer = (<Countdown
-                date={Date.now() + 180000}
+                date={Date.now() + config.RECORD_TIME *60*1000}
                 renderer={this.renderer}
             />)
             var recordingEle = ( <div >
@@ -330,9 +339,7 @@ toggleCanvas(){
             {showCanv}
            
             <div className="recorderfooter">
-                <div className="progresDiv">
-                    <div  className="progress" id="pbar" ></div>
-                </div>
+               <TimerBar />
                 {timer}
                 
                 <div className="btDiv">
@@ -358,9 +365,11 @@ toggleCanvas(){
             {videoplayer}
             </div>
             <SaveElement
+            shareOrRec={config.RECORDING}
             isSaveClicked={this.state.saveBtnClicked}
             saveClicked={this.saveClicked}
             discard={this.discardChanges}
+            closeImidiate={this.props.closeImidiate}
             savefilePublic={this.savefilePublic}
             savefilePrivate={this.savefilePrivate} />
        
@@ -377,10 +386,12 @@ toggleCanvas(){
          else if(this.props.isSaved ){
             // elseif {
             var postShareElements= (<div className = "postRecord">
-            
-                 <p>Link to access your saved project</p>
+                <p>Your recording has been saved successfully.
+               You can access it with the link below and share the same</p>
                  <CopyToClipboard sharablelink = {this.props.sharablelink} />
-
+                    <button className="buttonDark" 
+                    style={{marginTop:"50px"}} 
+                    onClick={closeFunction}>Go Home</button>
              </div>)
 
          }
@@ -396,7 +407,8 @@ toggleCanvas(){
         }
         return (
             <div className="recordMainScreen">
-             <Button close onClick={this.props.reStoreDefault} />
+            {closeBtn}
+            
                {recordingElements}
                 {postShareElements}
              </div>

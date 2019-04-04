@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar'
+// import Iframe from 'react-iframe'
 // import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -272,6 +273,15 @@ class NewHome extends Component {
     }
 
     render() {
+        // var iframe = <Iframe url="https://explain.bookmane.in/sharescreen"
+        // width="450px"
+        // height="450px"
+        // id="myId"
+        // className="myClassname"
+        // display="initial"
+        // position="relative"
+
+        // allowFullScreen/>
         const externalCloseBtn = <button className="close modalClose" style={{ position: 'absolute', top: '25px', height: '45px', width: '45', right: '25px', color: 'white' }} onClick={this.toggle}>&times;</button>;
         var self = this
         var sharabeLink = config.react_url + "/profile/" + this.props.twitterHandle
@@ -304,24 +314,27 @@ class NewHome extends Component {
         ) : (null)
 
         deatilsModal = (<IssueDetils />)
-        var explainDiv = (<Explain screenShareWindow={this.screenShareWindow} reStoreDefault={this.reStoreDefault} />)
-
+        var explainDiv = (<Explain closeImidiate={this.handleConfirm} screenShareWindow={this.screenShareWindow} reStoreDefault={this.reStoreDefault} />)
+        console.log("this.props.created : ",this.props.created)
+        console.log("this.props.participated : ",this.props.participated)
         if (this.props.isAauthenticated) {
             if (this.state.openExplain) {
-                explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
+                explainDiv = (<Explain closeImidiate={this.handleConfirm} reStoreDefault={this.reStoreDefault} />)
             }
             if (this.props.created && !this.props.participated ) {
                 explainDiv = null
+                console.log("created excecuting")
                 feedDiv = (
-                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}>
+                   <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}>
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
                             </div>
                             <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
                         </div>
-                    </Animated>)
+                   </Animated>)
             }
             else if (this.props.participated && !this.props.created) {
+                console.log("participated excecuting")
                 explainDiv = null
                 feedDiv = (
                     <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
@@ -335,14 +348,19 @@ class NewHome extends Component {
                     </Animated>)
 
             }
+            else{
+                console.log("nothing excecuting")
+            }
         }
        
 
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
-                this.props.screenAction === FULL_SCREEN_SHARE ||
-                this.props.screenAction === FULL_SCREEN_RECORD ||
+                this.props.isSceenSharing ||
+                this.props.isFullScreenRecording ||
+                // this.props.screenAction === FULL_SCREEN_SHARE ||
+                // this.props.screenAction === FULL_SCREEN_RECORD ||
                 this.props.participated ||
                 this.props.created) {
                 var profileCardElement = null
@@ -369,6 +387,7 @@ class NewHome extends Component {
                 var profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
                         isHome={this.state.isHome}
+                        sharabeLink={sharabeLink}
                         userId={this.props.userId}
                         toggleDisplayLink={this.toggleDisplayLink}
                         toggleCreatedIssue={this.toggleCreatedIssue}
@@ -405,6 +424,7 @@ class NewHome extends Component {
                         {deatilsModal}
                     </ModalBody>
                 </Modal>
+                {/* {iframe} */}
             </div>
         )) : (null)
 
@@ -448,6 +468,9 @@ const mapStateToProps = state => ({
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
+    isSceenSharing: state.tools.isFullScreenSharing,
+    isFullScreenRecording :state.tools.isFullScreenRecording,
+
 
    
 

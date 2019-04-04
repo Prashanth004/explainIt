@@ -23,7 +23,7 @@ id: rn(options),
 
 
 exports.updateProjectpublic = function(req, res){
-    database.db.none('update projects SET public = $1 WHERE issueid = $2', [1, req.body.projectId])
+    database.db.none('update projects SET public = $1 WHERE projectid = $2', [1, req.body.projectId])
     .then(data=>{
         res.status(200).send({
             success: 1,
@@ -41,7 +41,7 @@ exports.updateProjectpublic = function(req, res){
 }
 
 exports.updateProjectprivate = function(req, res){
-    database.db.none('update projects SET public = $1 WHERE issueid = $2', [0, req.body.projectId])
+    database.db.none('update projects SET public = $1 WHERE projectid = $2', [0, req.body.projectId])
     .then(data=>{
         res.status(200).send({
             success: 1,
@@ -207,9 +207,27 @@ exports.getAllProject = function (req, res) {
 
 
 }
-exports.getProjectById = function (req, res) {
+exports.getIssueById = function (req, res) {
 
     database.db.one('select * from projects where issueid = $1', req.params.id)
+        .then(projects => {
+            console.log("projects : ",projects)
+            res.status(200).send({
+                success: 1,
+                data: projects
+            })
+        })
+        .catch(error => {
+            console.log("error : ",error)
+            res.status(500).send({
+                sucess: 0,
+                msg: error
+            })
+        })
+}
+exports.getProjectById = function (req, res) {
+
+    database.db.one('select * from projects where projectid = $1', req.params.id)
         .then(projects => {
             console.log("projects : ",projects)
             res.status(200).send({

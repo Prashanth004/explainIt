@@ -17,6 +17,8 @@ import Project from './components/Project'
 import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
 import inbox from './components/tool/NewUi/Inbox'
+import RecordName from './components/tool/NewUi/RecordName';
+import ExtHome from './components/tool/NewUi/Extension/landing'
 // import Profile from './components/tool/NewUi/connectProfile'
 class App extends Component {
   render() {
@@ -36,7 +38,9 @@ class App extends Component {
             <Route exact path ='/inbox/:userid' component={inbox}/>
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact  path='/signup' component={Signup} />
-            <Route exct path = '/sharescreen' component={ShareWindow}/>
+            <Route exact path = '/sharescreen' component={ShareWindow}/>
+            <Route exact path = '/recorder' component={RecordName} />
+            <Route exact path = '/extension' component={ExtHome} />
             <Route component={NoMatch} />
             </Switch>
           </BrowserRouter>

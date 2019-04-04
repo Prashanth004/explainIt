@@ -49,14 +49,13 @@ class Login extends Component {
                     <div className="Logininfo">
                         <h3>
                             <b>
-                                Communicate better with visuals. Express with lot more than just text.
-                                Get your personalised Link so that people you love can connect with you. 
+                            Making visual explanations quick and easy 
                         </b>
                         </h3>
                         <br/>
                         <h5>
                             <b>
-                               Grab your Link
+                              
                         </b>
                         </h5>
                         <br />

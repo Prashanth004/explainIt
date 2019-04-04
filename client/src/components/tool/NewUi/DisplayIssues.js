@@ -7,6 +7,7 @@ import config from '../../../config/config'
 import { deleteProjects, checkPublicValue } from '../../../actions/projectActions';
 import Swal from 'sweetalert2';
 import '../../css/toggle.css'
+import IssueCard from './issueCard'
 import { confirmAlert } from 'react-confirm-alert'; // Import4
 import DisplayIssueTopBtns from './DisplayIssueTpBtns'
 
@@ -32,7 +33,7 @@ class DisplayIssue extends Component {
     }
     componentWillMount() {
         this.setState({
-            issueArray: this.props.issueArray
+            issueArray: null
 
         })
         if (this.props.home === config.HOME)
@@ -43,6 +44,11 @@ class DisplayIssue extends Component {
             this.setState({
                 itsHome: false
             })
+    }
+    componentDidMount(){
+        this.setState({
+            issueArray :this.props.issueArray
+        })
     }
 
     deleteProjects(e) {
@@ -80,17 +86,7 @@ class DisplayIssue extends Component {
         this.setState(newState); // 
 
     }
-    displaySuccessDelete() {
-        Swal.fire({
-            type: 'success',
-            title: 'Delete successFull',
-            timer: 1500,
-            showConfirmButton: false,
-        })
-
-        this.props.restoredelete()
-
-    }
+    
     tweetWindow(e) {
         var sharableURL = config.react_url + '/project/' + e.target.id;
         var text = "Discussions happened on explain";
@@ -112,8 +108,6 @@ class DisplayIssue extends Component {
 
     }
     handlePublicPrives(e) {
-
-
         this.props.checkPublicValue(e.target.id)
     }
     toggle() {
@@ -137,52 +131,31 @@ class DisplayIssue extends Component {
     }
 
     render() {
-        console.log("this.state.issueArray : ", (this.state.issueArray).length)
+        console.log("i am getting rendered")
         var issueItems = null;
-        if (this.state.displayCopyEle) {
-            var copyElement = (<div className="copyDisplay">
-                <CopyToClipboard sharablelink={config.react_url + '/project/' + this.state.projectId} />
-            </div>)
-        }
-        else {
-            var copyElement = null
-        }
-        if ((this.state.issueArray).length === 0) {
+      if(this.props.issueArray !== null){
+        if ((this.props.issueArray).length === 0) {
             issueItems = (<div className="emptyIssues">
                 <p>Not participated in any discussions</p>
             </div>)
         }
         else {
-            issueItems = this.state.issueArray.map((issue, index) => (
-                <div key={issue.issueid} className="issueCard">
-                    <div className="orginCard">
-                       <DisplayIssueTopBtns
-                       issue={issue}
-                       toggleDisplayLink={this.toggleDisplayLink} 
-                       tweetWindow = {this.tweetWindow}
-                       deleteProjects= {this.deleteProjects}
-                       itsHome = {this.state.itsHome}/>
-                        {/* {copyElement} */}
-                        <div className="copyDisplay" id={"clipboard_" + issue.issueid} style={{ display: "none" }}>
-                            <CopyToClipboard sharablelink={config.react_url + '/project/' + this.state.projectId} />
-                        </div>
-                        <div id={issue.issueid} onClick={this.props.togglemodal} className="questionText">
-                            <p id={issue.issueid} >{issue.textexplain}</p>
-                        </div>
-                        <div id={issue.issueid} onClick={this.props.togglemodal} className="questionImg">
-                            <video controls id={issue.issueid} width="100%" height="100%" src={issue.videofilepath} ></video>
-                        </div>
-
-                    </div>
-                    <div id={issue.issueid} className="explainAnswer">
-                        <ImagesOfExplainers issueid={issue.issueid} />
-                        <div className="explainIt">
-                            <button id={issue.issueid} className="buttonDark explainItBtn" onClick={this.props.explainTool}>Explain it</button>
-                        </div>
-                    </div>
-                </div>
+            issueItems =this.props.issueArray.map((issue, index) => (
+               <IssueCard 
+               itsHome={this.state.itsHome}
+               displayCopyEle={this.state.displayCopyEle}
+               deleteProjects={this.deleteProjects}
+               tweetWindow={this.tweetWindow}
+               handlePublicPrives={this.handlePublicPrives}
+               toggle={this.toggle}
+               toggleDisplayLink={this.toggleDisplayLink}
+               projectId={this.state.projectId}
+               issue={issue}
+               explainTool={this.props.explainTool}/>
             ))
         }
+      }
+        
         return (
             <div>
                 {issueItems}

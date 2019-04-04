@@ -9,10 +9,15 @@
 }
 .shareTime{
     width:100%;
+    margin:auto;
+    align-self: center;
+    background-color: red;
+    border-radius:5px;
     /* height: 75vh; */
     /* background-color:blue; */
 }
 .explainFormContainer{
+    align-self: center;
     padding:10px;
     width:89%;
     margin:auto;
@@ -26,17 +31,18 @@
 }
 
 .reExplainContainer{
-    min-height:100vh;
+    min-height:95vh;
     width:65%;
     margin:auto;
     padding-top:55px;
     
 }
 .explainContainer{
-    padding:5px;
-    width:86%;
+    /* background-color: blue; */
+    /* padding:5px; */
+    text-align: center;
+      margin-top:5px;
     margin:auto;
-    margin-top:5px;
     border-style:none;
     border-radius:5px;
     /* background-color:white; */
@@ -45,10 +51,13 @@
 }
 .shareElement{
     /* border-style:solid; */
+    /* background-color: yellow; */
+    border-radius:5px;
  
 }
 .shareControl{
-    background-color:white;
+    width:100%;
+    /* background-color:green; */
     box-shadow:none;
     box-shadow: 0 0 0 0;
     border-style:solid;
@@ -110,7 +119,7 @@ margin-bottom:10px; */
     padding:0px;
 }
 .divRecordOrShare{
-    width:60%;
+    width:40%;
     margin:auto;
     margin-top:20px;
     display:inline;
@@ -129,6 +138,7 @@ margin-bottom:10px; */
     .explainContainer{
         padding:5px;
         width:56%;
+        margin:auto
         
     }
     .formContainer{

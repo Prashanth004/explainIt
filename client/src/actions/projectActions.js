@@ -15,7 +15,7 @@ export const checkPublicValue = (issueId) =>(dispatch)=>{
    
     axios({
         method:'get',
-        url:config.base_dir+'/api/project/'+issueId,
+        url:config.base_dir+'/api/project/project/'+issueId,
         headers: {
             "Authorization": token,
         }

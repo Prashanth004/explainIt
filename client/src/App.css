@@ -31,6 +31,7 @@ div{
 }
 body{
  color:rgb(32, 32, 32);
+ overflow: auto;
   
 }
 a{

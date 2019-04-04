@@ -63,16 +63,14 @@ class Search2 extends Component {
     render() {
         return (
 
-            <div style={{ borderRadius:"5%", marginLeft: 50, display:"inline" }}>
+            <div style={{ width:"100%", borderRadius:"5%", marginLeft:"60%", display:"inline" }}>
                 <Autocomplete
                     className="input"
                     value={this.state.value}
-                    style={{ borderRadius:"5%", padding:"10px" }}
                     inputProps={{
                          id: 'states-autocomplete',
                          className:'inputtext'
                          }}
-                    wrapperProps={{ borderRadius:"5%", padding:"10px" }}
                     wrapperStyle={{ position: 'relative', display: 'inline-block' }}
                     items={this.props.projects}
                     getItemValue={item => item.textexplain}

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './css/newlanding.css'
 import Navbar from '../components/Navbar'
 import { Modal, ModalBody } from 'reactstrap';
-import IssueDetils from './issueModal'
+import IssueDetils from './tool/NewUi/issueModal'
 import { connect } from 'react-redux';
 import { fetchIssues, setIssueId } from '../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../actions/projectActions';

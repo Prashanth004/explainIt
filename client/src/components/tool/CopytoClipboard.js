@@ -24,11 +24,18 @@ class copyToClipboard extends Component {
     return (
       <div className="copyToCipboardDiv">
          
-      <input id="Link" className="myInput" type="text" value={this.props.sharablelink}/>
+      <input id="Link" className="myInputClip" type="text" value={this.props.sharablelink}/>
                 <span class="hint--bottom" aria-label={this.state.copyStatus}>
-                    <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
+                    {/* <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
                     Copy Link
-                    </button>
+                    </button> */}
+                    <div className="cpyNewBtn">
+                        <img src={require('../images/cpyNew.png')}
+                        width="100%"
+                        onClick={this.copyToClipboard}
+                        marginTop="5px"
+                        height="100%"></img>
+                    </div>
             </span>
         
       </div>

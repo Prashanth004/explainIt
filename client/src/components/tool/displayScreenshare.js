@@ -3,7 +3,6 @@ import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css'
-import { Redirect } from 'react-router-dom';
 import { answerCall } from '../../actions/callAction'
 import { connect } from 'react-redux';
 import { MdCallEnd } from "react-icons/md";
@@ -31,6 +30,7 @@ class DisplayShare extends Component {
             closedHere: false,
             showDisconectMessage: false,
             connected: false,
+            myProfilePicture:null,
             peerProfilePic: null,
             callEnded: false,
             manualClose: false,
@@ -64,6 +64,7 @@ class DisplayShare extends Component {
         })
 
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+            console.log(" socket.on(config.CLOSE_NETWORK_ISSUE, data => {")
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
                 self.closeConnection()
             }
@@ -80,6 +81,7 @@ class DisplayShare extends Component {
         })
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
             // alert("success")
+            console.log("got acknolegdement")
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
@@ -117,6 +119,7 @@ class DisplayShare extends Component {
             socket: socket
         })
         this.peerConnections(socket);
+        this.props.stillAuthenicated();
     }
 
     peerConnections(socket) {
@@ -126,11 +129,11 @@ class DisplayShare extends Component {
             socket: socket,
             peerIdFrmPeer: peerIdFrmPeer
         });
-        this.props.stillAuthenicated();
-        var profilePic = (localStorage.getItem("profilePic"))
-        this.setState({
-            peerProfilePic: profilePic
-        });
+        
+        // var profilePic = (localStorage.getItem("profilePic"))
+        // this.setState({
+        //     peerProfilePic: profilePic
+        // });
         this.props.answerCall()
         var peer = new window.Peer()
         var self = this
@@ -147,17 +150,21 @@ class DisplayShare extends Component {
         var self = this;
         var startConnection = new Promise((resolve, reject) => {
             var conn = peer.connect(peerIdFrmPeer);
-            resolve(conn)
-        });
-        startConnection.then((conn) => {
-            setTimeout(() => {
-                console.log("sending the data please wait")
+            conn.on('open', function(){
+                // resolve(conn)
                 conn.send({
                     clientId: self.state.clientPeerid,
 
                 });
-            }, 5000)
+              });
+          
         });
+        // startConnection.then((conn) => {
+        //     setTimeout(() => {
+        //         console.log("sending the data please wait")
+              
+        //     }, 5000)
+        // });
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         peer.on('call', function (call) {
 
@@ -166,7 +173,9 @@ class DisplayShare extends Component {
                 call.answer(audiostream)
                 call.on('stream', function (stream) {
                     socket.emit(config.CALL_ACK_MESSAGE, {
-                        'clientId': self.state.clientPeerid
+                        'clientId': self.state.clientPeerid,
+                        'recieverProfilePic': self.props.myProfilePicture,
+                        'recieverProfileName':self.props.myProfileName
                     })
                     self.setState({
                         connected: false
@@ -182,7 +191,7 @@ class DisplayShare extends Component {
                 });
 
                 call.on('close', function () {
-                    // console.log("close connection   ")
+                    console.log(" call.on('close',  ")
                     if (!self.state.callEnded) {
                         self.closeConnection()
                     }
@@ -198,7 +207,7 @@ class DisplayShare extends Component {
             })
         })
         peer.on('close', () => {
-
+console.log(" peer.on('close', () ")
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
@@ -208,6 +217,7 @@ class DisplayShare extends Component {
             })
         })
         peer.on('disconnected', function () {
+            console.log(" peer.on('disconnected'")
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
@@ -223,6 +233,7 @@ class DisplayShare extends Component {
         window.open(config.react_url + '/login')
     }
     endCall() {
+        console.log("endCall pressed")
         var call = this.state.call;
         this.setState({
             closedHere: true,
@@ -239,6 +250,7 @@ class DisplayShare extends Component {
         this.closeConnection()
     }
     closeConnection() {
+        console.log("close connection")
         if (!this.state.closedHere === true) {
             this.setState({
                 showDisconectMessage: true
@@ -296,11 +308,19 @@ class DisplayShare extends Component {
                     </div>
                     <div className="decreasePadding">
                         <div className="callPage-recieverImageDiv">
+                        <span className="hint--top" aria-label="End Call">
+                            <MdCallEnd onClick={this.endCall} 
+                            className="img__overlay" 
+                            style={{
+                                padding:"10px"
+                            }}/>
+                             </span>
 
-                            <MdCallEnd onClick={this.endCall} className="img__overlay" />
-
-                            <img className="callPage-recieverImage" src={this.state.picture}></img>
+                            <img className="callPage-recieverImage" 
+                            style={{marginTop:"-72px"}}
+                            src={this.state.picture}></img>
                         </div>
+                        <span style={{fontSize:"12px"}}>End Call</span>
 
                         {/* <div class="overlayEndCall">
                         {/* <div class="text">Hello World</div> */}
@@ -366,7 +386,8 @@ DisplayShare.PropType = {
 }
 
 const mapStateToProps = state => ({
-    profilePic: state.auth.profilePic,
+    myProfilePicture: state.auth.profilePic,
+    myProfileName:state.auth.userName,
     peerProfilePic: state.visitProfile.profilePic,
     isLoggedIn: state.auth.isAuthenticated
 
