@@ -1,16 +1,20 @@
 import React, {Component} from 'react'
 import Toggle from 'react-toggle';
 import { FiLink2, FiDelete } from "react-icons/fi";
-import '../../css/issueDetails.css'
+import '../../css/issueDetails.css';
+import { FiTrash,FiMoreVertical } from "react-icons/fi";
 
 export default class displayTopBtns extends Component {
     constructor(props) {
         super(props)
         this.state = {
             displayTwitter : "none",
-            toolTipValue : "private"
+            toolTipValue : "private",
+            optionVisibe:"hidden"
+            // visible
         }
-        this.changeToggle = this.changeToggle.bind(this)
+        this.changeToggle = this.changeToggle.bind(this);
+        this.onOptClick = this.onOptClick.bind(this);
     }
     componentDidMount(){
         if(Number(this.props.issue.public)){
@@ -26,18 +30,29 @@ export default class displayTopBtns extends Component {
             })
         }
     }
+    onOptClick(){
+        if(this.state.optionVisibe==="hidden")
+        this.setState({
+            optionVisibe:"visible"
+        })
+        else{
+            this.setState({
+                optionVisibe:"hidden"
+            }) 
+        }
+    }
 
     changeToggle(e){
         if(this.state.displayTwitter === "block"){
             this.setState({
                 displayTwitter : "none",
-                toolTipValue : "private"
+                toolTipValue : "Private - only you can see this card"
             })
         }
         else{
             this.setState({
                 displayTwitter:"block",
-                toolTipValue : "public"
+                toolTipValue : "Public - anyone can see this card"
             })
         }
         this.props.handlePublicPrives(e)
@@ -49,10 +64,19 @@ export default class displayTopBtns extends Component {
 
 
         const deleteDiv = (this.props.itsHome) ? (
+            <div>
             <div className="iconsright">
-                <span className="hint--top" aria-label="Delete">
-                    <FiDelete id={this.props.issue.issueid} onClick={this.props.deleteProjects} />
-                </span>
+                
+                    <FiMoreVertical onClick={this.onOptClick} />
+               
+            </div>
+            <div className="dropDownForOption"  id={this.props.issue.issueid}  style={{visibility:this.state.optionVisibe}}>
+            <div onClick={this.props.deleteProjects}  className="menuItem">
+                <button  id={this.props.issue.issueid}  className="dropDownBtn">Delete</button>
+                <span>  <FiTrash  id={this.props.issue.issueid}  className="menuIcon"/></span>
+               
+            </div>
+            </div>
             </div>
         ) : (null)
 
@@ -73,7 +97,7 @@ export default class displayTopBtns extends Component {
                 <div id={this.props.issue.issueid} className="topButtons">
                     <div id={this.props.issue.issueid} className="sharableLinkCard">
                         <div id={this.props.issue.issueid} onClick={this.props.toggleDisplayLink} className="icons">
-                            <span id={this.props.issue.issueid} className="hint--top" aria-label="Get shareable Linkn">
+                            <span id={this.props.issue.issueid} className="hint--top" aria-label="Get shareable Link">
                                 <FiLink2 id={this.props.issue.issueid} className="linkElementSym" id={this.props.issue.issueid} />
                             </span>
                         </div>

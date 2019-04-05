@@ -1,0 +1,159 @@
+
+
+.screenShareFloat .tooltiptextChrome{
+  visibility: hidden;
+  background-color: white;
+  /* color: #fff; */
+  text-align: center;
+  border-radius: 6px;
+
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: -125%;
+  margin-left: -60px;
+}
+.endButton{
+  padding:10px;
+  border-style:none;
+  height:35px;
+  width:35px;
+  align-items: center;
+}
+
+.screenShareFloat:hover .tooltiptextChrome {
+  visibility: visible;
+} 
+.callImageDivAnwser{
+  position:fixed;
+  width:7%;
+  bottom:25px;
+  /* right:5px; */
+ right:25px;;
+ display:grid;
+grid-template-columns: 50% 50%; 
+}
+
+.img__overlay {
+  padding:20px;
+  border-style:none;
+  height:35px;
+  width:35px;
+  border-radius:50%;
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  opacity: 0;
+  position: relative;
+  right: 0;
+  top: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+  background-color: rgb(184, 33, 6);
+  background: linear-gradient(65deg, rgb(233, 112, 13),rgb(248, 21, 5));
+  color: #fafafa;
+  font-size: 14px;
+}
+
+.img__overlay:hover {
+  opacity: 1;
+}
+.statusBarCall{
+    display:grid;
+    grid-template-columns: 15% 70% 15%
+}
+
+
+.shareVideoDisplay{
+    height:90vh;
+    width:90%;
+    margin:auto;
+    
+}
+.videoContainer{
+    width:100%;
+    height:80%;
+}
+
+
+.VideoElementReciever{
+    width:100%;
+    height:100%;
+
+}
+
+
+.callDiv{
+  width:100%;
+  /* height:60vh; */
+ 
+}
+.callDetails{
+  padding-top:30px;
+  padding-bottom:40px;
+  font-size:22px;
+  
+}
+.secondShareVideo{
+  width:"100%";
+  height:"100%";
+}
+
+
+.callPage-recieverImageDiv .tooltiptext {
+  visibility: hidden;
+  /* width: 120px; */
+width:280px;
+  background-color: white;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  left: -125%;
+  margin-left: -60px;
+}
+
+
+
+.callPage-recieverImageDiv{
+  height:35px;
+  width:35px;
+  border-radius:50%;
+  margin:auto;
+ 
+  text-align: center;
+  box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
+
+}
+.callPage-recieverImageDiv:hover .tooltiptext {
+  visibility: visible;
+} 
+.endCall{
+  background-color: rgb(221, 103, 24);
+}
+.callPage-recieverImage{
+  height:36px;
+  width:36px;
+  margin:auto;
+  margin-top:-60px;
+  border-radius:50%;
+ 
+}
+
+
+.wait{
+  margin-top:0px;
+}
+
+.initialMessage{
+  min-height:100vh;
+  width:50%;
+  margin:auto;
+  padding-top:50px;
+  text-align: center;
+}

@@ -2,10 +2,14 @@ import React, { Component } from 'react'
 import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
-import '../css/call.css'
+import '../css/call.css';
+import browser from 'browser-detect';
+import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
+import { MdFilterNone } from "react-icons/md";
 import { answerCall } from '../../actions/callAction'
 import { connect } from 'react-redux';
 import { MdCallEnd } from "react-icons/md";
+import ProfileCard from './NewUi/ProfileHover'
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { stillAuthenicated } from '../../actions/signinAction';
@@ -30,7 +34,7 @@ class DisplayShare extends Component {
             closedHere: false,
             showDisconectMessage: false,
             connected: false,
-            myProfilePicture:null,
+            myProfilePicture: null,
             peerProfilePic: null,
             callEnded: false,
             manualClose: false,
@@ -38,19 +42,71 @@ class DisplayShare extends Component {
             validCheckComplete: false,
             picture: null,
             twitterhandle: null,
-            timerEnded: false
+            timerEnded: false,
+            callerProfileId: null,
+            isInstalled: true,
+            secondVideoStream: null
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
+        this.shareScreen = this.shareScreen.bind(this);
+        this.receiveMessage = this.receiveMessage.bind(this);
+        this.startCall = this.startCall.bind(this);
+        this.downloadExtension = this.downloadExtension.bind(this);
+
     }
+     downloadExtension() {
+    window.open(config.EXTENSION_URL)
+
+  }
     closeWindow() {
         window.close();
     }
 
     componentDidMount() {
+        var self = this
+        const result = browser();
+        if (result.name === "chrome") {
+            var img;
+            img = new Image();
+            img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
+            img.onload = function () {
+            };
+            img.onerror = function () {
+                self.setState({
+                    isInstalled: false
+                })
+            };
+        }
         var socket = this.state.socket;
         var peerIdFrmPeer = this.state.peerIdFrmPeer;
         var self = this;
+        function postMessageHandler(event) {
+            console.log(" event :", event)
+            if (event.data === 'rtcmulticonnection-extension-loaded') {
+                console.log(" event.source :", event.source)
+                self.setState({
+                    source: event.source,
+                    origin: event.origin,
+                    gotmessage: true
+                })
+                self.props.saveExtensionDetails(event.source, event.origin)
+            }
+            if (event.data.sourceId !== undefined) {
+                console.log("We've got a message!");
+                console.log("* Message:", event.data);
+                console.log("* Origin:", event.origin);
+                console.log("* Source:", event.source);
+                console.log("*event.data.message__sourceId : ", event.data.sourceId)
+                self.props.saveSourceId(event.data.sourceId)
+                self.startCall()
+            }
+        }
+        if (window.addEventListener) {
+            window.addEventListener("message", postMessageHandler, false);
+        } else {
+            window.attachEvent("onmessage", postMessageHandler);
+        }
         setTimeout(() => {
             if (!self.state.validCheckComplete) {
                 self.setState({
@@ -82,12 +138,14 @@ class DisplayShare extends Component {
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
             // alert("success")
             console.log("got acknolegdement")
+            console.log("caller profileId : ", data.id)
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
                     isTokenValid: true,
                     picture: data.profilePic,
-                    twitterhandle: data.twitterHandle
+                    twitterhandle: data.twitterHandle,
+                    callerProfileId: data.id
                 })
             }
         })
@@ -114,6 +172,8 @@ class DisplayShare extends Component {
     }
 
     componentWillMount() {
+        var self = true;
+
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket
@@ -129,7 +189,7 @@ class DisplayShare extends Component {
             socket: socket,
             peerIdFrmPeer: peerIdFrmPeer
         });
-        
+
         // var profilePic = (localStorage.getItem("profilePic"))
         // this.setState({
         //     peerProfilePic: profilePic
@@ -150,19 +210,19 @@ class DisplayShare extends Component {
         var self = this;
         var startConnection = new Promise((resolve, reject) => {
             var conn = peer.connect(peerIdFrmPeer);
-            conn.on('open', function(){
+            conn.on('open', function () {
                 // resolve(conn)
                 conn.send({
                     clientId: self.state.clientPeerid,
 
                 });
-              });
-          
+            });
+
         });
         // startConnection.then((conn) => {
         //     setTimeout(() => {
         //         console.log("sending the data please wait")
-              
+
         //     }, 5000)
         // });
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -175,7 +235,8 @@ class DisplayShare extends Component {
                     socket.emit(config.CALL_ACK_MESSAGE, {
                         'clientId': self.state.clientPeerid,
                         'recieverProfilePic': self.props.myProfilePicture,
-                        'recieverProfileName':self.props.myProfileName
+                        'recieverProfileName': self.props.myProfileName,
+                        'recieverUserId': self.props.myProfileUserId
                     })
                     self.setState({
                         connected: false
@@ -207,7 +268,7 @@ class DisplayShare extends Component {
             })
         })
         peer.on('close', () => {
-console.log(" peer.on('close', () ")
+            console.log(" peer.on('close', () ")
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
@@ -249,7 +310,76 @@ console.log(" peer.on('close', () ")
         })
         this.closeConnection()
     }
+    shareScreen() {
+        var self = this
+        // var ua = window.detect.parse(navigator.userAgent);
+        const result = browser();
+        if (result.name === "chrome") {
+            console.log('chrome')
+            if (this.state.isInstalled) {
+                console.log("installed")
+                self.receiveMessage()
+            }
+        }
+        else if (result.name === "firefox") {
+            console.log("firefox")
+            self.startCall()
+        }
+    }
+    receiveMessage() {
+
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        console.log(" source :", source)
+        console.log("origin :", origin)
+        if (this.props.extSource !== null) {
+            console.log("postingMessage")
+            source.postMessage('audio-plus-tab', origin);
+        }
+    }
+    startCall() {
+        const self = this
+        console.log("in start call")
+        const peer = this.state.peer
+        const result = browser();
+        var sourceId = this.props.extSourceId;
+        if (result.name === "chrome") {
+            console.log("chrome here")
+            var constraints = {
+                video: {
+                    mandatory: {
+                        chromeMediaSource: 'desktop',
+                        maxWidth: 2020,
+                        maxHeight: 600,
+                        maxFrameRate: 100,
+                        minAspectRatio: 1.75,
+                        chromeMediaSourceId: sourceId
+                    }
+                }
+            };
+        }
+        else if (result.name === "firefox") {
+            var constraints = {
+                video: {
+                    mediaSource: "screen",
+                    width: { max: '1920' },
+                    height: { max: '1080' },
+                    frameRate: { max: '10' }
+                }
+            }
+        }
+        navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
+            peer.call(self.state.peerIdFrmPeer, screenStream);
+            self.setState({
+                secondVideoStream: screenStream
+            })
+        })
+
+    }
     closeConnection() {
+        if (this.state.secondVideoStream !== null) {
+            this.state.secondVideoStream.stop()
+        }
         console.log("close connection")
         if (!this.state.closedHere === true) {
             this.setState({
@@ -267,6 +397,20 @@ console.log(" peer.on('close', () ")
     }
 
     render() {
+        const DownloadExt = (this.state.isInstalled) ? (
+            null) : (<div className="messageToDownload">
+                <h3>Please download the chrome extension to continue</h3>
+                <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
+            </div>)
+        if (this.state.callerProfileId !== null) {
+            console.log("1")
+            var ProfileHover = (<ProfileCard
+                userId={this.state.callerProfileId} />)
+        }
+        else {
+            console.log("0")
+            var ProfileHover = null
+        }
         var profileUrl = config.react_url + '/profile/' + this.state.twitterhandle
 
         // var callAnim=(this.state.connected)?
@@ -306,25 +450,46 @@ console.log(" peer.on('close', () ")
                     <div className="videoContainer">
                         <video className="VideoElementReciever" autoPlay={true} id="video" srcObject=" " ></video>
                     </div>
-                    <div className="decreasePadding">
-                        <div className="callPage-recieverImageDiv">
-                        <span className="hint--top" aria-label="End Call">
-                            <MdCallEnd onClick={this.endCall} 
-                            className="img__overlay" 
-                            style={{
-                                padding:"10px"
-                            }}/>
-                             </span>
+                    <div className="callImageDivAnwser">
+                        <div className="decreasePadding">
+                            <div className="callPage-recieverImageDiv">
+                                <MdCallEnd onClick={this.endCall}
+                                    className="img__overlay"
+                                    style={{
+                                        padding: "10px"
+                                    }} />
 
-                            <img className="callPage-recieverImage" 
-                            style={{marginTop:"-72px"}}
-                            src={this.state.picture}></img>
-                        </div>
-                        <span style={{fontSize:"12px"}}>End Call</span>
+                                <span className="tooltiptext" >
+                                    <div>
+                                        {ProfileHover}
 
-                        {/* <div class="overlayEndCall">
+                                    </div></span>
+
+                                <img className="callPage-recieverImage"
+                                    style={{ marginTop: "-60px" }}
+                                    src={this.state.picture}></img>
+                            </div>
+                            {/* <span style={{fontSize:"12px"}}>End Call</span> */}
+
+                            {/* <div class="overlayEndCall">
                         {/* <div class="text">Hello World</div> */}
-                        {/* </div>  */}
+                            {/* </div>  */}
+
+                        </div>
+                        <div className="screenShareFloat">
+                        <span className="tooltiptextChrome" >
+                                        <div>
+                                            {/* <p>asjdhskjad</p> */}
+                                            {DownloadExt}
+
+                                        </div>
+                        </span>
+                            <div className="callPage-recieverImageDiv endCall">
+                                {/* <span className="hint--top" aria-label="ShareScreen"> */}
+                                    <MdFilterNone onClick={this.shareScreen} className="endButton" />
+                                {/* </span> */}
+                            </div>
+                        </div>
                     </div>
                 </div>
             )
@@ -359,7 +524,6 @@ console.log(" peer.on('close', () ")
         return ((this.state.validCheckComplete) ? (
             (this.state.isTokenValid) ?
                 (<div>
-
                     {precallActivity}
                     <div className="screenShareDiv">
                         {ShareElement}
@@ -382,18 +546,27 @@ console.log(" peer.on('close', () ")
 DisplayShare.PropType = {
     answerCall: PropType.func.isRequired,
     stillAuthenicated: PropType.func.isRequired,
-    getProfileByTwitterHandle: PropType.isRequired
+    getProfileByTwitterHandle: PropType.isRequired,
+    saveSourceId: PropType.isRequired,
+    saveExtensionDetails: PropType.func.isRequired
+
 }
 
 const mapStateToProps = state => ({
     myProfilePicture: state.auth.profilePic,
-    myProfileName:state.auth.userName,
+    myProfileName: state.auth.userName,
+    myProfileUserId: state.auth.id,
     peerProfilePic: state.visitProfile.profilePic,
-    isLoggedIn: state.auth.isAuthenticated
+    isLoggedIn: state.auth.isAuthenticated,
+    extSource: state.extension.source,
+    extSourceId: state.extension.sourceId,
+    extOrigin: state.extension.origin,
+
+
 
 })
 
-export default connect(mapStateToProps, { answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 
 

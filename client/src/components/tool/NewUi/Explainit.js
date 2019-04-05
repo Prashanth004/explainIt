@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Button } from 'reactstrap';
-import Iframe from 'react-iframe'
-
 import Form from '../Form';
-import Navbar from './Navbar';
 import '../../css/explainit.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -18,10 +13,6 @@ import { setIssueId, cancelValidationErrors } from '../../../actions/issueAction
 import { creatAnsProject } from '../../../actions/projectActions'
 import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
 import config from '../../../config/config';
-import Home from './Home'
-import browser from 'browser-detect';
-
-
 
 class Explainit extends Component {
   constructor(props) {
@@ -37,7 +28,7 @@ class Explainit extends Component {
     this.drawRect = this.drawRect.bind(this);
     this.savefile = this.savefile.bind(this);
     this.clearCanvas = this.clearCanvas.bind(this);
-    this.downloadExtension = this.downloadExtension.bind(this);
+    // this.downloadExtension = this.downloadExtension.bind(this);
     this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
     this.recordFullScreen = this.recordFullScreen.bind(this);
     this.saveVideoData = this.saveVideoData.bind(this);
@@ -48,38 +39,13 @@ class Explainit extends Component {
     this.resize = this.resize.bind(this);
     this.openScreenShare = this.openScreenShare.bind(this)
   }
-  downloadExtension() {
-    window.open(config.EXTENSION_URL, "_self")
+  // downloadExtension() {
+  //   window.open(config.EXTENSION_URL, "_self")
 
-  }
-
-  componentWillMount() {
-    var self = this
-    this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
-    const result = browser();
-  //   {
-  //     name: 'chrome',
-  //     version: '58.0.3029',
-  //     versionNumber: 58.03029,
-  //     mobile: false,
-  //     os: 'Windows NT 10.0'
   // }
 
-
-    if (result.name === "chrome") {
-
-      var img;
-      img = new Image();
-      img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
-      img.onload = function () {
-
-      };
-      img.onerror = function () {
-        self.setState({
-          isInstalled: false
-        })
-      };
-    }
+  componentWillMount() {
+ 
   }
 
 
@@ -249,8 +215,8 @@ class Explainit extends Component {
       if (this.props.screenAction === FULL_SCREEN_SHARE ||
         this.props.screenAction === FULL_SCREEN_RECORD){
           formDiv = null
-          if(this.state.reducedWidth || this.props.showCanvas){
-            percentage = "80%";
+          if(this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare){
+            percentage = "100%";
           }
           else{
             percentage = "48%";
@@ -258,9 +224,9 @@ class Explainit extends Component {
         
         }
         else{
-          if(this.state.reducedWidth || this.props.showCanvas){
+          if(this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare){
            
-            percentage = "80%";
+            percentage = "100%";
           }
           else{
             percentage = "48%";
@@ -342,7 +308,7 @@ class Explainit extends Component {
       </div>)
     }
    
-    return (this.state.isInstalled) ? (
+    return(
 
       <div>
         {/* <div className="explainContainer"> */}
@@ -361,14 +327,7 @@ class Explainit extends Component {
           </div>
         </div>
       </div>
-    ) : (<div >
-      {/* <Navbar /> */}
-      <div className="messageToDownload">
-        <h3>Please down the chrome extension to continue</h3>
-        <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-      </div>
-    </div>
-      )
+    ) 
   }
 }
 Explainit.PropType = {
@@ -381,6 +340,7 @@ Explainit.PropType = {
   displayScrenRecord: PropType.func.isRequired,
 
 
+
 };
 const mapStateToProps = state => ({
   error: state.issues.error,
@@ -388,7 +348,9 @@ const mapStateToProps = state => ({
   success: state.issues.successCreation,  
   screenAction: state.tools.screenAction,
   isSignedIn: state.auth.isAuthenticated,
-  showCanvas:state.canvasActions.showCanvas
+  showCanvas:state.canvasActions.showCanvas,
+  startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
+
 
 })
 export default connect(mapStateToProps, { displayScrenRecord, displayShareScreen, creatAnsProject, setIssueId, displayFullScreShare, displayFullScrenRecord, cancelValidationErrors })(Explainit)

@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import {Button} from 'reactstrap'
+import bigInt from "big-integer";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy'
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
+import {startSecodScreenShare,endSecondScreenShare} from '../../../actions/secondShareAction'
 import config from '../../../config/config';
 import '../../css/shareScreen.css';
 import { FaArrowLeft } from "react-icons/fa";
 import CallImage from './CallImage'
 import socketIOClient from "socket.io-client";
+import browser from 'browser-detect';
 import Call from './Call';
-import { FiX, FiTwitter, FiVideo } from "react-icons/fi";
-import { MdReplay, MdCallEnd } from "react-icons/md";
+import { FiX, FiVideo } from "react-icons/fi";
+import { MdReplay } from "react-icons/md";
 import SaveElement from './Saveproject';
 import {
     fullStartedSharing,
@@ -39,7 +42,6 @@ class ScreenRecorder extends Component {
             downloadUrl: null,
             isShareDone: false,
             blob: null,
-            // noText :false,
             finalStream: null,
             host: config.peerHost,
             port: config.peerPort,
@@ -74,11 +76,11 @@ class ScreenRecorder extends Component {
             stopedSharing: false,
             tweetBtnPressed: false,
             isSaveClicked: false,
+            recieverProfileId:null,
             noOfMinutes: 3,
-            // limitExce: false,
+            isInstalled:true,
             maxTimeForVideo: null,
-            // emptyNumber: false,
-            // negNumber: false
+            secondShareStrem:null
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
@@ -98,24 +100,20 @@ class ScreenRecorder extends Component {
         this.saveClicked = this.saveClicked.bind(this);
         this.expireTimer = this.expireTimer.bind(this)
         this.setNoOfMinutes = this.setNoOfMinutes.bind(this);
-        // this.changeImputNumber = this.changeImputNumber.bind(this);
-        // this.startBar = this.startBar.bind(this)
+        this.downloadExtension = this.downloadExtension.bind(this);
 
+       
     }
 setNoOfMinutes(minutes){
    this.setState({
     noOfMinutes:minutes
    })
 }
-  
-   
-
 
     startScreenShareSend() {
         var self = this
         var sourceId = this.props.extSourceId;
         var ua = window.detect.parse(navigator.userAgent);
-
         if (ua.browser.family === "Chrome") {
             var constraints = {
                 video: {
@@ -148,7 +146,6 @@ setNoOfMinutes(minutes){
                 window.getTracks(audioStream, 'audio').forEach(function (track) {
                     finalStream.addTrack(track);
                 });
-
                 window.getTracks(screenStream, 'video').forEach(function (track) {
                     finalStream.addTrack(track);
                 });
@@ -183,8 +180,6 @@ setNoOfMinutes(minutes){
                 peer: null
             })
         }
-
-
         // self.stopShare()
         self.setState({
             initiatedCloseCall: true
@@ -209,16 +204,13 @@ setNoOfMinutes(minutes){
                 timeOutNoAnswer: true,
                 peer:null
             })
-           
         }
     }
 
     componentDidMount() {
-       
         var socket = this.state.socket;
         var self = this
         var peer = this.state.peer;
-
         function postMessageHandler(event) {
             console.log(" event :", event)
             if (event.data.sourceId !== undefined) {
@@ -230,7 +222,6 @@ setNoOfMinutes(minutes){
                 self.props.saveSourceId(event.data.sourceId)
                 self.startScreenShareSend()
             }
-
         }
         if (window.addEventListener) {
             window.addEventListener("message", postMessageHandler, false);
@@ -251,19 +242,23 @@ setNoOfMinutes(minutes){
             // }
         // }, 3 * 60 * 1000)
         socket.on(config.CALL_ACK_MESSAGE, data => {
+            console.log("data.recieverUserId : ",data.recieverUserId)
+            console.log("typeof(data.recieverUserId) : ",typeof(data.recieverUserId))
+            console.log("Number(data.recieverUserId) : ",bigInt(data.recieverUserId).value)
+            var userId = Number(data.recieverUserId);
+            var userId = bigInt(data.recieverUserId).value;
+            console.log("typeof(bigint) : ",typeof(userId))
             self.setState({
                 recieverProfilePic:data.recieverProfilePic,
-                recieverProfileName:data.recieverProfileName
+                recieverProfileName:data.recieverProfileName,
+                recieverProfileId :userId
             })
             console.log(" data from client ack : ", data)
             if (data.clientId === self.state.peerId) {
-              
                     self.setState({
                         CallAck: true,
                     })
                 }
-            
-
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
             console.log("network issue from other peer")
@@ -274,7 +269,6 @@ setNoOfMinutes(minutes){
                 })
             }
         })
-
 
         socket.on(config.END_CALL, data => {
             console.log(" data from end call process : ", data)
@@ -294,7 +288,6 @@ setNoOfMinutes(minutes){
                     manualClose: true
                 })
             }
-
         })
 
         socket.on(config.ENDCALL_ACK, data => {
@@ -305,7 +298,6 @@ setNoOfMinutes(minutes){
         })
 
         socket.on(config.CHECK_TOKEN_VALIDITY, data => {
-
             console.log("confmessage : ", data)
             console.log(" ")
             if (data.clientId === self.state.peerId) {
@@ -313,6 +305,7 @@ setNoOfMinutes(minutes){
                 socket.emit(config.COMFIRM_TOKEN_VALIDITY, {
                     success: 1,
                     msg: "token valid",
+                    id:self.props.userId,
                     profilePic: self.props.profilePic,
                     twitterHandle: self.props.callerTwitterHandle
                 })
@@ -322,19 +315,29 @@ setNoOfMinutes(minutes){
     }
 
     componentWillMount() {
-       
-        this.props.stillAuthenicated()
+        this.props.stillAuthenicated();
+        const result = browser();
+          if (result.name === "chrome") {
+            var img;
+            img = new Image();
+            img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
+            img.onload = function () {
+            };
+            img.onerror = function () {
+              self.setState({
+                isInstalled: false
+              })
+            };
+          }
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket
         });
-
         var self = this;
         var peer = new window.Peer()
         this.setState({
             peer: peer
         });
-
         peer.on('open', (id) => {
             console.log('My peer ID is: ' + id);
             self.setState({
@@ -342,7 +345,19 @@ setNoOfMinutes(minutes){
             })
             self.generateLink()
         });
+        peer.on('call', function (call) {
 
+            console.log("connection : ", call)
+                call.answer()
+                call.on('stream', function (stream) {
+                   console.log("strem rom other peer : ", stream)
+                   var audio = document.querySelector('#secondShareVideo');
+                   audio.srcObject = stream
+                   audio.style.display="block"
+                   audio.play()
+                   self.props.startSecodScreenShare(stream)
+                })
+        })
         peer.on('connection', (conn) => {
             conn.on('open', () => {
                 console.log("got some data")
@@ -652,6 +667,7 @@ setNoOfMinutes(minutes){
                 this.props.fullStopedSharing();
             var self = this;
             var recorder1 = this.state.recorder;
+           
             var audioStream = this.props.audioStream;
             var screenStream = this.props.screenStream;
             if (audioStream !== null)
@@ -681,6 +697,7 @@ setNoOfMinutes(minutes){
                     })
                     self.props.saveVideoBlob(blob)
                 });
+            self.props.endSecondScreenShare()
             this.setState({
                 isShareDone: true,
                 isAudioRecDone: true,
@@ -695,6 +712,10 @@ setNoOfMinutes(minutes){
         }
 
     }
+    downloadExtension() {
+        window.open(config.EXTENSION_URL, "_self")
+    
+      }
 
     render() {
         const closeFunction=(this.props.isSceenSharing)?this.props.reStoreDefault:
@@ -763,8 +784,7 @@ setNoOfMinutes(minutes){
             var MessageDisconnected = (
                 <div>
                     <p><b>Call ended due to network issues</b></p>
-
-                    <p>You can reord the canvas and send it</p>
+                    <p>You can reord the screen and send it</p>
                     <span className="hint--bottom" aria-label="Record call and send">
                         <FiVideo className="icons" onClick={this.recordCall} />
                     </span>
@@ -783,7 +803,7 @@ setNoOfMinutes(minutes){
             var MessageDisconnected = (
                 <div>
                     <p><b>Retry failed</b><br />{noInternet}</p>
-                    <p>You can reord the canvas and send it</p>
+                    <p>You can reord the screen and send it</p>
                     <span className="hint--bottom" aria-label="Record call and send">
                         <FiVideo className="icons" onClick={this.recordCall} />
                     </span>
@@ -805,8 +825,13 @@ setNoOfMinutes(minutes){
             var recieverProfPic= (this.props.twirecieverPrfilePic ===null)?
             (this.state.recieverProfilePic):
             (this.props.twirecieverPrfilePic)
+
             const recieveProfileName = (this.props.twitterName ===null)?
             (this.state.recieverProfileName):(this.props.twitterName)
+
+            const recieverProfileId = (this.props.twitterUserId!==null)?(
+                this.props.twitterUserId
+            ):(this.state.recieverProfileId)
     
             
             var shareTimeElements = (
@@ -816,7 +841,9 @@ setNoOfMinutes(minutes){
                         endCall={this.endCall}
                         otherPersonPic={recieverProfPic}
                         otherPersonName={recieveProfileName}
+                        otherPersonProfileId={recieverProfileId}
                         timeAloted = {this.state.noOfMinutes}
+                        secondShareStrem={this.state.secondShareStrem}
                     />
                 </div>
             )
@@ -846,13 +873,7 @@ setNoOfMinutes(minutes){
                 var postShareElements = (<div className="postRecord">
                    
                     <p>Call is saved under your created section</p>
-                    {/* <p>Do you want to tweet the recording to the other peer?</p>
-                    <span className="hint--bottom" aria-label="Tweet">
-                        <FiTwitter className="icons" onClick={this.tweetToParicipant} />
-                    </span>
-                    <span className="hint--bottom" aria-label="Cancel">
-                        <FiX className="icons" onClick={this.discard} onClick={this.discard} />
-                    </span> */}
+                   
                 </div>)
             else if (!this.props.tweetSuccess && this.state.tweetBtnPressed && this.props.twitterSendDone) {
                 var postShareElements = (<div className="postRecord">
@@ -945,7 +966,7 @@ setNoOfMinutes(minutes){
 
             </div>)
 
-        return (
+        return (this.state.isInstalled) ? (
             <div>
                 {/* {backArrow} */}
                { closeBtn}
@@ -957,7 +978,14 @@ setNoOfMinutes(minutes){
                 </div>
             </div>
 
-        )
+        ):(<div >
+            {/* <Navbar /> */}
+            <div className="messageToDownload">
+              <h3>Please download the chrome extension to continue</h3>
+              <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
+            </div>
+          </div>
+            )
     }
 }
 ScreenRecorder.PropType = {
@@ -969,7 +997,8 @@ ScreenRecorder.PropType = {
     cancelAllMessageAction: PropType.func.isRequired,
     displayFullScrenRecord: PropType.func.isRequired,
     sendTweet: PropType.func.isRequired,
-    resetValues: PropType.func.isRequired
+    resetValues: PropType.func.isRequired,
+    endSecondScreenShare:PropType.func.isRequired
 }
 const mapStateToProps = state => ({
 
@@ -986,10 +1015,14 @@ const mapStateToProps = state => ({
     profilePic: state.auth.profilePic,
     twirecieverPrfilePic: state.twitterApi.twitterProfilePic,
     twitterName: state.twitterApi.name,
+    twitterUserId:state.twitterApi.twitterId,
     callerTwitterHandle: state.auth.twitterHandle,
     recieverTwitterHandle: state.twitterApi.twitterHandle,
     tweetSuccess: state.twitterApi.tweeetSent,
-    twitterSendDone: state.twitterApi.tweetDone
+    twitterSendDone: state.twitterApi.tweetDone,
+    userId: state.auth.id,
+    startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
+    secodShareStream :  state.secondScreenShare.stream
 
 
 })
@@ -1000,10 +1033,12 @@ export default connect(mapStateToProps, {
     sendTweet,
     cancelAllMessageAction,
     restAllToolValue,
+    startSecodScreenShare,
     saveSourceId,
     fullStartedSharing,
     setStream,
     fullStopedSharing,
     saveVideoBlob,
     stillAuthenicated,
+    endSecondScreenShare
 })(ScreenRecorder)

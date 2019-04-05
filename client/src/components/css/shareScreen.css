@@ -1,5 +1,5 @@
 .LinkDisplay{
-    width:90%;
+    width:100%;
     margin:auto;
     /* min-height:60vh; */
     background-color: white;
@@ -24,12 +24,13 @@
     font-size:12px;
     /* background-color: #eee; */
 }
+
 .DisconMessage{
     width:80%;
     margin:auto;
     margin-top:10px;
     padding-top:20px;
-    font-size:22px;
+    font-size:19px;
     font-weight: 400;
 }
 /* .icons{
@@ -145,6 +146,11 @@ height:25;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
 }
+
+
+
+  
+
 
 @keyframes pulse{
 	0%{

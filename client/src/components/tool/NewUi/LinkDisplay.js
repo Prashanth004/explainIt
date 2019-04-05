@@ -75,7 +75,7 @@ export default class componentName extends Component {
                 clearInterval(id);
             } else {
                 width = width - (100 / timeAloted);
-                console.log("width: ", width)
+                // console.log("width: ", width)
                 progressbar.style.width = width + '%';
             }
         }
@@ -154,7 +154,7 @@ export default class componentName extends Component {
                 </div>
                 <div>
                 <div className="twitter" style={{width:"20px", height:"20px"}}>
-                <span class="hint--top" aria-label="Spxhare manually">
+                <span class="hint--top" aria-label="Share manually">
 
                         <img src={require('../../images/share.svg')}
                         width="100%"
@@ -179,14 +179,7 @@ export default class componentName extends Component {
                             </p>
                     <TimerBar />
                 </div>
-
                 {tweetOrshare}
-
-
-
-
-
-
             </div>
         ) : (
                 <div className="timerDuration">

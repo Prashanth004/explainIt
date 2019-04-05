@@ -12,6 +12,8 @@ import navReducer from './navReducer'
 import twitterApiReducer from './twitterApiReducer';
 import streamReducer from './streamReducer';
 import canvasActionsReducer from './canvasActionReducer'
+import profileHoverReducer from './profileHoverReducer'
+import secondScreenShareReducer from './secondShareReducer'
  
 export default combineReducers({
     auth : signinReducer,
@@ -26,5 +28,7 @@ export default combineReducers({
     nav:navReducer,
     twitterApi:twitterApiReducer,
     stream:streamReducer,
-    canvasActions:canvasActionsReducer
+    canvasActions:canvasActionsReducer,
+    profileHover:profileHoverReducer,
+    secondScreenShare :secondScreenShareReducer
 })

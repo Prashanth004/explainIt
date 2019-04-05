@@ -11,7 +11,7 @@ import Form from '../Form'
 import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
 import { Button } from 'reactstrap'; 
 import TimerBar from './TimerBar'
-import { FiSave, FiX, FiTwitter, FiVideo } from "react-icons/fi";
+import browser from 'browser-detect';
 import {fullStartedRecording,
     fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
 import {connect} from 'react-redux';
@@ -31,7 +31,7 @@ class FullScreenRecorder extends Component {
             copyStatus:"copy link",
             saveBtnClicked:false,
             showCanvas:false,
-           
+            isInstalled:true
            
             
         }
@@ -262,6 +262,24 @@ toggleCanvas(){
             screenStream: null,
         })
     }
+    componentWillMount(){
+        var self = this
+        const result = browser();
+        if (result.name === "chrome") {
+    
+          var img;
+          img = new Image();
+          img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
+          img.onload = function () {
+    
+          };
+          img.onerror = function () {
+            self.setState({
+              isInstalled: false
+            })
+          };
+        }
+    }
     componentWillUnmount(){
         var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
@@ -405,14 +423,21 @@ toggleCanvas(){
         if (this.state.shareScreenLink) {
             linkElement = (<p>{this.state.shareScreenLink}</p>)
         }
-        return (
+        return (this.state.isInstalled) ? (
             <div className="recordMainScreen">
             {closeBtn}
             
                {recordingElements}
                 {postShareElements}
              </div>
-        )
+        ):(<div >
+            {/* <Navbar /> */}
+            <div className="messageToDownload">
+              <h3>Please down the chrome extension to continue</h3>
+              <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
+            </div>
+          </div>
+            )
     }
 }
 FullScreenRecorder.PropType={

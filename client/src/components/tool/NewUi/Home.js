@@ -88,14 +88,7 @@ class NewHome extends Component {
         var self = this
         function postMessageHandler(event) {
             console.log(" event :", event)
-            // if (event.data.sourceId !== undefined) {
-            //     console.log("We've got a message!");
-            //     console.log("* Message:", event.data);
-            //     console.log("* Origin:", event.origin);
-            //     console.log("* Source:", event.source);
-            //     console.log("*event.data.message__sourceId : ", event.data.sourceId)
-            //     self.props.saveSourceId(event.data.sourceId)
-            // }
+          
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
                 console.log(" event.source :", event.source)
@@ -436,7 +429,7 @@ NewHome.PropType = {
     fetchProjectbyIssue: PropType.func.isRequired,
     setIssueId: PropType.func.isRequired,
     // getProfileDetails: PropType.func.isRequired,
-    saveExtensionDetails: PropType.func.issaveExtensionDetailsRequired,
+    saveExtensionDetails: PropType.func.isRequired,
     saveSourceId: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     acceptCallDetails: PropType.func.isRequired,

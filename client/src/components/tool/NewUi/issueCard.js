@@ -101,7 +101,8 @@ export default class componentName extends Component {
                         <div className="copyDisplay" id={"clipboard_" + this.props.issue.issueid} style={{ display: "none" }}>
                             <CopyToClipboard sharablelink={config.react_url + '/project/' + this.props.projectId} />
                         </div>
-                        <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionText">
+                        <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
+                         className="questionText">
                             <p id={this.props.issue.issueid} >{this.props.issue.textexplain}</p>
                         </div>
                         <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
