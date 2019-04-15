@@ -4,6 +4,7 @@ import '../../css/explainit.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import ScreenShare from './ScreenShare'
+
 import ScreenRecorder from './ScreenRecorder'
 import FullScreenShare from './enitreScreenShare'
 import FullScreenRecord from './FullScreenRecord'
@@ -314,7 +315,7 @@ class Explainit extends Component {
         {/* <div className="explainContainer"> */}
 
         {/* </div> */}
-        <div className="explainContainer" style={{width : percentage}}>
+        <div className="explainContainer" style={{width : "100%"}}>
 
        
           {formDiv}

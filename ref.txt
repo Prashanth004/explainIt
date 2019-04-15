@@ -27,7 +27,7 @@ pg_dump -U bookmane -d toolArchi > dump.sql
 
 
 SERVER
-sudo -u postgres -i
+    sudo -u postgres -i
 psql
 
 \list
@@ -39,6 +39,7 @@ ALTER DATABASE explain OWNER TO bookmane
 CREATE DATABASE <dbname> OWNER <ownername> 
 \dt
 psql dbname < dump.sql
+\d table_name -- to view table details
 
 
 

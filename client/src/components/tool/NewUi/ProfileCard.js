@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import config from '../../../config/config'
+import config from '../../../config/config';
+import { FiMail } from "react-icons/fi";
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
+import Explain from './Explainit'
 
 import { IoIosLink } from "react-icons/io";
 
@@ -42,23 +44,38 @@ class ProfileCard extends Component {
         // var sharabeLink = config.base_dir+"/"+this.props.twitterHandle
         return (
             <div className="Profilecard">
-                <div className="blackwhite">
-                    {linkSymbol}
-                </div>
-                <div className="profileDetails">
-                    <div className="nameImageDiv">
-                        <div className="profileImage">
-                        <a href={"https://twitter.com/"+this.props.twitterHandle}>
-                            <img src={this.props.profilePic} className="profileImageElement" ></img>
-                            </a>    
-                        </div>
-                        <div   className="profileName">
-                        <a href={"https://twitter.com/"+this.props.twitterHandle}
-                       ><b>{this.props.userName}</b></a>
-                      </div>
+                {/* <div className="blackwhite">
 
+                    {/* {linkSymbol} */}
+                {/* </div> */} 
+                <div className="profileDetails">
+                    <div>
+                        <div className="nameImageDiv">
+                            <div className="profileImage">
+                                <a href={"https://twitter.com/" + this.props.twitterHandle}>
+                                    <img src={this.props.profilePic} className="profileImageElement" ></img>
+                                </a>
+                            </div>
+                            <div className="profileName">
+                                <a href={"https://twitter.com/" + this.props.twitterHandle}
+                                ><b>{this.props.userName}</b></a>
+                            </div>
+
+                        </div>
                     </div>
-                    <div onClick={this.props.toggleCreatedIssue} className="displayNumber">
+
+
+                    <div>
+
+                        <Explain closeImidiate={this.handleConfirm} style={{ width: "100%" }} reStoreDefault={this.reStoreDefault} />
+                    </div>
+                    <div>
+                        <div className="MailIconHolder">
+                            <img src={require('../../images/mail.png')} width="100%" height="100%"></img>
+                        </div>
+                        {/* <FiMail /> */}
+                    </div>
+                    {/* <div onClick={this.props.toggleCreatedIssue} className="displayNumber">
                         <p>Created</p>
                         <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>
 
@@ -67,7 +84,7 @@ class ProfileCard extends Component {
                         <p>Participated</p>
                         <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>
 
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )

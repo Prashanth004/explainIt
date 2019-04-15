@@ -312,7 +312,7 @@ class NewHome extends Component {
         console.log("this.props.participated : ",this.props.participated)
         if (this.props.isAauthenticated) {
             if (this.state.openExplain) {
-                explainDiv = (<Explain closeImidiate={this.handleConfirm} reStoreDefault={this.reStoreDefault} />)
+                // explainDiv = (<Explain closeImidiate={this.handleConfirm} reStoreDefault={this.reStoreDefault} />)
             }
             if (this.props.created && !this.props.participated ) {
                 explainDiv = null
@@ -405,9 +405,9 @@ class NewHome extends Component {
                         {profileCardElement}
                         {/* {explainItBt/n} */}
                     </div>
-                    <div >
+                    {/* <div >
                         {explainDiv}
-                    </div>
+                    </div> */}
                     <div>
                         {feedDiv}
                     </div>
