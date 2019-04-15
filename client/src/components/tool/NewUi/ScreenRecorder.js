@@ -32,8 +32,6 @@ export class ScreenRecorder extends Component {
         this.toggle = this.toggle.bind(this);
         this.savefile = this.savefile.bind(this);
         this.discardChanges = this.discardChanges.bind(this);
-        // this.copyToClipboard = this.copyToClipboard.bind(this)
-
     }
 
     startRecoding(){
@@ -64,10 +62,7 @@ export class ScreenRecorder extends Component {
                 canvasStream: canvasStream,
                 finalStream: finalStream
             })
-            self.props.startDraw()
-
-           
-          
+            self.props.startDraw()      
            
         }).catch(err => {
             console.log("error ouucres : ", err)

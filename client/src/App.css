@@ -1,11 +1,13 @@
 .App {
   background-color:#f5f0f8;
+  /* background-clip: #fcf8ff; */
   /* background-color: white; */
 
 
   font-family: "Helvetica";
   height: '100vh';
 }
+
 .mainContainer{
   min-height:100vh;
 }

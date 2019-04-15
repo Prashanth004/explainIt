@@ -1,0 +1,79 @@
+.floatcontainer{
+    display:grid;
+    grid-template-columns:25% 25% 25% 25%;
+    padding:5px;
+    border-radius:25px;
+    width:80%;
+    margin:auto;
+    height:55px;
+    position:relative;
+    /* background-color:rgb(14, 14, 44); */
+    border-style:solid;
+    border-width:0.5px;
+    border-color:rgba(0, 0, 0, 0.404);
+
+}
+.floatcontainer:hover{
+   
+cursor:move;
+}
+.dragoMail{
+    width:35px;
+    height:35px;
+}
+.detailsFloater{
+    position:relative;
+    width:250px;
+    height:105px;
+    top:5px;
+    background-color:white;
+    border-radius:3px;
+    right:20px;
+}
+.issueContainer{
+    width:45%;
+}
+ .recieverProfilePic .tooltiptext {
+    visibility: hidden;
+    /* width: 120px; */
+  width:220px;
+    background-color: white;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+  
+    position: absolute;
+    z-index: 1;
+    bottom: 57px;
+    left:55px ;
+    margin-left: -60px;
+  }
+  .recieverProfilePic:hover .tooltiptext{
+    visibility: visible;
+   
+  }
+
+.profilePic{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    }
+    .profilePic:hover{
+        cursor: pointer;
+    }
+    .screenShareBtn{
+        width:35px;
+        height:35px
+    }
+    .RecordBtn{
+        width:35px;
+        height:35px;
+    }
+
+    @media (min-width: 700px) {
+        .floatcontainer{
+          
+            width:200px;
+            height:55px;
+        }
+    }

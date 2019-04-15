@@ -35,6 +35,8 @@ class FullScreenRecorder extends Component {
            
             
         }
+            this.downloadExtension = this.downloadExtension.bind(this);
+
         this.recordScreenStop = this.recordScreenStop.bind(this);
         this.savefilePrivate = this.savefilePrivate.bind(this);
         this.savefilePublic = this.savefilePublic.bind(this);
@@ -177,12 +179,9 @@ class FullScreenRecorder extends Component {
     discardChanges(){
         // this.props.clearCanvas();
         // this.props.discardAfterRecord();
-
        window.location.reload();
-
     }
     receiveMessage() {
-        
         console.log("i reached insoide start Recording")
         var mainBtn = document.querySelector('.mainBtn');
         mainBtn.style.backgroundColor="rgb(133, 39, 39)";
@@ -261,7 +260,12 @@ toggleCanvas(){
             audioStream: null,
             screenStream: null,
         })
+
     }
+    downloadExtension() {
+    window.open(config.EXTENSION_URL, "_self")
+
+  }
     componentWillMount(){
         var self = this
         const result = browser();

@@ -1,4 +1,6 @@
-import {CALL_DETAILS_ACCEPT,ANSWER_CALL,MISS_CALL } from './types'
+import {CALL_DETAILS_ACCEPT,
+    ANSWER_CALL,MISS_CALL,
+    SAVE_RECIEVER_DATA } from './types'
 
 export const acceptCallDetails = (link, callerEmail, callerUserName, callerId,callerProfilePic)=>(dispatch)=>{
 dispatch({
@@ -20,5 +22,14 @@ export const answerCall = ()=>(dispatch)=>{
 export const missCall = () =>(dispatch)=>{
     dispatch({
         type:MISS_CALL
+    })
+}
+
+export const getRecieverData=(profileImage,profileName,userId)=>(dispatch)=>{
+    dispatch({
+        type:SAVE_RECIEVER_DATA,
+        profileImage:profileImage,
+        profileName:profileName,
+        userId:userId
     })
 }

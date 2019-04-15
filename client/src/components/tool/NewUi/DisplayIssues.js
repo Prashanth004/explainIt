@@ -140,6 +140,9 @@ class DisplayIssue extends Component {
             </div>)
         }
         else {
+            console.log("this.props.issueArray : ", this.props.issueArray)
+            // const issueItemReverse = (this.props.issueArray).reverse()
+            // console.log("issueItemReverse : ", issueItemReverse)
             issueItems =this.props.issueArray.map((issue, index) => (
                <IssueCard 
                itsHome={this.state.itsHome}

@@ -3,6 +3,7 @@ import '../../css/call.css'
 import Countdown from 'react-countdown-now';
 import Form from '../Form'
 import { connect } from 'react-redux';
+import Draggable from 'react-draggable';
 import PropType from 'prop-types';
 import { showCanvas, hideCanvas } from '../../../actions/canvasAction';
 import { MdCallEnd } from "react-icons/md";
@@ -72,7 +73,7 @@ class Call extends Component {
 
                 </div>
                 {showCanv}
-
+                <Draggable>
                 <div className="callImageDivAnwser">
 
                     <div className="callPage-recieverImageDiv">
@@ -104,6 +105,7 @@ class Call extends Component {
                         {/* <span style={{fontSize:"12px"}}>End Call</span> */}
                     {/* </div> */}
                 </div>
+                </Draggable>
 
 
             </div>

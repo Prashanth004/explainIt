@@ -22,26 +22,33 @@ border-radius:10.5px;
 }
 .menuItem{
     width:100%;
+    /* display: inline-block; */
 
+}
+.privateOpt{
+    padding-left:18px;
+    display:inline-block;
 }
 /* .menuItem:hover{
     background-color: rgba(7, 133, 59, 0.562);
 } */
 .dropDownForOption{
     width:125px;
-    /* visibility: hidden;
-    visibility: visible */
     text-align: left;
     position:relative;
-    left:180px;
-    top:30px;
+    left:30px;
+    top:20px;
     background-color: white;
     border-radius:5px;
-    padding:0 10px 0 10px;
+    /* padding:0 10px 0 10px; */
     border-width:0.5px;
     border-style:none;
+    z-index:1000000;
     border-color:rgb(90, 90, 90);
     box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329);
+
+}
+.PublicPrivateToggle{
 
 }
 .questionModal{
@@ -59,6 +66,7 @@ border-radius:10.5px;
 }
 .icons{
     margin-left:10px;
+    text-align: right;
 }
 .iconsright{
     margin-left:10px;
@@ -77,6 +85,10 @@ border-radius:10.5px;
 .profileNameDiv{
     text-align: center;
 }
+.ProfileNameCard{
+    text-align: left;
+    padding-left:15px;
+}
 .copyDisplay{
         width:100%;
         margin:auto;
@@ -85,17 +97,21 @@ border-radius:10.5px;
 }
 .sharableLinkCard{
     /* background-color:blue; */
-    display: grid;
-  grid-template-columns: 30% 30% 40%;
+   
 }
 
 
 .topButtons{
+
     width:100%;
+    height:60px;
+  
     padding:7px 7px 0px 0px;
+    padding-top:15px;
+    padding-left:10px;
   display: grid;
-  grid-template-columns: 30% 30% 40%;
-  border-bottom-style:solid;
+  grid-template-columns: 80% 20%;
+  border-bottom-style:none;
   border-bottom-color: rgb(232,232,232);
   border-bottom-width:0.5px;
 }

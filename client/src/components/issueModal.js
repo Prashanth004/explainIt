@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { Player } from 'video-react';
 import PropType from 'prop-types';
 import {getImagesByemail} from '../actions/projectActions'
-// import "../../node_modules/video-react/dist/video-react.css";
-// import config from '../../../config/config';
-// import CopyToClipboard from '../CopytoClipboard'
 
 
 
@@ -136,7 +133,7 @@ class issueDetails extends Component {
             {/* <video  controls  src={this.props.questionProject.videofilepath}  >
    
 </video> */}
-            <video src={this.props.questionProject.videofilepath} controls  className="videoPlayer" ref={vid => this.videoExplain = vid}autoPlay="true" ></video>
+            <video src={this.props.questionProject.videofilepath} controls  className="videoPlayer" ref={vid => this.videoExplain = vid} ></video>
             {/* <Player
     className="videoPlayer"
       ref={vid => this.videoExplain = vid}

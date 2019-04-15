@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css';
 import { Redirect } from 'react-router-dom';
+import PageNotFount from './NoMatch';
+import DisplayCreated from './DisplayCreated'
+
 
 import Navbar from './Navbar'
 import '../../css/NewSignin.css'
@@ -76,7 +79,9 @@ class NewHome extends Component {
        
         
         if(!this.props.isPresentInExplain){
-            this.props.getRecpientId(this.props.match.params.encrTwitterHandle)
+            // alert("dnvnvnfkn")
+            const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+            this.props.getRecpientId(twiHand)
         }
         var self = this
                 function postMessageHandler(event) {
@@ -106,9 +111,13 @@ class NewHome extends Component {
     }
     componentWillMount() {
         this.props.stillAuthenicated()
-        console.log("this.props.match.params.encrTwitterHandle :",this.props.match.params.encrTwitterHandle)
-        this.props.getProfileByTwitterHandle(this.props.match.params.encrTwitterHandle)
-        localStorage.setItem("peerId",JSON.stringify(this.props.match.params.encrTwitterHandle))
+        if(this.props.match.params.encrTwitterHandle===null){
+            alert("empty")
+        }
+        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+        console.log("this.props.match.params.encrTwitterHandle :",twiHand)
+        this.props.getProfileByTwitterHandle(twiHand)
+        localStorage.setItem("peerId",JSON.stringify(twiHand))
     }
     toodleExplain() {
         localStorage.setItem("issueId", null)
@@ -230,9 +239,10 @@ class NewHome extends Component {
         var explainDiv = null;
         var feedDiv = null;
         var trueFalse = this.state.showParticipatedIssue;
-        var loginButton = (this.props.isAauthenticated)?(null):( <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
+        var loginButton = (this.props.isAauthenticated)?
+        (null):((this.props.created || this.props.participated)? (null):(<TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
         onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-        requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />)
+        requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />))
           
         
         // if (this.props.isAauthenticated) {
@@ -245,7 +255,9 @@ class NewHome extends Component {
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
                             </div>
-                            <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
+                            {/* <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={issuesCreated} /> */}
+                            <DisplayCreated home={config.NOT_HOME} issueArray={(issuesCreated).reverse()} />
+
                         </div>
                     </Animated>)
             }
@@ -294,12 +306,15 @@ class NewHome extends Component {
         //     var profileCardElement = (<Content />)
         // }
         var self = this
+        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
         return (this.props.authAction)?(
             // (!(this.props.twitterHandle===this.props.match.params.encrTwitterHandle))?(
             (!!this.props.fetchProfile)?(
             (!!this.props.isPresentInExplain)?(
             <div className="fullHome">
-                <Navbar />
+                <Navbar
+                page="profile"
+                twitterHandle={twiHand} />
                 <div className="containerHome">
                     <div>
                         {profileCardElement}
@@ -335,7 +350,7 @@ class NewHome extends Component {
                     (this.props.profilePresentOnTwitter)?(
                     <ProfileNotOnExplain twitterhandle={this.props.match.params.encrTwitterHandle} />
              ):(
-                 <ProfileNotOnTwitter />
+                 <PageNotFount />
              )
             ):(null)
                

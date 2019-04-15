@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
-import Navbar from './Navbar'
-import Screenrecorder from './FullScreenRecord';
+import { Button } from 'reactstrap'; 
+
+import TwitterLogin from 'react-twitter-auth';
+import Screenrecorder from './explainItRecorder';
 import { connect } from 'react-redux';
+import config from '../../../config/config'
+import { twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
+import { cancelAllMessageAction } from '../../../actions/messageAction'
+import { restAllToolValue } from "../../../actions/toolActions";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
@@ -11,111 +17,127 @@ import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAc
 
 import '../../css/ExplainpPage.css'
 class ExplainPage extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-
+        this.state = {
+            twitterHandle:null
         }
-        this.saveVideoData =this.saveVideoData.bind(this)
+        this.saveVideoData = this.saveVideoData.bind(this);
+        this.closeFunction = this.closeFunction.bind(this)
     }
 
+    componentWillMount(){
+        const twitterHandle = (window.location.href).split("/")[3]
+        this.setState({
+            twitterHandle:twitterHandle
+        })
+    }
+    componentDidMount() {
+        var self = this
+        
+    }
+    closeFunction(){
+        this.props.cancelAllMessageAction();
+        this.props.restAllToolValue();
+        this.props.handleCloseModal();
+    }
+    reStoreDefault = () => {
+        confirmAlert({
+            title: "Are you sure?",
+            message: "You won't be able to revert this!",
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.handleConfirm()
+                },
+                {
+                    label: 'No',
+                    onClick: () => this.handleCancel()
+                }
+            ]
+        })
+    }
+    handleCancel = () => {
 
-    componentDidMount(){
-      var self = this
-      function postMessageHandler(event) {
-          if (event.data === 'rtcmulticonnection-extension-loaded') {
-              console.log(" event.source :", event.source)
-              self.setState({
-                  source: event.source,
-                  origin: event.origin,
-                  gotmessage: true
-              })
-              self.props.saveExtensionDetails(event.source, event.origin)
-          }
-      }
-    
-      if (window.addEventListener) {
-          window.addEventListener("message", postMessageHandler, false);
-      } else {
-          window.attachEvent("onmessage", postMessageHandler);
-      }
-}
-reStoreDefault = () => {
-      confirmAlert({
-          title: "Are you sure?",
-          message: "You won't be able to revert this!",
-          buttons: [
-              {
-                  label: 'Yes',
-                  onClick: () => this.handleConfirm()
-              },
-              {
-                  label: 'No',
-                  onClick: () => this.handleCancel()
-              }
-          ]
-      })
-  }
-  handleCancel=()=>{
+    }
 
-  }
-
-      handleConfirm=()=>{
+    handleConfirm = () => {
         window.close()
-      }
-    saveVideoData(data) {
+    }
+    saveVideoData(data,isPublic,text) {
         console.log("the data whcih is gonna get saved : ", data)
-        var issueId = localStorage.getItem('issueId')
-        var textExplain = " "
+        var issueId = null
+        var textExplain = text
         var imgData = "null"
         var items = {}
         var isquestion = " "
-        if (issueId == null || issueId === undefined) {
+        if (this.props.issueId == null || this.props.issueId === undefined) {
           isquestion = "true"
-          issueId = null
         }
         else {
           isquestion = "false"
-        
+          issueId = this.props.issueId
         }
-        this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId)
-      }
-  render() {
-      var widthDiv = null;
-      if(this.props.showCanvas){
-        widthDiv="55%";
-      }
-      else{
-        widthDiv="45%";
-      }
-    return (
-      <div className="explainMain">
-          <Navbar />
-          <div className="recorderConatainerPage" style={{width:widthDiv}}>
-          <Screenrecorder 
-          reStoreDefault={this.reStoreDefault}
-          savefile={this.saveVideoData} />
-          </div>
+        this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId,isPublic)
+    }
+    render() {
+        var widthDiv = null;
+        if (this.props.showCanvas) {
+            widthDiv = "95%";
+        }
+        else {
+            widthDiv = "95%";
+        }
+        return (this.props.isAuthenticated)?(
+            <div className="explainMain">
+                <div className="recorderConatainerPage" style={{ width: widthDiv }}>
+                    <Screenrecorder
+                        handleCloseModal={this.props.handleCloseModal}
+                        reStoreDefault={this.reStoreDefault}
+                        savefile={this.saveVideoData} />
+                </div>
+
+
+            </div>):(
+                <div>
+                <Button close onClick={this.closeFunction} />
+                <div className="requestLogin">
+                <h3>You need to Login</h3>
+                <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/visit/auth/twitter"}
+        onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
+        requestTokenUrl={config.base_dir+"/api/twitter/visit/auth/twitter/reverse/"+this.state.twitterHandle} />
+        </div>
+        </div>
+            )
         
-        
-      </div>
-    )
-  }
+    }
 }
 
 ExplainPage.PropType = {
     creatAnsProject: PropType.func.isRequired,
-    saveExtensionDetails: PropType.func.issaveExtensionDetailsRequired,
+    saveExtensionDetails: PropType.func.isRequired,
+    twitterAuthFailure:PropType.func.isRequired,
+    signInWithTwitter:PropType.func.isRequired
+
 
 };
 const mapStateToProps = state => ({
     error: state.issues.error,
     issueId: state.issues.currentIssueId,
-    success: state.issues.successCreation, 
-    showCanvas:state.canvasActions.showCanvas
-   
+    success: state.issues.successCreation,
+    showCanvas: state.canvasActions.showCanvas,
+    isAuthenticated: state.auth.isAuthenticated,
+    cancelAllMessageAction:PropType.func.isRequired,
+    restAllToolValue:PropType.func.isRequired
+
 })
 
-export default connect(mapStateToProps, { saveExtensionDetails, creatAnsProject})(ExplainPage)
+export default connect(mapStateToProps, { 
+    saveExtensionDetails, 
+    cancelAllMessageAction,
+    restAllToolValue,
+    twitterAuthFailure,
+    signInWithTwitter,
+    creatAnsProject })(ExplainPage)
 
 

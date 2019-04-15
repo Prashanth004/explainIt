@@ -31,6 +31,7 @@ const client = new Twitter({
                 profilePic : newProfilePic,
                 name: body.name
             })
+            if(req.user!== undefined){
             database.db.manyOrNone('select * from usertwitter where userid = $1 and twitterhandle = $2',[req.user.id,req.params.twitterhandler])
             .then(data=>{
                 if(data.length=== 0){
@@ -54,6 +55,7 @@ const client = new Twitter({
             .catch(err=>{
                 console.log("error in checking if present : ", err)
             })
+        }
            
 
          }

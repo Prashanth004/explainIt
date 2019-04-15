@@ -47,6 +47,9 @@
 
 
   }
+  /* .navBarLogin{
+margin-top:-100px;
+  } */
   .navgation{
     width:100%;
    margin:auto;
@@ -57,9 +60,19 @@
   .logo{
     font-size: 17px;
   }
+  .logoCentre{
+    font-size: 17px;
+    margin-left:-22px;
+  }
+ 
   .logoContainer{
     width:125px;
     height:35px;
+  }
+  .logoContainerCreate{
+    width:35px;
+    height:35px;
+    margin-left:35px;
   }
   .navItem{
     display:grid;
@@ -80,7 +93,7 @@
     outline:none;
   }
   .normalNav{
-    margin-top:5px;
+    margin-top:10px;
   }
   @media (min-width: 700px) {
 

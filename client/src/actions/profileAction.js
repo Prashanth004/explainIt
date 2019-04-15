@@ -9,7 +9,7 @@ export const getProfileDetails=(userId, profilePrivacy)=>(dispatch)=>{
   var userName = null;
   var profilepic =null;
   var twitterHandle = null;
-
+    console.log("userId : ", userId)
 
     axios({
         method: 'get',

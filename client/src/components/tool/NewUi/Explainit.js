@@ -219,7 +219,7 @@ class Explainit extends Component {
             percentage = "100%";
           }
           else{
-            percentage = "48%";
+            percentage = "37%";
           }
         
         }
@@ -229,7 +229,7 @@ class Explainit extends Component {
             percentage = "100%";
           }
           else{
-            percentage = "48%";
+            percentage = "37%";
           }
         
           formDiv = (

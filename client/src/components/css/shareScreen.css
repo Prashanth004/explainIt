@@ -54,7 +54,7 @@
     align-content: center;
     display:grid;
     /* background-color:blue; */
-    grid-template-columns:50% 50%
+    /* grid-template-columns:50% 50% */
 
 
 }
@@ -71,8 +71,10 @@ height:25;
 
 }
 .twitterBird{
-    text-align: right;
-    margin-left:50%;
+    width:20%;
+    float:right;
+    /* text-align: right;
+    margin-left:50%; */
   /* width:50%;
   margin-left:80%;
 /* text-align:right;
@@ -80,7 +82,9 @@ height:25;
     align-content: right; */ 
 
 }
-
+.twitterInput{
+    /* width:90%; */
+}
 .sharableLink{
     text-align: center;
     align-content: center;

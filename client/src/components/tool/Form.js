@@ -1263,7 +1263,6 @@ class Forms extends Component {
                                     opacity={1}
                                     ref={stage => this.canv = stage}
                                     onMouseDown={this.handleStageMouseDown}>
-
                                     <Layer>
                                         {this.state.rectangles.map((rect, i) => (
                                             <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />

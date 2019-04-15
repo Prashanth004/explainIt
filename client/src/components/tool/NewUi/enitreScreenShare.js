@@ -723,9 +723,9 @@ setNoOfMinutes(minutes){
         var linkElement = " ";
         var backArrow = null;
         // if()
-        const closeBtn=(!this.props.isSceenSharing)?
-        (<Button close onClick={closeFunction} />):
-        (null)
+        const closeBtn=((this.props.isSceenSharing || this.props.isSharingCompleted0) || !this.props.isSaved)?
+        (null):
+        (<Button close onClick={closeFunction} />)
         const saveBtns = <SaveElement
         closeImidiate={this.props.closeFunction}
             shareOrRec={config.SHARING}
@@ -961,7 +961,7 @@ setNoOfMinutes(minutes){
                 <span className="hint--bottom" aria-label="Record call and send">
                     <FiVideo className="icons" onClick={this.recordCall} />
                 </span>                <span className="hint--bottom" aria-label="Cancel">
-                    <FiX className="icons" onClick={this.discard} />
+                    <FiX className="icons" onClick={this.props.closeImidiate} />
                 </span>
 
             </div>)

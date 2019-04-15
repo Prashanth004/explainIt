@@ -18,7 +18,11 @@ import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
 import inbox from './components/tool/NewUi/Inbox'
 import RecordName from './components/tool/NewUi/RecordName';
-import ExtHome from './components/tool/NewUi/Extension/landing'
+import ExtHome from './components/tool/NewUi/Extension/landing';
+import testmodal from './components/tool/NewUi/testingModal';
+import floater from './components/tool/NewUi/Floater/floater'
+import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
+import savedItems from './components/tool/NewUi/Floater/savedIssues'
 // import Profile from './components/tool/NewUi/connectProfile'
 class App extends Component {
   render() {
@@ -29,7 +33,6 @@ class App extends Component {
           <Switch>
           <Route path ="/connect/:callerid" component= {DisplayShare}/>
             <Route exact path ="/" component={Home}/>
-            <Route exact path = "/profile/:encrTwitterHandle"component = {visitProfile}/>
             <Route exact  path='/login' component={Login} />
             <Route exact  path='/newlogin' component={Newlogin} />
             <Route exact  path='/explainIt' component={Explainit} />
@@ -41,7 +44,15 @@ class App extends Component {
             <Route exact path = '/sharescreen' component={ShareWindow}/>
             <Route exact path = '/recorder' component={RecordName} />
             <Route exact path = '/extension' component={ExtHome} />
+            <Route exact path = '/testmodal' component={testmodal} />
+            <Route exact path ='/floater' component={floater}/>
+            <Route exact path = "/saveditems" component={savedItems}/>
+            <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
+
+            <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>
+           
             <Route component={NoMatch} />
+           
             </Switch>
           </BrowserRouter>
         </div>

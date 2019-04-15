@@ -1,4 +1,6 @@
-import {CALL_DETAILS_ACCEPT, ANSWER_CALL,MISS_CALL} from '../actions/types'
+import {CALL_DETAILS_ACCEPT,
+    SAVE_RECIEVER_DATA,
+     ANSWER_CALL,MISS_CALL} from '../actions/types'
 
 const initialState={
     link:null,
@@ -6,7 +8,11 @@ const initialState={
     email:null,
     id:null,
     profilePic:null,
-    incommingCall :false
+    incommingCall :false,
+    recieverProfileImage:null,
+    recieverUserName:null,
+    recieverUserId:null
+
 }
 
 export default function(state= initialState, action){
@@ -31,6 +37,13 @@ export default function(state= initialState, action){
                 ...state,
                 incommingCall:false
             }
+        case SAVE_RECIEVER_DATA:
+        return{
+            ...state,
+            recieverProfileImage:action.profileImage,
+            recieverUserName : action.profileName,
+            recieverUserId :action.userId
+        }
     default:
             return {
                 ...state

@@ -31,7 +31,7 @@ class ProfileCard extends Component {
                             </a>    
                         </div>
                         <div   className="profileNameVisit">
-                        <a href={"https://twitter.com/"+this.props.twitterHandle}
+                        <a href={"https://twitter.com/"+this.props.twitterHandle} target="_blank"
                        ><b>{this.props.userName}</b></a>
                       </div>
 

@@ -3,6 +3,7 @@ import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
+import Draggable from 'react-draggable';
 import browser from 'browser-detect';
 import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
 import { MdFilterNone } from "react-icons/md";
@@ -450,6 +451,8 @@ class DisplayShare extends Component {
                     <div className="videoContainer">
                         <video className="VideoElementReciever" autoPlay={true} id="video" srcObject=" " ></video>
                     </div>
+
+                     <Draggable>
                     <div className="callImageDivAnwser">
                         <div className="decreasePadding">
                             <div className="callPage-recieverImageDiv">
@@ -466,7 +469,7 @@ class DisplayShare extends Component {
                                     </div></span>
 
                                 <img className="callPage-recieverImage"
-                                    style={{ marginTop: "-60px" }}
+                                    style={{ marginTop: "-62px" }}
                                     src={this.state.picture}></img>
                             </div>
                             {/* <span style={{fontSize:"12px"}}>End Call</span> */}
@@ -485,12 +488,13 @@ class DisplayShare extends Component {
                                         </div>
                         </span>
                             <div className="callPage-recieverImageDiv endCall">
-                                {/* <span className="hint--top" aria-label="ShareScreen"> */}
+                                <span className="hint--top" aria-label="ShareScreen">
                                     <MdFilterNone onClick={this.shareScreen} className="endButton" />
-                                {/* </span> */}
+                                </span>
                             </div>
                         </div>
                     </div>
+                    </Draggable>
                 </div>
             )
         }

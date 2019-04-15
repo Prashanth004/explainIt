@@ -1,7 +1,7 @@
 .recorderConatainerPage{
-    width:45%;
-    margin:auto;
-    margin-top:55px;
+    width:100%;
+   margin:auto;
+     /* margin-top:25px; */
     background-color:white;
     border-radius:8px;
     border-style:solid;
@@ -10,6 +10,9 @@
     padding:15px;
 
 }
-.explainMain{
-    min-height:90vh;
+
+.requestLogin{
+    width:65%;
+    margin:auto;
+    margin-top:50px;
 }

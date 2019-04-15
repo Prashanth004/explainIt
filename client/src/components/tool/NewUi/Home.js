@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar'
+import DisplatCreated from './DisplayCreated'
 // import Iframe from 'react-iframe'
 // import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
@@ -9,7 +10,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import { Button, Modal, ModalBody } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import { SCREEN_SHARE, SCREEN_RECORD,FULL_SCREEN_RECORD,FULL_SCREEN_SHARE } from '../../../actions/types';
+import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
 import CopyToClipboard from '../CopytoClipboard'
 import Explain from './Explainit'
 import { setIssueId } from '../../../actions/issueActions';
@@ -17,6 +18,7 @@ import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActio
 import { stillAuthenicated } from '../../../actions/signinAction';
 // import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
+import { FiGrid,FiList } from "react-icons/fi";
 import { resetValues } from '../../../actions/twitterApiAction'
 
 import Swal from 'sweetalert2'
@@ -47,8 +49,9 @@ class NewHome extends Component {
             showProjects: false,
             displayLink: false,
             isHome: true,
-            socket: null
-
+            socket: null,
+            showDetails: false,
+            typeOfView: "list"
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -62,8 +65,10 @@ class NewHome extends Component {
         this.handleCancel = this.handleCancel.bind(this);
         this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
         this.answerCall = this.answerCall.bind(this);
-        this.rejectCall = this.rejectCall.bind(this)
-
+        this.rejectCall = this.rejectCall.bind(this);
+        this.openDtailsTab = this.openDtailsTab.bind(this);
+        this.changeViewToList = this.changeViewToList.bind(this);
+        this.changeViewToGrid = this.changeViewToGrid.bind(this);
     }
     toggleDisplayLink() {
         this.setState({
@@ -73,7 +78,11 @@ class NewHome extends Component {
     reloadPage() {
         window.location.reload();
     }
-
+    openDtailsTab() {
+        this.setState({
+            showDetails: !this.state.showDetails
+        })
+    }
 
     closeParticipated() {
         this.setState({
@@ -88,7 +97,7 @@ class NewHome extends Component {
         var self = this
         function postMessageHandler(event) {
             console.log(" event :", event)
-          
+
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
                 console.log(" event.source :", event.source)
@@ -177,9 +186,9 @@ class NewHome extends Component {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
         console.log("e.target.id : ", e.target.id)
-       
 
-        if (classOfClicked !== "singleMember"  && classOfClicked !== "sharableLink"&&  classOfClicked !== "linkElementSym" && classOfClicked !== "hint--top"   && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
+
+        if (classOfClicked !== "singleMember" && classOfClicked !== "sharableLink" && classOfClicked !== "linkElementSym" && classOfClicked !== "hint--top" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
             if (this.state.modal === false) {
                 this.props.clearAnswers(e.target.id)
                 this.props.fetchProjectbyIssue(e.target.id);
@@ -207,7 +216,7 @@ class NewHome extends Component {
 
     }
     reStoreDefault = () => {
-        if(this.props.screenAction!==null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted ){
+        if (this.props.screenAction !== null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted) {
             confirmAlert({
                 title: "Are you sure?",
                 message: "You won't be able to revert this!",
@@ -223,17 +232,17 @@ class NewHome extends Component {
                 ]
             })
         }
-        else{
+        else {
             this.handleConfirm()
         }
     }
-    screenShareWindow(){
-       
-        var href = config.react_url+"/sharescreen"
-        var width = window.innerHeight*(3/4),
-            height =  window.innerHeight*(3/4),
-            top =10,
-            left =10,
+    screenShareWindow() {
+
+        var href = config.react_url + "/sharescreen"
+        var width = window.innerHeight * (3 / 4),
+            height = window.innerHeight * (3 / 4),
+            top = 10,
+            left = 10,
             url = href,
             opts = 'status=1' +
                 ',width=' + width +
@@ -264,8 +273,25 @@ class NewHome extends Component {
             )
         }
     }
+    changeViewToList() {
+        this.setState({
+            typeOfView: "list"
+        })
+    }
+    changeViewToGrid() {
+        this.setState({
+            typeOfView: "grid"
+        })
+    }
 
     render() {
+       
+        const details = (this.state.showDetails) ? (
+            <div>
+                <p>I am availabel to solve the problem from 2pm to 5 pm tuesdays and saturday</p>
+                <p>I charge 25$ for a minute</p>
+            </div>
+        ) : (null)
         // var iframe = <Iframe url="https://explain.bookmane.in/sharescreen"
         // width="450px"
         // height="450px"
@@ -277,9 +303,9 @@ class NewHome extends Component {
         // allowFullScreen/>
         const externalCloseBtn = <button className="close modalClose" style={{ position: 'absolute', top: '25px', height: '45px', width: '45', right: '25px', color: 'white' }} onClick={this.toggle}>&times;</button>;
         var self = this
-        var sharabeLink = config.react_url + "/profile/" + this.props.twitterHandle
+        var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         var deatilsModal = null
-        var issuesCreated = this.props.myissues;
+        var issuesCreated = (this.props.myissues)
         var self = this
         var explainDiv = null;
         var feedDiv = null;
@@ -308,44 +334,78 @@ class NewHome extends Component {
 
         deatilsModal = (<IssueDetils />)
         var explainDiv = (<Explain closeImidiate={this.handleConfirm} screenShareWindow={this.screenShareWindow} reStoreDefault={this.reStoreDefault} />)
-        console.log("this.props.created : ",this.props.created)
-        console.log("this.props.participated : ",this.props.participated)
+        console.log("this.props.created : ", this.props.created)
+        console.log("this.props.participated : ", this.props.participated)
         if (this.props.isAauthenticated) {
             if (this.state.openExplain) {
                 explainDiv = (<Explain closeImidiate={this.handleConfirm} reStoreDefault={this.reStoreDefault} />)
             }
-            if (this.props.created && !this.props.participated ) {
+            if (this.props.created && !this.props.participated) {
                 explainDiv = null
                 console.log("created excecuting")
+                var createdDiv = (this.state.typeOfView === "list") ? (
+                    <div className="issueContainer" style={{width:"65%  "}}>
+                    <div className="closeBtnHolder">
+                    </div>
+                    <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated).reverse()} />
+                    {/* <DisplatCreated home={config.HOME} issueArray={(issuesCreated).reverse()} /> */}
+                </div>
+                ):(
+                    <div className="issueContainerMore" >
+                    <div className="closeBtnHolder">
+                    </div>
+                    {/* <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated).reverse()} /> */}
+                    <DisplatCreated home={config.HOME} issueArray={(issuesCreated).reverse()} />
+                </div>
+                )
+
                 feedDiv = (
-                   <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}>
-                        <div className="issueContainer" >
-                            <div className="closeBtnHolder">
-                            </div>
-                            <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
+
+                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}>
+                        <div style={{ textAlign: "right" }}>
+                            {/* <button className="buttonLight" onClick={this.changeViewToList}>List</button> */}
+                            <span className="hint--top" aria-label="List View">
+                            <FiList onClick={this.changeViewToList} className="listView"/>
+                            </span>
+                            <span className="hint--top" aria-label="Grid View">
+                            {/* <button className="buttonLight" onClick={this.changeViewToGrid}>Grid</button> */}
+                            <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                            </span>
                         </div>
-                   </Animated>)
+                       {createdDiv}
+                    </Animated>)
             }
             else if (this.props.participated && !this.props.created) {
                 console.log("participated excecuting")
+                var participatedDiv = (this.state.typeOfView === "list") ? (
+                    <div className="issueContainer" style={{ width: "65%" }} >
+        
+                        <div className="closeBtnHolder">
+                        </div>
+                        <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                    </div>
+                ) : (<div className="issueContainer" style={{ width: "80%" }} >
+        
+                    <div className="closeBtnHolder">
+                    </div>
+                    <DisplatCreated home={config.HOME} issueArray={this.props.participatedIssues} />
+                </div>)
                 explainDiv = null
                 feedDiv = (
                     <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
-
-                        <div className="issueContainer" >
-
-                            <div className="closeBtnHolder">
-                            </div>
-                            <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                        <div style={{ textAlign: "center" }}>
+                            <button className="buttonLight" onClick={this.changeViewToList}>List</button>
+                            <button className="buttonLight" onClick={this.changeViewToGrid}>Grid</button>
                         </div>
+                        {participatedDiv}
                     </Animated>)
 
             }
-            else{
+            else {
                 console.log("nothing excecuting")
             }
         }
-       
+
 
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
@@ -358,7 +418,7 @@ class NewHome extends Component {
                 this.props.created) {
                 var profileCardElement = null
             }
-            else if(this.props.userId!==null){
+            else if (this.props.userId !== null) {
                 if (this.state.displayLink) {
                     var displayLinkDiv = (<div className="sharableLinkSection">
                         <Button close onClick={this.toggleDisplayLink} />
@@ -381,12 +441,13 @@ class NewHome extends Component {
                     <div className="ProfileDiv"><ProfileCard
                         isHome={this.state.isHome}
                         sharabeLink={sharabeLink}
+                        openDtailsTab={this.openDtailsTab}
                         userId={this.props.userId}
                         toggleDisplayLink={this.toggleDisplayLink}
                         toggleCreatedIssue={this.toggleCreatedIssue}
                         toggleParticipatedIssue={this.toggleParticipatedIssue} />
                         {displayLinkDiv}
-                       
+
                     </div>
                 )
             }
@@ -410,6 +471,9 @@ class NewHome extends Component {
                     </div>
                     <div>
                         {feedDiv}
+                    </div>
+                    <div>
+                        {details}
                     </div>
                 </div>
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
@@ -438,13 +502,13 @@ NewHome.PropType = {
     openParticipated: PropType.func.isRequired,
     openCreated: PropType.func.isRequired,
     cancelAllMessageAction: PropType.func.isRequired,
-    resetValues:PropType.func.isRequired
+    resetValues: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
     screenAction: state.tools.screenAction,
-    isSharingCompleted : state.tools.isSharingCompleted,
-    isFullSharingCompleted : state.tools.isFullSharingCompleted,
+    isSharingCompleted: state.tools.isSharingCompleted,
+    isFullSharingCompleted: state.tools.isFullSharingCompleted,
     newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
     profilePic: state.auth.profilePic,
@@ -462,10 +526,10 @@ const mapStateToProps = state => ({
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
     isSceenSharing: state.tools.isFullScreenSharing,
-    isFullScreenRecording :state.tools.isFullScreenRecording,
+    isFullScreenRecording: state.tools.isFullScreenRecording,
 
 
-   
+
 
 })
 
@@ -480,7 +544,7 @@ export default connect(mapStateToProps, {
     saveExtensionDetails,
     saveSourceId,
     fetchProjectbyIssue,
-    setIssueId, 
+    setIssueId,
     // getProfileDetails,
     clearAnswers, stillAuthenicated,
     fetchProjectbyIssue,

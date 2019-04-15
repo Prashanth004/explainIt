@@ -39,7 +39,6 @@ class ProfileCard extends Component {
             var linkSymbol = null
 
         }
-        // var sharabeLink = config.base_dir+"/"+this.props.twitterHandle
         return (
             <div className="Profilecard">
                 <div className="blackwhite">
@@ -49,7 +48,7 @@ class ProfileCard extends Component {
                     <div className="nameImageDiv">
                         <div className="profileImage">
                         <a href={"https://twitter.com/"+this.props.twitterHandle}>
-                            <img src={this.props.profilePic} className="profileImageElement" ></img>
+                            <img src={this.props.profilePic} onDoubleClick={this.props.openDtailsTab} className="profileImageElement" ></img>
                             </a>    
                         </div>
                         <div   className="profileName">

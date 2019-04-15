@@ -44,8 +44,8 @@ export default class componentName extends Component {
         })
 
     }
-    componentDidMount(){
-       
+    componentDidMount() {
+
     }
     genLink() {
         if (!this.state.noText
@@ -56,20 +56,20 @@ export default class componentName extends Component {
             })
             setTimeout(() => {
                 this.startBar()
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.props.expireTimer()
-                },config.LINK_EXPIRE_TIME*60*1000)
+                }, config.LINK_EXPIRE_TIME * 60 * 1000)
             }, 500)
         }
     }
     startBar() {
         var self = this;
-        var timeAloted = config.LINK_EXPIRE_TIME * 60 * 16
+        var timeAloted = config.LINK_EXPIRE_TIME * 60
         var progressbar = document.querySelector('#pbar');
         var progresDiv = document.querySelector(".progresDiv")
         progresDiv.style.display = "block";
         var width = 100;
-        var id = setInterval(frame, 75);
+        var id = setInterval(frame, 1000);
         function frame() {
             if (width <= 0) {
                 clearInterval(id);
@@ -84,7 +84,7 @@ export default class componentName extends Component {
         var noOfMinutestemp = e.target.value;
         console.log(typeof (noOfMinutestemp))
         console.log(Number(noOfMinutestemp))
-        if (noOfMinutestemp.length !== 0 && Number(noOfMinutestemp) !== 0 &&  !Number(noOfMinutestemp)) {
+        if (noOfMinutestemp.length !== 0 && Number(noOfMinutestemp) !== 0 && !Number(noOfMinutestemp)) {
             this.setState({
                 noText: true
             })
@@ -113,24 +113,19 @@ export default class componentName extends Component {
             })
         }
         this.props.setNoOfMinutes(e.target.value)
-      
+
 
     }
 
     render() {
         const shareAction = this.state.shareOptSelected ? (
-            
+
 
 
             (this.state.tweetAction) ? (
                 <div className="twitterInput">
-                    <TweetSearch
-                        limitExce={this.state.limitExce}
-                        negNumber={this.state.negNumber}
-                        channgeTeet={this.props.changeTweetStatePos}
-                        doneTweeting={this.props.doneTweeting}
-                        shareScreenLink={this.props.shareScreenLink} />
-                   
+
+
                 </div>
             ) : (
                     <CopyToClipboard sharablelink={this.props.shareScreenLink} />
@@ -144,30 +139,26 @@ export default class componentName extends Component {
         const tweetOrshare = (<div className="copyToClipBoard">
             <p className="info">You can either copy and share the link  OR  tweet it the concern person</p>
             <div className="twitterLinkDiv">
-                <div className="twitterBird">
-                    <div className="twitter">
-                    <span class="hint--top" aria-label="Tweet">
-                        <img width="100%"
-                            onClick={this.updateShareActionToTweet} height="100%" src={require('../../images/twitter3.png')} />
-                            </span>
-                    </div>
-                </div>
-                <div>
-                <div className="twitter" style={{width:"20px", height:"20px"}}>
-                <span class="hint--top" aria-label="Share manually">
 
-                        <img src={require('../../images/share.svg')}
-                        width="100%"
-                        // onClick={this.copyToClipboard}
-                        marginTop="5px"
-                        onClick={this.updateShareActionToShare}
-                        height="100%"></img>
+                <div className="twitterInput">
+                    <TweetSearch
+                        limitExce={this.state.limitExce}
+                        negNumber={this.state.negNumber}
+                        channgeTeet={this.props.changeTweetStatePos}
+                        doneTweeting={this.props.doneTweeting}
+                        shareScreenLink={this.props.shareScreenLink} />
+                </div> 
+                <div>
+                    <div className="twitter" style={{ width: "20px", height: "20px" }}>
+                        <span class="hint--top" aria-label="Share manually">
                         </span>
                     </div>
+                    <CopyToClipboard sharablelink={this.props.shareScreenLink} />
+
                 </div>
-                
+
             </div>
-           
+
             {shareAction}
         </div>)
         return this.state.generatedLink ? (
@@ -175,7 +166,7 @@ export default class componentName extends Component {
 
                 <div>
                     <p className="info">
-                        <br />The link expires in 3 minutes
+                        <br />The link expires in {config.LINK_EXPIRE_TIME} minutes
                             </p>
                     <TimerBar />
                 </div>
@@ -184,8 +175,8 @@ export default class componentName extends Component {
         ) : (
                 <div className="timerDuration">
 
-                    <p>Time is very preciuos
-               <br/>Enter the duration of the call you would wish to have</p>
+                   
+               <p>Enter the duration of the call you would wish to have</p>
                     <div className="inputTime">
                         <InputNumber
                             empty={this.state.emptyNumber}
