@@ -1,7 +1,9 @@
 .App {
-  background-color:#f5f0f8;
+  /* background-color:#fcf6ff; */
+  /* background-color:#f6fdff; */
   /* background-clip: #fcf8ff; */
   /* background-color: white; */
+  background-color: rgb(245,245,245);
 
 
   font-family: "Helvetica";
@@ -101,8 +103,8 @@ audio{
 color:white;
 
   border-radius:3px;
-  /* background-color:#aac8db; */
-  background-color: #34a4a8;
+  background-color: #2b8b8f; 
+  /* background-color: #34a4a8; */
 
   /* background-color: rgb(205, 243, 224); */
  

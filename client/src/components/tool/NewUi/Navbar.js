@@ -5,12 +5,12 @@ import config from '../../../config/config';
 import PropType from 'prop-types';
 // import SearchBar from './Search'
 import { connect } from 'react-redux';
-import TwitterLogin from 'react-twitter-auth';
+import { FiMail } from "react-icons/fi";
 import Swal from 'sweetalert2';
 import '../../css/nav.css'
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
-import { openHome, openCreated, openParticipated } from '../../../actions/navAction'
+import { openHome, openInbox, openCreated, openParticipated } from '../../../actions/navAction'
 
 class Navigationbar extends React.Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Navigationbar extends React.Component {
     this.state = {
       isOpen: false,
       isViewPage: false,
-      isProjectPage:false
+      isProjectPage: false
     };
     this.googleResponse = this.googleResponse.bind(this);
     this.handleGit = this.handleGit.bind(this);
@@ -44,11 +44,11 @@ class Navigationbar extends React.Component {
       this.setState({
         isViewPage: true
       })
-      if(this.props.page !==undefined && this.props.page ==="project"){
-        this.setState({
-          isProjectPage :true
-        })
-      }
+    if (this.props.page !== undefined && this.props.page === "project") {
+      this.setState({
+        isProjectPage: true
+      })
+    }
 
     // }
   }
@@ -90,7 +90,15 @@ class Navigationbar extends React.Component {
   }
   render() {
     var createdStyle = null;
-    var partiStyle = null
+    var partiStyle = null;
+    var explainLogo = (
+      <div className="logoContainer" onClick={this.openHome}>
+        <span>
+          <img src={require('../../images/logo.png')}
+            width="100%"
+            height="100%"></img>
+        </span>
+      </div>)
     if (this.props.Created) {
       createdStyle = {
         color: "#d3a5cd",
@@ -106,45 +114,43 @@ class Navigationbar extends React.Component {
     var centreNav = null;
 
 
-if ((this.props.Created || this.props.Participated)
-&& this.state.isViewPage
-&& !this.props.isAuthenticated) {
-var profileImage=(null)
-{/* <div>
+    if ((this.props.Created || this.props.Participated)
+      && this.state.isViewPage
+      && !this.props.isAuthenticated) {
+      var profileImage = (null)
+      {/* <div>
   <button className="buttonDark" 
   style={{marinTop:"-50px"}}>Login</button>
 </div>) */}
-}
-else{
-  var profileImage= (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (<div className="dropdown">
-  <div className="profileImagesDiv">
-    <img className="profileImages" src={this.props.profilePic}></img>
-  </div>
-  <div className="dropdown-content">
-    <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
-    <div className="imageLogout">
-      <span>
-        <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
-      </span>
-    </div>
-  </div>
-</div>) : (null)
-}
+    }
+    else {
+      var profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (<div className="dropdown">
+        <div className="profileImagesDiv">
+          <img className="profileImages" src={this.props.profilePic}></img>
+        </div>
+        <div className="dropdown-content">
+          <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
+          <div className="imageLogout">
+            <span>
+              <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
+            </span>
+          </div>
+        </div>
+      </div>) : (null)
+    }
 
 
 
-if ((this.props.Created || this.props.Participated) && !this.state.isViewPage) {
-      var explainLogo = null
+    if ((this.props.Created || this.props.Participated || this.props.inbox) && !this.state.isViewPage) {
+
       centreNav = (<div className="navgation">
         <div onClick={this.openCreated} className="normalNav">
           <button onClick={this.openCreated} style={createdStyle} className="noButtons"><a>Created</a></button>
         </div>
         <div className="logoCentre Create">
-          <div className="logoContainerCreate" onClick={this.openHome}>
+          <div className="logoContainerCreate" >
             <span>
-              <img src={require('../../images/logo5.png')}
-                width="100%"
-                height="100%"></img>
+              <FiMail onClick={this.props.openInbox} className="dragoMail" />
             </span>
           </div>                  </div>
         <div className="normalNav">
@@ -153,19 +159,17 @@ if ((this.props.Created || this.props.Participated) && !this.state.isViewPage) {
       </div>)
     }
 
-    else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated)){
+    else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated)) {
+      
       if ((this.props.Created || this.props.Participated)) {
-        var explainLogo = null
         centreNav = (<div className="navgation">
           <div onClick={this.openCreated} className="normalNav">
             <button onClick={this.openCreated} style={createdStyle} className="noButtons"><a>Created</a></button>
           </div>
           <div className="logoCentre">
-            <div className="logoContainerCreate" onClick={this.openVisitHome}>
+            <div className="logoContainerCreate" >
               <span>
-                <img src={require('../../images/logo5.png')}
-                  width="100%"
-                  height="100%"></img>
+                <FiMail onClick={this.props.openInbox} className="dragoMail" />
               </span>
             </div>                  </div>
           <div className="normalNav">
@@ -174,7 +178,7 @@ if ((this.props.Created || this.props.Participated) && !this.state.isViewPage) {
         </div>)
       }
       else {
-        var explainLogo = null;
+
         centreNav = (
           <div className="navgation">
             <div>
@@ -192,14 +196,7 @@ if ((this.props.Created || this.props.Participated) && !this.state.isViewPage) {
 
     }
     else {
-      var explainLogo = (
-        <div className="logoContainer" onClick={this.openHome}>
-          <span>
-            <img src={require('../../images/logo.png')}
-              width="100%"
-              height="100%"></img>
-          </span>
-        </div>)
+     
       // centreNav = (<SearchBar />)
     }
     const content = (<div className="navBar">
@@ -246,7 +243,8 @@ Navigationbar.PropType = {
   twitterAuthFailure: PropType.func.isRequired,
   openHome: PropType.func.isRequired,
   openCreated: PropType.func.isRequired,
-  openParticipated: PropType.func.isRequired
+  openParticipated: PropType.func.isRequired,
+  openInbox: PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
@@ -257,12 +255,13 @@ const mapStateToProps = state => ({
   userId: state.auth.id,
   Home: state.nav.openHome,
   Created: state.nav.openCreated,
+  inbox: state.nav.openInbox,
   Participated: state.nav.openParticipated,
   authAction: state.auth.authAction,
 
 
 })
-export default connect(mapStateToProps, { signInWithTwitter, openHome, openCreated, openParticipated, twitterAuthFailure, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+export default connect(mapStateToProps, { openHome, openInbox, signInWithTwitter, openCreated, openParticipated, twitterAuthFailure, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
 
 
 

@@ -4,7 +4,8 @@ import '../../css/copyToClipboard.css'
 import TweetSearch from './tweetSearch';
 import InputNumber from './InputNumber';
 import CopyToClipboard from '../CopytoClipboard';
-import config from '../../../config/config'
+import config from '../../../config/config';
+import TweetSearchCall from './TweetAcceptHandle'
 
 export default class componentName extends Component {
     constructor(props) {
@@ -17,7 +18,8 @@ export default class componentName extends Component {
             maxTimeForVideo: null,
             generatedLink: false,
             shareOptSelected: false,
-            tweetAction: false
+            tweetAction: false,
+            timeInputDone: false
 
         }
         this.changeImputNumber = this.changeImputNumber.bind(this);
@@ -25,6 +27,7 @@ export default class componentName extends Component {
         this.startBar = this.startBar.bind(this);
         this.updateShareActionToTweet = this.updateShareActionToTweet.bind(this)
         this.updateShareActionToShare = this.updateShareActionToShare.bind(this)
+        this.acceptTwitterHandle = this.acceptTwitterHandle.bind(this)
     }
     updateShareActionToTweet() {
         this.setState({
@@ -46,6 +49,15 @@ export default class componentName extends Component {
     }
     componentDidMount() {
 
+    }
+    acceptTwitterHandle() {
+        if (!this.state.noText
+            && !this.state.negNumber
+            && !this.state.emptyNumber) {
+            this.setState({
+                timeInputDone: true
+            })
+        }
     }
     genLink() {
         if (!this.state.noText
@@ -119,27 +131,17 @@ export default class componentName extends Component {
 
     render() {
         const shareAction = this.state.shareOptSelected ? (
-
-
-
             (this.state.tweetAction) ? (
                 <div className="twitterInput">
-
-
                 </div>
             ) : (
                     <CopyToClipboard sharablelink={this.props.shareScreenLink} />
                 )
-
-
-
         ) : (null)
-
 
         const tweetOrshare = (<div className="copyToClipBoard">
             <p className="info">You can either copy and share the link  OR  tweet it the concern person</p>
             <div className="twitterLinkDiv">
-
                 <div className="twitterInput">
                     <TweetSearch
                         limitExce={this.state.limitExce}
@@ -147,23 +149,19 @@ export default class componentName extends Component {
                         channgeTeet={this.props.changeTweetStatePos}
                         doneTweeting={this.props.doneTweeting}
                         shareScreenLink={this.props.shareScreenLink} />
-                </div> 
+                </div>
                 <div>
                     <div className="twitter" style={{ width: "20px", height: "20px" }}>
                         <span class="hint--top" aria-label="Share manually">
                         </span>
                     </div>
                     <CopyToClipboard sharablelink={this.props.shareScreenLink} />
-
                 </div>
-
             </div>
-
             {shareAction}
         </div>)
         return this.state.generatedLink ? (
             <div>
-
                 <div>
                     <p className="info">
                         <br />The link expires in {config.LINK_EXPIRE_TIME} minutes
@@ -172,26 +170,35 @@ export default class componentName extends Component {
                 </div>
                 {tweetOrshare}
             </div>
-        ) : (
-                <div className="timerDuration">
-
-                   
-               <p>Enter the duration of the call you would wish to have</p>
-                    <div className="inputTime">
-                        <InputNumber
-                            empty={this.state.emptyNumber}
-                            limitOfChar={this.state.maxTimeForVideo}
-                            limitExce={this.state.limitExce}
-                            changeInputValue={this.changeImputNumber}
-                            textValue={this.props.noOfMinutes}
-                            negNumber={this.state.negNumber}
-                            noText={this.state.noText} />
+        ) : ((!this.state.timeInputDone) ? (
+            <div className="timerDuration">
+                <p>Enter the duration of the call you would wish to have</p>
+                <div className="inputTime">
+                    <InputNumber
+                        empty={this.state.emptyNumber}
+                        limitOfChar={this.state.maxTimeForVideo}
+                        limitExce={this.state.limitExce}
+                        changeInputValue={this.changeImputNumber}
+                        textValue={this.props.noOfMinutes}
+                        negNumber={this.state.negNumber}
+                        noText={this.state.noText} />
                         <button className="buttonDark"
-                            style={{ marginTop: "10px" }}
-                            onClick={this.genLink}>Generate Link</button>
-                    </div>
+                        style={{ marginTop: "10px" }}
+                        onClick={this.acceptTwitterHandle}>Generate Link</button>
                 </div>
-            )
+            </div>
+        ) : (<div className="timerDuration">
+                    
+                    <div className="inputTime">
+                    <TweetSearchCall
+                        shareScreenLink={this.props.shareScreenLink}
+                        makeCallAction={this.props.makeCallAction}
+                       />
+                    </div>
+
+                </div>
+
+            ))
     }
 
 

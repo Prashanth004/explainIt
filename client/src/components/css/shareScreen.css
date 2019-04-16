@@ -33,9 +33,10 @@
     font-size:19px;
     font-weight: 400;
 }
-/* .icons{
-    padding:3px;
-} */
+.icons{
+    width:20px;
+    height:20px;
+}
 .clickedMessage{
 
   padding-top:65px;

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar'
 import DisplatCreated from './DisplayCreated'
-// import Iframe from 'react-iframe'
-// import socketIOClient from "socket.io-client";
+import Inbox from './Inbox'
+import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
@@ -115,33 +115,33 @@ class NewHome extends Component {
             window.attachEvent("onmessage", postMessageHandler);
         }
 
-        // var socket = this.state.socket
-        // console.log("sockets : ", socket)
-        // socket.on(config.LINK_TO_CALL, data => {
-        //     console.log("data : ", data)
-        //     setTimeout(() => {
-        //         this.props.missCall();
-        //     }, 18000)
-        //     localStorage.setItem("profilePic", data.fromProfilePic)
-        //     if (data.ToUserId === this.props.userId) {
-        //         this.props.acceptCallDetails(
-        //             data.link,
-        //             data.fromEmail,
-        //             data.fromUserName,
-        //             data.fromUserId,
-        //             data.fromProfilePic
-        //         )
-        //     }
-        // });
+        var socket = this.state.socket
+        console.log("sockets : ", socket)
+        socket.on(config.LINK_TO_CALL, data => {
+            console.log("data : ", data)
+            setTimeout(() => {
+                this.props.missCall();
+            }, 18000)
+            localStorage.setItem("profilePic", data.fromProfilePic)
+            if (String(data.ToUserId) === this.props.userId) {
+                this.props.acceptCallDetails(
+                    data.link,
+                    data.fromEmail,
+                    data.fromUserName,
+                    data.fromUserId,
+                    data.fromProfilePic
+                )
+            }
+        });
 
 
     }
     componentWillMount() {
         this.props.stillAuthenicated()
-        // const socket = socketIOClient(config.base_dir);
-        // this.setState({
-        //     socket: socket
-        // })
+        const socket = socketIOClient(config.base_dir);
+        this.setState({
+            socket: socket
+        })
 
     }
     toodleExplain() {
@@ -203,10 +203,10 @@ class NewHome extends Component {
         this.props.answerCall();
     }
     rejectCall() {
-        // var socket = this.state.socket
-        // socket.emit(config.REJECT_REPLY, {
-        //     'message': config.REPLY_TO_SHARE_REQ
-        // })
+        var socket = this.state.socket
+        socket.emit(config.REJECT_REPLY, {
+            'message': config.REPLY_TO_SHARE_REQ
+        })
         this.props.answerCall();
     }
 
@@ -393,13 +393,30 @@ class NewHome extends Component {
                 explainDiv = null
                 feedDiv = (
                     <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
-                        <div style={{ textAlign: "center" }}>
+                        
+                        <div style={{ textAlign: "right" }}>
+                            {/* <button className="buttonLight" onClick={this.changeViewToList}>List</button> */}
+                            <span className="hint--top" aria-label="List View">
+                            <FiList onClick={this.changeViewToList} className="listView"/>
+                            </span>
+                            <span className="hint--top" aria-label="Grid View">
+                            {/* <button className="buttonLight" onClick={this.changeViewToGrid}>Grid</button> */}
+                            <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                            </span>
+                        </div>
+                        
+                        
+                        {/* <div style={{ textAlign: "center" }}>
                             <button className="buttonLight" onClick={this.changeViewToList}>List</button>
                             <button className="buttonLight" onClick={this.changeViewToGrid}>Grid</button>
-                        </div>
+                        </div> */}
                         {participatedDiv}
                     </Animated>)
 
+            }
+            else if(this.props.inbox){
+                explainDiv = null
+                var feedDiv =(<Inbox userId={this.props.userId}/>)
             }
             else {
                 console.log("nothing excecuting")
@@ -415,6 +432,7 @@ class NewHome extends Component {
                 // this.props.screenAction === FULL_SCREEN_SHARE ||
                 // this.props.screenAction === FULL_SCREEN_RECORD ||
                 this.props.participated ||
+                this.props.inbox ||
                 this.props.created) {
                 var profileCardElement = null
             }
@@ -525,6 +543,7 @@ const mapStateToProps = state => ({
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
+    inbox:state.nav.openInbox,
     isSceenSharing: state.tools.isFullScreenSharing,
     isFullScreenRecording: state.tools.isFullScreenRecording,
 

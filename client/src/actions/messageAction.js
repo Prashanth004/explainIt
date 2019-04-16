@@ -4,7 +4,17 @@ import {SEND_MESSAGE,
      SEND_FAILED,
      FETCH_MESSAGES,
      FETCH_FAILED,
-     CANCEL_MESSAGE_STATE} from './types'
+     CANCEL_MESSAGE_STATE,
+     HIDE_TEXT_BOX_AFTER_RECORDONG,
+     FROM_SHARE_TO_RECORD,
+     SHOW_TEXT_BOX_AFTER_RECORDONG} from './types'
+
+
+     export const fromShareToRecord =()=>(dispatch)=>{
+         dispatch({
+             type:FROM_SHARE_TO_RECORD
+         })
+     }
 
 export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
     console.log(link, fromId, ToId, subject)
@@ -39,6 +49,16 @@ export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
         }
     })
 
+}
+export const hideTextBoxAfterRecord=()=>(dispatch)=>{
+    dispatch({
+        type:HIDE_TEXT_BOX_AFTER_RECORDONG
+    })
+}
+export const showTextBoxAfterRecord=()=>(dispatch)=>{
+    dispatch({
+        type:SHOW_TEXT_BOX_AFTER_RECORDONG
+    })
 }
 export const cancelAllMessageAction=()=>(dispatch)=>{
     dispatch({

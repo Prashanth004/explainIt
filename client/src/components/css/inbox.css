@@ -19,19 +19,29 @@ margin-top:20px;
     float:right;
     font-size:11px;
 }
+.nameDate{
+    text-align: left;
+    padding-left:11%;
+}
+.linkToProject{
+    text-align: left;
+    /* padding-left:11%; */
+}
 .messageElementDiv{
     width:60%;
     margin:auto;
+
     margin-top:20px;
-    padding:5px;
+    padding:30px 30px 20px 20px ;
     background-color:white;
-    border-style:solid;
-    border-radius:6.5px;
-    border-color:rgb(192, 188, 188);
-    border-width:0.5px;
-    /* box-shadow: 0px 0px 5px 0.5px rgba(192, 192, 192, 0.335); */
+    /* border-top-style:solid; */
+    /* border-top-radius:6.5px; */
+    border-radius:3px;
+    border-top-color:rgb(192, 188, 188);
+    border-top-width:0.5px;
+    box-shadow: 0px 0px 5px 2.5px rgba(192, 192, 192, 0.178);
     display:grid;
-    grid-template-columns: 15% 85%;
+    grid-template-columns: 6% 94%;
 }
 .messageElementDiv:hover{
     box-shadow: 0px 0px 0px 0px rgba(192, 192, 192, 0.335);

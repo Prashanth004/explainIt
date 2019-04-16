@@ -47,7 +47,8 @@ class NewHome extends Component {
             showCreatedIssue: false,
             showParticipatedIssue: false,
             showProjects: false,
-            isHome : false
+            isHome : false,
+            isVisitProfile:true
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -75,9 +76,6 @@ class NewHome extends Component {
     }
 
     componentDidMount() {
-       
-       
-        
         if(!this.props.isPresentInExplain){
             // alert("dnvnvnfkn")
             const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
@@ -348,7 +346,9 @@ class NewHome extends Component {
             </div>):(
                 (this.props.doneGettingId)?(
                     (this.props.profilePresentOnTwitter)?(
-                    <ProfileNotOnExplain twitterhandle={this.props.match.params.encrTwitterHandle} />
+                    <ProfileNotOnExplain
+                    isVisitProfile={this.state.isVisitProfile}
+                    twitterhandle={this.props.match.params.encrTwitterHandle} />
              ):(
                  <PageNotFount />
              )

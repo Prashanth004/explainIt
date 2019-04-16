@@ -15,8 +15,11 @@ class Inbox extends Component {
         }
     }
     componentDidMount(){
-            console.log(this.props.match.params.userid)
-            this.props.getAllMessages(this.props.match.params.userid)
+        
+            // console.log(this.props.match.params.userid)
+            // this.props.getAllMessages(this.props.match.params.userid)
+            console.log(this.props.userId)
+            this.props.getAllMessages(this.props.userId)
       
        
     }
@@ -26,24 +29,25 @@ class Inbox extends Component {
   render() {
       console.log("this.props.allMessage : ",this.props.allMessage)
       if(this.props.allMessage!==null){
-        var allMessageEle = this.props.allMessage.map(message=>(
+        var revallMessage = this.props.allMessage.reverse()
+        var allMessageEle = revallMessage.map(message=>(
             <div className="messageElementDiv">
-                <div>
+                <div >
                     <div className="profileImageInbox">
                         <img className="profileImageElementInbox"src={message.profilepic}/>
                     </div>
                    
                 </div>
-                <div>
-                <p className="timeDate">{message.time}</p>
+                <div className="nameDate">
+                <p className="timeDate">{message.time.slice(0,15)}</p>
 
                     <p><b>
                         {message.username}
                         </b>
                     </p>
-                    <p>
+                    <div className="linkToProject">
                     <a href={message.link}>{message.link}</a>
-                    </p>
+                    </div>
                     
                 </div>
                
@@ -58,7 +62,7 @@ class Inbox extends Component {
      
       return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Login />) : (
         <div className="mainBodyContainer">
-    <Navbar />
+    {/* <Navbar /> */}
     <div className="inboxContainer">
     <div className="inboxText">
     <h1>Inbox</h1>

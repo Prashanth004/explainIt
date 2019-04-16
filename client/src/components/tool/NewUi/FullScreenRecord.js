@@ -12,6 +12,7 @@ import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
 import { Button } from 'reactstrap'; 
 import TimerBar from './TimerBar'
 import browser from 'browser-detect';
+import {sendMessage} from '../../../actions/messageAction';
 import {fullStartedRecording,
     fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
 import {connect} from 'react-redux';
@@ -31,8 +32,9 @@ class FullScreenRecorder extends Component {
             copyStatus:"copy link",
             saveBtnClicked:false,
             showCanvas:false,
-            isInstalled:true
-           
+            isInstalled:true,
+            subjectOfMessage:null,
+            sendBtnClicked:false       
             
         }
             this.downloadExtension = this.downloadExtension.bind(this);
@@ -48,7 +50,9 @@ class FullScreenRecorder extends Component {
         this.discardChanges = this.discardChanges.bind(this);
         this.receiveMessage = this.receiveMessage.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
-        this.toggleCanvas = this.toggleCanvas.bind(this)
+        this.toggleCanvas = this.toggleCanvas.bind(this);
+        this.sendMessageLocal = this.sendMessageLocal.bind(this);
+        this.sendButtonClick = this.sendButtonClick.bind(this)
 
     }
     startBar(){
@@ -218,6 +222,9 @@ savefilePublic(textData) {
 }
 savefilePrivate(textData) {
     var blob = this.state.blob
+    this.setState({
+        subjectOfMessage : textData
+    })
     this.props.savefile(blob, 0, textData)
 }
 
@@ -284,6 +291,10 @@ toggleCanvas(){
           };
         }
     }
+    sendMessageLocal(){
+        var subject = this.state.subjectOfMessage
+        this.props.sendMessage(this.props.sharablelink,this.props.fromId,this.props.twitterUserId,subject)
+    }
     componentWillUnmount(){
         var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
@@ -293,6 +304,11 @@ toggleCanvas(){
             screenStream.stop();
         }
        
+    }
+    sendButtonClick(){
+        this.setState({
+            sendBtnClicked:true
+        })
     }
 
     render() {
@@ -338,7 +354,7 @@ toggleCanvas(){
         var linkElement = " ";
         var convey ="Start"
        
-        if (this.state.downloadUrl) {
+        if (this.state.downloadUrl && !this.state.sendBtnClicked && !this.state.saveBtnClicked) {
             videoplayer = (<video className="videoPlayer2" src={this.state.downloadUrl} controls={true}></video>)
            
         }
@@ -378,51 +394,60 @@ toggleCanvas(){
             var recordingElements = null;
         }
     
-       
-        // var timer = null;
-     
-        if(this.props.isFullRecordCompleted === true && this.props.isSaved===false){
+        if(this.props.isSaved && !this.props.sendSuccess){
+            console.log("i a, here twoice?")
+                this.sendMessageLocal() 
+        }
+    
+        if(this.props.isFullRecordCompleted && !this.props.isSaved){
             var postShareElements= (<div className = "postRecord">
             <div classNam="showVideoElement">
             {videoplayer}
             </div>
             <SaveElement
+            hideVideotag={this.hideVideotag}
             shareOrRec={config.RECORDING}
             isSaveClicked={this.state.saveBtnClicked}
             saveClicked={this.saveClicked}
+            sendButtonClick={this.sendButtonClick}
             discard={this.discardChanges}
             closeImidiate={this.props.closeImidiate}
             savefilePublic={this.savefilePublic}
             savefilePrivate={this.savefilePrivate} />
-       
-                 {/* <p>Do you want to sav it?</p>
-                 <span className="hint--bottom" aria-label="Save Call">
-                <FiSave className="icons" onClick={this.savefile} />
-            </span>
-            <span className="hint--bottom" aria-label="Cancel">
-                <FiX className="icons" onClick={this.discardChanges} />
-            </span> */}
-                
              </div>)
          }
-         else if(this.props.isSaved ){
-            // elseif {
-            var postShareElements= (<div className = "postRecord">
-                <p>Your recording has been saved successfully.
-               You can access it with the link below and share the same</p>
-                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
-                    <button className="buttonDark" 
-                    style={{marginTop:"50px"}} 
-                    onClick={closeFunction}>Go Home</button>
-             </div>)
-
-         }
-        //  else if(this.state.saveBtnClicked && !this.props.isSaved){
-        //     var postShareElements= (<div>
-        //          <p>Save processing..</p>
+        //  else if(this.props.isSaved ){
+        //     // elseif {
+        //     var postShareElements= (<div className = "postRecord">
+        //         <p>Your recording has been saved successfully.
+        //        You can access it with the link below and share the same</p>
+        //          <CopyToClipboard sharablelink = {this.props.sharablelink} />
+        //             <button className="buttonDark" 
+        //             style={{marginTop:"50px"}} 
+        //             onClick={closeFunction}>Go Home</button>
         //      </div>)
+
         //  }
-       
+
+
+         else if (this.props.sendSuccess) {
+            var postShareElements = (<div className="postRecord">
+                <p><b>The recording successfully sent to {this.props.twitterName}</b></p>
+                <p>Link to access your saved project</p>
+                <CopyToClipboard sharablelink={this.props.sharablelink} />
+
+            </div>)
+        }
+        else if (this.props.isSaved) {
+            var postShareElements = (<div>
+                <p>Sending the message. Please wait..</p>
+            </div>)
+
+        }
+
+
+
+      
        
         if (this.state.shareScreenLink) {
             linkElement = (<p>{this.state.shareScreenLink}</p>)
@@ -451,7 +476,8 @@ FullScreenRecorder.PropType={
     saveSourceId:PropType.func.isRequired,
     setStream: PropType.func.isRequired,
     showCanvas: PropType.func.isRequired, 
-    hideCanvas: PropType.func.isRequired
+    hideCanvas: PropType.func.isRequired,
+    sendMessage:PropType.func.isRequired
 }
 const mapStateToProps = state =>({
     isFullScreenRecording :state.tools.isFullScreenRecording,
@@ -462,8 +488,12 @@ const mapStateToProps = state =>({
     extOrigin:state.extension.origin,
     extSourceId:state.extension.sourceId,
     audioStream :state.stream.audioStream,
+    fromId : state.auth.id,
     screenStream : state.stream.screenStream,
+    sendSuccess:state.message.sendSuccess,
+    twitterUserId: state.twitterApi.twitterId,
+    twitterName: state.twitterApi.name
 }) 
 
-export default connect(mapStateToProps,{saveSourceId, showCanvas, hideCanvas,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
+export default connect(mapStateToProps,{sendMessage,saveSourceId, showCanvas, hideCanvas,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
 
