@@ -7,7 +7,11 @@ import {SEND_MESSAGE,
      CANCEL_MESSAGE_STATE,
      HIDE_TEXT_BOX_AFTER_RECORDONG,
      FROM_SHARE_TO_RECORD,
-     SHOW_TEXT_BOX_AFTER_RECORDONG} from './types'
+     GET_TOTAL_UNREAD,
+     SUCCESS_IN_CHNAGE_READ_STATE,
+     FAILURE_IN_CHNAGE_READ_STATE,
+     SHOW_TEXT_BOX_AFTER_RECORDONG,
+     EXPLAIN_ISSUE} from './types'
 
 
      export const fromShareToRecord =()=>(dispatch)=>{
@@ -15,8 +19,63 @@ import {SEND_MESSAGE,
              type:FROM_SHARE_TO_RECORD
          })
      }
+     export const explainIssue =()=>(dispatch)=>{
+         dispatch({
+             type:EXPLAIN_ISSUE
+         })
+     }
+export const getTotalUnread=()=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'))
+    axios({
+        method:'get',
+        url:config.base_dir+'/api/message/totalunread',
+        headers:{
+            "Authorization":token,
+        }
+    })
+    .then(response=>{
+        if(response.status===200 || response.status === 304)
+        {
 
+            dispatch({
+                type:GET_TOTAL_UNREAD,
+                payload:response.data.number
+            })
+        }
+    })
+    .catch(error=>{
+        console.log("error : ", error)
+        
+    })
+}
+export const changeReadStatus = (messageId)=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'))
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/message/changeunread/'+messageId,
+        headers:{
+            "Authorization":token,
+        }
+    }).then(response=>{
+        if(response.status === 200 || response.status === 304){
+            dispatch({
+                type:SUCCESS_IN_CHNAGE_READ_STATE
+            })
+        }
+        else{
+            dispatch({
+                type:FAILURE_IN_CHNAGE_READ_STATE
+            })
+        }
+    }).catch(error=>{
+        console.log("error : ",error)
+        dispatch({
+            type:FAILURE_IN_CHNAGE_READ_STATE
+        })
+    })
+}
 export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
+    console.log('=---------------------=-')
     console.log(link, fromId, ToId, subject)
     var token = JSON.parse(localStorage.getItem('token'))
     var postData = {

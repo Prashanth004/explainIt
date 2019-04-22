@@ -31,6 +31,7 @@
     "react-konva": "^16.6.31",
     "react-media-recorder": "^0.7.1",
     "react-modal": "^3.8.1",
+    "react-notification-badge": "^1.4.0",
     "react-progressbar.js": "^0.2.0",
     "react-redux": "^6.0.0",
     "react-router": "^4.3.1",

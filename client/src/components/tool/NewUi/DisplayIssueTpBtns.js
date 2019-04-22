@@ -26,6 +26,7 @@ export default class displayTopBtns extends Component {
                 toolTipValue: "Public - anyone can see this card",
                 toolTipsimple: "public"
             })
+            this.props.changepublicStatus("public")
         }
         else {
             this.setState({
@@ -33,6 +34,7 @@ export default class displayTopBtns extends Component {
                 toolTipValue: "Private - only you can see this card",
                 toolTipsimple: "private"
             })
+            this.props.changepublicStatus("private")
         }
     }
     onOptClick() {
@@ -54,6 +56,7 @@ export default class displayTopBtns extends Component {
                 toolTipValue: "Private - only you can see this card",
                 toolTipsimple: "Private"
             })
+            this.props.changepublicStatus("private")
         }
         else {
             this.setState({
@@ -61,6 +64,7 @@ export default class displayTopBtns extends Component {
                 toolTipValue: "Public - anyone can see this card",
                 toolTipsimple: "Public"
             })
+            this.props.changepublicStatus("public")
         }
         this.props.handlePublicPrives(e)
     }

@@ -15,6 +15,60 @@ var options = {
   , max:  10000
   , integer: true
   }
+
+
+exports.updateProfile = function(req,res){
+    console.log(req.body.bio,
+        req.body.cost,
+        req.body.angellist,
+        req.body.linkedin,
+        req.body.github,
+        req.user.id
+    )
+    database.db.none('update users SET bio = $1, cost =$2, angellist =$3,linkedin =$4, github=$5 WHERE id = $6',
+     [req.body.bio,
+    req.body.cost,
+    req.body.angellist,
+    req.body.linkedin,
+    req.body.github,
+     req.user.id,
+    ]).then(data=>{
+        console.log(data)
+        database.db.oneOrNone('select * from users where id = $1', req.user.id)
+        .then(data=>{
+            console.log("second sending datat : ", data)
+            if(data!==null){
+                res.status(200).send({
+                    success:1,
+                    data:data
+                })
+            }
+            else{
+                res.status(200).send({
+                    success:1,
+                    data:req.user
+                }) 
+            }
+        })
+        .catch(err=>{
+            console.log("error : ",err)
+            res.status(200).send({
+                success:1,
+                data:req.user
+            })
+        })
+
+       
+    })
+    .catch(error=>{
+        console.error("error : ",error)
+        res.status(500).send({
+            sussecc:0,
+            error:error
+        })
+    })
+
+}
 exports.getUserByEmail = function(req,res){
     // console.log("req.params.email : ",req.params.email)
     database.db.oneOrNone('select * from users where email = $1', req.params.email)

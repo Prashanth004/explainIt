@@ -9,11 +9,9 @@ module.exports = function(passport) {
   opts.jwtFromRequest =  ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.secretOrKey = config.secret;
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-      console.log("jwt_payload :"+jwt_payload.id)
     database.db.oneOrNone('select * from users where id = $1', jwt_payload.id)
     .then(function( user) {
       if (user) {
-          console.log(user)
         done(null, user);
       } else {
         done(null, false);

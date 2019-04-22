@@ -7,7 +7,8 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FiMail } from "react-icons/fi";
 import Swal from 'sweetalert2';
-import '../../css/nav.css'
+import '../../css/nav.css';
+import { confirmAlert } from 'react-confirm-alert'; // Import
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
 import { openHome, openInbox, openCreated, openParticipated } from '../../../actions/navAction'
@@ -27,6 +28,9 @@ class Navigationbar extends React.Component {
     this.openParticipated = this.openParticipated.bind(this);
     this.openCreated = this.openCreated.bind(this);
     this.openVisitHome = this.openVisitHome.bind(this);
+    this.logout = this.logout.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
   showLogoutSuccess() {
     // Swal.fire({
@@ -36,6 +40,35 @@ class Navigationbar extends React.Component {
     //   showConfirmButton: false,
     // })
   }
+  logout = () => {
+    
+    if (this.props.screenAction !== null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted) {
+
+        confirmAlert({
+            title: "Are you sure?",
+            message: "The call will get disconnected",
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.handleConfirm()
+                },
+                {
+                    label: 'No',
+                    onClick: () => this.handleCancel()
+                }
+            ]
+        })
+    }
+    else {
+        this.handleConfirm()
+    }
+}
+handleCancel=()=>{
+
+}
+handleConfirm() {
+  this.props.signout()
+}
   componentWillMount() {
     this.props.stillAuthenicated()
     console.log("window.location.href : ", window.location.href)
@@ -129,10 +162,10 @@ class Navigationbar extends React.Component {
           <img className="profileImages" src={this.props.profilePic}></img>
         </div>
         <div className="dropdown-content">
-          <button onClick={this.props.signout} className=" buttonLight navButton1"> Logout</button>
+          <button onClick={this.logout} className=" buttonLight navButton1"> Logout</button>
           <div className="imageLogout">
             <span>
-              <img onClick={this.props.signout} height="100%" width="100%" src={require('../../images/logout.png')} />
+              <img onClick={this.logout} height="100%" width="100%" src={require('../../images/logout.png')} />
             </span>
           </div>
         </div>
@@ -250,6 +283,11 @@ Navigationbar.PropType = {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   userName: state.auth.userName,
+  isSceenSharing: state.tools.isFullScreenSharing,
+  screenAction: state.tools.screenAction,
+  isSharingCompleted: state.tools.isSharingCompleted,
+  isFullSharingCompleted: state.tools.isFullSharingCompleted,
+
   profilePic: state.auth.profilePic,
   logoutSuccess: state.auth.logoutSuccess,
   userId: state.auth.id,

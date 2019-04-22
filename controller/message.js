@@ -1,6 +1,8 @@
 var database = require('../app')
-var promise = require('bluebird');
-var rn = require('random-number');
+console.log("database############ :L ",database)
+
+    var rn = require('random-number');
+const config = require('../config/keys')
 var options = {
     min: 0
     , max: 10000000
@@ -8,28 +10,116 @@ var options = {
 }
 
 
+exports.checkReplyInfo =( req, res)=>{
+database.db.oneOrNone('select * from projects where email =$1 and issueid =$2',[req.user.email,Number(req.params.issueid)])
+.then(data=>{
+    if(data){
+        if(data.length!==null){
+            res.status(200).send({
+                success:1,
+                data : data
+            })
+        }
+        else{
+            res.status(200).send({
+                success:0,
+                msg:"no data found"
+            })
+        }
+    }
+    else{
+        res.status(200).send({
+            success:0,
+            mag: "no data found"
+        })
+    }
+})
+.catch(err=>{
+    console.log("error : ",err)
+    res.status(200).send({
+        success:0,
+        error:err
+    })
+
+})
+}
+
+exports.getUnreadNumber=(req,res)=>{
+    database.db.manyOrNone('select * from message where unread =$1 and touser=$2',[1,req.user.id])
+    .then(data=>{
+        if(data!==null){
+            res.status(200).send({
+                success:1,
+                number: data.length
+            })
+        }
+        else{
+            res.status(200).send({
+                success:1,
+                number:0
+            })
+        }
+    })
+    .catch(error=>{
+        res.status(500).send({
+            success:0,
+            error:error
+        })
+    })
+}
+exports.changeUnread = (req,res)=>{
+   
+    // update projects SET public = $1 
+    // database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time,unread)' +
+    // 'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time},${unread})',
+    database.db.none('update message SET unread = $1, WHERE touser = $2 and id= $3', [0, req.user.id, req.params.messageid])
+    .then(data=>{
+        res.io.emit(config.UPDATE_BADGE, {
+            "userId":req.user.id
+         })
+        res.status(200).send({
+            success:1,
+            data:data
+        })
+        
+    })
+    .catch(error=>{
+        res.status(500).send({
+            success:0,
+            error:error
+        })
+    })
+
+     
+}
 
 exports.saveMessage = function (req, res) {
+    
     var rand = rn(options)
-    console.log(req)
-    console.log("req.body : ", req.body)
+
     let dateNow = new Date().toString()
-    database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time)' +
-    'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time})',
+    database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time,unread)' +
+    'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time},${unread})',
     {
         id:rand,
         link: req.body.link,
         subject:req.body.subject,
         fromuser: req.body.fromUser,
         touser:req.body.touser,
-        time : dateNow
+        time : dateNow,
+        unread : 1
     }).then(function(data){
+        res.io.emit(config.NEW_MESSAGE, {
+            "touser":req.body.touser
+         })
         res.status(201).send({
             success:1,
             data:data
         })
+        
+
     }).catch(function(error){
-        console.log(error)
+       // console.log(error)
         res.status(500).send({
             success:0,
             error:error
@@ -41,7 +131,6 @@ exports.saveMessage = function (req, res) {
 exports.getMessage = function(req, res){
     database.db.manyOrNone('select * from message where touser = $1', req.params.userid)
     .then(data=>{
-        console.log("data : ",data)
         if(data){
             res.status(200).send({
                 success:1,

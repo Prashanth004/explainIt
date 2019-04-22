@@ -1,12 +1,7 @@
 https://mherman.org/blog/designing-a-restful-api-with-node-and-postgres/
-
 https://www.npmjs.com/package/pg-promise#usage
-
 https://www.tech-recipes.com/rx/56738/one-to-one-one-to-many-table-relationships-in-sql-server/
-
-
 https://github.com/adcentury/socketio-jwt-auth
-
 https://www.valentinog.com/blog/socket-io-node-js-react/
 
 https://www.npmjs.com/package/socketio-jwt
@@ -39,6 +34,89 @@ ALTER DATABASE explain OWNER TO bookmane
 CREATE DATABASE <dbname> OWNER <ownername> 
 \dt
 psql dbname < dump.sql
+
+
+explain_first
+CREATE DATABASE explain_first OWNER bookmane
+
+
+
+view-Page
+
+1) option to delete/edit
+2) view element proper
+3) explainIt button works properly
+4) flow of explain is good?
+5) nav button are good?
+6) logout login flow
+
+screen share
+1) low for shariing screen
+   the validetions work fine?
+   the twiiter handle properly recognised
+   wordings and spellings
+   call answer flow
+   call reject flow
+   call not answered flow
+   record flow of the call rejected or not anwseed
+   call notification
+   call to deiapear before clickng on expired link
+   
+2) Call flow
+   call connected
+   i ended call
+   other person ended the call
+   the call got disconected
+   retry options
+3) record flow
+   record and send to people
+    wordings and spelling
+    record and save for further refrence
+    saving the recording
+4) created
+   Ui lagging
+   order of the elements displayed
+   tweet option
+    explain it button
+   delete
+   public/private
+   sharable link
+   grid to list and list to grif conversion
+   view properly working
+5) inbox
+  notifications badges realtimmr
+  disapear of badges in real time
+  display message with subjects in order of sate
+  messages go to participated once explained
+  
+
+
+
+
+bugs:
+1) order of data
+2) hot spot issue
+3) edit option not working
+4) 
+
+1) order of message
+2) save to export 
+3) twitter handle suggestion
+4) order of inbox
+5) display subject for inbox
+6) hash tags
+7) extension
+8) notification
+
+
+
+
+
+
+
+
+
+
 
 
 

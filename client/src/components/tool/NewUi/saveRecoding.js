@@ -116,8 +116,11 @@ class SaveProjects extends Component {
 
     }
   render() {
+      const shareOption=(!this.props.explainIssue)?(<span className="hint--top" aria-label="Send Recording">
+      <FiSend className="icons" onClick={this.sendMessage} />
+  </span>):null
       const saveOption=(this.props.twitterUserId===null)?(
-        <span className="hint--bottom" aria-label="Save Recording">
+        <span className="hint--top" aria-label="Save Recording">
         <FiSave className="icons" onClick={this.props.saveClicked} />
     </span>
       ):(null)
@@ -128,6 +131,7 @@ class SaveProjects extends Component {
         changeInputValue={this.changeInputValue}
         textValue={this.state.textValue}
         />):(null) )
+
     const tweetSendMessage = (this.props.fromShareToRecord
     )?(<div style={{textAlign:"center"}}>
             <button onClick={this.savefilePri} className="buttonDark">Send Recording</button>
@@ -138,12 +142,11 @@ class SaveProjects extends Component {
         
     return  (!this.props.isSaveClicked && !this.state.sendMessageClicked)?
     (<div>
-        <p>Do you want to save the {this.state.callRecText}?</p>
-       <span className="hint--bottom" aria-label="Send Recording">
-           <FiSend className="icons" onClick={this.sendMessage} />
-       </span>
+        <br/>
+       
+       {shareOption}
        {saveOption}
-        <span className="hint--bottom" aria-label="Cancel">
+        <span className="hint--top" aria-label="Discard">
             <FiX className="icons" onClick={this.props.closeImidiate} />
         </span>
     </div>):
@@ -189,7 +192,8 @@ const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
     showInputBox:state.message.showTextAftRec,
     twitterUserId: state.twitterApi.twitterId,
-    fromShareToRecord:state.message.fromShareToRecord
+    fromShareToRecord:state.message.fromShareToRecord,
+    explainIssue:state.message.explainIssue
 })
 
 export default connect(mapStateToProps, { })(SaveProjects)

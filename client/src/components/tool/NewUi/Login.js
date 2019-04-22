@@ -11,10 +11,14 @@ import { connect } from 'react-redux';
 class Login extends Component {
     constructor() {
         super();
+        this.state={
+            istwitterPressed:false
+        }
         this.state = { isAuthenticated: false, user: null, token: '' };
         this.googleResponse = this.googleResponse.bind(this);
         this.githubResponse = this.githubResponse.bind(this);
-        this.githubFailure = this.githubFailure.bind(this)
+        this.githubFailure = this.githubFailure.bind(this);
+        this.twitterPressed = this.twitterPressed.bind(this)
     }
   
     handleGit(){
@@ -23,6 +27,12 @@ class Login extends Component {
     }
     componentWillMount(){
         this.props.stillAuthenicated()
+    }
+    twitterPressed(){
+       
+        this.setState({
+        istwitterPressed:true
+        })
     }
 
     githubResponse(response){
@@ -42,7 +52,12 @@ class Login extends Component {
 
     render() {
         let content = !this.props.isAuthenticated ?
-            (<div className="ShapeImage">
+            ((this.state.istwitterPressed && !this.props.twitterLoginFailed)?
+            ( <div className="loginSection">
+            <div className="Logininfo">
+                <h4><b>Redirecting..</b></h4>
+            </div>
+            </div>):(<div className="ShapeImage">
                 {/* <div className="ShapeImage">
                 </div> */}
                 <div className="loginSection">
@@ -59,7 +74,7 @@ class Login extends Component {
                         </b>
                         </h5>
                         <br />
-                            <div className="buttonDiv">
+                            <div onClick={this.twitterPressed} className="buttonDiv">
                                 <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
                                     onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
                                     requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />
@@ -69,7 +84,7 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
-            ): (<Redirect to={{ pathname: './' }} />) 
+            )): (<Redirect to={{ pathname: './' }} />) 
         return (
             <div>
                 {content}
@@ -83,10 +98,12 @@ Login.PropType = {
     signInWithGoogle: PropType.func.isRequired,
     twitterAuthFailure:PropType.func.isRequired,
     signInWithTwitter:PropType.func.isRequired,
-    stillAuthenicated:PropType.func.isRequired
+    stillAuthenicated:PropType.func.isRequired,
 };
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
+    authAction :state.auth.authAction,
+    twitterLoginFailed:state.auth.twitterLoginFailed
 })
 export default connect(mapStateToProps, { signInWithGoogle, stillAuthenicated, twitterAuthFailure, signInWithTwitter})(Login)
 

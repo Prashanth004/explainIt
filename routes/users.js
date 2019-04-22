@@ -7,10 +7,24 @@ var jwt = require('jsonwebtoken');
 require('../config/passport-setup');
 var request = require('request');
 var qs = require('querystring')
+router.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
+ 
+ router.use('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+ });
+ 
+// 
 
 //Basic login form authentication system
 router.get('/email/:email',user.getUserByEmail)
 router.get('/id/:id',user.getUserById)
+router.post('/updateprofile',passport.authenticate('jwt', { session: false }),user.updateProfile)
 router.get('/twitterhandle/:enctwitterhandle', user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
 router.post('/authenticate',user.authenticate)

@@ -43,7 +43,16 @@ const conf = {
     RECORDING:"recording",
     SHARING : "sharing",
     RECORD_TIME: 3,
-    LINK_EXPIRE_TIME:3
+    LINK_EXPIRE_TIME:3,
+    UPDATE_BADGE:"updateBadge",
+    NEW_MESSAGE:"newMessage",
+    LINK_TO_CALL_ACK:"lonkToCallAck",
+    ENDING_RING:"endingRing",
+    ENDING_RING_ACK:"endingRingAck",
+    SAVED_NEW_PROJECT:"savedNewProject",
+    SHARE_MY_SCREEN:"shareMyScreen",
+    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen"
+
 
 
     

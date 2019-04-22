@@ -26,13 +26,15 @@ import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
 import Content from './Content'
+// import { openParticipated,openInbox, openCreated } from "../../../actions/navAction";
+
 import { Animated } from "react-animated-css";
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
 import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import {getRecpientId} from '../../../actions/twitterApiAction'
-import { openParticipated,openCreated } from "../../../actions/navAction";
+import {openInbox, openParticipated,openCreated } from "../../../actions/navAction";
 import { stat } from 'fs';
 import ProfileNotOnExplain from './ProfileNotOnExplain'
 import ProfileNotOnTwitter from './ProfileNotOnTwitter'
@@ -60,6 +62,7 @@ class NewHome extends Component {
         this.reStoreDefault = this.reStoreDefault.bind(this);
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.toggleInbox = this.toggleInbox.bind(this);
     }
     
     reloadPage() {
@@ -174,6 +177,14 @@ class NewHome extends Component {
     handleCancel(){
         
     }
+    toggleInbox(){
+        var self = this
+        this.setState({
+            showProjects: true,
+            openExplain: false
+        })
+        this.props.openCreated()
+    }
     reStoreDefault = () => {
         if(this.props.screenAction!==null){
         confirmAlert({
@@ -253,8 +264,8 @@ class NewHome extends Component {
                         <div className="issueContainer" >
                             <div className="closeBtnHolder">
                             </div>
-                            {/* <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={issuesCreated} /> */}
-                            <DisplayCreated home={config.NOT_HOME} issueArray={(issuesCreated).reverse()} />
+                            <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
+                            {/* <DisplayCreated home={config.NOT_HOME} issueArray={(issuesCreated).reverse()} /> */}
 
                         </div>
                     </Animated>)
@@ -292,6 +303,7 @@ class NewHome extends Component {
                   var profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
                     isHome={this.state.isHome}
+                    toggleInbox={this.toggleInbox}
                         userId={this.props.userId}
                         toggleCreatedIssue={this.toggleCreatedIssue}
                         toggleParticipatedIssue={this.toggleParticipatedIssue} />
@@ -376,7 +388,8 @@ NewHome.PropType = {
     openCreated:PropType.func.isRequired,
     getRecpientId :PropType.func.isRequired,
     twitterAuthFailure: PropType.func.isRequired,
-    signInWithTwitter: PropType.func.isRequired
+    signInWithTwitter: PropType.func.isRequired,
+    openInbox:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -402,4 +415,4 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, {twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {openInbox,twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)

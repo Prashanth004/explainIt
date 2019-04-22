@@ -49,17 +49,17 @@ class Search2 extends Component {
     render() {
         return (
 
-            <div style={{ borderRadius:"5%", marginLeft: 50, display:"inline" }}>
+            <div style={{ borderRadius:"5%", display:"inline" }}>
                 <Autocomplete
-                    className="input"
+                    className="inputTweet"
                     value={this.props.tweetTextvalue}
-                    style={{ borderRadius:"5%", padding:"10px" }}
+                    style={{ borderRadius:"5%", margin:"10px",padding:"5px" }}
                     inputProps={{
                          id: 'states-autocomplete',
                          className:this.props.classOfInput,
                          placeholder:this.props.placeholder
                          }}
-                    wrapperProps={{ borderRadius:"5%", padding:"10px" }}
+                    wrapperProps={{ borderRadius:"5%",margin:"10px", padding:"5px" }}
                     wrapperStyle={{ position: 'relative', display: 'inline-block' }}
                     items={this.props.twiterHandleArray}
                     getItemValue={item => item.twitterhandle}
@@ -73,13 +73,13 @@ class Search2 extends Component {
                         </div>  
                     )}
                     renderItem={
-                       (item, isHighlighted) => (
+                       (item, isHighlighted) => (null
                         // (item.lenght>0)?(
-                        <div
-                            className={`item ${isHighlighted ? 'item-highlighted' : ''}`}
-                            key={item.issueid} >
-                            <p>{item.twitterhandle}</p>
-                        </div >
+                        // <div
+                        //     className={`item ${isHighlighted ? 'item-highlighted' : ''}`}
+                        //     key={item.issueid} >
+                        //     <p>{item.twitterhandle}</p>
+                        // </div >
                         // )
                     )}
                 />

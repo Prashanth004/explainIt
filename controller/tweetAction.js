@@ -14,7 +14,6 @@ const client = new Twitter({
         "screen_name":req.params.twitterhandler
      }
       client.get('users/show.json', params, function(error,body ,response){
-         
 
          if(error!==null){
             res.status(200).send({
@@ -27,7 +26,7 @@ const client = new Twitter({
             var newProfilePic = body.profile_image_url_https.replace("_normal","")
             res.status(200).send({
                 success:1,
-                id:body.id,
+                id:body.id_str,
                 profilePic : newProfilePic,
                 name: body.name
             })
@@ -42,14 +41,12 @@ const client = new Twitter({
                         userid:req.user.id
                     })
                     .then(data=>{
-                        console.log("done saving twitter handle")
                     })
                     .catch(error=>{
                         console.log(error)
                     })
                 }
                 else{
-                    console.log("data alreay exist")
                 }
             })
             .catch(err=>{
@@ -81,10 +78,8 @@ const client = new Twitter({
 
     client.post('statuses/update', {status: statusCaller}, function(error1, tweet, response) {
         if (!error1) {
-            console.log("sent tweet to the caller ")
           client.post('statuses/update', {status: statuReciever}, function(error2, tweet, response) {
             if (!error2) {
-                console.log("sent tweet to the reciever ")
                 res.status(200).send({
                     success:1,
                     msg:"tweetAction failed"
@@ -116,10 +111,8 @@ const client = new Twitter({
 
   exports.twitterlist = (req, res)=>{
       const user = req.user.id
-      console.log("user id : ", req.user.id)
       database.db.manyOrNone('select * from usertwitter where userid = $1',user)
       .then(data=>{
-          console.log("data : ",data)
           if(data){
               res.status(200).send({
                   success:1,

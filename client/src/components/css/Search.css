@@ -44,6 +44,9 @@
       font-size:12px;
       border-color:rgb(153, 153, 153);
   }
+  .inputTweet{
+    margin:2px;
+  }
   
   .item {
     padding: 2px 6px;

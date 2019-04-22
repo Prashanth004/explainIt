@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import Issue from './issueModal'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import socketIOClient from "socket.io-client";
 import './css/toggle.css';
+import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
 import ExplainPage from './tool/NewUi/ExplainPage';
+import {explainIssue} from '../actions/messageAction'
 import {clearAnswers, fetchProjectbyIssue} from '../actions/projectActions'
 import Navbar from './tool/NewUi/Navbar';
 import Swal from 'sweetalert2';
@@ -31,6 +34,7 @@ class Project extends Component {
   }
   handleOpenModal(e) {
     if (this.props.isAauthenticated) {
+        this.props.explainIssue()
       this.props.setIssueId(this.props.match.params.projectid)
       localStorage.setItem("issueId",this.props.match.params.projectid)
       this.setState({ showModalExplain: true });
@@ -53,10 +57,20 @@ handleCloseModal() {
       this.setState({
         issueId:issueId
       })
+      const socket = socketIOClient(config.base_dir);
+      this.setState({
+          socket: socket
+      })
 
   }
   componentDidMount(){
+    var socket = this.state.socket
     var self = this;
+    socket.on(config.SAVED_NEW_PROJECT,data=>{
+        if(data.userId === this.props.userId){
+            this.props.fetchProjectbyIssue(this.props.match.params.projectid);
+        }
+    })
     function postMessageHandler(event) {
       if (event.data === 'rtcmulticonnection-extension-loaded') {
           console.log(" event.source :", event.source)
@@ -121,8 +135,7 @@ handleCloseModal() {
                             isOpen={this.state.showModalExplain}
                             contentLabel="Minimal Modal Example"
                             className="ModalA"
-                            overlayClassName="OverlayA"
-                        >
+                            overlayClassName="OverlayA">
                             <div >
                                 <div onclick={this.handleCloseModal} className="closeModalBtn">
                                     <span>
@@ -146,15 +159,18 @@ Project.PropType = {
   cancelAllMessageAction:PropType.func.isRequired,
   restAllToolValue:PropType.func.isRequired,
   resetValues:PropType.func.isRequired,
-  saveExtensionDetails:PropType.func.isRequired
+  saveExtensionDetails:PropType.func.isRequired,
+  
 };
 const mapStateToProps = state => ({
-  isAauthenticated: state.auth.isAuthenticated
+  isAauthenticated: state.auth.isAuthenticated,
+  userId: state.auth.id,
 })
 
 export default connect(mapStateToProps, {clearAnswers,
   saveExtensionDetails, 
   cancelAllMessageAction,
+  explainIssue,
   restAllToolValue,
   resetValues,
   setIssueId, fetchProjectbyIssue})(Project)

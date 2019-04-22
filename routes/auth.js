@@ -110,11 +110,7 @@ router.post('/auth/twitter/', function (req, res, next) {
 
 router.post('/visit/auth/twitter/reverse/:twitterhandle', function (req, res) {
     twitterhandle = req.params.twitterhandle
-    console.log("twitterhandle : ", twitterhandle)
-    // console.log("req.query.oauth_token :", req.query.oauth_token)
-    // console.log("req.query.oauth_verifier :", req.query.oauth_verifier)
-
-
+   
     var qs = require('querystring')
         , oauth =
         {
@@ -138,7 +134,6 @@ router.post('/visit/auth/twitter/reverse/:twitterhandle', function (req, res) {
 
 router.post('/visit/auth/twitter/', function (req, res, next) {
   
-    console.log("twitterhandle@@@@ : ".twitterhandle )
         request.post({
             url: 'https://api.twitter.com/oauth/access_token',
             oauth: {

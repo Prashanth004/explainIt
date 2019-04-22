@@ -1,4 +1,5 @@
-import { SIGN_IN_WITH_GOOGLE,SIGN_IN_WITH_GIT, SIGN_IN_WITH_TWITTER, SIGN_OUT, AUTH_FAIL, CHECK_TOKEN_VALIDIDTY } from './types'
+import { SIGN_IN_WITH_GOOGLE,
+    AUTH_FAIL_TWITTER,SIGN_IN_WITH_GIT, SIGN_IN_WITH_TWITTER, SIGN_OUT, AUTH_FAIL, CHECK_TOKEN_VALIDIDTY } from './types'
 import axios from 'axios'
 import config from '../config/config'
 
@@ -107,7 +108,7 @@ export const signInWithTwitter = (response) => (dispatch) => {
 
 export const twitterAuthFailure = (error) => (dispatch) => {
     dispatch({
-        type: AUTH_FAIL,
+        type: AUTH_FAIL_TWITTER,
         payload: false,
         error: error,
         token: null

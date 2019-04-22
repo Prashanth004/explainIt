@@ -26,7 +26,15 @@ module.exports = {
     COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity",
     RETRYCALL : "reTryCall",
     ENDCALL_ACK:"endCallAck",
-    CLOSE_NETWORK_ISSUE : "closeDueToNetworkIssue"
+    CLOSE_NETWORK_ISSUE : "closeDueToNetworkIssue",
+    UPDATE_BADGE:"updateBadge",
+    NEW_MESSAGE:"newMessage",
+    LINK_TO_CALL_ACK:"lonkToCallAck",
+    ENDING_RING:"endingRing",
+    ENDING_RING_ACK:"endingRingAck",
+    SAVED_NEW_PROJECT:"savedNewProject",
+    SHARE_MY_SCREEN:"shareMyScreen",
+    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen"
 
 
 

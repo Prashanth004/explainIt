@@ -30,12 +30,19 @@ class issueCard extends Component {
             showModalExplain: false,
             showModalTwitterLogin: false,
             showAllPeople: false,
-            questionProject: []
+            questionProject: [],
+            publicStatus:"public"
         }
         this.changeVideo = this.changeVideo.bind(this)
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.toggleAllPeopleList = this.toggleAllPeopleList.bind(this);
+        this.changepublicStatus = this.changepublicStatus.bind(this)
+    }
+    changepublicStatus(status){
+        this.setState({
+            publicStatus:status
+        })
     }
     componentDidMount(){
        var test =  this.videoExplain
@@ -136,6 +143,12 @@ class issueCard extends Component {
 
     }
     render() {
+        const twitterBird = (this.state.publicStatus !== "private")?(
+            <span id={this.props.issue.issueid} className="hint--top" aria-label="Tweet it">
+
+            <img id={this.props.issue.issueid} width="100%" height="100%" onClick={this.props.tweetWindow} src={require('../../images/twitter.png')} />
+        </span >
+        ):(null)
         const bottomImages=(  <ImagesOfExplainers
             toggleAllPeopleList={this.toggleAllPeopleList}
                 answerProjects={this.state.answerProjects}
@@ -145,10 +158,7 @@ class issueCard extends Component {
         const tweetOption = (this.props.isAauthenticated) ? (
           
                 <div style={{ display: this.state.displayTwitter }} id={this.props.issue.issueid} className="twitter">
-                    <span id={this.props.issue.issueid} className="hint--top" aria-label="Tweet it">
-
-                        <img id={this.props.issue.issueid} width="100%" height="100%" onClick={this.props.tweetWindow} src={require('../../images/twitter.png')} />
-                    </span >
+                   {twitterBird}
                 </div>
            
         ) : (null)
@@ -173,6 +183,7 @@ class issueCard extends Component {
                 <div key={this.props.issue.issueid} className="issueCard">
                     <div className="orginCard">
                         <DisplayIssueTopBtns
+                        changepublicStatus={this.changepublicStatus}
                             issue={this.props.issue}
                             questionProject={this.state.questionProject[0]}
                             toggleDisplayLink={this.props.toggleDisplayLink}

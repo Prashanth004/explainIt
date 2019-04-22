@@ -430,12 +430,13 @@ toggleCanvas(){
          else if(this.props.isSaved ){
             // elseif {
             var postShareElements= (<div className = "postRecord">
-                <p>Your recording has been saved successfully.
+            <p><b>Your Explaination is recorded successfully :)</b></p>
+                {/* <p>Your recording has been saved successfully.
                You can access it with the link below and share the same</p>
                  <CopyToClipboard sharablelink = {this.props.sharablelink} />
                     <button className="buttonDark" 
                     style={{marginTop:"50px"}} 
-                    onClick={this.closeFunction}>Go Back</button>
+                    onClick={this.closeFunction}>Go Back</button> */}
              </div>)
 
          }

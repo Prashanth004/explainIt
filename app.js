@@ -62,27 +62,11 @@ var messageRouter = require('./routes/message')
 var tweetRouter = require('./routes/tweetAction')
 
 
-app.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
 
-//routes
-app.use('/api/tech', indexRouter);
-app.use('/api/twitter', twitterAuthRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/project', projectRouter);
-app.use('/api/issues',issueRouter);
-app.use('/api/message',messageRouter);
-app.use('/api/tweetactions', tweetRouter)
-app.use("/public", express.static(__dirname + "/public"));
 
-// app.use('/', basic );
-app.use(express.static('client/build'))
-app.get('*', (req,res)=>{
-  res.sendFile(path.resolve(__dirname,'client', 'build', 'index.html'))
-})
+
+
 
 // app.use(express.static(path.join(__dirname, 'public')));
 
@@ -96,18 +80,46 @@ server.on('listening', onListening);
 app.set( 'view engine', 'jade');
 app.set('views', path.join(__dirname, 'views'));
 
+const io = socketIo(server);
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
 
+
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
+
+//routes
+app.use('/api/tech', indexRouter);
+app.use('/api/twitter', twitterAuthRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/project', projectRouter);
+app.use('/api/issues',issueRouter);
+app.use('/api/message',messageRouter);
+app.use('/api/tweetactions', tweetRouter)
+app.use("/public", express.static(__dirname + "/public"));
 //peerjs for screen sharing
 app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
 app.use(logger('dev'));
-const io = socketIo(server);
+
+
+
+// app.use('/', basic );
+app.use(express.static('client/build'))
+app.get('*', (req,res)=>{
+  res.sendFile(path.resolve(__dirname,'client', 'build', 'index.html'))
+})
 
 io.on("connection", socket => {
   console.log("New client connected");
   
  
     socket.on(key.LINKTOCALL,(data)=>{
-      console.log("data : ",data)
     io.emit(key.LINKTOCALL, data); // Emitting a new message. It will be consumed by the client
 
     })
@@ -129,17 +141,30 @@ io.on("connection", socket => {
     })
 
     socket.on(key.CALL_ACK_MESSAGE,(data)=>{
-      console.log("ackmessage : ",data)
       io.emit(key.CALL_ACK_MESSAGE, data);
     })
 
     socket.on(key.CHECK_TOKEN_VALIDITY, (data)=>{
-      console.log("#### request to check token validity send")
       io.emit(key.CHECK_TOKEN_VALIDITY, data);
     })
+    socket.on(key.LINK_TO_CALL_ACK, (data)=>{
+      io.emit(key.LINK_TO_CALL_ACK, data);
+    })
+    socket.on(key.ENDING_RING, (data)=>{
+      io.emit(key.ENDING_RING, data);
+    })
+    socket.on(key.ENDING_RING_ACK, (data)=>{
+      io.emit(key.ENDING_RING_ACK, data);
+    })
+    socket.on(key.SHARE_MY_SCREEN, (data)=>{
+      io.emit(key.SHARE_MY_SCREEN, data);
+    })
+    socket.on(key.ACCEPT_SHARE_OTHRT_PEER_SCREEN, (data)=>{
+      io.emit(key.ACCEPT_SHARE_OTHRT_PEER_SCREEN, data);
+    })
+   
 
     socket.on(key.COMFIRM_TOKEN_VALIDITY, (data)=>{
-      console.log("########eaiting for confirmation")
       io.emit(key.COMFIRM_TOKEN_VALIDITY, data)
     })
     socket.on(key.RETRYCALL, (data)=>{
@@ -172,8 +197,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+// exports.io=io;
 exports.db = db;
+
 
 //server console functions
 function normalizePort(val) {

@@ -24,11 +24,15 @@ margin-top:20px;
     padding-left:11%;
 }
 .linkToProject{
+    width:60%;
     text-align: left;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis; 
     /* padding-left:11%; */
 }
 .messageElementDiv{
-    width:60%;
+    width:100%;
     margin:auto;
 
     margin-top:20px;
@@ -41,7 +45,7 @@ margin-top:20px;
     border-top-width:0.5px;
     box-shadow: 0px 0px 5px 2.5px rgba(192, 192, 192, 0.178);
     display:grid;
-    grid-template-columns: 6% 94%;
+    grid-template-columns: 20% 80%;
 }
 .messageElementDiv:hover{
     box-shadow: 0px 0px 0px 0px rgba(192, 192, 192, 0.335);
@@ -60,4 +64,19 @@ margin-top:20px;
     width:66px;
     border-radius:50%;
     margin:auto;
+  }
+
+  
+  @media (min-width: 700px) {
+    .messageElementDiv{
+        width:80%;
+        grid-template-columns: 23% 77%;
+    }
+}
+
+  @media (min-width: 1000px) {
+    .messageElementDiv{
+        width:60%;
+          grid-template-columns: 6% 94%;
+    }
   }

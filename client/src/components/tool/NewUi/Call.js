@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import '../../css/call.css'
 import Countdown from 'react-countdown-now';
-import Form from '../Form'
+import Form from '../Form';
+import { MdFilterNone } from "react-icons/md";
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import PropType from 'prop-types';
@@ -26,8 +27,11 @@ class Call extends Component {
 
     }
     render() {
-        const videoInfo = (this.props.startSecodScreenShare)?
-        (<span style={{fontSize:"15px"}}>Below is the screen of other peer</span>):(null)
+        const messageOfScreenShare =(!this.props.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
+        (<h4><b>Your screen is being shared</b></h4>)
+       
+        const shouldDisplay=(!this.props.myscreenSharing)?("block"):("none")
+        
 
         console.log("calling file, other profileid : ", this.props.otherPersonProfileId)
         if (this.props.otherPersonProfileId !== null) {
@@ -46,23 +50,22 @@ class Call extends Component {
 
             </div>
         ) : (<div className="callDetails">
-            <p><b>Screen is being shared..</b></p>
-            {videoInfo}
-            <video srcObject=" "
-                id="secondShareVideo"
-                style={{ display: "none" }}
-                width="100%"
-            ></video>
+            {messageOfScreenShare}
+            
+            <video srcObject={Object(this.props.videoStream)}
+        id="secondShareVideo"
+        autoPlay
+        style={{ display:shouldDisplay}}
+       
+        width="100%"
+    ></video>
 
         </div>)
         return (
             <div className="callDiv">
                 <div className="statusBarCall">
                     <div className="timerDiv">
-                        <Countdown
-                            date={Date.now() + this.props.timeAloted * 60 * 1000}
-                            renderer={this.props.renderer}
-                        />
+                       
                     </div>
                     <div>
 
@@ -74,7 +77,7 @@ class Call extends Component {
                 </div>
                 {showCanv}
                 <Draggable>
-                <div className="callImageDivAnwser">
+                <div className="callImageDivAnwserMain">
 
                     <div className="callPage-recieverImageDiv">
 
@@ -97,6 +100,19 @@ class Call extends Component {
                         <img className="callPage-recieverImage" src={this.props.otherPersonPic}></img>
                         {/* </span> */}
                     </div>
+                    <div className="callPage-recieverImageDiv endCall">
+                                <span className="hint--top" aria-label="ShareScreen">
+                                    <MdFilterNone onClick={this.props.shareMyScreen} className="endButton" />
+                                </span>
+                    </div>
+                    <div fontSize="13px"style={{color:"white"}}>
+                    <Countdown
+                    
+                    date={Date.now() + this.props.timeAloted * 60 * 1000}
+                    renderer={this.props.renderer}
+                />
+                    </div>
+                   
 
                     {/* <div className="callPage-recieverImageDiv endCall">
                         <span className="hint--top" aria-label="End Call">

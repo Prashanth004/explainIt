@@ -34,7 +34,8 @@ class FullScreenRecorder extends Component {
             showCanvas:false,
             isInstalled:true,
             subjectOfMessage:null,
-            sendBtnClicked:false       
+            sendBtnClicked:false,
+            savedfuncCalled:false      
             
         }
             this.downloadExtension = this.downloadExtension.bind(this);
@@ -104,7 +105,7 @@ class FullScreenRecorder extends Component {
 
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
-            self.startBar()
+            // self.startBar()
             var finalStream = new MediaStream();
             window.getTracks(audioStream, 'audio').forEach(function (track) {
                 finalStream.addTrack(track);
@@ -292,6 +293,9 @@ toggleCanvas(){
         }
     }
     sendMessageLocal(){
+        this.setState({
+            savedfuncCalled:true
+        })
         var subject = this.state.subjectOfMessage
         this.props.sendMessage(this.props.sharablelink,this.props.fromId,this.props.twitterUserId,subject)
     }
@@ -394,7 +398,7 @@ toggleCanvas(){
             var recordingElements = null;
         }
     
-        if(this.props.isSaved && !this.props.sendSuccess){
+        if(this.props.isSaved && !this.state.savedfuncCalled && this.props.twitterUserId!==null &&!this.props.sendSuccess){
             console.log("i a, here twoice?")
                 this.sendMessageLocal() 
         }
@@ -416,18 +420,15 @@ toggleCanvas(){
             savefilePrivate={this.savefilePrivate} />
              </div>)
          }
-        //  else if(this.props.isSaved ){
-        //     // elseif {
-        //     var postShareElements= (<div className = "postRecord">
-        //         <p>Your recording has been saved successfully.
-        //        You can access it with the link below and share the same</p>
-        //          <CopyToClipboard sharablelink = {this.props.sharablelink} />
-        //             <button className="buttonDark" 
-        //             style={{marginTop:"50px"}} 
-        //             onClick={closeFunction}>Go Home</button>
-        //      </div>)
+         else if(this.props.isSaved && this.state.saveBtnClicked ){
+            // elseif {
+            var postShareElements= (<div className = "postRecord">
+                <p>Your recording has been saved successfully.
+               You can access it with the link below and share the same</p>
+                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
+             </div>)
 
-        //  }
+         }
 
 
          else if (this.props.sendSuccess) {
@@ -438,6 +439,7 @@ toggleCanvas(){
 
             </div>)
         }
+     
         else if (this.props.isSaved) {
             var postShareElements = (<div>
                 <p>Sending the message. Please wait..</p>

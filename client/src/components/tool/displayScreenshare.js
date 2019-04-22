@@ -46,7 +46,9 @@ class DisplayShare extends Component {
             timerEnded: false,
             callerProfileId: null,
             isInstalled: true,
-            secondVideoStream: null
+            secondVideoStream: null,
+            initiatedScreenShare:false,
+            myscreenSharing:false
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -119,7 +121,13 @@ class DisplayShare extends Component {
         socket.emit(config.CHECK_TOKEN_VALIDITY, {
             'clientId': peerIdFrmPeer
         })
-
+        socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,data=>{
+            if(data.otherPeerId === self.state.peerIdFrmPeer){
+                self.setState({
+                    myscreenSharing:false
+                })
+            }
+        })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
             console.log(" socket.on(config.CLOSE_NETWORK_ISSUE, data => {")
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
@@ -240,13 +248,14 @@ class DisplayShare extends Component {
                         'recieverUserId': self.props.myProfileUserId
                     })
                     self.setState({
-                        connected: false
+                        connected: false,
+                        videoStream:stream
                     })
-                    console.log('Received', stream);
                     var divi = document.querySelector('.screenShareDiv')
                     divi.style.display = "block"
                     var video = document.querySelector('#video');
                     video.srcObject = stream
+                 
                     setTimeout(() => {
                         video.play()
                     }, 1000)
@@ -312,6 +321,19 @@ class DisplayShare extends Component {
         this.closeConnection()
     }
     shareScreen() {
+        var self= this;
+        var socket = this.state.socket
+        if(this.state.initiatedScreenShare){
+            this.setState({
+                myscreenSharing:true
+            })
+            socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,{
+                'otherPeerId': self.state.clientPeerid
+            })
+        }
+        else{
+
+        
         var self = this
         // var ua = window.detect.parse(navigator.userAgent);
         const result = browser();
@@ -327,6 +349,7 @@ class DisplayShare extends Component {
             self.startCall()
         }
     }
+    }
     receiveMessage() {
 
         var source = this.props.extSource
@@ -340,9 +363,14 @@ class DisplayShare extends Component {
     }
     startCall() {
         const self = this
+        this.setState({
+            myscreenSharing :true,
+            initiatedScreenShare:true
+                })
         console.log("in start call")
         const peer = this.state.peer
         const result = browser();
+        
         var sourceId = this.props.extSourceId;
         if (result.name === "chrome") {
             console.log("chrome here")
@@ -398,6 +426,9 @@ class DisplayShare extends Component {
     }
 
     render() {
+        const shouldDisplay = (!this.state.myscreenSharing)?("block"):("none")
+        const messageOfScreenShare =(!this.state.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
+        (<h4><b>Your screen is being shared</b></h4>)
         const DownloadExt = (this.state.isInstalled) ? (
             null) : (<div className="messageToDownload">
                 <h3>Please download the chrome extension to continue</h3>
@@ -448,9 +479,10 @@ class DisplayShare extends Component {
         if (!this.state.callEnded) {
             var ShareElement = (
                 <div className="shareVideoDisplay">
-                    <div className="videoContainer">
-                        <video className="VideoElementReciever" autoPlay={true} id="video" srcObject=" " ></video>
-                    </div>
+                   <div className="videoContainer">
+                   {messageOfScreenShare}
+        <video className="VideoElementReciever" style={{display:shouldDisplay}} autoPlay={true} id="video" srcObject={this.state.videoStream} ></video>
+    </div>
 
                      <Draggable>
                     <div className="callImageDivAnwser">

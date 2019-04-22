@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import InputNumber from './InputNumber';
+import config from '../../../config/config';
 import TweetSuggest from './TweetSug';
 import { FaArrowLeft } from "react-icons/fa";
 import CopyToClipboard from '../CopytoClipboard';
@@ -16,22 +18,38 @@ class tweetSearch extends Component {
             twitterHandle: '',
             tweetTested: false,
             isVisitProfile: false,
+            limitExce: false,
+            emptyNumber: false,
+            negNumber: false,
+            noText: false,
+            maxTimeForVideo: null,
+            tweetAction: false,
+            timeInputDone: false
 
 
         }
         this.testHandle = this.testHandle.bind(this);
         this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this);
         this.tweetTheMessage = this.tweetTheMessage.bind(this);
-        this.changeTweetStateNeg = this.changeTweetStateNeg.bind(this)
+        this.changeTweetStateNeg = this.changeTweetStateNeg.bind(this);
+        this.changeImputNumber = this.changeImputNumber.bind(this)
     }
     componentWillMount() {
         this.props.resetValues();
         this.props.getTwitterHandles();
+        this.setState({
+            maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT
+        })
 
     }
+  
     testHandle() {
+        // if () {
         if (!this.props.limitExce &&
-            !this.props.negNumber) {
+            !this.props.negNumber &&
+            !this.state.noText
+            && !this.state.negNumber
+            && !this.state.emptyNumber) {
             this.setState({
                 tweetTested: true
             })
@@ -55,6 +73,43 @@ class tweetSearch extends Component {
             tweetTested:false
         })
     }
+    changeImputNumber(e) {
+        var noOfMinutestemp = e.target.value;
+        console.log(typeof (noOfMinutestemp))
+        console.log(Number(noOfMinutestemp))
+        if (noOfMinutestemp.length !== 0 && Number(noOfMinutestemp) !== 0 && !Number(noOfMinutestemp)) {
+            this.setState({
+                noText: true
+            })
+        }
+        else if (noOfMinutestemp.length !== 0 && noOfMinutestemp !== null && noOfMinutestemp > this.state.maxTimeForVideo) {
+            this.setState({
+                limitExce: true
+            })
+        }
+        else if (noOfMinutestemp.length !== 0 && noOfMinutestemp.length > 0 && noOfMinutestemp < 1) {
+            this.setState({
+                negNumber: true
+            })
+        }
+        else if (noOfMinutestemp.length === 0) {
+            this.setState({
+                emptyNumber: true
+            })
+        }
+        else {
+            this.setState({
+                limitExce: false,
+                negNumber: false,
+                noText: false,
+                emptyNumber: false
+            })
+        }
+        this.props.setNoOfMinutes(e.target.value)
+
+
+    }
+
 
     tweetTheMessage() {
         this.setState({
@@ -66,18 +121,31 @@ class tweetSearch extends Component {
     }
     render() {
         var validatinginfo = null;
-        var mainContainer = (<div>
-            <p>Enter the twitter handle to send a shareRequest</p>
+        var mainContainer = (<div className="startShare">
+            <span style={{margin:"10px"}}>You want share screen with </span>
+            <br/>
+            <div style={{margin:"7px"}}>
             <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
-                placeholder="Enter @username"
+                placeholder="Enter @twitter handle"
                 classOfInput="myInput"
                 tweetTextvalue={this.state.twitterHandle}
                 array={this.props.twiterHandleArray}
 
             />
-
-            <button className="buttonDark" onClick={this.testHandle}>Send request</button>
+            </div>
+            
+            <span style={{marginTop:"0px"}}> for </span>
+             <InputNumber
+                        empty={this.state.emptyNumber}
+                        limitOfChar={this.state.maxTimeForVideo}
+                        limitExce={this.state.limitExce}
+                        changeInputValue={this.changeImputNumber}
+                        textValue={this.props.noOfMinutes}
+                        negNumber={this.state.negNumber}
+                        noText={this.state.noText} />
+                      
+            <button className="buttonDark" style={{marginTop:"10px"}} onClick={this.testHandle}>Send request</button>
         </div>)
         if (this.state.tweetTested && !this.state.doneTweeting) {
             if (this.props.doneFetching && this.props.fetchProfile) {

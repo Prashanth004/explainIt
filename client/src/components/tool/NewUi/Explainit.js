@@ -28,7 +28,6 @@ class Explainit extends Component {
     this.drawRect = this.drawRect.bind(this);
     this.savefile = this.savefile.bind(this);
     this.clearCanvas = this.clearCanvas.bind(this);
-    // this.downloadExtension = this.downloadExtension.bind(this);
     this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
     this.recordFullScreen = this.recordFullScreen.bind(this);
     this.saveVideoData = this.saveVideoData.bind(this);

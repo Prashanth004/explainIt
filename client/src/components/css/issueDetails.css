@@ -84,8 +84,10 @@ border-radius:10.5px;
 }
 .profileNameDiv{
     text-align: center;
+    display:"none";
 }
 .ProfileNameCard{
+    display:none;
     text-align: left;
     padding-left:15px;
 }
@@ -145,4 +147,21 @@ border-radius:10.5px;
     height: 100%; 
    
   
+  }
+
+
+
+  @media (min-width: 700px) {
+   
+}
+
+  @media (min-width: 1000px) {
+    .ProfileNameCard{
+        display:block;
+    }
+    .profileNameDiv{
+        display:block;
+        text-align: center;
+    }
+
   }

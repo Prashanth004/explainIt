@@ -39,8 +39,7 @@ passport.use(new GoogleTokenStrategy({
     clientSecret: keys.google.clientSecret
   },
   function(accessToken, refreshToken, email, done)  {
-      console.log("sfnfnksdnfksbk")
-      console.log("email : ",email)
+   
       if(email._json.image){
             var profile_image =email._json.image.url
       }
@@ -55,15 +54,12 @@ passport.use(new GoogleTokenStrategy({
             + currentdate.getHours() + ":"
             + currentdate.getMinutes() + ":"
             + currentdate.getSeconds();
-        console.log("about to check dab")
             database.db.oneOrNone('select * from users where email = $1', email.emails[0].value)
             .then((currentUser) => {
                 if (currentUser) {
-                    console.log("current user : ",currentUser)
                     done(null, currentUser);
                   }
                   else{
-                    console.log("no user")
                     database.db.none('insert into users(username, password, email, profilepic,date, payment, id)' +
                         'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id})',
                         {
@@ -77,10 +73,8 @@ passport.use(new GoogleTokenStrategy({
                              
                         })
                         .then(() => {
-                            console.log("successfull !!!")
                             database.db.one('select * from users where email = $1', email.emails[0].value)
                             .then((newUser) => {
-                                console.log("newUser !!!!!!" + newUser.username)
                                 done(null, newUser);
                             })
 
@@ -103,7 +97,6 @@ passport.use(new GitHubTokenStrategy({
     clientSecret: keys.gitHub.clientSecret,
     passReqToCallback: true
 }, function(req, accessToken, refreshToken, profile, done) {
-    console.log("profile : ", profile)
     var currentdate = new Date();
     var datetime = "Last Sync: " + currentdate.getDate() + "/"
         + (currentdate.getMonth() + 1) + "/"
@@ -116,11 +109,9 @@ passport.use(new GitHubTokenStrategy({
             .then((currentUser) => {
                 if (currentUser) {
                     // already have this user
-console.log("existing user")
                     done(null, currentUser);
                 }
                 else{
-                    console.log("new user")
                     database.db.none('insert into users(username, password, email, profilepic,date, payment, id)' +
                         'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id})',
                         {
@@ -132,10 +123,8 @@ console.log("existing user")
                             payment: 0,
                             id: profile.id,
                         }).then(() => {
-                            console.log("saved New user")
                             database.db.one('select * from users where email = $1', profile.emails[0].value)
                                 .then((newUser) => {
-                                    console.log("newUser !!!!!!" + newUser.username)
                                     done(null, newUser);
                                 })
 
@@ -190,7 +179,6 @@ passport.use(new TwitterTokenStrategy({
     includeEmail: true
 },
     function (token, tokenSecret, profile, done) {
-        console.log("profile : ", profile)
         var currentdate = new Date();
         var datetime = "Last Sync: " + currentdate.getDate() + "/"
             + (currentdate.getMonth() + 1) + "/"
@@ -199,19 +187,12 @@ passport.use(new TwitterTokenStrategy({
             + currentdate.getMinutes() + ":"
             + currentdate.getSeconds();
             var newProfilePic = profile._json.profile_image_url.replace("_normal","")
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            console.log( " newProfilePic : ",newProfilePic)
-        
-            console.log("as;kvncoajvzoljbdnvohaodbvsjodbiahdfib")
-
         database.db.oneOrNone('select * from users where id = $1', profile.id)
             .then((currentUser) => {
                 if (currentUser) {
                     // already have this user
-console.log("existing user")
                     done(null, currentUser);
                 } else {
-                    console.log("new user")
                     database.db.none('insert into users(username, password, email, profilepic,date, payment, id, twitterhandle)' +
                         'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id},${twitterhandle})',
                         {
@@ -224,10 +205,8 @@ console.log("existing user")
                             id: profile.id,
                             twitterhandle:profile.username
                         }).then(() => {
-                            console.log("saved New user")
                             database.db.oneOrNone('select * from users where twitterhandle = $1', profile.username)
                                 .then((newUser) => {
-                                    console.log("newUser !!!!!!" + newUser.username)
                                     done(null, newUser);
                                 })
 

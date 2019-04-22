@@ -14,7 +14,7 @@
     /* background-color: #0075a2; */
     text-align: left;
     display:grid;
-    grid-template-columns: 10% 40% 50%
+    grid-template-columns: 50% 50%
     
   }
   .navbar-brand{
@@ -23,8 +23,12 @@
   .PublicPrivateToggle{
     padding: 40px 0pax 40px 0px;
 }
+.startShare{
+  margin-top:20px;
+  padding:15px;
+}
   .sharableLinkSection{
-    width:60%;
+    width:90%;
     margin:auto;
     padding:15px;
     background-color: white;
@@ -274,7 +278,7 @@ margin-top:10px;
 }
 
   .containerHome{
-      width:95%;
+      width:100%;
       margin:auto;
       text-align: center;
       display:grid;
@@ -300,9 +304,7 @@ margin-top:10px;
   }
   .cardWithDate{
     width:100%;
-    display: grid;
-    grid-template-columns: 10% 90%;
-    margin-top:30px;
+    margin-top:0px;
     
    
   }
@@ -626,10 +628,17 @@ border-top-width:0.5px;
         font-size: 13px;
        
       }
+      .cardWithDate{
+       
+        margin-top:15px;
+      }
     
     }
 
     @media (min-width: 1000px) {
+      .sharableLinkSection{
+        width:50%;
+      }
       .issueContainer{
         width:66%;
         /* border-style: solid; */
@@ -675,10 +684,17 @@ border-top-width:0.5px;
         text-align:center;
         box-shadow: 0px 0px 10px 2px rgb(150, 149, 149);
       }
+      .profileCardDiv{
+        grid-template-columns: 10% 40% 50%
+      }
       .displayNumber{
     
         font-size: 18px;
        
+      }
+      .cardWithDate{
+       
+        margin-top:30px;
       }
     
     }

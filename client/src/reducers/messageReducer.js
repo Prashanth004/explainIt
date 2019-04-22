@@ -5,6 +5,10 @@ import {SEND_MESSAGE,
     SHOW_TEXT_BOX_AFTER_RECORDONG,
     FETCH_FAILED,
     FROM_SHARE_TO_RECORD,
+    GET_TOTAL_UNREAD,
+    EXPLAIN_ISSUE,
+    SUCCESS_IN_CHNAGE_READ_STATE,
+    FAILURE_IN_CHNAGE_READ_STATE,
     CANCEL_MESSAGE_STATE} from '../actions/types'
 
 const initialState = {
@@ -13,7 +17,9 @@ const initialState = {
     allMessage:null,
     fetchFailed:false,
     showTextAftRec : true ,
-    fromShareToRecord:false
+    fromShareToRecord:false,
+    totalInboxNumber:0,
+    explainIssue:false
 }
 
 export default function(state=initialState, action){
@@ -28,10 +34,20 @@ export default function(state=initialState, action){
             ...state,
             showTextAftRec:false
         }
+        case EXPLAIN_ISSUE:
+        return{
+            ...state,
+            explainIssue:true
+        }
         case FROM_SHARE_TO_RECORD:
         return{
             ...state,
             fromShareToRecord:true
+        }
+        case GET_TOTAL_UNREAD:
+        return{
+            ...state,
+            totalInboxNumber:action.payload
         }
         case SHOW_TEXT_BOX_AFTER_RECORDONG:
         return{

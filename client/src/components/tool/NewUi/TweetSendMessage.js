@@ -69,17 +69,16 @@ class tweetSearch extends Component {
     render() {
         var validatinginfo = null;
         var mainContainer = (<div>
-            <p>Enter the twitter handle to send a shareRequest</p>
+            <p>Enter the twitter handle to send a recording</p>
             <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="Enter @username"
                 classOfInput="myInput"
                 tweetTextvalue={this.state.twitterHandle}
                 array={this.props.twiterHandleArray}
-
             />
 
-            <button className="buttonDark" onClick={this.testHandle}>Send request</button>
+            <button className="buttonDark" onClick={this.testHandle}>Send</button>
         </div>)
         if (this.state.tweetTested && !this.state.doneTweeting) {
             if (this.props.doneFetching && this.props.fetchProfile) {

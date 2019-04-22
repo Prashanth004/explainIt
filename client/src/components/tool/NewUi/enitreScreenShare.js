@@ -30,7 +30,7 @@ import { restAllToolValue } from "../../../actions/toolActions";
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { displayFullScrenRecord } from '../../../actions/toolActions'
 import { sendTweet } from '../../../actions/twitterApiAction';
-import LinkDisplay from './LinkDisplay'
+import LinkDisplay from './TweetAcceptHandle'
 
 class ScreenRecorder extends Component {
     constructor(props) {
@@ -53,6 +53,7 @@ class ScreenRecorder extends Component {
             streamvideo: null,
             socket: null,
             peer: null,
+            ringAck:false,
             peerId: null,
             timerEnded: false,
             connected: false,
@@ -84,7 +85,9 @@ class ScreenRecorder extends Component {
             secondShareStrem: null,
             answerFrmPeer: false,
             messageFrmPeer: null,
-            timeOutNoAnswerOnCAll: false
+            timeOutNoAnswerOnCAll: false,
+            videoStream:null,
+            myscreenSharing:true
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
@@ -106,7 +109,8 @@ class ScreenRecorder extends Component {
         this.setNoOfMinutes = this.setNoOfMinutes.bind(this);
         this.downloadExtension = this.downloadExtension.bind(this);
         this.makeCallAction = this.makeCallAction.bind(this);
-        this.recordCallAfterShare = this.recordCallAfterShare.bind(this)
+        this.recordCallAfterShare = this.recordCallAfterShare.bind(this);
+        this.shareMyScreen = this.shareMyScreen.bind(this)
 
     }
     setNoOfMinutes(minutes) {
@@ -265,8 +269,30 @@ class ScreenRecorder extends Component {
                 })
             }
         })
+        socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,data=>{
+            if (data.otherPeerId === self.state.destkey) {
+                self.setState({
+                    myscreenSharing:false
+                })
+            }
+        })
+        socket.on(config.LINK_TO_CALL_ACK,data=>{
+            if(data.fromUserId === this.props.userId){
+                this.setState({
+                    ringAck:true
+                })
+            }
+        })
+        socket.on(config.ENDING_RING_ACK,data=>{
+            if(data.ToUserId === this.props.userId){
+                self.setState({
+                    timeOutNoAnswerOnCAll: true
+                })
+            }
+        })
         socket.on(config.REJECT_REPLY, data => {
             console.log("reject reply : ",data)
+            if(data.toUserId === this.props.userId)
             self.setState({
                 answerFrmPeer: true,
                 messageFrmPeer: data.message
@@ -341,9 +367,9 @@ class ScreenRecorder extends Component {
                 })
             };
         }
-        const socket = socketIOClient(config.base_dir);
+       
         this.setState({
-            socket: socket
+            socket: this.props.socket
         });
         var self = this;
         var peer = new window.Peer()
@@ -363,11 +389,15 @@ class ScreenRecorder extends Component {
             call.answer()
             call.on('stream', function (stream) {
                 console.log("strem rom other peer : ", stream)
+                self.setState({
+                    videoStream:stream,
+                    myscreenSharing:false
+                })
                 var audio = document.querySelector('#secondShareVideo');
                 audio.srcObject = stream
-                audio.style.display = "block"
-                audio.play()
+            
                 self.props.startSecodScreenShare(stream)
+              
             })
         })
         peer.on('connection', (conn) => {
@@ -446,6 +476,16 @@ class ScreenRecorder extends Component {
         }
 
     }
+    shareMyScreen(){
+        var socket = this.state.socket
+        var self = this
+        this.setState({
+            myscreenSharing:true
+        })
+        socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,{
+            'otherPeerId': self.state.peerId
+        })
+    }
 
     peerCall() {
 
@@ -508,15 +548,17 @@ class ScreenRecorder extends Component {
                 'peerId': this.state.peerId,
                 'timerEnded': true
             })
-
-            var peer = this.state.peer
-            if (peer != null) {
-                peer.destroy()
+            if(!this.props.isSharingCompleted){
+                var peer = this.state.peer
+                if (peer != null) {
+                    peer.destroy()
+                }
+                this.setState({
+                    timerEnded: true,
+    
+                })
             }
-            this.setState({
-                timerEnded: true,
-
-            })
+          
             return (<Dummy></Dummy>)
         } else {
             // Render a countdown
@@ -668,8 +710,14 @@ class ScreenRecorder extends Component {
         })
         setTimeout(() => {
             if (!this.state.answerFrmPeer) {
-                self.setState({
-                    timeOutNoAnswerOnCAll: true
+                if(!this.state.ringAck){
+                    self.setState({
+                        timeOutNoAnswerOnCAll: true
+                    })
+                }
+                socket.emit(config.ENDING_RING,{
+                    'fromUserId': this.props.userId,
+                    'ToUserId': this.props.twitterUserId
                 })
             }
         }, 20000)
@@ -778,9 +826,9 @@ class ScreenRecorder extends Component {
         var linkElement = " ";
         var backArrow = null;
         // if()
-        const closeBtn = ((this.props.isSceenSharing || this.props.isSharingCompleted0) || !this.props.isSaved) ?
-            (null) :
-            (<Button close onClick={closeFunction} />)
+        const closeBtn = (!this.props.isSceenSharing) ?
+            (((( this.props.isSharingCompleted) && !this.props.isSaved)|| this.state.doneCalling ||  this.state.answerFrmPeer)?(null) :(<Button close onClick={closeFunction} />)):
+            (null)
         const saveBtns = <SaveElement
             closeImidiate={this.props.closeFunction}
             shareOrRec={config.SHARING}
@@ -796,13 +844,13 @@ class ScreenRecorder extends Component {
         if (this.state.timerEnded && !this.props.isSaved)
             var MessageDisconnected = (
                 <div>
-                    <p><b>Dissconected as the call exceded {this.state.noOfMinutes} mins</b></p>
+                    <p><b>Call ended as the it exceded {this.state.noOfMinutes} mins</b></p>
                     <p>You need to share a new link to connect again</p>
                     {saveBtns}
                 </div>)
         else if (this.state.showDisconectMessage && !this.props.isSaved && !this.state.closedHere && this.state.manualClose) {
             var MessageDisconnected = (<div>
-                <p><b>Disconnected from other peer</b></p>
+                <p><b>Call ended from other peer</b></p>
                 {saveBtns}
 
             </div>)
@@ -810,7 +858,7 @@ class ScreenRecorder extends Component {
         else if (!this.state.manualClose && !this.props.isSaved && !this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
             var MessageDisconnected = (
                 <div>
-                    <p><b>Call ended due to network issues</b></p>
+                    <p><b>Call disconnected due to network issues</b></p>
                     <span className="hint--bottom" aria-label="Retry">
                         <MdReplay className="icons" onClick={this.retryCall} />
                     </span>
@@ -824,7 +872,7 @@ class ScreenRecorder extends Component {
         else if (!this.state.manualClose && !this.props.isSaved && this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
             var MessageDisconnected = (
                 <div>
-                    <p><b>Call ended due to network issues</b></p>
+                    <p><b>Call disconnected due to network issues</b></p>
                     <span className="hint--bottom" aria-label="Retry">
                         <MdReplay className="icons" onClick={this.retryCall} />
                     </span>
@@ -892,6 +940,9 @@ class ScreenRecorder extends Component {
             var shareTimeElements = (
                 <div>
                     <Call
+                    shareMyScreen={this.shareMyScreen}
+                        myscreenSharing={this.state.myscreenSharing}
+                        videoStream={this.state.videoStream}
                         renderer={this.renderer}
                         endCall={this.endCall}
                         otherPersonPic={recieverProfPic}
@@ -1005,7 +1056,7 @@ class ScreenRecorder extends Component {
             !this.state.timeOutNoAnswerOnCAll) {
             var linkElement = (<div>
                 <div className="waitMsg">
-                    <p> Waiting<b>@{this.props.twitterName} to accept the Screen Share request, if not we can drop a recorded message</b></p>
+                    <p><b>Waiting {this.props.twitterName} to accept the Screen Share request, if not we can drop a recorded message</b></p>
                 </div>
                 <div className="callerImageDiv">
                     <CallImage
@@ -1024,7 +1075,7 @@ class ScreenRecorder extends Component {
                 <audio autoPlay style={{ display: "none" }} src={require('../../audio/brute-force.mp3')}></audio>
 
                 <div className="waitMsg">
-                    <p><b>@{this.props.twitterName} has clicked the link</b></p>
+                    <p><b>{this.props.twitterName} has clicked the link</b></p>
                 </div>
                 <div className="callerImageDiv">
                     <CallImage
@@ -1041,7 +1092,7 @@ class ScreenRecorder extends Component {
             this.state.timeOutNoAnswerOnCAll)
             linkElement = (<div className="clickedMessage">
                 <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
-                <p><b>@{this.props.twitterName}</b> did not accept the request.</p>
+                <p><b>{this.props.twitterName}</b> did not accept the request.</p>
                 <p>You can record the call and send</p>
                 <span className="hint--bottom" aria-label="Record call and send">
                     <FiVideo className="icons" onClick={this.recordCallAfterShare} />
@@ -1056,7 +1107,7 @@ class ScreenRecorder extends Component {
             !this.state.timeOutNoAnswer &&
             this.state.answerFrmPeer) {
             linkElement = (<div className="clickedMessage">
-                <p><b>Other Peer has responded with a message</b></p>
+                <p><b>{this.props.twitterName} has responded with a message</b></p>
                 <p>message : {this.state.messageFrmPeer}</p>
                 <p>Do You wish to record the screen and send?</p>
                 <span className="hint--bottom" aria-label="Record call and send">

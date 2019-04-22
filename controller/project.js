@@ -1,4 +1,5 @@
-var database = require('../app')
+var appMethods = require('../app')
+var database = appMethods.db
 var promise = require('bluebird');
 var buffer = require('buffer');
 const fs = require('fs');
@@ -59,15 +60,13 @@ exports.updateProjectprivate = function(req, res){
 }
 
     exports.saveProject = function (req, res) {
-        console.log("request.body", req.body)
+        // console.log("request.body", req.body)
         var issueID = null
         var videopathName = null;
         if (!req.file) {
         }
         else if (req.file) {
-            console.log("req.file : ", req.file)
             if (req.file.size > (1024 * 1024 * 25)) {
-                console.log("file ttoooo largeeeee")
                 return res.status(450).send({
                     success: 0,
                     lengthExceeds: 1,
@@ -76,9 +75,7 @@ exports.updateProjectprivate = function(req, res){
             }
             videopathName = config.domain + '/public/audio/' + req.body.projectName + '.mp4'
         }
-        console.log("req.body.imageData:", typeof(req.body.imageData))
         if (req.body.imageData != "null") {
-            console.log("i am inside if")
             var imageBuffer = decodeBase64Image(req.body.imageData);
         }
         var rand2 = rn(options)
@@ -106,7 +103,6 @@ exports.updateProjectprivate = function(req, res){
         }
         var dateNow = new Date().toString()
         var rand = rn(options)
-        console.log("type of data : ",typeof(req.body.public))
         database.db.oneOrNone('insert into projects(name,email, projectid,  date,textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
             'values(${name},${email}, ${projectid},${date},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
             {
@@ -121,9 +117,11 @@ exports.updateProjectprivate = function(req, res){
                 videofilepath: videopathName,
                 public : Number(req.body.public)
             }).then((respponse) => {
-                console.log("saving project successfull")
                 database.db.one('select * from projects where projectid = $1', rand)
                     .then(data => {
+                        res.io.emit(key.SAVED_NEW_PROJECT,{
+                            "userId":req.user.id
+                        })
                         res.status(201).send({
                             success: 1,
                             data: data
@@ -211,7 +209,6 @@ exports.getIssueById = function (req, res) {
 
     database.db.one('select * from projects where issueid = $1', req.params.id)
         .then(projects => {
-            console.log("projects : ",projects)
             res.status(200).send({
                 success: 1,
                 data: projects
@@ -229,14 +226,12 @@ exports.getProjectById = function (req, res) {
 
     database.db.one('select * from projects where projectid = $1', req.params.id)
         .then(projects => {
-            console.log("projects : ",projects)
             res.status(200).send({
                 success: 1,
                 data: projects
             })
         })
         .catch(error => {
-            console.log("error : ",error)
             res.status(500).send({
                 sucess: 0,
                 msg: error

@@ -24,19 +24,19 @@
   .screenShareFloat:hover .tooltiptextChrome {
     visibility: visible;
   } 
-  .callImageDivAnwser{
+  .callImageDivAnwserMain{
     background-color: rgb(51, 39, 58);
     border-radius: 25px;
     padding:5px;
     position:fixed;
-    width:105px;
+    width:155px;
     bottom:25px;
     /* right:5px; */
    right:25px;;
    display:grid;
-  grid-template-columns: 50% 50%; 
+  grid-template-columns: 33.333% 33.333% 33.333%; 
   }
-  .callImageDivAnwser:hover{
+  .callImageDivAnwserMain:hover{
     cursor: move;
    
   }

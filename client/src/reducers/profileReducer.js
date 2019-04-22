@@ -1,8 +1,14 @@
-import {GET_PROFILE_DETAILS,GET_PROFILE_DETAILS_FAIL} from '../actions/types'
+import {GET_PROFILE_DETAILS,
+    UPDATE_USER_PROFILE,
+    UPDATE_USER_PROFILE_FAILED,
+    OPEN_EDIT_PROFILE,
+    CLOSE_EDIT_PROFILE
+    ,GET_PROFILE_DETAILS_FAIL} from '../actions/types'
 
 const initialState = {
    
     email:null,
+    openEdirProfile:false,
     profilePic:null,
     userName:null,
     noParticipated:null,
@@ -11,15 +17,59 @@ const initialState = {
     myIssues:null,
     participatedIssue:null,
     twitterHandle:null,
+    doneUpdating:false,
+    updateSuccess:true,
+    cost : null,
+    bio : null,
+    twitterLink : null,
+    angelLink : null,
+    linkinLink : null,
+    githubLink : null,
   
 }
 
 export default function(state=initialState, action){
     switch(action.type){
+        case UPDATE_USER_PROFILE:
+            return{
+                ...state,
+                openEdirProfile:false,
+                doneUpdating:true,
+                updateSuccess:true,
+                cost : action.cost,
+                bio : action.bio,
+                angelLink : action.angelLink,
+                linkinLink : action.linkinLink,
+                githubLink : action.githubLink,
+
+            }
+        case OPEN_EDIT_PROFILE:
+        return{
+            ...state,
+            openEdirProfile:true
+        }
+        case CLOSE_EDIT_PROFILE:
+        return{
+            ...state,
+            openEdirProfile:false
+        }
+        case UPDATE_USER_PROFILE_FAILED:
+        return{
+            ...state,
+            doneUpdating:true,
+            updateSuccess:false,
+        }
+        
         case GET_PROFILE_DETAILS:
             return {
                 ...state,
                 email:action.email,
+                cost :action.cost,
+                bio :action.bio,
+                twitterLink : action.twitterLink,
+                angelLink : action.angelLink,
+                linkinLink : action.linkinLink,
+                githubLink : action.githubLink,
                 userName:action.userName,
                 profilePic:action.profilePic,
                 noParticipated:action.noParticipated,
@@ -27,6 +77,7 @@ export default function(state=initialState, action){
                 myIssues:action.myIssue,
                 participatedIssue : action.participatedIssue,
                 twitterHandle:action.twitterHandle
+
             }
         case GET_PROFILE_DETAILS_FAIL:
             return {
