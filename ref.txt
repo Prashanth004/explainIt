@@ -99,15 +99,54 @@ bugs:
 3) edit option not working
 4) 
 
-1) order of message
-2) save to export 
-3) twitter handle suggestion
-4) order of inbox
-5) display subject for inbox
-6) hash tags
-7) extension
-8) notification
 
+0) width of the cards
+1) order of message
+2) responsive web apps@
+2) realtime actions
+3) save to export @
+4) twitter handle suggestion 
+5) order of inbox
+6) display subject for inbox @
+7) remove from inbox option
+7) hash tags
+8) extension
+9) notification
+10) payment integrations
+11) 
+
+
+
+
+show waiting message only when the rhe acknowledge is present
+listen to escape key pressed to end call
+
+
+
+1)
+1. when you login, you are always shown the login page before showingthe home page
+2. make a note of all the flows where you rpompt a new tab, close them when task is done
+3. Screenshare option either side should improve
+4. messages needs to improve
+5. private option should not prompt twitter
+6. Floater needs to be rightly utilised
+7.Timer show rightly on floater
+8. Logout and any action during a screenshare should ask permission
+9. Icon driven actions if made, will be useful
+
+
+1. when you login, you are always shown the login page before showingthe home page@@@@
+2. make a note of all the flows where you rpompt a new tab, close them when task is done
+3. Screenshare option either side should improve
+4. messages needs to improve
+5. private option should not prompt twitter@@@@@
+6. Floater needs to be rightly utilised
+
+7.Timer show rightly on floater
+8. Logout and any action during a screenshare should ask permission
+9. double tap to profile
+10. edit card
+11. responsivenes
 
 
 

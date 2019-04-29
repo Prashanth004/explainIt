@@ -17,14 +17,14 @@ class ProfileCard extends Component {
         this.openProfile = this.openProfile.bind(this)
     }
     componentWillMount() {
-        console.log("uswrID : ", this.props.userId)
         if (this.props.userId === this.props.profileId)
             this.props.getProfileDetails(this.props.userId, config.SELF)
         else
             this.props.getProfileDetails(this.props.userId, config.VISIT_PROF)
-    }
+            this.props.getAllMessages(this.props.userId)
+        }
     componentDidMount(){
-        this.props.getAllMessages(this.props.userId)
+        
         
     }
     openProfile(){
@@ -41,8 +41,9 @@ class ProfileCard extends Component {
                 <span className="hint--top" aria-label="Get profile link">
                     <FiLink2 style={{width:"15px",
                     height:"15px", 
-                    marginTop:"10px",
-                    marginLeft:"10px"}}onClick={this.props.toggleDisplayLink} />
+                    float:"right",
+                    marginTop:"0px",
+                    marginRight:"10px"}}onClick={this.props.toggleDisplayLink} />
                 </span>
             )
 

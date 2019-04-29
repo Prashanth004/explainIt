@@ -14,18 +14,29 @@ class InboxMessage extends Component {
             <div>
                 <div className="messageElementDiv">
                     <div >
-                        <div className="profileImageInbox">
-                            <img className="profileImageElementInbox" src={this.props.message.profilepic} />
-                        </div>
+                       
                     </div>
                     <div className="nameDate">
+                  
+                            <img className="profileImageElementInbox" src={this.props.message.profilepic} />
+                       
                         <p className="timeDate">{this.props.message.time.slice(0, 15)}</p>
-                        <span><b>
+                        {/* <span>From :</span> */}
+                        {/* <br/> */}
+                        <span className="formName"><b>
                             {this.props.message.username}
                         </b>
                         </span>
                         <br/>
-                        <span>{this.props.message.subject}</span>
+                        <span className="headers">Subject :</span>
+                        <br/>
+                        {/* <div className="inboxContent"> */}
+                        <span className="inboxContent">{this.props.message.subject}</span>
+                        {/* </div> */}
+                        <br/>
+                        <span className="headers">Link to recording :</span>
+                        <br/>
+                        
                         <div className="linkToProject">
                             <a href={this.props.message.link} target="_blank">{this.props.message.link}</a>
                         </div>

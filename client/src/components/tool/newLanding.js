@@ -10,7 +10,7 @@ import { fetchProjectbyIssue ,clearAnswers } from '../../../actions/projectActio
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from '../../LoginModal'
+// import LoginMadal from '../../LoginModal'
 // import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
@@ -133,13 +133,13 @@ class NewHome extends Component {
                 </Modal>
 
 
-                <Modal isOpen={this.state.modalTool} toggle={this.explainTool} className={this.props.className}>
+                {/* <Modal isOpen={this.state.modalTool} toggle={this.explainTool} className={this.props.className}>
 
                     <ModalBody className="modalBodyTool">
                         <LoginMadal />
                     </ModalBody>
 
-                </Modal> 
+                </Modal>  */}
 
             </div>
         )

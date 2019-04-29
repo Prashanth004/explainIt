@@ -1,12 +1,18 @@
 .LinkDisplay{
     width:100%;
     margin:auto;
+    color:#333;
+    font-size:14px;
+    padding:8px;
     /* min-height:60vh; */
     background-color: white;
     text-align: center;
     align-content: center;
     align-items: center;
     border-radius:5px;
+    border-style:solid;
+    border-width:0.5px;
+    border-color:rgba(51, 51, 51, 0.459);
 
 }
 .inputTime{
@@ -30,7 +36,7 @@
     margin:auto;
     margin-top:10px;
     padding-top:20px;
-    font-size:19px;
+    font-size:14px;
     font-weight: 400;
 }
 .icons{
@@ -39,7 +45,8 @@
 }
 .clickedMessage{
 
-  padding-top:65px;
+  padding-top:15px;
+  /* padding:20px; */
 }
 .twitter{
   
@@ -220,7 +227,7 @@ border-color:#34a4a8;
 }
 
 .imageOfPeersDisplay{
-    width:100%;
+    width:80%;
     display:grid;
     grid-template-columns: 25% 50% 25%
 }
@@ -238,7 +245,7 @@ border-color:#34a4a8;
       
   }
   .callerImageDiv{
-      margin-top:50px;
+      margin-top:0px;
   }
   .callerImage{
       align-items: right;
@@ -253,7 +260,7 @@ border-color:#34a4a8;
   .callImageDiv{
       min-height: 100vh;
       text-align: center;
-      width:35%;
+      width:30%;
       margin:auto;
       padding-top: 50px;
   }

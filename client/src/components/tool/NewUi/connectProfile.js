@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css';
 import { Redirect } from 'react-router-dom';
 import PageNotFount from './NoMatch';
-import DisplayCreated from './DisplayCreated'
-
-
+import DisplatCreated from './DisplayCreated';
+import { FiGrid,FiList } from "react-icons/fi";
 import Navbar from './Navbar'
 import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
@@ -20,7 +19,7 @@ import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActio
 import { stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from '../../LoginModal';
+// import LoginMadal from '../../LoginModal';
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
@@ -56,6 +55,9 @@ class NewHome extends Component {
         this.explainTool = this.explainTool.bind(this)
         this.toggleModalCreate = this.toggleModalCreate.bind(this)
         this.toodleExplain = this.toodleExplain.bind(this);
+        this.changeViewToList = this.changeViewToList.bind(this);
+        this.changeViewToGrid = this.changeViewToGrid.bind(this);
+
         this.toggleCreatedIssue = this.toggleCreatedIssue.bind(this);
         this.toggleParticipatedIssue = this.toggleParticipatedIssue.bind(this);
         this.closeParticipated = this.closeParticipated.bind(this);
@@ -77,7 +79,16 @@ class NewHome extends Component {
             showCreatedIssue: false,
         })
     }
-
+    changeViewToList() {
+        this.setState({
+            typeOfView: "list"
+        })
+    }
+    changeViewToGrid() {
+        this.setState({
+            typeOfView: "grid"
+        })
+    }
     componentDidMount() {
         if(!this.props.isPresentInExplain){
             // alert("dnvnvnfkn")
@@ -87,15 +98,10 @@ class NewHome extends Component {
         var self = this
                 function postMessageHandler(event) {
             if (event.data.sourceId !== undefined) {
-                console.log("epxlain got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message__sourceId : ", event.data.sourceId)
+              
                 self.props.saveSourceId(event.data.sourceId)
             }
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                console.log(" event.source :", event.source)
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -116,7 +122,6 @@ class NewHome extends Component {
             alert("empty")
         }
         const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
-        console.log("this.props.match.params.encrTwitterHandle :",twiHand)
         this.props.getProfileByTwitterHandle(twiHand)
         localStorage.setItem("peerId",JSON.stringify(twiHand))
     }
@@ -162,7 +167,6 @@ class NewHome extends Component {
     togglemodal = (e) => {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
-        console.log("e.target.id : ", e.target.id)
         if (classOfClicked !== "singleMember" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
             if (this.state.modal === false) {
                 this.props.clearAnswers(e.target.id)
@@ -228,7 +232,11 @@ class NewHome extends Component {
     }
 
     render() {
-       
+        var issuepercentage="55%";
+        var percentage ="30%"
+        if(this.state.reducedWidth){
+            issuepercentage="90%"
+        }
         if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle){
           
              this.props.history.push("/");
@@ -259,28 +267,57 @@ class NewHome extends Component {
                 explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
             }
             if (this.props.created) {
-                feedDiv = (
-                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created}>
-                        <div className="issueContainer" >
-                            <div className="closeBtnHolder">
-                            </div>
-                            <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={issuesCreated} />
-                            {/* <DisplayCreated home={config.NOT_HOME} issueArray={(issuesCreated).reverse()} /> */}
-
+                var createdDiv = (this.state.typeOfView === "list") ? (
+                    <div className="issueContainer" style={{width:issuepercentage}}>
+                    <div className="closeBtnHolder">
+                    </div>
+                    <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={(issuesCreated)} />
+                </div>
+                ):(
+                    <div className="issueContainerMore" >
+                    <div className="closeBtnHolder">
+                    </div>
+                    <DisplatCreated home={config.NOT_HOME} issueArray={(issuesCreated)} />
+                </div>
+                )
+                feedDiv = (<div>
+                        <div style={{ textAlign: "right" }}>
+                            <span className="hint--top" aria-label="List View">
+                            <FiList onClick={this.changeViewToList} className="listView"/>
+                            </span>
+                            <span className="hint--top" aria-label="Grid View">
+                            <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                            </span>
                         </div>
-                    </Animated>)
+                       {createdDiv}
+                       </div>)
             }
             if (this.props.participated) {
-                feedDiv = (
-                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated}>
-
-                        <div className="issueContainer" >
-
-                            <div className="closeBtnHolder">
-                            </div>
-                            <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                var participatedDiv = (this.state.typeOfView === "list") ? (
+                    <div className="issueContainer" style={{ width: issuepercentage }} >
+                        <div className="closeBtnHolder">
                         </div>
-                    </Animated>)
+                        <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                    </div>
+                ) : (<div className="issueContainer" style={{ width: "80%" }} >
+        
+                    <div className="closeBtnHolder">
+                    </div>
+                    <DisplatCreated home={config.NOT_HOME} issueArray={this.props.participatedIssues} />
+                </div>)
+                feedDiv = (
+                    <div>
+                    <div style={{ textAlign: "right" }}>
+                         <span className="hint--top" aria-label="List View">
+                         <FiList onClick={this.changeViewToList} className="listView"/>
+                         </span>
+                         <span className="hint--top" aria-label="Grid View">
+                         <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                         </span>
+                     </div>
+                     
+                     {participatedDiv}
+                     </div>)
 
             }
         // }
@@ -338,7 +375,7 @@ class NewHome extends Component {
                         {feedDiv}
                     </div>
                 </div>
-                <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
+                {/* <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
 
                     <ModalBody className="modalBody">
                         {deatilsModal}
@@ -353,7 +390,7 @@ class NewHome extends Component {
                         <LoginMadal />
                     </ModalBody>
 
-                </Modal>
+                </Modal> */}
 
             </div>):(
                 (this.props.doneGettingId)?(

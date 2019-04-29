@@ -9,31 +9,52 @@ border-radius:10.5px;
 
 }
 .menuIcon{
-    width:15%;
+    font-size:15px;
+    width:70%;
     margin-top:-5px;
 }
 .dropDownBtn{
     width:60%;
    
     background-color:transparent;
-    margin:5px;
+  
     border-style:none;
 
 }
 .menuItem{
     width:100%;
+    padding-left:20px;
+    height:30px;
+    /* padding-top:10px; */
+    padding-bottom:10px;
+    padding-top:5px;
+    /* margin-top:10px; */
+    /* margin-bottom:10px; */
+    border-bottom-style: solid;
+    border-bottom-color: rgba(51, 51, 51, 0.192);
     /* display: inline-block; */
-
+    border-bottom-width:0.5px;
+    text-align: left;
+    display:grid;
+    grid-template-columns: 20% 80%
+    /* height:30px; */
 }
 .privateOpt{
-    padding-left:18px;
+    padding-left:30%;
     display:inline-block;
 }
-/* .menuItem:hover{
-    background-color: rgba(7, 133, 59, 0.562);
-} */
+.menuItem:hover{
+    /* background-color: rgba(176, 150, 177, 0.562); */
+    background-color: #3333;
+}
+.textInDropDown{
+    display: "inline-block";
+    margin: "15px";
+    margin-top: "-10px",
+}
 .dropDownForOption{
-    width:125px;
+    /* padding-left:10px; */
+    width:155px;
     text-align: left;
     position:relative;
     left:30px;
@@ -45,12 +66,10 @@ border-radius:10.5px;
     border-style:none;
     z-index:1000000;
     border-color:rgb(90, 90, 90);
-    box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329);
+    box-shadow: 0px 0px 10px 2px rgba(85, 85, 85, 0.192);
 
 }
-.PublicPrivateToggle{
 
-}
 .questionModal{
     border-bottom-style:none;
     border-bottom-width:0.2px;
@@ -59,7 +78,7 @@ border-radius:10.5px;
 .imageModal{
     height:205px;
     width:100%;
-    margin:auto;
+    /* margin:auto; */
     /* border-style: solid;
     border-color:rgb(192, 190, 190);
     border-width:0.2px; */
@@ -89,24 +108,24 @@ border-radius:10.5px;
 .ProfileNameCard{
     display:none;
     text-align: left;
-    padding-left:15px;
+    font-size:14px;
+    color:rgba(51, 51, 51, 0.815);
+    padding-left:2px;
+    /* margin-top:-2px; */
 }
 .copyDisplay{
         width:100%;
-        margin:auto;
+        /* margin:auto; */
         /* background-color: red; */
         text-align: center;
 }
-.sharableLinkCard{
-    /* background-color:blue; */
-   
-}
+
 
 
 .topButtons{
 
     width:100%;
-    height:60px;
+    height:55px;
   
     padding:7px 7px 0px 0px;
     padding-top:15px;
@@ -127,7 +146,7 @@ border-radius:10.5px;
   }
   .audioModal{
 
-     margin:auto;
+   
 
      width:100%;
      height:260px;
@@ -142,7 +161,7 @@ border-radius:10.5px;
   }
   .videoPlayer{
   align-self: center;
-   margin:auto;
+  
     width: 100%; 
     height: 100%; 
    

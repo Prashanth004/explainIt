@@ -191,18 +191,19 @@ passport.use(new TwitterTokenStrategy({
             .then((currentUser) => {
                 if (currentUser) {
                     // already have this user
+                    console.log("already a user")
                     done(null, currentUser);
                 } else {
-                    database.db.none('insert into users(username, password, email, profilepic,date, payment, id, twitterhandle)' +
-                        'values(${name}, ${password}, ${email},${profilepic},${date},${payment},${id},${twitterhandle})',
+                    database.db.none('insert into users(username, password, profilepic,date, payment, id, twitterhandle)' +
+                        'values(${name}, ${password}, ${profilepic},${date},${payment},${id},${twitterhandle})',
                         {
                             name: profile.displayName,
                             password: profile.id,
-                            email:rn(options),
                             profilepic: newProfilePic,
                             date: datetime,
                             payment: 0,
                             id: profile.id,
+                            activation:0,
                             twitterhandle:profile.username
                         }).then(() => {
                             database.db.oneOrNone('select * from users where twitterhandle = $1', profile.username)

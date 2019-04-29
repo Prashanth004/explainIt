@@ -94,7 +94,7 @@ class ProfileNotFound extends Component {
             <div>
                 <div style={displayInvite}>
                     <div className="inviteContainer" style={inviteContainer}>
-                        <span>Looks like this person hasn't registered with Bookmane</span>
+                        <span>Looks like this person hasn't registered with Explain</span>
                         <div className="inviteMagic" style={inviteMagic}>
                             <span>May be he can add lot of value being here</span>
                             <span>Would you help him to know?</span>

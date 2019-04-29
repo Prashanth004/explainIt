@@ -2,8 +2,9 @@ import {GET_PROFILE_DETAILS,
     UPDATE_USER_PROFILE,
     UPDATE_USER_PROFILE_FAILED,
     OPEN_EDIT_PROFILE,
-    CLOSE_EDIT_PROFILE
-    ,GET_PROFILE_DETAILS_FAIL} from '../actions/types'
+    CLOSE_EDIT_PROFILE,
+  
+    GET_PROFILE_DETAILS_FAIL} from '../actions/types'
 
 const initialState = {
    
@@ -25,6 +26,8 @@ const initialState = {
     angelLink : null,
     linkinLink : null,
     githubLink : null,
+    goodat:null,
+    works:null,
   
 }
 
@@ -41,6 +44,8 @@ export default function(state=initialState, action){
                 angelLink : action.angelLink,
                 linkinLink : action.linkinLink,
                 githubLink : action.githubLink,
+                goodat:action.goodat,
+                works:action.works
 
             }
         case OPEN_EDIT_PROFILE:
@@ -76,7 +81,9 @@ export default function(state=initialState, action){
                 noCreated:action.noCreated,
                 myIssues:action.myIssue,
                 participatedIssue : action.participatedIssue,
-                twitterHandle:action.twitterHandle
+                twitterHandle:action.twitterHandle,
+                goodat:action.goodat,
+                works:action.works
 
             }
         case GET_PROFILE_DETAILS_FAIL:

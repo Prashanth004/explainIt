@@ -14,15 +14,14 @@ export default (props) => {
       ):(null))))
   return (
     <div >
-    <div className="inputHolder">
-  
-      <input className="inputNumber"
+        <input className="inputNumber"
        onChange={props.changeInputValue} 
        value={props.textValue}
        type="text" pattern="[0-9]"></input>
-       <sapn> minutes</sapn>
-    </div>
+        <sapn> minutes</sapn>
+        <br/>
       {spanElement}
-    </div>
+      </div>
+  
   )
 }

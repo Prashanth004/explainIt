@@ -6,6 +6,9 @@ import {FETCH_PROJ_BY_ISSUE,
      CREATE_ISSUE_PROJECT,
      FETCH_STARTED,
      DELETE_SUCCESSFULL,
+     UPDATE_TEXT_EXPLAIN,
+     OPEN_EDIT_TEXT_MODAL,
+     CLOSE_EDIT_TEXT_MODAL,
      DELETE_FAILED} from './types'
 import axios from 'axios'
 import config from '../config/config'
@@ -70,6 +73,49 @@ export const checkPublicValue = (issueId) =>(dispatch)=>{
     }).catch(err=>{
         console.log("error : ",err)
 
+    })
+}
+export const openEditModal=(openEditModal)=>(dispatch)=>{
+    dispatch({
+        type:OPEN_EDIT_TEXT_MODAL,
+        id:openEditModal
+
+    })
+}
+
+export const closeEditModal=()=>(dispatch)=>{
+    dispatch({
+        type:CLOSE_EDIT_TEXT_MODAL
+    })
+}
+
+
+export const updatProjectReason =(title,projectid)=>dispatch=>{
+    var token = JSON.parse(localStorage.getItem('token'))
+    var data={
+        projectid :projectid,
+        title:title
+    }
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/project/edittext',
+        data:data,
+        headers:{
+            "Authorization": token,
+        }
+    })
+    .then(response=>{
+        if(response.status===200 || response.status === 204){
+           dispatch({
+               type:UPDATE_TEXT_EXPLAIN
+           })
+        }
+        else{
+            console("error :")
+        }
+    })
+    .catch(error=>{
+        console.log('error : ',error)
     })
 }
 
@@ -256,6 +302,7 @@ export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
 }
 
 export const deleteProjects =(issueId)=>(dispatch)=>{
+    console.log("got here")
     var token = JSON.parse(localStorage.getItem('token'))
     axios({
         method: 'delete',
@@ -265,6 +312,7 @@ export const deleteProjects =(issueId)=>(dispatch)=>{
         },
       
     }) .then(response => {
+        console.log("response : ", response)
         dispatch({
             type:DELETE_SUCCESSFULL
         })

@@ -55,34 +55,41 @@ class Inbox extends Component {
 
         });
     }
-    componentDidMount(){
-        
-            // console.log(this.props.match.params.userid)
-            // this.props.getAllMessages(this.props.match.params.userid)
-            console.log(this.props.userId)
-          
-      
-       
-    }
+  
     componentWillMount(){
         
     }
   render() {
+      console.log("this.state.filetrInbox : ", this.state.filteredInbox)
       if(this.props.allMessage!==null && !this.state.isFiltered){
             this.filterInbox()
       }
       console.log("this.state.filteredInbox : ",this.state.filteredInbox)
-      if(this.state.filteredInbox!==null || (this.state.filteredInbox).lenght!==0){
-        var revallMessage = this.state.filteredInbox.reverse()
-        var allMessageEle = revallMessage.map(message=>(
-            
-               <InboxMessages message={message} />
-               
-        ))
+      if(this.state.filteredInbox!==null ){
+          if(this.state.filteredInbox.length>0){
+            var revallMessage = this.state.filteredInbox.reverse()
+            var allMessageEle = revallMessage.map(message=>(
+                
+                   <InboxMessages key = {message.id}message={message} />
+                   
+            ))
+          }
+          else{
+            var allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
+                <h4>You dont have any recorded messages yet</h4>
+                <br/>
+    
+                <h6>When you respond to a recording, it automatically gets into participated list</h6>
+            </div>)
+          }
+        
       }
       else{
         var allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
-            <h4>Empty</h4>
+            <h4>You dont have any recorded messages yet</h4>
+            <br/>
+
+            <h6>When you respond to a recording, it automatically gets into participated list</h6>
         </div>)
       }
      

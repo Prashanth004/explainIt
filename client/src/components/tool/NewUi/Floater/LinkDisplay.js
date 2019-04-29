@@ -150,7 +150,7 @@ export default class componentName extends Component {
         </div>)
         return(
               <div>
-                    The link expires in {config.LINK_EXPIRE_TIME} minutes
+                    <span>The link expires in {config.LINK_EXPIRE_TIME} minutes</span>
                     {/* <TimerBar /> */}
                     {tweetOrshare}
                 </div>

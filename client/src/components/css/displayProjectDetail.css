@@ -1,8 +1,8 @@
 .detailProjectConatiner{
-    width:80%;
-    display:grid;
-    grid-template-columns: 60% 40%;
-    grid-column-gap: 20px;
+    width:95%;
+    /* display:grid;
+    grid-template-columns: 60% 40%; */
+  
     margin:auto;
     min-height: 99vh;
 
@@ -101,6 +101,13 @@ padding:10px;
     box-shadow: 0px 0px 0px 0px rgba(136, 135, 135, 0.151);
 
 }
-.deatilsVideoCard{
 
+
+@media (min-width: 700px){
+    .detailProjectConatiner{
+        width:80%;
+        display:grid;
+        grid-template-columns: 60% 40%;
+        grid-column-gap: 20px;
+    }
 }

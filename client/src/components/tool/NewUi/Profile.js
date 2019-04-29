@@ -22,19 +22,45 @@ class Profile extends Component {
        this.props.closeEditProfile()
     }
     render() {
+        const bio =(this.props.bio!==null)?(
+            (this.props.bio.length>0)?(
+                <p>
+                       {this.props.bio}
+                    </p>
+            ):(null)
+        ):(null)
+
+        const goodAtDiv = (this.props.goodat!==null)?(
+            (this.props.goodat.length>0)?(
+                <div>
+                <span><b>I am good at</b></span>
+                <p>{this.props.goodat}</p>
+                </div>
+            ):(null)
+        ):(null)
+
+
+        const worksDiv =(this.props.works!==null)?(
+            (this.props.works.length>0)?(
+                <div>
+                <span><b>My works</b></span>
+                                    <p>{this.props.works}</p>
+                </div>
+            ):(null)
+        ):(null)
         const profileConatiner = (!this.props.openEdirProfile)?
         (
             <div>
                 <div className="bio">
                     <p><b>Prashanth</b></p>
-                    <p>
-                       {this.props.bio}
-                    </p>
-                    <p><b>I charge {this.props.cost}$ a minute</b></p>
+                    {bio}
+                   {goodAtDiv}
+                   {worksDiv}
+                    {/* <p><b>I charge {this.props.cost}$ a minute</b></p> */}
                 </div>
                 <div >
                     <div className="socialIcon"
-                    visibility={(this.props.githubLink!==null)?"visible":"hidden"}>
+                    style={{visibility:((this.props.githubLink!==null)?((this.props.githubLink.length!==0)?"visible":"hidden"):"hidden")}}>
                     <a href={this.props.githubLink}
                     
                     target="_blank">
@@ -42,7 +68,7 @@ class Profile extends Component {
                         </a>
                     </div>
                     <div className="socialIcon"
-                    visibility={(this.props.linkinLink!==null)?"visible":"hidden"}>
+                    style={{visibility:((this.props.linkinLink!==null)?((this.props.linkinLink.length!==0)?"visible":"hidden"):"hidden")}}>
                     <a href={this.props.linkinLink} target="_blank">
                     
                         <FiLinkedin />
@@ -86,7 +112,9 @@ const mapStateToProps = state => ({
     twitterHandle:state.profile.twitterHandle,
     updatingDone:state.profile.doneUpdating,
     updateSuccess : state.profile.updateSuccess,
-    openEdirProfile:state.profile.openEdirProfile
+    openEdirProfile:state.profile.openEdirProfile,
+    goodat:state.profile.goodat,
+    works:state.profile.works
 })
 
 export default connect(mapStateToProps, {

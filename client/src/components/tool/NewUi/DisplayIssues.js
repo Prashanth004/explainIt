@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import ImagesOfExplainers from '../../DisplayExplained';
-import CopyToClipboard from '../CopytoClipboard'
 import config from '../../../config/config'
 import { deleteProjects, checkPublicValue } from '../../../actions/projectActions';
-import Swal from 'sweetalert2';
+
 import '../../css/toggle.css'
 import IssueCard from './issueCard'
 import { confirmAlert } from 'react-confirm-alert'; // Import4
@@ -47,11 +45,12 @@ class DisplayIssue extends Component {
     }
     componentDidMount(){
         this.setState({
-            issueArray :this.props.issueArray
+            issueArray :this.props.issueArray.reverse()
         })
     }
 
     deleteProjects(e) {
+        console.log("e.target.id : ", e.target.id)
         this.setState({
             deleteItemId: e.target.id
         })
@@ -76,11 +75,17 @@ class DisplayIssue extends Component {
 
     handleConfirm() {
         var id = this.state.deleteItemId
+        console.log(this.state.issueArray)
         this.props.deleteProjects(id);
         const newState = this.state;
         const index = newState.issueArray.findIndex(a => a.issueid === id);
 
-        if (index === -1) return;
+        if (index === -1) {
+            console.log("nothing found")
+            return;
+        }
+        
+       
         newState.issueArray.splice(index, 1);
 
         this.setState(newState); // 
@@ -116,11 +121,11 @@ class DisplayIssue extends Component {
         }));
     }
     toggleDisplayLink(e) {
-        console.log(e.currentTarget.id)
-        this.setState({
-            projectId: e.currentTarget.id,
-            displayCopyEle: !this.state.displayCopyEle,
-        })
+        console.log("counting")
+        // this.setState({
+        //     projectId: e.currentTarget.id,
+        //     displayCopyEle: !this.state.displayCopyEle,
+        // })
         var element = document.querySelector('#clipboard_' + e.currentTarget.id)
         if (element.style.display === 'none') {
             element.style.display = 'block'
@@ -131,19 +136,32 @@ class DisplayIssue extends Component {
     }
 
     render() {
-        console.log("i am getting rendered")
         var issueItems = null;
       if(this.props.issueArray !== null){
         if ((this.props.issueArray).length === 0) {
-            issueItems = (<div className="emptyIssues">
-                <p>Not participated in any discussions</p>
+            if(this.props.created){
+                issueItems = (<div className="emptyIssues">
+                <h4>Empty</h4>
+                <br/>
+                <h6>If you have initiated a screen share or record the screen, the recordings with respect to these will be found here</h6>
+                <br/>
+                <h6>You can have it hidden form others to view it or you can let others view it and contribute to the recorded content</h6>
             </div>)
+            }
+            if(this.props.participated){
+                issueItems = (<div className="emptyIssues">
+                <h4>Empty</h4>
+                <br/>
+                <h6>If you have explained anyone by recording or sharing your screen, you will find the recordings related to them here</h6>
+                <br/>
+            </div>)
+            }
+           
         }
         else {
-            console.log("this.props.issueArray : ", this.props.issueArray)
             // const issueItemReverse = (this.props.issueArray).reverse()
             // console.log("issueItemReverse : ", issueItemReverse)
-            issueItems =this.props.issueArray.map((issue, index) => (
+            issueItems =this.props.issueArray.reverse().map((issue, index) => (
                <IssueCard 
                itsHome={this.state.itsHome}
                displayCopyEle={this.state.displayCopyEle}
@@ -174,7 +192,8 @@ DisplayIssue.PropType = {
 
 };
 const mapStateToProps = state => ({
-
+ participated: state.nav.openParticipated,
+    created: state.nav.openCreated,
 })
 
 export default connect(mapStateToProps, {

@@ -10,7 +10,7 @@
   position: absolute;
   z-index: 1;
   bottom: 100%;
-  left: -125%;
+  right: -125%;
   margin-left: -60px;
 }
 .endButton{
@@ -25,20 +25,30 @@
   visibility: visible;
 } 
 .callImageDivAnwser{
-  position:fixed;
-  width:7%;
-  bottom:25px;
+  background-color: rgb(51, 39, 58);
+  border-radius: 25px;
+  padding:5px;
+  
+  width:105px;
+ /* top:150px; */
   /* right:5px; */
- right:25px;;
+ /* right:25px;; */
+ position:fixed;
+ bottom:0px;
+ right:25px;
  display:grid;
 grid-template-columns: 50% 50%; 
+}
+.callImageDivAnwser:hover{
+  cursor: move;
+ 
 }
 
 .img__overlay {
   padding:20px;
   border-style:none;
-  height:35px;
-  width:35px;
+  height:36px;
+  width:36px;
   border-radius:50%;
   align-items: center;
   bottom: 0;
@@ -67,20 +77,21 @@ grid-template-columns: 50% 50%;
 
 
 .shareVideoDisplay{
-    height:90vh;
-    width:90%;
+    height:99vh;
+    width:100%;
     margin:auto;
     
 }
 .videoContainer{
     width:100%;
-    height:80%;
+    height:100vh;
 }
 
 
 .VideoElementReciever{
     width:100%;
-    height:100%;
+    /* background-color: blue; */
+    height:100vh;
 
 }
 

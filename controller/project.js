@@ -21,7 +21,27 @@ var options = {
 id: rn(options),
 
 
-
+exports.editReason = (req,res)=>{
+database.db.none('update projects SET textexplain =$1 WHERE projectid =$2',[req.body.title,req.body.projectid])
+.then(data=>{
+    console.log("changes done")
+    database.db.oneOrNone('select * from projects where projectid=$1',req.body.projectid)
+    .then(data=>{
+        res.status(200).send({
+            success:1,
+            data:data
+        })
+    })
+   
+})
+.catch(err=>{
+    console.log(err)
+    res.status(500).send({
+        success:1,
+        error:err
+    })
+})
+}
 
 exports.updateProjectpublic = function(req, res){
     database.db.none('update projects SET public = $1 WHERE projectid = $2', [1, req.body.projectId])
@@ -103,13 +123,13 @@ exports.updateProjectprivate = function(req, res){
         }
         var dateNow = new Date().toString()
         var rand = rn(options)
-        database.db.oneOrNone('insert into projects(name,email, projectid,  date,textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
-            'values(${name},${email}, ${projectid},${date},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
+        database.db.oneOrNone('insert into projects(name,email, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
+            'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
             {
                 name: req.body.projectName,
                 email: req.user.email,
                 projectid: rand,
-                date: dateNow,
+                
                 imgurl: imgurl,
                 textExplain: req.body.textExplain,
                 isquestion: req.body.isquestion,
@@ -195,7 +215,7 @@ exports.retrieveItems = function (req, res) {
 }
 
 exports.getAllProject = function (req, res) {
-    database.db.manyOrNone('select * from projects')
+    database.db.manyOrNone('select * from projects ORDER BY date')
         .then(data => {
             res.status(200).send({ success: 1, data: data })
         })
@@ -224,7 +244,7 @@ exports.getIssueById = function (req, res) {
 }
 exports.getProjectById = function (req, res) {
 
-    database.db.one('select * from projects where projectid = $1', req.params.id)
+    database.db.one('select * from projects where projectid = $1 ', req.params.id)
         .then(projects => {
             res.status(200).send({
                 success: 1,
@@ -241,7 +261,7 @@ exports.getProjectById = function (req, res) {
 
 
 exports.getAllProjectByIssue = function (req, res) {
-    database.db.manyOrNone('select * from projects where issueid = $1', req.params.issueid)
+    database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date', req.params.issueid)
         .then(projects => {
 
             if (projects) {

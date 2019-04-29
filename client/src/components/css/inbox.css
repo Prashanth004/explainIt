@@ -20,11 +20,15 @@ margin-top:20px;
     font-size:11px;
 }
 .nameDate{
+    /* display: inline-block; */
     text-align: left;
-    padding-left:11%;
+    padding-left:2%;
 }
 .linkToProject{
-    width:60%;
+    background-color: #eeee;
+    padding:2px 8px 2px 8px;
+    border-radius:3px;
+    width:100%;
     text-align: left;
     word-wrap: break-word;
     overflow: hidden;
@@ -36,47 +40,61 @@ margin-top:20px;
     margin:auto;
 
     margin-top:20px;
-    padding:30px 30px 20px 20px ;
+    padding:20px 20px 8px 8px ;
     background-color:white;
-    /* border-top-style:solid; */
-    /* border-top-radius:6.5px; */
+    border-style:solid; 
+    border-radius:6.5px; 
     border-radius:3px;
-    border-top-color:rgb(192, 188, 188);
-    border-top-width:0.5px;
-    box-shadow: 0px 0px 5px 2.5px rgba(192, 192, 192, 0.178);
-    display:grid;
-    grid-template-columns: 20% 80%;
+    border-color:rgba(151, 149, 149, 0.13);
+    border-width:0.5px;
+    /* box-shadow: 0px 0px 2px 1.5px rgba(139, 139, 139, 0.068); */
+    
+}
+.headers{
+    display:inline-block;
+    font-size:12px;
+    /* background-color: #eeee;
+    padding:2px 8px 2px 8px;
+    border-radius:3px; */
 }
 .messageElementDiv:hover{
     box-shadow: 0px 0px 0px 0px rgba(192, 192, 192, 0.335);
+    background-color:rgb(232, 229, 235);
+}
+.inboxContent{
+    /* margin-left:20px; */
+    width:100%;
+    display:inline-block;
+    background-color: #eeee;
+    padding:2px 8px 2px 8px;
+    border-radius:3px;
+}
+.formName{
+margin-left:2%;
 }
 
-.profileImageInbox{
-    height:65px;
-    width:65px;
-    border-radius:50%;
-    margin:auto;
-    text-align: center;
-    box-shadow: 0px 0px 7px 1px rgba(109, 108, 108, 0.424)
-  }
   .profileImageElementInbox{
-    height:66px;
-    width:66px;
+    height:36px;
+    width:36px;
     border-radius:50%;
     margin:auto;
+    box-shadow: 0px 0px 7px 1px rgba(109, 108, 108, 0.424)
+
   }
 
   
   @media (min-width: 700px) {
     .messageElementDiv{
         width:80%;
-        grid-template-columns: 23% 77%;
     }
 }
 
   @media (min-width: 1000px) {
     .messageElementDiv{
-        width:60%;
-          grid-template-columns: 6% 94%;
+        width:70%;
+    }
+    .linkToProject{
+      
+        width:100%;
     }
   }

@@ -19,13 +19,11 @@ import config from '../../../config/config'
     openProfile(e){
         // window.open(config.react_url+'/explainIt', "_blank")
        var twitter = this.props.DetailsOfPeople.filter(a=>a.projectid===e.target.id)
-       console.log("twitter : ", twitter)
        window.open(config.react_url+'/profile/'+twitter[0].twitterhandle, "_blank")
 
     }
   
   render() {
-      console.log("details of people : ",this.props.DetailsOfPeople)
     var limitPeople = this.props.DetailsOfPeople.slice(0,config.peopleDisplayLength)
     var countElement = null;
     var allPeopleImages = null;
@@ -57,7 +55,7 @@ import config from '../../../config/config'
     }
        
       var images= (!this.props.showAllPeople)?(limitPeople.map((People,index)=>(
-                    <div id={this.props.issueid}  className="imagePeopleDiv">
+                    <div id={this.props.issueid} key={this.props.projectid}  className="imagePeopleDiv">
                     <span>
                             <img id="imageOfPeople" src={People.profilepic} className="peopleImage"></img>
                             </span>

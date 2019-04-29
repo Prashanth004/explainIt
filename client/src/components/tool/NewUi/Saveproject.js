@@ -41,10 +41,17 @@ class SaveProjects extends Component {
         if(this.state.textValue!==null){
             if((this.state.textValue).length > 0)
             {
-            this.setState({
-                privatePublic:true
-            })
-            this.props.savefilePublic(this.state.textValue)
+                if ((this.state.textValue).length < 201) {
+                    this.setState({
+                        privatePublic: true
+                    })
+                    this.props.savefilePublic(this.state.textValue)
+                }
+                else {
+                    this.setState({
+                        limitExce: true
+                    })
+                }
         }
             else{
                 this.setState({
@@ -60,10 +67,18 @@ class SaveProjects extends Component {
     savefilePri(){
         if(this.state.textValue!==null){
             if((this.state.textValue).length > 0){
-        this.props.savefilePrivate(this.state.textValue)
-        this.setState({
-            privatePublic:true
-        })
+         if ((this.state.textValue).length < 201) {
+
+                    this.props.savefilePrivate(this.state.textValue)
+                    this.setState({
+                        privatePublic: true
+                    })
+                }
+                else {
+                    this.setState({
+                        limitExce: true
+                    })
+                }
     }
         else{
             this.setState({

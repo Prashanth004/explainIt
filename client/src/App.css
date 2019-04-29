@@ -3,10 +3,12 @@
   /* background-color:#f6fdff; */
   /* background-clip: #fcf8ff; */
   /* background-color: white; */
-  background-color: rgb(245,245,245);
+  background-color: rgb(155, 155, 155);
+  background-color: #fafafa;
+  /* font-weight:  */
 
 
-  font-family: "Helvetica";
+  /* font-family: "Helvetica"; */
   height: '100vh';
 }
 
@@ -36,6 +38,7 @@ div{
 body{
  color:rgb(32, 32, 32);
  overflow: auto;
+font-family: "Frutiger Neue W02 Book ,Arial,Helvetica,sans-serif"
   
 }
 a{

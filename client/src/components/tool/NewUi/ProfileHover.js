@@ -8,8 +8,7 @@ import '../../css/profielVisit.css'
 
 class ProfileCard extends Component {
     componentWillMount() {
-      console.log("2")
-        console.log("uswrID : ", this.props.userId)
+     
         if (this.props.userId === this.props.profileId)
             this.props.getProfileDetailsOnHover(this.props.userId, config.SELF)
         else

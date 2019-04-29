@@ -20,6 +20,8 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     var angelLink = null;
     var linkinLink = null;
     var githubLink = null;
+    var goodat = null;
+    var works = null;
     console.log("userId : ", userId)
 
     axios({
@@ -39,7 +41,9 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
             twitterLink = response1.data.data.bio;
             angelLink = response1.data.data.angellist;
             linkinLink = response1.data.data.linkedin;
-            githubLink = response1.data.data.github
+            githubLink = response1.data.data.github;
+            goodat=response1.data.data.goodat;
+            works=response1.data.data.works;
             axios({
                 method: 'get',
                 url: config.base_dir + '/api/project/',
@@ -94,6 +98,8 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                     angelLink : angelLink,
                     linkinLink : linkinLink,
                     githubLink : githubLink,
+                    goodat:goodat,
+                    works:works,
                     twitterHandle: twitterHandle,
                     myIssue: myIssue,
                     participatedIssue: participated,
@@ -132,17 +138,19 @@ export const closeEditProfile=()=>(dispatch)=>{
         type:CLOSE_EDIT_PROFILE
     })
 }
-export const updateUserProfile=(bio, cost,linkedin,angellist,github)=>(dispatch)=>{
+export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
     
-    console.log(bio,linkedin,angellist,cost, github);
+    console.log(bio,linkedin,angellist,cost, github,goodat, works);
    
     var postData = {
         bio: bio,
         cost:cost,
         angellist: angellist,
         linkedin:linkedin,
-        github:github
+        github:github,
+        goodat:goodat,
+        works:works
       };
       let axiosConfig = {
         headers: {
@@ -164,6 +172,8 @@ export const updateUserProfile=(bio, cost,linkedin,angellist,github)=>(dispatch)
                 angelLink : response.data.data.angellist,
                 linkinLink : response.data.data.linkedin,
                 githubLink : response.data.data.github,
+                goodat:response.data.data.goodat,
+                works:response.data.data.works
             })
         }
         else{

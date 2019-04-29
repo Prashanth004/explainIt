@@ -78,16 +78,11 @@ class Explainit extends Component {
     var self = this
     function postMessageHandler(event) {
         if (event.data.sourceId !== undefined) {
-            console.log("We've got a message!");
-            console.log("* Message:", event.data);
-            console.log("* Origin:", event.origin);
-            console.log("* Source:", event.source);
-            console.log("*event.data.message__sourceId : ", event.data.sourceId)
+          
             self.props.saveSourceId(event.data.sourceId)
         }
 
         if (event.data === 'rtcmulticonnection-extension-loaded') {
-            console.log(" event.source :", event.source)
           
             self.props.saveExtensionDetails(event.source, event.origin)
         }

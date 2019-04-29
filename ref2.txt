@@ -1,0 +1,106 @@
+1) hide the player
+2) do your own player
+3) do the symbols properly
+4) expand the grid and list to prfile visit
+5) make the profile visit as
+
+
+
+6) remove cancel button@@@@@@@
+7) card design to differentiate selected@@@
+8) floater design
+9) writings to show empty explaination to initiate the explain   on issues-page@@@@@
+10) hide scroller and give arrow  	
+11) date with color change@@@@@@@
+11) search bar in created page only@@@@
+12) share request Action ---- when initiate screen share enter the handle for other person to get the notificatiob promt.@@@@
+13) if twitter handle is valid and if person is not on explain he should have an option to invite.@@@@
+
+
+
+Dicussion on an subject by two people (it has to represented as an email conversation):
+
+================================================================================================================
+
+
+floater    gmail plugin    extension       discussion        explaination     screenShareRequest   
+
+
+
+
+
+Anatomy of the conversation
+
+1) reply can be a text or video
+
+flow for the screen share
+
+                call
+happened		did not happen. leave a message
+problem solved          got reply
+		   coonvinced    notconvinced
+		  done            schedule a time
+
+
+time zone related activity
+multiple user conersation
+
+
+
+
+1) 1week crypto currency
+2) bitcoins
+3) ethurium
+4) altcoins
+5) decentralised application
+
+
+1) reduce the card size
+2) notofication of incoming call
+3) notification badges
+4) flow of once replied will get into participated
+5) scheduling the time
+
+
+4189
+
+
+bugs
+
+1) hide record and share when inbox is opened
+2) change the wording when recording is done
+3) change the entire recordong and reply flow from inbox
+4) explainIt button to have a right flow
+
+
+2591624137
+
+
+1) change 
+removed foriegn keys
+
+plan for today:
+
+1) messages check on high level by 9:15
+2) profile work 10:30 - 1:00
+
+
+plan today 
+1)fix all the bugs
+2)edit option working
+3) add fields to profile
+4) remove cost
+
+
+const connectionString = {
+    host: 'localhost',  
+    port: 5432,
+    database: 'explain_first',
+    user: 'postgres',
+    password: 'postgres'
+};
+
+
+
+
+

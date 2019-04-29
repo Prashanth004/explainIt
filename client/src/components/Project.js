@@ -73,7 +73,6 @@ handleCloseModal() {
     })
     function postMessageHandler(event) {
       if (event.data === 'rtcmulticonnection-extension-loaded') {
-          console.log(" event.source :", event.source)
           self.setState({
               source: event.source,
               origin: event.origin,

@@ -4,9 +4,9 @@
      /* margin-top:25px; */
     background-color:white;
     border-radius:8px;
-    border-style:solid;
+    border-style:none;
     border-width:0.5px;
-    border-color:rgb(109, 107, 107);
+    border-color:#FFFF;
     padding:15px;
 
 }

@@ -1,14 +1,10 @@
 import React from 'react';
-import BasicAutocomplete from './search3'
-import { Link } from 'react-router-dom';
 import config from '../../../config/config';
 import PropType from 'prop-types';
-// import SearchBar from './Search'
 import { connect } from 'react-redux';
 import { FiMail } from "react-icons/fi";
-import Swal from 'sweetalert2';
 import '../../css/nav.css';
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import { confirmAlert } from 'react-confirm-alert'; 
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
 import { openHome, openInbox, openCreated, openParticipated } from '../../../actions/navAction'
@@ -71,7 +67,6 @@ handleConfirm() {
 }
   componentWillMount() {
     this.props.stillAuthenicated()
-    console.log("window.location.href : ", window.location.href)
     if (this.props.page !== undefined && this.props.page === "profile")
       // if(window.location.href.includes('profile') ){
       this.setState({
@@ -124,6 +119,7 @@ handleConfirm() {
   render() {
     var createdStyle = null;
     var partiStyle = null;
+    var inboxStyle = null;
     var explainLogo = (
       <div className="logoContainer" onClick={this.openHome}>
         <span>
@@ -140,6 +136,12 @@ handleConfirm() {
     }
     else if (this.props.Participated) {
       partiStyle = {
+        color: "#d3a5cd",
+
+      }
+    }
+    else if(this.props.inbox){
+      inboxStyle = {
         color: "#d3a5cd",
 
       }
@@ -183,7 +185,7 @@ handleConfirm() {
         <div className="logoCentre Create">
           <div className="logoContainerCreate" >
             <span>
-              <FiMail onClick={this.props.openInbox} className="dragoMail" />
+              <FiMail onClick={this.props.openInbox} style={inboxStyle} className="dragoMail" />
             </span>
           </div>                  </div>
         <div className="normalNav">
@@ -247,11 +249,6 @@ handleConfirm() {
         </div>
         <div></div>
         <div >
-
-          {/* <BasicAutocomplete
-      items={['apple', 'orange', 'carrot']}
-      onChange={selectedItem => console.log(selectedItem)}
-    /> */}
         </div>
         <div>
           {profileImage}

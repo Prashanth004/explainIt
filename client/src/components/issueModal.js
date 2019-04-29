@@ -72,16 +72,13 @@ class issueDetails extends Component {
     }
 
     componentDidMount(){
-        console.log("this.props.questionProject : ",this.props.questionProject)
         if(this.props.questionProject.videofilepath === null){
-            console.log("this.props.questionProject.imgurl: ",this.props.questionProject.imgurl)
             this.setState({
                 element:this.state.image,
                 src : this.props.questionProject.imgurl
             })
         }
         else{
-            console.log("this.props.quesproj.viodeofie : ",this.props.questionProject.videofilepath)
             this.setState({
                 element:this.state.video,
                 src : this.props.questionProject.videofilepath
@@ -90,12 +87,10 @@ class issueDetails extends Component {
     }
 
     getImages(projects){
-      console.log("projectsssssssssss : ",projects)
       var emailOfanswers=[]
       for(var proj in projects){
             emailOfanswers.push(projects[proj].email)
       }
-      console.log("emailOfanswers",emailOfanswers)
     //   this.props.getImagesByemail(emailOfanswers,projects)
         // projects.ForEach((projects)=>{
         //    
@@ -119,16 +114,14 @@ class issueDetails extends Component {
 
 
         var displayElement = ""
-      console.log("videoSrc : ",this.state.src)
-      console.log("element : ",this.state.element)
+   
         const bottomImages = this.props.answerProject.map((proj,key )=>(
             <div key={key}className="imagePeopleModal ">
                 <img id={proj.projectid} onClick={this.changeDisplay} src={proj.profilepic} className="peopleImage"></img>
             </div>
         ))
         if(this.state.element === this.state.video){
-            console.log("this.state.element : ",this.state.element)
-            console.log("this.state.video : ",this.state.video)
+           
             displayElement  = (<div  ref={a=>this.imgDiv = a} className="audioModal">
             {/* <video  controls  src={this.props.questionProject.videofilepath}  >
    

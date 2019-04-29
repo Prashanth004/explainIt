@@ -11,6 +11,10 @@ class ProfileForm extends Component {
             bioValue: null,
             linkedInValue: null,
             gitHubValue: null,
+            worksValue:null,
+            goodAtValue:null,
+            worksValueError:null,
+            goodAtValueError:null,
             angelListValue: null,
             costValue: null,
             costError: false,
@@ -18,7 +22,8 @@ class ProfileForm extends Component {
             linkInerror: false,
             gitHibError: false,
             angelListError: false,
-            saveClicked: false
+            saveClicked: false,
+            
         }
         this.changeBio = this.changeBio.bind(this);
         this.changeLinkedIn = this.changeLinkedIn.bind(this);
@@ -26,6 +31,8 @@ class ProfileForm extends Component {
         this.changeAngelList = this.changeAngelList.bind(this);
         this.uploadData = this.uploadData.bind(this);
         this.updateCost = this.updateCost.bind(this);
+        this.changeGoodAt = this.changeGoodAt.bind(this);
+        this.changeWorks = this.changeWorks.bind(this);
     }
     componentDidMount() {
         this.setState({
@@ -34,6 +41,20 @@ class ProfileForm extends Component {
             gitHubValue: this.props.githubLink,
             angelListValue: this.props.angelLink,
             costValue: this.props.cost,
+            goodAtValue:this.props.goodat,
+            worksValue:this.props.works
+        })
+    }
+    changeWorks(e){
+        this.setState({
+            worksValue: e.target.value,
+            worksValueError: null
+        })
+    }
+    changeGoodAt(e){
+        this.setState({
+            goodAtValue: e.target.value,
+            goodAtValueError: null
         })
     }
     changeBio(e) {
@@ -75,51 +96,71 @@ class ProfileForm extends Component {
         })
     }
     uploadData() {
-        
-            if (!this.state.linkedInValue.includes('www.linkedin.com')
-            && !this.state.linkedInValue!==null) {
+       
+        if(this.state.linkedInValue.length!==0){
+            if (!this.state.linkedInValue.includes('www.linkedin.com')) {
                 this.setState({
                     linkInerror: true
                 })
             }
-    
-        else if (!this.state.gitHubValue.includes('github.com')
-        && !this.state.gitHubValue!==null) {
+        }
+            if(this.state.gitHubValue.length!==0){
+        if (!this.state.gitHubValue.includes('github.com')) {
                 this.setState({
                     gitHibError: true
                 })
             }
-        
-        else if (!this.state.angelListValue.includes('angel.co')&&
-        !this.state.angelListValue!==null) {
+        }
+        if(this.state.angelListValue.length!==0){
+        if (!this.state.angelListValue.includes('angel.co')) {
                 this.setState({
                     angelListError: true
                 })
             }
+        }
          
        
-        else if (this.state.costValue < 0) {
+        if (this.state.costValue < 0) {
             this.setState({
                 costError: true
             })
         }
-        else if (this.state.bioValue.length > 200) {
+       if(this.state.goodAtValue!==null)
+        if (this.state.goodAtValue.length > 200) {
+            this.setState({
+                goodAtValueError: true
+            })
+        }
+        if(this.state.bioValue!==null)
+        if (this.state.bioValue.length > 200) {
             this.setState({
                 bioValueError: true
             })
         }
-        else {
-            this.setState({
-                saveClicked: true
-            })
-            this.props.updateUserProfile(
-                this.state.bioValue,
-                this.state.costValue,
-                this.state.linkedInValue,
-                this.state.angelListValue,
-                this.state.gitHubValue
-            )
-        }
+        setTimeout(()=>{
+            if(!this.state.bioValueError&&
+                !this.state.costError&&
+                !this.state.angelListError&&
+                !this.state.gitHibError&&
+                !this.state.linkInerror &&
+                !this.state.goodAtValueError
+            ) {
+                    
+                this.setState({
+                    saveClicked: true
+                })
+                this.props.updateUserProfile(
+                    this.state.bioValue,
+                    this.state.costValue,
+                    this.state.linkedInValue,
+                    this.state.angelListValue,
+                    this.state.gitHubValue,
+                    this.state.goodAtValue,
+                    this.state.worksValue
+                )
+            }
+        },500)
+       
     }
 
     render() {
@@ -138,6 +179,9 @@ class ProfileForm extends Component {
         const bioErrorDiv = (this.state.bioValueError) ? (
             <span className="errorSpan">bio cant be more than 200 characters</span>
         ) : (null)
+        const goodAtErrorDiv = (this.state.goodAtValueError) ? (
+            <span className="errorSpan">Can not be more than 200 characters</span>
+        ) : (null)
 
         return (this.state.saveClicked) ? (
             <div style={{ marginTop: "40px" }}>
@@ -145,12 +189,25 @@ class ProfileForm extends Component {
             </div>
         ) : (
                 <div className="profileFormContainer">
-                    <span><b>Bio</b></span>
+                    <span><b>Who am I</b></span>
                     <span className="support">   (200 characters)</span>
                     <textarea
                         value={this.state.bioValue}
                         rows="6" onChange={this.changeBio} className="inputboxes" />
                     {bioErrorDiv}
+
+                       <span><b>What am I good at</b></span>
+                    <span className="support">   (150 characters)</span>
+                    <textarea
+                        value={this.state.goodAtValue}
+                        rows="3" onChange={this.changeGoodAt} className="inputboxes" />
+                    {goodAtErrorDiv}
+
+                    <span><b>My works</b></span>
+                    <textarea
+                        value={this.state.worksValue}
+                        rows="3" onChange={this.changeWorks} className="inputboxes" />
+                   
                     <label><b>LinkedIn :</b></label>
                     <input
                         value={this.state.linkedInValue}
@@ -166,9 +223,9 @@ class ProfileForm extends Component {
                         value={this.state.angelListValue}
                         type="text" onChange={this.changeAngelList} className="inputboxes" />
                     {angelerrorDiv}
-                    <label><b>How much would you link to charge for explaining for a minut</b></label>
+                    {/* <label><b>How much would you link to charge for explaining for a minut</b></label>
                     <input value={this.state.costValue} type="number" onChange={this.updateCost} className="inputNumber"></input><span>$</span><br />
-                    {costErrorDiv}
+                    {costErrorDiv} */}
                     <button className="buttonLight" onClick={this.props.closeEditProfile}>Cancel</button>
                     <button className="buttonLight" onClick={this.uploadData}>Submit</button>
                 </div>
@@ -186,7 +243,9 @@ const mapStateToProps = state => ({
     angelLink: state.profile.angelLink,
     githubLink: state.profile.githubLink,
     bio: state.profile.bio,
-    linkinLink: state.profile.linkinLink
+    linkinLink: state.profile.linkinLink,
+    goodat:state.profile.goodat,
+    works:state.profile.works
 })
 
 export default connect(mapStateToProps, {

@@ -27,9 +27,15 @@ router.get('/id/:id',user.getUserById)
 router.post('/updateprofile',passport.authenticate('jwt', { session: false }),user.updateProfile)
 router.get('/twitterhandle/:enctwitterhandle', user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
-router.post('/authenticate',user.authenticate)
+router.post('/authenticate',user.authenticate);
+router.get('/activationstatus',passport.authenticate('jwt', { session: false }), user.getActivationStatus)
+router.put('/emailactivation', passport.authenticate('jwt', { session: false }), user.emailActivation)
+router.post('/sendotp',passport.authenticate('jwt', { session: false }),user.sendotp);
+router.post('/resendotp',passport.authenticate('jwt', { session: false }), user.resend); 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-	if (req.user) {
+  // console.log(req.user)
+	if (req.user && req.user.activation==='1' ) {
+    
 		res.status(200).send({ user: req.user })
 	} else {
         res.status(401).send({ user: null})

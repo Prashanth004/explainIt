@@ -89,7 +89,6 @@ class ScreenRecorder extends Component {
             }
         },10000)
         if (!navigator.onLine) {
-            console.log("no intenet")
             self.setState({
                 noInternet: true
             })
@@ -107,7 +106,6 @@ class ScreenRecorder extends Component {
         var self = this
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             var finalStream = new MediaStream();
-            console.log("audio Stream : ", audioStream)
             window.getTracks(audioStream, 'audio').forEach(function (track) {
                 finalStream.addTrack(track);
             });
@@ -133,7 +131,6 @@ class ScreenRecorder extends Component {
             })
             if (call) {
                 call.on('stream', function (remoteStream) {
-                    console.log("call answer recieved : ", remoteStream)
                     var audio = document.querySelector('#video');
                     audio.srcObject = remoteStream
                     audio.play()
@@ -145,7 +142,6 @@ class ScreenRecorder extends Component {
                     console.log('Failed to get local stream', err);
                 });
                 call.on('close', function () {
-                    console.log("got closed message")
                     self.stopShare()
                 })
             }
@@ -165,7 +161,6 @@ class ScreenRecorder extends Component {
             peer: peer
         })
         peer.on('open', (id) => {
-            console.log('My peer ID is: ' + id);
             self.setState({
                 peerId: id
             })
@@ -182,7 +177,6 @@ class ScreenRecorder extends Component {
                 })
                 conn.on('data', (data) => {
                     this.props.StartedSharing()
-                    console.log("data : ", data)
 
                     self.setState({
                         destkey: data.clientId,
@@ -259,7 +253,6 @@ class ScreenRecorder extends Component {
         }, 3 * 60 * 1000)
         //acceptinf acknowlegment from other peer for call starting
         socket.on(config.CALL_ACK_MESSAGE, data => {
-            console.log(" data from client ack : ", data)
             if (data.clientId === self.state.peerId) {
                 //    alert("got ack")
                 this.setState({
@@ -270,7 +263,6 @@ class ScreenRecorder extends Component {
         })
         // acepting message of ending call
         socket.on(config.END_CALL, data => {
-            console.log(" data from end call process : ", data)
             if (data.clientId === self.state.destkey) {
                 this.stopShare()
                 if (peer !== null) {
@@ -286,9 +278,7 @@ class ScreenRecorder extends Component {
         })
         socket.on(config.CHECK_TOKEN_VALIDITY, data=>{
 
-            console.log("confmessage : ", data)
-            console.log(" ")
-                if(data.clientId === self.state.peerId){
+               if(data.clientId === self.state.peerId){
                 socket.emit(config.COMFIRM_TOKEN_VALIDITY,{
                     success: 1,
                     msg:"token valid"
@@ -363,7 +353,6 @@ class ScreenRecorder extends Component {
 
     stopShare() {
         if (!this.state.closedHere && !this.state.timerEnded) {
-            console.log("I am here to show message")
             this.setState({
                 showDisconectMessage: true
             })
@@ -387,12 +376,9 @@ class ScreenRecorder extends Component {
 
         var audio = document.querySelector('#video');
         audio.src = "";
-        console.log("recorder1 : ", recorder1)
         if (recorder1) {
             recorder1.stopRecording(function () {
-                console.log("recorder 1 : ", recorder1)
                 var blob = recorder1.getBlob();
-                console.log("blob : ", blob)
                 self.setState({
                     downloadUrl: URL.createObjectURL(blob),
                     blob: blob

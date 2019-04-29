@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import PropType from 'prop-types';
 import './floater.css';
+import socketIOClient from "socket.io-client";
 import { FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../../actions/types';
 import { displayFullScrenRecord, displayFullScreShare } from '../../../../actions/toolActions'
 import { creatAnsProject } from '../../../../actions/projectActions'
-import FullScreenRecord from './recordScreen'
+import FullScreenRecord from '../FullScreenRecord'
 import FullScreenShare from './sharescreen'
 import { saveExtensionDetails, saveSourceId } from "../../../../actions/extensionAction";
 import { stillAuthenicated } from '../../../../actions/signinAction';
@@ -21,6 +22,7 @@ class Floater extends Component {
         this.state = {
             source: null,
             origin: null,
+            socket: null,
             gotmessage: false,
             displayDetails: "none"
         }
@@ -32,7 +34,11 @@ class Floater extends Component {
         this._handleDoubleClickItem = this._handleDoubleClickItem.bind(this)
     }
     componentWillMount() {
-        this.props.stillAuthenicated()
+        this.props.stillAuthenicated();
+        const socket = socketIOClient(config.base_dir);
+        this.setState({
+            socket: socket
+        })
     }
     recordFullScreen() {
         if (this.state.displayDetails === "none") {
@@ -151,6 +157,7 @@ class Floater extends Component {
         var details = null
         if (this.props.screenAction === FULL_SCREEN_RECORD) {
             details = (<FullScreenRecord
+                socket={this.state.socket}
                 closeImidiate={this.props.closeImidiate}
                 reStoreDefault={this.props.reStoreDefault}
                 savefile={this.saveVideoData}
@@ -158,6 +165,7 @@ class Floater extends Component {
         }
         else if (this.props.screenAction === FULL_SCREEN_SHARE) {
             details = (<FullScreenShare
+                socket={this.state.socket}
                 onRef={ref => (this.child = ref)}
                 closeImidiate={this.props.closeImidiate}
                 reStoreDefault={this.props.reStoreDefault}
@@ -192,7 +200,7 @@ class Floater extends Component {
                             </div>
                         </div>
 
-                        <div className="detailsFloater" style={{ display: this.state.displayDetails }}>
+                        <div className="detailsFloaterMove" style={{ display: this.state.displayDetails }}>
                             {details}
                         </div>
                     </div>

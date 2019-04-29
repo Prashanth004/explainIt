@@ -51,7 +51,6 @@ class Explainit extends Component {
   componentDidMount() {
     window.addEventListener("resize", this.resize.bind(this));
     this.resize();
-    console.log("asnckjadbskbsjfihb")
     var self = this
     this.setState({
       error:false,
@@ -132,7 +131,6 @@ class Explainit extends Component {
   //   this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId,isPublic)
   // }
   saveVideoData(data,isPublic,text) {
-    console.log("the data whcih is gonna get saved : ", data)
     var issueId = null
     var textExplain = text
     var imgData = "null"

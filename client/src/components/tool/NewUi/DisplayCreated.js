@@ -12,7 +12,8 @@ class Displatcreaated extends Component {
   constructor(props){
     super(props)
     this.state={
-      itsHome:false
+      itsHome:false,
+      issueArray:[]
     }
     this.deleteProjects = this.deleteProjects.bind(this);
     this.handlePublicPrives = this.handlePublicPrives.bind(this)
@@ -71,15 +72,14 @@ else
   }
   render() {
     var issueItems = null
-    if(this.props.issueArray !== null){
-      if ((this.props.issueArray).length === 0) {
+    if(this.state.issueArray !== null){
+      if ((this.state.issueArray).length === 0) {
           issueItems = (<div className="emptyIssues">
               <p>Not participated in any discussions</p>
           </div>)
       }
       else {
-          console.log("this.props.issueArray : ", this.props.issueArray)
-          issueItems =this.props.issueArray.map((issue, index) => (
+          issueItems =this.state.issueArray.map((issue, index) => (
             <div className="createdCard">
              <IssueCard 
              deleteProjects={this.deleteProjects}

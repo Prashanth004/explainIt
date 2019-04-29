@@ -46,7 +46,6 @@ class DisplayProjectDetail extends Component {
     var self = this
     function postMessageHandler(event) {
       if (event.data === 'rtcmulticonnection-extension-loaded') {
-        console.log(" event.source :", event.source)
         self.setState({
           source: event.source,
           origin: event.origin,
@@ -102,7 +101,6 @@ class DisplayProjectDetail extends Component {
               method: 'get',
               url: config.base_dir + '/api/users/email/' + projects.email,
             }).then(response => {
-              console.log("final response: ", response)
               if (response.status == 200) {
                 const newTestJson = JSON.parse(JSON.stringify(allProjects));
                 newTestJson[index]['profilepic'] = response.data.data.profilepic;
@@ -110,10 +108,8 @@ class DisplayProjectDetail extends Component {
                 newTestJson[index]['id'] = response.data.data.id
                 newTestJson[index]['twitterhandle'] = response.data.data.twitterhandle
                 allProjects = newTestJson
-                console.log("newTestJson : ", newTestJson)
                 var answerProject = allProjects.filter(project => project.isquestion != "true")
                 var questionProject = allProjects.filter(projects => projects.isquestion == 'true')
-                console.log("questionProject :", questionProject)
                 self.setState({
                   answerProjects: answerProject,
                   DetailsOfPeople: answerProject,

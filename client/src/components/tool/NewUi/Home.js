@@ -90,7 +90,6 @@ class NewHome extends Component {
         this.setState({reducedWidth: window.innerWidth <= 700});
       }
     saveVideoData(data, isPublic, text) {
-        console.log("the data whcih is gonna get saved : ", data)
         var issueId = null
         var textExplain = text
         var imgData = "null"
@@ -131,11 +130,9 @@ class NewHome extends Component {
         this.resize();
         var self = this
         function postMessageHandler(event) {
-            console.log(" event :", event)
 
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                console.log(" event.source :", event.source)
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -151,7 +148,6 @@ class NewHome extends Component {
         }
 
         var socket = this.state.socket
-        console.log("sockets : ", socket)
         socket.on(config.UPDATE_BADGE,data=>{
             if(data.userId===this.props.userId){
             this.props.getTotalUnread()
@@ -172,9 +168,7 @@ class NewHome extends Component {
             }
         })
         socket.on(config.NEW_MESSAGE,data=>{
-           console.log("data.touser : ",data.touser)
-           console.log("this.props.userId :",this.props.userId)
-            if(data.touser === (this.props.userId)){
+           if(data.touser === (this.props.userId)){
                
                 this.props.getTotalUnread();
                 this.props.getAllMessages(this.props.userId)
@@ -182,8 +176,6 @@ class NewHome extends Component {
             }
         })
         socket.on(config.LINK_TO_CALL, data => {
-           
-            console.log("data : ", data)
             setTimeout(() => {
                 this.props.missCall();
             }, 18000)
@@ -310,7 +302,6 @@ class NewHome extends Component {
     togglemodal = (e) => {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
-        console.log("e.target.id : ", e.target.id)
 
 
         if (classOfClicked !== "singleMember" && classOfClicked !== "sharableLink" && classOfClicked !== "linkElementSym" && classOfClicked !== "hint--top" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
@@ -410,7 +401,7 @@ class NewHome extends Component {
     }
 
     render() {
-       var issuepercentage="55%";
+       var issuepercentage="65%";
         var percentage ="30%"
         if(this.state.reducedWidth){
             issuepercentage="100%"
@@ -472,15 +463,20 @@ class NewHome extends Component {
             {shareRecord}
          </div>
         ):(null)
-        const details = (this.state.showDetails) ? (
-            <Profile />
+        const details = (this.state.showDetails) ? ((this.props.inbox?(
+            null
+        ):( <Profile />))
+           
         ) : (null)
       
         const externalCloseBtn = <button className="close modalClose" style={{ position: 'absolute', top: '25px', height: '45px', width: '45', right: '25px', color: 'white' }} onClick={this.toggle}>&times;</button>;
         var self = this
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         var deatilsModal = null
+        if(this.props.myissues!==null)
         var issuesCreated = (this.props.myissues)
+        // if(this.props.participatedIssues!==null)
+        var participatedIssue = (this.props.participatedIssues)
         var self = this
        
         var feedDiv = null;
@@ -519,12 +515,11 @@ class NewHome extends Component {
             }
             if (!this.props.incommingCall && this.props.created && !this.props.participated) {
                 // explainDiv = null
-                console.log("created excecuting")
                 var createdDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{width:issuepercentage}}>
                     <div className="closeBtnHolder">
                     </div>
-                    <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated).reverse()} />
+                    <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated)} />
                     {/* <DisplatCreated home={config.HOME} issueArray={(issuesCreated).reverse()} /> */}
                 </div>
                 ):(
@@ -532,29 +527,24 @@ class NewHome extends Component {
                     <div className="closeBtnHolder">
                     </div>
                     {/* <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated).reverse()} /> */}
-                    <DisplatCreated home={config.HOME} issueArray={(issuesCreated).reverse()} />
+                    <DisplatCreated home={config.HOME} issueArray={(issuesCreated)} />
                 </div>
                 )
 
                 feedDiv = (
                     <div>
-                    {/* // <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created && !this.props.participated}> */}
                         <div style={{ textAlign: "right" }}>
-                            {/* <button className="buttonLight" onClick={this.changeViewToList}>List</button> */}
                             <span className="hint--top" aria-label="List View">
                             <FiList onClick={this.changeViewToList} className="listView"/>
                             </span>
                             <span className="hint--top" aria-label="Grid View">
-                            {/* <button className="buttonLight" onClick={this.changeViewToGrid}>Grid</button> */}
                             <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
                             </span>
                         </div>
                        {createdDiv}
                        </div>)
-                    // </Animated>)
             }
-            else if (!this.props.incommingCall && this.props.participated && !this.props.created) {
-                console.log("participated excecuting")
+            if (!this.props.incommingCall && this.props.participated && !this.props.created) {
                 var participatedDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{ width: issuepercentage }} >
                         <div className="closeBtnHolder">

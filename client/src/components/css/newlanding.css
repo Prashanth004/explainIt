@@ -24,8 +24,19 @@
     padding: 40px 0pax 40px 0px;
 }
 .startShare{
+  /* text-align: left; */
   margin-top:20px;
   padding:15px;
+  padding-top:15px;
+  font-size:14px;
+  /* background-color: blue; */
+}
+.handleInput{
+  width:30%;
+  border-style:none;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(0, 0, 0, 0.486);
+
 }
   .sharableLinkSection{
     width:90%;
@@ -81,7 +92,7 @@
 
 }
 .profileImagesDiv{
-  margin:0px 10px 0px 10px;
+  /* margin:0px 10px 0px 10px; */
   height:37px;
   width:37px;
   border-radius:50%;
@@ -288,8 +299,18 @@ margin-top:10px;
 
       
   }
+  .year{
+    font-size:18px
+  }
+  .dateOfCard{
+    margin-right:15px;
+    padding-top:10px;
+    padding-right:25px;
+    /* background-color: red; */
+    /* text-align: right; */
+  }
   .questionImg{
-    height: 155 px;
+    height: 225px;
     width:100%;
     border-top-style:none;
     border-top-color:rgba(100, 99, 99, 0.356);
@@ -306,6 +327,8 @@ margin-top:10px;
     width:100%;
     margin-top:0px;
     
+  display: grid;
+  grid-template-columns: 0% 100%
    
   }
   .date{
@@ -313,18 +336,27 @@ margin-top:10px;
     /* margin-top:20px; */
    color:rgb(87, 85, 85);
     width:100px;
-    margin-left:-25px;
+    margin-right:10px;
+    /* margin-left:-25px; */
   }
   .gridView{
-    width:25px;
-    height:25px;
+    width:18px;
+    height:18px;
 margin:10px;
+color:rgba(51, 51, 51, 0.609);
 
   }
+  .textEditArea{
+    width:90%;
+    border-radius:3px;
+    font-size:12px;
+    
+  }
  .listView{
-  width:25px;
-  height:25px;
+  width:18px;
+  height:18px;
 margin:10px;
+color:rgba(51, 51, 51, 0.609);
  }
   .twitterContainer{
     /* background-color: #0075a2; */
@@ -404,27 +436,25 @@ margin:10px;
   }
   .issueCard{
       width:100%;
-      margin:auto;
+      /* margin:auto; */
       box-shadow: 0px 0px 0px 0px rgba(235, 235, 235, 0.911);
 
       background-color :white;
       /* margin-top:20px; */
-      border-radius:2.5px;
+      border-radius:3.5px;
       border-style:solid;
       border-width:0.5px;
-      border-color: rgba(128, 125, 125, 0.397);
-  }
-  .issueCard:hover{
-    box-shadow: 0px 0px 10px 1.5px rgba(141, 141, 141, 0.089);
+      border-color: rgba(128, 125, 125, 0.171);
+      box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
 
-    background-color :rgb(250, 248, 248);
   }
+ 
   .modalBody{
     /* background-color: #111; */
     background-color :white;
     padding:0px;
     width:100%;
-    margin:auto;
+    /* margin:auto; */
     align-self: left;
     position:absolute;
     border-radius:6.5px;
@@ -442,7 +472,7 @@ margin:10px;
   .modalBodyTool{
     /* background-color: #111; */
     padding:0px;
-    width:130%;
+    /* width:130%; */
     margin:auto;
     align-self: center;
     position:absolute;
@@ -465,10 +495,10 @@ margin:10px;
     text-align: left;
 width:99%;
 margin:auto;
-min-height: 60px;
-
+min-height: 10px;
+color:rgba(51, 51, 51, 0.863);
 /* background-color: blue; */
-padding:05px 25px 05px 25px;
+padding:00px 0px 10px 57px;
 font-size:13px;
 /* background-color :white; */
 border-style: none;
@@ -501,10 +531,12 @@ border-top-width:0.5px;
   }
   .explainItBtn{
     width:85px;
-   color:white;
+   color:rgb(77, 76, 76);
     float:right;
+    font-size:13px;
     align-self: right;
     align-content: right;
+    border-color:rgba(51, 51, 51, 0.664);
   }
 
   .emptyIssues{
@@ -631,6 +663,8 @@ border-top-width:0.5px;
       .cardWithDate{
        
         margin-top:15px;
+        display: grid;
+        grid-template-columns: 20% 80%
       }
     
     }
@@ -650,7 +684,7 @@ border-top-width:0.5px;
       }
       
       .questionImg{
-        height: 380px;
+        height: 376px;
         width:100%;
         margin:auto;
       }
@@ -693,7 +727,9 @@ border-top-width:0.5px;
        
       }
       .cardWithDate{
-       
+        margin-left:-2%;
+        display: grid;
+  grid-template-columns: 10% 90%;
         margin-top:30px;
       }
     

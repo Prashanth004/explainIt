@@ -2,10 +2,15 @@ import React, { Component } from 'react'
 import Toggle from 'react-toggle';
 import { FiLink2, FiEdit, FiDelete } from "react-icons/fi";
 import '../../css/issueDetails.css';
+import '../../css/toggle.css'
 import { FiTrash, FiMoreVertical } from "react-icons/fi";
 import { GoChevronDown } from "react-icons/go";
+import { connect } from 'react-redux';
+import PropType from 'prop-types';
+import {openEditModal} from '../../../actions/projectActions'
 
-export default class displayTopBtns extends Component {
+
+class displayTopBtns extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -18,6 +23,7 @@ export default class displayTopBtns extends Component {
         }
         this.changeToggle = this.changeToggle.bind(this);
         this.onOptClick = this.onOptClick.bind(this);
+        this.openEditModal = this.openEditModal.bind(this);
     }
     componentDidMount() {
         if (Number(this.props.issue.public)) {
@@ -39,15 +45,17 @@ export default class displayTopBtns extends Component {
     }
     onOptClick() {
         if (this.state.optionVisibe === "hidden")
-            this.setState({
-                optionVisibe: "visible"
-            })
+            this.setState({optionVisibe: "visible"})
         else {
-            this.setState({
-                optionVisibe: "hidden"
-            })
+            this.setState({optionVisibe: "hidden"})
         }
     }
+
+
+    openEditModal=(e)=>{
+
+        this.setState({optionVisibe: "hidden"})
+        this.props.openEditModal(e.target.id)}
 
     changeToggle(e) {
         if (this.state.displayTwitter === "block") {
@@ -74,7 +82,6 @@ export default class displayTopBtns extends Component {
         // const twitterBird = (Number(this.props.issue.public)) ? (
         //     >) : (null)
         if (this.props.questionProject !== undefined) {
-            console.log("### this.props.questioProject : ", this.props.questionProject)
             var profilePic = this.props.questionProject.profilepic
             var profileName = this.props.questionProject.username
 
@@ -97,31 +104,54 @@ export default class displayTopBtns extends Component {
             </label>) : (null)
 
         const deleteDiv = (this.props.itsHome) ? (
-            <div>
+            <div style={{fontSize:"13px", color:"#333"}}>
                 <div className="iconsright">
                     <GoChevronDown onClick={this.onOptClick} />
                 </div>
-                <div className="dropDownForOption" id={this.props.issue.issueid} style={{ visibility: this.state.optionVisibe }}>
-                    <div onClick={this.props.deleteProjects} className="menuItem">
-                        <button id={this.props.issue.issueid} className="dropDownBtn">Delete</button>
-                        <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
+                <div className="dropDownForOption" 
+                onMouseLeave={this.onOptClick}id={this.props.issue.issueid} style={{ visibility: this.state.optionVisibe }}>
+                    <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
+                        
+                        <div >
+                            <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
+                        </div>
+                        <div>
+                            <span className="textInDropDown" id={this.props.issue.issueid} className="dropDownBtn">Delete</span>
+                        </div>
                     </div>
-                    <div className="menuItem">
-                        <button id={this.props.issue.issueid} className="dropDownBtn">Edit</button>
-                        <span>  <FiEdit id={this.props.issue.issueid} className="menuIcon" /></span>
+                    <div id={this.props.issue.projectid} className="menuItem">
+                       
+                        <div>
+                            <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal}className="menuIcon" /></span>
+                        </div>
+                        <div>
+                            <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} className="dropDownBtn">Edit</span>
+                        </div>
                     </div>
-                    <div className="menuItem">
+                    <div className="menuItem" id={this.props.issue.issueid}  onClick={this.props.toggleDisplayLink}  >
+                        
+                        <div >
+                            <span>
+                                <FiLink2 id={this.props.issue.issueid} className="menuIcon" />
+                                </span>
+                        </div>
+                        <div>
+                            <span className="textInDropDown">Sharable link</span>
+                        </div>
+                    </div>
+                    <div >
 
                         <div className="privateOpt">
-                            <span style={{
+                            {/* <span style={{
                                 display: "inline-block",
                                 margin: "8px",
                                 marginTop: "-10px",
-                            }}>{this.state.toolTipsimple}</span>
+                            }}>{this.state.toolTipsimple}</span> */}
                             {publictoggle}
                         </div>
 
                     </div>
+                   
                 </div>
             </div>
         ) : (null)
@@ -132,8 +162,8 @@ export default class displayTopBtns extends Component {
                     <div className="profileCardDiv">
                         <img src={profilePic}
                             style={{
-                                width: "41px",
-                                height: "41px",
+                                width: "35px",
+                                height: "35px",
                                 borderRadius: "50%",
                                 marginTop: "-8px",
                                 marginLeft: "5px"
@@ -141,17 +171,15 @@ export default class displayTopBtns extends Component {
 
                         <span
                             className="ProfileNameCard">
-                            <b>{profileName}</b></span>
-                            <div className="date">
+                            {profileName}</span>
+                            {/* <div className="date">
                 {this.props.issue.date.slice(0,15)}
-                </div>
+                </div> */}
                     </div>
 
                     <div id={this.props.issue.issueid} className="twitterHolder">
-                        <div id={this.props.issue.issueid} onClick={this.props.toggleDisplayLink} className="icons">
-                            <span id={this.props.issue.issueid} className="hint--top" aria-label="Get shareable Link">
-                                <FiLink2 id={this.props.issue.issueid} className="linkElementSym" id={this.props.issue.issueid} />
-                            </span>
+                        <div id={this.props.issue.issueid}  className="icons">
+                           
                         </div>
                         {deleteDiv}
                         {/* <button  id={this.props.issue.issueid} className="buttonDark twitterBtn"
@@ -163,6 +191,17 @@ export default class displayTopBtns extends Component {
         )
     }
 }
+displayTopBtns.PropType = {
+    openEditModal:PropType.func.isRequired
+   };
+const mapStateToProps = state => ({
+    isAauthenticated: state.auth.isAuthenticated,
+
+})
+
+export default connect(mapStateToProps, { 
+    openEditModal
+})(displayTopBtns)
 
 
 // import React, {Component} from 'react'

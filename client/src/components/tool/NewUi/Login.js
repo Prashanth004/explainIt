@@ -36,10 +36,8 @@ class Login extends Component {
     }
 
     githubResponse(response){
-        console.log("github response : ",response)
     }
     githubFailure(response){
-        console.log("github error : ",response)
     }
     googleResponse(response) {
         const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
@@ -84,7 +82,7 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
-            )): (<Redirect to={{ pathname: './' }} />) 
+            )): (<Redirect to={{ pathname: './emailvarify' }} />) 
         return (
             <div>
                 {content}

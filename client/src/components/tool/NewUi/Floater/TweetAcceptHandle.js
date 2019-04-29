@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import InputNumber from './InputNumber';
-import config from '../../../config/config';
-import TweetSuggest from './TweetSug';
+import InputNumber from '../InputNumber';
+import './floaterScreenshare.css'
+import config from '../../../../config/config';
 import { FaArrowLeft } from "react-icons/fa";
-import CopyToClipboard from '../CopytoClipboard';
-import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
-import ProfileNotOnExplain from "./ProfileNotOnExplain"
-import { getRecpientId, getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
+import CopyToClipboard from '../../CopytoClipboard';
+import { getProfileByTwitterHandle } from "../../../../actions/visitProfileAction";
+import ProfileNotOnExplain from "../ProfileNotOnExplain";
+import { getRecpientId, getTwitterHandles, resetValues } from '../../../../actions/twitterApiAction'
 
 
 class tweetSearch extends Component {
@@ -105,39 +105,24 @@ class tweetSearch extends Component {
             })
         }
         this.props.setNoOfMinutes(e.target.value)
-
-
     }
-
-
     tweetTheMessage() {
         this.setState({
             tweetTested: false,
             doneTweeting: true
         })
         this.props.makeCallAction()
-
     }
     render() {
         var validatinginfo = null;
-        var mainContainer = (<div className="startShare">
+        var mainContainer = (<div className="startShareFloater">
             <span style={{margin:"10px"}}>Initiate screen share with</span>
-           
            <input 
            onChange={this.updateTwitterHandleBox}
            className="handleInput"
-                placeholder="Username"
+                placeholder="@twitter-handle"
                 value={this.state.twitterHandle} />
-            {/* <TweetSuggest
-                onChange={this.updateTwitterHandleBox}
-                placeholder="Enter @twitter handle"
-                classOfInput="myInput"
-                tweetTextvalue={this.state.twitterHandle}
-                array={this.props.twiterHandleArray}
-
-            /> */}
-           
-            
+                      
             <span > for </span>
              <InputNumber
                         empty={this.state.emptyNumber}
@@ -177,7 +162,6 @@ class tweetSearch extends Component {
                         </div>
                         )
                     mainContainer = (null)
-
                 }
                 else {
                     this.tweetTheMessage()
@@ -186,14 +170,7 @@ class tweetSearch extends Component {
             else {
                 validatinginfo = (<p className="info">checking handle validity</p>)
             }
-
-
-            // else if(
-
-            // )
-
         }
-        // else if()
         return (
             <div>
                 {mainContainer}

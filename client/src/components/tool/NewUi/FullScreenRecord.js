@@ -69,7 +69,6 @@ class FullScreenRecorder extends Component {
              clearInterval(id);
            } else {
              width= width+(100/timeAloted); 
-             console.log("width: ", width)
              progressbar.style.width=width+'%';
                    }
          }   
@@ -143,13 +142,8 @@ class FullScreenRecorder extends Component {
     componentDidMount(){
     var self = this
         function postMessageHandler(event) {
-            console.log(" event :", event)
             if (event.data.sourceId !== undefined) {
-                console.log("We've got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message__sourceId : ", event.data.sourceId)
+              
                 self.props.saveSourceId(event.data.sourceId)
                 self.startRecoding()
             }
@@ -187,7 +181,6 @@ class FullScreenRecorder extends Component {
        window.location.reload();
     }
     receiveMessage() {
-        console.log("i reached insoide start Recording")
         var mainBtn = document.querySelector('.mainBtn');
         mainBtn.style.backgroundColor="rgb(133, 39, 39)";
         this.convey.innerText="Stop"
@@ -199,7 +192,6 @@ class FullScreenRecorder extends Component {
     }
 
     toggle(){
-        console.log("this.props.isFullScreenRecording : ",this.props.isFullScreenRecording)
         if(this.props.isFullScreenRecording){
             this.recordScreenStop()
         }
@@ -243,7 +235,6 @@ toggleCanvas(){
        
         var audioStream = this.props.audioStream;
         var  screenStream=this.props.screenStream;
-        console.log("recording : ",recorder1)
         if (recorder1) {
             recorder1.stopRecording(function () {
                 var blob = recorder1.getBlob();
@@ -346,12 +337,7 @@ toggleCanvas(){
         {recordingEle}
         </div>)
         var ua = window.detect.parse(navigator.userAgent);
-    //     if(ua.browser.family === "Chrome"){
-    //     if(this.props.sourceId!==null){
-    //         console.log("render source id calling function : ",this.props.sourceId)
-    //         this.startRecoding()
-    //     }
-    // }
+   
      
         var videoplayer = " ";
         var downLinkAudio = " ";
@@ -374,7 +360,6 @@ toggleCanvas(){
 
                 </div>
                 <div>
-                    {/* <p onClick={this.toggleCanvas}>Canvas</p> */}
                 </div>
                 
             </div>
@@ -399,7 +384,6 @@ toggleCanvas(){
         }
     
         if(this.props.isSaved && !this.state.savedfuncCalled && this.props.twitterUserId!==null &&!this.props.sendSuccess){
-            console.log("i a, here twoice?")
                 this.sendMessageLocal() 
         }
     

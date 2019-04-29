@@ -69,14 +69,15 @@ cursor:move;
     width:35px;
     height:35px;
 }
-.detailsFloater{
-    position:relative;
-    width:250px;
+.detailsFloaterMove{
+    /* position:relative; */
+    text-align: center;
+    width:80%;
     height:105px;
-    top:5px;
+    margin:auto;
     background-color:white;
     border-radius:3px;
-    right:20px;
+    /* right:20px; */
 }
 .issueContainer{
     width:45%;
@@ -142,9 +143,18 @@ cursor:move;
         .floatcontainer{
           
             width:200px;
+            margin:auto;
             height:55px;
         }
         .labelContainer{
             width:50%;
         }
+        .detailsFloaterMove{
+            position:relative;
+            width:250px;
+            height:105px;
+            top:5px;
+           
+        }
+
     }

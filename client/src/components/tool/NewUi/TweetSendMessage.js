@@ -17,6 +17,7 @@ class tweetSearch extends Component {
             twitterHandle: '',
             tweetTested: false,
             isVisitProfile: false,
+            doneWithAll:false
 
 
         }
@@ -57,16 +58,25 @@ class tweetSearch extends Component {
             tweetTested:false
         })
     }
-
-    tweetTheMessage() {
+    chaneTweetState(){
         this.setState({
             tweetTested: false,
-            doneTweeting: true
+            doneTweeting: true,
+            doneWithAll:true
         })
-        this.props.sendRecording()
+    }
+
+    tweetTheMessage() {
+       
+    this.props.sendRecording()
+    
+                
 
     }
     render() {
+        if(this.props.successSent && !this.state.doneWithAll){
+            this.chaneTweetState()
+        }
         var validatinginfo = null;
         var mainContainer = (<div>
             <p>Enter the twitter handle to send a recording</p>

@@ -85,9 +85,7 @@ class DisplayShare extends Component {
         var peerIdFrmPeer = this.state.peerIdFrmPeer;
         var self = this;
         function postMessageHandler(event) {
-            console.log(" event :", event)
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                console.log(" event.source :", event.source)
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -96,11 +94,6 @@ class DisplayShare extends Component {
                 self.props.saveExtensionDetails(event.source, event.origin)
             }
             if (event.data.sourceId !== undefined) {
-                console.log("We've got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message__sourceId : ", event.data.sourceId)
                 self.props.saveSourceId(event.data.sourceId)
                 self.startCall()
             }
@@ -129,7 +122,6 @@ class DisplayShare extends Component {
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
-            console.log(" socket.on(config.CLOSE_NETWORK_ISSUE, data => {")
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
                 self.closeConnection()
             }
@@ -145,9 +137,6 @@ class DisplayShare extends Component {
             }
         })
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
-            // alert("success")
-            console.log("got acknolegdement")
-            console.log("caller profileId : ", data.id)
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
@@ -159,7 +148,6 @@ class DisplayShare extends Component {
             }
         })
         socket.on(config.END_CALL, data => {
-            console.log(" data from client ack : ", data)
             if (data.peerId === peerIdFrmPeer && data.timerEnded) {
                 self.closeConnection()
                 self.setState({
@@ -215,7 +203,6 @@ class DisplayShare extends Component {
                 connected: true
             })
         });
-        console.log(" this.props.match.params.callerid : ", this.props.match.params.callerid)
         var self = this;
         var startConnection = new Promise((resolve, reject) => {
             var conn = peer.connect(peerIdFrmPeer);
@@ -230,14 +217,12 @@ class DisplayShare extends Component {
         });
         // startConnection.then((conn) => {
         //     setTimeout(() => {
-        //         console.log("sending the data please wait")
 
         //     }, 5000)
         // });
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         peer.on('call', function (call) {
 
-            console.log("connection : ", call)
             getUserMedia({ audio: true }, function (audiostream) {
                 call.answer(audiostream)
                 call.on('stream', function (stream) {
@@ -262,7 +247,6 @@ class DisplayShare extends Component {
                 });
 
                 call.on('close', function () {
-                    console.log(" call.on('close',  ")
                     if (!self.state.callEnded) {
                         self.closeConnection()
                     }
@@ -278,7 +262,6 @@ class DisplayShare extends Component {
             })
         })
         peer.on('close', () => {
-            console.log(" peer.on('close', () ")
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
@@ -288,7 +271,6 @@ class DisplayShare extends Component {
             })
         })
         peer.on('disconnected', function () {
-            console.log(" peer.on('disconnected'")
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
@@ -304,7 +286,6 @@ class DisplayShare extends Component {
         window.open(config.react_url + '/login')
     }
     endCall() {
-        console.log("endCall pressed")
         var call = this.state.call;
         this.setState({
             closedHere: true,
@@ -338,14 +319,11 @@ class DisplayShare extends Component {
         // var ua = window.detect.parse(navigator.userAgent);
         const result = browser();
         if (result.name === "chrome") {
-            console.log('chrome')
             if (this.state.isInstalled) {
-                console.log("installed")
                 self.receiveMessage()
             }
         }
         else if (result.name === "firefox") {
-            console.log("firefox")
             self.startCall()
         }
     }
@@ -354,10 +332,8 @@ class DisplayShare extends Component {
 
         var source = this.props.extSource
         var origin = this.props.extOrigin
-        console.log(" source :", source)
-        console.log("origin :", origin)
+     
         if (this.props.extSource !== null) {
-            console.log("postingMessage")
             source.postMessage('audio-plus-tab', origin);
         }
     }
@@ -367,13 +343,11 @@ class DisplayShare extends Component {
             myscreenSharing :true,
             initiatedScreenShare:true
                 })
-        console.log("in start call")
         const peer = this.state.peer
         const result = browser();
         
         var sourceId = this.props.extSourceId;
         if (result.name === "chrome") {
-            console.log("chrome here")
             var constraints = {
                 video: {
                     mandatory: {
@@ -409,7 +383,6 @@ class DisplayShare extends Component {
         if (this.state.secondVideoStream !== null) {
             this.state.secondVideoStream.stop()
         }
-        console.log("close connection")
         if (!this.state.closedHere === true) {
             this.setState({
                 showDisconectMessage: true
@@ -435,12 +408,10 @@ class DisplayShare extends Component {
                 <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
             </div>)
         if (this.state.callerProfileId !== null) {
-            console.log("1")
             var ProfileHover = (<ProfileCard
                 userId={this.state.callerProfileId} />)
         }
         else {
-            console.log("0")
             var ProfileHover = null
         }
         var profileUrl = config.react_url + '/profile/' + this.state.twitterhandle
@@ -485,7 +456,7 @@ class DisplayShare extends Component {
     </div>
 
                      <Draggable>
-                    <div className="callImageDivAnwser">
+                    <div className="callImageDivAnwserMain">
                         <div className="decreasePadding">
                             <div className="callPage-recieverImageDiv">
                                 <MdCallEnd onClick={this.endCall}

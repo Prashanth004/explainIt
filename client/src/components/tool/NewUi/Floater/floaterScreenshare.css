@@ -4,5 +4,8 @@
 
 .mainScreenShareContainer{
 font-size:13px;
-text-align:centre;
+/* text-align:right; */
+}
+.startShareFloater{
+    font-size:12px;
 }

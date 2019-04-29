@@ -42,7 +42,7 @@ router.all('/', function(req, res, next) {
    });
    
 // 
-
+router.put('/edittext',passport.authenticate('jwt', { session: false }),project.editReason )
 router.post('/',upload.single('audioData'), passport.authenticate('jwt', { session: false }), project.saveProject)
 router.delete('/:issueid', passport.authenticate('jwt', { session: false }),project.deleteItems )
 router.get('/',project.getAllProject)

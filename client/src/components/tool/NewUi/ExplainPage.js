@@ -65,7 +65,6 @@ class ExplainPage extends Component {
         window.close()
     }
     saveVideoData(data,isPublic,text) {
-        console.log("the data whcih is gonna get saved : ", data)
         var issueId = null
         var textExplain = text
         var imgData = "null"

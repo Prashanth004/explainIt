@@ -51,7 +51,8 @@ const conf = {
     ENDING_RING_ACK:"endingRingAck",
     SAVED_NEW_PROJECT:"savedNewProject",
     SHARE_MY_SCREEN:"shareMyScreen",
-    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen"
+    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen",
+    OTP_SECRET:"explainotpbookmane"
 
 
 

@@ -88,7 +88,6 @@ export class ScreenRecorder extends Component {
 
     renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            console.log("123445")
             this.recordScreenStop()
             return (<Dummy></Dummy>)
 
@@ -130,7 +129,6 @@ export class ScreenRecorder extends Component {
         var recorder1 = this.state.recorder;
         var audioStream = this.state.audioStream;
         var canvasStream = this.state.canvasStream;
-        console.log("recording : ",recorder1)
         if (recorder1) {
             recorder1.stopRecording(function () {
                 var blob = recorder1.getBlob();
@@ -197,7 +195,6 @@ export class ScreenRecorder extends Component {
     
        
         // var timer = null;
-     console.log("this.props.isSaved : ",this.props.isSaved)
         if(this.props.isRecordingCompleted === true && !this.state.saveBtnClicked  && this.props.isSaved==false){
             var postShareElements= (<div className = "postRecord">
             {videoplayer}

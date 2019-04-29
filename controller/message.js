@@ -1,4 +1,5 @@
 var database = require('../app')
+var userController = require('./user.js')
 console.log("database############ :L ",database)
 
     var rn = require('random-number');
@@ -21,6 +22,7 @@ database.db.oneOrNone('select * from projects where email =$1 and issueid =$2',[
             })
         }
         else{
+            console.log(data)
             res.status(200).send({
                 success:0,
                 msg:"no data found"
@@ -28,6 +30,7 @@ database.db.oneOrNone('select * from projects where email =$1 and issueid =$2',[
         }
     }
     else{
+        
         res.status(200).send({
             success:0,
             mag: "no data found"
@@ -72,7 +75,7 @@ exports.changeUnread = (req,res)=>{
     // update projects SET public = $1 
     // database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time,unread)' +
     // 'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time},${unread})',
-    database.db.none('update message SET unread = $1, WHERE touser = $2 and id= $3', [0, req.user.id, req.params.messageid])
+    database.db.none('update message SET unread = $1 WHERE touser = $2 and id= $3', [0, req.user.id, req.params.messageid])
     .then(data=>{
         res.io.emit(config.UPDATE_BADGE, {
             "userId":req.user.id
@@ -84,6 +87,7 @@ exports.changeUnread = (req,res)=>{
         
     })
     .catch(error=>{
+        console.log("error: ",error)
         res.status(500).send({
             success:0,
             error:error
@@ -98,15 +102,14 @@ exports.saveMessage = function (req, res) {
     var rand = rn(options)
 
     let dateNow = new Date().toString()
-    database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time,unread)' +
-    'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time},${unread})',
+    database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,unread)' +
+    'values(${id},${link},${subject}, ${fromuser}, ${touser},${unread})',
     {
         id:rand,
         link: req.body.link,
         subject:req.body.subject,
         fromuser: req.body.fromUser,
         touser:req.body.touser,
-        time : dateNow,
         unread : 1
     }).then(function(data){
         res.io.emit(config.NEW_MESSAGE, {
@@ -115,6 +118,29 @@ exports.saveMessage = function (req, res) {
         res.status(201).send({
             success:1,
             data:data
+        })
+        database.db.oneOrNone('select * from users where id = $1', req.body.touser)
+        .then(toData=>{
+            if(toData){
+                database.db.oneOrNone('select * from users where id = $1', req.body.fromUser)
+                .then(fromData=>{
+                   
+                    if(fromData){
+                        console.log(fromData.username)
+                        console.log(toData.email)
+                        var subject = "Message notification";
+                        var htmlContent = "<p>You have got a new recorded message from "+fromData.username+".</p><br/><p><a href='"+config.frontEndDomain+"'>click here</a> to view</p>"
+                        userController.sendEmail(toData.email,subject,htmlContent)
+                    }
+                   
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            }
+        })
+        .catch(err=>{
+            console.log(err)
         })
         
 
@@ -129,7 +155,7 @@ exports.saveMessage = function (req, res) {
 }
 
 exports.getMessage = function(req, res){
-    database.db.manyOrNone('select * from message where touser = $1', req.params.userid)
+    database.db.manyOrNone('select * from message where touser = $1 ORDER BY time', req.params.userid)
     .then(data=>{
         if(data){
             res.status(200).send({

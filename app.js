@@ -199,6 +199,7 @@ app.use(function(err, req, res, next) {
 });
 // exports.io=io;
 exports.db = db;
+exports.db = db;
 
 
 //server console functions

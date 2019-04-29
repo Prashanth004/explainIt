@@ -33,14 +33,11 @@ class Call extends Component {
         const shouldDisplay=(!this.props.myscreenSharing)?("block"):("none")
         
 
-        console.log("calling file, other profileid : ", this.props.otherPersonProfileId)
         if (this.props.otherPersonProfileId !== null) {
-            console.log("1")
             var ProfileHover = (<ProfileCard
                 userId={this.props.otherPersonProfileId} />)
         }
         else {
-            console.log("0")
             var ProfileHover = null
         }
         var showCanv = (this.state.showCanvas) ? (

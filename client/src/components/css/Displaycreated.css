@@ -1,11 +1,12 @@
 .CreatedContainer{
     width:100%;
     margin:auto;
-    display:grid;
+    /* display:grid; */
     /* grid-t-columns: 33.33% 33.33% 33.33%; */
-    grid-template-columns: 45% 45%;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
+    /* grid-template-columns: 45% 45%;  */
+    /* /* grid-column-gap: 10px; */
+    /* grid-column-gap: 10px; */
+
 
 }
 .cardProfileName{
@@ -48,9 +49,9 @@
     /* border-top-style:solid;
     border-top-width:0.5px;
     border-top-color:rgb(139, 133, 133); */
-    margin-top:-5px;
+    margin-top:-7px;
     width:"100%";
-    height:160px
+    height:155px
 }
 .cardLiked{
     height:40px;
@@ -71,7 +72,7 @@
   text-overflow: ellipsis;  
 }
 .dropDownForOptionCard{
-    width:125px;
+    width:155px;
     text-align: left;
     position:relative;
     left:190px;

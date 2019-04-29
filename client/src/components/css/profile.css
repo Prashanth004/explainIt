@@ -1,5 +1,5 @@
 .profileConatiner{
-    width:30%;
+    width:75%;
     margin:auto;
     background-color: white;
     border-style:solid;
@@ -24,4 +24,19 @@ padding:10px;
 }
 .edit{
     float:right;
+}
+
+
+@media (min-width: 700px) {
+    .profileConatiner{
+        width:48%;
+        }
+    
+}
+
+@media (min-width: 1000px) {
+    .profileConatiner{
+    width:30%;
+    }
+
 }
