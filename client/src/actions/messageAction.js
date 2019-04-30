@@ -11,7 +11,8 @@ import {SEND_MESSAGE,
      SUCCESS_IN_CHNAGE_READ_STATE,
      FAILURE_IN_CHNAGE_READ_STATE,
      SHOW_TEXT_BOX_AFTER_RECORDONG,
-     EXPLAIN_ISSUE} from './types'
+     EXPLAIN_ISSUE,
+     JUST_RECORD} from './types'
 
 
      export const fromShareToRecord =()=>(dispatch)=>{
@@ -22,6 +23,11 @@ import {SEND_MESSAGE,
      export const explainIssue =()=>(dispatch)=>{
          dispatch({
              type:EXPLAIN_ISSUE
+         })
+     }
+     export const JustRecord = ()=>(dispatch)=>{
+         dispatch({
+             type:JUST_RECORD
          })
      }
 export const getTotalUnread=()=>(dispatch)=>{

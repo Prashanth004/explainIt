@@ -19,11 +19,11 @@
   position: absolute;
   
   top: 110px;
-   left: 10px; 
-  right: 10px;
+   left: 20px; 
+  right: 20px;
   bottom: auto; 
   background-color:#ffffff;
-  border-radius:5px;
+  border-radius:9px;
   padding:15px;
   text-align: center;
   /* transform  : 'translate(-50%, -50%)' */
@@ -58,7 +58,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.048);
+    background-color: rgba(0, 0, 0, 0.521);
   }
   .react-toggle {
     touch-action: pan-x;
@@ -206,4 +206,13 @@
   .custom-classname.react-toggle--checked .react-toggle-track {
     height:15px ;
     width:35px;
+  }
+
+
+  @media(min-width:700px){
+    .ModalEdit{
+      top:170px;
+      left:470px;
+      right:470px;
+    }
   }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import './Floater/floater.css';
 import { FiLink2} from "react-icons/fi";
-import {getAllMessages} from '../../../actions/messageAction'
+import {getAllMessages,JustRecord} from '../../../actions/messageAction'
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
 import config from '../../../config/config'
@@ -14,8 +14,9 @@ import { FiMail } from "react-icons/fi";
 class ProfileCard extends Component {
     constructor(props){
         super(props)
-        this.openProfile = this.openProfile.bind(this)
-    }
+        this.openProfile = this.openProfile.bind(this);
+        this.startShareScreen = this.startShareScreen.bind(this);
+        }
     componentWillMount() {
         if (this.props.userId === this.props.profileId)
             this.props.getProfileDetails(this.props.userId, config.SELF)
@@ -23,9 +24,10 @@ class ProfileCard extends Component {
             this.props.getProfileDetails(this.props.userId, config.VISIT_PROF)
             this.props.getAllMessages(this.props.userId)
         }
-    componentDidMount(){
-        
-        
+    startShareScreen(){
+        this.props.recordFullScreen();
+        this.props.JustRecord();
+
     }
     openProfile(){
         window.open("https://twitter.com/"+this.props.twitterHandle, '_blank')
@@ -47,15 +49,12 @@ class ProfileCard extends Component {
                     marginRight:"10px"}}onClick={this.props.toggleDisplayLink} />
                 </span>
             )
-
         }
         else {
             linkSymbol = null
-
         }
         return (this.props.isHome)?(
             <div>
-                
                 <div className="labelContainer">
                 <div className="topSymbol">
                 <span>
@@ -65,15 +64,11 @@ class ProfileCard extends Component {
                 <div className="gridLay">
                     <div className="pImageContainer">
                     <span className="hint--top" aria-label={this.props.userName}>
-                    
                         <img alt="profile pic"src={this.props.profilePic} 
-                            // onClick={this.openProfile}
                             onDoubleClick={this.props.openDtailsTab}
                             className="labelProfilePic"></img>
-                        
                         </span>
                     </div>
-
                     <div className="screenShareBtnLabel">
                         <span className="hint--top" aria-label="Share screen!">
                             <img alt="screen share" onClick={this.props.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
@@ -81,9 +76,8 @@ class ProfileCard extends Component {
                     </div>
                     <div className="RecordBtnLabel">
                         <span className="hint--top" aria-label="Record screen!">
-                            <img alt="record screen" onClick={this.props.recordFullScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                            <img alt="record screen" onClick={this.startShareScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
                         </span>
-
                     </div>
                     <div className="drago">
                     <div >
@@ -191,5 +185,5 @@ const mapStateToProps = state => ({
     twitterHandle: state.profile.twitterHandle,
 })
 
-export default connect(mapStateToProps, {  getAllMessages,getProfileDetails })(ProfileCard)
+export default connect(mapStateToProps, { JustRecord, getAllMessages,getProfileDetails })(ProfileCard)
 

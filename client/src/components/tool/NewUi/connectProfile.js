@@ -40,7 +40,8 @@ class NewHome extends Component {
             showParticipatedIssue: false,
             showProjects: false,
             isHome : false,
-            isVisitProfile:true
+            isVisitProfile:true,
+            typeOfView:"list"
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)

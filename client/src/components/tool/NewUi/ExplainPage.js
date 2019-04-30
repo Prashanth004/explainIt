@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { Button } from 'reactstrap'; 
+import { cancelAllMessageAction } from '../../../actions/messageAction'
+import { restAllToolValue } from "../../../actions/toolActions";
+import { resetValues } from '../../../actions/twitterApiAction'
 
 import TwitterLogin from 'react-twitter-auth';
 import Screenrecorder from './explainItRecorder';
 import { connect } from 'react-redux';
 import config from '../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
-import { cancelAllMessageAction } from '../../../actions/messageAction'
-import { restAllToolValue } from "../../../actions/toolActions";
+
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
@@ -31,6 +33,9 @@ class ExplainPage extends Component {
         this.setState({
             twitterHandle:twitterHandle
         })
+        this.props.cancelAllMessageAction();
+        this.props.restAllToolValue();
+        this.props.resetValues();
     }
   
     closeFunction(){
@@ -132,6 +137,7 @@ export default connect(mapStateToProps, {
     saveExtensionDetails, 
     cancelAllMessageAction,
     restAllToolValue,
+    resetValues,
     twitterAuthFailure,
     signInWithTwitter,
     creatAnsProject })(ExplainPage)

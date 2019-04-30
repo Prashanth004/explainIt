@@ -7,6 +7,7 @@ import {SEND_MESSAGE,
     FROM_SHARE_TO_RECORD,
     GET_TOTAL_UNREAD,
     EXPLAIN_ISSUE,
+    JUST_RECORD,
     CANCEL_MESSAGE_STATE} from '../actions/types'
 
 const initialState = {
@@ -27,6 +28,13 @@ export default function(state=initialState, action){
             ...state,
             sendSuccess:true
         }
+        case JUST_RECORD:
+        return {
+            ...state,
+            explainIssue:false,
+            fromShareToRecord:false,
+
+        }
         case HIDE_TEXT_BOX_AFTER_RECORDONG:
         return{
             ...state,
@@ -35,12 +43,14 @@ export default function(state=initialState, action){
         case EXPLAIN_ISSUE:
         return{
             ...state,
+            fromShareToRecord:false,
             explainIssue:true
         }
         case FROM_SHARE_TO_RECORD:
         return{
             ...state,
-            fromShareToRecord:true
+            fromShareToRecord:true,
+            explainIssue:false
         }
         case GET_TOTAL_UNREAD:
         return{
@@ -60,7 +70,8 @@ export default function(state=initialState, action){
             allMessage:null,
             fetchFailed:false,
             showTextAftRec : true ,
-            fromShareToRecord:false
+            fromShareToRecord:false,
+            explainIssue:false
         }
         case SEND_FAILED:
         return{

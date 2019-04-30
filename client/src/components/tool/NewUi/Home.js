@@ -119,7 +119,6 @@ class NewHome extends Component {
             showProjects: false,
             showParticipatedIssue: false,
             showCreatedIssue: false,
-
         })
     }
 
@@ -171,7 +170,6 @@ class NewHome extends Component {
                
                 this.props.getTotalUnread();
                 this.props.getAllMessages(this.props.userId)
-
             }
         })
         socket.on(config.LINK_TO_CALL, data => {
@@ -196,8 +194,6 @@ class NewHome extends Component {
                 )
             }
         });
-
-
     }
     componentWillMount() {
         this.props.stillAuthenicated()

@@ -15,6 +15,7 @@ import browser from 'browser-detect';
 import { sendMessage } from '../../../actions/messageAction';
 import {
     fullStartedRecording,
+    
     fullStopedRecording, discardAfterRecord
 } from '../../../actions/toolActions'
 import { connect } from 'react-redux';
@@ -41,7 +42,6 @@ class FullScreenRecorder extends Component {
 
         }
         this.downloadExtension = this.downloadExtension.bind(this);
-
         this.recordScreenStop = this.recordScreenStop.bind(this);
         this.savefilePrivate = this.savefilePrivate.bind(this);
         this.savefilePublic = this.savefilePublic.bind(this);
@@ -340,7 +340,13 @@ class FullScreenRecorder extends Component {
             {recordingEle}
         </div>)
         if (this.state.downloadUrl && !this.state.sendBtnClicked && !this.state.saveBtnClicked) {
-            videoplayer = (<video className="videoPlayer2" src={this.state.downloadUrl} controls={true}></video>)
+            videoplayer = (
+                <div className="showVideoElement">
+            <video className="videoPlayer2" src={this.state.downloadUrl} controls={true}></video>
+            </div>)
+        }
+        else{
+            videoplayer = (null)
 
         }
         if (this.props.isFullRecordCompleted === false) {
@@ -381,9 +387,8 @@ class FullScreenRecorder extends Component {
 
         if (this.props.isFullRecordCompleted && !this.props.isSaved) {
             postShareElements = (<div className="postRecord">
-                <div className="showVideoElement">
+               
                     {videoplayer}
-                </div>
                 <SaveElement
                     hideVideotag={this.hideVideotag}
                     shareOrRec={config.RECORDING}
