@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './css/newlanding.css'
 import './css/issueDetails.css'
 import { connect } from 'react-redux';
-import { Player } from 'video-react';
 import PropType from 'prop-types';
 import {getImagesByemail} from '../actions/projectActions'
 
@@ -117,7 +116,7 @@ class issueDetails extends Component {
    
         const bottomImages = this.props.answerProject.map((proj,key )=>(
             <div key={key}className="imagePeopleModal ">
-                <img id={proj.projectid} onClick={this.changeDisplay} src={proj.profilepic} className="peopleImage"></img>
+                <img alt=" " id={proj.projectid} onClick={this.changeDisplay} src={proj.profilepic} className="peopleImage"></img>
             </div>
         ))
         if(this.state.element === this.state.video){
@@ -137,7 +136,7 @@ class issueDetails extends Component {
         }
         else{
             displayElement  = ( <div ref={a=>this.imgDiv = a} className="imageModal">
-            <img  ref={img => this.imageExplain = img}src={this.props.questionProject.imgurl} width="100%" height="100%"></img>
+            <img alt=" " ref={img => this.imageExplain = img}src={this.props.questionProject.imgurl} width="100%" height="100%"></img>
         </div>)
         }
         return (

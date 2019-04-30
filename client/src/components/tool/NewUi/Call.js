@@ -27,6 +27,7 @@ class Call extends Component {
 
     }
     render() {
+        var ProfileHover = null
         const messageOfScreenShare =(!this.props.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
         (<h4><b>Your screen is being shared</b></h4>)
        
@@ -34,11 +35,11 @@ class Call extends Component {
         
 
         if (this.props.otherPersonProfileId !== null) {
-            var ProfileHover = (<ProfileCard
+            ProfileHover = (<ProfileCard
                 userId={this.props.otherPersonProfileId} />)
         }
         else {
-            var ProfileHover = null
+            ProfileHover = null
         }
         var showCanv = (this.state.showCanvas) ? (
             <div className="canvToolDivCall">
@@ -94,7 +95,7 @@ class Call extends Component {
                             </div></span>
 
                         {/* <span className="hint--top" aria-label={this.props.otherPersonName}> */}
-                        <img className="callPage-recieverImage" src={this.props.otherPersonPic}></img>
+                        <img alt="reciever profile pic"className="callPage-recieverImage" src={this.props.otherPersonPic}></img>
                         {/* </span> */}
                     </div>
                     <div className="callPage-recieverImageDiv endCall">

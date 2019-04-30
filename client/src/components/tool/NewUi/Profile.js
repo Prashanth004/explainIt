@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import ProfileForm from './ProfileForm';
 import {openEditProfile,closeEditProfile} from '../../../actions/profileAction'
-import config from '../../../config/config'
 import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
 class Profile extends Component {
     constructor(props) {
@@ -62,21 +61,23 @@ class Profile extends Component {
                     <div className="socialIcon"
                     style={{visibility:((this.props.githubLink!==null)?((this.props.githubLink.length!==0)?"visible":"hidden"):"hidden")}}>
                     <a href={this.props.githubLink}
-                    
+                    rel="noopener noreferrer"
                     target="_blank">
                         <FiGithub />
                         </a>
                     </div>
                     <div className="socialIcon"
                     style={{visibility:((this.props.linkinLink!==null)?((this.props.linkinLink.length!==0)?"visible":"hidden"):"hidden")}}>
-                    <a href={this.props.linkinLink} target="_blank">
+                    <a href={this.props.linkinLink} rel="noopener noreferrer" target="_blank">
                     
                         <FiLinkedin />
                         </a>
                     </div>
 
                     <div className="socialIcon">
-                    <a href={'https://twitter.com/'+this.props.twitterHandle}target="_blank">
+                    <a href={'https://twitter.com/'+this.props.twitterHandle}
+                    rel="noopener noreferrer"
+                    target="_blank">
                         <FiTwitter />
                     </a>
                     </div>

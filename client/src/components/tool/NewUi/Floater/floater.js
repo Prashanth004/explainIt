@@ -127,10 +127,10 @@ class Floater extends Component {
       
 
         var shareScreenImg = (<span className="hint--bottom" aria-label="Share screen!">
-            <img onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../../images/screensharing.png')} />
+            <img alt="screenShare"onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../../images/screensharing.png')} />
         </span>)
         var recorScreenImg = (<span className="hint--bottom" aria-label="Record screen!">
-            <img onClick={this.recordFullScreen} height="100%" width="100%" src={require('../../../images/download.jpg')} />
+            <img alt="recordScreen"onClick={this.recordFullScreen} height="100%" width="100%" src={require('../../../images/download.jpg')} />
         </span>)
         var svaedStff = (<span>
             <FiMail onClick={this.openIssueList} className="dragoMail" />
@@ -147,7 +147,7 @@ class Floater extends Component {
                             {ProfileHover}
                         </div>
                     </span>
-                    <img  onDoubleClick={this._handleDoubleClickItem} src={this.props.recieverProfileImage} className="profilePic"></img>
+                    <img alt="profile" onDoubleClick={this._handleDoubleClickItem} src={this.props.recieverProfileImage} className="profilePic"></img>
                 </div>
             )
         }
@@ -185,7 +185,7 @@ class Floater extends Component {
                     <div>
                         <div className="floatcontainer">
                             <div>
-                                <img src={this.props.profilePic} className="profilePic"></img>
+                                <img alt="profilePic" src={this.props.profilePic} className="profilePic"></img>
                             </div>
 
                             <div className="screenShareBtn">

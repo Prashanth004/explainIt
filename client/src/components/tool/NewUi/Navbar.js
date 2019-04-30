@@ -120,10 +120,11 @@ handleConfirm() {
     var createdStyle = null;
     var partiStyle = null;
     var inboxStyle = null;
+    var profileImage = null;
     var explainLogo = (
       <div className="logoContainer" onClick={this.openHome}>
         <span>
-          <img src={require('../../images/logo.png')}
+          <img alt="open home"src={require('../../images/logo.png')}
             width="100%"
             height="100%"></img>
         </span>
@@ -152,22 +153,19 @@ handleConfirm() {
     if ((this.props.Created || this.props.Participated)
       && this.state.isViewPage
       && !this.props.isAuthenticated) {
-      var profileImage = (null)
-      {/* <div>
-  <button className="buttonDark" 
-  style={{marinTop:"-50px"}}>Login</button>
-</div>) */}
+      profileImage = (null)
+    
     }
     else {
-      var profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (<div className="dropdown">
+      profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (<div className="dropdown">
         <div className="profileImagesDiv">
-          <img className="profileImages" src={this.props.profilePic}></img>
+          <img alt="profilr pic" className="profileImages" src={this.props.profilePic}></img>
         </div>
         <div className="dropdown-content">
           <button onClick={this.logout} className=" buttonLight navButton1"> Logout</button>
           <div className="imageLogout">
             <span>
-              <img onClick={this.logout} height="100%" width="100%" src={require('../../images/logout.png')} />
+              <img alt="logout"onClick={this.logout} height="100%" width="100%" src={require('../../images/logout.png')} />
             </span>
           </div>
         </div>
@@ -180,7 +178,7 @@ handleConfirm() {
 
       centreNav = (<div className="navgation">
         <div onClick={this.openCreated} className="normalNav">
-          <button onClick={this.openCreated} style={createdStyle} className="noButtons"><a>Created</a></button>
+          <button  style={createdStyle} className="noButtons"><span>Created</span></button>
         </div>
         <div className="logoCentre Create">
           <div className="logoContainerCreate" >
@@ -189,7 +187,7 @@ handleConfirm() {
             </span>
           </div>                  </div>
         <div className="normalNav">
-          <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><a>Participated</a></button>
+          <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
         </div>
       </div>)
     }
@@ -199,7 +197,7 @@ handleConfirm() {
       if ((this.props.Created || this.props.Participated)) {
         centreNav = (<div className="navgation">
           <div onClick={this.openCreated} className="normalNav">
-            <button onClick={this.openCreated} style={createdStyle} className="noButtons"><a>Created</a></button>
+            <button onClick={this.openCreated} style={createdStyle} className="noButtons"><span>Created</span></button>
           </div>
           <div className="logoCentre">
             <div className="logoContainerCreate" >
@@ -208,7 +206,7 @@ handleConfirm() {
               </span>
             </div>                  </div>
           <div className="normalNav">
-            <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><a>Participated</a></button>
+            <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
           </div>
         </div>)
       }
@@ -221,7 +219,7 @@ handleConfirm() {
             </div>
             <div className="  " onClick={this.openVisitHome}>
               <span>
-                <img src={require('../../images/logo.png')}
+                <img alt="visit home" src={require('../../images/logo.png')}
                   width="100%"
                   height="100%"></img>
               </span>
@@ -296,7 +294,7 @@ const mapStateToProps = state => ({
 
 
 })
-export default connect(mapStateToProps, { openHome, openInbox, signInWithTwitter, openCreated, openParticipated, twitterAuthFailure, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+export default connect(mapStateToProps, { openHome, openInbox,  openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
 
 
 

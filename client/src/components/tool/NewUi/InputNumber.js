@@ -18,7 +18,7 @@ export default (props) => {
        onChange={props.changeInputValue} 
        value={props.textValue}
        type="text" pattern="[0-9]"></input>
-        <sapn> minutes</sapn>
+        <span> minutes</span>
         <br/>
       {spanElement}
       </div>

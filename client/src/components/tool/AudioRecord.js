@@ -107,7 +107,6 @@ class Recoder extends Component {
         this.recordScreenStop()
         var rec1 = this.state.rec;
         var gumStream1 = this.state.gumStream;
-        console.log("pauseButton clicked rec.recording=", rec1.recording);
         rec1.stop();
         gumStream1.getAudioTracks()[0].stop();
         rec1.exportWAV(this.createDownloadLink);
@@ -135,11 +134,9 @@ class Recoder extends Component {
             var canvasStream = canvas.captureStream();
             var finalStream = new MediaStream();
             window.getTracks(audioStream, 'audio').forEach(function (track) {
-                console.log("track : ",track)
                 finalStream.addTrack(track);
             });
             window.getTracks(canvasStream, 'video').forEach(function (track) {
-                console.log("canvastrack : ",track)
                 finalStream.addTrack(track);
             });
             var recorder1 = RecordRTC(finalStream, {
@@ -148,9 +145,7 @@ class Recoder extends Component {
             // this.addReactFull()
             recorder1.startRecording();
            
-            console.log(recorder1)
             var stop = false;
-            console.log("record started")
             states.setState({
                 recorder:recorder1,
                 audioStream:audioStream,

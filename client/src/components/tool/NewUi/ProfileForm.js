@@ -8,14 +8,14 @@ class ProfileForm extends Component {
         super(props)
         this.state = {
             // this.state.linkedInValue
-            bioValue: null,
-            linkedInValue: null,
-            gitHubValue: null,
-            worksValue:null,
-            goodAtValue:null,
+            bioValue: "",
+            linkedInValue: "",
+            gitHubValue: "",
+            worksValue:"",
+            goodAtValue:"",
             worksValueError:null,
             goodAtValueError:null,
-            angelListValue: null,
+            angelListValue: "",
             costValue: null,
             costError: false,
             bioValueError: false,
@@ -173,9 +173,9 @@ class ProfileForm extends Component {
         const linkedinerrorDiv = (this.state.linkInerror) ? (
             <span className="errorSpan">invalid linkedin URL</span>
         ) : (null)
-        const costErrorDiv = (this.state.costError) ? (
-            <span className="errorSpan">invalig cost</span>
-        ) : (null)
+        // const costErrorDiv = (this.state.costError) ? (
+        //     <span className="errorSpan">invalig cost</span>
+        // ) : (null)
         const bioErrorDiv = (this.state.bioValueError) ? (
             <span className="errorSpan">bio cant be more than 200 characters</span>
         ) : (null)
@@ -210,8 +210,9 @@ class ProfileForm extends Component {
                    
                     <label><b>LinkedIn :</b></label>
                     <input
+                    type="text" 
                         value={this.state.linkedInValue}
-                        type="text" onChange={this.changeLinkedIn} className="inputboxes" />
+                        onChange={this.changeLinkedIn} className="inputboxes" />
                     {linkedinerrorDiv}
                     <label><b>GitHub : </b></label>
                     <input

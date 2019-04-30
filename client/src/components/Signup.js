@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import {Input,Label,FormGroup,Form,Button} from 'reactstrap'
-import { Container } from 'konva';
 import './css/form.css'
 import axios from 'axios';
 import config from '../config/config';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import './ErrorHnadle'
 
 
@@ -77,7 +76,6 @@ this.setState({
        }
        else{
            alert("Not able to SignUp ")
-           console.log(response.data)
        }
     })
     .catch(err=>{

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import Toggle from 'react-toggle';
-import { FiLink2, FiEdit, FiDelete } from "react-icons/fi";
+import { FiLink2, FiEdit } from "react-icons/fi";
 import '../../css/issueDetails.css';
 import '../../css/toggle.css'
-import { FiTrash, FiMoreVertical } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
 import { GoChevronDown } from "react-icons/go";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -78,25 +78,25 @@ class displayTopBtns extends Component {
     }
 
     render() {
-
+        var profilePic = null;
         // const twitterBird = (Number(this.props.issue.public)) ? (
         //     >) : (null)
         if (this.props.questionProject !== undefined) {
-            var profilePic = this.props.questionProject.profilepic
+            profilePic = this.props.questionProject.profilepic
             var profileName = this.props.questionProject.username
 
         }
         else {
-            var profilePic = null
+            profilePic = null
         }
-
+        const defaultToggle = (Number(this.props.issue.public)===1)?true:false
         const publictoggle = (this.props.itsHome) ? (
 
             <label id={this.props.issue.projectid}>
                 <span className="hint--top" aria-label={this.state.toolTipValue}>
                     <Toggle
                         id={this.props.issue.projectid}
-                        defaultChecked={Number(this.props.issue.public)}
+                        defaultChecked={defaultToggle}
                         className='custom-classname'
                         icons={false}
                         onChange={this.changeToggle} />
@@ -116,7 +116,7 @@ class displayTopBtns extends Component {
                             <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
                         </div>
                         <div>
-                            <span className="textInDropDown" id={this.props.issue.issueid} className="dropDownBtn">Delete</span>
+                            <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
                         </div>
                     </div>
                     <div id={this.props.issue.projectid} className="menuItem">
@@ -125,7 +125,7 @@ class displayTopBtns extends Component {
                             <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal}className="menuIcon" /></span>
                         </div>
                         <div>
-                            <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} className="dropDownBtn">Edit</span>
+                            <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} >Edit</span>
                         </div>
                     </div>
                     <div className="menuItem" id={this.props.issue.issueid}  onClick={this.props.toggleDisplayLink}  >
@@ -160,7 +160,7 @@ class displayTopBtns extends Component {
             <div>
                 <div id={this.props.issue.issueid} className="topButtons">
                     <div className="profileCardDiv">
-                        <img src={profilePic}
+                        <img alt="button"src={profilePic}
                             style={{
                                 width: "35px",
                                 height: "35px",
@@ -202,17 +202,4 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, { 
     openEditModal
 })(displayTopBtns)
-
-
-// import React, {Component} from 'react'
-
-// export default class componentName extends Component {
-//   render() {
-//     return (
-//       <div>
-
-//       </div>
-//     )
-//   }
-// }
 

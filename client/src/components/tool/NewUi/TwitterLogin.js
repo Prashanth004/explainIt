@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
-import { Button } from 'reactstrap'; 
-
 import TwitterLogin from 'react-twitter-auth';
-import Screenrecorder from './explainItRecorder';
 import { connect } from 'react-redux';
 import config from '../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import { cancelAllMessageAction } from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
-import { confirmAlert } from 'react-confirm-alert'; // Import
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
 import { creatAnsProject } from '../../../actions/projectActions';
-import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
+import { saveExtensionDetails } from "../../../actions/extensionAction";
 
 
 import '../../css/ExplainpPage.css'
@@ -61,7 +57,7 @@ class ExplainPage extends Component {
         if(this.props.isAuthenticated){
             this.closeFunction()
         }
-        var widthDiv = null;
+        // var widthDiv = null;
       
         return(
                 <div>

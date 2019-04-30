@@ -4,7 +4,6 @@ import PropType from 'prop-types';
 import TweetSuggest from './TweetSug';
 import { FaArrowLeft } from "react-icons/fa";
 import {showTextBoxAfterRecord} from '../../../actions/messageAction'
-import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import ProfileNotOnExplain from "./ProfileNotOnExplain"
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
@@ -109,7 +108,7 @@ class tweetSearch extends Component {
                                 isVisitProfile={this.state.isVisitProfile}
                                 twitterhandle={this.state.twitterHandle} />
 
-                                <a>save and sent the link manually</a>
+                                <span>save and sent the link manually</span>
                         
                         {/* <span style={{fontSize:"14px"}}>
                             You can manually share the link now to get connected

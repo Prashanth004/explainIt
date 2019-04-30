@@ -23,7 +23,6 @@ export const resendOtp =(email)=>(dispatch)=>{
             "Authorization": token,
         }
     }).then(response=>{
-        console.log("response : ", response)
         if(response.status===201|| response.status === 304){
             if(response.data.success ===1){
                 dispatch({
@@ -65,7 +64,6 @@ export const sendOtp=(email,otp)=>(dispatch)=>{
             "Authorization": token,
         }
     }).then(response=>{
-        console.log("response : ", response)
         if(response.status===201|| response.status === 304){
             if(response.data.success ===1){
                 dispatch({
@@ -123,7 +121,6 @@ export const activateProfile=(email)=>(dispatch)=>{
                 
             }
         }
-        console.log('resposne: ', response)
     })
 
 }

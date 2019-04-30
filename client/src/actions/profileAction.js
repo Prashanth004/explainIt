@@ -22,7 +22,6 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     var githubLink = null;
     var goodat = null;
     var works = null;
-    console.log("userId : ", userId)
 
     axios({
         method: 'get',
@@ -31,7 +30,8 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
             "Authorization": token,
         }
     }).then((response1) => {
-        if (response1.status == 200 || response1.status == 304) {
+        var myProjects =null;
+        if (response1.status === 200 || response1.status === 304) {
             email = response1.data.data.email;
             userName = response1.data.data.username;
             profilepic = response1.data.data.profilepic;
@@ -52,14 +52,13 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                 }
             }).then((response2) => {
                 var participated = []
-                console.log("response2.data.data , ", response2.data.data)
                 if (profilePrivacy === config.SELF)
-                    var myProjects = (response2.data.data).filter(project => (
+                    myProjects = (response2.data.data).filter(project => (
                         project.email === response1.data.data.email
 
                     ))
                 else if (profilePrivacy === config.VISIT_PROF) {
-                    var myProjects = (response2.data.data).filter(project => (
+                    myProjects = (response2.data.data).filter(project => (
                         project.email === response1.data.data.email &&
                         project.public === "1"
 
@@ -75,16 +74,14 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
 
                 // var issuIDMyProject = myProjects.map(project=>project.issueid)
                 const distinctIssueId = [...new Set(myProjects.map(proj => proj.issueid))]
-                console.log("distinct IssueID : ", distinctIssueId)
                 response2.data.data.forEach(proj => {
-                    if (distinctIssueId.includes(proj.issueid) && proj.isquestion == "true") {
+                    if (distinctIssueId.includes(proj.issueid) && proj.isquestion === "true") {
                         participated.push(proj)
                     }
                 });
                 participated = participated.filter(x => !myIssue.includes(x));
-                console.log("participated :", participated)
                 var noOdprojectsCreated = myIssue.length
-                var noOfProj = myProjects.length
+                // var noOfProj = myProjects.length
                 var noOfparticipation = participated.length
                 // var noOfparticipation = noOfProj - noOdprojectsCreated
 
@@ -141,7 +138,6 @@ export const closeEditProfile=()=>(dispatch)=>{
 export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
     
-    console.log(bio,linkedin,angellist,cost, github,goodat, works);
    
     var postData = {
         bio: bio,
@@ -158,12 +154,10 @@ export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works
         }
       };
 
-    // console.log(bio,linkedin,angellist,cost, github);
     axios.post(config.base_dir+'/api/users/updateprofile',
        postData,
        axiosConfig
     ).then(response=>{
-        console.log("response : : : : ",response)
         if(response.status ===200 || response.status ===304){
             dispatch({
                 type:UPDATE_USER_PROFILE,
@@ -189,23 +183,7 @@ export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works
         })
     })
 
-    // var projectName = config.dataTime
-    // var fd = new FormData();
-    // fd.append('imageData', imgData);
-    // fd.append('projectName', projectName);
-    // fd.append('audioData', audioData);
-    // fd.append('issueID',issueID);
-    // fd.append('textExplain',textExplain);
-    // fd.append('isquestion',isquestion);
-    // fd.append('public', isPublic);
-    // console.log("the project getting saved : ",fd)
-    // axios({
-    //     method: 'post',
-    //     url: config.base_dir + '/api/project',
-    //     headers: {
-    //         "Authorization":token,
-    //     },
-    //     data: fd
+
 }
 
 

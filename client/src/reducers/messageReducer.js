@@ -7,8 +7,6 @@ import {SEND_MESSAGE,
     FROM_SHARE_TO_RECORD,
     GET_TOTAL_UNREAD,
     EXPLAIN_ISSUE,
-    SUCCESS_IN_CHNAGE_READ_STATE,
-    FAILURE_IN_CHNAGE_READ_STATE,
     CANCEL_MESSAGE_STATE} from '../actions/types'
 
 const initialState = {

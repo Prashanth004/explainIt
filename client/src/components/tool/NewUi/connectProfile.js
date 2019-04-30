@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css';
-import { Redirect } from 'react-router-dom';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './DisplayCreated';
 import { FiGrid,FiList } from "react-icons/fi";
@@ -9,34 +8,24 @@ import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import { Modal, ModalBody} from 'reactstrap';
-import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD } from '../../../actions/types';
-import Explain from './Explainit'
 import {  setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-// import LoginMadal from '../../LoginModal';
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
-import Content from './Content'
-// import { openParticipated,openInbox, openCreated } from "../../../actions/navAction";
-
-import { Animated } from "react-animated-css";
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
 import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import {getRecpientId} from '../../../actions/twitterApiAction'
 import {openInbox, openParticipated,openCreated } from "../../../actions/navAction";
-import { stat } from 'fs';
 import ProfileNotOnExplain from './ProfileNotOnExplain'
-import ProfileNotOnTwitter from './ProfileNotOnTwitter'
 
 class NewHome extends Component {
     constructor(props) {
@@ -135,7 +124,6 @@ class NewHome extends Component {
     }
 
     toggleCreatedIssue() {
-      var self = this
       this.setState({
           showProjects: true,
           openExplain: false
@@ -182,7 +170,6 @@ class NewHome extends Component {
         
     }
     toggleInbox(){
-        var self = this
         this.setState({
             showProjects: true,
             openExplain: false
@@ -233,7 +220,6 @@ class NewHome extends Component {
 
     render() {
         var issuepercentage="55%";
-        var percentage ="30%"
         if(this.state.reducedWidth){
             issuepercentage="90%"
         }
@@ -241,31 +227,23 @@ class NewHome extends Component {
           
              this.props.history.push("/");
          }
-        var open = this.state.openDialog
-        var deatilsModal = null
-        deatilsModal = (<IssueDetils />)
+      
         var issuesCreated = this.props.myissues;
-        var issuesParicipated = this.props.showProjects
 
         var self = this
         window.addEventListener('storage', function (event) {
-            if (event.key == 'token') {
+            if (event.key === 'token') {
                 self.reloadPage()
             }
         })
-        var explainDiv = null;
         var feedDiv = null;
-        var trueFalse = this.state.showParticipatedIssue;
         var loginButton = (this.props.isAauthenticated)?
         (null):((this.props.created || this.props.participated)? (null):(<TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
         onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
         requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />))
           
         
-        // if (this.props.isAauthenticated) {
-            if (this.state.openExplain) {
-                explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
-            }
+          
             if (this.props.created) {
                 var createdDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{width:issuepercentage}}>
@@ -320,8 +298,6 @@ class NewHome extends Component {
                      </div>)
 
             }
-        // }
-        // if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE || 
                 this.props.participated ||
@@ -330,14 +306,9 @@ class NewHome extends Component {
             }
             else {
               
-                if(this.state.openExplain){
-                    var explainItBtn= null
-                }
-                else{
-                    var explainItBtn=(<button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>)
-                }
-                if(this.props.userId!=null){
-                  var profileCardElement = (
+               
+                if(this.props.userId!==null){
+                  profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
                     isHome={this.state.isHome}
                     toggleInbox={this.toggleInbox}
@@ -348,14 +319,10 @@ class NewHome extends Component {
                 )
                 }
             }
-        // }
-        // else {
-        //     var profileCardElement = (<Content />)
-        // }
-        var self = this
+    
+        // var self = this
         const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
         return (this.props.authAction)?(
-            // (!(this.props.twitterHandle===this.props.match.params.encrTwitterHandle))?(
             (!!this.props.fetchProfile)?(
             (!!this.props.isPresentInExplain)?(
             <div className="fullHome">
@@ -369,28 +336,12 @@ class NewHome extends Component {
                     <div className="twitterBtnDiv">
                    {loginButton}
                     </div>
-{/* {explainDiv} */}
 
                     <div>
                         {feedDiv}
                     </div>
                 </div>
-                {/* <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
-
-                    <ModalBody className="modalBody">
-                        {deatilsModal}
-                    </ModalBody>
-
-                </Modal>
-
-
-                <Modal isOpen={this.state.modalTool} toggle={this.explainTool} className={this.props.className}>
-
-                    <ModalBody className="modalBodyTool">
-                        <LoginMadal />
-                    </ModalBody>
-
-                </Modal> */}
+           
 
             </div>):(
                 (this.props.doneGettingId)?(
@@ -405,7 +356,6 @@ class NewHome extends Component {
                
             )
         ):(null)
-    // ):(<Redirect to="/"/>)
 
                ):(null)
     }
@@ -452,4 +402,4 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, {openInbox,twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {openInbox,twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)

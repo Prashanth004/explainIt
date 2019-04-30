@@ -30,7 +30,7 @@ class DisplayShare extends Component {
             conn: null,
             socket: null,
             clientPeerid: null,
-            stream: null,
+          
             call: null,
             closedHere: false,
             showDisconectMessage: false,
@@ -83,7 +83,6 @@ class DisplayShare extends Component {
         }
         var socket = this.state.socket;
         var peerIdFrmPeer = this.state.peerIdFrmPeer;
-        var self = this;
         function postMessageHandler(event) {
             if (event.data === 'rtcmulticonnection-extension-loaded') {
                 self.setState({
@@ -169,8 +168,6 @@ class DisplayShare extends Component {
     }
 
     componentWillMount() {
-        var self = true;
-
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket
@@ -203,18 +200,18 @@ class DisplayShare extends Component {
                 connected: true
             })
         });
-        var self = this;
-        var startConnection = new Promise((resolve, reject) => {
-            var conn = peer.connect(peerIdFrmPeer);
-            conn.on('open', function () {
-                // resolve(conn)
-                conn.send({
-                    clientId: self.state.clientPeerid,
+       
+        // var startConnection = new Promise((resolve, reject) => {
+        //     var conn = peer.connect(peerIdFrmPeer);
+        //     conn.on('open', function () {
+        //         // resolve(conn)
+        //         conn.send({
+        //             clientId: self.state.clientPeerid,
 
-                });
-            });
+        //         });
+        //     });
 
-        });
+        // });
         // startConnection.then((conn) => {
         //     setTimeout(() => {
 
@@ -315,7 +312,7 @@ class DisplayShare extends Component {
         else{
 
         
-        var self = this
+       
         // var ua = window.detect.parse(navigator.userAgent);
         const result = browser();
         if (result.name === "chrome") {
@@ -345,10 +342,11 @@ class DisplayShare extends Component {
                 })
         const peer = this.state.peer
         const result = browser();
+        var constraints = null;
         
         var sourceId = this.props.extSourceId;
         if (result.name === "chrome") {
-            var constraints = {
+            constraints = {
                 video: {
                     mandatory: {
                         chromeMediaSource: 'desktop',
@@ -362,7 +360,7 @@ class DisplayShare extends Component {
             };
         }
         else if (result.name === "firefox") {
-            var constraints = {
+            constraints = {
                 video: {
                     mediaSource: "screen",
                     width: { max: '1920' },
@@ -399,6 +397,9 @@ class DisplayShare extends Component {
     }
 
     render() {
+        var ProfileHover = null;
+        
+        var ShareElement = null;
         const shouldDisplay = (!this.state.myscreenSharing)?("block"):("none")
         const messageOfScreenShare =(!this.state.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
         (<h4><b>Your screen is being shared</b></h4>)
@@ -408,11 +409,11 @@ class DisplayShare extends Component {
                 <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
             </div>)
         if (this.state.callerProfileId !== null) {
-            var ProfileHover = (<ProfileCard
+            ProfileHover = (<ProfileCard
                 userId={this.state.callerProfileId} />)
         }
         else {
-            var ProfileHover = null
+            ProfileHover = null
         }
         var profileUrl = config.react_url + '/profile/' + this.state.twitterhandle
 
@@ -448,7 +449,7 @@ class DisplayShare extends Component {
                 </div>))
             )
         if (!this.state.callEnded) {
-            var ShareElement = (
+            ShareElement = (
                 <div className="shareVideoDisplay">
                    <div className="videoContainer">
                    {messageOfScreenShare}
@@ -471,7 +472,7 @@ class DisplayShare extends Component {
 
                                     </div></span>
 
-                                <img className="callPage-recieverImage"
+                                <img alt="caller screen share" className="callPage-recieverImage"
                                     style={{ marginTop: "-62px" }}
                                     src={this.state.picture}></img>
                             </div>
@@ -502,7 +503,7 @@ class DisplayShare extends Component {
             )
         }
         else if (this.state.callEnded) {
-            var ShareElement = (
+            ShareElement = (
                 <div>
                     <div className="postCalltextDisplay">
                         {displayMessage}
@@ -512,7 +513,7 @@ class DisplayShare extends Component {
             )
         }
         else {
-            var ShareElement = (
+            ShareElement = (
                 <div>
                     <div className="postCalltextDisplay">
                         <h4>Connecting..</h4>
@@ -525,7 +526,7 @@ class DisplayShare extends Component {
             <h2>Connecting..</h2>
             <p>Please wait</p>
             <div className="callPage-recieverImageDiv">
-                <img className="callPage-recieverImage wait" src={this.state.picture}></img>
+                <img  alt="reciever screen share" className="callPage-recieverImage wait" src={this.state.picture}></img>
             </div>
         </div>) : (null)
         return ((this.state.validCheckComplete) ? (

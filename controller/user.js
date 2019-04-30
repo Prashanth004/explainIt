@@ -98,7 +98,6 @@ exports.getUserByEmail = function(req,res){
 exports.getActivationStatus = (req,res)=>{
 database.db.oneOrNone('select * from users where id=$1 and activation =$2',[req.user.id,1])
 .then(data=>{
-    console.log("data:",data)
     if(data){
         if(data!==null){
            
@@ -123,7 +122,6 @@ database.db.oneOrNone('select * from users where id=$1 and activation =$2',[req.
 }
 
 const sendEmail = (toAddress, Subject, emailContent)=>{
-    console.log("pinged here")
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -252,10 +250,8 @@ exports.getUserByTwitteHandle = function(req, res){
     
 }
 exports.getUserById = function(req,res){
-    // console.log("req.params.id : ",req.params.id)
     database.db.oneOrNone('select * from users where id = $1', req.params.id)
     .then(data=>{
-        // console.log("data : ",data)
         if(data){
             res.status(200).send({
                 success:1,
@@ -278,7 +274,6 @@ exports.getUserById = function(req,res){
 exports.authenticate = function(req, res) {
     database.db.oneOrNone('select * from users where email = $1', req.body.email)
     .then( function(user) {
-        // console.log(user)
       
       if (!user) {
         res.status(401).send({ success: 0, message: 'Authentication failed. User not found.' });

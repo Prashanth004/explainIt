@@ -80,8 +80,9 @@ else
       }
       else {
           issueItems =this.state.issueArray.map((issue, index) => (
-            <div className="createdCard">
+            <div   key={index+123456} className="createdCard">
              <IssueCard 
+           
              deleteProjects={this.deleteProjects}
              projectId={this.state.projectId}
              itsHome={this.state.itsHome}

@@ -18,7 +18,7 @@ import ReactModal from 'react-modal';
 import { cancelAllMessageAction } from '../actions/messageAction';
 import { restAllToolValue } from "../actions/toolActions";
 import { resetValues } from '../actions/twitterApiAction';
-import { saveExtensionDetails, saveSourceId } from "../actions/extensionAction";
+import { saveExtensionDetails } from "../actions/extensionAction";
 
 class Project extends Component {
   constructor(props){

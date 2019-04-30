@@ -129,7 +129,7 @@ class SaveProjects extends Component {
        empty={this.state.empty}
        limitOfChar={this.state.limitOfChar}
        changeInputValue={this.changeInputValue}
-       textValue={this.state.  textValue}
+       textValue={this.state.textValue}
        />
        {/* <h8>Your privacy is important to use</h8> */}
        <button className="buttonDark" onClick={this.savefilePu}>Public</button>

@@ -12,7 +12,6 @@ import Swal from 'sweetalert2';
 import { setIssueId, cancelValidationErrors } from '../../../actions/issueActions'
 import { creatAnsProject } from '../../../actions/projectActions'
 import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
-import config from '../../../config/config';
 
 class Explainit extends Component {
   constructor(props) {
@@ -241,7 +240,7 @@ class Explainit extends Component {
     
                 <div className="screenShareBtn">
                   <span className="hint--bottom" aria-label="Share screen!">
-                    <img onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                    <img alt="share screen"onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                   </span>
                 </div>
               </div>

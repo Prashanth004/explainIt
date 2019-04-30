@@ -6,7 +6,7 @@ export default () => {
     <div className ="noMatchcontainer">
     <div className="noMatchContent">
         <h1>SORRY</h1>
-        <img src={require('../../images/saddog.gif')}></img>
+        <img alt="cute dog"src={require('../../images/saddog.gif')}></img>
         <h5>I couldn't find this page</h5>
         <h6>404 - Page Not Found</h6>
     </div>

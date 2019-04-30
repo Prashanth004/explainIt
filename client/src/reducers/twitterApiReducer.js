@@ -70,12 +70,7 @@ export default (state=initialState, action)=>{
             twitterHandles:action.payload,
             fetchHanldesSuggest:true
         }
-        case GET_TWITTER_HANDLE:
-        return{
-            ...state,
-            twitterHandles:action.payload,
-            fetchHanldesSuggest:true
-        }
+       
         case GET_TWITTER_HANDLE_FAILED:
         return{
             ...state,

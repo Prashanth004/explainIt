@@ -26,23 +26,23 @@ class ProfileCard extends Component {
                     <div className="nameImageDiv">
                         <div className="profileImageVisit">
                         <a href={"https://twitter.com/"+this.props.twitterHandle}>
-                            <img src={this.props.profilePic} className="profileImageElementVisit" ></img>
+                            <img alt="profile pic" src={this.props.profilePic} className="profileImageElementVisit" ></img>
                             </a>    
                         </div>
                         <div   className="profileNameVisit">
-                        <a href={"https://twitter.com/"+this.props.twitterHandle} target="_blank"
+                        <a href={"https://twitter.com/"+this.props.twitterHandle}  rel="noopener noreferrer" target="_blank"
                        ><b>{this.props.userName}</b></a>
                       </div>
 
                     </div>
                     <div className="displayNumberVisit">
                         <p>Created</p>
-                        <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>
+                        <p className="numberShow"><span>{this.props.noCreated}</span></p>
 
                     </div >
                     <div className="displayNumberVisit">
                         <p>Participated</p>
-                        <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>
+                        <p className="numberShow"><span>{this.props.noParticipated}</span></p>
 
                     </div>
                 </div>

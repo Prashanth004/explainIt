@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import Navbar from './Navbar'
 import InboxMessages from './InboxMessages'
 import PropType from 'prop-types';
 import axios from 'axios';
@@ -27,7 +26,6 @@ class Inbox extends Component {
         var token = JSON.parse(localStorage.getItem('token'))
         var filteredInbox = []
         var issueId= null
-        var email = this.props.email
         this.props.allMessage.forEach(message => {
             issueId = message.link.split('/')[4];
             axios({
@@ -60,22 +58,21 @@ class Inbox extends Component {
         
     }
   render() {
-      console.log("this.state.filetrInbox : ", this.state.filteredInbox)
+      var allMessageEle = null;
       if(this.props.allMessage!==null && !this.state.isFiltered){
             this.filterInbox()
       }
-      console.log("this.state.filteredInbox : ",this.state.filteredInbox)
       if(this.state.filteredInbox!==null ){
           if(this.state.filteredInbox.length>0){
             var revallMessage = this.state.filteredInbox.reverse()
-            var allMessageEle = revallMessage.map(message=>(
+            allMessageEle = revallMessage.map(message=>(
                 
                    <InboxMessages key = {message.id}message={message} />
                    
             ))
           }
           else{
-            var allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
+            allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
                 <h4>You dont have any recorded messages yet</h4>
                 <br/>
     
@@ -85,7 +82,7 @@ class Inbox extends Component {
         
       }
       else{
-        var allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
+        allMessageEle =(<div style={{textAlign:"center", marginTop:"20px"}}>
             <h4>You dont have any recorded messages yet</h4>
             <br/>
 

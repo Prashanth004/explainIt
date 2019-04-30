@@ -5,7 +5,7 @@ import '../../css/issueDetails.css';
 import config from '../../../config/config'
 import ImagesOfExplainers from './DisplayExplained'
 import { GoChevronDown } from "react-icons/go";
-import { FiLink2,FiEdit } from "react-icons/fi";
+import { FiLink2} from "react-icons/fi";
 import { FiTrash } from "react-icons/fi";
 
 
@@ -16,7 +16,6 @@ export default class componentName extends Component {
       answerProjects: [],
       questionProject: [],
       DetailsOfPeople: [],
-      optionVisibe: false,
       toolTipValue: null,
       toolTipsimple: null,
       optionVisibe: "hidden"
@@ -65,15 +64,15 @@ export default class componentName extends Component {
               method: 'get',
               url: config.base_dir + '/api/users/email/' + projects.email,
             }).then(response => {
-              if (response.status == 200) {
+              if (response.status === 200) {
                 const newTestJson = JSON.parse(JSON.stringify(allProjects));
                 newTestJson[index]['profilepic'] = response.data.data.profilepic;
                 newTestJson[index]['username'] = response.data.data.username;
                 newTestJson[index]['id'] = response.data.data.id
                 newTestJson[index]['twitterhandle'] = response.data.data.twitterhandle
                 allProjects = newTestJson
-                var answerProject = allProjects.filter(project => project.isquestion != "true")
-                var questionProject = allProjects.filter(projects => projects.isquestion == 'true')
+                var answerProject = allProjects.filter(project => project.isquestion !== "true")
+                var questionProject = allProjects.filter(projects => projects.isquestion === 'true')
                 self.setState({
                   answerProjects: answerProject,
                   DetailsOfPeople: answerProject,
@@ -125,7 +124,8 @@ export default class componentName extends Component {
     this.props.handlePublicPrives(e)
   }
   render() {
-
+    var profilePic = null;
+    var proflileName =null;
     const publictoggle = (this.props.itsHome) ? (
       <label id={this.props.issue.projectid}>
         <span className="hint--top" aria-label={this.state.toolTipValue}>
@@ -147,18 +147,18 @@ export default class componentName extends Component {
         </span>
       </div>)
     if ((this.state.questionProject).length > 0 && this.state.questionProject !== undefined) {
-      var profilePic = this.state.questionProject[0].profilepic
-      var proflileName = this.state.questionProject[0].username
+      profilePic = this.state.questionProject[0].profilepic
+      proflileName = this.state.questionProject[0].username
     }
     else {
-      var profilePic = null
-      var proflileName = null
+    profilePic = null
+      proflileName = null
     }
     return (
       <div className="cardNew" >
         <div className="cardName" id={this.props.issue.issueid}>
 
-          <img src={profilePic}
+          <img alt="profile pic"src={profilePic}
             id={this.props.issue.issueid}
             onClick={this.openProjectDetails}
             style={{
@@ -181,7 +181,7 @@ export default class componentName extends Component {
                 <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
               </div>
               <div>
-                <span className="textInDropDown" id={this.props.issue.issueid} className="dropDownBtn">Delete</span>
+                <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
               </div>
             </div>
            

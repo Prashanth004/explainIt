@@ -75,8 +75,7 @@ export const changeReadStatus = (messageId)=>(dispatch)=>{
     })
 }
 export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
-    console.log('=---------------------=-')
-    console.log(link, fromId, ToId, subject)
+  
     var token = JSON.parse(localStorage.getItem('token'))
     var postData = {
         link: link,
@@ -94,7 +93,6 @@ export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
       axios.post(config.base_dir+'/api/message', postData, axiosConfig).then(response=>{
         if(response.status=== 201 || response.status === 301)
         {
-            console.log(" response :", response.data)
             dispatch({
                 type:SEND_MESSAGE,
                 payload:true
@@ -134,11 +132,9 @@ export const getAllMessages=(userId)=>(dispatch)=>{
             "Authorization":token,
         }
     }).then(response=>{
-        if(response.status== 200|| response.status == 301){
-            console.log("message data : ",response.data.data)
+        if(response.status===200|| response.status === 301){
             allMessage = response.data.data;
             allMessage.forEach((message,index)=>{
-                console.log("message : ", message)
                 if(message.fromuser!==null){
 
                 

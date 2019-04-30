@@ -5,7 +5,6 @@ import Dummy from './dummy';
 import socketIOClient from "socket.io-client";
 
 import CopyToClipboard from './CopytoClipboard';
-import html2canvas from 'html2canvas'
 import config from '../../config/config'
 import '../css/shareScreen.css'
 import {StartedSharing,
@@ -14,8 +13,6 @@ import {StartedSharing,
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 
-import Swal from 'sweetalert2';
-import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap';
 class ScreenRecorder extends Component {
     constructor(props) {
         super(props)

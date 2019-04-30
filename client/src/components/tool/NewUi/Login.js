@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import config from '../../../config/config';
 import { signInWithGoogle, stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import PropType from 'prop-types';

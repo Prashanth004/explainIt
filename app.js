@@ -116,8 +116,7 @@ app.get('*', (req,res)=>{
 })
 
 io.on("connection", socket => {
-  console.log("New client connected");
-  
+ 
  
     socket.on(key.LINKTOCALL,(data)=>{
     io.emit(key.LINKTOCALL, data); // Emitting a new message. It will be consumed by the client
@@ -170,14 +169,7 @@ io.on("connection", socket => {
     socket.on(key.RETRYCALL, (data)=>{
       io.emit(key.RETRYCALL, data)
     })
-    
- 
-    // console.error(`Error: ${error}`);
-  
-
- 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
   });
 });
 
@@ -197,12 +189,12 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-// exports.io=io;
+
 exports.db = db;
 exports.db = db;
 
 
-//server console functions
+
 function normalizePort(val) {
   var port = parseInt(val, 10);
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
 import config from '../../../config/config'
-import CopyToClipboard from '../CopytoClipboard';
 import {setStream} from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
 import Dummy from './dummy';
@@ -12,7 +11,6 @@ import { cancelAllMessageAction } from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
 
 import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
-import { Button } from 'reactstrap'; 
 import TimerBar from './TimerBar'
 import browser from 'browser-detect';
 import {fullStartedRecording,
@@ -54,7 +52,6 @@ class FullScreenRecorder extends Component {
 
     }
     startBar(){
-        var self = this;
         var timeAloted = config.RECORD_TIME*60*16
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
@@ -73,10 +70,11 @@ class FullScreenRecorder extends Component {
 
     startRecoding(){
         var self = this
+        var constraints =  null;
         var sourceId = this.props.extSourceId;
         const result = browser();
         if (result.name === "chrome") {
-            var constraints = { 
+            constraints = { 
                 video: {
                     mandatory: {
                       chromeMediaSource: 'desktop',
@@ -93,7 +91,7 @@ class FullScreenRecorder extends Component {
        
         // }
         if (result.name === "firefox") {
-            var constraints = {
+            constraints = {
                 video: {
                     mediaSource: "screen", 
                     width: {max: '1920'},
@@ -246,8 +244,8 @@ toggleCanvas(){
                 // 
             });
         }
-         var audioStream = this.state.audioStream;
-        var screenStream = this.state.screenStream;
+        audioStream = this.state.audioStream;
+        screenStream = this.state.screenStream;
         audioStream.stop();
         screenStream.stop();
         self.props.fullStopedRecording()
@@ -308,24 +306,26 @@ toggleCanvas(){
     }
 
     render() {
-       
-        const closeFunction=(this.props.isFullScreenRecording)?this.props.reStoreDefault:
-                this.props.closeImidiate
-        const closeBtn=(!this.props.isFullScreenRecording && (!this.props.isFullRecordCompleted 
-         || this.state.saveClicked)?
-            (<Button close onClick={this.closeFunction} />):(null))
+       var recordingEle = null;
+       var recordingElements = null;
+       var postShareElements = null;
+        // const closeFunction=(this.props.isFullScreenRecording)?this.props.reStoreDefault:
+        //         this.props.closeImidiate
+        // const closeBtn=(!this.props.isFullScreenRecording && (!this.props.isFullRecordCompleted 
+        //  || this.state.saveClicked)?
+            // (<Button close onClick={this.closeFunction} />):(null))
         if (this.props.isFullScreenRecording) {
            
             var timer = (<Countdown
                 date={Date.now() + config.RECORD_TIME *60*1000}
                 renderer={this.renderer}
             />)
-            var recordingEle = ( <div >
+            recordingEle = ( <div >
                 <p>Recording screen</p>
                 </div>)
         }
         else{
-            var recordingEle = ( <div >
+            recordingEle = ( <div >
                 <p>Explain by recording screen.</p>
             
                 </div>)
@@ -341,8 +341,6 @@ toggleCanvas(){
        
      
         var videoplayer = " ";
-        var downLinkAudio = " ";
-        var linkElement = " ";
         var convey ="Start"
        
         if (this.state.downloadUrl) {
@@ -353,7 +351,7 @@ toggleCanvas(){
 
      
         if(this.props.isFullRecordCompleted ===false){
-        var recordingElements = (<div>
+        recordingElements = (<div>
              <div className="statusBarCall">
                 <div className="timerDiv">
                 </div>
@@ -382,14 +380,14 @@ toggleCanvas(){
         )
     }
         else{
-            var recordingElements = null;
+            recordingElements = null;
         }
     
        
         // var timer = null;
      
         if(this.props.isFullRecordCompleted === true && this.props.isSaved===false){
-            var postShareElements= (<div className = "postRecord">
+            postShareElements= (<div className = "postRecord">
             <div classNam="showVideoElement">
             {videoplayer}
             </div>
@@ -414,7 +412,7 @@ toggleCanvas(){
          }
          else if(this.props.isSaved ){
             // elseif {
-            var postShareElements= (<div className = "postRecord">
+            postShareElements= (<div className = "postRecord">
             <p><b>Your Explaination is recorded successfully :)</b></p>
                 {/* <p>Your recording has been saved successfully.
                You can access it with the link below and share the same</p>
@@ -432,9 +430,9 @@ toggleCanvas(){
         //  }
        
        
-        if (this.state.shareScreenLink) {
-            linkElement = (<p>{this.state.shareScreenLink}</p>)
-        }
+        // if (this.state.shareScreenLink) {
+        //     var linkElement = (<p>{this.state.shareScreenLink}</p>)
+        // }
         return (this.state.isInstalled) ? (
             <div className="recordMainScreen">
             {/* {closeBtn} */}

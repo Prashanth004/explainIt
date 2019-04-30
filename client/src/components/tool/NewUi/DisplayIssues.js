@@ -7,7 +7,6 @@ import { deleteProjects, checkPublicValue } from '../../../actions/projectAction
 import '../../css/toggle.css'
 import IssueCard from './issueCard'
 import { confirmAlert } from 'react-confirm-alert'; // Import4
-import DisplayIssueTopBtns from './DisplayIssueTpBtns'
 
 
 
@@ -122,10 +121,6 @@ class DisplayIssue extends Component {
     }
     toggleDisplayLink(e) {
         console.log("counting")
-        // this.setState({
-        //     projectId: e.currentTarget.id,
-        //     displayCopyEle: !this.state.displayCopyEle,
-        // })
         var element = document.querySelector('#clipboard_' + e.currentTarget.id)
         if (element.style.display === 'none') {
             element.style.display = 'block'
@@ -159,10 +154,9 @@ class DisplayIssue extends Component {
            
         }
         else {
-            // const issueItemReverse = (this.props.issueArray).reverse()
-            // console.log("issueItemReverse : ", issueItemReverse)
             issueItems =this.props.issueArray.reverse().map((issue, index) => (
                <IssueCard 
+               key={index+1000}
                itsHome={this.state.itsHome}
                displayCopyEle={this.state.displayCopyEle}
                deleteProjects={this.deleteProjects}

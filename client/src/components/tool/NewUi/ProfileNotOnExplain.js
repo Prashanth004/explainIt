@@ -35,10 +35,10 @@ class ProfileNotFound extends Component {
 
         var sharableURL = config.react_url + '/project/' + this.props.twitterhandle;
         var text = "Discussions happened on explain";
-        var encSharableURL = encodeURI(sharableURL);
-        var encText = encodeURI(text);
+        encSharableURL = encodeURI(sharableURL);
+        encText = encodeURI(text);
 
-        var href = "https://twitter.com/intent/tweet?text=" + encText + "&url=" + encSharableURL
+        // var href = "https://twitter.com/intent/tweet?text=" + encText + "&url=" + encSharableURL
         var width = 555,
             height = 300,
             top = window.innerHeight / 4,
@@ -80,7 +80,7 @@ class ProfileNotFound extends Component {
 
             inviteMagic = {
                 padding: "5px",
-                marginTop: "3px;"
+                marginTop: "3px"
             }
 
             inviteContainer = {
@@ -100,7 +100,7 @@ class ProfileNotFound extends Component {
                             <span>Would you help him to know?</span>
                            <br/>
                             <button className="buttonDark twitterBtn"
-                                onClick={this.SendInvite}><i class="fa fa-twitter twitterBtn">  Invite</i></button>
+                                onClick={this.SendInvite}><i className="fa fa-twitter twitterBtn">  Invite</i></button>
                         </div>
                     </div>
                 </div>

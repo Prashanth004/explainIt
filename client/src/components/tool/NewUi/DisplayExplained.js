@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import '../../css/newlanding.css';
 import { getDetailsOfExplained } from '../../../actions/issueActions';
-import axios from 'axios'
 import config from '../../../config/config'
  class DisplayExplained extends Component {
     constructor(props){
@@ -17,7 +16,6 @@ import config from '../../../config/config'
 
   
     openProfile(e){
-        // window.open(config.react_url+'/explainIt', "_blank")
        var twitter = this.props.DetailsOfPeople.filter(a=>a.projectid===e.target.id)
        window.open(config.react_url+'/profile/'+twitter[0].twitterhandle, "_blank")
 
@@ -26,27 +24,7 @@ import config from '../../../config/config'
   render() {
     var limitPeople = this.props.DetailsOfPeople.slice(0,config.peopleDisplayLength)
     var countElement = null;
-    var allPeopleImages = null;
-    if(this.state.showAllPeople){
-        // allPeopleImages = ()
-    //     this.props.DetailsOfPeople.map((people,index)=>(
-    //         <div >
-    //         <div key ={people.projectid}className="singleMember">
-    //                <div id={people.projectid} onClick={this.openProfile}className="imagePeopleDiv">
-    //                <span>
-    //                    <img id={people.projectid} width="100%" height="100%"src={people.profilepic} className="peopleImage"/>
-    //                 </span>
-    //                </div>
-    //                <span id={people.projectid} onClick={this.props.changeVideo} className="peopleName">
-    //                    {people.username}
-    //                </span>
-    //            </div>
-    //            </div>
-    // ))
-    }
-    else{
-        allPeopleImages = null;
-    }
+  
    
     if(this.props.DetailsOfPeople.length >config.peopleDisplayLength){
         var noOfPeople = (this.props.DetailsOfPeople.length)-config.peopleDisplayLength
@@ -57,7 +35,7 @@ import config from '../../../config/config'
       var images= (!this.props.showAllPeople)?(limitPeople.map((People,index)=>(
                     <div id={this.props.issueid} key={this.props.projectid}  className="imagePeopleDiv">
                     <span>
-                            <img id="imageOfPeople" src={People.profilepic} className="peopleImage"></img>
+                            <img alt="people" id="imageOfPeople" src={People.profilepic} className="peopleImage"></img>
                             </span>
                         </div>
       ))):(null)

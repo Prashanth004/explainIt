@@ -31,13 +31,14 @@ class ProfileCard extends Component {
         window.open("https://twitter.com/"+this.props.twitterHandle, '_blank')
     }
     render() {
+        var linkSymbol =null;
         var notifyBadge =null
         if (this.props.userId === this.props.profileId){
             notifyBadge=(<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y}/>
             )
         }
         if (this.props.isHome) {
-            var linkSymbol = (
+            linkSymbol = (
                 <span className="hint--top" aria-label="Get profile link">
                     <FiLink2 style={{width:"15px",
                     height:"15px", 
@@ -49,7 +50,7 @@ class ProfileCard extends Component {
 
         }
         else {
-            var linkSymbol = null
+            linkSymbol = null
 
         }
         return (this.props.isHome)?(
@@ -65,7 +66,7 @@ class ProfileCard extends Component {
                     <div className="pImageContainer">
                     <span className="hint--top" aria-label={this.props.userName}>
                     
-                        <img src={this.props.profilePic} 
+                        <img alt="profile pic"src={this.props.profilePic} 
                             // onClick={this.openProfile}
                             onDoubleClick={this.props.openDtailsTab}
                             className="labelProfilePic"></img>
@@ -75,12 +76,12 @@ class ProfileCard extends Component {
 
                     <div className="screenShareBtnLabel">
                         <span className="hint--top" aria-label="Share screen!">
-                            <img onClick={this.props.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                            <img alt="screen share" onClick={this.props.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                         </span>
                     </div>
                     <div className="RecordBtnLabel">
                         <span className="hint--top" aria-label="Record screen!">
-                            <img onClick={this.props.recordFullScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                            <img alt="record screen" onClick={this.props.recordFullScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
                         </span>
 
                     </div>
@@ -149,7 +150,7 @@ class ProfileCard extends Component {
                 <div className="pImageContainer">
                 <span className="hint--top" aria-label={this.props.userName}>
                 
-                    <img src={this.props.profilePic} onClick={this.openProfile}className="labelProfilePic"></img>
+                    <img alt=" "src={this.props.profilePic} onClick={this.openProfile}className="labelProfilePic"></img>
                     
                     </span>
                 </div>

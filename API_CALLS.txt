@@ -1,0 +1,25 @@
+landing page:
+
+CDN : recorderjs
+CDN : WRTC
+CDN : animate-css
+CDN :PEERJS
+CSS : https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext
+
+GET
+https://abs.twimg.com/sticky/default_profile_images/default_profile.png
+twitter profile image
+
+
+
+[POST]
+websockets connections:
+http://localhost:9000/socket.io/?EIO=3&transport=polling&
+ 
+ [GET]
+
+http://localhost:9000/api/users
+http://localhost:9000/api/project/
+http://localhost:9000/api/projects/:id
+http://localhost:9000/api/user
+http://localhost:9000/api/message/1090895508699176960

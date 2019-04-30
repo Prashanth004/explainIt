@@ -9,7 +9,6 @@ export const getProfileDetailsOnHover=(userId, profilePrivacy)=>(dispatch)=>{
   var userName = null;
   var profilepic =null;
   var twitterHandle = null;
-    console.log("getting called && user ID : ",userId)
 
     axios({
         method: 'get',
@@ -18,7 +17,7 @@ export const getProfileDetailsOnHover=(userId, profilePrivacy)=>(dispatch)=>{
             "Authorization": token,
         }
     }).then((response1)=>{
-        if (response1.status == 200 || response1.status == 304) {
+        if (response1.status === 200 || response1.status === 304) {
         email = response1.data.data.email;
         userName = response1.data.data.username;
         profilepic = response1.data.data.profilepic;
@@ -30,15 +29,15 @@ export const getProfileDetailsOnHover=(userId, profilePrivacy)=>(dispatch)=>{
                 "Authorization": token,
             }
         }).then((response2)=>{
+            var myProjects = null;
            var participated = []
-           console.log("response2.data.data , ",response2.data.data)
            if(profilePrivacy === config.SELF)
-            var myProjects = (response2.data.data).filter(project=>(
+            myProjects = (response2.data.data).filter(project=>(
                 project.email === response1.data.data.email 
               
             ))
             else if(profilePrivacy === config.VISIT_PROF){
-                var myProjects = (response2.data.data).filter(project=>(
+                myProjects = (response2.data.data).filter(project=>(
                     project.email === response1.data.data.email &&
                     project.public === "1"
                   
@@ -54,16 +53,13 @@ export const getProfileDetailsOnHover=(userId, profilePrivacy)=>(dispatch)=>{
          
             // var issuIDMyProject = myProjects.map(project=>project.issueid)
             const distinctIssueId = [...new Set(myProjects.map(proj=>proj.issueid))]
-            console.log("distinct IssueID : ",distinctIssueId)
             response2.data.data.forEach(proj => {
-                if(distinctIssueId.includes(proj.issueid)&& proj.isquestion == "true"){
+                if(distinctIssueId.includes(proj.issueid)&& proj.isquestion === "true"){
                     participated.push(proj) 
                 }
             });
             participated = participated.filter(x => !myIssue.includes(x));
-            console.log("participated :",participated)
             var noOdprojectsCreated = myIssue.length
-            var noOfProj = myProjects.length
             var noOfparticipation = participated.length
             // var noOfparticipation = noOfProj - noOdprojectsCreated
 

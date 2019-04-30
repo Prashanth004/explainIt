@@ -31,7 +31,6 @@ import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
 import Content from './Content'
-import { Animated } from "react-animated-css";
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
@@ -218,7 +217,7 @@ class NewHome extends Component {
         })
     }
     toggleInbox(){
-        var self = this
+        
         this.setState({
             showProjects: true,
             openExplain: false
@@ -230,7 +229,7 @@ class NewHome extends Component {
             showDetails:false,
             displayDetails:false
         })
-        var self = this
+        
         this.setState({
             showProjects: true,
             openExplain: false
@@ -242,7 +241,7 @@ class NewHome extends Component {
             showDetails:false,
             displayDetails:false
         })
-        var self = this
+       
         this.setState({
             showProjects: true,
             openExplain: false
@@ -402,7 +401,9 @@ class NewHome extends Component {
 
     render() {
        var issuepercentage="65%";
-        var percentage ="30%"
+        var percentage ="30%";
+        var displayLinkDiv=null;
+        var profileCardElement = null;
         if(this.state.reducedWidth){
             issuepercentage="100%"
         }
@@ -476,13 +477,13 @@ class NewHome extends Component {
         if(this.props.myissues!==null)
         var issuesCreated = (this.props.myissues)
         // if(this.props.participatedIssues!==null)
-        var participatedIssue = (this.props.participatedIssues)
-        var self = this
+       
+       
        
         var feedDiv = null;
 
         window.addEventListener('storage', function (event) {
-            if (event.key == 'token') {
+            if (event.key === 'token') {
                 self.reloadPage()
             }
         })
@@ -491,7 +492,7 @@ class NewHome extends Component {
             <div className="callNotification">
                 <div>
                     <div className="callerProfileImage">
-                        <img className="callerProfileImageElement" src={this.props.callerProfilePic} />
+                        <img alt="caller profile Pic"className="callerProfileImageElement" src={this.props.callerProfilePic} />
                     </div>
                     <audio style={{ display: "none" }} autoPlay  loop src={require('../../audio/simple_beep.mp3')}></audio>
 
@@ -578,10 +579,10 @@ class NewHome extends Component {
             }
             else if(this.props.inbox){
                 // explainDiv = null
-                var feedDiv =(<Inbox userId={this.props.userId}/>)
+                feedDiv =(<Inbox userId={this.props.userId}/>)
             }
             else {
-                console.log("nothing excecuting")
+                
             }
         }
 
@@ -596,7 +597,7 @@ class NewHome extends Component {
                 this.props.participated ||
                 this.props.inbox ||
                 this.props.created) {
-                var profileCardElement = null
+                profileCardElement = null
             }
             else if (this.props.userId !== null) {
                 if (this.state.displayLink &&
@@ -605,18 +606,18 @@ class NewHome extends Component {
                     !this.props.created && 
                     !this.props.participated 
                     ){
-                    var displayLinkDiv = (<div className="sharableLinkSection">
+                    displayLinkDiv = (<div className="sharableLinkSection">
                         <Button close onClick={this.toggleDisplayLink} />
                         <p>Your shareable Link</p>
                         <CopyToClipboard sharablelink={sharabeLink} />
                     </div>)
                 }
                 else {
-                    var displayLinkDiv = null
+                    displayLinkDiv = null
                 }
               
 
-                var profileCardElement = (
+                profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
                         isHome={this.state.isHome}
                         toggleInbox={this.toggleInbox}
@@ -635,7 +636,7 @@ class NewHome extends Component {
             }
         }
         else {
-            var profileCardElement = (<Content />)
+            profileCardElement = (<Content />)
         }
 
         return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to="/login" />) : (
@@ -739,7 +740,5 @@ export default connect(mapStateToProps, {
      displayFullScreShare ,
     creatAnsProject,
     clearAnswers, stillAuthenicated,
-    fetchProjectbyIssue,
-    setIssueId,
     resetValues
 })(NewHome)

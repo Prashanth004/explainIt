@@ -11,7 +11,6 @@ import { startSecodScreenShare, endSecondScreenShare } from '../../../../actions
 import config from '../../../../config/config';
 import {fromShareToRecord} from '../../../../actions/messageAction'
 import '../../../css/shareScreen.css';
-import { FaArrowLeft } from "react-icons/fa";
 import CallImage from '../CallImage'
 import browser from 'browser-detect';
 import Call from '../Call';
@@ -120,10 +119,11 @@ class ScreenRecorder extends Component {
 
     startScreenShareSend() {
         var self = this
+        var constraints = null;
         var sourceId = this.props.extSourceId;
         var ua = window.detect.parse(navigator.userAgent);
         if (ua.browser.family === "Chrome") {
-            var constraints = {
+            constraints = {
                 video: {
                     mandatory: {
                         chromeMediaSource: 'desktop',
@@ -137,7 +137,7 @@ class ScreenRecorder extends Component {
             };
         }
         else if (ua.browser.family === "Firefox") {
-            var constraints = {
+            constraints = {
                 video: {
                     mediaSource: "screen",
                     width: { max: '1920' },
@@ -246,7 +246,7 @@ class ScreenRecorder extends Component {
         socket.on(config.CALL_ACK_MESSAGE, data => {
            
             var userId = Number(data.recieverUserId);
-            var userId = bigInt(data.recieverUserId).value;
+            userId = bigInt(data.recieverUserId).value;
             self.setState({
                 recieverProfilePic: data.recieverProfilePic,
                 recieverProfileName: data.recieverProfileName,
@@ -776,14 +776,16 @@ class ScreenRecorder extends Component {
     render() {
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate
-        var linkElement = " ";
-        var backArrow = null;
+        var linkElement = null;
+        var MessageDisconnected =null;
+        var shareTimeElements = null; 
+        var postShareElements = null;  
         // if()
         const closeBtn = (!this.props.isSceenSharing) ?
             (((( this.props.isSharingCompleted) && !this.props.isSaved)|| this.state.doneCalling ||  this.state.answerFrmPeer)?(null) :(<Button close onClick={closeFunction} />)):
             (null)
         const saveBtns = <SaveElement
-            closeImidiate={this.props.closeFunction}
+          
             shareOrRec={config.SHARING}
             isSaveClicked={this.state.isSaveClicked}
             saveClicked={this.saveClicked}
@@ -795,21 +797,21 @@ class ScreenRecorder extends Component {
             noInternet = "No Intenet conecticvity"
         else noInternet = null;
         if (this.state.timerEnded && !this.props.isSaved)
-            var MessageDisconnected = (
+            MessageDisconnected = (
                 <div>
                     <p><b>Call ended as the it exceded {this.state.noOfMinutes} mins</b></p>
                     <p>You need to share a new link to connect again</p>
                     {saveBtns}
                 </div>)
         else if (this.state.showDisconectMessage && !this.props.isSaved && !this.state.closedHere && this.state.manualClose) {
-            var MessageDisconnected = (<div>
+            MessageDisconnected = (<div>
                 <p><b>Call ended from other peer</b></p>
                 {saveBtns}
 
             </div>)
         }
         else if (!this.state.manualClose && !this.props.isSaved && !this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
-            var MessageDisconnected = (
+            MessageDisconnected = (
                 <div>
                     <p><b>Call disconnected due to network issues</b></p>
                     <span className="hint--bottom" aria-label="Retry">
@@ -823,7 +825,7 @@ class ScreenRecorder extends Component {
                 </div>
             )
         else if (!this.state.manualClose && !this.props.isSaved && this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
-            var MessageDisconnected = (
+            MessageDisconnected = (
                 <div>
                     <p><b>Call disconnected due to network issues</b></p>
                     <span className="hint--bottom" aria-label="Retry">
@@ -837,7 +839,7 @@ class ScreenRecorder extends Component {
                 </div>
             )
         else if (!this.state.manualClose && !this.props.isSaved && !this.state.retry)
-            var MessageDisconnected = (
+            MessageDisconnected = (
                 <div>
                     <p><b>Call ended due to network issues</b></p>
                     <p>You can reord the screen and send it</p>
@@ -849,14 +851,14 @@ class ScreenRecorder extends Component {
                 </div>
             )
         else if (this.state.retry && !this.props.isSaved && !this.state.retryTimeOut && !this.state.noInternet)
-            var MessageDisconnected = (
+            MessageDisconnected = (
                 <div>
                     <p><b>Reconnecting..</b></p>
 
                 </div>
             )
         else if (this.state.retry && (this.state.retryTimeOut || this.state.noInternet))
-            var MessageDisconnected = (
+            MessageDisconnected = (
                 <div>
                     <p><b>Retry failed</b><br />{noInternet}</p>
                     <p>You can reord the screen and send it</p>
@@ -868,7 +870,7 @@ class ScreenRecorder extends Component {
                 </div>
             )
         else if (!this.props.isSaved) {
-            var MessageDisconnected = (<div>
+            MessageDisconnected = (<div>
                 <p><b>Call ended</b></p>
                 {saveBtns}
 
@@ -889,7 +891,7 @@ class ScreenRecorder extends Component {
             ) : (this.state.recieverProfileId)
 
 
-            var shareTimeElements = (
+            shareTimeElements = (
                 <div>
                     <Call
                     shareMyScreen={this.shareMyScreen}
@@ -908,12 +910,12 @@ class ScreenRecorder extends Component {
         }
         else if (this.state.clickedOnLink && !this.props.isSceenSharing && !this.state.CallAck)
             if (!this.state.retryLimit === 0)
-                var shareTimeElements = (<div className="clickedMessage">
+                shareTimeElements = (<div className="clickedMessage">
                     <audio style={{ display: "none" }} autoPlay src={require('../../../audio/brute-force.mp3')}></audio>
                     <p>Connecting.. </p>
                 </div>)
             else if (this.state.clickedOnLink && !this.props.isSceenSharing && this.state.conDidNotInitiate)
-                var shareTimeElements = (<div className="clickedMessage">
+                shareTimeElements = (<div className="clickedMessage">
                     <audio style={{ display: "none" }} autoPlay src={require('../../../audio/brute-force.mp3')}></audio>
                     <p><b>Failed To connect</b></p>
                     <p>This happened due to network issues</p>
@@ -921,20 +923,20 @@ class ScreenRecorder extends Component {
 
         //Post share elements
         if (this.props.isSharingCompleted && !this.state.clickedOnLink && !this.props.isSaved) {
-            var postShareElements = (<div className="DisconMessage">
+            postShareElements = (<div className="DisconMessage">
                 {MessageDisconnected}
 
             </div>)
         }
         else if (this.props.isSaved) {
             if (!this.props.tweetSuccess && !this.state.tweetBtnPressed)
-                var postShareElements = (<div className="postRecord">
+                postShareElements = (<div className="postRecord">
 
                     <p>Call is saved under your created section</p>
 
                 </div>)
             else if (!this.props.tweetSuccess && this.state.tweetBtnPressed && this.props.twitterSendDone) {
-                var postShareElements = (<div className="postRecord">
+                postShareElements = (<div className="postRecord">
                     <p>Tweeted Failed.</p>
                     <p>This could had have happened due to the repeated tweeting the same kind of message</p>
                     <span className="hint--bottom" aria-label="Retry Teet">
@@ -943,12 +945,12 @@ class ScreenRecorder extends Component {
                 </div>)
             }
             else if (!this.props.tweetSuccess && this.state.tweetBtnPressed)
-                var postShareElements = (<div className="postRecord">
+                postShareElements = (<div className="postRecord">
                     <p>processing ..</p>
                 </div>)
 
             else if (this.props.tweetSuccess && this.props.twitterSendDone) {
-                var postShareElements = (<div className="postRecord">
+                postShareElements = (<div className="postRecord">
                     <p>Tweeted successfully</p>
                 </div>)
             }
@@ -984,11 +986,8 @@ class ScreenRecorder extends Component {
             !this.state.answerFrmPeer &&
             !this.state.timeOutNoAnswerOnCAll) {
 
-            backArrow = (<FaArrowLeft onClick={this.changeTweetStateNeg} />)
-            var linkElement = (<div>
+            linkElement = (<div>
                 <div className="waitMsg">
-                    {/* <p><b>@{this.props.twitterName} has to still click on the link,
-                       lets wait for sometime, if not we can drop a recorded message</b></p> */}
                     <p>Wainting for peer to accept the Screen Share request</p>
                 </div>
                 <div className="callerImageDiv">
@@ -1006,7 +1005,7 @@ class ScreenRecorder extends Component {
             !this.state.timeOutNoAnswer &&
             !this.state.answerFrmPeer &&
             !this.state.timeOutNoAnswerOnCAll) {
-            var linkElement = (<div>
+            linkElement = (<div>
                 <div className="waitMsg">
                     <p>Waiting for <b>{this.props.twitterName}</b> to accept the Screen Share request, if not we can drop a recorded message</p>
                 </div>
@@ -1023,7 +1022,7 @@ class ScreenRecorder extends Component {
             !this.state.timeOutNoAnswer &&
             ! this.state.answerFrmPeer&&
             !this.state.timeOutNoAnswerOnCAll)
-            var linkElement = (<div>
+            linkElement = (<div>
                 <audio autoPlay style={{ display: "none" }} src={require('../../../audio/brute-force.mp3')}></audio>
 
                 <div className="waitMsg">
@@ -1096,7 +1095,7 @@ class ScreenRecorder extends Component {
                     {linkElement}
                     {shareTimeElements}
                     {postShareElements}
-                    <audio id="video" ref={a => this.videoTag = a} srcObject=" " ></audio>
+                    <audio id="video" ref={a => this.videoTag = a} srcobject=" " ></audio>
                 </div>
             </div>
 

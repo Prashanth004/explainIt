@@ -12,7 +12,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
 import { creatAnsProject } from '../../../actions/projectActions';
-import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
+import { saveExtensionDetails} from "../../../actions/extensionAction";
 
 
 import '../../css/ExplainpPage.css'
@@ -32,10 +32,7 @@ class ExplainPage extends Component {
             twitterHandle:twitterHandle
         })
     }
-    componentDidMount() {
-        var self = this
-        
-    }
+  
     closeFunction(){
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();

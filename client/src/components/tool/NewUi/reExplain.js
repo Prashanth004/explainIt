@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
 import { Button } from 'reactstrap';
-
 import Form from '../Form';
-import Navbar from './Navbar';
 import '../../css/explainit.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -18,9 +15,6 @@ import { setIssueId, cancelValidationErrors,cancelSuccess} from '../../../action
 import { creatAnsProject } from '../../../actions/projectActions'
 import { displayFullScrenRecord, restAllToolValue, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
 import config from '../../../config/config';
-import Home from './Home'
-
-
 
 class Explainit extends Component {
   constructor(props) {
@@ -228,13 +222,13 @@ class Explainit extends Component {
     
                 <div className="RecordBtn">
                   <span className="hint--bottom" aria-label="Record screen!">
-                    <img onClick={this.displayRecordBtn} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                    <img alt="record screen" onClick={this.displayRecordBtn} height="100%" width="100%" src={require('../../images/download.jpg')} />
                   </span>
                 </div>
     
                 <div className="screenShareBtn">
                   <span className="hint--bottom" aria-label="Share screen!">
-                    <img onClick={this.displayShareBtn} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                    <img alt="share screen"onClick={this.displayShareBtn} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                   </span>
                 </div>
                 {/* <button className="buttonLight" onClick={this.shareFullScreenShare}>Share Screen</button> */}

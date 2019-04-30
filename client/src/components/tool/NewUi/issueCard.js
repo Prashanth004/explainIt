@@ -97,7 +97,7 @@ class issueCard extends Component {
         this.props.resetValues();
     }
     changeVideo(e) {
-        var clickedProj = this.state.answerProjects.find(proj => proj.projectid == e.target.id)
+        var clickedProj = this.state.answerProjects.find(proj => proj.projectid === e.target.id)
         if (clickedProj.videofilepath) {
             if (this.videoExplain) {
                 this.videoExplain.src = clickedProj.videofilepath;
@@ -125,15 +125,15 @@ class issueCard extends Component {
                             method: 'get',
                             url: config.base_dir + '/api/users/email/' + projects.email,
                         }).then(response => {
-                            if (response.status == 200) {
+                            if (response.status === 200) {
                                 const newTestJson = JSON.parse(JSON.stringify(allProjects));
                                 newTestJson[index]['profilepic'] = response.data.data.profilepic;
                                 newTestJson[index]['username'] = response.data.data.username;
                                 newTestJson[index]['id'] = response.data.data.id
                                 newTestJson[index]['twitterhandle'] = response.data.data.twitterhandle
                                 allProjects = newTestJson
-                                var answerProject = allProjects.filter(project => project.isquestion != "true")
-                                var questionProject = allProjects.filter(projects => projects.isquestion == 'true')
+                                var answerProject = allProjects.filter(project => project.isquestion !=="true")
+                                var questionProject = allProjects.filter(projects => projects.isquestion === 'true')
                                 self.setState({
                                     answerProjects: answerProject,
                                     DetailsOfPeople: answerProject,
@@ -159,7 +159,7 @@ class issueCard extends Component {
         const twitterBird = (this.state.publicStatus !== "private")?(
             <span id={this.props.issue.issueid} className="hint--top" aria-label="Tweet it">
 
-            <img id={this.props.issue.issueid} width="100%" height="100%" onClick={this.props.tweetWindow} src={require('../../images/twitter.png')} />
+            <img alt="tweet" id={this.props.issue.issueid} width="100%" height="100%" onClick={this.props.tweetWindow} src={require('../../images/twitter.png')} />
         </span >
         ):(null)
         const bottomImages=(  <ImagesOfExplainers
@@ -182,14 +182,7 @@ class issueCard extends Component {
                  />
         ) : (null)
 
-        if (this.props.displayCopyEle) {
-            var copyElement = (<div className="copyDisplay">
-                <CopyToClipboard sharablelink={config.react_url + '/project/' + this.props.projectId} />
-            </div>)
-        }
-        else {
-            var copyElement = null
-        }
+     
         return (
             <div className="cardWithDate">
                <div className="dateOfCard">
@@ -221,7 +214,7 @@ class issueCard extends Component {
                         </div>
                         <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
                             <video id={this.props.issue.issueid}
-                                autoPlay="true"
+                                autoPlay={true}
                                 muted
                                 className="explainVideo"
                                 ref={vid => this.videoExplain = vid}

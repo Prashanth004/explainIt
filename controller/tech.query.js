@@ -128,10 +128,7 @@ function getSingleTech(req, res, next) {
         success: 1,
         data: images
       })
-      // result = createTech(images, req.params.name)
-      // setTimeout(function () {
-      //   console.log(result)
-      // }, 600);
+    
 
     }).catch(function (err) {
       console.log(err)
@@ -141,10 +138,6 @@ function getSingleTech(req, res, next) {
       })
     });
 
-  // you can also watch on events
-  // google.on('result', function (item) {
-  //   console.log('out', item);
-  // });
 }
 
 

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from './InputNumber';
 import config from '../../../config/config';
-import TweetSuggest from './TweetSug';
 import { FaArrowLeft } from "react-icons/fa";
 import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";

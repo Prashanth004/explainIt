@@ -1,6 +1,5 @@
 var database = require('../app')
 var userController = require('./user.js')
-console.log("database############ :L ",database)
 
     var rn = require('random-number');
 const config = require('../config/keys')
@@ -22,7 +21,6 @@ database.db.oneOrNone('select * from projects where email =$1 and issueid =$2',[
             })
         }
         else{
-            console.log(data)
             res.status(200).send({
                 success:0,
                 msg:"no data found"
@@ -126,8 +124,7 @@ exports.saveMessage = function (req, res) {
                 .then(fromData=>{
                    
                     if(fromData){
-                        console.log(fromData.username)
-                        console.log(toData.email)
+                     
                         var subject = "Message notification";
                         var htmlContent = "<p>You have got a new recorded message from "+fromData.username+".</p><br/><p><a href='"+config.frontEndDomain+"'>click here</a> to view</p>"
                         userController.sendEmail(toData.email,subject,htmlContent)

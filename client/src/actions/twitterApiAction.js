@@ -11,7 +11,6 @@ import config from '../config/config'
 
 
 export const getRecpientId = (twitterHandle) =>(dispatch)=>{
-    console.log("Get Recpient Id of ",twitterHandle)
     var token = JSON.parse(localStorage.getItem('token'))
     axios({
         method:'get',
@@ -28,7 +27,6 @@ export const getRecpientId = (twitterHandle) =>(dispatch)=>{
             })
         }
         else{
-            console.log(res.data)
             dispatch({
                 type:GOT_NO_PROFILE,
                 payload:false
@@ -68,14 +66,12 @@ export const getTwitterHandles=()=>(dispatch)=>{
             type:GET_TWITTER_HANDLE_FAILED
          
         })
-        console.log("respose from server error : ",err)
     })
 
 }
 
 export const sendTweet=(sendTwHandle, 
 recTwiandle, ProjectAccessLink)=>(dispatch)=>{
-    console.log("sending tweetmessage")
     var token = JSON.parse(localStorage.getItem('token'))
     var postData = {
         rectwiHandle: recTwiandle,

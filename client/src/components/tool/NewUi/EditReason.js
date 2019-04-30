@@ -17,7 +17,6 @@ this.updateValue = this.updateValue.bind(this);
   componentDidMount(){
     //   var reqProject=this.props.myissues.filter(project=>(project.issueid===this.props.editingModalId))
     var editTitle =  document.querySelector('#text_'+this.props.editingModalId);  
-    console.log("reqProject : ",editTitle)
       this.setState({
         titleValue:editTitle.textContent
       })

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import '../../css/explainStories.css'
 import { Button } from 'reactstrap'
-import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 export default class componentName extends Component {
     constructor(props) {
         super(props)
@@ -35,7 +34,9 @@ export default class componentName extends Component {
             <div key={people.projectid}
                 className="explainedprofileImgDiv"
             >
-                <img id={people.projectid}
+                <img 
+                alt="profile pic"
+                id={people.projectid}
                     onClick={this.changeVideoSrc}
                     style={{
                         height: (this.state.selected === people.projectid) ? "65px" : "55px",
@@ -51,16 +52,11 @@ export default class componentName extends Component {
             <div className="storyContainer">
                 <Button close onClick={this.props.toggleAllPeopleList} />
                 <div>
-                    {/* <div className="arrow">
-                        <span><FiChevronLeft /></span>
-                        </div> */}
+                   
                     <div className="imagesOfExplainedDiv">
                         {imagesOfExplained}
                     </div>
-                    {/* <div className="arrow">
-                    
-                    <span><FiChevronRight /></span>
-                    </div> */}
+                   
                    
                 </div>
                 <div className="explainedVideo">

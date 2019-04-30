@@ -24,7 +24,6 @@ id: rn(options),
 exports.editReason = (req,res)=>{
 database.db.none('update projects SET textexplain =$1 WHERE projectid =$2',[req.body.title,req.body.projectid])
 .then(data=>{
-    console.log("changes done")
     database.db.oneOrNone('select * from projects where projectid=$1',req.body.projectid)
     .then(data=>{
         res.status(200).send({
@@ -80,7 +79,6 @@ exports.updateProjectprivate = function(req, res){
 }
 
     exports.saveProject = function (req, res) {
-        // console.log("request.body", req.body)
         var issueID = null
         var videopathName = null;
         if (!req.file) {

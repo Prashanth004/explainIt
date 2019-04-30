@@ -7,7 +7,6 @@ import {StartedRecording,
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 import CopyToClipboard from './CopytoClipboard';
-import config from '../../config/config'
 import '../css/shareScreen.css'
 
 

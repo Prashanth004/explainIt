@@ -13,7 +13,7 @@ import ExplainPage from './ExplainPage';
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction'
-import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
+import { saveExtensionDetails } from "../../../actions/extensionAction";
 
 
 class DisplayProjectDetail extends Component {
@@ -101,15 +101,15 @@ class DisplayProjectDetail extends Component {
               method: 'get',
               url: config.base_dir + '/api/users/email/' + projects.email,
             }).then(response => {
-              if (response.status == 200) {
+              if (response.status === 200) {
                 const newTestJson = JSON.parse(JSON.stringify(allProjects));
                 newTestJson[index]['profilepic'] = response.data.data.profilepic;
                 newTestJson[index]['username'] = response.data.data.username;
                 newTestJson[index]['id'] = response.data.data.id
                 newTestJson[index]['twitterhandle'] = response.data.data.twitterhandle
                 allProjects = newTestJson
-                var answerProject = allProjects.filter(project => project.isquestion != "true")
-                var questionProject = allProjects.filter(projects => projects.isquestion == 'true')
+                var answerProject = allProjects.filter(project => project.isquestion !== "true")
+                var questionProject = allProjects.filter(projects => projects.isquestion === 'true')
                 self.setState({
                   answerProjects: answerProject,
                   DetailsOfPeople: answerProject,
@@ -141,7 +141,7 @@ class DisplayProjectDetail extends Component {
         <video controls    ref={a => this.video = a} className="detailVideoElement" src={this.state.questionProject[0].videofilepath}></video>
       ) : (null)
       name = (<span  ref={a => this.name = a} className="detailsProfileName"><b>{this.state.questionProject[0].username}</b></span>)
-      profileImage = (<img src={this.state.questionProject[0].profilepic}
+      profileImage = (<img alt="profleimage" src={this.state.questionProject[0].profilepic}
         ref={a => this.profileiPic = a} 
         className="detailsProfileImg"></img>)
       ExplainItbutton = (<button
@@ -167,7 +167,9 @@ class DisplayProjectDetail extends Component {
       }}
          key={issue.projectid}className="explainedPersonCard">
         {/* <div className="deatilsProfileImgContain"> */}
-          <img  id={issue.projectid} src={issue.profilepic} style={{
+          <img 
+          alt="explained person's profilepic"
+           id={issue.projectid} src={issue.profilepic} style={{
             width: "55px",
             height: "55px",
             borderRadius: "50%",

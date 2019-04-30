@@ -7,7 +7,6 @@ import {StartedRecording,
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 import CopyToClipboard from '../CopytoClipboard';
-import config from '../../../config/config'
 import '../../css/shareScreen.css'
 
 
@@ -40,7 +39,6 @@ export class ScreenRecorder extends Component {
         var mainBtn = document.querySelector('.mainBtn');
         mainBtn.style.backgroundColor="rgb(133, 39, 39)";
         this.convey.innerText="Stop"
-        var self = this
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             var finalStream = new MediaStream();
             window.getTracks(audioStream, 'audio').forEach(function (track) {
@@ -111,7 +109,7 @@ export class ScreenRecorder extends Component {
 
     toggle(){
         if(this.props.isScreenRecording){
-            this. recordScreenStop()
+            this.recordScreenStop()
         }
         else{
             this.startRecoding()
@@ -126,6 +124,7 @@ export class ScreenRecorder extends Component {
 }
     recordScreenStop() {
         var self = this;
+        var recordingElements= null;
         var recorder1 = this.state.recorder;
         var audioStream = this.state.audioStream;
         var canvasStream = this.state.canvasStream;
@@ -150,10 +149,12 @@ export class ScreenRecorder extends Component {
     }
 
     render() {
-        var videoplayer = " ";
-        var downLinkAudio = " ";
-        var linkElement = " ";
+        var recordingEle = null;
+        var recordingElements = null;
+        var videoplayer = null;
+        var linkElement = null;
         var convey = (<p ref={a=>this.convey=a}>Start</p>)
+        var postShareElements = null
        
         if (this.state.downloadUrl) {
             videoplayer = (<video src={this.state.downloadUrl} controls={true}></video>)
@@ -167,13 +168,13 @@ export class ScreenRecorder extends Component {
                 date={Date.now() + 180000}
                 renderer={this.renderer}
             />)
-            var recordingEle = ( <p>Recording Screen</p>)
+            recordingEle = ( <p>Recording Screen</p>)
         }
         if(!this.props.isScreenRecording){
-            var recordingEle = ( null)
+        recordingEle = ( null)
         }
         if(this.props.isRecordingCompleted ===false){
-        var recordingElements = (<div>
+        recordingElements = (<div>
             <div className="progresDiv">
                  <div  className="progress" id="pbar" ></div>
              </div>
@@ -190,13 +191,13 @@ export class ScreenRecorder extends Component {
         )
     }
         else{
-            var recordingElements = null;
+            recordingElements = null;
         }
     
        
         // var timer = null;
-        if(this.props.isRecordingCompleted === true && !this.state.saveBtnClicked  && this.props.isSaved==false){
-            var postShareElements= (<div className = "postRecord">
+        if(this.props.isRecordingCompleted === true && !this.state.saveBtnClicked  && this.props.isSaved===false){
+            postShareElements= (<div className = "postRecord">
             {videoplayer}
                  <p>Do you want to save it?</p>
                  <button onClick={this.savefile} className="buttonLight save">
@@ -209,7 +210,7 @@ export class ScreenRecorder extends Component {
          }
          else if(this.props.isSaved){
             // elseif {
-            var postShareElements= (<div className = "postRecord">
+            postShareElements= (<div className = "postRecord">
             
                  <p>Link to access your saved project</p>
                  <CopyToClipboard sharablelink = {this.props.sharablelink} />
@@ -218,7 +219,7 @@ export class ScreenRecorder extends Component {
 
          }
          else if(this.state.saveBtnClicked && !this.props.isSaved){
-            var postShareElements= (<div>
+            postShareElements= (<div>
                  <p>Save processing..</p>
              </div>)
          }

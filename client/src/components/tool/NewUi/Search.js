@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import config from '../../../config/config'
-import { getStocks, matchStocks } from './data';
-import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import '../../css/Search.css';
 

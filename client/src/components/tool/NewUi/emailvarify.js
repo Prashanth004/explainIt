@@ -46,8 +46,7 @@ class EmailVarify extends Component {
      this.setState({
         valdatingMessage:true
      })
-     console.log(this.state.enteredOtp)
-     console.log(this.state.token)
+   
      if(this.state.token === this.state.enteredOtp)
      {
          this.setState({
@@ -70,6 +69,7 @@ class EmailVarify extends Component {
      this.props.resendOtp(this.state.emailFlieldValue)
  }
   pressSubmit(){
+    
     const secret = config.OTP_SECRET
     const options = {
         algorithm: "sha256",
@@ -86,6 +86,7 @@ class EmailVarify extends Component {
       })
   }
   render() {
+    var otpAction =null;
     var validateOtp = (this.state.valdatingMessage)?(
 <p>validating Passcode</p>
     ):(null)
@@ -93,7 +94,7 @@ class EmailVarify extends Component {
         <p>incorrect passcode</p>
     ):(null)
     if(this.state.resendClick!==true){
-        var otpAction=(this.state.submitPressed)?(
+        otpAction=(this.state.submitPressed)?(
             (this.props.otpSent)?(
                 <div>
                     <p>passcode is sent to {this.state.emailFlieldValue}</p>
@@ -118,7 +119,7 @@ class EmailVarify extends Component {
             </div>)
     }
     else{
-        var otpAction = (this.props.reSentOtp)?(
+        otpAction = (this.props.reSentOtp)?(
             <div>
                 <p>passcode is sent to {this.state.emailFlieldValue}</p>
                 <h5>Enter passcode to verify</h5>
@@ -127,8 +128,7 @@ class EmailVarify extends Component {
                 <button className="buttonDark" onClick={this.varifyOtpValue}>Submit</button>
                 <br/>
                 <br/>
-                {/* <button className="buttonLight">Edit email</button> */}
-                {/* <button className="buttonLight" onClick={this.resend}>Resend</button> */}
+              
             </div>
         ):(
             <h4>Resending passcode to your mail</h4>
@@ -145,7 +145,7 @@ class EmailVarify extends Component {
         <div className="emailboxCotainer">
         <div className="logoEmail">
             <span>
-              <img onClick={this.logout} height="100%" width="100%" src={require('../../images/logo5.png')} />
+              <img alt="logo" onClick={this.logout} height="100%" width="100%" src={require('../../images/logo5.png')} />
             </span>
         </div>
         <br/>
