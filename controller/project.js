@@ -1,4 +1,5 @@
-var database = require('../app')
+var appMethods = require('../app')
+var database = appMethods.db
 var promise = require('bluebird');
 var buffer = require('buffer');
 const fs = require('fs');
@@ -19,17 +20,72 @@ var options = {
 
 id: rn(options),
 
+
+exports.editReason = (req,res)=>{
+database.db.none('update projects SET textexplain =$1 WHERE projectid =$2',[req.body.title,req.body.projectid])
+.then(data=>{
+    database.db.oneOrNone('select * from projects where projectid=$1',req.body.projectid)
+    .then(data=>{
+        res.status(200).send({
+            success:1,
+            data:data
+        })
+    })
+   
+})
+.catch(err=>{
+    console.log(err)
+    res.status(500).send({
+        success:1,
+        error:err
+    })
+})
+}
+
+exports.updateProjectpublic = function(req, res){
+    database.db.none('update projects SET public = $1 WHERE projectid = $2', [1, req.body.projectId])
+    .then(data=>{
+        res.status(200).send({
+            success: 1,
+            data:data
+        })
+    })
+    .catch(err=>{
+        console.log("error : ", err)
+        res.status(500).send({
+            success: 0,
+           msg:err
+        })
+
+    })
+}
+
+exports.updateProjectprivate = function(req, res){
+    database.db.none('update projects SET public = $1 WHERE projectid = $2', [0, req.body.projectId])
+    .then(data=>{
+        res.status(200).send({
+            success: 1,
+            data:data
+        })
+    })
+    .catch(err=>{
+        console.log("error : ", err)
+        res.status(500).send({
+            success: 0,
+           msg:err
+        })
+
+    })
+}
+
     exports.saveProject = function (req, res) {
-        console.log("request.body", req.body)
         var issueID = null
         var videopathName = null;
         if (!req.file) {
-            console.log(" video file not found")
         }
         else if (req.file) {
-            console.log("req.file : ", req.file)
-            if (req.file.size > (1024 * 1024 * 12)) {
-                res.status(450).send({
+            if (req.file.size > (1024 * 1024 * 25)) {
+                return res.status(450).send({
                     success: 0,
                     lengthExceeds: 1,
                     msg: " the audio exceeds 12 mb"
@@ -37,9 +93,7 @@ id: rn(options),
             }
             videopathName = config.domain + '/public/audio/' + req.body.projectName + '.mp4'
         }
-        console.log("req.body.imageData:", typeof(req.body.imageData))
         if (req.body.imageData != "null") {
-            console.log("i am inside if")
             var imageBuffer = decodeBase64Image(req.body.imageData);
         }
         var rand2 = rn(options)
@@ -67,22 +121,25 @@ id: rn(options),
         }
         var dateNow = new Date().toString()
         var rand = rn(options)
-        database.db.oneOrNone('insert into projects(name,email, projectid,  date,textExplain ,issueid,isquestion, imgurl,videofilepath)' +
-            'values(${name},${email}, ${projectid},${date},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath})',
+        database.db.oneOrNone('insert into projects(name,email, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
+            'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
             {
                 name: req.body.projectName,
                 email: req.user.email,
                 projectid: rand,
-                date: dateNow,
+                
                 imgurl: imgurl,
                 textExplain: req.body.textExplain,
                 isquestion: req.body.isquestion,
                 issueid: issueID,
                 videofilepath: videopathName,
+                public : Number(req.body.public)
             }).then((respponse) => {
-                console.log("saving project successfull")
                 database.db.one('select * from projects where projectid = $1', rand)
                     .then(data => {
+                        res.io.emit(key.SAVED_NEW_PROJECT,{
+                            "userId":req.user.id
+                        })
                         res.status(201).send({
                             success: 1,
                             data: data
@@ -156,7 +213,7 @@ exports.retrieveItems = function (req, res) {
 }
 
 exports.getAllProject = function (req, res) {
-    database.db.manyOrNone('select * from projects')
+    database.db.manyOrNone('select * from projects ORDER BY date')
         .then(data => {
             res.status(200).send({ success: 1, data: data })
         })
@@ -166,9 +223,26 @@ exports.getAllProject = function (req, res) {
 
 
 }
+exports.getIssueById = function (req, res) {
+
+    database.db.one('select * from projects where issueid = $1', req.params.id)
+        .then(projects => {
+            res.status(200).send({
+                success: 1,
+                data: projects
+            })
+        })
+        .catch(error => {
+            console.log("error : ",error)
+            res.status(500).send({
+                sucess: 0,
+                msg: error
+            })
+        })
+}
 exports.getProjectById = function (req, res) {
 
-    database.db.manyOrNone('select * from projects where projectid = $1', req.params.id)
+    database.db.one('select * from projects where projectid = $1 ', req.params.id)
         .then(projects => {
             res.status(200).send({
                 success: 1,
@@ -185,7 +259,7 @@ exports.getProjectById = function (req, res) {
 
 
 exports.getAllProjectByIssue = function (req, res) {
-    database.db.manyOrNone('select * from projects where issueid = $1', req.params.issueid)
+    database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date', req.params.issueid)
         .then(projects => {
 
             if (projects) {

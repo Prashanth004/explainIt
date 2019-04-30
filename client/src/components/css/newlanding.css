@@ -9,11 +9,37 @@
     height:50px;
    
   } */
+  .profileCardDiv{
+    display:inline-block;
+    /* background-color: #0075a2; */
+    text-align: left;
+    display:grid;
+    grid-template-columns: 50% 50%
+    
+  }
   .navbar-brand{
     color:white;
   }
+  .PublicPrivateToggle{
+    padding: 40px 0pax 40px 0px;
+}
+.startShare{
+  /* text-align: left; */
+  margin-top:20px;
+  padding:15px;
+  padding-top:15px;
+  font-size:14px;
+  /* background-color: blue; */
+}
+.handleInput{
+  width:30%;
+  border-style:none;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(0, 0, 0, 0.486);
+
+}
   .sharableLinkSection{
-    width:70%;
+    width:90%;
     margin:auto;
     padding:15px;
     background-color: white;
@@ -35,6 +61,8 @@
 
   }
   .sharableLink{
+    width:20%;
+    margin-left:0px;
     background-color: white;
     text-align: left;
     align-content: left;
@@ -64,7 +92,7 @@
 
 }
 .profileImagesDiv{
-  margin:0px 10px 0px 10px;
+  /* margin:0px 10px 0px 10px; */
   height:37px;
   width:37px;
   border-radius:50%;
@@ -94,14 +122,17 @@ padding-top:-10px;
     margin:10px;
   
 }  */
-
+a{
+  color:rgb(12, 12, 53);
+  text-decoration: underline;
+}
 .LinkBtn{
   color:white;
 
 }
   li a {
   
-    color:rgb(78, 78, 78);
+    color:rgb(12, 12, 53);
   
   }
 
@@ -131,13 +162,10 @@ text-align: center;
 .Profilecard:hover{
   box-shadow: 0px 0px 0px 0px rgba(143, 143, 143, 0.527);
 }
-.displayInvite{
-  min-height:100vh;
-}
+
 .inviteMagic{
-  min-width: 40px;
-  padding:30px;
-  margin-top:85px;
+
+ 
   /* background-color:white; */
   border-style:none;
   border-width:0.5px;
@@ -145,22 +173,25 @@ text-align: center;
   border-color:rgba(155, 153, 153, 0.609);
 }
 .inviteContainer{
-  width:40%;
+  
   margin:auto;
-  padding-top:105px;
+
   text-align: center;
   color:rgb(97, 96, 96);
 
 }
 .blackwhite{
   text-align: right;
-  padding:10px;
+  padding:8px;
+  margin-top:0px;
 
   height:50%;
-  /* background-color: rgb(252, 252, 250); */
+  /* background-color: #e7ebff; */
+  /* background-color: #aecdce;; */
+  /* background-color: rgb(66, 173, 187); */
   background-color: #dddd;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 .ProfileDiv{
   width:95%;
@@ -196,10 +227,10 @@ margin-top:10px;
 .numberShow{
   position: relative;
   font-weight: bold;
-
+  color:rgb(11, 11, 92);
   /* top:px; */
   /* color:black; */
-  font-size:20px;
+  font-size:15px;
 }
 .profileImage{
   height:95px;
@@ -238,6 +269,7 @@ margin-top:10px;
 .profileName{
   position:relative;
   top:-40%;
+
  
 }
 .callerProfileImage{
@@ -257,8 +289,9 @@ margin-top:10px;
 }
 
   .containerHome{
-      width:95%;
+      width:100%;
       margin:auto;
+      text-align: center;
       display:grid;
       /* grid-template-columns: 30% 40% 30%;
       grid-column-gap: 5px; */
@@ -266,27 +299,96 @@ margin-top:10px;
 
       
   }
-  .questionImg{
-    height: 200px;
-    width:100%;
+  .year{
+    font-size:18px
   }
+  .dateOfCard{
+    margin-right:15px;
+    padding-top:10px;
+    padding-right:25px;
+    /* background-color: red; */
+    /* text-align: right; */
+  }
+  .questionImg{
+    height: 225px;
+    width:100%;
+    border-top-style:none;
+    border-top-color:rgba(100, 99, 99, 0.356);
+    border-top-width:0.5px  }
   .twitter{
-    float:right;
+    /* float:right; */
     height:27px;
+    position: relative;
+    right:95px;
+    /* background-color: #0075a2; */
     width:27px
   }
+  .cardWithDate{
+    width:100%;
+    margin-top:0px;
+    
+  display: grid;
+  grid-template-columns: 0% 100%
+   
+  }
+  .date{
+    font-size:11px;
+    /* margin-top:20px; */
+   color:rgb(87, 85, 85);
+    width:100px;
+    margin-right:10px;
+    /* margin-left:-25px; */
+  }
+  .gridView{
+    width:18px;
+    height:18px;
+margin:10px;
+color:rgba(51, 51, 51, 0.609);
+
+  }
+  .textEditArea{
+    width:90%;
+    border-radius:3px;
+    font-size:12px;
+    
+  }
+ .listView{
+  width:18px;
+  height:18px;
+margin:10px;
+color:rgba(51, 51, 51, 0.609);
+ }
+  .twitterContainer{
+    /* background-color: #0075a2; */
+    text-align: left;
+  }
   .twitterHolder{
+   
     padding-right:5%;
     text-align:right;
+    display: grid;
+    grid-template-columns: 50% 50%
   }
   a:link {
-    color: rgb(99, 99, 99);
-    /* text-decoration: underline; */
+    color: rgb(10, 2, 85);
+    text-decoration: underline;
+  }
+  .issueContainerMore{
+    border-style: none;
+    /* border-radius: 8px; */
+    /* padding:5px; */
+    width:95%;
+    margin:auto;
+    /* background-color: rgb(239,239,233); */
+    /* background-color: white; */
+    margin-top:20px;
+    border-color:rgb(221, 220, 220);
+    border-width:0.5px;
   }
   .issueContainer{
     border-style: none;
-    border-radius: 8px;
-    padding:5px;
+    /* border-radius: 8px; */
+    /* padding:5px; */
     width:95%;
     margin:auto;
     /* background-color: rgb(239,239,233); */
@@ -315,6 +417,9 @@ margin-top:10px;
 }
   
   /* visited link */
+  a{
+    color:blue;
+  }
   a:visited {
     color: rgb(68, 68, 68);
   }
@@ -327,29 +432,29 @@ margin-top:10px;
   
   /* selected link */
   a:active {
-    color: rgb(68, 68, 68);
+    color:blue;
   }
   .issueCard{
-      width:93%;
-      margin:auto;
-     
-      box-shadow: 0px 0px 10px 1.5px rgba(236, 234, 234, 0.411);
+      width:100%;
+      /* margin:auto; */
+      box-shadow: 0px 0px 0px 0px rgba(235, 235, 235, 0.911);
+
       background-color :white;
-      margin-top:40px;
-      border-radius:6.5px;
+      /* margin-top:20px; */
+      border-radius:3.5px;
       border-style:solid;
       border-width:0.5px;
-      border-color: rgb(241, 237, 237);
+      border-color: rgba(128, 125, 125, 0.171);
+      box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
+
   }
-  .issueCard:hover{
-    box-shadow: 0px 0px 0px 0px rgba(235, 235, 235, 0.911);
-  }
+ 
   .modalBody{
     /* background-color: #111; */
     background-color :white;
     padding:0px;
     width:100%;
-    margin:auto;
+    /* margin:auto; */
     align-self: left;
     position:absolute;
     border-radius:6.5px;
@@ -367,7 +472,7 @@ margin-top:10px;
   .modalBodyTool{
     /* background-color: #111; */
     padding:0px;
-    width:130%;
+    /* width:130%; */
     margin:auto;
     align-self: center;
     position:absolute;
@@ -387,14 +492,20 @@ margin-top:10px;
     border-style:none;
   }
   .questionText{
+    text-align: left;
 width:99%;
 margin:auto;
-min-height: 60px;
+min-height: 10px;
+color:rgba(51, 51, 51, 0.863);
 /* background-color: blue; */
-padding:05px 25px 05px 25px;
+padding:00px 0px 10px 57px;
 font-size:13px;
-background-color :white;
+/* background-color :white; */
 border-style: none;
+border-top-style:none;
+border-top-color:rgb(146, 146, 146);
+border-top-width:0.5px;
+
 
   }
   .modalBtns{
@@ -412,15 +523,20 @@ border-style: none;
   .explainAnswer{
     width:99%;
     margin:auto;
-    background-color :white;
+    /* background-color :white; */
     display:grid;
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 50% 35% 15%;
     padding:5px;
 
   }
   .explainItBtn{
-   
+    width:85px;
+   color:rgb(77, 76, 76);
     float:right;
+    font-size:13px;
+    align-self: right;
+    align-content: right;
+    border-color:rgba(51, 51, 51, 0.664);
   }
 
   .emptyIssues{
@@ -445,7 +561,8 @@ border-style: none;
    
   }
   .listOfAllPeople{
-    /* padding:10px; */
+    margin-top:10px;
+    /* padding:px;10px; */
     width:60%;
 
   }
@@ -457,6 +574,7 @@ border-style: none;
   .singleMember{
     width:80%;
     margin:auto;
+    margin-top:10px;
     display:grid;
     grid-template-columns:25% 75%
   }
@@ -471,8 +589,9 @@ border-style: none;
     display: inline-block;
     /* background-color:red; */
     display:grid;
-    grid-template-columns: 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6% 6%
+    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%
   }
+ 
   .toolContainer{
     background-color: white;
     padding:10px;
@@ -490,8 +609,10 @@ border-style: none;
     }
     .twitterBtn{
       color:white;
-      height:25px;
-      padding-top: 2px;
+      height:30px;
+      padding-top: 1.5px;
+      font-size:14px;
+      margin:5px;
       
     }
     .btn-twitter:link, .btn-twitter:visited {
@@ -521,7 +642,7 @@ border-style: none;
       }
       .questionImg{
         height: 300px;
-        width:100%;
+        width:99%;
       }
       .profileImage{
         height:105px;
@@ -535,49 +656,81 @@ border-style: none;
        
       }
       .displayNumber{
-    
+        
         font-size: 13px;
        
+      }
+      .cardWithDate{
+       
+        margin-top:15px;
+        display: grid;
+        grid-template-columns: 20% 80%
       }
     
     }
 
     @media (min-width: 1000px) {
+      .sharableLinkSection{
+        width:50%;
+      }
       .issueContainer{
-        width:65%;
-        border-style: solid;
-        border-radius: 8px;
-        background-color: white;
+        width:66%;
+        /* border-style: solid; */
+        /* border-radius: 8px; */
+        /* background-color: white; */
       }
       .containerHome{
-        width:65%;
+        width:85%;
       }
+      
       .questionImg{
-        height: 350px;
+        height: 376px;
         width:100%;
+        margin:auto;
       }
       .ProfileDiv{
-        width:80%;
+        width:60%;
         margin:auto;
       }
       .Profilecard{
-        width:70%;
+        width:60%;
       }
       .profileImage{
-        height:125px;
-        width:125px;
+        height:115px;
+        width:115px;
       
       }
       .profileImageElement{
        /* background-color: #ffff; */
-        height:126px;
-        width:126px;
+        height:116px;
+        width:116px;
        
+      }
+      .float{
+        position:fixed;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        right:40px;
+        background-color:black;
+        color:#FFF;
+        border-radius:50px;
+        text-align:center;
+        box-shadow: 0px 0px 10px 2px rgb(150, 149, 149);
+      }
+      .profileCardDiv{
+        grid-template-columns: 10% 40% 50%
       }
       .displayNumber{
     
         font-size: 18px;
        
+      }
+      .cardWithDate{
+        margin-left:-2%;
+        display: grid;
+  grid-template-columns: 10% 90%;
+        margin-top:30px;
       }
     
     }

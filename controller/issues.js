@@ -69,7 +69,6 @@ var optionsRand = {
 }
 
 exports.getAllIssues = function (req, res) {
-    console.log("dtatabase  : ", database)
     isTrue = "true"
     database.db.manyOrNone('select * from projects where isquestion = $1', isTrue)
         .then(data => {

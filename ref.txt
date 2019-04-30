@@ -1,12 +1,7 @@
 https://mherman.org/blog/designing-a-restful-api-with-node-and-postgres/
-
 https://www.npmjs.com/package/pg-promise#usage
-
 https://www.tech-recipes.com/rx/56738/one-to-one-one-to-many-table-relationships-in-sql-server/
-
-
 https://github.com/adcentury/socketio-jwt-auth
-
 https://www.valentinog.com/blog/socket-io-node-js-react/
 
 https://www.npmjs.com/package/socketio-jwt
@@ -39,6 +34,128 @@ ALTER DATABASE explain OWNER TO bookmane
 CREATE DATABASE <dbname> OWNER <ownername> 
 \dt
 psql dbname < dump.sql
+
+
+explain_first
+CREATE DATABASE explain_first OWNER bookmane
+
+
+
+view-Page
+
+1) option to delete/edit
+2) view element proper
+3) explainIt button works properly
+4) flow of explain is good?
+5) nav button are good?
+6) logout login flow
+
+screen share
+1) low for shariing screen
+   the validetions work fine?
+   the twiiter handle properly recognised
+   wordings and spellings
+   call answer flow
+   call reject flow
+   call not answered flow
+   record flow of the call rejected or not anwseed
+   call notification
+   call to deiapear before clickng on expired link
+   
+2) Call flow
+   call connected
+   i ended call
+   other person ended the call
+   the call got disconected
+   retry options
+3) record flow
+   record and send to people
+    wordings and spelling
+    record and save for further refrence
+    saving the recording
+4) created
+   Ui lagging
+   order of the elements displayed
+   tweet option
+    explain it button
+   delete
+   public/private
+   sharable link
+   grid to list and list to grif conversion
+   view properly working
+5) inbox
+  notifications badges realtimmr
+  disapear of badges in real time
+  display message with subjects in order of sate
+  messages go to participated once explained
+  
+
+
+
+
+bugs:
+1) order of data
+2) hot spot issue
+3) edit option not working
+4) 
+
+
+0) width of the cards
+1) order of message
+2) responsive web apps@
+2) realtime actions
+3) save to export @
+4) twitter handle suggestion 
+5) order of inbox
+6) display subject for inbox @
+7) remove from inbox option
+7) hash tags
+8) extension
+9) notification
+10) payment integrations
+11) 
+
+
+
+
+show waiting message only when the rhe acknowledge is present
+listen to escape key pressed to end call
+
+
+
+1)
+1. when you login, you are always shown the login page before showingthe home page
+2. make a note of all the flows where you rpompt a new tab, close them when task is done
+3. Screenshare option either side should improve
+4. messages needs to improve
+5. private option should not prompt twitter
+6. Floater needs to be rightly utilised
+7.Timer show rightly on floater
+8. Logout and any action during a screenshare should ask permission
+9. Icon driven actions if made, will be useful
+
+
+1. when you login, you are always shown the login page before showingthe home page@@@@
+2. make a note of all the flows where you rpompt a new tab, close them when task is done
+3. Screenshare option either side should improve
+4. messages needs to improve
+5. private option should not prompt twitter@@@@@
+6. Floater needs to be rightly utilised
+
+7.Timer show rightly on floater
+8. Logout and any action during a screenshare should ask permission
+9. double tap to profile
+10. edit card
+11. responsivenes
+
+
+
+
+
+
+
+
+
 
 
 

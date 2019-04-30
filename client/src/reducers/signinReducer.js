@@ -1,10 +1,13 @@
 
 
 import {SIGN_IN_WITH_GOOGLE,
-    SIGN_IN_WITH_GIT,SIGN_OUT,CHECK_TOKEN_VALIDIDTY,AUTH_FAIL,SIGN_IN_WITH_TWITTER} from '../actions/types'
+    SIGN_IN_WITH_GIT,
+    AUTH_FAIL_TWITTER,
+    SIGN_OUT,CHECK_TOKEN_VALIDIDTY,AUTH_FAIL,SIGN_IN_WITH_TWITTER} from '../actions/types'
 
 const initialState = {
     authAction:false,
+    twitterLoginFailed:false,
     isAuthenticated:false,
     domainName :null,
     error :null,
@@ -50,6 +53,7 @@ export default function(state = initialState, action){
            
             return{
                 ...state,
+                authAction:true,    
                 logoutSuccess:false,
                 isAuthenticated:action.payload,                
                 domainName: "twitter",
@@ -60,6 +64,11 @@ export default function(state = initialState, action){
                 id:action.id,
                 twitterHandle:action.twitterHandle
  }
+        case AUTH_FAIL_TWITTER:
+            return{
+                ...state,
+                twitterLoginFailed:true
+            }
         case AUTH_FAIL : 
             return{
                 ...state,

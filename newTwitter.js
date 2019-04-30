@@ -8,10 +8,15 @@ var client = new Twitter({
   });
 
  
-  client.get('users/show.json', {"screen_name":'Sirivanth4'}, function(error,body ,response){
-      console.log("body : ", body)
-      id = body.id
-    //   window.open("https://twitter.com/messages/compose?recipient_id="+id, target="_blank")
+  // client.get('users/show.json', {"screen_name":'Sirivanth4'}, function(error,body ,response){
+  //     console.log("body : ", body)
+  //     id = body.id
+  //   //   window.open("https://twitter.com/messages/compose?recipient_id="+id, target="_blank")
+  // });
+  client.post('statuses/update', {status: 'I am a tweet'}, function(error, tweet, response) {
+    if (!error) {
+      console.log(tweet);
+    }
   });
 
   

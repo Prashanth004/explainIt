@@ -1,36 +1,31 @@
 import React, { Component } from 'react'
-import '../../css/newlanding.css'
+import '../../css/newlanding.css';
+import PageNotFount from './NoMatch';
+import DisplatCreated from './DisplayCreated';
+import { FiGrid,FiList } from "react-icons/fi";
 import Navbar from './Navbar'
 import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import { Modal, ModalBody} from 'reactstrap';
-import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD } from '../../../actions/types';
-import Explain from './Explainit'
 import {  setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from '../../LoginModal';
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
-import Content from './Content'
-import { Animated } from "react-animated-css";
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
 import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import {getRecpientId} from '../../../actions/twitterApiAction'
-import { openParticipated,openCreated } from "../../../actions/navAction";
-import { stat } from 'fs';
+import {openInbox, openParticipated,openCreated } from "../../../actions/navAction";
 import ProfileNotOnExplain from './ProfileNotOnExplain'
-import ProfileNotOnTwitter from './ProfileNotOnTwitter'
 
 class NewHome extends Component {
     constructor(props) {
@@ -42,18 +37,23 @@ class NewHome extends Component {
             showCreatedIssue: false,
             showParticipatedIssue: false,
             showProjects: false,
-            isHome : false
+            isHome : false,
+            isVisitProfile:true
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
         this.toggleModalCreate = this.toggleModalCreate.bind(this)
         this.toodleExplain = this.toodleExplain.bind(this);
+        this.changeViewToList = this.changeViewToList.bind(this);
+        this.changeViewToGrid = this.changeViewToGrid.bind(this);
+
         this.toggleCreatedIssue = this.toggleCreatedIssue.bind(this);
         this.toggleParticipatedIssue = this.toggleParticipatedIssue.bind(this);
         this.closeParticipated = this.closeParticipated.bind(this);
         this.reStoreDefault = this.reStoreDefault.bind(this);
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.toggleInbox = this.toggleInbox.bind(this);
     }
     
     reloadPage() {
@@ -68,23 +68,29 @@ class NewHome extends Component {
             showCreatedIssue: false,
         })
     }
-
+    changeViewToList() {
+        this.setState({
+            typeOfView: "list"
+        })
+    }
+    changeViewToGrid() {
+        this.setState({
+            typeOfView: "grid"
+        })
+    }
     componentDidMount() {
         if(!this.props.isPresentInExplain){
-            this.props.getRecpientId(this.props.match.params.encrTwitterHandle)
+            // alert("dnvnvnfkn")
+            const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+            this.props.getRecpientId(twiHand)
         }
         var self = this
                 function postMessageHandler(event) {
             if (event.data.sourceId !== undefined) {
-                console.log("epxlain got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message__sourceId : ", event.data.sourceId)
+              
                 self.props.saveSourceId(event.data.sourceId)
             }
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                console.log(" event.source :", event.source)
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -101,9 +107,12 @@ class NewHome extends Component {
     }
     componentWillMount() {
         this.props.stillAuthenicated()
-        console.log("this.props.match.params.encrTwitterHandle :",this.props.match.params.encrTwitterHandle)
-        this.props.getProfileByTwitterHandle(this.props.match.params.encrTwitterHandle)
-        localStorage.setItem("peerId",JSON.stringify(this.props.match.params.encrTwitterHandle))
+        if(this.props.match.params.encrTwitterHandle===null){
+            alert("empty")
+        }
+        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+        this.props.getProfileByTwitterHandle(twiHand)
+        localStorage.setItem("peerId",JSON.stringify(twiHand))
     }
     toodleExplain() {
         localStorage.setItem("issueId", null)
@@ -115,7 +124,6 @@ class NewHome extends Component {
     }
 
     toggleCreatedIssue() {
-      var self = this
       this.setState({
           showProjects: true,
           openExplain: false
@@ -147,7 +155,6 @@ class NewHome extends Component {
     togglemodal = (e) => {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
-        console.log("e.target.id : ", e.target.id)
         if (classOfClicked !== "singleMember" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
             if (this.state.modal === false) {
                 this.props.clearAnswers(e.target.id)
@@ -161,6 +168,13 @@ class NewHome extends Component {
   
     handleCancel(){
         
+    }
+    toggleInbox(){
+        this.setState({
+            showProjects: true,
+            openExplain: false
+        })
+        this.props.openCreated()
     }
     reStoreDefault = () => {
         if(this.props.screenAction!==null){
@@ -205,56 +219,85 @@ class NewHome extends Component {
     }
 
     render() {
-
-        var open = this.state.openDialog
-        var deatilsModal = null
-        deatilsModal = (<IssueDetils />)
+        var issuepercentage="55%";
+        if(this.state.reducedWidth){
+            issuepercentage="90%"
+        }
+        if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle){
+          
+             this.props.history.push("/");
+         }
+      
         var issuesCreated = this.props.myissues;
-        var issuesParicipated = this.props.showProjects
 
         var self = this
         window.addEventListener('storage', function (event) {
-            if (event.key == 'token') {
+            if (event.key === 'token') {
                 self.reloadPage()
             }
         })
-        var explainDiv = null;
         var feedDiv = null;
-        var trueFalse = this.state.showParticipatedIssue;
-        var loginButton = (this.props.isAauthenticated)?(null):( <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
+        var loginButton = (this.props.isAauthenticated)?
+        (null):((this.props.created || this.props.participated)? (null):(<TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
         onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-        requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />)
+        requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />))
           
         
-        // if (this.props.isAauthenticated) {
-            if (this.state.openExplain) {
-                explainDiv = (<Explain reStoreDefault={this.reStoreDefault} />)
-            }
+          
             if (this.props.created) {
-                feedDiv = (
-                    <Animated animationIn="slideInLeft" animationOut="zoomOut" isVisible={this.props.created}>
-                        <div className="issueContainer" >
-                            <div className="closeBtnHolder">
-                            </div>
-                            <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={issuesCreated} />
+                var createdDiv = (this.state.typeOfView === "list") ? (
+                    <div className="issueContainer" style={{width:issuepercentage}}>
+                    <div className="closeBtnHolder">
+                    </div>
+                    <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={(issuesCreated)} />
+                </div>
+                ):(
+                    <div className="issueContainerMore" >
+                    <div className="closeBtnHolder">
+                    </div>
+                    <DisplatCreated home={config.NOT_HOME} issueArray={(issuesCreated)} />
+                </div>
+                )
+                feedDiv = (<div>
+                        <div style={{ textAlign: "right" }}>
+                            <span className="hint--top" aria-label="List View">
+                            <FiList onClick={this.changeViewToList} className="listView"/>
+                            </span>
+                            <span className="hint--top" aria-label="Grid View">
+                            <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                            </span>
                         </div>
-                    </Animated>)
+                       {createdDiv}
+                       </div>)
             }
             if (this.props.participated) {
-                feedDiv = (
-                    <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated}>
-
-                        <div className="issueContainer" >
-
-                            <div className="closeBtnHolder">
-                            </div>
-                            <IssueDisplay togglemodal={this.togglemodal} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                var participatedDiv = (this.state.typeOfView === "list") ? (
+                    <div className="issueContainer" style={{ width: issuepercentage }} >
+                        <div className="closeBtnHolder">
                         </div>
-                    </Animated>)
+                        <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                    </div>
+                ) : (<div className="issueContainer" style={{ width: "80%" }} >
+        
+                    <div className="closeBtnHolder">
+                    </div>
+                    <DisplatCreated home={config.NOT_HOME} issueArray={this.props.participatedIssues} />
+                </div>)
+                feedDiv = (
+                    <div>
+                    <div style={{ textAlign: "right" }}>
+                         <span className="hint--top" aria-label="List View">
+                         <FiList onClick={this.changeViewToList} className="listView"/>
+                         </span>
+                         <span className="hint--top" aria-label="Grid View">
+                         <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                         </span>
+                     </div>
+                     
+                     {participatedDiv}
+                     </div>)
 
             }
-        // }
-        // if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE || 
                 this.props.participated ||
@@ -263,16 +306,12 @@ class NewHome extends Component {
             }
             else {
               
-                if(this.state.openExplain){
-                    var explainItBtn= null
-                }
-                else{
-                    var explainItBtn=(<button className="buttonDark explainBtn" onClick={this.toodleExplain}>Explain</button>)
-                }
-                if(this.props.userId!=null){
-                  var profileCardElement = (
+               
+                if(this.props.userId!==null){
+                  profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
                     isHome={this.state.isHome}
+                    toggleInbox={this.toggleInbox}
                         userId={this.props.userId}
                         toggleCreatedIssue={this.toggleCreatedIssue}
                         toggleParticipatedIssue={this.toggleParticipatedIssue} />
@@ -280,16 +319,16 @@ class NewHome extends Component {
                 )
                 }
             }
-        // }
-        // else {
-        //     var profileCardElement = (<Content />)
-        // }
-        var self = this
+    
+        // var self = this
+        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
         return (this.props.authAction)?(
             (!!this.props.fetchProfile)?(
             (!!this.props.isPresentInExplain)?(
             <div className="fullHome">
-                <Navbar />
+                <Navbar
+                page="profile"
+                twitterHandle={twiHand} />
                 <div className="containerHome">
                     <div>
                         {profileCardElement}
@@ -297,35 +336,21 @@ class NewHome extends Component {
                     <div className="twitterBtnDiv">
                    {loginButton}
                     </div>
-{/* {explainDiv} */}
 
                     <div>
                         {feedDiv}
                     </div>
                 </div>
-                <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className}>
-
-                    <ModalBody className="modalBody">
-                        {deatilsModal}
-                    </ModalBody>
-
-                </Modal>
-
-
-                <Modal isOpen={this.state.modalTool} toggle={this.explainTool} className={this.props.className}>
-
-                    <ModalBody className="modalBodyTool">
-                        <LoginMadal />
-                    </ModalBody>
-
-                </Modal>
+           
 
             </div>):(
                 (this.props.doneGettingId)?(
                     (this.props.profilePresentOnTwitter)?(
-                    <ProfileNotOnExplain twitterhandle={this.props.match.params.encrTwitterHandle} />
+                    <ProfileNotOnExplain
+                    isVisitProfile={this.state.isVisitProfile}
+                    twitterhandle={this.props.match.params.encrTwitterHandle} />
              ):(
-                 <ProfileNotOnTwitter />
+                 <PageNotFount />
              )
             ):(null)
                
@@ -350,7 +375,8 @@ NewHome.PropType = {
     openCreated:PropType.func.isRequired,
     getRecpientId :PropType.func.isRequired,
     twitterAuthFailure: PropType.func.isRequired,
-    signInWithTwitter: PropType.func.isRequired
+    signInWithTwitter: PropType.func.isRequired,
+    openInbox:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -362,6 +388,7 @@ const mapStateToProps = state => ({
     myissues: state.profile.myIssues,
     participatedIssues: state.profile.participatedIssue,
     twitterHandle :state.profile.twitterHandle,
+    authTwitterHandle:state.auth.twitterHandle,
     email: state.auth.email,
     userId: state.visitProfile.id,
     fetchProfile:state.visitProfile.fetchProfile,
@@ -375,4 +402,4 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, {twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated, fetchProjectbyIssue, setIssueId })(NewHome)
+export default connect(mapStateToProps, {openInbox,twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)

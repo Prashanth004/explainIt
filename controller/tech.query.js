@@ -13,8 +13,7 @@ var db = pgp(connectionString);
 
 
 function getSingleTechMiddle(req, res, next) {
-  console.log(req.user)
-  console.log("typeof(req.params.name)" + typeof (req.params.name))
+  
   var techName = (req.params.name);
   db.one('select * from tech where name = $1', techName)
     .then(function (data) {
@@ -22,10 +21,7 @@ function getSingleTechMiddle(req, res, next) {
         imgRes = []
         db.many('select * from images where name = $1', data.name)
           .then(function (imgData) {
-            console.log(imgData)
-
-            console.log(imgData[0].length)
-            console.log(imgData[0].name)
+          
             for (var items in imgData) {
 
               imgRes.push({
@@ -37,7 +33,6 @@ function getSingleTechMiddle(req, res, next) {
                 type: imgData[items].type
               })
             }
-            console.log("data present")
             return res.status(200).send({
               success: 1,
               data: imgRes,
@@ -46,7 +41,6 @@ function getSingleTechMiddle(req, res, next) {
 
           })
           .catch(function (err) {
-            console.log("Item not found in db :( lets find it else where :)  ")
             next()
           });
 
@@ -54,12 +48,10 @@ function getSingleTechMiddle(req, res, next) {
 
       }
       else {
-        console.log("item not fount in db i think, left fins it else where")
         next()
       }
     })
     .catch(function (err) {
-      console.log("Item not found in db :( lets find it else where :)  ")
       next()
     });
 }
@@ -76,7 +68,6 @@ function createTech(images, name) {
     })
 
     .then(function () {
-      console.log("created tech info")
       for (var img in images) {
         db.none('insert into images(name, height  , width, url, type)' +
           'values(${name}, ${height}, ${width},${url},${type})',
@@ -88,11 +79,9 @@ function createTech(images, name) {
             type: images[img].type,
 
           }).then(function () {
-            console.log("created imges table")
             return ("success")
           })
           .catch(function (err) {
-            console.log("failed add image values")
             console.log(err)
             return (err);
           })
@@ -108,7 +97,6 @@ function createTech(images, name) {
 
 
 function getSingleTech(req, res, next) {
-  console.log(req.user)
   bing.list({
     keyword: req.params.name + ' logo png',
     num: 30,
@@ -118,8 +106,7 @@ function getSingleTech(req, res, next) {
     }
   })
     .then(function (data) {
-    console.log("data fro search : ", data)
-    console.log("data length : ", data.length)
+
       images = []
       var numImages = 0
       for (var img in data) {
@@ -136,16 +123,12 @@ function getSingleTech(req, res, next) {
       }
 
       }
-      console.log("images : ", images)
-      console.log("I am sending data of " + req.params.name)
+    
       res.status(200).send({
         success: 1,
         data: images
       })
-      // result = createTech(images, req.params.name)
-      // setTimeout(function () {
-      //   console.log(result)
-      // }, 600);
+    
 
     }).catch(function (err) {
       console.log(err)
@@ -155,10 +138,6 @@ function getSingleTech(req, res, next) {
       })
     });
 
-  // you can also watch on events
-  // google.on('result', function (item) {
-  //   console.log('out', item);
-  // });
 }
 
 

@@ -10,9 +10,14 @@ import callReducer from './callReducer'
 import messageReducer from './messageReducer'
 import navReducer from './navReducer'
 import twitterApiReducer from './twitterApiReducer';
-import streamReducer from './streamReducer'
+import streamReducer from './streamReducer';
+import canvasActionsReducer from './canvasActionReducer'
+import profileHoverReducer from './profileHoverReducer'
+import secondScreenShareReducer from './secondShareReducer'
+import emailReducer from './emailReducer'
  
 export default combineReducers({
+    email:emailReducer,
     auth : signinReducer,
     issues: issueReducer,
     projects: projectReducer,
@@ -24,5 +29,8 @@ export default combineReducers({
     message:messageReducer,
     nav:navReducer,
     twitterApi:twitterApiReducer,
-    stream:streamReducer
+    stream:streamReducer,
+    canvasActions:canvasActionsReducer,
+    profileHover:profileHoverReducer,
+    secondScreenShare :secondScreenShareReducer
 })

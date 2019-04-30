@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Button } from 'reactstrap';
-
 import Form from '../Form';
-import Navbar from './Navbar';
 import '../../css/explainit.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -16,11 +12,6 @@ import Swal from 'sweetalert2';
 import { setIssueId, cancelValidationErrors } from '../../../actions/issueActions'
 import { creatAnsProject } from '../../../actions/projectActions'
 import { displayFullScrenRecord, displayScrenRecord, displayFullScreShare, displayShareScreen } from '../../../actions/toolActions'
-import config from '../../../config/config';
-import Home from './Home'
-import browser from 'browser-detect';
-
-
 
 class Explainit extends Component {
   constructor(props) {
@@ -36,7 +27,6 @@ class Explainit extends Component {
     this.drawRect = this.drawRect.bind(this);
     this.savefile = this.savefile.bind(this);
     this.clearCanvas = this.clearCanvas.bind(this);
-    this.downloadExtension = this.downloadExtension.bind(this);
     this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
     this.recordFullScreen = this.recordFullScreen.bind(this);
     this.saveVideoData = this.saveVideoData.bind(this);
@@ -44,47 +34,22 @@ class Explainit extends Component {
     this.displayShareBtn = this.displayShareBtn.bind(this);
     this.shareCanvasScreen = this.shareCanvasScreen.bind(this);
     this.recordCanvasScreen = this.recordCanvasScreen.bind(this);
-    this.resize = this.resize.bind(this)
+    this.resize = this.resize.bind(this);
+    this.openScreenShare = this.openScreenShare.bind(this)
   }
-  downloadExtension() {
-    window.open(config.EXTENSION_URL, "_self")
+  // downloadExtension() {
+  //   window.open(config.EXTENSION_URL, "_self")
 
-  }
-
-  componentWillMount() {
-    var self = this
-    this.props.setIssueId(JSON.parse(localStorage.getItem("issueId")))
-    const result = browser();
-  //   {
-  //     name: 'chrome',
-  //     version: '58.0.3029',
-  //     versionNumber: 58.03029,
-  //     mobile: false,
-  //     os: 'Windows NT 10.0'
   // }
 
-
-    if (result.name === "chrome") {
-
-      var img;
-      img = new Image();
-      img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
-      img.onload = function () {
-
-      };
-      img.onerror = function () {
-        self.setState({
-          isInstalled: false
-        })
-      };
-    }
+  componentWillMount() {
+ 
   }
 
 
   componentDidMount() {
     window.addEventListener("resize", this.resize.bind(this));
     this.resize();
-    console.log("asnckjadbskbsjfihb")
     var self = this
     this.setState({
       error:false,
@@ -108,6 +73,10 @@ class Explainit extends Component {
       showShareBtns: !this.state.showShareBtns
     })
   }
+  openScreenShare(){
+    localStorage.setItem('issueId',null)
+    this.props.screenShareWindow()
+  }
 
   showErrorAlert() {
     Swal.fire({
@@ -123,6 +92,7 @@ class Explainit extends Component {
     this.props.displayShareScreen()
   }
   recordCanvasScreen() {
+    
     this.props.displayScrenRecord()
   }
 
@@ -130,6 +100,7 @@ class Explainit extends Component {
     this.props.displayFullScrenRecord()
   }
   shareFullScreenShare() {
+    localStorage.setItem('issueId',null)
     this.props.displayFullScreShare()
   }
 
@@ -140,10 +111,27 @@ class Explainit extends Component {
   savefile(data) {
     this.child.pushData(data);
   }
-  saveVideoData(data) {
-    console.log("the data whcih is gonna get saved : ", data)
+  // saveVideoData(data, isPublic,text) {
+  //   console.log("the data whcih is gonna get saved : ", data)
+  //   var issueId = JSON.parse(localStorage.getItem('issueId'))
+  //   var textExplain = text
+  //   var imgData = "null"
+  //   var items = {}
+  //   var isquestion = " "
+  //   if (issueId == null || issueId === undefined) {
+  //     isquestion = "true"
+  //     issueId = null
+  //   }
+  //   else {
+  //     isquestion = "false"
+    
+  //   }
+  //   console.log("type of is public : ",typeof(isPublic))
+  //   this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId,isPublic)
+  // }
+  saveVideoData(data,isPublic,text) {
     var issueId = null
-    var textExplain = " "
+    var textExplain = text
     var imgData = "null"
     var items = {}
     var isquestion = " "
@@ -154,7 +142,7 @@ class Explainit extends Component {
       isquestion = "false"
       issueId = this.props.issueId
     }
-    this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId)
+    this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId,isPublic)
   }
   drawRect = () => {
     this.child.addReactFull();
@@ -170,34 +158,47 @@ class Explainit extends Component {
     })
   }
   render() {
+    // var iframe = <Iframe url="https://explain.bookmane.in/sharescreen"
+    // width="500px"
+    // height="500px"
+    // id="myId"
+    // className="myClassname"
+    // display="block"
+    // scrolling="no"
+    // style = {{overflow:"hidden"}}
+    // position="relative"
+    // />
+
+    // allowFullScreen/>
+   
    
     var percentage = "85%"
     var CanvasScreenButton = null;
     var formDiv = null;
-    if (this.state.showShareBtns) {
-      CanvasScreenButton = (
-        <div className="divRecordOrShare">
-          <button className="buttonDark" onClick={this.shareCanvasScreen}>
-            ShareCanvas
-          </button>
-          <button className="buttonDark" onClick={this.shareFullScreenShare}>
-            ShareScreen
-            </button>
-        </div>
-      )
-    }
-    else if (this.state.showRecordBtns) {
-      CanvasScreenButton = (
-        <div className="divRecordOrShare">
-          <button className="buttonDark" onClick={this.recordCanvasScreen}>
-            RecordCanvas
-          </button>
-          <button className="buttonDark" onClick={this.recordFullScreen}>
-            RecordScreen
-            </button>
-        </div>
-      )
-    }
+    // if (this.state.showShareBtns) {
+    //   CanvasScreenButton = (
+    //     <div className="divRecordOrShare">
+    //       <button className="buttonDark" onClick={this.shareCanvasScreen}>
+    //         ShareCanvas
+    //       </button>
+    //       <button className="buttonDark" onClick={this.shareFullScreenShare}>
+    //         ShareScreen
+    //         </button>
+    //     </div>
+    //   )
+    // }
+    // else if (this.state.showRecordBtns) {
+    //   CanvasScreenButton = (
+    //     <div className="divRecordOrShare">
+    //       <button className="buttonDark" onClick={this.recordCanvasScreen}>
+    //         RecordCanvas
+    //       </button>
+    //       <button className="buttonDark" onClick={this.recordFullScreen}>
+    //         RecordScreen
+    //         </button>
+    //     </div>
+    //   )
+    // }
     if (this.props.screenAction === SCREEN_RECORD ||
       this.props.screenAction === SCREEN_SHARE) {
         percentage = "85%";
@@ -210,43 +211,44 @@ class Explainit extends Component {
       if (this.props.screenAction === FULL_SCREEN_SHARE ||
         this.props.screenAction === FULL_SCREEN_RECORD){
           formDiv = null
-          if(this.state.reducedWidth){
-            percentage = "90%";
+          if(this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare){
+            percentage = "100%";
           }
           else{
-            percentage = "56%";
+            percentage = "37%";
           }
         
         }
         else{
-          if(this.state.reducedWidth){
+          if(this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare){
            
-            percentage = "90%";
+            percentage = "100%";
           }
           else{
-            percentage = "56%";
+            percentage = "37%";
           }
         
           formDiv = (
             <div className="formContainer">
               <div className="imageBtns">
-    
+               
                 <div className="RecordBtn">
                   <span className="hint--bottom" aria-label="Record screen!">
-                    <img onClick={this.displayRecordBtn} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                    <img onClick={this.recordFullScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
                   </span>
                 </div>
     
                 <div className="screenShareBtn">
                   <span className="hint--bottom" aria-label="Share screen!">
-                    <img onClick={this.displayShareBtn} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                    <img alt="share screen"onClick={this.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                   </span>
                 </div>
+              </div>
                 {/* <button className="buttonLight" onClick={this.shareFullScreenShare}>Share Screen</button> */}
                 {/* <button className="buttonLight" onClick={this.recordFullScreen}>Record Screen</button> */}
-              </div>
+            
               <div>
-                {CanvasScreenButton}
+                {/* {CanvasScreenButton} */}
               </div>
             </div>
           )
@@ -282,7 +284,9 @@ class Explainit extends Component {
     }
     else if (this.props.screenAction === FULL_SCREEN_SHARE) {
       shareElement = (<div className="shareControl">
+      {/* {iframe} */}
         <FullScreenShare
+        closeImidiate={this.props.closeImidiate}
         reStoreDefault={this.props.reStoreDefault}
           savefile={this.saveVideoData}
         />
@@ -293,20 +297,24 @@ class Explainit extends Component {
     else if (this.props.screenAction === FULL_SCREEN_RECORD) {
       shareElement = (<div className="shareControl">
         <FullScreenRecord
+        closeImidiate={this.props.closeImidiate}
+          reStoreDefault={this.props.reStoreDefault}
           savefile={this.saveVideoData}
         />
       </div>)
     }
-    return (this.state.isInstalled) ? (
+   
+    return(
+
       <div>
         {/* <div className="explainContainer"> */}
 
         {/* </div> */}
         <div className="explainContainer" style={{width : percentage}}>
 
-          <Button close onClick={this.props.reStoreDefault} />
+       
           {formDiv}
-          <div className="formContainer">
+          <div className="shareTime">
 
             <div className="shareElement">
               {shareElement}
@@ -315,14 +323,7 @@ class Explainit extends Component {
           </div>
         </div>
       </div>
-    ) : (<div >
-      {/* <Navbar /> */}
-      <div className="messageToDownload">
-        <h3>Please down the chrome extension to continue</h3>
-        <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-      </div>
-    </div>
-      )
+    ) 
   }
 }
 Explainit.PropType = {
@@ -335,6 +336,7 @@ Explainit.PropType = {
   displayScrenRecord: PropType.func.isRequired,
 
 
+
 };
 const mapStateToProps = state => ({
   error: state.issues.error,
@@ -342,6 +344,9 @@ const mapStateToProps = state => ({
   success: state.issues.successCreation,  
   screenAction: state.tools.screenAction,
   isSignedIn: state.auth.isAuthenticated,
+  showCanvas:state.canvasActions.showCanvas,
+  startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
+
 
 })
 export default connect(mapStateToProps, { displayScrenRecord, displayShareScreen, creatAnsProject, setIssueId, displayFullScreShare, displayFullScrenRecord, cancelValidationErrors })(Explainit)

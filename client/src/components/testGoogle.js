@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom';
 
 import GoogleLogin from 'react-google-login'
 import config from '../config/config'
@@ -19,13 +18,11 @@ export default class testGoogle extends Component {
           
             r.json().then(user => {
                 if (user.token) {
-                   console.log(user.token)
                 }
             });
         })
     };
     const responseGoogle = (response) => {
-        console.log(response);
       }
     return (
       <div>

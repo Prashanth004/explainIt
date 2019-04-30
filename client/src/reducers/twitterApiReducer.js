@@ -1,9 +1,20 @@
-import {GOT_NO_PROFILE,GET_PROFILE_ID , RESET_TWITTER_API_VALUES } from '../actions/types'
+import {GOT_NO_PROFILE,
+    GET_PROFILE_ID ,
+     RESET_TWITTER_API_VALUES,
+     SEND_TWEETS,SEND_TWEET_FAILED ,
+       GET_TWITTER_HANDLE,
+     GET_TWITTER_HANDLE_FAILED} from '../actions/types'
 
 const initialState = {
     twitterId:null,
     profilePresent:false,
-    doneFetching:false
+    doneFetching:false,
+    twitterProfilePic:null,
+    twitterHandle:null,
+    name:null,
+    tweeetSent:false,
+    twitterHandles:[],
+    fetchHanldesSuggest : false,
 }
 
 export default (state=initialState, action)=>{
@@ -11,7 +22,10 @@ export default (state=initialState, action)=>{
         case GET_PROFILE_ID:{
             return{
                 ...state,
-                twitterId:action.payload,
+                twitterId:action.payload.id,
+                twitterProfilePic:action.payload.profilePic,
+                name:action.payload.name,
+                twitterHandle:action.twitterHandle,
                 doneFetching:true,
                 profilePresent:true,
             }
@@ -20,8 +34,10 @@ export default (state=initialState, action)=>{
             return{
                 ...state,
                 twitterId:null,
+                twitterProfilePic:null,
                 doneFetching:true,
                 profilePresent:false,
+                twitterHandle:null,
             }
         }
         case RESET_TWITTER_API_VALUES:{
@@ -29,8 +45,37 @@ export default (state=initialState, action)=>{
                 ...state,
                 twitterId:null,
                 profilePresent:false,
-                doneFetching:false
+                doneFetching:false,
+                twitterHandle:null ,
+                tweeetSent:false, 
             }
+        }
+        case SEND_TWEETS:
+            return {
+                ...state,
+                tweeetSent:true,
+                tweetDone:true
+                
+            }
+        case SEND_TWEET_FAILED:
+            return {
+                ...state,
+                tweeetSent:false,
+                tweetDone:true
+                
+            }
+        case GET_TWITTER_HANDLE:
+        return{
+            ...state,
+            twitterHandles:action.payload,
+            fetchHanldesSuggest:true
+        }
+       
+        case GET_TWITTER_HANDLE_FAILED:
+        return{
+            ...state,
+            twitterHandles:[],
+            fetchHanldesSuggest:true
         }
         default :
             return{

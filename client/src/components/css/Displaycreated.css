@@ -1,0 +1,112 @@
+.CreatedContainer{
+    width:100%;
+    margin:auto;
+    /* display:grid; */
+    /* grid-t-columns: 33.33% 33.33% 33.33%; */
+    /* grid-template-columns: 45% 45%;  */
+    /* /* grid-column-gap: 10px; */
+    /* grid-column-gap: 10px; */
+
+
+}
+.cardProfileName{
+    font-size: 12px;
+    padding:5px;
+}
+/* .profileCardDiv{
+    width
+} */
+.createdCard{
+    width:100%;
+    margin:auto;
+    min-height:260px;
+    border-style:none;
+    border-radius:3px;
+    border-width:0.4px;
+    border-color:rgb(167, 163, 163);
+    background-color:white;
+    box-shadow: 0px 0px 10px 2.5px rgba(136, 135, 135, 0.274);
+
+}
+.iconsright{
+    width:20%;
+}
+.cardNew{
+    /* background-color: #34a4a8; */
+    color:rgb(110, 106, 106);
+  }
+.createdCard:hover{
+    box-shadow: 0px 0px 0px 0px rgba(68, 68, 68, 0.342);
+
+}
+.cardName{
+    text-align: left;
+    padding:5px;
+    height:43px;
+ margin-top:-5px;
+}
+.cardVideo{
+    /* border-top-style:solid;
+    border-top-width:0.5px;
+    border-top-color:rgb(139, 133, 133); */
+    margin-top:-7px;
+    width:"100%";
+    height:155px
+}
+.cardLiked{
+    height:40px;
+    text-align: left;
+    padding-left:10px;
+    background-color: #dac17f;
+    margin-top:-10px;
+}
+.cardText{
+    width:90%;
+    height:40px;
+    font-size:12px;
+    text-align:left;
+    padding-left:18px;
+    color:rgb(85, 84, 84);
+    word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+}
+.dropDownForOptionCard{
+    width:155px;
+    text-align: left;
+    position:relative;
+    left:190px;
+    top:0px;
+    background-color: white;
+    border-radius:5px;
+    border-width:0.5px;
+    border-style:none;
+    z-index:1000000;
+    border-color:rgb(90, 90, 90);
+    box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329);
+}
+
+@media (min-width: 700px) {
+    .CreatedContainer{
+        display:grid;
+        grid-template-columns:33.33% 33.33% 33.33%;
+        /* grid-template-columns: 25% 25% 25% 25%; */
+        grid-column-gap: 10px;
+        grid-row-gap: 10px;
+    
+      }
+   
+}
+
+
+
+@media (min-width: 1000px) {
+  .CreatedContainer{
+    display:grid;
+    /* grid-t-columns: 33.33% 33.33% 33.33%; */
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+
+  }
+}

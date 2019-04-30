@@ -95,7 +95,6 @@ export const stopedRcording = () =>(dispatch)=>{
 
 
 export const fullStartedRecording = () =>(dispatch)=>{
-    console.log("i am in action fullStaetedrecording")
     dispatch({
         type:FULL_START_RECORD,
         payload:true
@@ -111,7 +110,6 @@ export const fullStopedRecording = () =>(dispatch)=>{
 
 
 export const saveVideoBlob = (videoBlob) => (dispatch)=>{
-    console.log("videoBlob : ",videoBlob)
     var filedata = JSON.stringify(videoBlob)
     localStorage.setItem("filedata",filedata)
     dispatch({

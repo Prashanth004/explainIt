@@ -18,8 +18,9 @@ const conf = {
     gitHubClientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947",
     react_url_git:"https://explain.bookmane.in/git",
     canvBackground : "rgb(205, 243, 224)",
-    peopleDisplayLength:8,
+    peopleDisplayLength:5,
     null:"null",
+    // EXTENSION_ID:"bpclgbfkeejifflggonjhmpeehdpocji",
     EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
     EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
     SECRET : "thebookmaneisawesomeiguess",
@@ -30,7 +31,29 @@ const conf = {
     END_CALL : "endCall",
     CHECK_TOKEN_VALIDITY : "checkTokenValidity",
     COMFIRM_TOKEN_VALIDITY : "confirmTokenValidity",
-    RETRYCALL : "reTryCall"
+    RETRYCALL : "reTryCall",
+    ENDCALL_ACK:"endCallAck",
+    CLOSE_NETWORK_ISSUE : "closeDueToNetworkIssue",
+    SELF :"home",
+    VISIT_PROF : "notHome",
+    HOME : "home",
+    NOT_HOME:"nothome",
+    PROJECT_TEXT_LIMIT:200,
+    MAX_VIDEO_TIME_LIMIT:20,
+    RECORDING:"recording",
+    SHARING : "sharing",
+    RECORD_TIME: 3,
+    LINK_EXPIRE_TIME:3,
+    UPDATE_BADGE:"updateBadge",
+    NEW_MESSAGE:"newMessage",
+    LINK_TO_CALL_ACK:"lonkToCallAck",
+    ENDING_RING:"endingRing",
+    ENDING_RING_ACK:"endingRingAck",
+    SAVED_NEW_PROJECT:"savedNewProject",
+    SHARE_MY_SCREEN:"shareMyScreen",
+    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen",
+    OTP_SECRET:"explainotpbookmane"
+
 
 
     

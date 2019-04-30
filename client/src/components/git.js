@@ -14,9 +14,7 @@ class Git extends Component {
     }
 
     componentDidMount(){
-        console.log(window.location.href)
         const code =(window.location.href).split("=")
-        console.log(typeof(code[1]))
         if(code[1]!==undefined  ||code[1]!==null){
         
             // const tokenBlob = new Blob([JSON.stringify({access_token:code[1]}, null, 2)], {type : 'application/json'});

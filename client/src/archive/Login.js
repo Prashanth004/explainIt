@@ -1,110 +1,64 @@
+import _ from 'lodash'
+import faker from 'faker'
 import React, { Component } from 'react'
-import '../../css/NewSignin.css'
-import TwitterLogin from 'react-twitter-auth';
-import GitHubLogin from 'react-github-login';
-import { Redirect, Link } from 'react-router-dom';
-import config from '../../../config/config';
-import { signInWithGoogle, stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
-import GoogleLogin from 'react-google-login'
+import { Search, Grid, Header, Segment } from 'semantic-ui-react'
 
+const source = _.times(5, () => ({
+  title: faker.company.companyName(),
+  description: faker.company.catchPhrase(),
+  image: faker.internet.avatar(),
+  price: faker.finance.amount(0, 100, 2, '$'),
+}))
 
-class Login extends Component {
-    constructor() {
-        super();
-        this.state = { isAuthenticated: false, user: null, token: '' };
-        this.googleResponse = this.googleResponse.bind(this);
-        this.githubResponse = this.githubResponse.bind(this);
-        this.githubFailure = this.githubFailure.bind(this)
-    }
-    
-    componentWillMount() {
-        // this.props.stillAuthenicated()
-    }
-    componentDidMount(){
-      
-    }
-    handleGit(){
-        var url = `https://github.com/login/oauth/authorize?client_id=${config.gitHubClientId}&scope=user&redirect_uri=${config.react_url_git}`
-        window.open(url,'_self')
-    }
+export default class SearchExampleStandard extends Component {
+  componentWillMount() {
+    this.resetComponent()
+  }
 
-    githubResponse(response){
-        console.log("github response : ",response)
-    }
-    githubFailure(response){
-        console.log("github error : ",response)
-    }
-    googleResponse(response) {
-        const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
-        this.props.signInWithGoogle(tokenBlob)
-    }
-   
-    onFailed = (error) => {
-        alert(error);
-    };
+  resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
 
-    render() {
-        let content = !!this.props.isAuthenticated ? (<Redirect to={{ pathname: './' }} />) :
-            (<div className="ShapeImage">
-                {/* <div className="ShapeImage">
-                </div> */}
-                <div className="loginSection">
-                    <div className="Logininfo">
-                        <h3>
-                            <b>
-                                Communicate better with visuals. Express with lot more than just text.
-                                Get your personalised Link so that people you love can connect with you. 
-                        </b>
-                        </h3>
-                        
-                        <br />
-                        <h5>
-                            <b>
-                               Grab your Link
-                        </b>
-                        </h5>
-                        <br />
-                        <GoogleLogin
-                                    clientId={config.googleClientId}
-                                    render={renderProps => (
-                                        <button className="actualButton2"  onClick={renderProps.onClick}>Google</button>
-                                    )}
-                                    buttonText="Login"
-                                    onSuccess={this.googleResponse}
-                                    onFailure={this.responseGoogle}
-                                />      
-                        
-                           
-                            <div className="buttonDiv">
-                                <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/twitter/auth/twitter"}
-                                    onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-                                    requestTokenUrl={config.base_dir+"/twitter/auth/twitter/reverse"} />
-                            </div>
-                           
-                        
-                    </div>
-                </div>
-            </div>
-            )
-        return (
-            <div>
-                {content}
-            </div>
-        )
-    }
+  handleResultSelect = (e, { result }) => this.setState({ value: result.title })
+
+  handleSearchChange = (e, { value }) => {
+    this.setState({ isLoading: true, value })
+
+    setTimeout(() => {
+      if (this.state.value.length < 1) return this.resetComponent()
+
+      const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
+      const isMatch = result => re.test(result.title)
+
+      this.setState({
+        isLoading: false,
+        results: _.filter(source, isMatch),
+      })
+    }, 300)
+  }
+
+  render() {
+    const { isLoading, value, results } = this.state
+
+    return (
+      <Grid>
+        <Grid.Column width={6}>
+          <Search
+            loading={isLoading}
+            onResultSelect={this.handleResultSelect}
+            onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
+            results={results}
+            value={value}
+            {...this.props}
+          />
+        </Grid.Column>
+        <Grid.Column width={10}>
+          <Segment>
+            <Header>State</Header>
+            <pre style={{ overflowX: 'auto' }}>{JSON.stringify(this.state, null, 2)}</pre>
+            <Header>Options</Header>
+            <pre style={{ overflowX: 'auto' }}>{JSON.stringify(source, null, 2)}</pre>
+          </Segment>
+        </Grid.Column>
+      </Grid>
+    )
+  }
 }
-
-
-Login.PropType = {
-    signInWithGoogle: PropType.func.isRequired,
-    twitterAuthFailure:PropType.func.isRequired,
-    signInWithTwitter:PropType.func.isRequired,
-    stillAuthenicated:PropType.func.isRequired
-};
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
-})
-export default connect(mapStateToProps, { signInWithGoogle, stillAuthenicated, twitterAuthFailure, signInWithTwitter})(Login)
-

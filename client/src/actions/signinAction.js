@@ -1,4 +1,5 @@
-import { SIGN_IN_WITH_GOOGLE,SIGN_IN_WITH_GIT, SIGN_IN_WITH_TWITTER, SIGN_OUT, AUTH_FAIL, CHECK_TOKEN_VALIDIDTY } from './types'
+import { SIGN_IN_WITH_GOOGLE,
+    AUTH_FAIL_TWITTER,SIGN_IN_WITH_GIT, SIGN_IN_WITH_TWITTER, SIGN_OUT, AUTH_FAIL, CHECK_TOKEN_VALIDIDTY } from './types'
 import axios from 'axios'
 import config from '../config/config'
 
@@ -40,11 +41,9 @@ export const signInWithGoogle = (tokenBlob) => (dispatch) => {
 }
 
 export const signInWithGitHub = (code) =>(dispatch)=>{
-   console.log("*************************code : ",code)
     fetch( config.base_dir + '/api/users/git?code='+code)
         .then(r => {
             r.json().then(response => {
-                console.log("########### response ########",response)
                 var storeToken = new Promise(function (resolve, reject) {
                     localStorage.setItem('token', JSON.stringify(response.token))
                     var token1 = JSON.parse(localStorage.getItem('token'))
@@ -77,7 +76,6 @@ export const signInWithGitHub = (code) =>(dispatch)=>{
 
 export const signInWithTwitter = (response) => (dispatch) => {
     response.json().then(body => {
-        console.log("response : ",body)
         var responseBody = (body);
         var token = JSON.stringify(responseBody.token)
 
@@ -87,7 +85,6 @@ export const signInWithTwitter = (response) => (dispatch) => {
             resolve(token1)
         });
         storeToken.then(function (token) {
-            console.log("body.user : ", body.user.username)
             dispatch({
                 type: SIGN_IN_WITH_TWITTER,
                 token: token,
@@ -107,7 +104,7 @@ export const signInWithTwitter = (response) => (dispatch) => {
 
 export const twitterAuthFailure = (error) => (dispatch) => {
     dispatch({
-        type: AUTH_FAIL,
+        type: AUTH_FAIL_TWITTER,
         payload: false,
         error: error,
         token: null
@@ -115,7 +112,6 @@ export const twitterAuthFailure = (error) => (dispatch) => {
 }
 export const stillAuthenicated = () => (dispatch) => {
  var token = JSON.parse(localStorage.getItem('token'))
- console.log("this is getting called")
     axios({
         method: 'get',
         url: config.base_dir + '/api/users/',
@@ -123,8 +119,7 @@ export const stillAuthenicated = () => (dispatch) => {
             "Authorization": token,
         }
     }).then(response => {
-        if (response.status == 200 || response.status == 304) {
-            console.log(response.data)
+        if (response.status === 200 || response.status === 304) {
             dispatch({
                 type: CHECK_TOKEN_VALIDIDTY,
                 userName:response.data.user.username,
@@ -135,7 +130,7 @@ export const stillAuthenicated = () => (dispatch) => {
                 payload: true
             })
         }
-        else if (response.status == 401) {
+        else if (response.status === 401) {
             // localStorage.removeItem("token");
             dispatch({
                 type: AUTH_FAIL,

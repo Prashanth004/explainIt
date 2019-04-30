@@ -1,6 +1,9 @@
 import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER , 
     UPDATE_ANSWER_WITH_IMAGE,FETCH_STARTED,
-    CREATE_ANS_PROJECT, DELETE_SUCCESSFULL,
+    DELETE_SUCCESSFULL,
+    OPEN_EDIT_TEXT_MODAL,
+    UPDATE_TEXT_EXPLAIN,
+    CLOSE_EDIT_TEXT_MODAL,
     DELETE_FAILED} from '../actions/types'
 
 const initialState = {
@@ -8,11 +11,32 @@ const initialState = {
     answerProject:[],
     newprojectIem :{},
     isFetchDone:false,
-    deleteSuccess :false
+    deleteSuccess :false,
+    openEditModal:false,
+    doneUpdating:false,
+    editModalId:null
 }
 
 export default function(state = initialState, action){
     switch(action.type){
+        case OPEN_EDIT_TEXT_MODAL:
+            return{
+                ...state,
+                openEditModal:true,
+                editModalId:action.id
+            }
+        case UPDATE_TEXT_EXPLAIN:
+            return{
+                ...state,
+                doneUpdating:true,
+                openEditModal:false
+            }
+        case CLOSE_EDIT_TEXT_MODAL:
+            return{
+                ...state,
+                openEditModal:false,
+                editModalId:null
+            }
         case FETCH_PROJ_BY_ISSUE :
             return{
                 ...state,

@@ -20,11 +20,7 @@ import config from '../../config/config';
 import '../ErrorHnadle'
 import { creatAnsProject } from '../../actions/projectActions'
 import '../css/hint.css'
-import ScreenShare from './NewUi/ScreenShare'
-import ScreenRecorder from './NewUi/ScreenRecorder'
-import { SCREEN_SHARE, SCREEN_RECORD } from '../../actions/types'
 import { displayShareScreen, displayFullScrenRecord, displayFullScreShare, displayScrenRecord } from '../../actions/toolActions'
-import AudioRec from './AudioRecord'
 
 
 class Forms extends Component {
@@ -107,9 +103,7 @@ class Forms extends Component {
 
 
     }
-    test() {
-        alert("sklmnfjngdf")
-    }
+   
     displayShareOptions() {
         this.setState({
             showRecordBtns: false,
@@ -182,7 +176,7 @@ class Forms extends Component {
             var name = this.state.selectedShapeName
 
             if (shapes === "Circle") {
-                this.state.circles.map(function (circle, i) {
+                this.state.circles.map((circle, i) => {
                     if (circle.name === name) {
                         index = i;
                     }
@@ -202,7 +196,7 @@ class Forms extends Component {
                 }
             }
             if (shapes === "Rect") {
-                this.state.rectangles.map(function (rectangle, i) {
+                this.state.rectangles.map((rectangle, i) => {
                     if (rectangle.name === name) {
                         index = i;
                     }
@@ -324,7 +318,6 @@ class Forms extends Component {
                 if (this._isMounted) {
                     this.setState({ images });
                 }
-                console.log(this.state.images)
             }
         }
     }
@@ -338,7 +331,7 @@ class Forms extends Component {
 
     convToJsov(event) {
         if (this._isMounted) {
-            const stateJson = (this.canv).toJSON();
+            // const stateJson = (this.canv).toJSON();
         }
     }
     download(event) {
@@ -569,7 +562,6 @@ class Forms extends Component {
     componentWillMount() {
         if (this._isMounted) {
             document.addEventListener("keydown", this.deleteThis, false);
-            console.log("prog  in url is :" + this.props.paramsProjId)
             var proID = localStorage.getItem("projectID")
             var token = JSON.parse(localStorage.getItem("token"))
             if (proID !== null) {
@@ -580,8 +572,6 @@ class Forms extends Component {
                         "Authorization": token,
                     }
                 }).then(response => {
-                    console.log(" proID : ", proID)
-                    console.log("response.data : ", response.data)
                     if (response.status === 200) {
                         var items = (response.data.msg.items.shapeitems.children[0].children)
                         items.map(obg => {
@@ -658,12 +648,10 @@ class Forms extends Component {
                                 })
                             }
 
-                            console.log(this.state.images)
                         })
                     }
 
                     else {
-                        console.log("response " + response.data)
                     }
                 }).catch(err => {
                     console.log("eror" + err)
@@ -938,7 +926,6 @@ class Forms extends Component {
     assignAudioUrl(AudioUrl) {
 
 
-        console.log("AudioUrl : ", AudioUrl)
         if (this._isMounted) {
             this.setState({
                 audioData: AudioUrl
@@ -947,86 +934,40 @@ class Forms extends Component {
     }
 
 
-    assignImageUrl(event) {
-        if (this._isMounted) {
-            this.setState({
-                imgData: []
-            })
-        }
-        var rand = String(Math.random())
-        let image1 = null;
-        image1 = new window.Image();
-        image1.setAttribute('crossOrigin', 'anonymous');
-        image1.src = event.target.src;
-
-
-        image1.width = this.state.imgWidth;
-        image1.height = this.state.imgHeight;
-
-        image1.name = rand;
-
-        let img = null;
-        img = {
-            x: 10,
-            y: 10,
-            width: this.state.imgWidth,
-            height: this.state.imgHeight,
-            scaleX: 1,
-            scaleY: 1,
-            image: image1,
-            imageSrc: event.target.src,
-            crossOrigin: "anonymous",
-            name: rand,
-            draggable: true
-        }
-        if (this._isMounted) {
-            this.setState({
-                images: [...this.state.images, img]
-
-            })
-            this.setState({
-                imageUrl: [...this.state.imageUrl, image1]
-            })
-        }
-    }
     pushData(fileData) {
+        var imgData = null;
+        var items = null;
         if (this._isMounted) {
-            console.log("clicked")
             var shapeitems = null
             var textExplain = this.state.textExplain
             if (this.canv) {
-                var imgData = (this.canv).toDataURL()
-                var items = {
+                imgData = (this.canv).toDataURL()
+                items = {
                     shapeitems: JSON.parse(shapeitems),
                     images: this.state.images
                 }
             }
             else {
-                var imgData = config.null
-                var items = {}
+                imgData = config.null
+                items = {}
             }
             var isquestion = " "
             var videoData = fileData;
-            console.log(" videoData : ", videoData)
             isquestion = null;
             var issueIdThisCpm = null
 
 
 
             if (this.props.issueId !== null || this.props.issueId === undefined) {
-                console.log("stage 1")
 
-                console.log("ths is runnign")
                 isquestion = "false"
                 issueIdThisCpm = this.props.issueId
 
 
             }
             else {
-                console.log("stage 2 error")
                 isquestion = "true"
             }
-            console.log("clicked sending..")
 
             this.props.creatAnsProject(textExplain, imgData, videoData, items, isquestion, issueIdThisCpm)
 
@@ -1164,9 +1105,9 @@ class Forms extends Component {
         if (this._isMounted) {
             this.setState({ imgData: [] });
         }
-        const tName = {
-            name: this.state.key
-        };
+        // const tName = {
+        //     name: this.state.key
+        // };
 
         fetch(config.base_dir + '/api/tech/' + this.state.name).then((res) =>
             res.json()).then(data => {
@@ -1191,158 +1132,95 @@ class Forms extends Component {
         var shareElement = null;
         const imgurl = this.state.imgData.map((imgs, i) => (
             <div key={i} className="imag">
-                <img id={imgs.name}
+                <img alt="sharable link" id={imgs.name}
                     ref={imgs.name}
-                    alt=" "
+
                     onClick={this.assignImageUrl} dragable={true} height="100%" width="100%" object-fit="contain" src={imgs.url} ></img>
             </div>
         ));
-
-        var ShareBtns = null
-        var recordBtns = null;
-
-        if (this.state.showShareBtns) {
-            ShareBtns = (<div classsName="Sharebtns">
-                <button className="buttonDark" onClick={this.shareScreen}>
-                    Share canvas
-                    </button>
-                <button className="buttonDark" onClick={this.shareFullScreenShare}>
-                    Share entire screen
-                    </button>
-
-            </div>)
-        }
-        else{
-            ShareBtns=(<div className="screenShareBtn">
-            <span className="hint--bottom" aria-label="Share screen!">
-                <img onClick={this.displayShareOptions} height="100%" width="100%" src={require('../images/screensharing.png')} />
-            </span>
-        </div> )
-        }
-         if (this.state.showRecordBtns) {
-            recordBtns = (<div classsName="Sharebtns">
-                <button className="buttonDark" onClick={this.recordScreen}>
-                    Record canvas
-            </button>
-                <button className="buttonDark" onClick={this.shareElement}>
-                    Record entire screen
-            </button>
-
-            </div>)
-        }
-        else {
-            recordBtns = ( <div className="recorderScreen">
-            <div classsName="Sharebtns">
-                <span className="hint--bottom" aria-label="Record screen!">
-                    <img onClick={this.displayRecordBtn} height="100%" width="100%" src={require('../images/download.jpg')} />
-                </span>
-            </div>
-        </div>)
-
-        }
-        // if (this.props.shareAction === true) {
-            var form = (
-                <div>
-                    <div className="logo" >
-                        <div className="logoSrchGrp">
-                            <input className="inputText" placeholder="Search for the logo" value={this.state.value} onChange={this.handleChange} />
-                            <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
-                        </div>
-                        <div className="grid-container">
-                            {imgurl}
-                        </div>
-
+        var form = (
+            <div>
+                <div className="logo" >
+                    <div className="logoSrchGrp">
+                        <input className="inputText" placeholder="Search for the logo" value={this.state.value} onChange={this.handleChange} />
+                        <button addonType="append" className="buttonDark" onClick={this.handleSubmit}>Search</button>
                     </div>
-                    <div className="canvasTool">
-                        <div className="canvOut">
-                            <div className="canv" ref={a => this.DivToRecord = a} id="canv">
-                                <Stage
-                                    container="canv"
-                                    width={this.state.stateWidth}
-                                    height={this.state.stageHeight}
-                                    opacity={1}
-                                    ref={stage => this.canv = stage}
-                                    onMouseDown={this.handleStageMouseDown}>
+                    <div className="grid-container">
+                        {imgurl}
+                    </div>
 
-                                    <Layer>
-                                        {this.state.rectangles.map((rect, i) => (
-                                            <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />
-                                        ))}
-                                        {this.state.images.map((img, i) => (
-                                            <Image onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...img} crossoOrigin={true} />
-                                        ))}
-                                        {this.state.arrows.map((lns, i) => (
-                                            <Arrow onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...lns} />
-                                        ))}
-                                        {this.state.circles.map((crc, i) => (
-                                            <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                                        ))}
-                                        {this.state.elipse.map((eli, i) => (
-                                            <Elipse onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...eli} />
-                                        ))}
-                                        {this.state.texts.map((crc, i) => (
-                                            <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                                        ))}
-                                        {this.state.triangle.map((crc, i) => (
-                                            <Triangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
-                                        ))}
-                                        <TransformerComponent
-                                            selectedShapeName={this.state.selectedShapeName}
-                                            updateWH={this.updateWH}
-                                        />
-                                    </Layer>
-                                </Stage>
-                            </div>
+                </div>
+                <div className="canvasTool">
+                    <div className="canvOut">
+                        <div className="canv" ref={a => this.DivToRecord = a} id="canv">
+                            <Stage
+                                container="canv"
+                                width={this.state.stateWidth}
+                                height={this.state.stageHeight}
+                                opacity={1}
+                                ref={stage => this.canv = stage}
+                                onMouseDown={this.handleStageMouseDown}>
+                                <Layer>
+                                    {this.state.rectangles.map((rect, i) => (
+                                        <Rectangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...rect} />
+                                    ))}
+                                    {this.state.images.map((img, i) => (
+                                        <Image onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...img} crossoOrigin={true} />
+                                    ))}
+                                    {this.state.arrows.map((lns, i) => (
+                                        <Arrow onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...lns} />
+                                    ))}
+                                    {this.state.circles.map((crc, i) => (
+                                        <Circle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                                    ))}
+                                    {this.state.elipse.map((eli, i) => (
+                                        <Elipse onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...eli} />
+                                    ))}
+                                    {this.state.texts.map((crc, i) => (
+                                        <Text onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                                    ))}
+                                    {this.state.triangle.map((crc, i) => (
+                                        <Triangle onDragEnd1={this.handleDragEnd} onKeyDown={this.deleteThis} key={i} {...crc} />
+                                    ))}
+                                    <TransformerComponent
+                                        selectedShapeName={this.state.selectedShapeName}
+                                        updateWH={this.updateWH}
+                                    />
+                                </Layer>
+                            </Stage>
                         </div>
-                        <div>
-                            <Shapes
-                                addRightArrow={this.addRightArrow}
-                                addcrc={this.addCircle}
-                                addrect={this.addReact}
-                                addLefttArrow={this.addLefttArrow}
-                                addRigBotArrow={this.addRigBotArrow}
-                                addRigUpArrow={this.addRigUpArrow}
-                                addText={this.addText}
-                                handleText={this.handleText}
-                                addRountRect={this.addRountRect}
-                                addTriangle={this.addTriangle}
-                                addDiamond={this.addDiamond}
-                                addElipse={this.addElipse}
-                            />
-                        </div>
+                    </div>
+                    <div>
+                        <Shapes
+                            addRightArrow={this.addRightArrow}
+                            addcrc={this.addCircle}
+                            addrect={this.addReact}
+                            addLefttArrow={this.addLefttArrow}
+                            addRigBotArrow={this.addRigBotArrow}
+                            addRigUpArrow={this.addRigUpArrow}
+                            addText={this.addText}
+                            handleText={this.handleText}
+                            addRountRect={this.addRountRect}
+                            addTriangle={this.addTriangle}
+                            addDiamond={this.addDiamond}
+                            addElipse={this.addElipse}
+                        />
                     </div>
                 </div>
-            )
-        // }
-        // else {
-        //     var form = (
-        //         <div className="shareScreen">
-        //             <div className="btnContainers">
-        //             {ShareBtns}
-        //             </div>
-        //             <div  className="btnContainers">
-        //                {recordBtns}
-        //             </div>
-        //         </div>
-        //     )
-        // }
+            </div>
+        )
+
         if (this.state.errorInfo == null) {
             if (this.state.project === true) {
                 return <Redirect to='/projects' />
             }
 
-            var downLink = null
-            if (this.state.canvasUrl) {
-                downLink = (<div>
-                    <button className="lftBtn"><a href={this.state.canvasUrl} download={this.state.fileName}>Download</a></button>
-                </div>)
-            }
             return (
 
                 <div className="formContainerTool">
 
                     <div className="textExplainDiv">
-                        <textarea className="textExplain" placeholder="Explain in text" onChange={this.upDateTxtExplain} placeholder="type here to explain"></textarea>
+                        <textarea className="textExplain" placeholder="Explain in text" onChange={this.upDateTxtExplain}></textarea>
                     </div>
 
                     <div className="partTwoInput">
@@ -1352,17 +1230,6 @@ class Forms extends Component {
 
 
                     {shareElement}
-                    {/* <AudioRec assignAudioUrl={this.assignAudioUrl} canvass={this.recordScreen} stopRecord={this.stopRecord} /> */}
-
-
-                    {/* <div className="footer">
-                        <button className="buttonDark" onClick={this.clearAll}>Clear</button>
-                        <button className="buttonDark" onClick={this.pushData}>Save</button>
-                    </div> */}
-                    {/* <Button onClick={this.newProj}>New Project</Button> */}
-                    {/* <Button onClick={this.download}>Conver to Image</Button> */}
-                    {/* {downLink} */}
-                    {/* <Input onChange={this.handleProj} type="text" placeholder="Project Name"></Input> */}
                     <br />
                 </div >
             );

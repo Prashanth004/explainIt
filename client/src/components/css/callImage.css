@@ -1,13 +1,13 @@
 
 .imageOfPeersDisplay{
-    width:100%;
+    width:90%;
     display:grid;
     grid-template-columns: 25% 50% 25%
 }
 
 .profileImageCall{
-    height:85px;
-    width:85px;
+    height:55px;
+    width:55px;
     border-radius:50%;
     margin:auto;
     background-color:white;
@@ -15,8 +15,8 @@
     box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
   }
   .profileImageElementCall{
-    height:86px;
-    width:86px;
+    height:56px;
+    width:56px;
     border-radius:50%;
     margin:auto;
   }
@@ -32,12 +32,12 @@
 
   }
   .loader{
-      text-align: centre;
-      padding-top:20px;
+      text-align:center;
+      padding-top:40px;
   }
-  .recieverImage{
-      align-items:left;
-      text-align:left;
+  .recieverImageDiv{
+    align-items: left;
+      text-align: left;
       padding:10px;
   }
 
@@ -96,3 +96,19 @@
       transform: translate(19px, 0);
     }
   }
+
+  
+
+@media (min-width: 700px) {
+  .profileImageCall{
+    height:85px;
+    width:85px;
+     box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
+  }
+  .profileImageElementCall{
+    height:86px;
+    width:86px;
+   }
+}
+
+

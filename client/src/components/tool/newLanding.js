@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import './css/newlanding.css'
 import Navbar from '../../Navbar'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import Froms from '../Form';
 import { fetchIssues, setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue ,clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
-import LoginMadal from '../../LoginModal'
 // import ImagesOfExplainers from './DisplayExplained'
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
@@ -56,7 +54,6 @@ class NewHome extends Component {
     togglemodal = (e) => {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
-        console.log("e.target.id : ",e.target.id)
 
         if (classOfClicked!=="singleMember" && classOfClicked!=="explainAnswer" && classOfClicked!=="displayPeople" && classOfClicked!=="likes" && classOfClicked!== "numberOfPeople" &&idOfClicked !=="explainIt" && idOfClicked !=="audio" && idOfClicked !=="tweet" && idOfClicked !=="shareScreen" && idOfClicked !=="imageOfPeople" && classOfClicked !=="buttonDark explainItBtn") {
             if (this.state.modal === false) {
@@ -133,13 +130,7 @@ class NewHome extends Component {
                 </Modal>
 
 
-                <Modal isOpen={this.state.modalTool} toggle={this.explainTool} className={this.props.className}>
-
-                    <ModalBody className="modalBodyTool">
-                        <LoginMadal />
-                    </ModalBody>
-
-                </Modal> 
+             
 
             </div>
         )

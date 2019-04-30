@@ -4,9 +4,6 @@ import {  Transformer } from 'react-konva';
 import 'bootstrap/dist/css/bootstrap.min.css';
 class TransformerComponent extends React.Component {
 
-  constructor(props){
-    super(props)
-  }
 
     componentDidMount() {
       this.checkNode();

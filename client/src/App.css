@@ -1,22 +1,29 @@
 .App {
-  background-color:#f5f0f8;
+  /* background-color:#fcf6ff; */
+  /* background-color:#f6fdff; */
+  /* background-clip: #fcf8ff; */
   /* background-color: white; */
+  background-color: rgb(155, 155, 155);
+  background-color: #fafafa;
+  /* font-weight:  */
 
 
-  font-family: "Helvetica";
+  /* font-family: "Helvetica"; */
   height: '100vh';
 }
+
 .mainContainer{
   min-height:100vh;
 }
 .myInput{
   width:65%;
-  padding-left:10px;
+  padding:2px 12px 2px 12px;
   border-radius: 4px;
   border-style:solid;
   border-width:1px;
-  border-color:rgb(90, 89, 89);
+  border-color:rgb(116, 114, 114);
   margin:auto;
+  font-size:13px;
 }
 p{
   margin-top:0px;
@@ -30,6 +37,8 @@ div{
 }
 body{
  color:rgb(32, 32, 32);
+ overflow: auto;
+font-family: "Frutiger Neue W02 Book ,Arial,Helvetica,sans-serif"
   
 }
 a{
@@ -50,7 +59,7 @@ outline-style: none}
   padding: 0px 10px 0px 10px;
   /* border-color:rgb(153,153,153); */
   border-color:black;
-  color:rgb(153,153,153);
+  color:rgb(102, 102, 102);
   outline:none;
   outline-style: none;
   border-radius:3px;
@@ -63,6 +72,15 @@ outline-style: none}
 .buttonLight:hover{
   color:black;
   border-color:black;
+}
+
+a[href], input[type='submit'], input[type='image'], label[for],span, select, button, .pointer {
+  cursor: pointer;
+}
+
+.buttonLight:disabled{
+  color:rgb(211, 210, 210);
+  border-color:rgb(209, 209, 209)
 }
 audio{
   height:30px;
@@ -88,8 +106,8 @@ audio{
 color:white;
 
   border-radius:3px;
-  /* background-color:#aac8db; */
-  background-color: #34a4a8;
+  background-color: #2b8b8f; 
+  /* background-color: #34a4a8; */
 
   /* background-color: rgb(205, 243, 224); */
  

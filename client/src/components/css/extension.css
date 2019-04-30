@@ -1,0 +1,22 @@
+.imgConainExt{
+    overflow: hidden;
+    width:98%;
+    /* background-color: red; */
+    display:grid;
+    /* padding-left:20px; */
+    padding-top:20px;
+    padding-right:120px;
+    min-height:50px;
+    grid-template-columns: 50% 50%;
+}
+.RecordBtnExt{
+    width:28px;
+    height:28px;
+    padding:0px;
+}
+.formContainerExt{
+    width:100%;
+    min-height:50px;
+    /* background-color:blue; */
+    /* height:85px; */
+}

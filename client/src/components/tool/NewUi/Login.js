@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import config from '../../../config/config';
 import { signInWithGoogle, stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import PropType from 'prop-types';
@@ -11,10 +11,14 @@ import { connect } from 'react-redux';
 class Login extends Component {
     constructor() {
         super();
+        this.state={
+            istwitterPressed:false
+        }
         this.state = { isAuthenticated: false, user: null, token: '' };
         this.googleResponse = this.googleResponse.bind(this);
         this.githubResponse = this.githubResponse.bind(this);
-        this.githubFailure = this.githubFailure.bind(this)
+        this.githubFailure = this.githubFailure.bind(this);
+        this.twitterPressed = this.twitterPressed.bind(this)
     }
   
     handleGit(){
@@ -24,12 +28,16 @@ class Login extends Component {
     componentWillMount(){
         this.props.stillAuthenicated()
     }
+    twitterPressed(){
+       
+        this.setState({
+        istwitterPressed:true
+        })
+    }
 
     githubResponse(response){
-        console.log("github response : ",response)
     }
     githubFailure(response){
-        console.log("github error : ",response)
     }
     googleResponse(response) {
         const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
@@ -42,25 +50,29 @@ class Login extends Component {
 
     render() {
         let content = !this.props.isAuthenticated ?
-            (<div className="ShapeImage">
+            ((this.state.istwitterPressed && !this.props.twitterLoginFailed)?
+            ( <div className="loginSection">
+            <div className="Logininfo">
+                <h4><b>Redirecting..</b></h4>
+            </div>
+            </div>):(<div className="ShapeImage">
                 {/* <div className="ShapeImage">
                 </div> */}
                 <div className="loginSection">
                     <div className="Logininfo">
                         <h3>
                             <b>
-                                Communicate better with visuals. Express with lot more than just text.
-                                Get your personalised Link so that people you love can connect with you. 
+                            Making visual explanations quick and easy 
                         </b>
                         </h3>
                         <br/>
                         <h5>
                             <b>
-                               Grab your Link
+                              
                         </b>
                         </h5>
                         <br />
-                            <div className="buttonDiv">
+                            <div onClick={this.twitterPressed} className="buttonDiv">
                                 <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
                                     onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
                                     requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />
@@ -70,7 +82,7 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
-            ): (<Redirect to={{ pathname: './' }} />) 
+            )): (<Redirect to={{ pathname: './emailvarify' }} />) 
         return (
             <div>
                 {content}
@@ -84,10 +96,12 @@ Login.PropType = {
     signInWithGoogle: PropType.func.isRequired,
     twitterAuthFailure:PropType.func.isRequired,
     signInWithTwitter:PropType.func.isRequired,
-    stillAuthenicated:PropType.func.isRequired
+    stillAuthenicated:PropType.func.isRequired,
 };
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
+    authAction :state.auth.authAction,
+    twitterLoginFailed:state.auth.twitterLoginFailed
 })
 export default connect(mapStateToProps, { signInWithGoogle, stillAuthenicated, twitterAuthFailure, signInWithTwitter})(Login)
 

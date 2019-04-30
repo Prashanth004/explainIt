@@ -1,12 +1,22 @@
 import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
+import { Button } from 'reactstrap'
+import bigInt from "big-integer";
+import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy'
+import { stillAuthenicated } from '../../../actions/signinAction';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
-import config from '../../../config/config'
-import '../../css/shareScreen.css'
-import CopyToClipboard from '../CopytoClipboard';
-import socketIOClient from "socket.io-client";
+import { startSecodScreenShare, endSecondScreenShare } from '../../../actions/secondShareAction'
+import config from '../../../config/config';
+import {fromShareToRecord} from '../../../actions/messageAction'
+import '../../css/shareScreen.css';
+import CallImage from './CallImage'
+import browser from 'browser-detect';
+import Call from './Call';
+import { FiX, FiVideo } from "react-icons/fi";
+import { MdReplay } from "react-icons/md";
+import SaveElement from './Saveproject';
 import {
     fullStartedSharing,
     fullStopedSharing,
@@ -17,13 +27,15 @@ import PropType from 'prop-types';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { displayFullScrenRecord } from '../../../actions/toolActions'
-import { getRecpientId, resetValues } from '../../../actions/twitterApiAction'
+import { sendTweet } from '../../../actions/twitterApiAction';
+import LinkDisplay from './TweetAcceptHandle'
 
 class ScreenRecorder extends Component {
     constructor(props) {
         super(props)
         this.state = {
             recorder: null,
+            peercalled: false,
             audioStream: null,
             canvasStream: null,
             downloadUrl: null,
@@ -39,6 +51,7 @@ class ScreenRecorder extends Component {
             streamvideo: null,
             socket: null,
             peer: null,
+            ringAck:false,
             peerId: null,
             timerEnded: false,
             connected: false,
@@ -52,35 +65,65 @@ class ScreenRecorder extends Component {
             timeOutNoAnswer: false,
             clickedOnLink: false,
             conDidNotInitiate: false,
+            recieverProfilePic: null,
+            recieverProfileName: null,
             manualClose: false,
             retryLimit: 0,
             retry: false,
             initiatedCloseCall: false,
-            twitterHandle: null,
-            tweetTested: false,
-            noInternet: false
-
+            noInternet: false,
+            doneTweeting: false,
+            stopedSharing: false,
+            tweetBtnPressed: false,
+            isSaveClicked: false,
+            recieverProfileId: null,
+            noOfMinutes: 3,
+            isInstalled: true,
+            maxTimeForVideo: null,
+            secondShareStrem: null,
+            answerFrmPeer: false,
+            messageFrmPeer: null,
+            timeOutNoAnswerOnCAll: false,
+            videoStream:null,
+            myscreenSharing:true
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
         this.startScreenShareSend = this.startScreenShareSend.bind(this);
         this.generateLink = this.generateLink.bind(this);
-        this.savefile = this.savefile.bind(this)
+        this.savefilePrivate = this.savefilePrivate.bind(this);
+        this.savefilePublic = this.savefilePublic.bind(this);
         this.receiveMessage = this.receiveMessage.bind(this);
         this.endCall = this.endCall.bind(this)
         this.retryCall = this.retryCall.bind(this);
         this.recordCall = this.recordCall.bind(this);
-        this.testHandle = this.testHandle.bind(this);
-        this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this)
+        this.changeTweetStatePos = this.changeTweetStatePos.bind(this);
+        this.changeTweetStateNeg = this.changeTweetStateNeg.bind(this);
+        this.closeButton = this.closeButton.bind(this);
+        this.tweetToParicipant = this.tweetToParicipant.bind(this);
+        this.peerCall = this.peerCall.bind(this);
+        this.saveClicked = this.saveClicked.bind(this);
+        this.expireTimer = this.expireTimer.bind(this)
+        this.setNoOfMinutes = this.setNoOfMinutes.bind(this);
+        this.downloadExtension = this.downloadExtension.bind(this);
+        this.makeCallAction = this.makeCallAction.bind(this);
+        this.recordCallAfterShare = this.recordCallAfterShare.bind(this);
+        this.shareMyScreen = this.shareMyScreen.bind(this)
+
+    }
+    setNoOfMinutes(minutes) {
+        this.setState({
+            noOfMinutes: minutes
+        })
     }
 
     startScreenShareSend() {
         var self = this
+        var constraints = null;
         var sourceId = this.props.extSourceId;
         var ua = window.detect.parse(navigator.userAgent);
-
         if (ua.browser.family === "Chrome") {
-            var constraints = {
+            constraints = {
                 video: {
                     mandatory: {
                         chromeMediaSource: 'desktop',
@@ -94,7 +137,7 @@ class ScreenRecorder extends Component {
             };
         }
         else if (ua.browser.family === "Firefox") {
-            var constraints = {
+            constraints = {
                 video: {
                     mediaSource: "screen",
                     width: { max: '1920' },
@@ -103,55 +146,30 @@ class ScreenRecorder extends Component {
                 }
             }
         }
-        console.log("constrain set")
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
+
                 var finalStream = new MediaStream();
                 window.getTracks(audioStream, 'audio').forEach(function (track) {
                     finalStream.addTrack(track);
                 });
-
                 window.getTracks(screenStream, 'video').forEach(function (track) {
                     finalStream.addTrack(track);
                 });
-                console.log("peer : ", peer)
-                var peer = self.state.peer
-                var call = peer.call(self.state.destkey, finalStream);
-                var recorder1 = RecordRTC(finalStream, {
-                    type: 'video'
-                });
-                recorder1.startRecording();
                 self.props.setStream(audioStream, screenStream, finalStream)
                 self.setState({
-                    recorder: recorder1,
                     audioStream: audioStream,
                     screenStream: screenStream,
                     finalStream: finalStream,
-                    call: call,
                     retry: false
                 })
-                if (call) {
-                    call.on('stream', function (remoteStream) {
-                        console.log("call answer recieved : ", remoteStream)
-                        var audio = document.querySelector('#video');
-                        audio.srcObject = remoteStream
-                        audio.play()
-                        self.setState({
-                            connected: true
-                        })
-
-                    }, function (err) {
-                        console.log('Failed to get local stream', err);
-                    });
-
-
-                }
             }).catch(err => {
                 console.log("error ouucres : ", err)
             })
         });
     }
     endCall() {
+        var self = this
         var peer = this.state.peer;
         var socket = this.state.socket
         this.setState({
@@ -159,7 +177,8 @@ class ScreenRecorder extends Component {
             manualClose: true
         })
         socket.emit(config.END_CALL, {
-            'peerId': this.state.peerId
+            'peerId': this.state.peerId,
+            'timer-ended': false
         })
         if (peer !== null) {
             peer.destroy();
@@ -168,12 +187,12 @@ class ScreenRecorder extends Component {
                 peer: null
             })
         }
-
-        this.stopShare()
-
-
-
+        // self.stopShare()
+        self.setState({
+            initiatedCloseCall: true
+        })
     }
+
     receiveMessage() {
         var source = this.props.extSource
         var origin = this.props.extOrigin
@@ -181,24 +200,30 @@ class ScreenRecorder extends Component {
             source.postMessage('audio-plus-tab', origin);
         }
     }
+    expireTimer() {
+        var peer = this.state.peer;
+        var self = this;
+        if (!this.state.clickedOnLink) {
+            if (peer !== null) {
+                peer.destroy()
+            }
+            self.setState({
+                timeOutNoAnswer: true,
+                peer: null
+            })
+        }
+    }
 
     componentDidMount() {
-        var socket = this.state.socket;
+        var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
-
         function postMessageHandler(event) {
-            console.log(" event :", event)
             if (event.data.sourceId !== undefined) {
-                console.log("We've got a message!");
-                console.log("* Message:", event.data);
-                console.log("* Origin:", event.origin);
-                console.log("* Source:", event.source);
-                console.log("*event.data.message__sourceId : ", event.data.sourceId)
+              
                 self.props.saveSourceId(event.data.sourceId)
                 self.startScreenShareSend()
             }
-
         }
         if (window.addEventListener) {
             window.addEventListener("message", postMessageHandler, false);
@@ -206,38 +231,78 @@ class ScreenRecorder extends Component {
             window.attachEvent("onmessage", postMessageHandler);
         }
 
+        // setTimeout(() => {
+        // if (!this.state.clickedOnLink) {
+        //     if (peer !== null) {
+        //         peer.destroy()
+        //     }
+        //     self.setState({
+        //         timeOutNoAnswer: true,
+        //         peer:null
+        //     })
 
-
-
-
-        setTimeout(() => {
-            if (!this.state.clickedOnLink) {
-                self.setState({
-                    timeOutNoAnswer: true
-                })
-                if (peer !== null) {
-                    peer.destroy()
-                }
-
-
-            }
-        }, 3 * 60 * 1000)
-        //acceptinf acknowlegment from other peer for call starting
+        // }
+        // }, 3 * 60 * 1000)
         socket.on(config.CALL_ACK_MESSAGE, data => {
-            console.log(" data from client ack : ", data)
+           
+            var userId = Number(data.recieverUserId);
+            userId = bigInt(data.recieverUserId).value;
+            self.setState({
+                recieverProfilePic: data.recieverProfilePic,
+                recieverProfileName: data.recieverProfileName,
+                recieverProfileId: userId
+            })
             if (data.clientId === self.state.peerId) {
-                //    alert("got ack")
-                this.setState({
-                    CallAck: true
+                self.setState({
+                    CallAck: true,
                 })
             }
-
         })
-        // acepting message of ending call
+        socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,data=>{
+            if (data.otherPeerId === self.state.destkey) {
+                self.setState({
+                    myscreenSharing:false
+                })
+            }
+        })
+        socket.on(config.LINK_TO_CALL_ACK,data=>{
+            if(data.fromUserId === this.props.userId){
+                this.setState({
+                    ringAck:true
+                })
+            }
+        })
+        socket.on(config.ENDING_RING_ACK,data=>{
+            if(data.ToUserId === this.props.userId){
+                self.setState({
+                    timeOutNoAnswerOnCAll: true
+                })
+            }
+        })
+        socket.on(config.REJECT_REPLY, data => {
+            if(data.toUserId === this.props.userId)
+            self.setState({
+                answerFrmPeer: true,
+                messageFrmPeer: data.message
+            })
+        })
+        socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+            if (data.otherPeerId === self.state.destkey) {
+                self.stopShare()
+                self.setState({
+                    initiatedCloseCall: true
+                })
+            }
+        })
+
         socket.on(config.END_CALL, data => {
-            console.log(" data from end call process : ", data)
             if (data.clientId === self.state.destkey) {
-                this.stopShare()
+                if (!self.state.initiatedCloseCall) {
+                    self.stopShare()
+                    self.setState({
+                        initiatedCloseCall: true
+                    })
+                }
             }
             if (peer !== null) {
                 peer.destroy();
@@ -247,95 +312,99 @@ class ScreenRecorder extends Component {
                     manualClose: true
                 })
             }
+        })
 
+        socket.on(config.ENDCALL_ACK, data => {
+            if (data.clientId === self.state.peerId) {
+                this.stopShare()
+            }
         })
 
         socket.on(config.CHECK_TOKEN_VALIDITY, data => {
-
-            console.log("confmessage : ", data)
-            console.log(" ")
             if (data.clientId === self.state.peerId) {
-                socket.emit(config.COMFIRM_TOKEN_VALIDITY, {
-                    success: 1,
-                    msg: "token valid"
-                })
+                if (self.state.peer !== null) {
+                    socket.emit(config.COMFIRM_TOKEN_VALIDITY, {
+                        success: 1,
+                        msg: "token valid",
+                        id: self.props.userId,
+                        profilePic: self.props.profilePic,
+                        twitterHandle: self.props.callerTwitterHandle
+                    })
+                }
             }
         })
     }
 
     componentWillMount() {
-        const socket = socketIOClient(config.base_dir);
+        this.props.stillAuthenicated();
+        const result = browser();
+        if (result.name === "chrome") {
+            var img;
+            img = new Image();
+            img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
+            img.onload = function () {
+            };
+            img.onerror = function () {
+                self.setState({
+                    isInstalled: false
+                })
+            };
+        }
+       
         this.setState({
-            socket: socket
+            socket: this.props.socket
         });
-
         var self = this;
         var peer = new window.Peer()
         this.setState({
             peer: peer
         });
-
         peer.on('open', (id) => {
-            console.log('My peer ID is: ' + id);
             self.setState({
                 peerId: id
             })
             self.generateLink()
         });
+        peer.on('call', function (call) {
 
+            call.answer()
+            call.on('stream', function (stream) {
+                self.setState({
+                    videoStream:stream,
+                    myscreenSharing:false
+                })
+                var audio = document.querySelector('#secondShareVideo');
+                audio.srcObject = stream
+            
+                self.props.startSecodScreenShare(stream)
+              
+            })
+        })
         peer.on('connection', (conn) => {
             conn.on('open', () => {
-                console.log("got some data")
                 this.setState({
                     clickedOnLink: true
                 })
-                //    setTimeout(()=>{
-                //        if(!this.props.isSceenSharing && !self.props.isSharingCompleted && !self.props.CallAck){
-                //             self.setState({
-                //                 conDidNotInitiate: true
-                //             })
-                //        }
-                //    },20*1000)
-                conn.on('data', (data) => {
-                    this.props.fullStartedSharing()
-                    console.log("data : ", data)
+                var ua = window.detect.parse(navigator.userAgent);
 
-                    self.setState({
-                        destkey: data.clientId,
-                    })
-                    var ua = window.detect.parse(navigator.userAgent);
+                conn.on('data', (data) => {
                     if (ua.browser.family === "Chrome") {
                         self.receiveMessage()
                     }
                     else if (ua.browser.family === "Firefox") {
                         self.startScreenShareSend()
                     }
+                    self.setState({
+                        destkey: data.clientId,
+                    })
+
 
                 });
-                conn.on('close', () => {
-                    // alert("con close")
-                    if (!self.state.initiatedCloseCall) {
-                        self.stopShare()
-                        self.setState({
-                            initiatedCloseCall: true
-                        })
-
-                    }
-
-                })
+                
             });
         });
-        peer.on('disconnected', function () {
-            //   if(!self.state.initiatedCloseCall){
-            //     self.stopShare()
-            //     self.setState({
-            //         initiatedCloseCall : true
-            //     })
 
-            //    }
-        });
-        peer.on('error', function (err) { });
-        peer.on('close', function () {
+        peer.on('disconnected', function () {
             if (!self.state.initiatedCloseCall) {
                 self.stopShare()
                 self.setState({
@@ -344,30 +413,135 @@ class ScreenRecorder extends Component {
 
             }
         });
+        // peer.on('close', function () {
+        //     if (!self.state.initiatedCloseCall) {
+        //         self.stopShare()
+        //         self.setState({
+        //             initiatedCloseCall: true
+        //         })
+
+        //     }
+        // });
 
 
+    }
+    componentDidUpdate() {
+
+        if (this.state.audioStream !== null &&
+            this.state.screenStream !== null &&
+            this.state.finalStream !== null &&
+            this.state.destkey !== null &&
+            !this.state.peercalled) {
+            this.setState({
+                peercalled: true
+            })
+            this.peerCall()
+
+        }
+
+    }
+    shareMyScreen(){
+        var socket = this.state.socket
+        var self = this
+        this.setState({
+            myscreenSharing:true
+        })
+        socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,{
+            'otherPeerId': self.state.peerId
+        })
+    }
+
+    peerCall() {
+
+        var self = this
+        var socket = this.state.socket
+        var peer = this.state.peer
+        var finalStream = this.state.finalStream
+        var call = peer.call(this.state.destkey, finalStream);
+        var recorder1 = RecordRTC(finalStream, {
+            type: 'video'
+        });
+        this.props.fullStartedSharing()
+        recorder1.startRecording();
+
+        if (call) {
+            call.on('stream', function (remoteStream) {
+
+                var audio = document.querySelector('#video');
+                audio.srcObject = remoteStream
+                audio.play()
+                self.setState({
+                    connected: true
+                })
+
+            }, function (err) {
+                console.log('Failed to get local stream', err);
+            });
+            call.on('close', function () {
+                if (!self.state.initiatedCloseCall) {
+                    self.stopShare()
+                    self.setState({
+                        initiatedCloseCall: true
+                    })
+
+                }
+                socket.emit(config.CLOSE_NETWORK_ISSUE, {
+                    'otherPeerId': self.state.peerId
+                })
+            })
+        }
+        this.setState({
+            recorder: recorder1
+        })
     }
 
 
     discard = () => {
         setTimeout(() => {
             window.close()
-        }, 1000);
+        }, 300);
     }
 
     renderer = ({ hours, minutes, seconds, completed }) => {
+        var socket = this.state.socket
         if (completed) {
-            // Render a completed state
-            this.setState({
-                timerEnded: true
+            socket.emit(config.END_CALL, {
+                'peerId': this.state.peerId,
+                'timerEnded': true
             })
-            this.stopShare()
+            if(!this.props.isSharingCompleted){
+                var peer = this.state.peer
+                if (peer != null) {
+                    peer.destroy()
+                }
+                this.setState({
+                    timerEnded: true,
+    
+                })
+            }
+          
             return (<Dummy></Dummy>)
         } else {
             // Render a countdown
             return <span>{hours}:{minutes}:{seconds}</span>;
         }
     };
+    closeButton() {
+        this.props.reStoreDefault()
+        this.setState({
+            showDisconectMessage: false,
+            timeOutNoAnswer: false,
+            clickedOnLink: false,
+            conDidNotInitiate: false,
+            manualClose: false,
+            retryLimit: 0,
+            retry: false,
+            initiatedCloseCall: false,
+            noInternet: false,
+            doneTweeting: false,
+            doneCalling: false
+        })
+    }
 
     generateLink() {
         var peerId = this.state.peerId;
@@ -406,15 +580,44 @@ class ScreenRecorder extends Component {
 
     }
 
-    savefile() {
-        this.props.savefile(this.state.blob)
+    savefilePublic(textData) {
+        this.props.savefile(this.state.blob, 1, textData)
+        var peer = this.state.peer;
+        if (peer !== null) {
+            peer.destroy();
+            this.setState({
+                peer: null
+            })
+        }
+    }
+    savefilePrivate(textData) {
+        var blob = this.state.blob
+        this.props.savefile(blob, 0, textData)
+        var peer = this.state.peer;
+        if (peer !== null) {
+            peer.destroy();
+            this.setState({
+                peer: null
+            })
+        }
+    }
+    recordCallAfterShare(){
+       
+        this.props.cancelAllMessageAction();
+        this.props.restAllToolValue();
+        this.props.displayFullScrenRecord()
+        this.props.fromShareToRecord()
     }
     recordCall() {
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
-        this.props.displayFullScrenRecord()
-
-
+        this.props.displayFullScrenRecord();
+        this.props.fromShareToRecord();
+    }
+    saveClicked() {
+        this.setState({
+            isSaveClicked: true
+        })
     }
     componentWillUnmount() {
         var peer = this.state.peer
@@ -424,7 +627,6 @@ class ScreenRecorder extends Component {
         this.setState({
 
         })
-        // alert("unmounting")
         if (audioStream !== null) {
             audioStream.stop();
         }
@@ -440,326 +642,485 @@ class ScreenRecorder extends Component {
         }
 
     }
+    tweetToParicipant() {
 
-    testHandle() {
+        this.props.sendTweet(
+            this.props.callerTwitterHandle,
+            this.props.recieverTwitterHandle,
+            this.props.sharablelink
+        )
         this.setState({
-            tweetTested: true
+            tweetBtnPressed: true
         })
-        this.props.getRecpientId(this.state.twitterHandle)
     }
-    updateTwitterHandleBox(e) {
+    resetTweetActions() {
+        this.setState()
+    }
+    changeTweetStatePos() {
         this.setState({
-            twitterHandle: e.target.value
+            doneTweeting: true
         })
     }
-    tweetTheMessage() {
-        var sharableURL = this.state.shareScreenLink
-        var text = "@" + this.state.twitterHandle + " This is an invite link to join my screen share";
-        var encSharableURL = encodeURI(sharableURL);
-        var encText = encodeURI(text);
+    makeCallAction() {
+        var self = this;
+        // this.props.makeTwitterCall(RecievertwitterHandle)
+        var peerId = this.state.peerId;
+        var shareScreenLink = config.react_url + '/connect/' + peerId;
+        this.setState({
+            shareScreenLink: shareScreenLink
+        })
+        setTimeout(() => {
+            if (!this.state.answerFrmPeer) {
+                if(!this.state.ringAck){
+                    self.setState({
+                        timeOutNoAnswerOnCAll: true
+                    })
+                }
+                socket.emit(config.ENDING_RING,{
+                    'fromUserId': this.props.userId,
+                    'ToUserId': this.props.twitterUserId
+                })
+            }
+        }, 20000)
+        var socket = this.state.socket
+        socket.emit(config.LINK_TO_CALL, {
+            'link': shareScreenLink,
+            'fromEmail': this.props.email,
+            'fromUserName': this.props.userName,
+            'fromProfilePic': this.props.profilePic,
+            'fromUserId': this.props.userId,
+            'ToUserId': this.props.twitterUserId
+        })
+        this.setState({
+            doneCalling: true
+        })
 
-        var href = "https://twitter.com/intent/tweet?text=" + encText + "&url=" + encSharableURL
-        var width = 555,
-            height = 300,
-            top = window.innerHeight / 4,
-            left = window.innerWidth / 4,
-            url = href,
-            opts = 'status=1' +
-                ',width=' + width +
-                ',height=' + height +
-                ',top=' + top +
-                ',left=' + left;
-        window.open(url, 'twitter', opts);
 
+    }
+    changeTweetStateNeg() {
+        this.setState({
+            doneTweeting: false
+        })
         this.props.resetValues();
-        this.setState({
-            tweetTested: false
-        })
 
     }
 
     stopShare() {
-        var call = this.state.call;
-        var peer = this.state.peer;
-
-
-        if (call != null) {
-            setTimeout(() => {
-                call.close();
-            }, 400);
-        }
-        if (!this.state.closedHere && !this.state.timerEnded) {
+        if (!this.state.stopedSharing) {
             this.setState({
-                showDisconectMessage: true
+                stopedSharing: true
+            })
+            var call = this.state.call;
+            if (call != null)
+                setTimeout(() => {
+                    call.close();
+                }, 400);
+            if (!this.state.closedHere && !this.state.timerEnded)
+                this.setState({
+                    showDisconectMessage: true
+                })
+            this.setState({
+                clickedOnLink: false
+            })
+            if (this.props.isSceenSharing)
+                this.props.fullStopedSharing();
+            var self = this;
+            var recorder1 = this.state.recorder;
+
+            var audioStream = this.props.audioStream;
+            var screenStream = this.props.screenStream;
+            if (audioStream !== null)
+                audioStream.stop();
+            if (screenStream != null)
+                screenStream.stop();
+            var audioStreamLocal = this.state.audioStream;
+            var screenStreamLocal = this.state.screenStream;
+            if (audioStreamLocal !== null)
+                audioStream.stop();
+            if (screenStreamLocal != null)
+                screenStream.stop();
+            var audio = document.querySelector('#video');
+            if (audio !== null) {
+                audio.src = "";
+            }
+
+            if (recorder1 != null)
+                recorder1.stopRecording(function () {
+                    var blob = recorder1.getBlob();
+                    self.setState({
+                        downloadUrl: URL.createObjectURL(blob),
+                        blob: blob
+                    })
+                    self.props.saveVideoBlob(blob)
+                });
+            self.props.endSecondScreenShare()
+            this.setState({
+                isShareDone: true,
+                isAudioRecDone: true,
+                clickedOnLink: false,
+                isRecording: "",
+                recorder: null,
+                audioStream: null,
+                canvasStream: null,
+                call: null,
+                peercalled: false
             })
         }
-        this.setState({
-            clickedOnLink: false
-        })
-        if (this.props.isSceenSharing) {
-            this.props.fullStopedSharing();
-        }
 
-        var self = this;
-        var peer = this.state.peer;
-        var recorder1 = this.state.recorder;
+    }
+    downloadExtension() {
+        window.open(config.EXTENSION_URL, "_self")
 
-        var audioStream = this.props.audioStream;
-        var screenStream = this.props.screenStream;
-        var audioStreamLocal = this.state.audioStream;
-        var screenStreamLocal = this.state.screenStream;
-        if (audioStream !== null) {
-            audioStream.stop();
-        }
-        if (screenStream != null) {
-            screenStream.stop();
-        }
-
-        if (audioStreamLocal !== null) {
-            audioStream.stop();
-        }
-        if (screenStreamLocal != null) {
-            screenStream.stop();
-        }
-        var audio = document.querySelector('#video');
-        audio.src = "";
-        console.log("recorder1 : ", recorder1)
-        if (recorder1) {
-            recorder1.stopRecording(function () {
-                console.log("recorder 1 : ", recorder1)
-                var blob = recorder1.getBlob();
-                console.log("blob : ", blob)
-                self.setState({
-                    downloadUrl: URL.createObjectURL(blob),
-                    blob: blob
-                })
-                self.props.saveVideoBlob(blob)
-            });
-        }
-        else {
-
-        }
-
-        this.setState({
-            isShareDone: true,
-            isAudioRecDone: true,
-            clickedOnLink: false,
-            isRecording: "",
-            recorder: null,
-            audioStream: null,
-            canvasStream: null,
-            call: null,
-        })
     }
 
     render() {
-        var validatinginfo = null
+        const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
+            this.props.closeImidiate
+        var linkElement = null;
+        var MessageDisconnected =null;
+        var shareTimeElements = null; 
+        var postShareElements = null;  
+        // if()
+        const closeBtn = (!this.props.isSceenSharing) ?
+            (((( this.props.isSharingCompleted) && !this.props.isSaved)|| this.state.doneCalling ||  this.state.answerFrmPeer)?(null) :(<Button close onClick={closeFunction} />)):
+            (null)
+        const saveBtns = <SaveElement
+          
+            shareOrRec={config.SHARING}
+            isSaveClicked={this.state.isSaveClicked}
+            saveClicked={this.saveClicked}
+            closeImidiate={this.props.closeImidiate}
+            savefilePublic={this.savefilePublic}
+            savefilePrivate={this.savefilePrivate} />
         var noInternet = null
-        if (this.state.noInternet) {
+        if (this.state.noInternet)
             noInternet = "No Intenet conecticvity"
-        }
-        else {
-            noInternet = null
-        }
-        if (this.state.tweetTested && !this.props.doneFetching) {
-            validatinginfo = (<p className="info">checking handle validity</p>)
-        }
-        if (this.props.doneFetching && this.props.twitterHandleValid) {
-            this.tweetTheMessage()
-        }
-        if (this.state.tweetTested && this.props.doneFetching && !this.props.twitterHandleValid) {
-            validatinginfo = (<div>
-                <p className="info">Incorrect twitter handle<br />
-                    Please check and try again</p>
-            </div>
-            )
-        }
-
-        if (this.state.timerEnded) {
-            var MessageDisconnected = (<p><b>Dissconected as the call exceded 3 mins</b></p>)
-        }
-        if (this.state.showDisconectMessage && !this.state.closedHere && this.state.manualClose) {
-            var MessageDisconnected = (<p><b>Disconnected from other peer</b></p>)
-        }
-        else if (!this.state.manualClose && !this.state.retry && (this.state.retryLimit < 1)) {
-            var MessageDisconnected = (
+        else noInternet = null;
+        if (this.state.timerEnded && !this.props.isSaved)
+            MessageDisconnected = (
                 <div>
-                    <p><b>Call ended due to network issues</b></p>
-                    <button className="buttonDark" onClick={this.retryCall}>Retry</button>
-                    <button className="buttonDark " onClick={this.recordCall}>Record</button>
-                    <button className="buttonDark">Cancel</button>
+                    <p><b>Call ended as the it exceded {this.state.noOfMinutes} mins</b></p>
+                    <p>You need to share a new link to connect again</p>
+                    {saveBtns}
+                </div>)
+        else if (this.state.showDisconectMessage && !this.props.isSaved && !this.state.closedHere && this.state.manualClose) {
+            MessageDisconnected = (<div>
+                <p><b>Call ended from other peer</b></p>
+                {saveBtns}
+
+            </div>)
+        }
+        else if (!this.state.manualClose && !this.props.isSaved && !this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
+            MessageDisconnected = (
+                <div>
+                    <p><b>Call disconnected due to network issues</b></p>
+                    <span className="hint--bottom" aria-label="Retry">
+                        <MdReplay className="icons" onClick={this.retryCall} />
+                    </span>
+                    <span className="hint--bottom" aria-label="Record call and send">
+                        <FiVideo className="icons" onClick={this.recordCall} />
+                    </span>
+                    {saveBtns}
+
                 </div>
             )
-        }
-        else if (!this.state.manualClose && !this.state.retry) {
-            var MessageDisconnected = (
+        else if (!this.state.manualClose && !this.props.isSaved && this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1))
+            MessageDisconnected = (
                 <div>
-                    <p><b>Call ended due to network issues</b></p>
+                    <p><b>Call disconnected due to network issues</b></p>
+                    <span className="hint--bottom" aria-label="Retry">
+                        <MdReplay className="icons" onClick={this.retryCall} />
+                    </span>
+                    <span className="hint--bottom" aria-label="Record call and send">
+                        <FiVideo className="icons" onClick={this.recordCall} />
+                    </span>
+                    {saveBtns}
 
-                    <p>You can reord the canvas and send it</p>
-                    <button className="buttonDark" onClick={this.recordCall}>Record</button>
-                    <button className="buttonDark" onClick={this.props.reStoreDefault}>Cancel</button>
                 </div>
             )
-        }
-        else if (this.state.retry && !this.state.retryTimeOut && !this.state.noInternet) {
-            var MessageDisconnected = (
+        else if (!this.state.manualClose && !this.props.isSaved && !this.state.retry)
+            MessageDisconnected = (
+                <div>
+                    <p><b>Call ended due to network issues</b></p>
+                    <p>You can reord the screen and send it</p>
+                    <span className="hint--bottom" aria-label="Record call and send">
+                        <FiVideo className="icons" onClick={this.recordCall} />
+                    </span>
+                    {saveBtns}
+
+                </div>
+            )
+        else if (this.state.retry && !this.props.isSaved && !this.state.retryTimeOut && !this.state.noInternet)
+            MessageDisconnected = (
                 <div>
                     <p><b>Reconnecting..</b></p>
 
                 </div>
             )
-        }
-        else if (this.state.retry && (this.state.retryTimeOut || this.state.noInternet)) {
-            var MessageDisconnected = (
+        else if (this.state.retry && (this.state.retryTimeOut || this.state.noInternet))
+            MessageDisconnected = (
                 <div>
                     <p><b>Retry failed</b><br />{noInternet}</p>
-                    <p>You can reord the canvas and send it</p>
-                    <button className="buttonDark" onClick={this.recordCall}>Record</button>
-                    <button className="buttonDark" onClick={this.props.reStoreDefault}>Cancel</button>
+                    <p>You can reord the screen and send it</p>
+                    <span className="hint--bottom" aria-label="Record call and send">
+                        <FiVideo className="icons" onClick={this.recordCall} />
+                    </span>
+                    {saveBtns}
+
                 </div>
             )
-        }
-        else {
-            var MessageDisconnected = <p><b>Call ended</b></p>
-        }
-        var timer = null;
-        var videoplayer = " ";
-        var downLinkAudio = " ";
-        var linkElement = " ";
-        if (this.props.isSceenSharing) {
-            // timer = (<Countdown
-            //     date={Date.now() + 180000}
-            //     renderer={this.renderer}
-            // />)
-            var shareTimeElements = (
-                <div>
-                    <div className="recordHolder">
-                        {/* {timer} */}
+        else if (!this.props.isSaved) {
+            MessageDisconnected = (<div>
+                <p><b>Call ended</b></p>
+                {saveBtns}
 
-                        <button className="Rec"></button>
-                    </div>
-                    <p>Sharing the screen...</p>
-                    <button onClick={this.endCall} className="stopButton">End sharing</button>
-                    {/* <div id="main-circle">
-                    <div onClick ={this.endCall}id="inner-circle">END</div>
-                </div> */}
-                </div>
-            )
-        }
-        if (this.state.clickedOnLink && !this.props.isSceenSharing && !this.state.CallAck) {
-            if (this.state.retryLimit === 0) {
-                var shareTimeElements = (<div className="clickedMessage">
-                    <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
-                    <p><b>Link clikced</b></p>
-                    <p>Connecting.. </p>
-                </div>)
-            }
-            else {
-                var shareTimeElements = (<div className="clickedMessage">
-                    <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
-                    <p>Connecting.. </p>
-                </div>)
-            }
-
-        }
-        if (this.state.clickedOnLink && !this.props.isSceenSharing && this.state.conDidNotInitiate) {
-            var shareTimeElements = (<div className="clickedMessage">
-                <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
-                <p><b>Failed To connect</b></p>
-                <p>This happened due to network issues</p>
             </div>)
         }
+
+        if (this.props.isSceenSharing) {
+           
+            var recieverProfPic = (this.props.twirecieverPrfilePic === null) ?
+                (this.state.recieverProfilePic) :
+                (this.props.twirecieverPrfilePic)
+
+            const recieveProfileName = (this.props.twitterName === null) ?
+                (this.state.recieverProfileName) : (this.props.twitterName)
+
+            const recieverProfileId = (this.props.twitterUserId !== null) ? (
+                this.props.twitterUserId
+            ) : (this.state.recieverProfileId)
+
+
+            shareTimeElements = (
+                <div>
+                    <Call
+                    shareMyScreen={this.shareMyScreen}
+                        myscreenSharing={this.state.myscreenSharing}
+                        videoStream={this.state.videoStream}
+                        renderer={this.renderer}
+                        endCall={this.endCall}
+                        otherPersonPic={recieverProfPic}
+                        otherPersonName={recieveProfileName}
+                        otherPersonProfileId={recieverProfileId}
+                        timeAloted={this.state.noOfMinutes}
+                        secondShareStrem={this.state.secondShareStrem}
+                    />
+                </div>
+            )
+        }
+        else if (this.state.clickedOnLink && !this.props.isSceenSharing && !this.state.CallAck)
+            if (!this.state.retryLimit === 0)
+                shareTimeElements = (<div className="clickedMessage">
+                    <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
+                    <p>Connecting.. </p>
+                </div>)
+            else if (this.state.clickedOnLink && !this.props.isSceenSharing && this.state.conDidNotInitiate)
+                shareTimeElements = (<div className="clickedMessage">
+                    <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
+                    <p><b>Failed To connect</b></p>
+                    <p>This happened due to network issues</p>
+                </div>)
+
+        //Post share elements
         if (this.props.isSharingCompleted && !this.state.clickedOnLink && !this.props.isSaved) {
-            var postShareElements = (<div>
+            postShareElements = (<div className="DisconMessage">
                 {MessageDisconnected}
 
             </div>)
-            {/* {MessageDisconnected}
-                     <p>Do you want to save the call for referring later?</p>
-                     <button onClick={this.savefile} className="buttonLight save">
-                       Save
-                     </button>
-                     <button onClick={this.discard}className="buttonDark save">
-                         Discard
-                     </button>
-                 </div>) */}
         }
-        {/* else if(this.props.isSaved){
-            var postShareElements= (<div className = "postRecord">
-          
-                 <p>Link to access your saved project</p>
+        else if (this.props.isSaved) {
+            if (!this.props.tweetSuccess && !this.state.tweetBtnPressed)
+                postShareElements = (<div className="postRecord">
 
-                 <CopyToClipboard sharablelink = {this.props.sharablelink} />
-             </div>)
-        } */}
-        if (this.state.downloadUrl) {
-            videoplayer = (<video src={this.state.downloadUrl} controls={true}></video>)
+                    <p>Call is saved under your created section</p>
 
-            downLinkAudio = (<div>
-                <a href={this.state.downloadUrl} download="dmkmdvkmdkm">Download</a>
-            </div>)
-        }
-        if (!this.props.isSceenSharing &&
-            !this.state.clickedOnLink &&
-            !this.props.isSharingCompleted &&
-            this.state.timeOutNoAnswer) {
-            var shareTimeElements = (<div className="clickedMessage">
-                <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
-                <p><b>Link expired</b></p>
-                <p>Client did not click to get connected</p>
-            </div>)
+                </div>)
+            else if (!this.props.tweetSuccess && this.state.tweetBtnPressed && this.props.twitterSendDone) {
+                postShareElements = (<div className="postRecord">
+                    <p>Tweeted Failed.</p>
+                    <p>This could had have happened due to the repeated tweeting the same kind of message</p>
+                    <span className="hint--bottom" aria-label="Retry Teet">
+                        <MdReplay className="icons" onClick={this.tweetToParicipant} />
+                    </span>
+                </div>)
+            }
+            else if (!this.props.tweetSuccess && this.state.tweetBtnPressed)
+                postShareElements = (<div className="postRecord">
+                    <p>processing ..</p>
+                </div>)
+
+            else if (this.props.tweetSuccess && this.props.twitterSendDone) {
+                postShareElements = (<div className="postRecord">
+                    <p>Tweeted successfully</p>
+                </div>)
+            }
+
         }
 
-        if (this.state.shareScreenLink &&
+        if (!this.state.doneTweeting &&
+            !this.state.doneCalling &&
             !this.props.isSceenSharing &&
             !this.state.clickedOnLink &&
             !this.props.isSharingCompleted &&
-            !this.state.timeOutNoAnswer) {
+            !this.state.timeOutNoAnswer &&
+            !this.state.answerFrmPeer &&
+            !this.state.timeOutNoAnswerOnCAll)
             linkElement = (
                 <div>
-                    <div>
-                        <p><b>Share the link below to get connected</b></p>
-                        <p className="info">
-                            <br />The link expires in 3 minutes
-                    <br />You will be notified with a sound when peer clicks on the link</p>
-                        <CopyToClipboard sharablelink={this.state.shareScreenLink} />
-                    </div>
-                    <div>
-                        <p><b>Tweet it to twitter user to invite them to join the call</b></p>
-                        <input type="text"
-                            className="myInput"
-                            placeholder="Enter twitter handle"
-                            onChange={this.updateTwitterHandleBox}></input>
-                        <button className="buttonDark" onClick={this.testHandle}>Tweet</button>
-                        {validatinginfo}
-                    </div>
-
+                    <LinkDisplay
+                        doneCalling={this.state.doneCalling}
+                        makeCallAction={this.makeCallAction}
+                        expireTimer={this.expireTimer}
+                        noOfMinutes={this.state.noOfMinutes}
+                        setNoOfMinutes={this.setNoOfMinutes}
+                        shareScreenLink={this.state.shareScreenLink}
+                        changeTweetStatePos={this.changeTweetStatePos}
+                        doneTweeting={this.state.doneTweeting} />
                 </div>)
-        }
-        return (
+        else if (this.state.doneTweeting &&
+            !this.state.doneCalling &&
+            !this.props.isSceenSharing &&
+            !this.state.clickedOnLink &&
+            !this.props.isSharingCompleted &&
+            !this.state.timeOutNoAnswer &&
+            !this.state.answerFrmPeer &&
+            !this.state.timeOutNoAnswerOnCAll) {
 
-            <div className="LinkDisplay">
-                {linkElement}
-                {shareTimeElements}
-                {postShareElements}
-                <audio id="video" ref={a => this.videoTag = a} srcObject=" " ></audio>
+            linkElement = (<div>
+                <div className="waitMsg">
+                    <p>Wainting for peer to accept the Screen Share request</p>
+                </div>
+                <div className="callerImageDiv">
+                    <CallImage
+                        action="waiting" callerImageUrl={this.props.profilePic}
+                        recieverImageUrl={this.props.twirecieverPrfilePic} />
+                </div>
+            </div>)
+        }
+        else if (!this.state.doneTweeting &&
+            this.state.doneCalling &&
+            !this.props.isSceenSharing &&
+            !this.state.clickedOnLink &&
+            !this.props.isSharingCompleted &&
+            !this.state.timeOutNoAnswer &&
+            !this.state.answerFrmPeer &&
+            !this.state.timeOutNoAnswerOnCAll) {
+            linkElement = (<div>
+                <div className="waitMsg">
+                    <p>Waiting for <b>{this.props.twitterName}</b> to accept the Screen Share request, if not we can drop a recorded message</p>
+                </div>
+                <div className="callerImageDiv">
+                    <CallImage
+                        action="waiting" callerImageUrl={this.props.profilePic}
+                        recieverImageUrl={this.props.twirecieverPrfilePic} />
+                </div>
+            </div>)
+        }
+        else if (!this.props.isSceenSharing &&
+            this.state.clickedOnLink &&
+            !this.props.isSharingCompleted &&
+            !this.state.timeOutNoAnswer &&
+            ! this.state.answerFrmPeer&&
+            !this.state.timeOutNoAnswerOnCAll)
+            linkElement = (<div>
+                <audio autoPlay style={{ display: "none" }} src={require('../../audio/brute-force.mp3')}></audio>
+
+                <div className="waitMsg">
+                    <p><b>{this.props.twitterName} has clicked the link</b></p>
+                </div>
+                <div className="callerImageDiv">
+                    <CallImage
+                        action="waiting" callerImageUrl={this.props.profilePic}
+                        recieverImageUrl={this.props.twirecieverPrfilePic} />
+                </div>
+            </div>)
+
+        else if (!this.props.isSceenSharing &&
+            !this.state.clickedOnLink &&
+            !this.props.isSharingCompleted &&
+            !this.state.timeOutNoAnswer &&
+            ! this.state.answerFrmPeer &&
+            this.state.timeOutNoAnswerOnCAll)
+            linkElement = (<div className="clickedMessage">
+                <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
+                <span><b>{this.props.twitterName}</b> is not available to accept request.</span>
+                <span>You can record the screen and send</span>
+                <br />
+                <span className="hint--bottom" aria-label="Record call and send">
+                    <FiVideo className="icons" onClick={this.recordCallAfterShare} />
+                </span>                <span className="hint--bottom" aria-label="Cancel">
+                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                </span>
+
+            </div>)
+        else if (!this.props.isSceenSharing &&
+            !this.state.clickedOnLink &&
+            !this.props.isSharingCompleted &&
+            !this.state.timeOutNoAnswer &&
+            this.state.answerFrmPeer) {
+            linkElement = (<div className="clickedMessage">
+                <p><b>{this.props.twitterName} has responded with a message</b></p>
+                <p>message : {this.state.messageFrmPeer}</p>
+                <p>Do You wish to record the screen and send?</p>
+                <span className="hint--bottom" aria-label="Record call and send">
+                    <FiVideo className="icons" onClick={this.recordCallAfterShare} />
+                </span>                
+                <span className="hint--bottom" aria-label="Cancel">
+                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                </span>
+            </div>)
+        }
+        else if (!this.props.isSceenSharing &&
+            !this.state.clickedOnLink &&
+            !this.props.isSharingCompleted &&
+            this.state.timeOutNoAnswer)
+            linkElement = (<div className="clickedMessage">
+                <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
+                <p><b>Link expired</b></p>
+                <p>Client did not click to get connected</p>
+                <p>You can record the call and send</p>
+                <span className="hint--bottom" aria-label="Record call and send">
+                    <FiVideo className="icons" onClick={this.recordCall} />
+                </span>                <span className="hint--bottom" aria-label="Cancel">
+                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                </span>
+
+            </div>)
+
+        return (this.state.isInstalled) ? (
+            <div>
+                {/* {backArrow} */}
+                {closeBtn}
+                <div className="LinkDisplay">
+                    {linkElement}
+                    {shareTimeElements}
+                    {postShareElements}
+                    <audio id="video" ref={a => this.videoTag = a} srcobject=" " ></audio>
+                </div>
             </div>
-        )
+
+        ) : (<div >
+            {/* <Navbar /> */}
+            <div className="messageToDownload">
+                <h3>Please download the chrome extension to continue</h3>
+                <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
+            </div>
+        </div>
+            )
     }
 }
 ScreenRecorder.PropType = {
     StartedSharing: PropType.func.isRequired,
-    stopedSharing: PropType.func.isRequired,
     saveVideoBlob: PropType.func.isRequired,
     setStream: PropType.func.isRequired,
     saveSourceId: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     cancelAllMessageAction: PropType.func.isRequired,
     displayFullScrenRecord: PropType.func.isRequired,
-    getRecpientId: PropType.func.isRequired,
-    resetValues: PropType.func.isRequired
-
+    sendTweet: PropType.func.isRequired,
+    resetValues: PropType.func.isRequired,
+    endSecondScreenShare: PropType.func.isRequired,
+    fromShareToRecord:PropType.func.isRequired
 }
 const mapStateToProps = state => ({
 
@@ -773,9 +1134,36 @@ const mapStateToProps = state => ({
     audioStream: state.stream.audioStream,
     screenStream: state.stream.screenStream,
     finalStream: state.stream.finalStream,
-    twitterHandleValid: state.twitterApi.profilePresent,
-    doneFetching: state.twitterApi.doneFetching
+    profilePic: state.auth.profilePic,
+    email: state.auth.email,
+    userName: state.auth.userName,
+    twirecieverPrfilePic: state.twitterApi.twitterProfilePic,
+    twitterName: state.twitterApi.name,
+    twitterUserId: state.twitterApi.twitterId,
+    callerTwitterHandle: state.auth.twitterHandle,
+    recieverTwitterHandle: state.twitterApi.twitterHandle,
+    tweetSuccess: state.twitterApi.tweeetSent,
+    twitterSendDone: state.twitterApi.tweetDone,
+    userId: state.auth.id,
+    startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
+    secodShareStream: state.secondScreenShare.stream
+
 
 })
 
-export default connect(mapStateToProps, { getRecpientId, resetValues, displayFullScrenRecord, cancelAllMessageAction, restAllToolValue, saveSourceId, fullStartedSharing, setStream, fullStopedSharing, saveVideoBlob })(ScreenRecorder)
+export default connect(mapStateToProps, {
+    resetValues,
+    displayFullScrenRecord,
+    sendTweet,
+    cancelAllMessageAction,
+    restAllToolValue,
+    startSecodScreenShare,
+    saveSourceId,
+    fullStartedSharing,
+    setStream,
+    fullStopedSharing,
+    saveVideoBlob,
+    stillAuthenicated,
+    endSecondScreenShare,
+    fromShareToRecord
+})(ScreenRecorder)

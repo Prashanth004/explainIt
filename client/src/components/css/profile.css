@@ -1,0 +1,42 @@
+.profileConatiner{
+    width:75%;
+    margin:auto;
+    background-color: white;
+    border-style:solid;
+    border-color:rgba(90, 90, 90, 0.288);
+    border-width:0.5px;
+border-radius:5px;
+color:rgba(51, 51, 51, 0.938);
+padding:10px;
+}
+.socialIcon{
+    padding:5px;
+    display:inline-block;
+}
+
+.bio{
+    width:80%;
+    margin:auto;
+    margin-top:20px;
+    color:rgba(51, 51, 51, 0.815);
+    font-size:14px;
+    text-align: justify
+}
+.edit{
+    float:right;
+}
+
+
+@media (min-width: 700px) {
+    .profileConatiner{
+        width:48%;
+        }
+    
+}
+
+@media (min-width: 1000px) {
+    .profileConatiner{
+    width:30%;
+    }
+
+}

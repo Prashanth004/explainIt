@@ -4,3 +4,11 @@
     margin:auto;
     margin-top:40px;
 }
+
+.explainItBtn{
+    color:black;
+   border-radius:50px;
+    float:right;
+    align-self: right;
+    align-content: right;
+  }
