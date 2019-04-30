@@ -97,7 +97,9 @@ class EmailVarify extends Component {
         otpAction=(this.state.submitPressed)?(
             (this.props.otpSent)?(
                 <div>
-                    <p>passcode is sent to {this.state.emailFlieldValue}</p>
+                    <p>Passcode is sent to {this.state.emailFlieldValue}</p>
+          
+                    <span style={{fontSize:"12px"}}>check spam/update section too</span>
                     <h5>Enter passcode to verify</h5>
                     <br />
                     <input type="text" className="emailInput OTP" onChange={this.changeOtpValue}></input>

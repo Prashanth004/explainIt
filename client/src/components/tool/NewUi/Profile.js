@@ -21,6 +21,9 @@ class Profile extends Component {
        this.props.closeEditProfile()
     }
     render() {
+        const editOption = (this.props.isHome)?( <span>
+            <FiEdit onClick={this.openEdit} className="edit" />
+        </span>):(null)
         const bio =(this.props.bio!==null)?(
             (this.props.bio.length>0)?(
                 <p>
@@ -51,7 +54,7 @@ class Profile extends Component {
         (
             <div>
                 <div className="bio">
-                    <p><b>Prashanth</b></p>
+                    <p><b>{this.props.userName}</b></p>
                     {bio}
                    {goodAtDiv}
                    {worksDiv}
@@ -90,9 +93,8 @@ class Profile extends Component {
         return (
             <div>
                 <div className="profileConatiner">
-                <span>
-                    <FiEdit onClick={this.openEdit} className="edit" />
-                </span>
+                {editOption}
+               
                     {profileConatiner}
                 </div>
             </div>

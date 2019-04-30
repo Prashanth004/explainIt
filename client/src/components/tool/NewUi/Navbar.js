@@ -200,11 +200,16 @@ handleConfirm() {
             <button onClick={this.openCreated} style={createdStyle} className="noButtons"><span>Created</span></button>
           </div>
           <div className="logoCentre">
-            <div className="logoContainerCreate" >
-              <span>
-                <FiMail onClick={this.props.openInbox} className="dragoMail" />
-              </span>
-            </div>                  </div>
+          
+            <div className="pImageContainer">
+                    <span>
+                        <img alt="profile pic"src={this.props.otherprofilePic} 
+                            onClick={this.props.openInbox}
+                            className="labelProfilePicNav"></img>
+                    </span>
+                        
+                    </div>
+            </div>
           <div className="normalNav">
             <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
           </div>
@@ -212,19 +217,19 @@ handleConfirm() {
       }
       else {
 
-        centreNav = (
-          <div className="navgation">
-            <div>
+        // centreNav = (
+        //   <div className="navgation">
+        //     <div>
 
-            </div>
-            <div className="  " onClick={this.openVisitHome}>
-              <span>
-                <img alt="visit home" src={require('../../images/logo.png')}
-                  width="100%"
-                  height="100%"></img>
-              </span>
-            </div>
-          </div>)
+        //     </div>
+        //     <div className="  " onClick={this.openVisitHome}>
+        //       <span>
+        //         <img alt="visit home" src={require('../../images/logo.png')}
+        //           width="100%"
+        //           height="100%"></img>
+        //       </span>
+        //     </div>
+        //   </div>)
       }
 
     }
@@ -291,6 +296,7 @@ const mapStateToProps = state => ({
   inbox: state.nav.openInbox,
   Participated: state.nav.openParticipated,
   authAction: state.auth.authAction,
+  otherprofilePic: state.profile.profilePic,
 
 
 })

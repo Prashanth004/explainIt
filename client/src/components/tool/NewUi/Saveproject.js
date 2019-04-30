@@ -13,7 +13,7 @@ class SaveProjects extends Component {
             limitExce:false,
             empty:false,
             limitOfChar:null,
-            textValue:null,
+            textValue:"",
             privatePublic : false,
             callRecText:"Call"
         }

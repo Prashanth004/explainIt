@@ -30,7 +30,6 @@ class DisplayShare extends Component {
             conn: null,
             socket: null,
             clientPeerid: null,
-          
             call: null,
             closedHere: false,
             showDisconectMessage: false,
@@ -200,18 +199,17 @@ class DisplayShare extends Component {
                 connected: true
             })
         });
-       
-        // var startConnection = new Promise((resolve, reject) => {
-        //     var conn = peer.connect(peerIdFrmPeer);
-        //     conn.on('open', function () {
-        //         // resolve(conn)
-        //         conn.send({
-        //             clientId: self.state.clientPeerid,
+        var startConnection = new Promise((resolve, reject) => {
+            var conn = peer.connect(peerIdFrmPeer);
+            conn.on('open', function () {
+                // resolve(conn)
+                conn.send({
+                    clientId: self.state.clientPeerid,
 
-        //         });
-        //     });
+                });
+            });
 
-        // });
+        });
         // startConnection.then((conn) => {
         //     setTimeout(() => {
 
@@ -335,14 +333,14 @@ class DisplayShare extends Component {
         }
     }
     startCall() {
-        const self = this
+        const self = this;
+        var constraints = null;
         this.setState({
             myscreenSharing :true,
             initiatedScreenShare:true
                 })
         const peer = this.state.peer
         const result = browser();
-        var constraints = null;
         
         var sourceId = this.props.extSourceId;
         if (result.name === "chrome") {
@@ -397,9 +395,8 @@ class DisplayShare extends Component {
     }
 
     render() {
-        var ProfileHover = null;
-        
         var ShareElement = null;
+        var ProfileHover = null;
         const shouldDisplay = (!this.state.myscreenSharing)?("block"):("none")
         const messageOfScreenShare =(!this.state.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
         (<h4><b>Your screen is being shared</b></h4>)
@@ -472,7 +469,7 @@ class DisplayShare extends Component {
 
                                     </div></span>
 
-                                <img alt="caller screen share" className="callPage-recieverImage"
+                                <img alt=" " className="callPage-recieverImage"
                                     style={{ marginTop: "-62px" }}
                                     src={this.state.picture}></img>
                             </div>
@@ -526,7 +523,7 @@ class DisplayShare extends Component {
             <h2>Connecting..</h2>
             <p>Please wait</p>
             <div className="callPage-recieverImageDiv">
-                <img  alt="reciever screen share" className="callPage-recieverImage wait" src={this.state.picture}></img>
+                <img alt=" " className="callPage-recieverImage wait" src={this.state.picture}></img>
             </div>
         </div>) : (null)
         return ((this.state.validCheckComplete) ? (

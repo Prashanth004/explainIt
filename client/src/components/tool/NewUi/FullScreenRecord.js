@@ -381,7 +381,7 @@ class FullScreenRecorder extends Component {
 
         if (this.props.isFullRecordCompleted && !this.props.isSaved) {
             postShareElements = (<div className="postRecord">
-                <div classNam="showVideoElement">
+                <div className="showVideoElement">
                     {videoplayer}
                 </div>
                 <SaveElement

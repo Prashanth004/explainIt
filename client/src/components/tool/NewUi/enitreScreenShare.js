@@ -266,6 +266,7 @@ class ScreenRecorder extends Component {
             }
         })
         socket.on(config.LINK_TO_CALL_ACK,data=>{
+
             if(data.fromUserId === this.props.userId){
                 this.setState({
                     ringAck:true

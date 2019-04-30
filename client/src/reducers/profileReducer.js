@@ -10,8 +10,8 @@ const initialState = {
    
     email:null,
     openEdirProfile:false,
-    profilePic:null,
-    userName:null,
+    profilePic:"",
+    userName:"",
     noParticipated:null,
     noCreated:null,
     errorFetchingProfileData:null,
@@ -21,13 +21,13 @@ const initialState = {
     doneUpdating:false,
     updateSuccess:true,
     cost : null,
-    bio : null,
-    twitterLink : null,
-    angelLink : null,
-    linkinLink : null,
-    githubLink : null,
-    goodat:null,
-    works:null,
+    bio : "",
+    twitterLink : "",
+    angelLink : "",
+    linkinLink : "",
+    githubLink : "",
+    goodat:"",
+    works:"",
   
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css';
+import Profile from './Profile';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './DisplayCreated';
 import { FiGrid,FiList } from "react-icons/fi";
@@ -33,6 +34,7 @@ class NewHome extends Component {
         this.state = {
             modal: false,
             modalTool: false,
+            showDetails: false,
             openExplain: false,
             showCreatedIssue: false,
             showParticipatedIssue: false,
@@ -46,7 +48,7 @@ class NewHome extends Component {
         this.toodleExplain = this.toodleExplain.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
         this.changeViewToGrid = this.changeViewToGrid.bind(this);
-
+        this.openDtailsTab = this.openDtailsTab.bind(this);
         this.toggleCreatedIssue = this.toggleCreatedIssue.bind(this);
         this.toggleParticipatedIssue = this.toggleParticipatedIssue.bind(this);
         this.closeParticipated = this.closeParticipated.bind(this);
@@ -176,6 +178,12 @@ class NewHome extends Component {
         })
         this.props.openCreated()
     }
+    openDtailsTab() {
+        this.setState({
+            showDetails: !this.state.showDetails,
+           
+        })
+    }
     reStoreDefault = () => {
         if(this.props.screenAction!==null){
         confirmAlert({
@@ -227,7 +235,9 @@ class NewHome extends Component {
           
              this.props.history.push("/");
          }
-      
+         const details = (this.state.showDetails) ?((this.props.inbox || this.props.created || this.props.participated)?(
+            null
+        ):( <Profile isHome ={this.state.isHome}/>)):(null)
         var issuesCreated = this.props.myissues;
 
         var self = this
@@ -241,9 +251,7 @@ class NewHome extends Component {
         (null):((this.props.created || this.props.participated)? (null):(<TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
         onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
         requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />))
-          
-        
-          
+     
             if (this.props.created) {
                 var createdDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{width:issuepercentage}}>
@@ -310,6 +318,7 @@ class NewHome extends Component {
                 if(this.props.userId!==null){
                   profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
+                    openDtailsTab={this.openDtailsTab}
                     isHome={this.state.isHome}
                     toggleInbox={this.toggleInbox}
                         userId={this.props.userId}
@@ -339,6 +348,9 @@ class NewHome extends Component {
 
                     <div>
                         {feedDiv}
+                    </div>
+                    <div>
+                        {details}
                     </div>
                 </div>
            

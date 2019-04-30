@@ -13,7 +13,7 @@ class ProfileForm extends Component {
             gitHubValue: "",
             worksValue:"",
             goodAtValue:"",
-            worksValueError:null,
+            worksValueError:"",
             goodAtValueError:null,
             angelListValue: "",
             costValue: null,
@@ -191,6 +191,8 @@ class ProfileForm extends Component {
                 <div className="profileFormContainer">
                     <span><b>Who am I</b></span>
                     <span className="support">   (200 characters)</span>
+                    <br/>
+                    <span className="support">(optional)</span>
                     <textarea
                         value={this.state.bioValue}
                         rows="6" onChange={this.changeBio} className="inputboxes" />
@@ -198,28 +200,41 @@ class ProfileForm extends Component {
 
                        <span><b>What am I good at</b></span>
                     <span className="support">   (150 characters)</span>
+                    <br/>
+                    <span className="support">(optional)</span>
                     <textarea
                         value={this.state.goodAtValue}
                         rows="3" onChange={this.changeGoodAt} className="inputboxes" />
                     {goodAtErrorDiv}
 
                     <span><b>My works</b></span>
+                    <br/>
+                    <span  className="support">(optional)</span>
                     <textarea
                         value={this.state.worksValue}
                         rows="3" onChange={this.changeWorks} className="inputboxes" />
                    
-                    <label><b>LinkedIn :</b></label>
+                    <span><b>LinkedIn :</b></span>
+                    <br/>
+                   
+                    <span  className="support">(optional)</span>
                     <input
                     type="text" 
                         value={this.state.linkedInValue}
                         onChange={this.changeLinkedIn} className="inputboxes" />
                     {linkedinerrorDiv}
-                    <label><b>GitHub : </b></label>
+                    <span><b>GitHub :</b></span>
+                    <br/>
+                    
+                    <span  className="support">(optional)</span>
                     <input
                         value={this.state.gitHubValue}
                         type="text" onChange={this.changeGithub} className="inputboxes" />
                     {githuerrorDiv}
-                    <label><b>Angel List : </b></label>
+                    <span><b>LinkedIn :</b></span>
+                    <br/>
+                   
+                    <span  className="support">(optional)</span>
                     <input
                         value={this.state.angelListValue}
                         type="text" onChange={this.changeAngelList} className="inputboxes" />

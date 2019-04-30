@@ -150,7 +150,7 @@ class ProfileCard extends Component {
                 <div className="pImageContainer">
                 <span className="hint--top" aria-label={this.props.userName}>
                 
-                    <img alt=" "src={this.props.profilePic} onClick={this.openProfile}className="labelProfilePic"></img>
+                    <img alt=" "src={this.props.profilePic}  onDoubleClick={this.props.openDtailsTab}className="labelProfilePic"></img>
                     
                     </span>
                 </div>

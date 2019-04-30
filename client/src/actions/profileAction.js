@@ -32,17 +32,17 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     }).then((response1) => {
         var myProjects =null;
         if (response1.status === 200 || response1.status === 304) {
-            email = response1.data.data.email;
-            userName = response1.data.data.username;
-            profilepic = response1.data.data.profilepic;
-            twitterHandle = response1.data.data.twitterhandle;
+            email = (response1.data.data.email===null)?(""):(response1.data.data.email);
+            userName = (response1.data.data.username===null)?(""):(response1.data.data.username);
+            profilepic = (response1.data.data.profilepic===null)?(""):(response1.data.data.profilepic);
+            twitterHandle = (response1.data.data.twitterHandle===null)?(""):(response1.data.data.twitterHandle);
             cost = response1.data.data.cost;
-            bio = response1.data.data.bio;
-            twitterLink = response1.data.data.bio;
-            angelLink = response1.data.data.angellist;
-            linkinLink = response1.data.data.linkedin;
-            githubLink = response1.data.data.github;
-            goodat=response1.data.data.goodat;
+            bio =(response1.data.data.bio===null)?(""):(response1.data.data.bio);
+            twitterLink =(response1.data.data.twitterlink===null)?(""):(response1.data.data.twitterlink);
+            angelLink =(response1.data.data.angellist===null)?(""):(response1.data.data.angellist);
+            linkinLink = (response1.data.data.linkedin===null)?(""):(response1.data.data.linkedin);
+            githubLink = (response1.data.data.github===null)?(""):(response1.data.data.github);
+            goodat=(response1.data.data.goodat===null)?(""):(response1.data.data.goodat);
             works=response1.data.data.works;
             axios({
                 method: 'get',

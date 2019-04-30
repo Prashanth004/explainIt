@@ -220,14 +220,16 @@ class NewHome extends Component {
         
         this.setState({
             showProjects: true,
-            openExplain: false
+            openExplain: false,
+            showDetails:false
         })
         this.props.openInbox()
     }
     toggleCreatedIssue() {
         this.setState({
             showDetails:false,
-            displayDetails:false
+            displayDetails:false,
+            showDetails:false
         })
         
         this.setState({
@@ -239,7 +241,8 @@ class NewHome extends Component {
     toggleParticipatedIssue() {
         this.setState({
             showDetails:false,
-            displayDetails:false
+            displayDetails:false,
+            showDetails:false
         })
        
         this.setState({
@@ -464,9 +467,10 @@ class NewHome extends Component {
             {shareRecord}
          </div>
         ):(null)
-        const details = (this.state.showDetails) ? ((this.props.inbox?(
+        const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated)?(
             null
-        ):( <Profile />))
+        ):( <Profile 
+        isHome ={this.state.isHome}/>))
            
         ) : (null)
       
