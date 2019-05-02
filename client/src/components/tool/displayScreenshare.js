@@ -457,11 +457,13 @@ class DisplayShare extends Component {
                     <div className="callImageDivAnwserMain">
                         <div className="decreasePadding">
                             <div className="callPage-recieverImageDiv">
+                            <span>
                                 <MdCallEnd onClick={this.endCall}
                                     className="img__overlay"
                                     style={{
                                         padding: "10px"
                                     }} />
+                                    </span>
 
                                 <span className="tooltiptext" >
                                     <div>

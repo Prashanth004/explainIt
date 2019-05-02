@@ -10,7 +10,7 @@ var cors = require('cors');
 var debug = require('debug')('node-postgres-promises:server');
 var http = require('http');
 var promise = require('bluebird');
-var port = normalizePort(process.env.PORT || '9000');
+var port = normalizePort(process.env.PORT || key.PORT);
 var logger = require('morgan');
 
 const passport = require('passport');
@@ -27,9 +27,9 @@ var optionsForPeerjs = {
 const connectionString = {
     host: 'localhost',  
     port: 5432,
-    database: 'toolArchi',
-    user: 'postgres',
-    password: 'postgres'
+    database: key.DATABAE_NAME,
+    user: key.USER_NAME,
+    password: key.PASSWORD
 };
 
 var app = express();

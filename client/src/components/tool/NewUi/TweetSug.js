@@ -47,7 +47,7 @@ class Search2 extends Component {
     render() {
         return (
 
-            <div style={{ borderRadius:"5%", display:"inline" }}>
+            <div style={{ borderradius:"5%", display:"inline" }}>
                 <Autocomplete
                     className="inputTweet"
                     value={this.props.tweetTextvalue}

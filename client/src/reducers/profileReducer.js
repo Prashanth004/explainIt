@@ -45,7 +45,8 @@ export default function(state=initialState, action){
                 linkinLink : action.linkinLink,
                 githubLink : action.githubLink,
                 goodat:action.goodat,
-                works:action.works
+                works:action.works,
+                twitterHandle:action.twitterHandle
 
             }
         case OPEN_EDIT_PROFILE:

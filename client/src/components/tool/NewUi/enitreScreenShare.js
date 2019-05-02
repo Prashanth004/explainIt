@@ -78,7 +78,6 @@ class ScreenRecorder extends Component {
             tweetBtnPressed: false,
             isSaveClicked: false,
             recieverProfileId: null,
-            noOfMinutes: 3,
             isInstalled: true,
             maxTimeForVideo: null,
             secondShareStrem: null,
@@ -105,19 +104,12 @@ class ScreenRecorder extends Component {
         this.peerCall = this.peerCall.bind(this);
         this.saveClicked = this.saveClicked.bind(this);
         this.expireTimer = this.expireTimer.bind(this)
-        this.setNoOfMinutes = this.setNoOfMinutes.bind(this);
         this.downloadExtension = this.downloadExtension.bind(this);
         this.makeCallAction = this.makeCallAction.bind(this);
         this.recordCallAfterShare = this.recordCallAfterShare.bind(this);
         this.shareMyScreen = this.shareMyScreen.bind(this)
 
     }
-    setNoOfMinutes(minutes) {
-        this.setState({
-            noOfMinutes: minutes
-        })
-    }
-
     startScreenShareSend() {
         var self = this
         var constraints = null;
@@ -801,7 +793,7 @@ class ScreenRecorder extends Component {
         if (this.state.timerEnded && !this.props.isSaved)
             MessageDisconnected = (
                 <div>
-                    <p><b>Call ended as the it exceded {this.state.noOfMinutes} mins</b></p>
+                    <p><b>Call ended as the it exceded {this.props.noOfMinutes} mins</b></p>
                     <p>You need to share a new link to connect again</p>
                     {saveBtns}
                 </div>)
@@ -904,7 +896,6 @@ class ScreenRecorder extends Component {
                         otherPersonPic={recieverProfPic}
                         otherPersonName={recieveProfileName}
                         otherPersonProfileId={recieverProfileId}
-                        timeAloted={this.state.noOfMinutes}
                         secondShareStrem={this.state.secondShareStrem}
                     />
                 </div>
@@ -973,8 +964,6 @@ class ScreenRecorder extends Component {
                         doneCalling={this.state.doneCalling}
                         makeCallAction={this.makeCallAction}
                         expireTimer={this.expireTimer}
-                        noOfMinutes={this.state.noOfMinutes}
-                        setNoOfMinutes={this.setNoOfMinutes}
                         shareScreenLink={this.state.shareScreenLink}
                         changeTweetStatePos={this.changeTweetStatePos}
                         doneTweeting={this.state.doneTweeting} />
@@ -1147,6 +1136,7 @@ const mapStateToProps = state => ({
     tweetSuccess: state.twitterApi.tweeetSent,
     twitterSendDone: state.twitterApi.tweetDone,
     userId: state.auth.id,
+    noOfMinutes:state.call.noOfMinutes,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     secodShareStream: state.secondScreenShare.stream
 

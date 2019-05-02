@@ -12,6 +12,10 @@ import {setIssueIdToNull} from '../../../actions/issueActions'
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
 import { FiMail } from "react-icons/fi";
+import { cancelAllMessageAction } from '../../../actions/messageAction'
+import { restAllToolValue } from "../../../actions/toolActions";
+import { resetValues } from '../../../actions/twitterApiAction'
+
 
 class ProfileCard extends Component {
     constructor(props){
@@ -28,15 +32,20 @@ class ProfileCard extends Component {
             this.props.getAllMessages(this.props.userId)
         }
     startRecordScreen(){
-        this.props.recordFullScreen();
+        this.props.cancelAllMessageAction();
+        this.props.restAllToolValue();
+        this.props.resetValues();
         this.props.JustRecord();
         this.props.setIssueIdToNull();
         this.props.cancelSuccess();
-
+        this.props.recordFullScreen();
     }
     startSharingScreen(){
-        this.props.shareFullScreenShare()
+        this.props.cancelAllMessageAction();
+        this.props.restAllToolValue();
+        this.props.resetValues();
         this.props.cancelSuccess();
+        this.props.shareFullScreenShare()
     }
     openProfile(){
         window.open("https://twitter.com/"+this.props.twitterHandle, '_blank')
@@ -160,6 +169,7 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, { JustRecord,
-    setIssueIdToNull,cancelSuccess,
+    setIssueIdToNull,cancelSuccess,cancelAllMessageAction,
+    resetValues,restAllToolValue,
      getAllMessages,getProfileDetails })(ProfileCard)
 

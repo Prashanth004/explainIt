@@ -19,11 +19,13 @@ const initialState ={
     error:false,
     successCreation : false,
     detailsOfExplained:[],
-    sharablelink:null
+    sharablelink:null,
+    sizeTooLarge:false
 }  
 
 export default function(state = initialState, action){
     switch(action.type){
+       
         case FETCH_ISSUE:
             return{
                 ...state,
@@ -35,6 +37,7 @@ export default function(state = initialState, action){
                 ...state,
 
             }
+        
             case CREATE_ISSUE_PROJECT : 
             return{
                 ...state,

@@ -57,7 +57,7 @@ border-radius:10.5px;
     width:155px;
     text-align: left;
     position:relative;
-    left:30px;
+    left:-105px;
     top:20px;
     background-color: white;
     border-radius:5px;
@@ -177,6 +177,11 @@ border-radius:10.5px;
   @media (min-width: 1000px) {
     .ProfileNameCard{
         display:block;
+    }
+    .dropDownForOption{
+        /* padding-left:10px; */
+       
+        left:30px;
     }
     .profileNameDiv{
         display:block;

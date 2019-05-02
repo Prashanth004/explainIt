@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import '../../../css/call.css'
-import Countdown from 'react-countdown-now';
 import Form from '../../Form';
-import { MdFilterNone } from "react-icons/md";
 import { connect } from 'react-redux';
-import Draggable from 'react-draggable';
 import PropType from 'prop-types';
 import { showCanvas, hideCanvas } from '../../../../actions/canvasAction';
-import { MdCallEnd } from "react-icons/md";
 import ProfileCard from '../ProfileHover'
 class Call extends Component {
     constructor(props) {
@@ -50,7 +46,7 @@ class Call extends Component {
         ) : (<div className="callDetails">
             {messageOfScreenShare}
             
-            <video srcObject={Object(this.props.videoStream)}
+            <video controls srcObject={Object(this.props.videoStream)}
         id="secondShareVideo"
         autoPlay
         style={{ display:shouldDisplay}}

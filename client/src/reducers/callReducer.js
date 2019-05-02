@@ -1,5 +1,6 @@
 import {CALL_DETAILS_ACCEPT,
     SAVE_RECIEVER_DATA,
+    SET_NUMBER_MINUTES,
      ANSWER_CALL,MISS_CALL} from '../actions/types'
 
 const initialState={
@@ -11,12 +12,18 @@ const initialState={
     incommingCall :false,
     recieverProfileImage:null,
     recieverUserName:null,
-    recieverUserId:null
+    recieverUserId:null,
+    noOfMinutes:3
 
 }
 
 export default function(state= initialState, action){
     switch(action.type){
+        case SET_NUMBER_MINUTES:
+        return{
+            ...state,
+            noOfMinutes:action.payload
+        }
         case CALL_DETAILS_ACCEPT:
             return {
                 ...state,

@@ -17,6 +17,13 @@ module.exports = {
     },
     domain:"http://localhost:9000",
     frontEndDomain:"http://localhost:3000",
+    ADMIN_EMAIL:"cprashanth002@gmail.com",
+    EMAIL_PASSWORD:"Prash#08119",
+    DATABAE_NAME:'toolArchi',
+    USER_NAME:'postgres',
+    PASSWORD:'postgres',
+    PORT:'9000',
+
     LINKTOCALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
     CALL_ACK_MESSAGE : "callAckMessage",

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from './InputNumber';
 import config from '../../../config/config';
+import {setNoOfMinutes} from '../../../actions/callAction'
 import { FaArrowLeft } from "react-icons/fa";
 import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
@@ -146,6 +147,7 @@ class tweetSearch extends Component {
                         textValue={this.props.noOfMinutes}
                         negNumber={this.state.negNumber}
                         noText={this.state.noText} />
+                        <br/>
                       
             <button className="buttonDark" style={{marginTop:"10px"}} onClick={this.testHandle}>Send request</button>
         </div>)
@@ -213,11 +215,13 @@ const mapStateToProps = state => ({
     doneFetching: state.twitterApi.doneFetching,
     twiterHandleArray: state.twitterApi.twitterHandle,
     fetchProfile: state.visitProfile.fetchProfile,
+    noOfMinutes:state.call.noOfMinutes,
     isPresentInExplain: state.visitProfile.isPresent,
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle,
     getTwitterHandles,
+    setNoOfMinutes,
     getRecpientId,
     resetValues
 })(tweetSearch)

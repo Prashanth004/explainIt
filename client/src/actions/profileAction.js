@@ -35,7 +35,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
             email = (response1.data.data.email===null)?(""):(response1.data.data.email);
             userName = (response1.data.data.username===null)?(""):(response1.data.data.username);
             profilepic = (response1.data.data.profilepic===null)?(""):(response1.data.data.profilepic);
-            twitterHandle = (response1.data.data.twitterHandle===null)?(""):(response1.data.data.twitterHandle);
+            twitterHandle = response1.data.data.twitterhandle
             cost = response1.data.data.cost;
             bio =(response1.data.data.bio===null)?(""):(response1.data.data.bio);
             twitterLink =(response1.data.data.twitterlink===null)?(""):(response1.data.data.twitterlink);

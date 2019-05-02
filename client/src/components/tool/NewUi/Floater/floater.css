@@ -1,11 +1,12 @@
 .floatcontainer{
     display:grid;
     grid-template-columns:25% 25% 25% 25%;
-    padding:5px;
+    /* padding:5px; */
+    padding-left:9px;
     border-radius:25px;
     width:80%;
     margin:auto;
-    height:55px;
+    height:50px;
     position:relative;
     /* background-color:rgb(14, 14, 44); */
     border-style:solid;
@@ -15,7 +16,7 @@
 
 }
 .labelContainerView{
-    height: 90px;
+    /* height: 90px; */
     padding:5px;
     padding-bottom:5px;
     border-radius:6px;
@@ -73,7 +74,7 @@ cursor:move;
     /* position:relative; */
     text-align: center;
     width:100%;
-    height:105px;
+    /* height:105px; */
     margin:auto;
     background-color:white;
     border-radius:3px;
@@ -104,10 +105,14 @@ cursor:move;
     visibility: visible;
    
   }
-
+.timerRunning{
+    margin-top:8px;
+    margin-right:5px;
+}
 .profilePic{
-    width:40px;
-    height:40px;
+    width:36px;
+    height:36px;
+    margin-top:2px;
     border-radius:50%;
     }
     .RecordBtnLabel{
@@ -155,7 +160,7 @@ cursor:move;
         .detailsFloaterMove{
             position:relative;
             width:60%;
-            height:105px;
+            /* height:105px; */
             top:5px;
            
         }

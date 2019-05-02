@@ -84,13 +84,13 @@ exports.updateProjectprivate = function(req, res){
         if (!req.file) {
         }
         else if (req.file) {
-            if (req.file.size > (1024 * 1024 * 25)) {
-                return res.status(450).send({
-                    success: 0,
-                    lengthExceeds: 1,
-                    msg: " the audio exceeds 12 mb"
-                })
-            }
+            // if (req.file.size > (1024 * 1024 * 35)) {
+            //     return res.status(450).send({
+            //         success: 0,
+            //         lengthExceeds: 1,
+            //         msg: " the audio exceeds 12 mb"
+            //     })
+            // }
             videopathName = config.domain + '/public/audio/' + req.body.projectName + '.mp4'
         }
         if (req.body.imageData != "null") {

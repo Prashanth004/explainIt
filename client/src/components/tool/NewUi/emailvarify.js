@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import { Redirect} from 'react-router-dom';
 import '../../css/emailvarify.css';
 import OTP from 'otp-client';
+import ConfirmEmail from './confrimEmail'
 import config from '../../../config/config';
 import {varifyActivation,activateProfile,resendOtp, sendOtp} from '../../../actions/emailAction'
 
@@ -19,13 +20,16 @@ class EmailVarify extends Component {
         optIncorrect:true,
         valdatingMessage:false,
         invalidOTP:false,
-        resendClick:false
+        resendClick:false,
+        confirmedPressed:false
     }
     this.pressSubmit = this.pressSubmit.bind(this);
     this.onEmailChange = this.onEmailChange.bind(this);
     this.changeOtpValue = this.changeOtpValue.bind(this);
     this.varifyOtpValue = this.varifyOtpValue.bind(this);
-    this.resend = this.resend.bind(this)
+    this.resend = this.resend.bind(this);
+    this.editEmail = this.editEmail.bind(this);
+    this.confirmedEmail = this.confirmedEmail.bind(this);
   }
   componentWillMount(){
     this.props.varifyActivation()
@@ -68,8 +72,9 @@ class EmailVarify extends Component {
      })
      this.props.resendOtp(this.state.emailFlieldValue)
  }
-  pressSubmit(){
-    
+  pressSubmit=()=>{this.setState({submitPressed:true})}
+
+  confirmedEmail=()=>{
     const secret = config.OTP_SECRET
     const options = {
         algorithm: "sha256",
@@ -79,12 +84,14 @@ class EmailVarify extends Component {
     const otp = new OTP(secret,options)
     const token = otp.getToken()
     this.props.sendOtp(this.state.emailFlieldValue,token )
- 
       this.setState({
-        submitPressed:true,
-        token:token
+          confirmedPressed:true,
+          token:token
       })
   }
+
+  editEmail=()=>{this.setState({submitPressed:false})}
+
   render() {
     var otpAction =null;
     var validateOtp = (this.state.valdatingMessage)?(
@@ -94,7 +101,7 @@ class EmailVarify extends Component {
         <p>incorrect passcode</p>
     ):(null)
     if(this.state.resendClick!==true){
-        otpAction=(this.state.submitPressed)?(
+        otpAction=(this.state.confirmedPressed)?(
             (this.props.otpSent)?(
                 <div>
                     <p>Passcode is sent to {this.state.emailFlieldValue}</p>
@@ -106,13 +113,17 @@ class EmailVarify extends Component {
                     <button className="buttonDark" onClick={this.varifyOtpValue}>Submit</button>
                     <br/>
                     <br/>
-                    {/* <button className="buttonLight">Edit email</button> */}
                     <button className="buttonLight" onClick={this.resend}>Resend</button>
                 </div>
             ):(
                 <h4>Sending passcode to your mail</h4>
             )
-        ):( 
+        ):(this.state.submitPressed)?(
+            <ConfirmEmail 
+            email={this.state.emailFlieldValue}
+            confirmedEmail={this.confirmedEmail}
+            editEmail={this.editEmail}/>
+        ):(
             <div>
                 <h5>Enter an email id for us to contact you and update you when needed </h5>
                 <br/>

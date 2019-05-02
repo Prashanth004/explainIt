@@ -4,6 +4,7 @@ import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER ,
     OPEN_EDIT_TEXT_MODAL,
     UPDATE_TEXT_EXPLAIN,
     CLOSE_EDIT_TEXT_MODAL,
+    FILE_SIZE_TOO_LARGE,
     DELETE_FAILED} from '../actions/types'
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
     deleteSuccess :false,
     openEditModal:false,
     doneUpdating:false,
-    editModalId:null
+    editModalId:null,
+   
 }
 
 export default function(state = initialState, action){
@@ -25,6 +27,7 @@ export default function(state = initialState, action){
                 openEditModal:true,
                 editModalId:action.id
             }
+       
         case UPDATE_TEXT_EXPLAIN:
             return{
                 ...state,

@@ -1,6 +1,7 @@
 import {FETCH_PROJ_BY_ISSUE,
     AUTH_FAIL,
     CLEAR_ANSWER,
+    FILE_SIZE_TOO_LARGE,
     UPDATE_ANSWER_WITH_IMAGE,
     CREATE_ISSUE_PROJECT_FAILED,
      CREATE_ISSUE_PROJECT,
@@ -232,6 +233,11 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
             })
             }
            
+        }
+        if(response.status === 450){
+            dispatch({
+                type:FILE_SIZE_TOO_LARGE
+            })
         }
         if(response.status === 500 || response.status === 450){
             dispatch({

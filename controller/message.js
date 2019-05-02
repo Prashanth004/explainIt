@@ -11,7 +11,7 @@ var options = {
 
 
 exports.checkReplyInfo = (req, res) => {
-    database.db.oneOrNone('select * from projects where email =$1 and issueid =$2', [req.user.email, Number(req.params.issueid)])
+    database.db.manyOrNone('select * from projects where email =$1 and issueid =$2', [req.user.email, Number(req.params.issueid)])
         .then(data => {
             if (data) {
                 if (data.length !== null) {

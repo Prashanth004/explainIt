@@ -6,8 +6,8 @@
   .ModalA{
     position: absolute;
     top: 60px;
-     left: 35%; 
-    right: 35%;
+     left: 12%; 
+    right: 15%;
     bottom: auto; 
     background-color:#ffffff;
     border-radius:5px;
@@ -19,8 +19,8 @@
   position: absolute;
   
   top: 110px;
-   left: 20px; 
-  right: 20px;
+   left: 12%; 
+  right: 15%;
   bottom: auto; 
   background-color:#ffffff;
   border-radius:9px;
@@ -49,7 +49,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(8, 8, 8, 0.712);
+    background-color: rgba(8, 8, 8, 0.787);
   }
   .OverlayEdit {
     /* width:100%; */
@@ -58,7 +58,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.521);
+    background-color: rgba(8, 8, 8, 0.787);
   }
   .react-toggle {
     touch-action: pan-x;
@@ -77,7 +77,7 @@
     -ms-user-select: none;
     user-select: none;
   
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.582);
     -webkit-tap-highlight-color: transparent;
   }
   
@@ -104,7 +104,7 @@
     height:15px;
     padding: 0;
     border-radius: 30px;
-    background-color: #4D4D4D;
+    background-color: rgba(14, 13, 13, 0.561);
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
     transition: all 0.2s ease;
@@ -212,7 +212,13 @@
   @media(min-width:700px){
     .ModalEdit{
       top:170px;
-      left:470px;
-      right:470px;
+      left:35%;
+      right:35%;
+    }
+    .ModalA{
+      position: absolute;
+      top: 60px;
+       left: 35%; 
+      right: 35%;
     }
   }

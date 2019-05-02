@@ -95,15 +95,12 @@ class NewHome extends Component {
         var imgData = "null"
         var items = {}
         var isquestion = " "
-        console.log("this.props.issueId : ",this.props.issueId)
         if (this.props.issueId == null || this.props.issueId === undefined) {
             isquestion = "true"
-            console.log("isquestion true")
         }
         else {
             isquestion = "false"
             issueId = this.props.issueId
-            console.log("isquestion false")
         }
         this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId, isPublic)
     }
@@ -539,7 +536,7 @@ class NewHome extends Component {
 
                 feedDiv = (
                     <div>
-                        <div style={{ textAlign: "right" }}>
+                        <div style={{float:"right"}}>
                             <span className="hint--top" aria-label="List View">
                             <FiList onClick={this.changeViewToList} className="listView"/>
                             </span>
@@ -567,7 +564,7 @@ class NewHome extends Component {
                 feedDiv = (
                     // <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
                        <div>
-                       <div style={{ textAlign: "right" }}>
+                       <div style={{float:"right"}} >
                             <span className="hint--top" aria-label="List View">
                             <FiList onClick={this.changeViewToList} className="listView"/>
                             </span>

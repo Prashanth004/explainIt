@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import PropType from 'prop-types';
+import { JustRecord } from '../../../../actions/messageAction'
+import { MdFilterNone } from "react-icons/md";
+import Countdown from 'react-countdown-now';
 import { cancelAllMessageAction } from '../../../../actions/messageAction'
 import { restAllToolValue } from "../../../../actions/toolActions";
 import { resetValues } from '../../../../actions/twitterApiAction'
-import {cancelSuccess} from '../../../../actions/issueActions'
+import { cancelSuccess } from '../../../../actions/issueActions'
 import { MdCallEnd } from "react-icons/md";
 import '../../../css/call.css'
 import './floater.css';
@@ -41,6 +44,7 @@ class Floater extends Component {
         this.recordFullScreen = this.recordFullScreen.bind(this);
         this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
         this.saveVideoData = this.saveVideoData.bind(this);
+        this.closeme = this.closeme.bind(this);
         this.endShareScreen = this.endShareScreen.bind(this);
         this.openIssueList = this.openIssueList.bind(this);
         this.getProfileDetails = this.getProfileDetails.bind(this);
@@ -72,6 +76,7 @@ class Floater extends Component {
         })
     }
     recordFullScreen() {
+        this.props.JustRecord();
         if (this.state.displayDetails === "none") {
             this.setState({
                 displayDetails: "block",
@@ -80,6 +85,7 @@ class Floater extends Component {
             this.props.displayFullScrenRecord()
         }
         else {
+            this.handleClose()
             this.setState({
                 displayDetails: "none"
             })
@@ -95,23 +101,30 @@ class Floater extends Component {
             this.props.displayFullScreShare()
         }
         else {
+            this.handleClose()
             this.setState({
                 displayDetails: "none"
             })
         }
     }
-    closeme(){
+    closeme() {
 
         var msg = {
             type: 'close',
             data: 'close'
         };
 
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
+        // var source = this.props.extSource
+        // var origin = this.props.extOrigin
+        // if (this.props.extSource !== null) {
+        //     source.postMessage('audio-plus-tab', origin);
+        // }
+
+        var source = this.props.extSource;
+        var origin = this.props.extOrigin;
         if (this.props.extSource !== null) {
             source.postMessage(msg, origin);
-        }  
+        }
     }
     endCall(event) {
         this.child.endCall()
@@ -126,7 +139,6 @@ class Floater extends Component {
         window.open(config.react_url + '/saveditems')
     }
     saveVideoData(data, isPublic, text) {
-        console.log("the data whcih is gonna get saved : ", data)
         var issueId = null
         var textExplain = text
         var imgData = "null"
@@ -148,11 +160,9 @@ class Floater extends Component {
 
         var self = this
         function postMessageHandler(event) {
-            console.log(" event :", event)
 
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                console.log(" event.source :", event.source)
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -197,20 +207,29 @@ class Floater extends Component {
         if ((this.props.screenAction === FULL_SCREEN_SHARE && this.props.isSceenSharing)) {
 
             profilePic = (<div>
-                <span>
+                <span  >
                     <MdCallEnd
-                          onClick={this.endCall} 
+                        onClick={this.endCall}
                         className="img__overlay"
                         style={{
                             padding: "10px"
                         }} />
                 </span>
-                <img alt="profilePic" 
-                src={this.props.profilePic}
-                className="callPage-recieverImage"></img>
+                <img alt="profilePic"
+                    src={this.props.profilePic}
+                    className="callPage-recieverImage"></img>
             </div>)
-            recorScreenImg = null;
-            shareScreenImg = null;
+            recorScreenImg = (<div className="timerRunning">   <Countdown
+                    
+                date={Date.now() + this.props.timeAloted * 60 * 1000}
+                renderer={this.child.renderer}
+            />
+            </div>);
+            shareScreenImg = (
+                <div  style={{marginTop:"5px"}}className="callPage-recieverImageDiv endCall"><span className="hint--bottom" aria-label="ShareScreen">
+                            <MdFilterNone onClick={this.child.shareMyScreen} className="endButton" />
+                            </span>
+                            </div>);
             svaedStff = (
                 <div className="recieverProfilePic">
                     <span className="tooltiptext" >
@@ -283,7 +302,7 @@ class Floater extends Component {
                         </div>
                     </div>
                 </Draggable>
-                <button className="buttonDark" onCLick={this.closeme}>close</button>
+                {/* <button className="buttonDark" onClick={this.closeme}>close</button> */}
 
 
             </div>
@@ -301,8 +320,8 @@ Floater.PropType = {
     resetValues: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
-    cancelSuccess: PropType.func.isRequired
-
+    cancelSuccess: PropType.func.isRequired,
+    JustRecord: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     profilePic: state.auth.profilePic,
@@ -315,6 +334,7 @@ const mapStateToProps = state => ({
     recieverProfileImage: state.call.recieverProfileImage,
     recieverUserName: state.call.recieverUserName,
     recieverUserId: state.call.recieverUserId,
+    timeAloted:state.call.noOfMinutes,
     twirecieverPrfilePic: state.twitterApi.twitterProfilePic
 })
 export default connect(mapStateToProps, {
@@ -328,6 +348,6 @@ export default connect(mapStateToProps, {
     saveSourceId,
     displayFullScrenRecord,
     displayFullScreShare,
-   
+    JustRecord,
     creatAnsProject
 })(Floater)

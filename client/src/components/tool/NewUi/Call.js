@@ -132,7 +132,8 @@ Call.PropType = {
 };
 const mapStateToProps = state => ({
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
-    secodShareStream: state.secondScreenShare.stream
+    secodShareStream: state.secondScreenShare.stream,
+    timeAloted:state.call.noOfMinutes
 
 })
 

@@ -138,7 +138,7 @@ const sendEmail = (toAddress, Subject, emailContent)=>{
   
     transporter.sendMail(mailOptions, function (err) {
             if(err){
-                conosle.log("email send failed: ",err)
+                console.log("email send failed: ",err)
                 // return 
             }
             console.log("successfull")
@@ -155,12 +155,12 @@ exports.resend = (req,res)=>{
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'bookmanelabs@gmail.com',
-                    pass: 'bookmane321$'
+                    user: config.ADMIN_EMAIL,
+                    pass: config.EMAIL_PASSWORD
                 }
             });
             var mailOptions = {
-                from: '"Bookmane Labs" <bookmanelabs@gmail.com>',
+                from: '"Bookmane Labs" <'+ config.ADMIN_EMAIL+'>',
                 to: req.body.email,
                 subject: 'OTP for varification',
                 text: 'Hello,\n\n' + 'This is you passocde for authentication: \n\n \b'+passocde
@@ -180,12 +180,12 @@ exports.sendotp = (req,res)=>{
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'bookmanelabs@gmail.com',
-                pass: 'bookmane321$'
+                user: config.ADMIN_EMAIL,
+                    pass: config.EMAIL_PASSWORD
             }
         });
         var mailOptions = {
-            from: '"Bookmane Labs" <bookmanelabs@gmail.com>',
+            from: '"Bookmane Labs" <'+ config.ADMIN_EMAIL+'>',
             to: req.body.email,
             subject: 'OTP for varification',
             text: 'Hello,\n\n' + 'This is you one time password for authentication: \n\n \b'+req.body.otp

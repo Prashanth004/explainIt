@@ -1,13 +1,14 @@
 .imagesOfExplainedDiv{
     width:100%;
-    float:left;
+    /* float:left; */
     /* display:grid; */
-    /* display: inline-block; */
+    display: inline-block;
+        /* grid-template-columns: 12.25% 12.25% 12.25% 12.25% 12.25% 12.25% 12.25% 12.25%; */
+
     overflow-x: scroll;
     overflow-y: hidden;
-    white-space: nowrap;
-    grid-template-columns: 12.25% 12.25% 12.25% 12.25% 12.25% 12.25% 12.25% 12.25%;
-    grid-column-gap: 10px;
+    /* white-space: nowrap; */
+    /* grid-column-gap: 10px; */
     padding:10px;
     padding-bottom:20px;
 
@@ -37,10 +38,19 @@
 }
 .storyContainer{
     min-height:400px;
-    background-color: #eeee;
+    /* max-width:400px; */
+        background-color: #eeee;
     border-top:solid;
     border-color:rgb(149, 149, 149);
     border-top-color: rgb(161, 156, 156);
     border-top-width:0.5px;
     /* padding:15px; */
+}
+
+@media (min-width: 1000px) {
+    .storyContainer{
+        /* max-width:700px;} */
+    }
+
+   
 }
