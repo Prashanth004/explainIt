@@ -127,9 +127,9 @@ export const restAllToolValue = () =>(dispatch)=>{
     dispatch({
         type:CANCEL_MESSAGE_STATE
     })
-    dispatch({
-        type:CANCEL_CREATION
-    })
+    // dispatch({
+    //     type:CANCEL_CREATION
+    // })
 
 }
 

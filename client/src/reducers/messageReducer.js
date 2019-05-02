@@ -71,7 +71,6 @@ export default function(state=initialState, action){
             fetchFailed:false,
             showTextAftRec : true ,
             fromShareToRecord:false,
-            explainIssue:false
         }
         case SEND_FAILED:
         return{

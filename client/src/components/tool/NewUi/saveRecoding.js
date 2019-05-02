@@ -3,7 +3,9 @@ import config from '../../../config/config'
 import InputBox from './InputBox';
 import { FiSave, FiX, FiSend } from "react-icons/fi";
 import { connect } from 'react-redux';
-import TweetSendMessage from './TweetSendMessage'
+import PropType from 'prop-types';
+import TweetSendMessage from './TweetSendMessage';
+import {sendEmail} from '../../../actions/emailAction'
 
 
 
@@ -58,6 +60,10 @@ class SaveProjects extends Component {
                         privatePublic: true
                     })
                     this.props.savefilePublic(this.state.textValue)
+                    alert(this.props.replying)
+                    if(this.props.replying){
+                        this.props.sendEmail(this.props.issueId,this.props.userid)
+                    }
                 }
                 else {
                     this.setState({
@@ -88,7 +94,10 @@ class SaveProjects extends Component {
             if ((this.state.textValue).length > 0) {
                 if ((this.state.textValue).length < 201) {
 
-                    this.props.savefilePrivate(this.state.textValue)
+                    this.props.savefilePrivate(this.state.textValue);
+                    if(this.props.replying){
+                        this.props.sendEmail(this.props.issueId,this.props.userid)
+                    }
                     this.setState({
                         privatePublic: true,
                         successSent:true
@@ -207,17 +216,23 @@ class SaveProjects extends Component {
 
 
 SaveProjects.PropType = {
-
+    sendEmail:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
     showInputBox: state.message.showTextAftRec,
     twitterUserId: state.twitterApi.twitterId,
     fromShareToRecord: state.message.fromShareToRecord,
-    explainIssue: state.message.explainIssue
+    explainIssue: state.message.explainIssue,
+    issueId:state.email.issueId,
+    userid:state.email.userid,
+    replying:state.email.replying
+
 })
 
-export default connect(mapStateToProps, {})(SaveProjects)
+export default connect(mapStateToProps, {
+    sendEmail
+})(SaveProjects)
 
 
 

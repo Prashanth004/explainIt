@@ -34,9 +34,10 @@ module.exports = {
     ENDING_RING_ACK:"endingRingAck",
     SAVED_NEW_PROJECT:"savedNewProject",
     SHARE_MY_SCREEN:"shareMyScreen",
-    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen"
-
-
+    ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen",
+    FAILED_TO_GET_ISSUE_DETAILS:"failedToGetIssueDetails",
+    FAILED_TO_GET_CREATOR_DETAILS:"failedToGetCreatorDetails",
+    FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails"
 
 };
 

@@ -135,13 +135,14 @@ const sendEmail = (toAddress, Subject, emailContent)=>{
         subject: Subject,
         html: emailContent
     };
+  
     transporter.sendMail(mailOptions, function (err) {
-            if(!err){
-                conosle.log("email send")
-                return 
+            if(err){
+                conosle.log("email send failed: ",err)
+                // return 
             }
-            console.log("error : ",err)
-            return     
+            console.log("successfull")
+            // return     
     });
 
 }

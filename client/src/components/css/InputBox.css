@@ -5,7 +5,9 @@
     padding:5px;
     font-size:12px;
 }
-
+.inputNumberDiv{
+    display:inline-block;
+}
 .spanElement{
     color:rgb(138, 16, 16);
     font-size:12px;

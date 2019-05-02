@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Button } from 'reactstrap'; 
-import { cancelAllMessageAction } from '../../../actions/messageAction'
+import { cancelAllMessageAction} from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction'
+import {cancelSuccess} from '../../../actions/issueActions'
 
 import TwitterLogin from 'react-twitter-auth';
 import Screenrecorder from './explainItRecorder';
@@ -36,6 +37,7 @@ class ExplainPage extends Component {
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
         this.props.resetValues();
+        this.props.cancelSuccess();
     }
   
     closeFunction(){
@@ -140,6 +142,7 @@ export default connect(mapStateToProps, {
     resetValues,
     twitterAuthFailure,
     signInWithTwitter,
+    cancelSuccess,
     creatAnsProject })(ExplainPage)
 
 

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar'
-import DisplatCreated from './DisplayCreated'
+import DisplatCreated from './DisplayCreated';
+import {cancelSuccess} from '../../../actions/issueActions'
 import Inbox from './Inbox';
 import Profile from './Profile'
 import { getProfileDetails } from '../../../actions/profileAction';
@@ -94,12 +95,15 @@ class NewHome extends Component {
         var imgData = "null"
         var items = {}
         var isquestion = " "
+        console.log("this.props.issueId : ",this.props.issueId)
         if (this.props.issueId == null || this.props.issueId === undefined) {
             isquestion = "true"
+            console.log("isquestion true")
         }
         else {
             isquestion = "false"
             issueId = this.props.issueId
+            console.log("isquestion false")
         }
         this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId, isPublic)
     }
@@ -370,6 +374,7 @@ class NewHome extends Component {
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
         this.props.resetValues();
+        this.props.cancelSuccess();
         this.setState({
             displayDetails: false
         })
@@ -400,7 +405,7 @@ class NewHome extends Component {
 
     render() {
        var issuepercentage="65%";
-        var percentage ="30%";
+        var percentage ="35%";
         var displayLinkDiv=null;
         var profileCardElement = null;
         if(this.state.reducedWidth){
@@ -713,6 +718,7 @@ const mapStateToProps = state => ({
     isSceenSharing: state.tools.isFullScreenSharing,
     isFullScreenRecording: state.tools.isFullScreenRecording,
     showCanvas:state.canvasActions.showCanvas,
+    issueId:state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     
 
@@ -739,6 +745,7 @@ export default connect(mapStateToProps, {
     displayFullScrenRecord,
      displayFullScreShare ,
     creatAnsProject,
+    cancelSuccess,
     clearAnswers, stillAuthenicated,
     resetValues
 })(NewHome)

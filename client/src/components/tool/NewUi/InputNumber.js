@@ -13,7 +13,7 @@ export default (props) => {
         <span className="spanElement">Cant be empty</span>
       ):(null))))
   return (
-    <div >
+    <div className="inputNumberDiv">
         <input className="inputNumber"
        onChange={props.changeInputValue} 
        value={props.textValue}

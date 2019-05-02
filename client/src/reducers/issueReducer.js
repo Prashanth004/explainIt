@@ -1,5 +1,6 @@
 import {FETCH_ISSUE} from '../actions/types';
 import {SET_ISUUE_ID, 
+     SET_ISSUE_ID_TO_NULL,
     FETCH_DETAILS_OF_EXPLAINED,
     CANCEL_PROJ_CREATION_SUCCESS,
     CREATE_ISSUE_PROJECT,
@@ -26,7 +27,13 @@ export default function(state = initialState, action){
         case FETCH_ISSUE:
             return{
                 ...state,
-                items:action.payload
+                items:action.payload,
+                currentIssueId:null
+            }
+            case SET_ISSUE_ID_TO_NULL:
+            return{
+                ...state,
+
             }
             case CREATE_ISSUE_PROJECT : 
             return{

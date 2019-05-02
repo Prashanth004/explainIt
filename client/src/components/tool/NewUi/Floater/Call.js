@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import './callFloater.css'
+import '../../../css/call.css'
 import Countdown from 'react-countdown-now';
-import Form from '../../Form'
+import Form from '../../Form';
+import { MdFilterNone } from "react-icons/md";
 import { connect } from 'react-redux';
 import Draggable from 'react-draggable';
 import PropType from 'prop-types';
@@ -26,43 +27,43 @@ class Call extends Component {
 
     }
     render() {
-        const videoInfo = (this.props.startSecodScreenShare)?
-        (<span style={{fontSize:"13px"}}>Below is the screen of other peer</span>):(null)
+        var ProfileHover = null
+        const messageOfScreenShare =(!this.props.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
+        (<h4><b>Your screen is being shared</b></h4>)
+       
+        const shouldDisplay=(!this.props.myscreenSharing)?("block"):("none")
+        
 
-        console.log("calling file, other profileid : ", this.props.otherPersonProfileId)
         if (this.props.otherPersonProfileId !== null) {
-            console.log("1")
-            var ProfileHover = (<ProfileCard
+            ProfileHover = (<ProfileCard
                 userId={this.props.otherPersonProfileId} />)
         }
         else {
-            console.log("0")
-            var ProfileHover = null
+            ProfileHover = null
         }
         var showCanv = (this.state.showCanvas) ? (
-            <div>
+            <div className="canvToolDivCall">
                 <Form onRef={ref => (this.child = ref)} />
                 <p>Screen is being shared..</p>
 
             </div>
-        ) : (<div >
-            <p><b>Screen is being shared..</b></p>
-            {videoInfo}
-            <video srcObject=" "
-                id="secondShareVideo"
-                style={{ display: "none" }}
-                width="100%"
-            ></video>
+        ) : (<div className="callDetails">
+            {messageOfScreenShare}
+            
+            <video srcObject={Object(this.props.videoStream)}
+        id="secondShareVideo"
+        autoPlay
+        style={{ display:shouldDisplay}}
+       
+        width="100%"
+    ></video>
 
         </div>)
         return (
             <div className="callDiv">
                 <div className="statusBarCall">
                     <div className="timerDiv">
-                        <Countdown
-                            date={Date.now() + this.props.timeAloted * 60 * 1000}
-                            renderer={this.props.renderer}
-                        />
+                       
                     </div>
                     <div>
 
@@ -70,39 +71,10 @@ class Call extends Component {
                     <div>
                         {/* <p onClick={this.toggleCanvas}>Canvas</p> */}
                     </div>
+
                 </div>
                 {showCanv}
-                {/* <Draggable> */}
-                {/* <div className="callImageDivAnwser">
-                    <div className="callPage-recieverImageDiv"> */}
-                        {/* <MdCallEnd onClick={this.props.endCall} className="img__overlay"/> */}
-                        {/* <span>
-                        <MdCallEnd 
-                        onClick={this.props.endCall}
-                                        className="img__overlay"
-                                        style={{
-                                            padding: "10px"
-                                        }} />
-                                        </span>
-                        <span className="tooltiptext" >
-                            <div>
-                                {ProfileHover}
 
-                            </div></span> */}
-
-                        {/* <span className="hint--top" aria-label={this.props.otherPersonName}> */}
-                        {/* <img className="callPage-recieverImage" src={this.props.otherPersonPic}></img> */}
-                        {/* </span> */}
-                    {/* </div> */}
-
-                    {/* <div className="callPage-recieverImageDiv endCall">
-                        <span className="hint--top" aria-label="End Call">
-                            <MdCallEnd  className="endButton" />
-                        </span>
-                        {/* <span style={{fontSize:"12px"}}>End Call</span> */}
-                    {/* </div> */}
-                {/* </div> */}
-                {/* </Draggable> */}
 
 
             </div>

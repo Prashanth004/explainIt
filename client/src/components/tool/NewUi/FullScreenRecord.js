@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
 import config from '../../../config/config'
+
 import CopyToClipboard from '../CopytoClipboard';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
@@ -12,6 +13,7 @@ import { showCanvas, hideCanvas } from '../../../actions/canvasAction'
 import { Button } from 'reactstrap';
 import TimerBar from './TimerBar'
 import browser from 'browser-detect';
+
 import { sendMessage } from '../../../actions/messageAction';
 import {
     fullStartedRecording,
@@ -82,6 +84,7 @@ class FullScreenRecorder extends Component {
         var sourceId = this.props.extSourceId;
         var ua = window.detect.parse(navigator.userAgent);
         if (ua.browser.family === "Chrome") {
+            console.log("this is me")
             constraints = {
                 video: {
                     mandatory: {

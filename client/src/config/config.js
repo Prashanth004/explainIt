@@ -20,8 +20,8 @@ const conf = {
     canvBackground : "rgb(205, 243, 224)",
     peopleDisplayLength:5,
     null:"null",
-    // EXTENSION_ID:"bpclgbfkeejifflggonjhmpeehdpocji",
-    EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
+    EXTENSION_ID:"bpclgbfkeejifflggonjhmpeehdpocji",
+    // EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
     EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
     SECRET : "thebookmaneisawesomeiguess",
     LINK_TO_CALL: "linkTocall",
@@ -52,7 +52,10 @@ const conf = {
     SAVED_NEW_PROJECT:"savedNewProject",
     SHARE_MY_SCREEN:"shareMyScreen",
     ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen",
-    OTP_SECRET:"explainotpbookmane"
+    OTP_SECRET:"explainotpbookmane",
+    FAILED_TO_GET_ISSUE_DETAILS:"failedToGetIssueDetails",
+    FAILED_TO_GET_CREATOR_DETAILS:"failedToGetCreatorDetails",
+    FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails"
 
 
 

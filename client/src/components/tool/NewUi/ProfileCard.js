@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import {cancelSuccess} from '../../../actions/issueActions';
 import './Floater/floater.css';
 import { FiLink2} from "react-icons/fi";
 import {getAllMessages,JustRecord} from '../../../actions/messageAction'
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
 import config from '../../../config/config'
+import {setIssueIdToNull} from '../../../actions/issueActions'
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
 import { FiMail } from "react-icons/fi";
@@ -15,7 +17,8 @@ class ProfileCard extends Component {
     constructor(props){
         super(props)
         this.openProfile = this.openProfile.bind(this);
-        this.startShareScreen = this.startShareScreen.bind(this);
+        this.startSharingScreen = this.startSharingScreen.bind(this);
+        this.startRecordScreen = this.startRecordScreen.bind(this);
         }
     componentWillMount() {
         if (this.props.userId === this.props.profileId)
@@ -24,10 +27,16 @@ class ProfileCard extends Component {
             this.props.getProfileDetails(this.props.userId, config.VISIT_PROF)
             this.props.getAllMessages(this.props.userId)
         }
-    startShareScreen(){
+    startRecordScreen(){
         this.props.recordFullScreen();
         this.props.JustRecord();
+        this.props.setIssueIdToNull();
+        this.props.cancelSuccess();
 
+    }
+    startSharingScreen(){
+        this.props.shareFullScreenShare()
+        this.props.cancelSuccess();
     }
     openProfile(){
         window.open("https://twitter.com/"+this.props.twitterHandle, '_blank')
@@ -71,12 +80,12 @@ class ProfileCard extends Component {
                     </div>
                     <div className="screenShareBtnLabel">
                         <span className="hint--top" aria-label="Share screen!">
-                            <img alt="screen share" onClick={this.props.shareFullScreenShare} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                            <img alt="screen share" onClick={this.startSharingScreen} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                         </span>
                     </div>
                     <div className="RecordBtnLabel">
                         <span className="hint--top" aria-label="Record screen!">
-                            <img alt="record screen" onClick={this.startShareScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                            <img alt="record screen" onClick={this.startRecordScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
                         </span>
                     </div>
                     <div className="drago">
@@ -96,41 +105,6 @@ class ProfileCard extends Component {
 
             </div>
 
-
-
-
-
-
-
-            // <div className="Profilecard">
-            //     <div className="blackwhite">
-            //         {linkSymbol}
-            //     </div>
-            //     <div className="profileDetails">
-            //         <div className="nameImageDiv">
-            //             <div className="profileImage">
-            //             <a href={"https://twitter.com/"+this.props.twitterHandle}>
-            //                 <img src={this.props.profilePic} onDoubleClick={this.props.openDtailsTab} className="profileImageElement" ></img>
-            //                 </a>    
-            //             </div>
-            //             <div   className="profileName">
-            //             <a href={"https://twitter.com/"+this.props.twitterHandle}
-            //            ><b>{this.props.userName}</b></a>
-            //           </div>
-
-            //         </div>
-            //         <div onClick={this.props.toggleCreatedIssue} className="displayNumber">
-            //             <p>Created</p>
-            //             <p className="numberShow"><a href="#">{this.props.noCreated}</a></p>
-
-            //         </div >
-            //         <div onClick={this.props.toggleParticipatedIssue} className="displayNumber">
-            //             <p>Participated</p>
-            //             <p className="numberShow"><a href="#">{this.props.noParticipated}</a></p>
-
-            //         </div>
-            //     </div>
-            // </div>
         ):(
             <div>
                 
@@ -185,5 +159,7 @@ const mapStateToProps = state => ({
     twitterHandle: state.profile.twitterHandle,
 })
 
-export default connect(mapStateToProps, { JustRecord, getAllMessages,getProfileDetails })(ProfileCard)
+export default connect(mapStateToProps, { JustRecord,
+    setIssueIdToNull,cancelSuccess,
+     getAllMessages,getProfileDetails })(ProfileCard)
 

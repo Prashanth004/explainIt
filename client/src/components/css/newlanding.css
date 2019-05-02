@@ -33,6 +33,7 @@
 }
 .handleInput{
   width:30%;
+  text-align: center;
   border-style:none;
   border-bottom-style: solid;
   border-bottom-color: rgba(0, 0, 0, 0.486);

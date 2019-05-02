@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
 import bigInt from "big-integer";
+import './floater.css'
 import { resetValues } from '../../../../actions/twitterApiAction'
 import Dummy from '../dummy'
 import { stillAuthenicated } from '../../../../actions/signinAction';
@@ -13,7 +14,7 @@ import {fromShareToRecord} from '../../../../actions/messageAction'
 import '../../../css/shareScreen.css';
 import CallImage from '../CallImage'
 import browser from 'browser-detect';
-import Call from '../Call';
+import Call from './Call';
 import { FiX, FiVideo } from "react-icons/fi";
 import { MdReplay } from "react-icons/md";
 import SaveElement from '../Saveproject';
@@ -215,6 +216,7 @@ class ScreenRecorder extends Component {
     }
 
     componentDidMount() {
+        this.props.onRef(this)
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
@@ -1091,7 +1093,7 @@ class ScreenRecorder extends Component {
             <div>
                 {/* {backArrow} */}
                 {closeBtn}
-                <div className="LinkDisplay">
+                <div className="LinkDisplayFLoat">
                     {linkElement}
                     {shareTimeElements}
                     {postShareElements}

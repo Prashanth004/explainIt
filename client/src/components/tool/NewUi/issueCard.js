@@ -4,6 +4,7 @@ import ImagesOfExplainers from './DisplayExplained';
 import CopyToClipboard from '../CopytoClipboard'
 import config from '../../../config/config';
 import '../../css/toggle.css';
+import {saveReplyEmailOption} from '../../../actions/emailAction'
 import axios from 'axios';
 import {explainIssue} from '../../../actions/messageAction'
 import EditReason from './EditReason'
@@ -73,9 +74,11 @@ class issueCard extends Component {
     handleOpenModal(e) {
         if (this.props.isAauthenticated) {
             this.props.explainIssue()
+            console.log("settingIssueId : ",e.target.id)
             this.props.setIssueId(e.target.id)
             localStorage.setItem("issueId", e.target.id)
             this.setState({ showModalExplain: true });
+            this.props.saveReplyEmailOption(e.target.id,this.props.userid)
         }
         else {
             this.setState({ showModalTwitterLogin: true });
@@ -302,12 +305,14 @@ issueCard.PropType = {
     setIssueId: PropType.func.isRequired,
     cancelAllMessageAction:PropType.func.isRequired,
     restAllToolValue:PropType.func.isRequired,
-    resetValues:PropType.func.isRequired
+    resetValues:PropType.func.isRequired,
+    saveReplyEmailOption:PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
     isAauthenticated: state.auth.isAuthenticated,
-    isopenEditModal : state.projects.openEditModal
+    isopenEditModal : state.projects.openEditModal,
+    userid:state.auth.id
 
 })
 
@@ -315,6 +320,7 @@ export default connect(mapStateToProps, { setIssueId,
     cancelAllMessageAction,
     restAllToolValue,
     explainIssue,
+    saveReplyEmailOption,
     openEditModal,
     closeEditModal,
     resetValues})(issueCard)

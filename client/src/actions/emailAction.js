@@ -6,10 +6,49 @@ import {SEND_OTP,
     ACTIVATED_PROFILE,
     VARIFY_ACTIVATED_FAILED,
     RE_SEND_OTP,
-    RE_SEND_OTP_FAILED} from './types'
+    RE_SEND_OTP_FAILED,
+    REPLY_EMAIL_SENT,
+    SAVE_REPLY_EMAIL_OPTION,
+    CANCEL_EMAIL_OPTION} from './types'
 
 
-
+export const saveReplyEmailOption=(issueId, userid)=>(dispatch)=>{
+    dispatch({
+        type:SAVE_REPLY_EMAIL_OPTION,
+        issueId:issueId,
+        userid:userid
+    })
+}
+export const cancelEmailOption=()=>(dispatch)=>{
+    dispatch({
+        type:CANCEL_EMAIL_OPTION
+    })
+}
+export const sendEmail=(issueid,userid)=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'));
+    var data={
+        issueid:issueid,
+        replierId:userid
+    }
+    axios({
+        method:'POST',
+        url:config.base_dir+'/api/message/replyaction',
+        data,
+        headers:{
+            "Authorization":token
+        }
+    }).then(response=>{
+        console.log("its happened")
+        if(response.status===201){
+            dispatch({
+                type:REPLY_EMAIL_SENT
+            })
+        }
+    })
+    .catch(err=>{
+        console.log("it did not hapoend")
+    })
+}
 export const resendOtp =(email)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
     var data={

@@ -3,7 +3,7 @@ import { FETCH_ISSUE,
  
      CANCEL_PROJ_CREATION_ERROR, 
      SET_ISUUE_ID, 
-  
+     SET_ISSUE_ID_TO_NULL,
      CANCEL_SUCCESS} from './types'
 import axios from 'axios'
 import config from '../config/config'
@@ -27,6 +27,11 @@ export const fetchIssues = () => dispatch => {
         console.log("error : ",err)
     })
 } 
+export const setIssueIdToNull=()=>dispatch=>{
+    dispatch({
+        type:SET_ISSUE_ID_TO_NULL
+    })
+}
 
 export const cancelSuccess = () => dispatch =>{
     dispatch({
