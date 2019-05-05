@@ -3,17 +3,10 @@ const GoogleTokenStrategy = require('passport-google-token').Strategy;
 const TwitterTokenStrategy = require('passport-twitter-token');
 const keys = require('./keys');
 var LocalStrategy = require('passport-local').Strategy;
-var rn = require('random-number');
 var database = require('../app');
-var jwt = require('jsonwebtoken');
 var GitHubTokenStrategy = require('passport-github-token');
 
 
-var options = {
-    min:  -10000
-  , max:  10000
-  , integer: true
-  }
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -204,6 +197,7 @@ passport.use(new TwitterTokenStrategy({
                             payment: 0,
                             id: profile.id,
                             activation:0,
+                            online:1,
                             twitterhandle:profile.username
                         }).then(() => {
                             database.db.oneOrNone('select * from users where twitterhandle = $1', profile.username)

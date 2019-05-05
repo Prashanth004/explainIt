@@ -316,6 +316,11 @@ class NewHome extends Component {
     answerCall() {
         window.open(this.props.callActionLink);
         this.props.answerCall();
+        // this.setState({callAnswered:true})
+        // var self = this
+        // setTimeout(()=>{
+        //     self.setState({callAnswered:false})
+        // },5000)
     }
     rejectCall() {
         var socket = this.state.socket
@@ -324,6 +329,11 @@ class NewHome extends Component {
             'message': config.REPLY_TO_SHARE_REQ
         })
         this.props.answerCall();
+        // this.setState({callAnswered:true})
+        // var self = this
+        // setTimeout(()=>{
+        //     self.setState({callAnswered:false})
+        // },5000)
     }
 
 

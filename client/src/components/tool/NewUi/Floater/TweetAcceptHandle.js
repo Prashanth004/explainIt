@@ -2,13 +2,16 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from '../InputNumber';
-import './floaterScreenshare.css'
+import './floaterScreenshare.css';
+import {setNoOfMinutes} from '../../../actions/callAction'
+import { FiX, FiVideo } from "react-icons/fi";
 import config from '../../../../config/config';
 import { FaArrowLeft } from "react-icons/fa";
 import CopyToClipboard from '../../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../../actions/visitProfileAction";
 import ProfileNotOnExplain from "../ProfileNotOnExplain";
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../../actions/twitterApiAction'
+
 
 
 class tweetSearch extends Component {
@@ -105,24 +108,39 @@ class tweetSearch extends Component {
             })
         }
         this.props.setNoOfMinutes(e.target.value)
+
+
     }
+
+
     tweetTheMessage() {
         this.setState({
             tweetTested: false,
             doneTweeting: true
         })
         this.props.makeCallAction()
+
     }
     render() {
         var validatinginfo = null;
-        var mainContainer = (<div className="startShareFloater">
+        var mainContainer = (<div className="startShare">
             <span style={{margin:"10px"}}>Initiate screen share with</span>
+           
            <input 
            onChange={this.updateTwitterHandleBox}
            className="handleInput"
-                placeholder="@twitter-handle"
+                placeholder="Username"
                 value={this.state.twitterHandle} />
-                      
+            {/* <TweetSuggest
+                onChange={this.updateTwitterHandleBox}
+                placeholder="Enter @twitter handle"
+                classOfInput="myInput"
+                tweetTextvalue={this.state.twitterHandle}
+                array={this.props.twiterHandleArray}
+
+            /> */}
+           
+            
             <span > for </span>
              <InputNumber
                         empty={this.state.emptyNumber}
@@ -132,6 +150,7 @@ class tweetSearch extends Component {
                         textValue={this.props.noOfMinutes}
                         negNumber={this.state.negNumber}
                         noText={this.state.noText} />
+                        <br/>
                       
             <button className="buttonDark" style={{marginTop:"10px"}} onClick={this.testHandle}>Send request</button>
         </div>)
@@ -162,6 +181,29 @@ class tweetSearch extends Component {
                         </div>
                         )
                     mainContainer = (null)
+
+                }
+                else if(!this.props.onlineStatus){
+                    validatinginfo = (<div>
+                        <span style={{float:"left",
+                    fontSize:"15px"}}>
+                        <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                        </span> 
+                        <br/>
+                        <br/>
+                        <span>{this.props.userName} is not ready accept screen share requests at the moment</span>
+                        <br/>
+                        <span>You can record the screen and send</span>
+                        <br/>
+                        <br/>
+                        <span className="hint--bottom" aria-label="Record call and send">
+                    <FiVideo className="icons" onClick={this.props.recordCallAfterShare} />
+                </span>                <span className="hint--bottom" aria-label="Cancel">
+                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                </span>
+                        
+                        </div>)
+                        mainContainer = (null)
                 }
                 else {
                     this.tweetTheMessage()
@@ -170,7 +212,14 @@ class tweetSearch extends Component {
             else {
                 validatinginfo = (<p className="info">checking handle validity</p>)
             }
+
+
+            // else if(
+
+            // )
+
         }
+        // else if()
         return (
             <div>
                 {mainContainer}
@@ -191,11 +240,15 @@ const mapStateToProps = state => ({
     doneFetching: state.twitterApi.doneFetching,
     twiterHandleArray: state.twitterApi.twitterHandle,
     fetchProfile: state.visitProfile.fetchProfile,
+    noOfMinutes:state.call.noOfMinutes,
+    userName:state.visitProfile.userName,
+    onlineStatus:state.visitProfile.onlineStatus,
     isPresentInExplain: state.visitProfile.isPresent,
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle,
     getTwitterHandles,
+    setNoOfMinutes,
     getRecpientId,
     resetValues
 })(tweetSearch)

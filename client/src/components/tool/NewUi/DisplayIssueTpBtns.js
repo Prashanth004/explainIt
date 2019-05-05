@@ -79,8 +79,6 @@ class displayTopBtns extends Component {
 
     render() {
         var profilePic = null;
-        // const twitterBird = (Number(this.props.issue.public)) ? (
-        //     >) : (null)
         if (this.props.questionProject !== undefined) {
             profilePic = this.props.questionProject.profilepic
             var profileName = this.props.questionProject.username

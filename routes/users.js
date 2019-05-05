@@ -27,6 +27,7 @@ router.get('/id/:id',user.getUserById)
 router.post('/updateprofile',passport.authenticate('jwt', { session: false }),user.updateProfile)
 router.get('/twitterhandle/:enctwitterhandle', user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
+router.put('/onlinestatus',passport.authenticate('jwt', { session: false }),user.updateOnlineStatus)
 router.post('/authenticate',user.authenticate);
 router.get('/activationstatus',passport.authenticate('jwt', { session: false }), user.getActivationStatus)
 router.put('/emailactivation', passport.authenticate('jwt', { session: false }), user.emailActivation)

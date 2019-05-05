@@ -964,6 +964,8 @@ class ScreenRecorder extends Component {
                         doneCalling={this.state.doneCalling}
                         makeCallAction={this.makeCallAction}
                         expireTimer={this.expireTimer}
+                        closeImidiate={this.props.closeImidiate}
+                        recordCallAfterShare={this.recordCallAfterShare}
                         shareScreenLink={this.state.shareScreenLink}
                         changeTweetStatePos={this.changeTweetStatePos}
                         doneTweeting={this.state.doneTweeting} />

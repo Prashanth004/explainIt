@@ -799,7 +799,7 @@ class Forms extends Component {
 
         const imgurl = this.state.imgData.map((imgs, i) => (
             <div key={i} className="imag">
-                <img id={imgs.name}
+                <img alt=" " id={imgs.name}
                     ref={imgs.name}
                     alt=" "
 

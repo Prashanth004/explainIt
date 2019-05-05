@@ -3,11 +3,37 @@ import { GET_PROFILE_DETAILS,
      UPDATE_USER_PROFILE_FAILED,
      OPEN_EDIT_PROFILE,
      CLOSE_EDIT_PROFILE,
+     CHANGE_ONLINE_STATUS,
+     CHANGE_ONLINE_STATUS_FAILED,
      UPDATE_USER_PROFILE } from './types'
 import config from '../config/config';
 import axios from 'axios';
 
-
+export const changeOnlinestatus = (status)=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'));
+    var data={
+        onlineStatus:status
+    }
+    axios({
+        method: 'put',
+        url: config.base_dir + '/api/users/onlineStatus',
+        data:data,
+        headers: {
+            "Authorization": token,
+        }
+    }).then(response=>{
+        if(response.status===200 || response.status ===204)
+        dispatch({
+            type:CHANGE_ONLINE_STATUS,
+            payload:status
+        })
+    }).catch(err=>{
+        console.error("error : ",err)
+        dispatch({
+            type:CHANGE_ONLINE_STATUS_FAILED
+        })
+    })
+}
 export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     var token = JSON.parse(localStorage.getItem('token'))
     var email = null;
@@ -22,6 +48,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     var githubLink = null;
     var goodat = null;
     var works = null;
+    var onlineStatus = null;
 
     axios({
         method: 'get',
@@ -44,6 +71,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
             githubLink = (response1.data.data.github===null)?(""):(response1.data.data.github);
             goodat=(response1.data.data.goodat===null)?(""):(response1.data.data.goodat);
             works=response1.data.data.works;
+            onlineStatus=response1.data.data.online
             axios({
                 method: 'get',
                 url: config.base_dir + '/api/project/',
@@ -102,7 +130,8 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                     participatedIssue: participated,
                     profilePic: profilepic,
                     noParticipated: noOfparticipation,
-                    noCreated: noOdprojectsCreated
+                    noCreated: noOdprojectsCreated,
+                    onlineStatus:onlineStatus
                 })
             }).catch((error) => {
                 dispatch({

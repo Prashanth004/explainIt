@@ -120,6 +120,24 @@ database.db.oneOrNone('select * from users where id=$1 and activation =$2',[req.
     })
 })
 }
+exports.updateOnlineStatus = (req,res)=>{
+    console.log('req.body.onlineStatus : ',req.body.onlineStatus)
+    const onlineStatus = (req.body.onlineStatus)?(1):(0)
+database.db.none('UPDATE users SET online = $1 where id = $2',[onlineStatus, req.user.id])
+.then(data=>{
+    res.status(200).send({
+        success:1,
+        data:data
+    })
+})
+.catch(error=>{
+    console.log("error : ",error)
+    res.status(500).send({
+        success:0,
+        error:error
+    })
+})
+}
 
 const sendEmail = (toAddress, Subject, emailContent)=>{
     var transporter = nodemailer.createTransport({

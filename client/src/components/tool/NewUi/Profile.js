@@ -3,7 +3,7 @@ import '../../css/profile.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import ProfileForm from './ProfileForm';
-import {openEditProfile,closeEditProfile} from '../../../actions/profileAction'
+import { openEditProfile, closeEditProfile } from '../../../actions/profileAction'
 import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
 class Profile extends Component {
     constructor(props) {
@@ -15,86 +15,102 @@ class Profile extends Component {
         this.closeEdit = this.closeEdit.bind(this);
     }
     openEdit() {
-       this.props.openEditProfile()
+        this.props.openEditProfile()
     }
-    closeEdit(){
-       this.props.closeEditProfile()
+    closeEdit() {
+        this.props.closeEditProfile()
     }
     render() {
-        const editOption = (this.props.isHome)?( <span>
+        const editOption = (this.props.isHome) ? (<span>
             <FiEdit onClick={this.openEdit} className="edit" />
-        </span>):(null)
-        const bio =(this.props.bio!==null)?(
-            (this.props.bio.length>0)?(
+        </span>) : (null)
+        const bio = (this.props.bio !== null) ? (
+            (this.props.bio.length > 0) ? (
                 <p>
-                       {this.props.bio}
-                    </p>
-            ):(null)
-        ):(null)
+                    {this.props.bio}
+                </p>
+            ) : (null)
+        ) : (null)
 
-        const goodAtDiv = (this.props.goodat!==null)?(
-            (this.props.goodat.length>0)?(
+        const goodAtDiv = (this.props.goodat !== null) ? (
+            (this.props.goodat.length > 0) ? (
                 <div>
-                <span><b>I am good at</b></span>
-                <p>{this.props.goodat}</p>
+                    <span><b>I am good at</b></span>
+                    <p>{this.props.goodat}</p>
                 </div>
-            ):(null)
-        ):(null)
+            ) : (null)
+        ) : (null)
 
 
-        const worksDiv =(this.props.works!==null)?(
-            (this.props.works.length>0)?(
+        const worksDiv = (this.props.works !== null) ? (
+            (this.props.works.length > 0) ? (
                 <div>
-                <span><b>My works</b></span>
-                                    <p>{this.props.works}</p>
+                    <span><b>My works</b></span>
+                    <p>{this.props.works}</p>
                 </div>
-            ):(null)
-        ):(null)
-        const profileConatiner = (!this.props.openEdirProfile)?
-        (
-            <div>
-                <div className="bio">
-                    <p><b>{this.props.userName}</b></p>
-                    {bio}
-                   {goodAtDiv}
-                   {worksDiv}
-                    {/* <p><b>I charge {this.props.cost}$ a minute</b></p> */}
-                </div>
-                <div >
-                    <div className="socialIcon"
-                    style={{visibility:((this.props.githubLink!==null)?((this.props.githubLink.length!==0)?"visible":"hidden"):"hidden")}}>
-                    <a href={this.props.githubLink}
-                    rel="noopener noreferrer"
-                    target="_blank">
-                        <FiGithub />
-                        </a>
+            ) : (null)
+        ) : (null)
+        const profileConatiner = (!this.props.openEdirProfile) ?
+            (
+                <div>
+                    <div className="bio">
+                        <p><b>{this.props.userName}</b></p>
+                        {bio}
+                        {goodAtDiv}
+                        {worksDiv}
+                        {/* <p><b>I charge {this.props.cost}$ a minute</b></p> */}
                     </div>
-                    <div className="socialIcon"
-                    style={{visibility:((this.props.linkinLink!==null)?((this.props.linkinLink.length!==0)?"visible":"hidden"):"hidden")}}>
-                    <a href={this.props.linkinLink} rel="noopener noreferrer" target="_blank">
-                    
-                        <FiLinkedin />
-                        </a>
-                    </div>
+                    <div >
+                        <div className="socialIcon"
+                            style={{ visibility: ((this.props.githubLink !== null) ? ((this.props.githubLink.length !== 0) ? "visible" : "hidden") : "hidden") }}>
+                            <a href={this.props.githubLink}
+                                rel="noopener noreferrer"
+                                target="_blank">
+                                <FiGithub />
+                            </a>
+                        </div>
 
-                    <div className="socialIcon">
-                    <a href={'https://twitter.com/'+this.props.twitterHandle}
-                    rel="noopener noreferrer"
-                    target="_blank">
-                        <FiTwitter />
-                    </a>
+                        <div className="socialIcon"
+                            style={{ visibility: ((this.props.linkinLink !== null) ? ((this.props.linkinLink.length !== 0) ? "visible" : "hidden") : "hidden") }}>
+                            <a href={this.props.linkinLink} rel="noopener noreferrer" target="_blank">
+
+                                <FiLinkedin />
+                            </a>
+                        </div>
+
+
+                        <div className="socialIcon">
+                            <a href={'https://twitter.com/' + this.props.twitterHandle}
+                                rel="noopener noreferrer"
+                                target="_blank">
+                                <FiTwitter />
+                            </a>
+                        </div>
+                        <div className="socialIcon"
+                            style={{ visibility: ((this.props.angelLink !== null) ? ((this.props.angelLink.length !== 0) ? "vissible" : "hidden") : "hidded") }}>
+                            <span>
+                                <a href={this.props.angelLink} target="_blank">
+                                    <img
+
+                                        src={require('../../images/angellist.svg')}
+                                        width="17px" height="17px"
+                                    >
+                                    </img>
+                                </a>
+                            </span>
+
+                        </div>
                     </div>
                 </div>
-            </div> 
-        ):(
-            <ProfileForm 
-            closeEdit={this.closeEdit}/>
-        )
+            ) : (
+                <ProfileForm
+                    closeEdit={this.closeEdit} />
+            )
         return (
             <div>
                 <div className="profileConatiner">
-                {editOption}
-               
+                    {editOption}
+
                     {profileConatiner}
                 </div>
             </div>
@@ -102,26 +118,26 @@ class Profile extends Component {
     }
 }
 Profile.PropType = {
-    openEditProfile:PropType.func.isRequired,
-    closeEditProfile:PropType.func.isRequired
+    openEditProfile: PropType.func.isRequired,
+    closeEditProfile: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
-    userName:state.profile.userName,
-    cost : state.profile.cost,
-    angelLink:state.profile.angelLink,
-    githubLink:state.profile.githubLink,
-    bio:state.profile.bio,
-    linkinLink:state.profile.linkinLink,
-    twitterHandle:state.profile.twitterHandle,
-    updatingDone:state.profile.doneUpdating,
-    updateSuccess : state.profile.updateSuccess,
-    openEdirProfile:state.profile.openEdirProfile,
-    goodat:state.profile.goodat,
-    works:state.profile.works
+    userName: state.profile.userName,
+    cost: state.profile.cost,
+    angelLink: state.profile.angelLink,
+    githubLink: state.profile.githubLink,
+    bio: state.profile.bio,
+    linkinLink: state.profile.linkinLink,
+    twitterHandle: state.profile.twitterHandle,
+    updatingDone: state.profile.doneUpdating,
+    updateSuccess: state.profile.updateSuccess,
+    openEdirProfile: state.profile.openEdirProfile,
+    goodat: state.profile.goodat,
+    works: state.profile.works
 })
 
 export default connect(mapStateToProps, {
-    openEditProfile,closeEditProfile
+    openEditProfile, closeEditProfile
 })(Profile)
 
 

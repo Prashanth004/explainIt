@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from './InputNumber';
+import { FiX, FiVideo } from "react-icons/fi";
+
 import config from '../../../config/config';
 import {setNoOfMinutes} from '../../../actions/callAction'
 import { FaArrowLeft } from "react-icons/fa";
@@ -180,6 +182,28 @@ class tweetSearch extends Component {
                     mainContainer = (null)
 
                 }
+                else if(!this.props.onlineStatus){
+                    validatinginfo = (<div>
+                        <span style={{float:"left",
+                    fontSize:"15px"}}>
+                        <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                        </span> 
+                        <br/>
+                        <br/>
+                        <span>{this.props.userName} is not ready accept screen share requests at the moment</span>
+                        <br/>
+                        <span>You can record the screen and send</span>
+                        <br/>
+                        <br/>
+                        <span className="hint--bottom" aria-label="Record call and send">
+                    <FiVideo className="icons" onClick={this.props.recordCallAfterShare} />
+                </span>                <span className="hint--bottom" aria-label="Cancel">
+                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                </span>
+                        
+                        </div>)
+                        mainContainer = (null)
+                }
                 else {
                     this.tweetTheMessage()
                 }
@@ -216,6 +240,8 @@ const mapStateToProps = state => ({
     twiterHandleArray: state.twitterApi.twitterHandle,
     fetchProfile: state.visitProfile.fetchProfile,
     noOfMinutes:state.call.noOfMinutes,
+    userName:state.visitProfile.userName,
+    onlineStatus:state.visitProfile.onlineStatus,
     isPresentInExplain: state.visitProfile.isPresent,
 })
 export default connect(mapStateToProps, {

@@ -231,7 +231,7 @@ class ProfileForm extends Component {
                         value={this.state.gitHubValue}
                         type="text" onChange={this.changeGithub} className="inputboxes" />
                     {githuerrorDiv}
-                    <span><b>LinkedIn :</b></span>
+                    <span><b>Angel List :</b></span>
                     <br/>
                    
                     <span  className="support">(optional)</span>

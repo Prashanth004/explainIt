@@ -165,3 +165,7 @@
     padding-top:50px;
     text-align: center;
   }
+
+  @media (min-width: 700px) {
+    
+  }

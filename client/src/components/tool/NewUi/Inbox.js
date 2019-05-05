@@ -17,15 +17,16 @@ class Inbox extends Component {
             isFiltered:false,
             filteredInbox:[]
         }
-        this.filterInbox = this.filterInbox.bind(this)
     }
-    filterInbox(){
+     
+    componentWillMount(){
         this.setState({
             isFiltered:true
         })
         var token = JSON.parse(localStorage.getItem('token'))
         var filteredInbox = []
         var issueId= null
+        if(this.props.allMessage!==null)
         this.props.allMessage.forEach(message => {
             issueId = message.link.split('/')[4];
             axios({
@@ -37,7 +38,7 @@ class Inbox extends Component {
             
                 }).then((response)=>{
                     if(response.status === 200 || response.status === 304){
-                        if(response.data.success ===0){
+                        if(response.data.success ===1){
                             filteredInbox.push(message)  
                         }
                         this.setState({
@@ -52,16 +53,12 @@ class Inbox extends Component {
 
 
         });
-    }
-  
-    componentWillMount(){
         
     }
   render() {
       var allMessageEle = null;
-      if(this.props.allMessage!==null && !this.state.isFiltered){
-            this.filterInbox()
-      }
+     
+      console.log(this.state.filteredInbox)
       if(this.state.filteredInbox!==null ){
           if(this.state.filteredInbox.length>0){
             var revallMessage = this.state.filteredInbox.reverse()

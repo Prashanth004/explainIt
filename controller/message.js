@@ -13,24 +13,25 @@ var options = {
 exports.checkReplyInfo = (req, res) => {
     database.db.manyOrNone('select * from projects where email =$1 and issueid =$2', [req.user.email, Number(req.params.issueid)])
         .then(data => {
+            console.log("data : ",data.length)
             if (data) {
-                if (data.length !== null) {
+                if (data.length == 0) {
                     res.status(200).send({
                         success: 1,
-                        data: data
+                        msg: "no data found"
                     })
                 }
                 else {
                     res.status(200).send({
                         success: 0,
-                        msg: "no data found"
+                       data:data
                     })
                 }
             }
             else {
 
                 res.status(200).send({
-                    success: 0,
+                    success: 1,
                     mag: "no data found"
                 })
             }

@@ -18,8 +18,8 @@ http://localhost:9000/socket.io/?EIO=3&transport=polling&
  
  [GET]
 
-http://localhost:9000/api/users
-http://localhost:9000/api/project/
+http://localhost:9000/api/users   
+http://localhost:9000/api/project/   
 http://localhost:9000/api/projects/:id
 http://localhost:9000/api/user
 http://localhost:9000/api/message/1090895508699176960

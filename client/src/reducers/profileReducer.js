@@ -3,11 +3,12 @@ import {GET_PROFILE_DETAILS,
     UPDATE_USER_PROFILE_FAILED,
     OPEN_EDIT_PROFILE,
     CLOSE_EDIT_PROFILE,
-  
+    CHANGE_ONLINE_STATUS,
+    CHANGE_ONLINE_STATUS_FAILED,
     GET_PROFILE_DETAILS_FAIL} from '../actions/types'
 
 const initialState = {
-   
+   donefetching:false,
     email:null,
     openEdirProfile:false,
     profilePic:"",
@@ -28,6 +29,7 @@ const initialState = {
     githubLink : "",
     goodat:"",
     works:"",
+    onlineStatus:0,
   
 }
 
@@ -49,6 +51,11 @@ export default function(state=initialState, action){
                 twitterHandle:action.twitterHandle
 
             }
+        case CHANGE_ONLINE_STATUS:
+        return{
+            ...state,
+            onlineStatus:action.payload
+        }
         case OPEN_EDIT_PROFILE:
         return{
             ...state,
@@ -69,10 +76,12 @@ export default function(state=initialState, action){
         case GET_PROFILE_DETAILS:
             return {
                 ...state,
+                donefetching:true,
                 email:action.email,
                 cost :action.cost,
                 bio :action.bio,
                 twitterLink : action.twitterLink,
+                onlineStatus:action.onlineStatus,
                 angelLink : action.angelLink,
                 linkinLink : action.linkinLink,
                 githubLink : action.githubLink,

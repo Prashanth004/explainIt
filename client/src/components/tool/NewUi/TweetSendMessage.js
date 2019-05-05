@@ -16,8 +16,8 @@ class tweetSearch extends Component {
             twitterHandle: '',
             tweetTested: false,
             isVisitProfile: false,
-            doneWithAll:false
-
+            doneWithAll:false,
+            tweetedMessage:false
 
         }
         this.testHandle = this.testHandle.bind(this);
@@ -66,6 +66,9 @@ class tweetSearch extends Component {
     }
 
     tweetTheMessage() {
+        this.setState({
+            tweetedMessage:true
+        })
        
     this.props.sendRecording()
     
@@ -120,7 +123,7 @@ class tweetSearch extends Component {
                     mainContainer = (null)
 
                 }
-                else {
+                else if(!this.state.tweetedMessage) {
                     this.tweetTheMessage()
                 }
             }

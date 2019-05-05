@@ -9,6 +9,7 @@ import Login from './components/tool/NewUi/Login'
 import NoMatch from './components/tool/NewUi/NoMatch'
 // import Newlogin from './components/Newlogin'
 import Home from './components/tool/NewUi/Home'
+import video from './components/tool/NewUi/videoDisplay'
 // import ShareWindow from './components/tool/NewUi/ShareWindow'
 import Explainit from './components/tool/NewUi/ExplainPage'
 import google from './components/testGoogle'
@@ -44,6 +45,7 @@ class App extends Component {
             {/* <Route exact path = '/recorder' component={RecordName} /> */}
             {/* <Route exact path = '/extension' component={ExtHome} /> */}
             {/* <Route exact path = '/testmodal' component={testmodal} /> */}
+            <Route exact path = '/video' component={video} />
             <Route exact path ='/floater' component={floater}/>
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exaxt path ='/emailvarify' component={emailvarify}/>
