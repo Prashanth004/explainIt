@@ -215,12 +215,6 @@ class issueCard extends Component {
                             className="questionText">
                             <span id={"text_"+this.props.issue.projectid} >{this.props.issue.textexplain}</span>
                         </div>
-                        <button ><div className="g-savetodrive"
-                            data-src={this.props.issue.videofilepath}
-                            data-filename="My Statement.pdf"
-                            data-sitename="My Company Name">
-                            </div>
-                        </button>
                         <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
                             <video id={this.props.issue.issueid}
                                 autoPlay={true}

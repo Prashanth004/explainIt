@@ -60,6 +60,7 @@ var projectRouter = require('./routes/project')
 var basic = require('./routes/basic.routes')
 var messageRouter = require('./routes/message')
 var tweetRouter = require('./routes/tweetAction')
+// var adminRouter = require('./routes/admin')
 
 
 
@@ -96,6 +97,7 @@ app.use(bodyParser.urlencoded({
 
 //routes
 app.use('/api/tech', indexRouter);
+// app.use('/api/admin', adminRouter);
 app.use('/api/twitter', twitterAuthRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/project', projectRouter);
