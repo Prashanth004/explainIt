@@ -14,13 +14,15 @@ import streamReducer from './streamReducer';
 import canvasActionsReducer from './canvasActionReducer'
 import profileHoverReducer from './profileHoverReducer'
 import secondScreenShareReducer from './secondShareReducer'
-import emailReducer from './emailReducer'
+import emailReducer from './emailReducer';
+import adminReducer from './adminReducer'
  
 export default combineReducers({
     email:emailReducer,
     auth : signinReducer,
     issues: issueReducer,
     projects: projectReducer,
+    admin:adminReducer,
     tools: toolReducer,
     profile: profileReducer,
     extension:extensionReducer,

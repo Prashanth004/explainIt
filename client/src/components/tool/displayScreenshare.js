@@ -5,6 +5,7 @@ import '../css/shareScreen.css';
 import '../css/call.css';
 import Draggable from 'react-draggable';
 import browser from 'browser-detect';
+import CopyToClipboard from './CopytoClipboard'
 import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
 import { MdFilterNone } from "react-icons/md";
 import { answerCall } from '../../actions/callAction'
@@ -25,6 +26,8 @@ class DisplayShare extends Component {
             port: config.peerPort,
             path: config.peerPath,
             stream: null,
+            sharablelink:null,
+            gotSharableLink:false,
             peerIdFrmPeer: null,
             isConnPreasent: false,
             conn: null,
@@ -111,6 +114,16 @@ class DisplayShare extends Component {
         }, 4000)
         socket.emit(config.CHECK_TOKEN_VALIDITY, {
             'clientId': peerIdFrmPeer
+        })
+        socket.on(config.SEND_SHARABLE_LINK, data=>{
+            console.log("data: ",data)
+            console.log("self.state.peerIdFrmPeer",self.state.peerIdFrmPeer)
+            if(data.otherPeerId === self.state.peerIdFrmPeer){
+                self.setState({
+                    sharablelink:data.sharableLink,
+                    gotSharableLink:true
+                })
+            }
         })
         socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,data=>{
             if(data.otherPeerId === self.state.peerIdFrmPeer){
@@ -395,6 +408,11 @@ class DisplayShare extends Component {
     }
 
     render() {
+        var sharableLinkMessage = !this.state.gotSharableLink?(<p>Preparing a link to access the call..</p>):
+        (<div className="sharableLinkDiv">
+            <span>Link to access you saved call : </span>
+            <CopyToClipboard sharablelink={this.state.sharablelink}/>
+        </div>)
         var ShareElement = null;
         var ProfileHover = null;
         const shouldDisplay = (!this.state.myscreenSharing)?("block"):("none")
@@ -425,19 +443,18 @@ class DisplayShare extends Component {
             (this.state.closedHere) ?
                 (<div>
                     <h5>Call Ended</h5>
-                    <p>You can view this call in caller's profile created section</p>
-                    <p>URL to access prfoile is <a href={profileUrl}>{profileUrl}</a></p>
+                   {sharableLinkMessage}
                 </div>) :
                 (<h5>
                     Disconnected from other peer
-                    <p>You can view this call in caller's profile created section</p>
-                    <p>URL to access prfoile is <a href={profileUrl}>{profileUrl}</a></p>
+                    {sharableLinkMessage}
                 </h5>)
         ) : (
                 ((this.state.timerEnded) ? (
                     <div>
                         <h3>Call ended as the time exceeded alloted time by the caller</h3>
                         <p>You can expect another link from the caller to continue the conversation</p>
+                        {sharableLinkMessage}
                     </div>
                 ) : (<div><h5>
                     <b>Call ended due to network issues</b>
@@ -490,8 +507,8 @@ class DisplayShare extends Component {
 
                                         </div>
                         </span>
-                            <div className="callPage-recieverImageDiv endCall">
-                                <span className="hint--top" aria-label="ShareScreen">
+                            <div  style={{display:shouldDisplay}} className="callPage-recieverImageDiv endCall">
+                                <span className="hint--top" aria-label="Share my screen">
                                     <MdFilterNone onClick={this.shareScreen} className="endButton" />
                                 </span>
                             </div>

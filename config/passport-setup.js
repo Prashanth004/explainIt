@@ -142,13 +142,13 @@ passport.use(new GitHubTokenStrategy({
 
 passport.use(new LocalStrategy(
     {
-        usernameField: 'email',
+        usernameField: 'username',
         passwordField: 'password'
     },
-    function (email, password, done) {
-        database.db.oneOrNone('select * from users where email = $1', email).then((User) => {
+    function (usernameField, password, done) {
+        database.db.oneOrNone('select * from admin where username = $1', usernameField).then((User) => {
             if (User) {
-
+                console.log("cdcd",User)
                 if (User.password == password) {
                     done(null, User);
                 }

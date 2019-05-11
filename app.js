@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser');
+var helmet = require('helmet')
 const socketIo = require("socket.io");
 const key = require('./config/keys')
 var ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -44,14 +45,18 @@ var app = express();
 app.use(passport.initialize());
 app.use(passport.session());
 var db = pgp(connectionString);
-
-//cors 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(helmet())
 app.use(cors());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+app.disable('x-powered-by')
 var issueRouter = require('./routes/issues')
 var twitterAuthRouter = require('./routes/auth')
 var indexRouter = require('./routes/tech');
@@ -60,7 +65,8 @@ var projectRouter = require('./routes/project')
 var basic = require('./routes/basic.routes')
 var messageRouter = require('./routes/message')
 var tweetRouter = require('./routes/tweetAction')
-// var adminRouter = require('./routes/admin')
+var adminRouter = require('./routes/admin')
+var activityRouter = require('./routes/activity')
 
 
 
@@ -80,30 +86,24 @@ server.on('listening', onListening);
 
 app.set( 'view engine', 'jade');
 app.set('views', path.join(__dirname, 'views'));
-
-const io = socketIo(server);
+var io = require('socket.io').listen(server);
+// const io = socketIo(server);
 app.use(function(req, res, next){
   res.io = io;
   next();
 });
 
 
-app.use(bodyParser.json());
-
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-
-
 //routes
 app.use('/api/tech', indexRouter);
-// app.use('/api/admin', adminRouter);
+app.use('/api/admin', adminRouter);
 app.use('/api/twitter', twitterAuthRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/project', projectRouter);
 app.use('/api/issues',issueRouter);
 app.use('/api/message',messageRouter);
-app.use('/api/tweetactions', tweetRouter)
+app.use('/api/tweetactions', tweetRouter);
+app.use('/api/activity',activityRouter)
 app.use("/public", express.static(__dirname + "/public"));
 //peerjs for screen sharing
 app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
@@ -120,8 +120,8 @@ app.get('*', (req,res)=>{
 io.on("connection", socket => {
  
  
-    socket.on(key.LINKTOCALL,(data)=>{
-    io.emit(key.LINKTOCALL, data); // Emitting a new message. It will be consumed by the client
+    socket.on(key.LINK_TO_CALL,(data)=>{
+    io.emit(key.LINK_TO_CALL, data); // Emitting a new message. It will be consumed by the client
 
     })
 
@@ -156,6 +156,10 @@ io.on("connection", socket => {
     })
     socket.on(key.ENDING_RING_ACK, (data)=>{
       io.emit(key.ENDING_RING_ACK, data);
+    })
+    socket.on(key.SEND_SHARABLE_LINK, (data)=>{
+      console.log("SEND_SHARABLE_LINK : ",data)
+      io.emit(key.SEND_SHARABLE_LINK, data);
     })
     socket.on(key.SHARE_MY_SCREEN, (data)=>{
       io.emit(key.SHARE_MY_SCREEN, data);

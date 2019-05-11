@@ -80,11 +80,13 @@ export const changeReadStatus = (messageId)=>(dispatch)=>{
         })
     })
 }
-export const sendMessage = (link, fromId, ToId, subject)=>(dispatch)=>{
+export const sendMessage = (link,callTopic, fromId, ToId, subject)=>(dispatch)=>{
   
     var token = JSON.parse(localStorage.getItem('token'))
     var postData = {
         link: link,
+        callTopic,
+        activity:config.MESSAGE_ACTIVITY,
         subject:subject,
         fromUser: fromId,
         touser:ToId

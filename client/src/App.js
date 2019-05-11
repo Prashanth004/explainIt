@@ -4,7 +4,8 @@ import { BrowserRouter, Switch, Route} from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
 import emailvarify from './components/tool/NewUi/emailvarify'
-import Login from './components/tool/NewUi/Login'
+import Login from './components/tool/NewUi/Login';
+import adminDash from './components/tool/NewUi/adminPages/adminroot'
 // import Signup from './components/Signup'
 import NoMatch from './components/tool/NewUi/NoMatch'
 // import Newlogin from './components/Newlogin'
@@ -45,6 +46,7 @@ class App extends Component {
             {/* <Route exact path = '/recorder' component={RecordName} /> */}
             {/* <Route exact path = '/extension' component={ExtHome} /> */}
             {/* <Route exact path = '/testmodal' component={testmodal} /> */}
+            <Route exact path = '/admindash' component={adminDash} />
             <Route exact path = '/video' component={video} />
             <Route exact path ='/floater' component={floater}/>
             <Route exact path = "/saveditems" component={savedItems}/>

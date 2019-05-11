@@ -291,7 +291,7 @@ class FullScreenRecorder extends Component {
             savedfuncCalled: true
         })
         var subject = this.state.subjectOfMessage
-        this.props.sendMessage(this.props.sharablelink, this.props.fromId, this.props.twitterUserId, subject)
+        this.props.sendMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
         var audioStream = this.state.audioStream;
@@ -317,7 +317,7 @@ class FullScreenRecorder extends Component {
         const closeFunction = (this.props.isFullScreenRecording) ? this.props.reStoreDefault :
             this.props.closeImidiate
         const closeBtn = (!this.props.isFullScreenRecording ?
-            (<Button close onClick={closeFunction} />) : (null))
+            (<Button style={{margin:"5px"}} close onClick={closeFunction} />) : (null))
         if (this.props.isFullScreenRecording) {
 
             var timer = (<Countdown
@@ -432,7 +432,7 @@ class FullScreenRecorder extends Component {
         }
 
         return (this.state.isInstalled) ? (
-            <div className="recordMainScreen">
+            <div className="recordMainScreen" >
                 {closeBtn}
 
                 {recordingElements}
@@ -456,7 +456,8 @@ FullScreenRecorder.PropType = {
     setStream: PropType.func.isRequired,
     showCanvas: PropType.func.isRequired,
     hideCanvas: PropType.func.isRequired,
-    sendMessage: PropType.func.isRequired
+    sendMessage: PropType.func.isRequired,
+
 }
 const mapStateToProps = state => ({
     isFullScreenRecording: state.tools.isFullScreenRecording,

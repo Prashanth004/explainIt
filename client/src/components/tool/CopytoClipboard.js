@@ -19,8 +19,7 @@ class copyToClipboard extends Component {
         
     }
     copyToClipboard(e){
-        var copyText = document.querySelector('#Link');
-        copyText.select();
+        this.textArea.select();
         document.execCommand("copy");
         this.setState({
             copyStatus:"link copied"
@@ -30,7 +29,7 @@ class copyToClipboard extends Component {
     return (
       <div className="copyToCipboardDiv">
          
-      <input id="Link" className="myInputClip" type="text"
+      <input   ref={(textarea) => this.textArea = textarea} className="myInputClip" type="text"
       onChange={this.changeCopyDiv}
        value={this.props.sharablelink}/>
                 <span className="hint--bottom" aria-label={this.state.copyStatus}>

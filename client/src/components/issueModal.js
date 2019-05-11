@@ -34,7 +34,7 @@ class issueDetails extends Component {
         this.setState({ state: this.state });
       var clickedProj = this.props.answerProject.find(proj=>proj.projectid == e.target.id)
         this.textExplain.textContent = clickedProj.textexplain;
-        this.userName.textContent = clickedProj.username;
+        // this.userName.textContent = clickedProj.username;
         if(clickedProj.videofilepath){
             if(!this.videoExplain){
                 this.setState({
@@ -142,22 +142,15 @@ class issueDetails extends Component {
         return (
             <div className="issueCard issueModal">
                 <div >
-                    <div className="topButtons ">
-                        <div>
-                        {/* <button className="buttonLight tweetButton" onClick={this.showCopyEle}>Get Sharable Link</button> */}
-                        </div>
-                        <div className="profileNameDiv">
-                            <p ref={p=>this.userName=p}></p>
-                        </div>
-                        <div >
-                        </div>
-                    </div>
+                   
                    {copyElement}
                     <div className="orginCard">
-                        <div className="questionText questionModal">
+                    <div className="questionText questionModal">
                             <p  ref={p => this.textExplain = p}  >{this.props.questionProject.textexplain}</p>
                         </div>
-                        {displayElement}
+                    {displayElement}
+                       
+                       
                     </div>
                 </div>
                 <div className="explainModal ">

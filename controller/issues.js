@@ -1,11 +1,6 @@
 var database = require('../app')
-var promise = require('bluebird');
-var config = require('../config/keys')
-var key = require('../config/keys')
 var rn = require('random-number');
-var options = {
-    promiseLib: promise
-};
+
 
 var optionsRand = {
     min:  -10000000

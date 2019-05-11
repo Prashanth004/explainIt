@@ -9,15 +9,17 @@
     border-style:solid;
     border-radius:3px;
     border-width:0.5px;
-    border-color:rgba(51, 51, 51, 0.424);
+    border-color:rgba(51, 51, 51, 0.171);
     font-size:14px;
+    box-shadow: 0px 0px 10px 1px rgba(155, 155, 155, 0.151);
+
 }
 .screenShareDiv{
     min-height: 100vh;
     width:100%;
     margin:auto;
     /* background-color:red; */
-    padding:30px;
+    /* padding:0px; */
     align-content: center;
     align-items: center;
     text-align: center;

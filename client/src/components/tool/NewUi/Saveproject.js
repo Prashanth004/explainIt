@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import config from '../../../config/config'
 import InputBox from './InputBox';
-import { FiSave, FiX } from "react-icons/fi";
+import {saveTopicOfTheCall} from '../../../actions/callAction'
+// import { FiSave, FiX } from "react-icons/fi";
 import { connect } from 'react-redux';
+import PropType from 'prop-types';
 
 
 
@@ -18,8 +20,7 @@ class SaveProjects extends Component {
             callRecText: "Call"
         }
         this.changeInputValue = this.changeInputValue.bind(this);
-        this.savefilePu = this.savefilePu.bind(this);
-        this.savefilePri = this.savefilePri.bind(this);
+        this.SaveTopic = this.SaveTopic.bind(this);
     }
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {
@@ -36,42 +37,13 @@ class SaveProjects extends Component {
             limitOfChar: config.PROJECT_TEXT_LIMIT
         })
     }
-    savefilePu() {
 
+    SaveTopic() {
         if (this.state.textValue !== null) {
             if ((this.state.textValue).length > 0) {
                 if ((this.state.textValue).length < 201) {
-                    this.setState({
-                        privatePublic: true
-                    })
-                    this.props.savefilePublic(this.state.textValue)
-                }
-                else {
-                    this.setState({
-                        limitExce: true
-                    })
-                }
-            }
-            else {
-                this.setState({
-                    empty: true
-                })
-            }
-        } else {
-            this.setState({
-                empty: true
-            })
-        }
-    }
-    savefilePri() {
-        if (this.state.textValue !== null) {
-            if ((this.state.textValue).length > 0) {
-                if ((this.state.textValue).length < 201) {
-
-                    this.props.savefilePrivate(this.state.textValue)
-                    this.setState({
-                        privatePublic: true
-                    })
+                    this.props.saveTopicOfTheCall(this.state.textValue)
+                    this.props.tweetTheMessage()
                 }
                 else {
                     this.setState({
@@ -111,41 +83,33 @@ class SaveProjects extends Component {
 
     }
     render() {
-        return (!this.props.isSaveClicked) ?
-            (<div>
-                <p>Do you want to save the {this.state.callRecText}?</p>
-
-                <span className="hint--top" aria-label="Save">
-                    <FiSave className="icons" onClick={this.props.saveClicked} />
-                </span>
-                <span className="hint--bottom" aria-label="Cancel">
-                    <FiX className="icons" onClick={this.props.closeImidiate} />
-                </span>
-            </div>) :
-            ((this.state.privatePublic) ? (<div><p>saving..</p></div>) : (<div>
-                <InputBox
+        return (
+        <div>
+            <p>Topic for the screen share.</p>
+            <InputBox
                     limitExce={this.state.limitExce}
                     empty={this.state.empty}
                     limitOfChar={this.state.limitOfChar}
                     changeInputValue={this.changeInputValue}
                     textValue={this.state.textValue}
                 />
-                {/* <h8>Your privacy is important to use</h8> */}
-                <button className="buttonDark" onClick={this.savefilePu}>Public</button>
-                <button className="buttonDark" onClick={this.savefilePri}>Private</button>
-            </div>))
+                <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>Send Request</button>
+            </div>
+             
+         )
     }
 }
 
 
 SaveProjects.PropType = {
+    saveTopicOfTheCall :PropType.func.isRequired,
 
 };
 const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
 })
 
-export default connect(mapStateToProps, {})(SaveProjects)
+export default connect(mapStateToProps, {saveTopicOfTheCall})(SaveProjects)
 
 
 

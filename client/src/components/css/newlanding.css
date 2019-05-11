@@ -194,6 +194,24 @@ text-align: center;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
+.labelContainer{
+   
+  padding-top:24px;
+  height: 90px;
+  padding:5px;
+  border-style:none;
+  padding-bottom:5px;
+  border-radius:6px;
+  width:80%;
+  margin:auto;
+  margin-top:30px;
+  /* height:55px; */
+  position:relative;
+  background-color:rgb(249, 249, 250);
+  /* border-style:solid; */
+  /* border-width:0.5px;
+  border-color:rgba(0, 0, 0, 0.404); */
+}
 .ProfileDiv{
   width:95%;
   margin:auto;
@@ -398,19 +416,39 @@ color:rgba(51, 51, 51, 0.609);
     border-color:rgb(221, 220, 220);
     border-width:0.5px;
   }
+  .acceptRejectDiv{
+    display:grid;
+    grid-template-columns: 50% 50%;
+    text-align: center;
+
+  }
+  .acceptCall{
+    width:40px;
+    margin:auto;
+    height:40px;
+    padding-top:7px;
+    border-radius:50%;
+    background-color: rgba(52, 124, 52, 0.822);
+    box-shadow: 0px 0px 10px 2px rgba(110, 110, 110, 0.212);
+
+    color:white;
+    border-style:none;
+  }
+  .reject{
+    background-color: rgba(167, 75, 75, 0.774);
+  }
   .callNotification{
-    width:40%;
+    width:20%;
     margin:auto;
     margin-top:10px;
     background-color: white;
     border-style: solid;
     border-radius:6.5px;
-    border-width:0.4px;
-    border-color:rgb(185, 184, 184);
-    display:grid;
-    grid-template-columns: 35% 65%;
-
+    border-width:0.5px;
+    border-color:rgb(226, 226, 226);
     padding:10px;
+    box-shadow: 0px 0px 10px 1px rgba(110, 110, 110, 0.103);
+
 }
   .dropdownImage{
     background-color: white;
@@ -661,6 +699,9 @@ border-top-width:0.5px;
         font-size: 13px;
        
       }
+      .labelContainer{
+        width:50%;
+    }
       .cardWithDate{
        
         margin-top:15px;

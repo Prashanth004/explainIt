@@ -1,0 +1,19 @@
+.activityContent{
+    padding:10px;
+    background-color: #eeee;
+    display:grid;
+    grid-template-columns: 15% 85%
+}
+.activityImage{
+    width:35px;
+    height:35px;
+    border-radius:50%
+}
+.activityContentWithDate{
+    width:50%;
+   
+    margin-top:10px;
+    display:grid;
+    margin:auto;
+    grid-template-columns: 15% 85%
+}

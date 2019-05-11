@@ -30,7 +30,7 @@ class DisplayIssue extends Component {
     }
     componentWillMount() {
         this.setState({
-            issueArray: null
+            issueArray: this.props.myissues
 
         })
         if (this.props.home === config.HOME)
@@ -42,12 +42,7 @@ class DisplayIssue extends Component {
                 itsHome: false
             })
     }
-    componentDidMount(){
-        this.setState({
-            issueArray :this.props.issueArray.reverse()
-        })
-    }
-
+ 
     deleteProjects(e) {
         console.log("e.target.id : ", e.target.id)
         this.setState({
@@ -132,44 +127,62 @@ class DisplayIssue extends Component {
 
     render() {
         var issueItems = null;
-      if(this.props.issueArray !== null){
-        if ((this.props.issueArray).length === 0) {
             if(this.props.created){
-                issueItems = (<div className="emptyIssues">
-                <h4>Empty</h4>
-                <br/>
-                <h6>If you have initiated a screen share or record the screen, the recordings with respect to these will be found here</h6>
-                <br/>
-                <h6>You can have it hidden form others to view it or you can let others view it and contribute to the recorded content</h6>
-            </div>)
+                if(this.props.myissues!==null)
+                    if(this.props.myissues.length===0)
+                        issueItems = (<div className="emptyIssues">
+                        <h4>Empty</h4>
+                        <br/>
+                        <h6>If you have initiated a screen share or record the screen, the recordings with respect to these will be found here</h6>
+                        <br/>
+                        <h6>You can have it hidden form others to view it or you can let others view it and contribute to the recorded content</h6>
+                        </div>)
+                    else{
+                      
+                        issueItems =this.state.issueArray.reverse().map((issue, index) => (
+                            <IssueCard 
+                            key={index+1000}
+                            itsHome={this.state.itsHome}
+                            displayCopyEle={this.state.displayCopyEle}
+                            deleteProjects={this.deleteProjects}
+                            tweetWindow={this.tweetWindow}
+                            handlePublicPrives={this.handlePublicPrives}
+                            toggle={this.toggle}
+                            toggleDisplayLink={this.toggleDisplayLink}
+                            projectId={this.state.projectId}
+                            issue={issue}
+                            explainTool={this.props.explainTool}/>
+                        ))
+                    }
+
+                       
+ 
             }
-            if(this.props.participated){
-                issueItems = (<div className="emptyIssues">
-                <h4>Empty</h4>
-                <br/>
-                <h6>If you have explained anyone by recording or sharing your screen, you will find the recordings related to them here</h6>
-                <br/>
-            </div>)
-            }
-           
+            else if(this.props.participated){
+                if(this.props.participatedIssues!==null)
+                    if(this.props.participatedIssues.length===0)
+                        issueItems = (<div className="emptyIssues">
+                            <h4>Empty</h4>
+                            <br/>
+                            <h6>If you have explained anyone by recording or sharing your screen, you will find the recordings related to them here</h6>
+                            <br/>
+                            </div>)
+                    else
+                    issueItems =this.props.participatedIssues.reverse().map((issue, index) => (
+                        <IssueCard 
+                        key={index+1000}
+                        itsHome={this.state.itsHome}
+                        displayCopyEle={this.state.displayCopyEle}
+                        deleteProjects={this.deleteProjects}
+                        tweetWindow={this.tweetWindow}
+                        handlePublicPrives={this.handlePublicPrives}
+                        toggle={this.toggle}
+                        toggleDisplayLink={this.toggleDisplayLink}
+                        projectId={this.state.projectId}
+                        issue={issue}
+                        explainTool={this.props.explainTool}/>
+                    ))
         }
-        else {
-            issueItems =this.props.issueArray.reverse().map((issue, index) => (
-               <IssueCard 
-               key={index+1000}
-               itsHome={this.state.itsHome}
-               displayCopyEle={this.state.displayCopyEle}
-               deleteProjects={this.deleteProjects}
-               tweetWindow={this.tweetWindow}
-               handlePublicPrives={this.handlePublicPrives}
-               toggle={this.toggle}
-               toggleDisplayLink={this.toggleDisplayLink}
-               projectId={this.state.projectId}
-               issue={issue}
-               explainTool={this.props.explainTool}/>
-            ))
-        }
-      }
         
         return (
             <div>
@@ -188,12 +201,12 @@ DisplayIssue.PropType = {
 const mapStateToProps = state => ({
  participated: state.nav.openParticipated,
     created: state.nav.openCreated,
+    myissues: state.profile.myIssues,
+    participatedIssues: state.profile.participatedIssue,
 })
 
 export default connect(mapStateToProps, {
     deleteProjects, checkPublicValue
-
-
 })(DisplayIssue)
 
 

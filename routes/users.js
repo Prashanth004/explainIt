@@ -23,12 +23,15 @@ router.all('/', function(req, res, next) {
 
 //Basic login form authentication system
 router.get('/email/:email',user.getUserByEmail)
+router.post('/all', passport.authenticate('local', { session: false }), user.getAllUsers)
 router.get('/id/:id',user.getUserById)
 router.post('/updateprofile',passport.authenticate('jwt', { session: false }),user.updateProfile)
 router.get('/twitterhandle/:enctwitterhandle', user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
 router.put('/onlinestatus',passport.authenticate('jwt', { session: false }),user.updateOnlineStatus)
 router.post('/authenticate',user.authenticate);
+router.put('/deactivate',passport.authenticate('local', { session: false }), user.deactivate)
+router.put('/activate',passport.authenticate('local', { session: false }), user.activate)
 router.get('/activationstatus',passport.authenticate('jwt', { session: false }), user.getActivationStatus)
 router.put('/emailactivation', passport.authenticate('jwt', { session: false }), user.emailActivation)
 router.post('/sendotp',passport.authenticate('jwt', { session: false }),user.sendotp);

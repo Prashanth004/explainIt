@@ -15,6 +15,7 @@ module.exports = {
     decryptKey:{
         key:"918027681781"
     },
+    MESSAGE_ACTIVITY:"messageActivity",
     domain:"http://localhost:9000",
     frontEndDomain:"http://localhost:3000",
     ADMIN_EMAIL:"cprashanth002@gmail.com",
@@ -23,8 +24,9 @@ module.exports = {
     USER_NAME:'postgres',
     PASSWORD:'postgres',
     PORT:'9000',
+    SEND_SHARABLE_LINK:"sendSharableLink",
 
-    LINKTOCALL: "linkTocall",
+    LINK_TO_CALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
     CALL_ACK_MESSAGE : "callAckMessage",
     END_CALL : "endCall",

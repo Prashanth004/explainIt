@@ -126,7 +126,7 @@ class ProfileForm extends Component {
             })
         }
        if(this.state.goodAtValue!==null)
-        if (this.state.goodAtValue.length > 200) {
+        if (this.state.goodAtValue.length > 150) {
             this.setState({
                 goodAtValueError: true
             })
@@ -164,23 +164,39 @@ class ProfileForm extends Component {
     }
 
     render() {
-        const angelerrorDiv = (this.state.angelListError) ? (
-            <span className="errorSpan">invalid angel list URL</span>
+        const angelerrorDiv = (this.state.angelListError) ? (<div>
+<span className="errorSpan">invalid angel list URL</span>
+<br/>
+        </div>
+            
         ) : (null)
         const githuerrorDiv = (this.state.gitHibError) ? (
+            <div>
             <span className="errorSpan">invalid github URL</span>
+            <br/>
+            </div>
         ) : (null)
         const linkedinerrorDiv = (this.state.linkInerror) ? (
+            <div>
             <span className="errorSpan">invalid linkedin URL</span>
+            <br/>
+            </div>
+
         ) : (null)
         // const costErrorDiv = (this.state.costError) ? (
         //     <span className="errorSpan">invalig cost</span>
         // ) : (null)
         const bioErrorDiv = (this.state.bioValueError) ? (
+            <div>
             <span className="errorSpan">bio cant be more than 200 characters</span>
+            <br/>
+            </div>
         ) : (null)
         const goodAtErrorDiv = (this.state.goodAtValueError) ? (
-            <span className="errorSpan">Can not be more than 200 characters</span>
+            <div>
+            <span className="errorSpan">Can not be more than 150 characters</span>
+            <br/>
+            </div>
         ) : (null)
 
         return (this.state.saveClicked) ? (

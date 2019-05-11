@@ -5,7 +5,7 @@ import { FiSave, FiX, FiSend } from "react-icons/fi";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import TweetSendMessage from './TweetSendMessage';
-import {sendEmail} from '../../../actions/emailAction'
+import { sendEmail } from '../../../actions/emailAction'
 
 
 
@@ -22,13 +22,14 @@ class SaveProjects extends Component {
             sendMessageClicked: false,
             enteredSubjest: false,
             tweetStarted: false,
-            successSent:false
+            successSent: false
         }
         this.changeInputValue = this.changeInputValue.bind(this);
         this.savefilePu = this.savefilePu.bind(this);
         this.savefilePri = this.savefilePri.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-        this.markTweetStarted = this.markTweetStarted.bind(this)
+        this.markTweetStarted = this.markTweetStarted.bind(this);
+        this.chooseSave = this.chooseSave.bind(this);
     }
 
     markTweetStarted() {
@@ -56,13 +57,10 @@ class SaveProjects extends Component {
         if (this.state.textValue !== null) {
             if ((this.state.textValue).length > 0) {
                 if ((this.state.textValue).length < 201) {
-                    this.setState({
-                        privatePublic: true
-                    })
-                    this.props.savefilePublic(this.state.textValue)
+
                     alert(this.props.replying)
-                    if(this.props.replying){
-                        this.props.sendEmail(this.props.issueId,this.props.userid)
+                    if (this.props.replying) {
+                        this.props.sendEmail(this.props.issueId, this.props.userid)
                     }
                 }
                 else {
@@ -90,37 +88,55 @@ class SaveProjects extends Component {
         })
     }
     savefilePri() {
-        if (this.state.textValue !== null) {
-            if ((this.state.textValue).length > 0) {
-                if ((this.state.textValue).length < 201) {
+        if (this.props.fromShareToRecord) {
+            this.setState({
+                sendMessageClicked: true,
+                privatePublic: true
+            })
+            this.props.sendButtonClick()
+            this.props.savefilePrivate(this.props.topicOfTheCall);
 
-                    this.props.savefilePrivate(this.state.textValue);
-                    if(this.props.replying){
-                        this.props.sendEmail(this.props.issueId,this.props.userid)
+        }
+        else {
+            if (this.state.textValue !== null) {
+                if ((this.state.textValue).length > 0) {
+                    if ((this.state.textValue).length < 201) {
+                        this.props.savefilePrivate(this.state.textValue);
+
+                        if (this.props.replying) {
+                            this.props.sendEmail(this.props.issueId, this.props.userid)
+                        }
+                        this.setState({
+                            privatePublic: true,
+                            successSent: true
+                        })
                     }
-                    this.setState({
-                        privatePublic: true,
-                        successSent:true
-                    })
+                    else {
+                        this.setState({
+                            limitExce: true
+                        })
+                        return;
+                    }
                 }
                 else {
                     this.setState({
-                        limitExce: true
+                        empty: true
                     })
                     return;
                 }
-            }
-            else {
+            } else {
                 this.setState({
                     empty: true
                 })
-                return;
             }
-        } else {
-            this.setState({
-                empty: true
-            })
         }
+
+    }
+    chooseSave() {
+        if (this.props.fromShareToRecord)
+            this.savefilePri()
+        else
+            this.sendMessage()
     }
 
     changeInputValue(e) {
@@ -143,9 +159,11 @@ class SaveProjects extends Component {
 
     }
     render() {
-        const shareOption = (!this.props.explainIssue) ? (<span className="hint--top" aria-label="Send Recording">
-            <FiSend className="icons" onClick={this.sendMessage} />
-        </span>) : null
+        const shareOption = (!this.props.explainIssue) ? (
+
+            <span className="hint--top" aria-label="Send Recording">
+                <FiSend className="icons" onClick={this.chooseSave} />
+            </span>) : null
         const saveOption = (this.props.twitterUserId === null) ? (
             <span className="hint--top" aria-label="Save Recording">
                 <FiSave className="icons" onClick={this.props.saveClicked} />
@@ -184,13 +202,8 @@ class SaveProjects extends Component {
                     {subjectInoutBox}
                     {tweetSendMessage}
                     {/* <TweetSendMessage
-            sendRecording={this.savefilePri}
              /> */}
                 </div>
-
-                // ):(null)
-
-
 
             ) :
 
@@ -216,7 +229,7 @@ class SaveProjects extends Component {
 
 
 SaveProjects.PropType = {
-    sendEmail:PropType.func.isRequired
+    sendEmail: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
@@ -224,9 +237,10 @@ const mapStateToProps = state => ({
     twitterUserId: state.twitterApi.twitterId,
     fromShareToRecord: state.message.fromShareToRecord,
     explainIssue: state.message.explainIssue,
-    issueId:state.email.issueId,
-    userid:state.email.userid,
-    replying:state.email.replying
+    issueId: state.email.issueId,
+    userid: state.email.userid,
+    replying: state.email.replying,
+    topicOfTheCall: state.call.topicOfTheCall
 
 })
 

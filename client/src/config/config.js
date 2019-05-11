@@ -55,7 +55,25 @@ const conf = {
     OTP_SECRET:"explainotpbookmane",
     FAILED_TO_GET_ISSUE_DETAILS:"failedToGetIssueDetails",
     FAILED_TO_GET_CREATOR_DETAILS:"failedToGetCreatorDetails",
-    FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails"
+    FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails",
+    SEND_SHARABLE_LINK:"sendSharableLink",
+    CALL_FAILED:"callFailed",
+    CALL_SUCCESSFULL:"callSuccessful",
+    MESSAGE_ACTIVITY:"messageActivity",
+    monthPicker : {
+        "01": "Jan",
+        "02": "feb",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "Jun",
+        "07": "Jul",
+        "08": "Aug",
+        "09": "Sept",
+        "10": "Oct",
+        "11": "Nov",
+        "12": "Dec"
+    }
 
 
 

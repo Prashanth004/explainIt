@@ -127,7 +127,6 @@ exports.updateProjectprivate = function(req, res){
                 name: req.body.projectName,
                 email: req.user.email,
                 projectid: rand,
-                
                 imgurl: imgurl,
                 textExplain: req.body.textExplain,
                 isquestion: req.body.isquestion,

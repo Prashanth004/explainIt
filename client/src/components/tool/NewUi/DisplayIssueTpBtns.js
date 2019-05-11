@@ -7,7 +7,7 @@ import { FiTrash } from "react-icons/fi";
 import { GoChevronDown } from "react-icons/go";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import {openEditModal} from '../../../actions/projectActions'
+import { openEditModal } from '../../../actions/projectActions'
 
 
 class displayTopBtns extends Component {
@@ -45,17 +45,18 @@ class displayTopBtns extends Component {
     }
     onOptClick() {
         if (this.state.optionVisibe === "hidden")
-            this.setState({optionVisibe: "visible"})
+            this.setState({ optionVisibe: "visible" })
         else {
-            this.setState({optionVisibe: "hidden"})
+            this.setState({ optionVisibe: "hidden" })
         }
     }
 
 
-    openEditModal=(e)=>{
+    openEditModal = (e) => {
 
-        this.setState({optionVisibe: "hidden"})
-        this.props.openEditModal(e.target.id)}
+        this.setState({ optionVisibe: "hidden" })
+        this.props.openEditModal(e.target.id)
+    }
 
     changeToggle(e) {
         if (this.state.displayTwitter === "block") {
@@ -79,17 +80,32 @@ class displayTopBtns extends Component {
 
     render() {
         var profilePic = null;
-        if (this.props.questionProject !== undefined) {
-            profilePic = this.props.questionProject.profilepic
-            var profileName = this.props.questionProject.username
+        const createdMenuItems = (this.props.participated || !this.props.itsHome) ? (null) : (
+            <div>
+            <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
 
-        }
-        else {
-            profilePic = null
-        }
-        const defaultToggle = (Number(this.props.issue.public)===1)?true:false
-        const publictoggle = (this.props.itsHome) ? (
+                <div >
+                    <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
+                </div>
+                <div>
+                    <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
+                </div>
+            </div>
+            <div id={this.props.issue.projectid} className="menuItem">
 
+                <div>
+                    <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal} className="menuIcon" /></span>
+                </div>
+                <div>
+                    <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} >Edit</span>
+                </div>
+            </div>
+        </div>
+        )
+        const publicPrivate = (this.props.participated || !this.props.itsHome)?(
+          null
+        ):(  <div >
+            <div className="privateOpt">
             <label id={this.props.issue.projectid}>
                 <span className="hint--top" aria-label={this.state.toolTipValue}>
                     <Toggle
@@ -99,66 +115,51 @@ class displayTopBtns extends Component {
                         icons={false}
                         onChange={this.changeToggle} />
                 </span>
-            </label>) : (null)
+            </label>
+            </div>
 
-        const deleteDiv = (this.props.itsHome) ? (
-            <div style={{fontSize:"13px", color:"#333"}}>
+        </div>)
+        if (this.props.questionProject !== undefined) {
+            profilePic = this.props.questionProject.profilepic
+            var profileName = this.props.questionProject.username
+
+        }
+        else {
+            profilePic = null
+        }
+        const defaultToggle = (Number(this.props.issue.public) === 1) ? true : false
+    
+
+        const deleteDiv = (
+            <div style={{ fontSize: "13px", color: "#333" }}>
                 <div className="iconsright">
                     <GoChevronDown onClick={this.onOptClick} />
                 </div>
-                <div className="dropDownForOption" 
-                onMouseLeave={this.onOptClick}id={this.props.issue.issueid} style={{ visibility: this.state.optionVisibe }}>
-                    <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
-                        
-                        <div >
-                            <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
-                        </div>
-                        <div>
-                            <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
-                        </div>
-                    </div>
-                    <div id={this.props.issue.projectid} className="menuItem">
-                       
-                        <div>
-                            <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal}className="menuIcon" /></span>
-                        </div>
-                        <div>
-                            <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} >Edit</span>
-                        </div>
-                    </div>
-                    <div className="menuItem" id={this.props.issue.issueid}  onClick={this.props.toggleDisplayLink}  >
-                        
+                <div className="dropDownForOption"
+                    onMouseLeave={this.onOptClick} id={this.props.issue.issueid} style={{ visibility: this.state.optionVisibe }}>
+                    {createdMenuItems}
+                    <div className="menuItem" id={this.props.issue.issueid} onClick={this.props.toggleDisplayLink}  >
+
                         <div >
                             <span>
                                 <FiLink2 id={this.props.issue.issueid} className="menuIcon" />
-                                </span>
+                            </span>
                         </div>
                         <div>
                             <span className="textInDropDown">Sharable link</span>
                         </div>
                     </div>
-                    <div >
+                   {publicPrivate}
 
-                        <div className="privateOpt">
-                            {/* <span style={{
-                                display: "inline-block",
-                                margin: "8px",
-                                marginTop: "-10px",
-                            }}>{this.state.toolTipsimple}</span> */}
-                            {publictoggle}
-                        </div>
-
-                    </div>
-                   
                 </div>
             </div>
-        ) : (null)
+        ) 
 
         return (
             <div>
                 <div id={this.props.issue.issueid} className="topButtons">
                     <div className="profileCardDiv">
-                        <img alt="button"src={profilePic}
+                        <img alt="button" src={profilePic}
                             style={{
                                 width: "35px",
                                 height: "35px",
@@ -170,14 +171,14 @@ class displayTopBtns extends Component {
                         <span
                             className="ProfileNameCard">
                             {profileName}</span>
-                            {/* <div className="date">
+                        {/* <div className="date">
                 {this.props.issue.date.slice(0,15)}
                 </div> */}
                     </div>
 
                     <div id={this.props.issue.issueid} className="twitterHolder">
-                        <div id={this.props.issue.issueid}  className="icons">
-                           
+                        <div id={this.props.issue.issueid} className="icons">
+
                         </div>
                         {deleteDiv}
                         {/* <button  id={this.props.issue.issueid} className="buttonDark twitterBtn"
@@ -190,14 +191,16 @@ class displayTopBtns extends Component {
     }
 }
 displayTopBtns.PropType = {
-    openEditModal:PropType.func.isRequired
-   };
+    openEditModal: PropType.func.isRequired
+};
 const mapStateToProps = state => ({
     isAauthenticated: state.auth.isAuthenticated,
+    participated: state.nav.openParticipated,
+
 
 })
 
-export default connect(mapStateToProps, { 
+export default connect(mapStateToProps, {
     openEditModal
 })(displayTopBtns)
 

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
-import Navbar from './Navbar'
+import Navbar from './Navbar';
+import { MdCallEnd,MdCall } from "react-icons/md";
+import Activity from './Activies.js/indexActivity'
 import DisplatCreated from './DisplayCreated';
 import {cancelSuccess} from '../../../actions/issueActions'
 import Inbox from './Inbox';
@@ -32,7 +34,7 @@ import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
 import Content from './Content'
-import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
+import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
 import { answerCall, missCall } from '../../../actions/callAction';
@@ -130,7 +132,6 @@ class NewHome extends Component {
         var self = this
         function postMessageHandler(event) {
 
-
             if (event.data === 'rtcmulticonnection-extension-loaded') {
                 self.setState({
                     source: event.source,
@@ -226,7 +227,7 @@ class NewHome extends Component {
         this.setState({
             showDetails:false,
             displayDetails:false,
-            showDetails:false
+         
         })
         
         this.setState({
@@ -239,7 +240,6 @@ class NewHome extends Component {
         this.setState({
             showDetails:false,
             displayDetails:false,
-            showDetails:false
         })
        
         this.setState({
@@ -508,15 +508,24 @@ class NewHome extends Component {
                     </div>
                     <audio style={{ display: "none" }} autoPlay  loop src={require('../../audio/simple_beep.mp3')}></audio>
 
-                </div>
-                <div>
                     <p>{this.props.callerName}</p>
-                    <button className="buttonLight"onClick={this.answerCall}>Accept Share Request</button>
-                    <br/>
-                    <button className="buttonLight"onClick={this.rejectCall}>Ask to send recording</button>
-                    {/* <p onClick={this.answerCall}><a href="#">Accept Screen-share Request</a></p>
-                    <p onClick={this.rejectCall}><a href="#">Ask to send the recording</a></p> */}
-
+                    <div className="acceptRejectDiv">
+                    <span className="hint--top" aria-label="Accept Request">
+                        <div onClick={this.answerCall} className="acceptCall">
+                            <MdCall />
+                        </div>
+                        </span>
+                        <span className="hint--top" aria-label="Ask to send recording">
+                        <div  onClick={this.rejectCall} className="acceptCall reject">
+                            <MdCallEnd/>
+                        </div>
+                        </span>
+                        {/* <button className="acceptCall">Accept Share Request</button>
+                        <br/>
+                        <button className="buttonLight">Ask to send recording</button>
+                        {/* <p onClick={this.answerCall}><a href="#">Accept Screen-share Request</a></p>
+                        <p onClick={this.rejectCall}><a href="#">Ask to send the recording</a></p> */} 
+                    </div>
                 </div>
             </div>
         ) : (null)
@@ -524,51 +533,18 @@ class NewHome extends Component {
         deatilsModal = (<IssueDetils />)
        
         if (this.props.isAauthenticated) {
-            if (this.state.openExplain) {
-            }
-            if (!this.props.incommingCall && this.props.created && !this.props.participated) {
-                // explainDiv = null
-                var createdDiv = (this.state.typeOfView === "list") ? (
-                    <div className="issueContainer" style={{width:issuepercentage}}>
-                    <div className="closeBtnHolder">
-                    </div>
-                    <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated)} />
-                    {/* <DisplatCreated home={config.HOME} issueArray={(issuesCreated).reverse()} /> */}
-                </div>
-                ):(
-                    <div className="issueContainerMore" >
-                    <div className="closeBtnHolder">
-                    </div>
-                    {/* <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={(issuesCreated).reverse()} /> */}
-                    <DisplatCreated home={config.HOME} issueArray={(issuesCreated)} />
-                </div>
-                )
-
-                feedDiv = (
-                    <div>
-                        <div style={{float:"right"}}>
-                            <span className="hint--top" aria-label="List View">
-                            <FiList onClick={this.changeViewToList} className="listView"/>
-                            </span>
-                            <span className="hint--top" aria-label="Grid View">
-                            <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
-                            </span>
-                        </div>
-                       {createdDiv}
-                       </div>)
-            }
-            if (!this.props.incommingCall && this.props.participated && !this.props.created) {
+            if (!this.props.incommingCall && (this.props.participated || this.props.created)) {
                 var participatedDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{ width: issuepercentage }} >
                         <div className="closeBtnHolder">
                         </div>
-                        <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} issueArray={this.props.participatedIssues} />
+                        <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool}/>
                     </div>
                 ) : (<div className="issueContainer" style={{ width: "80%" }} >
         
                     <div className="closeBtnHolder">
                     </div>
-                    <DisplatCreated home={config.HOME} issueArray={this.props.participatedIssues} />
+                    <DisplatCreated home={config.HOME} issueArray={(this.props.participated)?this.props.participatedIssues:issuesCreated} />
                 </div>)
                 // explainDiv = null
                 feedDiv = (
@@ -591,7 +567,7 @@ class NewHome extends Component {
             }
             else if(this.props.inbox){
                 // explainDiv = null
-                feedDiv =(<Inbox userId={this.props.userId}/>)
+                feedDiv =(<Activity userId={this.props.userId}/>)
             }
             else {
                 
@@ -686,7 +662,6 @@ NewHome.PropType = {
     fetchProjectbyIssue: PropType.func.isRequired,
     setIssueId: PropType.func.isRequired,
     saveExtensionDetails: PropType.func.isRequired,
-    saveSourceId: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     acceptCallDetails: PropType.func.isRequired,
     answerCall: PropType.func.isRequired,
@@ -743,7 +718,6 @@ export default connect(mapStateToProps, {
     restAllToolValue,
     acceptCallDetails,
     saveExtensionDetails,
-    saveSourceId,
     openInbox,
     getProfileDetails,
     fetchProjectbyIssue,

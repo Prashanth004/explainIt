@@ -47,8 +47,9 @@ exports.checkReplyInfo = (req, res) => {
 }
 
 exports.getUnreadNumber = (req, res) => {
-    database.db.manyOrNone('select * from message where unread =$1 and touser=$2', [1, req.user.id])
-        .then(data => {
+    database.db.manyOrNone('select * from activities where unread =$1 and touser=$2 and activity=$3',
+    [1, req.user.id,config.MESSAGE_ACTIVITY])
+    .then(data=>{
             if (data !== null) {
                 res.status(200).send({
                     success: 1,
@@ -74,7 +75,7 @@ exports.changeUnread = (req, res) => {
     // update projects SET public = $1 
     // database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time,unread)' +
     // 'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time},${unread})',
-    database.db.none('update message SET unread = $1 WHERE touser = $2 and id= $3', [0, req.user.id, req.params.messageid])
+    database.db.none('update activities SET unread = $1 WHERE touser = $2 and id= $3 and activity=$4', [0, req.user.id, req.params.messageid, config.MESSAGE_ACTIVITY])
         .then(data => {
             res.io.emit(config.UPDATE_BADGE, {
                 "userId": req.user.id
@@ -166,25 +167,44 @@ exports.replyaction = (req, res) => {
 exports.saveMessage = function (req, res) {
 
     var rand = rn(options)
-
+    var unreadDefault = 1
     let dateNow = new Date().toString()
-    database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,unread)' +
-        'values(${id},${link},${subject}, ${fromuser}, ${touser},${unread})',
-        {
-            id: rand,
-            link: req.body.link,
-            subject: req.body.subject,
-            fromuser: req.body.fromUser,
-            touser: req.body.touser,
-            unread: 1
-        }).then(function (data) {
-            res.io.emit(config.NEW_MESSAGE, {
-                "touser": req.body.touser
-            })
-            res.status(201).send({
-                success: 1,
-                data: data
-            })
+    database.db.oneOrNone('insert into activities (fromuser,touser,activity,subject,link,duration,unread)'+
+    'values (${fromuser},${touser},${activity}, ${subject}, ${link},${duration},${unread})',
+{
+    fromuser:req.user.id,
+    touser:req.body.touser,
+    activity:req.body.activity,
+    subject:req.body.subject,
+    link:req.body.link,
+    duration:null,
+    unread:unreadDefault
+}).then(data=>{
+    res.io.emit(config.NEW_MESSAGE, {
+                    "touser": req.body.touser
+                })
+                res.status(201).send({
+                    success: 1,
+                    data: data
+                })
+
+    // database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,unread)' +
+    //     'values(${id},${link},${subject}, ${fromuser}, ${touser},${unread})',
+    //     {
+    //         id: rand,
+    //         link: req.body.link,
+    //         subject: req.body.subject,
+    //         fromuser: req.body.fromUser,
+    //         touser: req.body.touser,
+    //         unread: 1
+    //     }).then(function (data) {
+    //         res.io.emit(config.NEW_MESSAGE, {
+    //             "touser": req.body.touser
+    //         })
+    //         res.status(201).send({
+    //             success: 1,
+    //             data: data
+    //         })
             database.db.oneOrNone('select * from users where id = $1', req.body.touser)
                 .then(toData => {
                     if (toData) {
@@ -216,6 +236,7 @@ exports.saveMessage = function (req, res) {
                 error: error
             })
         })
+        
 
 }
 
