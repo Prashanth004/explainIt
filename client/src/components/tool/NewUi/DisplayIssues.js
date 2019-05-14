@@ -139,7 +139,7 @@ class DisplayIssue extends Component {
                         </div>)
                     else{
                       
-                        issueItems =this.state.issueArray.reverse().map((issue, index) => (
+                        issueItems =this.state.issueArray.map((issue, index) => (
                             <IssueCard 
                             key={index+1000}
                             itsHome={this.state.itsHome}
@@ -168,7 +168,7 @@ class DisplayIssue extends Component {
                             <br/>
                             </div>)
                     else
-                    issueItems =this.props.participatedIssues.reverse().map((issue, index) => (
+                    issueItems =this.props.participatedIssues.map((issue, index) => (
                         <IssueCard 
                         key={index+1000}
                         itsHome={this.state.itsHome}

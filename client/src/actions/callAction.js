@@ -4,6 +4,7 @@ import {CALL_DETAILS_ACCEPT,
     INCREASE_CALL_BY_MINUTE,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,
+    RESET_CALL_ACTIONS,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     BASIC_INFO_OF_CALL,
@@ -77,6 +78,11 @@ export const answerCall = ()=>(dispatch)=>{
         type:ANSWER_CALL
     })
 }
+export const resetCallAction = ()=>(dispatch)=>{
+    dispatch({
+        type:RESET_CALL_ACTIONS
+    })
+}
 export const getAllActivities = ()=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'));
     axios({
@@ -124,7 +130,8 @@ export const callSuccessedUpate = (touser, topic, duration, link)=>{
     })
 
 }
-export const callFailedUpdate = ( touser, topic)=>{
+export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
+    console.log("got the request")
     var token = JSON.parse(localStorage.getItem('token'));
     var data={
         touser:touser,
@@ -141,11 +148,11 @@ export const callFailedUpdate = ( touser, topic)=>{
         },
         data:data
     }).then(data=>{
-        return
+        console.log("got a possitive response")
     })
     .catch(err=>{
         console.log("error in saving the call fail details : ", err)
-        return 
+  
     })
 }
 

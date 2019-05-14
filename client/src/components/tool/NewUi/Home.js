@@ -30,7 +30,8 @@ import PropType from 'prop-types';
 import { FiGrid,FiList } from "react-icons/fi";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Swal from 'sweetalert2'
-import config from '../../../config/config'
+import config from '../../../config/config';
+import {resetCallAction,getAllActivities} from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
 import Content from './Content'
@@ -171,7 +172,7 @@ class NewHome extends Component {
            if(data.touser === (this.props.userId)){
                
                 this.props.getTotalUnread();
-                this.props.getAllMessages(this.props.userId)
+                this.props.getAllActivities()
             }
         })
         socket.on(config.LINK_TO_CALL, data => {
@@ -382,6 +383,7 @@ class NewHome extends Component {
         this.props.restAllToolValue();
         this.props.resetValues();
         this.props.cancelSuccess();
+        this.props.resetCallAction();
         this.setState({
             displayDetails: false
         })
@@ -488,10 +490,6 @@ class NewHome extends Component {
         var deatilsModal = null
         if(this.props.myissues!==null)
         var issuesCreated = (this.props.myissues)
-        // if(this.props.participatedIssues!==null)
-       
-       
-       
         var feedDiv = null;
 
         window.addEventListener('storage', function (event) {
@@ -673,7 +671,9 @@ NewHome.PropType = {
     creatAnsProject:PropType.func.isRequired,
     openInbox:PropType.func.isRequired,
     getAllMessages:PropType.func.isRequired,
-    getProfileDetails:PropType.func.isRequired
+    resetCallAction:PropType.func.isRequired,
+    getProfileDetails:PropType.func.isRequired,
+    getAllActivities:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -712,6 +712,8 @@ export default connect(mapStateToProps, {
     answerCall,
     openCreated,
     getAllMessages,
+    resetCallAction,
+    getAllActivities,
     cancelAllMessageAction,
     openParticipated,
     missCall,

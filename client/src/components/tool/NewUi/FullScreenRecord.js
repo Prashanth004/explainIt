@@ -62,7 +62,7 @@ class FullScreenRecorder extends Component {
     }
     startBar() {
 
-        var timeAloted = config.RECORD_TIME * 60 * 16
+        var timeAloted = this.props.timeAloted * 60 * 16
         var progressbar = document.querySelector('#pbar');
         var progresDiv = document.querySelector(".progresDiv")
         progresDiv.style.display = "block";
@@ -321,7 +321,7 @@ class FullScreenRecorder extends Component {
         if (this.props.isFullScreenRecording) {
 
             var timer = (<Countdown
-                date={Date.now() + config.RECORD_TIME * 60 * 1000}
+                date={Date.now() + this.props.timeAloted * 60 * 1000}
                 renderer={this.renderer}
             />)
             recordingEle = (<div >
@@ -472,7 +472,8 @@ const mapStateToProps = state => ({
     screenStream: state.stream.screenStream,
     sendSuccess: state.message.sendSuccess,
     twitterUserId: state.twitterApi.twitterId,
-    twitterName: state.twitterApi.name
+    twitterName: state.twitterApi.name,
+    timeAloted: state.call.noOfMinutes,
 })
 
 export default connect(mapStateToProps, { sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)

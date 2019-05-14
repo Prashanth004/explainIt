@@ -14,6 +14,9 @@ exports.addActivity = (req,res)=>{
     duration:req.body.duration,
     unread:unreadDefault
 }).then(data=>{
+    res.io.emit(config.NEW_MESSAGE, {
+        "touser": req.body.touser
+    })
     res.status(201).send({
         success:1,
         data:data
@@ -27,7 +30,7 @@ exports.addActivity = (req,res)=>{
 })
 }
 exports.getAcitivies=(req,res)=>{
-    database.db.manyOrNone('select * from activities where touser = $1 or fromuser = $2 ORDER BY date ASC',
+    database.db.manyOrNone('select * from activities where touser = $1 or fromuser = $2 ORDER BY id ASC',
     [String(req.user.id),String(req.user.id)])
     .then(data=>{
         res.status(200).send({

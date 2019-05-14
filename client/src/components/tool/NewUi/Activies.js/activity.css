@@ -10,10 +10,17 @@
     border-radius:50%
 }
 .activityContentWithDate{
-    width:50%;
+    width:90%;
    
     margin-top:10px;
     display:grid;
     margin:auto;
-    grid-template-columns: 15% 85%
+    grid-template-columns: 20% 80%
+}
+
+@media (min-width: 700px) {
+    .activityContentWithDate{
+        width:50%;
+        grid-template-columns: 15% 75%
+    }
 }

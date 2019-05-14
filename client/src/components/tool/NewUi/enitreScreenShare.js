@@ -662,12 +662,14 @@ class ScreenRecorder extends Component {
             shareScreenLink: shareScreenLink
         })
         setTimeout(() => {
+            console.log("trying to call action 1")
             if (!this.state.answerFrmPeer) {
+                console.log("trying to call action 2")
+                self.props.callFailedUpdate(self.props.touser,self.props.callTopic)
                 if (!this.state.ringAck) {
                     self.setState({
                         timeOutNoAnswerOnCAll: true
                     })
-                    self.props.callFailedUpdate(self.props.touser,self.props.callTopic)
                 }
                 socket.emit(config.ENDING_RING, {
                     'fromUserId': this.props.userId,

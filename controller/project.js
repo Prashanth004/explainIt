@@ -119,7 +119,6 @@ exports.updateProjectprivate = function(req, res){
         else {
             var imgurl = config.domain + '/images/default.png'
         }
-        var dateNow = new Date().toString()
         var rand = rn(options)
         database.db.oneOrNone('insert into projects(name,email, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
             'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
@@ -212,7 +211,7 @@ exports.retrieveItems = function (req, res) {
 }
 
 exports.getAllProject = function (req, res) {
-    database.db.manyOrNone('select * from projects ORDER BY date')
+    database.db.manyOrNone('select * from projects ORDER BY date ASC')
         .then(data => {
             res.status(200).send({ success: 1, data: data })
         })
@@ -258,7 +257,7 @@ exports.getProjectById = function (req, res) {
 
 
 exports.getAllProjectByIssue = function (req, res) {
-    database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date', req.params.issueid)
+    database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date ASC', req.params.issueid)
         .then(projects => {
 
             if (projects) {

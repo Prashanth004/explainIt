@@ -125,8 +125,6 @@ exports.replyaction = (req, res) => {
                                             subject + "'</p><br/> <a href='" + link + "'>click here</a>"
                                         userController.sendEmail(creatorEmail, MailSubject, htmlContent)
                                     }
-                                  
-
                                 })
                                 .catch(error => {
                                     console.log("error in fetching replier's details")

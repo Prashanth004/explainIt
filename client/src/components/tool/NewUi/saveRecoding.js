@@ -101,15 +101,16 @@ class SaveProjects extends Component {
             if (this.state.textValue !== null) {
                 if ((this.state.textValue).length > 0) {
                     if ((this.state.textValue).length < 201) {
+                        this.setState({
+                            privatePublic: true,
+                            successSent: true
+                        })
                         this.props.savefilePrivate(this.state.textValue);
 
                         if (this.props.replying) {
                             this.props.sendEmail(this.props.issueId, this.props.userid)
                         }
-                        this.setState({
-                            privatePublic: true,
-                            successSent: true
-                        })
+                       
                     }
                     else {
                         this.setState({
@@ -196,7 +197,7 @@ class SaveProjects extends Component {
                     <FiX className="icons" onClick={this.props.closeImidiate} />
                 </span>
             </div>) :
-            ((this.state.sendMessageClicked) ? (
+            ((this.state.sendMessageClicked && !this.state.privatePublic) ? (
                 // this.state.enteredSubjest?(
                 <div>
                     {subjectInoutBox}
@@ -205,9 +206,7 @@ class SaveProjects extends Component {
              /> */}
                 </div>
 
-            ) :
-
-                ((this.state.privatePublic) ? (<div><p>saving..</p></div>) : (
+            ) :((this.state.privatePublic) ? (<div><p>saving..</p></div>) : (
                     <div style={{
                         width: "70%",
                         margin: "auto"

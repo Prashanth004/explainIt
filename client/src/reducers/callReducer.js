@@ -8,6 +8,7 @@ import {CALL_DETAILS_ACCEPT,
     GET_ALL_ACTIVITES_FAILED,
     INCREASE_CALL_BY_MINUTE,
     SAVE_TOPIC_OF_THE_CALL,
+    RESET_CALL_ACTIONS,
     UPATE_CURRENT_TIME_TO_DISPLAY,
      ANSWER_CALL,MISS_CALL} from '../actions/types'
 
@@ -47,6 +48,22 @@ export default function(state= initialState, action){
             ...state,
             gotAllActivities:true,
             activities:action.payload
+        }
+        case RESET_CALL_ACTIONS:
+        return{
+            ...state,
+            topicOfTheCall:"",
+            peerId:null,
+            touser:null,
+            link:null,
+            userName:null,
+            email:null,
+            id:null,
+            initialTime:3,
+            noOfIncreaseInTime:0,
+            currentTimeLeft : 3,
+            noOfMinutes:3,
+            currentTimeLeft : 3
         }
         case GET_ALL_ACTIVITES_FAILED:
         return{

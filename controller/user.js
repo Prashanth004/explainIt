@@ -141,12 +141,34 @@ exports.updateOnlineStatus = (req, res) => {
 
 const sendEmail = (toAddress, Subject, emailContent) => {
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: config.EMAIL_SERVICE,
+        port: 465,
+        secure: true,
         auth: {
-            user: 'bookmanelabs@gmail.com',
-            pass: 'bookmane321$'
+            user: config.ADMIN_EMAIL,
+            pass: config.EMAIL_PASSWORD
         }
     });
+    // host: 'bookmane.in',
+    // port: 465,
+    // secure: true,        
+    // auth: {
+    //     user: 'hello@bookmane.in',
+    //     pass: 'B08Sj+j3t?w)'
+    // }
+    // var smtpTransport = nodemailer.createTransport('SMTP', {
+    //     service: 'Gmail',
+    //     auth: {
+    //       XOAuth2: {
+    //         user: smtpConfig.user,
+    //         clientId: smtpConfig.client_id,
+    //         clientSecret: smtpConfig.client_secret,
+    //         refreshToken: smtpConfig.refresh_token,
+    //         accessToken: smtpConfig.access_token,
+    //         timeout: smtpConfig.access_timeout - Date.now()
+    //       }
+    //     }
+    //   };
     var mailOptions = {
         from: '"Bookmane Labs" <bookmanelabs@gmail.com>',
         to: toAddress,

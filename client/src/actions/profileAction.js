@@ -80,13 +80,14 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                 }
             }).then((response2) => {
                 var participated = []
+                var allProjects = response2.data.data.reverse()
                 if (profilePrivacy === config.SELF)
-                    myProjects = (response2.data.data).filter(project => (
+                    myProjects = (allProjects).filter(project => (
                         project.email === response1.data.data.email
 
                     ))
                 else if (profilePrivacy === config.VISIT_PROF) {
-                    myProjects = (response2.data.data).filter(project => (
+                    myProjects = (allProjects).filter(project => (
                         project.email === response1.data.data.email &&
                         project.public === "1"
 
@@ -102,7 +103,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
 
                 // var issuIDMyProject = myProjects.map(project=>project.issueid)
                 const distinctIssueId = [...new Set(myProjects.map(proj => proj.issueid))]
-                response2.data.data.forEach(proj => {
+                allProjects.forEach(proj => {
                     if (distinctIssueId.includes(proj.issueid) && proj.isquestion === "true") {
                         participated.push(proj)
                     }
