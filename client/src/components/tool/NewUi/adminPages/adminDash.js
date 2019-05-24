@@ -12,6 +12,9 @@ export default (props) => {
                    <p><b>Name</b></p>
                </div>
                <div>
+                   <p><b>Twitter</b></p>
+               </div>
+               <div>
                    <p><b>Email</b></p>
                </div>
                <div>

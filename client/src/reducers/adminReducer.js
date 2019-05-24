@@ -13,8 +13,7 @@ const initialState={
     emptyPassword:false,
     authFail:false,
     userDetails:null,
-    userName:null,
-    password:null
+   
 }
 
 export default function(state= initialState, action){

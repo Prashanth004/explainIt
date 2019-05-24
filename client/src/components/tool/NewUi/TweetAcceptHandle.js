@@ -106,8 +106,8 @@ class tweetSearch extends Component {
                 emptyNumber: false
             })
         }
-        this.props.setNoOfMinutes(e.target.value)
-        this.props.updateCurrentTime(e.target.value)
+        this.props.setNoOfMinutes(Number(e.target.value))
+        this.props.updateCurrentTime(Number(e.target.value))
 
     }
 

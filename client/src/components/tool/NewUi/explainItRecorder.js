@@ -53,6 +53,18 @@ class FullScreenRecorder extends Component {
     }
     startBar(){
         var timeAloted = config.RECORD_TIME*60*16
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        const callStart = {
+            type:config.START_CALL,
+            data:{timer:timeAloted,
+            action:config.FULL_SCREEN_RECORD}
+        }
+        if (this.props.extSource !== null) {
+            console.log("posting start call from web application")
+            source.postMessage(callStart, origin);
+        }
+       
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
          progresDiv.style.display = "block";
@@ -105,13 +117,16 @@ class FullScreenRecorder extends Component {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
             self.startBar()
             var finalStream = new MediaStream();
-            window.getTracks(audioStream, 'audio').forEach(function (track) {
-                finalStream.addTrack(track);
-            });
-           
-            window.getTracks(screenStream, 'video').forEach(function (track) {
-                finalStream.addTrack(track);
-            });
+            var videoTracks = screenStream.getVideoTracks();
+                videoTracks.forEach(function(track) {
+                    finalStream.addTrack(track);
+                });
+
+            var audioTracks = audioStream.getAudioTracks();
+                audioTracks.forEach(function(track) {
+                    finalStream.addTrack(track);
+                });
+
             var recorder1 = RecordRTC(finalStream, {
                 type: 'video'
             });
@@ -141,6 +156,11 @@ class FullScreenRecorder extends Component {
     componentDidMount(){
     var self = this
         function postMessageHandler(event) {
+            if(event.data.type){
+                if(event.data.type === config.END_RECORD_FROM_EXTENSION){
+                    self.recordScreenStop()
+                }
+            }
             if (event.data.sourceId !== undefined) {
              
                 self.props.saveSourceId(event.data.sourceId)
@@ -167,6 +187,15 @@ class FullScreenRecorder extends Component {
 
     renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
+            var source = this.props.extSource
+            var origin = this.props.extOrigin
+            const END_RECORD_TIME_END = {
+                type:config.END_RECORD_TIMEOUT
+            }
+            if (this.props.extSource !== null) {
+                console.log("posting from webpage")
+                source.postMessage(END_RECORD_TIME_END, origin);
+            }
             this.recordScreenStop()
             return (<Dummy></Dummy>)
 
@@ -182,11 +211,14 @@ class FullScreenRecorder extends Component {
     receiveMessage() {
         var mainBtn = document.querySelector('.mainBtn');
         mainBtn.style.backgroundColor="rgb(133, 39, 39)";
-        this.convey.innerText="Stop"
+        this.convey.style.display="none"
         var source = this.props.extSource
         var origin = this.props.extOrigin
+        const GET_SOURCE_ID = {
+            type:config.GET_SOURCE_ID_AUDIO_TAB
+        }
         if (this.props.extSource!==null) {
-            source.postMessage('audio-plus-tab', origin);
+            source.postMessage(GET_SOURCE_ID, origin);
         }
     }
 
@@ -309,11 +341,6 @@ toggleCanvas(){
        var recordingEle = null;
        var recordingElements = null;
        var postShareElements = null;
-        // const closeFunction=(this.props.isFullScreenRecording)?this.props.reStoreDefault:
-        //         this.props.closeImidiate
-        // const closeBtn=(!this.props.isFullScreenRecording && (!this.props.isFullRecordCompleted 
-        //  || this.state.saveClicked)?
-            // (<Button close onClick={this.closeFunction} />):(null))
         if (this.props.isFullScreenRecording) {
            
             var timer = (<Countdown

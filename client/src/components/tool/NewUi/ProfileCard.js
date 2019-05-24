@@ -108,7 +108,10 @@ class ProfileCard extends Component {
                                 <div >
                                     {notifyBadge}
                                     <span>
+                                  
                                         <FiMail onClick={this.props.toggleInbox} className="dragoMail" />
+                                        {/* <FiMail onClick={this.props.showInbox} className="dragoMail" /> */}
+
                                     </span>
                                 </div>
                             </div>

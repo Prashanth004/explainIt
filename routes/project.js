@@ -9,17 +9,19 @@ const storage = multer.diskStorage({
         cb(null, 'public/audio');
     },
     filename :  function(req, file, cb){
-        cb(null, req.body.projectName+'.mp4')
+        cb(null, req.body.projectName+'.webm')
     } 
+   
 })
-// const fileFilter = (req, file, cb)=>{
-// if( file.mimetype === 'vide/wav' || file.mimetype === 'audio/mp3 '){
+//  const fileFilter = (req, file, cb)=>{
+// if( file.mimetype === 'video/webm' || file.mimetype === 'audio/mp3 '){
 //  cb(null, true);
 // }
 // else{
 //     cb(null, false);
 // }
 // }
+
 
 
 const upload =  multer({

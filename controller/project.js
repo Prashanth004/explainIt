@@ -91,7 +91,7 @@ exports.updateProjectprivate = function(req, res){
             //         msg: " the audio exceeds 12 mb"
             //     })
             // }
-            videopathName = config.domain + '/public/audio/' + req.body.projectName + '.mp4'
+            videopathName = config.domain + '/public/audio/' + req.body.projectName + '.webm'
         }
         if (req.body.imageData != "null") {
             var imageBuffer = decodeBase64Image(req.body.imageData);

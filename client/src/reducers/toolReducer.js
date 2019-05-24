@@ -2,6 +2,8 @@ import {DISPLAY_SCREEN_SHARE,
     SCREEN_SHARE,
     DISPLAY_SCREEN_RECORD,
     SCREEN_RECORD,
+    INBOX,
+    DISPLAY_INBOX,
     START_SHARING,
     START_RECORDING,
     STOP_SHARING,
@@ -46,6 +48,10 @@ export default (state=initialState, action)=>{
                 ...state,
                 screenAction:SCREEN_RECORD,
             }
+        case DISPLAY_INBOX:
+            return{
+            screenAction:INBOX,
+        }
         case DISPLAY_FULL_SHARE:
             return{
                 ...state,

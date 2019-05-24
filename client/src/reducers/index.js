@@ -15,11 +15,13 @@ import canvasActionsReducer from './canvasActionReducer'
 import profileHoverReducer from './profileHoverReducer'
 import secondScreenShareReducer from './secondShareReducer'
 import emailReducer from './emailReducer';
-import adminReducer from './adminReducer'
+import adminReducer from './adminReducer';
+import landingReducer from './landingReducer'
  
 export default combineReducers({
     email:emailReducer,
     auth : signinReducer,
+    landing:landingReducer,
     issues: issueReducer,
     projects: projectReducer,
     admin:adminReducer,

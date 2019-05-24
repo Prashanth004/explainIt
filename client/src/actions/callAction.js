@@ -4,6 +4,7 @@ import {CALL_DETAILS_ACCEPT,
     INCREASE_CALL_BY_MINUTE,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,
+    INITIATE_SEND,
     RESET_CALL_ACTIONS,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
@@ -36,8 +37,9 @@ export const setpeerId = (peerId)=>(dispatch)=>{
 export const updateRemainingTime = (timeRem)=>dispatch=>{
     dispatch({
         type:UPATE_CURRENT_TIME_TO_DISPLAY,
-        payloadL:timeRem
+        payload:timeRem
     })
+    return true
 }
 export const saveTopicOfTheCall = (topic)=>(dispatch)=>{
     dispatch({
@@ -65,7 +67,13 @@ export const increaseTimer = ()=>(dispatch)=>{
     })
 }
 export const durationInMinutes = (intialTime, numberOfIncrease, currentTime)=>{
-    return intialTime+numberOfIncrease-currentTime
+    console.log("typeof(intialTime) : ",typeof(intialTime))
+    console.log("Number(intialTime) : ",Number(intialTime))
+    const tInitialTime=(typeof(intialTime)==="string")?(Number(intialTime)):intialTime
+    const tNumberOfIncrease=(typeof(numberOfIncrease)==="string")?(Number(numberOfIncrease)):numberOfIncrease
+    const tCurrentTime=(typeof(currentTime)==="string")?(Number(currentTime)):currentTime
+    console.log(tInitialTime,tNumberOfIncrease,tCurrentTime)
+    return tInitialTime+tNumberOfIncrease-tCurrentTime
 }
 export const setNoOfMinutes =(numberMinutes)=>(dispatch)=>{
 dispatch({
@@ -106,7 +114,6 @@ export const getAllActivities = ()=>(dispatch)=>{
     })
 }
 export const callSuccessedUpate = (touser, topic, duration, link)=>{
-    console.log(touser, topic, duration, link)
     var token = JSON.parse(localStorage.getItem('token'));
     var data={
         touser:touser,
@@ -130,8 +137,12 @@ export const callSuccessedUpate = (touser, topic, duration, link)=>{
     })
 
 }
+export const initiateSend = ()=>(dispatch)=>{
+    dispatch({
+        type:INITIATE_SEND
+    })
+}
 export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
-    console.log("got the request")
     var token = JSON.parse(localStorage.getItem('token'));
     var data={
         touser:touser,
@@ -148,7 +159,6 @@ export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
         },
         data:data
     }).then(data=>{
-        console.log("got a possitive response")
     })
     .catch(err=>{
         console.log("error in saving the call fail details : ", err)

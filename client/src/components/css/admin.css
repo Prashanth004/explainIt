@@ -32,7 +32,7 @@ background-color: rgb(46, 46, 104);
 }
 .AdminDashboard{
     display:grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-columns: 16.66% 16.66% 19.66% 16.66% 16.66% 16.66%;
     width:80%;
     margin:auto;
     padding-top:50px;

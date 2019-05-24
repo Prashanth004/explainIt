@@ -46,10 +46,12 @@
     background-color: white;
     margin-top:10px;
     text-align: center;
-    border-radius:6.5px;
+    border-radius:5px;
     border-style:solid;
-    border-width:0.8px;
-    border-color:#b6b4b4;
+    border-width:0.5px;
+    border-color:rgba(51, 51, 51, 0.164);
+    box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
+
   }
   .navBar{
     background-color:white;
@@ -480,12 +482,16 @@ color:rgba(51, 51, 51, 0.609);
 
       background-color :white;
       /* margin-top:20px; */
-      border-radius:3.5px;
-      border-style:solid;
-      border-width:0.5px;
-      border-color: rgba(128, 125, 125, 0.171);
-      box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
+      border-radius:2px;
+      border-bottom-style:solid;
+      border-bottom-width:0.5px;
+      border-bottom-color: rgba(8, 8, 32, 0.137);
+         box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
 
+  }
+  .issueCard:hover{
+    
+    background-color:  rgb(245,248,250)
   }
  
   .modalBody{
@@ -704,7 +710,7 @@ border-top-width:0.5px;
     }
       .cardWithDate{
        
-        margin-top:15px;
+        margin-top:0px;
         display: grid;
         grid-template-columns: 20% 80%
       }
@@ -771,8 +777,8 @@ border-top-width:0.5px;
       .cardWithDate{
         margin-left:-2%;
         display: grid;
-  grid-template-columns: 10% 90%;
-        margin-top:30px;
+  grid-template-columns: 12% 88%;
+        margin-top:15px;
       }
     
     }

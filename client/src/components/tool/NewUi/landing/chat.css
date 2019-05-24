@@ -1,0 +1,79 @@
+.talk-bubble {
+    margin: 10px;
+    padding:10px;
+  position: relative;
+	width: 100%;
+	min-height: 70px;
+    background-color: white;
+       box-shadow: 0px 0px 20px 0.5px rgba(54, 54, 54, 0.116);
+
+}
+.round{
+    border-radius: 40px;
+      -webkit-border-radius: 40px;
+      -moz-border-radius: 40px;
+  
+  }
+  .tri-right.right-in:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: -15px;
+  top: 25px;
+	bottom: auto;
+	border: 12px solid;
+	border-color: white transparent transparent white;
+}
+.tri-right.border.right-top:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: -40px;
+  top: -8px;
+	bottom: auto;
+	border: 32px solid;
+	border-color: #666 transparent transparent transparent;
+}
+.tri-right.border.left-in:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: -15px;
+	right: auto;
+  top: 30px;
+	bottom: auto;
+	border: 20px solid;
+	border-color: #666 #666 transparent transparent;
+}
+.tri-right.left-in:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left:-15px;
+	right: auto;
+  top: 32px;
+	bottom: auto;
+	border: 12px solid;
+	border-color: white white transparent transparent;
+}
+.rightChat{
+    display:grid;
+    grid-template-columns: 75% 25%
+}
+.leftChat{
+    display:grid;
+    grid-template-columns: 15% 80% 
+}
+.avatarPic{
+    width:80px;
+    height:80px;
+    margin:auto;
+    border-radius:50%
+}
+

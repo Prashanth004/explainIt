@@ -1,5 +1,7 @@
 
-
+.floaterContainerTans{
+  background-color:rgba(255, 255, 255, 0);
+}
 .screenShareFloat .tooltiptextChrome{
     visibility: hidden;
     background-color: white;
@@ -24,23 +26,28 @@
   .screenShareFloat:hover .tooltiptextChrome {
     visibility: visible;
   } 
-  .callImageDivAnwserMain{
+  .callImageDivAnwserMainRecieve{
+    width:200px;
     background-color: rgb(51, 39, 58);
     border-radius: 25px;
     padding:5px;
-    position:fixed;
-    width:155px;
-    bottom:25px;
-    /* right:5px; */
-   right:25px;;
+    position: fixed;
+    bottom:5px;
+    right:5px;
    display:grid;
   grid-template-columns: 33.333% 33.333% 33.333%; 
   }
-  .callImageDivAnwserMain:hover{
-    cursor: move;
-   
+ 
+  .callImageDivAnwserMain{
+    width:95%;
+    background-color: rgb(51, 39, 58);
+    border-radius: 25px;
+    padding:5px;
+   right:25px;
+   display:grid;
+  grid-template-columns: 33.333% 33.333% 33.333%; 
   }
-  
+
   .img__overlay {
     padding:20px;
     border-style:none;
@@ -167,5 +174,7 @@
   }
 
   @media (min-width: 700px) {
-    
+    .callImageDivAnwserMain{
+      width:55%;
+    }
   }

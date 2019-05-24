@@ -192,7 +192,9 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
     })
 }
 export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion,issueIdFrmCpm,isPublic)=> (dispatch) =>{
-  
+    var file = new File([audioData], 'filename.webm', {
+        type: 'video/webm'
+    });
    var issueID
    var token = JSON.parse(localStorage.getItem('token'))
     if(isquestion === "false"){
@@ -211,7 +213,7 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
     var fd = new FormData();
     fd.append('imageData', imgData);
     fd.append('projectName', projectName);
-    fd.append('audioData', audioData);
+    fd.append('audioData', file);
     fd.append('issueID',issueID);
     fd.append('textExplain',textExplain);
     fd.append('isquestion',isquestion);
@@ -279,11 +281,12 @@ export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
             console.log("error in fetch user data : ",err)
         })
 
-       dispatch({
-           type:UPDATE_ANSWER_WITH_IMAGE,
-           payload:projects
-       })
+    
     }
+    dispatch({
+        type:UPDATE_ANSWER_WITH_IMAGE,
+        payload:projects
+    })
 }
 
 export const deleteProjects =(issueId)=>(dispatch)=>{

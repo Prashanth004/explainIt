@@ -21,7 +21,8 @@ const conf = {
     peopleDisplayLength:5,
     null:"null",
     // EXTENSION_ID:"bpclgbfkeejifflggonjhmpeehdpocji",
-    EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
+    // EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
+    EXTENSION_ID:"egfmgeokjijeefalgllckhldjgjkgenc",
     EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
     SECRET : "thebookmaneisawesomeiguess",
     LINK_TO_CALL: "linkTocall",
@@ -73,10 +74,20 @@ const conf = {
         "10": "Oct",
         "11": "Nov",
         "12": "Dec"
-    }
-
-
-
-    
+    },
+    START_CALL:"startCall",
+    GET_SOURCE_ID_AUDIO_TAB:"audio-plus-tab",
+    END_CALL_FROM_EXTENSION:"endCallFrmExtension",
+    END_CALL_FROM_FLOATER:"endCallFrmFloater",
+    END_CALL_PEER_FROM_EXTNESION:"endCallPeerFromExtension",
+    ADD_EXTRA_MIUTE_TO_EXTENSION:"addExtraTimeToExtension",
+    ADD_EXTRA_TIME_TO_FLOATER:"addExtraTimeToFloater",
+    SHARE_MY_SCREEN_FROM_FLOATER:"shareMyScreenFromFloater",
+    SHARE_MYSCREEN_FROM_EXTENSION:"shareMyScreenFromExtension",
+    FULL_SCREEN_RECORD:"fullScreenRecord",
+    FULL_SCREEN_SHARE:"fullScreenShare",
+    END_RECORD_FROM_FLOATER:"endRecordFromFloater",
+    END_RECORD_FROM_EXTENSION:"endRecordFromExtension",
+    END_RECORD_TIMEOUT : "endRecordTimeOut"
 }
 export default conf

@@ -13,11 +13,9 @@ import { showCanvas, hideCanvas } from '../../../actions/canvasAction'
 import { Button } from 'reactstrap';
 import TimerBar from './TimerBar'
 import browser from 'browser-detect';
-
 import { sendMessage } from '../../../actions/messageAction';
 import {
     fullStartedRecording,
-    
     fullStopedRecording, discardAfterRecord
 } from '../../../actions/toolActions'
 import { connect } from 'react-redux';
@@ -58,10 +56,19 @@ class FullScreenRecorder extends Component {
         this.toggleCanvas = this.toggleCanvas.bind(this);
         this.sendMessageLocal = this.sendMessageLocal.bind(this);
         this.sendButtonClick = this.sendButtonClick.bind(this)
-
     }
     startBar() {
-
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        const callStart = {
+            type:config.START_CALL,
+            data:{timer:this.props.timeAloted,
+            action:config.FULL_SCREEN_RECORD}
+        }
+        if (this.props.extSource !== null) {
+            console.log("posting start call from web application")
+            source.postMessage(callStart, origin);
+        }
         var timeAloted = this.props.timeAloted * 60 * 16
         var progressbar = document.querySelector('#pbar');
         var progresDiv = document.querySelector(".progresDiv")
@@ -82,8 +89,8 @@ class FullScreenRecorder extends Component {
         var self = this;
         var constraints = null;
         var sourceId = this.props.extSourceId;
-        var ua = window.detect.parse(navigator.userAgent);
-        if (ua.browser.family === "Chrome") {
+        const result = browser();
+        if (result.name === "chrome") {
             console.log("this is me")
             constraints = {
                 video: {
@@ -98,7 +105,7 @@ class FullScreenRecorder extends Component {
                 }
             };
         }
-        else if (ua.browser.family === "Firefox") {
+        if (result.name === "firefox") {
             constraints = {
                 video: {
                     mediaSource: "screen",
@@ -113,13 +120,16 @@ class FullScreenRecorder extends Component {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
                 self.startBar()
                 var finalStream = new MediaStream();
-                window.getTracks(audioStream, 'audio').forEach(function (track) {
-                    finalStream.addTrack(track);
-                });
+                var videoTracks = screenStream.getVideoTracks();
+                    videoTracks.forEach(function(track) {
+                        finalStream.addTrack(track);
+                    });
 
-                window.getTracks(screenStream, 'video').forEach(function (track) {
-                    finalStream.addTrack(track);
-                });
+                var audioTracks = audioStream.getAudioTracks();
+                    audioTracks.forEach(function(track) {
+                        finalStream.addTrack(track);
+                    });
+
                 var recorder1 = RecordRTC(finalStream, {
                     type: 'video'
                 });
@@ -149,12 +159,16 @@ class FullScreenRecorder extends Component {
     componentDidMount() {
         var self = this
         function postMessageHandler(event) {
-            if (event.data.sourceId !== undefined) {
-
+            if(event.data.type){
+                if(event.data.type === config.END_RECORD_FROM_EXTENSION){
+                    self.recordScreenStop()
+                }
+            }
+             else if(event.data.sourceId !== undefined) {
                 self.props.saveSourceId(event.data.sourceId)
                 self.startRecoding()
             }
-
+          
         }
         if (window.addEventListener) {
             window.addEventListener("message", postMessageHandler, false);
@@ -175,6 +189,15 @@ class FullScreenRecorder extends Component {
 
     renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
+            var source = this.props.extSource
+            var origin = this.props.extOrigin
+            const END_RECORD_TIME_END = {
+                type:config.END_RECORD_TIMEOUT
+            }
+            if (this.props.extSource !== null) {
+                console.log("posting from webpage")
+                source.postMessage(END_RECORD_TIME_END, origin);
+            }
             this.recordScreenStop()
             return (<Dummy></Dummy>)
 
@@ -190,11 +213,15 @@ class FullScreenRecorder extends Component {
     receiveMessage() {
         var mainBtn = document.querySelector('.mainBtn');
         mainBtn.style.backgroundColor = "rgb(133, 39, 39)";
-        this.convey.innerText = "Stop"
+        this.convey.style.display = "none"
         var source = this.props.extSource
         var origin = this.props.extOrigin
+        const GET_SOURCE_ID = {
+            type:config.GET_SOURCE_ID_AUDIO_TAB
+        }
         if (this.props.extSource !== null) {
-            source.postMessage('audio-plus-tab', origin);
+            console.log("posting from webpage")
+            source.postMessage(GET_SOURCE_ID, origin);
         }
     }
 
@@ -203,8 +230,10 @@ class FullScreenRecorder extends Component {
             this.recordScreenStop()
         }
         else {
-
+            const result = browser();
+            if (result.name === "chrome") 
             this.receiveMessage()
+            else
             this.startRecoding()
 
         }

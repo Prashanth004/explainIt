@@ -6,6 +6,8 @@ var config = require('../config/keys');
 var nodemailer = require('nodemailer');
 var promise = require('bluebird');
 var key = require('../config/keys');
+var Twitter = require('twitter');
+
 
 require('../config/passport')(passport)
 var options = {
@@ -18,6 +20,12 @@ var options = {
     , max: 10000
     , integer: true
 }
+const client = new Twitter({
+    consumer_key: 'Auz3a4BeVAVKRcO1ZVvRvbJDa',
+    consumer_secret: 'FDBIlsYilBeoAi2vZyZubM0qFEPtJeaPoPVQ6ki2g2M9xqTTiA',
+    access_token_key: '1090895508699176960-dwE2I31URS2FFnctXJmcWzL75Des6o',
+    access_token_secret: 'LCEHpUBTU4yxMY5YYJxPKI8A6eVqoIJehImLYByU9HhB1'
+  });
 
 
 var createToken = function (auth) {
@@ -28,6 +36,60 @@ var createToken = function (auth) {
             expiresIn: 8 * 7 * 24 * 60 * 60 * 1000
         });
 };
+
+
+
+exports.onBoardUser = function (req,res){
+    var params = {
+        "screen_name":req.body.twitterhandler
+     }
+     console.log("req.body.twitterhandler : ",req.body.twitterhandler)
+      client.get('users/show.json', params, function(error,body ,response){
+         if(error!==null){
+             console.log("error : ",error)
+            res.status(200).send({
+                success:0
+            })
+         }  
+         else{
+            console.log(" no error : ",body)
+            var newProfilePic = body.profile_image_url_https.replace("_normal","");
+            var currentdate = new Date();
+            var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                + (currentdate.getMonth() + 1) + "/"
+                + currentdate.getFullYear() + " @ "
+                + currentdate.getHours() + ":"
+                + currentdate.getMinutes() + ":"
+                + currentdate.getSeconds();
+            res.status(200).send({
+                success:1
+            })
+            database.db.oneOrNone('select * from users where twitterhandle = $1', req.body.twitterhandler)
+            .then(function (data) {
+                if (!data) {
+                    database.db.none('insert into users(username,twitterhandle, password, profilepic,date, payment, id,activation)' +
+                        'values(${name},${twitterhandle},${password},${profilepic},${date},${payment},${id},${activation})',
+                        {
+                            id:body.id_str,
+                            twitterhandle:req.body.twitterhandler,
+                            password:body.id_str,
+                            profilepic : newProfilePic,
+                            name: body.name,
+                            payment:0,
+                            activation:0,
+                            date:datetime
+                        }
+                    ).then(data=>{
+                    })
+                    .catch(error=>{
+                    })
+                }
+            })
+            .catch(err=>{
+            })
+        }
+})
+}
 
 
 exports.updateProfile = function (req, res) {
@@ -58,17 +120,14 @@ exports.updateProfile = function (req, res) {
                     }
                 })
                 .catch(err => {
-                    console.log("error : ", err)
                     res.status(200).send({
                         success: 1,
                         data: req.user
                     })
                 })
 
-
         })
         .catch(error => {
-            console.error("error : ", error)
             res.status(500).send({
                 sussecc: 0,
                 error: error

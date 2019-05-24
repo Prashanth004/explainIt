@@ -5,7 +5,7 @@ import { MdCallEnd,MdCall } from "react-icons/md";
 import Activity from './Activies.js/indexActivity'
 import DisplatCreated from './DisplayCreated';
 import {cancelSuccess} from '../../../actions/issueActions'
-import Inbox from './Inbox';
+import Inboxfeed from './Inboxfeed';
 import Profile from './Profile'
 import { getProfileDetails } from '../../../actions/profileAction';
 import {getAllMessages} from '../../../actions/messageAction'
@@ -21,7 +21,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import { Button, Modal, ModalBody } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
+import { SCREEN_SHARE, SCREEN_RECORD,INBOX_FEED, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
 import CopyToClipboard from '../CopytoClipboard'
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
@@ -80,7 +80,8 @@ class NewHome extends Component {
         this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
         this.recordFullScreen = this.recordFullScreen.bind(this);
         this.toggleInbox =this.toggleInbox.bind(this);
-        this.saveVideoData = this.saveVideoData.bind(this)
+        this.saveVideoData = this.saveVideoData.bind(this);
+        this.showInbox = this.showInbox.bind(this);
     }
     toggleDisplayLink() {
         this.setState({
@@ -170,7 +171,6 @@ class NewHome extends Component {
         })
         socket.on(config.NEW_MESSAGE,data=>{
            if(data.touser === (this.props.userId)){
-               
                 this.props.getTotalUnread();
                 this.props.getAllActivities()
             }
@@ -259,6 +259,23 @@ class NewHome extends Component {
                 displayDetails: true
             })
             this.props.displayFullScrenRecord()
+        }
+        else {
+            this.setState({
+                displayDetails: false
+            })
+        }
+    }
+    showInbox(){
+        this.setState({
+            showDetails:false,
+            displayLink:false
+        })
+        if (!this.state.displayDetails) {
+            this.setState({
+                displayDetails: true
+            })
+            this.props.displayInox()
         }
         else {
             this.setState({
@@ -468,8 +485,8 @@ class NewHome extends Component {
                 savefile={this.saveVideoData}
             />)
         }
-        else {
-            shareRecord = null
+        else{
+            shareRecord = (<Inboxfeed />)
         }
     }
         const activityDiv =(this.state.displayDetails)?(
@@ -611,6 +628,7 @@ class NewHome extends Component {
                         openDtailsTab={this.openDtailsTab}
                         userId={this.props.userId}
                         shareFullScreenShare={this.shareFullScreenShare}
+                        showInbox={this.showInbox}
                         recordFullScreen={this.recordFullScreen}
                         toggleDisplayLink={this.toggleDisplayLink}
                         toggleCreatedIssue={this.toggleCreatedIssue}

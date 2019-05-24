@@ -32,6 +32,9 @@ class DashboardEle extends Component {
                     <p><b>{user.username}</b></p>
                 </div>
                 <div>
+                    <p>{user.twitterhandle}</p>
+                </div>
+                <div>
                     <p>{user.email}</p>
                 </div>
                 <div>

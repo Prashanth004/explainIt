@@ -22,6 +22,7 @@ router.all('/', function(req, res, next) {
 // 
 
 //Basic login form authentication system
+router.post('/onboard',user.onBoardUser)
 router.get('/email/:email',user.getUserByEmail)
 router.post('/all', passport.authenticate('local', { session: false }), user.getAllUsers)
 router.get('/id/:id',user.getUserById)

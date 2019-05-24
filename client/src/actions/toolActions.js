@@ -1,5 +1,6 @@
 import {DISPLAY_SCREEN_SHARE,
     SCREEN_SHARE,
+    DISPLAY_INBOX,
     DISPLAY_SCREEN_RECORD,
     SCREEN_RECORD,
     START_SHARING,
@@ -43,6 +44,12 @@ export const displayFullScreShare=()=>(dispatch)=>{
         payload:FULL_SCREEN_SHARE
     })
 
+}
+export const displayInox= ()=>(dispatch)=>{
+    dispatch({
+        type:DISPLAY_INBOX,
+        payload:FULL_SCREEN_SHARE
+    })
 }
 
 export const displayFullScrenRecord=()=>(dispatch)=>{

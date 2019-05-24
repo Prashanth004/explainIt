@@ -116,8 +116,7 @@ class DisplayShare extends Component {
             'clientId': peerIdFrmPeer
         })
         socket.on(config.SEND_SHARABLE_LINK, data=>{
-            console.log("data: ",data)
-            console.log("self.state.peerIdFrmPeer",self.state.peerIdFrmPeer)
+          
             if(data.otherPeerId === self.state.peerIdFrmPeer){
                 self.setState({
                     sharablelink:data.sharableLink,
@@ -184,17 +183,16 @@ class DisplayShare extends Component {
         this.setState({
             socket: socket
         })
-        this.peerConnections(socket);
+        var peerIdFrmPeer = this.props.match.params.callerid;
+        this.setState({  peerIdFrmPeer: peerIdFrmPeer})
+        this.peerConnections(socket,peerIdFrmPeer);
         this.props.stillAuthenicated();
     }
 
-    peerConnections(socket) {
-        var peerIdFrmPeer = this.props.match.params.callerid
-
-        this.setState({
-            socket: socket,
-            peerIdFrmPeer: peerIdFrmPeer
-        });
+    peerConnections(socket,peerIdFrmPeer) {
+            this.setState({
+            socket: socket
+            });
 
         // var profilePic = (localStorage.getItem("profilePic"))
         // this.setState({
@@ -223,15 +221,9 @@ class DisplayShare extends Component {
             });
 
         });
-        // startConnection.then((conn) => {
-        //     setTimeout(() => {
 
-        //     }, 5000)
-        // });
-        var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         peer.on('call', function (call) {
-
-            getUserMedia({ audio: true }, function (audiostream) {
+            navigator.mediaDevices.getUserMedia({ audio: true}).then(function(audiostream) {
                 call.answer(audiostream)
                 call.on('stream', function (stream) {
                     socket.emit(config.CALL_ACK_MESSAGE, {
@@ -471,7 +463,7 @@ class DisplayShare extends Component {
     </div>
 
                      <Draggable>
-                    <div className="callImageDivAnwserMain">
+                    <div className="callImageDivAnwserMainRecieve">
                         <div className="decreasePadding">
                             <div className="callPage-recieverImageDiv">
                             <span>
@@ -545,9 +537,7 @@ class DisplayShare extends Component {
                 <img alt=" " className="callPage-recieverImage wait" src={this.state.picture}></img>
             </div>
         </div>) : (null)
-        return ((this.state.validCheckComplete) ? (
-            (this.state.isTokenValid) ?
-                (<div>
+        return (<div>
                     {precallActivity}
                     <div className="screenShareDiv">
                         {ShareElement}
@@ -557,14 +547,17 @@ class DisplayShare extends Component {
                         </div>
                     </div>
                 </div>)
-                : (<div className="callImageDiv">
-                    <h2>The sharable link is expired</h2>
-                    <h3>Please check with the caller</h3>
-                </div>)
+                // ((this.state.validCheckComplete) ? (
+        //     (this.state.isTokenValid) ?
 
-        ) : ((<div className="callImageDiv">
-            <h2>Testing Link Validity...</h2>
-        </div>)))
+        //         : (<div className="callImageDiv">
+        //             <h2>The sharable link is expired</h2>
+        //             <h3>Please check with the caller</h3>
+        //         </div>)
+
+        // ) : ((<div className="callImageDiv">
+        //     <h2>Testing Link Validity...</h2>
+        // </div>)))
     }
 }
 DisplayShare.PropType = {

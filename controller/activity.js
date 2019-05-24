@@ -14,6 +14,7 @@ exports.addActivity = (req,res)=>{
     duration:req.body.duration,
     unread:unreadDefault
 }).then(data=>{
+    
     res.io.emit(config.NEW_MESSAGE, {
         "touser": req.body.touser
     })

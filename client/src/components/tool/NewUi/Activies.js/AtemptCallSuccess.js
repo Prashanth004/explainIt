@@ -49,7 +49,7 @@ export default class componentName extends Component {
                     </div>
                     <div style={{ textAlign: "left" }}>
                         <p>You were in call with <b>@{this.state.userName}</b> for the topic <b>{this.props.activity.subject}</b> for <b>{Math.floor(timetaken)} minutes and
-             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>. Link to access the screen share : </p>
+             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>.<br/> Link to access the screen share : </p>
                         <CopyToClipboard sharablelink={this.props.activity.link} />
 
                     </div>

@@ -3,15 +3,29 @@
   /* background-color:#f6fdff; */
   /* background-clip: #fcf8ff; */
   /* background-color: white; */
-  background-color: rgb(155, 155, 155);
-  background-color: #fafafa;
+  /* background-color: rgb(155, 155, 155); */
+  background-color: rgb(230,236,240);
+  /* background-color: rgb(251,251,251); */
+  /* background-color:rgb(230,236,240); */
+  /* background-color: #2b8b8f; */
+  /* background-color: rgb(255,138,0); */
+  /* background-color:rgb(0,25,53); */
   /* font-weight:  */
 
 
   /* font-family: "Helvetica"; */
   height: '100vh';
 }
-
+p{
+  /* color:#333; */
+  font-size: 14px;
+  /* font-weight: bold; */
+}
+span{
+  color:#333;
+  font-size: 14px;
+  /* font-weight: bold; */
+}
 .mainContainer{
   min-height:100vh;
 }
@@ -49,20 +63,22 @@ outline-offset: 0px;
 outline-style: none}
 
 .buttonLight{
-  border-style: solid;
+  border-style: none;
   border-width:0.5px;
-  background-color:rgb(252, 252, 247);
-  font-size: 15px;
-  font-weight: 400;
-  height:27px;
+  /* background-color:rgb(24, 141, 214); */
+  background-color: #2b8b8f;
+  font-size: 13px;
+
+  font-weight: 600;
+  height:32px;
   width:auto;
-  padding: 0px 10px 0px 10px;
+  padding: 0px 20px 0px 20px;
   /* border-color:rgb(153,153,153); */
   border-color:black;
-  color:rgb(102, 102, 102);
+  color:white;
   outline:none;
   outline-style: none;
-  border-radius:3px;
+  border-radius:15px;
   margin:5px;
   /* background-color:white; */
 }
@@ -70,8 +86,7 @@ outline-style: none}
   outline:0px;
 }
 .buttonLight:hover{
-  color:black;
-  border-color:black;
+  background-color: #34a9ad;
 }
 
 a[href], input[type='submit'], input[type='image'], label[for],span, select, button, .pointer {
@@ -90,23 +105,23 @@ audio{
 
 .buttonDark{
   outline:25px;
-  border-style: none;
-  padding: 0px 12px 0px 12px;
-  background-color:wihte;
-  border-width:0.5px;
-  font-size: 13px;
+  border-style: solid;
+  padding: 0px 20px 0px 20px;
+  background-color:white;
+  border-width:1px;
+  font-size: 15px;
+  font-weight:bold;
   margin-left:2px;
   margin-right:2px;
 
-  height:29px;
+  height:32px;
   width:auto;
   outline-style: solid;
   outline: 0;
-  border-color:#929292;
-color:white;
+  border-color: #2b8b8f; ;
+  color:#2b8b8f; ;
 
-  border-radius:3px;
-  background-color: #2b8b8f; 
+  border-radius:15px;
   /* background-color: #34a4a8; */
 
   /* background-color: rgb(205, 243, 224); */
@@ -117,7 +132,7 @@ color:white;
   outline:0px;
 }
 .buttonDark:hover{
-background-color: #247679;
+background-color: white;
 }
 
 

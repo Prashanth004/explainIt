@@ -4,6 +4,7 @@ import {CALL_DETAILS_ACCEPT,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,
     BASIC_INFO_OF_CALL,
+    INITIATE_SEND,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     INCREASE_CALL_BY_MINUTE,
@@ -26,12 +27,12 @@ const initialState={
     noOfIncreaseInTime:0,
     currentTimeLeft : 3,
     noOfMinutes:3,
-    currentTimeLeft : 3,
     topicOfTheCall:"",
     peerId:null,
     touser:null,
     gotAllActivities:false,
     activities:[],
+    sendinitiated:false,
     buttonClassName:"buttonLight"
 }
 
@@ -49,6 +50,11 @@ export default function(state= initialState, action){
             gotAllActivities:true,
             activities:action.payload
         }
+        case INITIATE_SEND:
+        return{
+            ...state,
+            sendinitiated:true
+        }
         case RESET_CALL_ACTIONS:
         return{
             ...state,
@@ -59,11 +65,11 @@ export default function(state= initialState, action){
             userName:null,
             email:null,
             id:null,
+            sendinitiated:false,
             initialTime:3,
             noOfIncreaseInTime:0,
             currentTimeLeft : 3,
             noOfMinutes:3,
-            currentTimeLeft : 3
         }
         case GET_ALL_ACTIVITES_FAILED:
         return{
@@ -101,7 +107,7 @@ export default function(state= initialState, action){
         case UPATE_CURRENT_TIME_TO_DISPLAY:
         return{
             ...state,
-            noOfMinutes:state.currentTimeLeft
+            noOfMinutes:action.payload
         }
         case UPDATE_CURRENT_TIME:
         return{

@@ -50,6 +50,23 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(helmet())
+app.use(helmet({
+  frameguard: false
+}))
+app.use(helmet.noCache())
+app.use(helmet.featurePolicy({
+  features: {
+    fullscreen: ["'self'"],
+    vibrate: ["'none'"],
+    payment: ['example.com'],
+    syncXhr: ["'none'"]
+  }
+}))
+// app.use(expectCt({
+//   enforce: true,
+//   maxAge: 123
+// }))
+app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
 app.use(cors());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

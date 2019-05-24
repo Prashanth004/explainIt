@@ -1,0 +1,106 @@
+.landingMainContain{
+    min-height:100vh;
+    margin-top:-5px;
+    padding: 0px 5% 0px 5%;
+    background-color:rgb(255,254,252);
+    text-align: center;
+}
+
+.logoEmail{
+    width:20px;
+    height:20px;
+    /* margin:auto;
+    margin-top:180px; */
+}
+.questionLand{
+    font-size:35px;
+    font-weight:bold;
+    color:black;
+
+}
+.roadMapDiv{
+    display: grid;
+    text-align: center;
+    /* margin-top: */
+    /* grid-template-columns: 28% 28% 28%; */
+    /* grid-column-gap: 40px; */
+    /* text-align: justify */
+}
+.divisionImage{
+    width:150px;
+    height:150px;
+    margin:auto;
+    /* height:200px; */
+    text-align: center;
+    /* background-color: blue; */
+
+}
+.twiCom{
+    font-size: 17px;
+    font-weight:600
+}
+.twiHandleInput{
+    border-style:none;
+    border-bottom-style:solid;
+    border-bottom-width:0.8px;
+    border-bottom-color:rgba(0, 0, 0, 0.452);
+    width:120px;
+}
+.videoContainerDemo{
+    width:95%;
+    margin:auto;
+    height:auto;
+    border-radius:5px;
+    /* margin:40px; */
+    box-shadow: 0px 0px 20px 2px rgba(54, 54, 54, 0.185);
+}
+.fistDivision{
+    text-align: center;
+    
+}
+.partOfGrid{
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:5px;
+    box-shadow: 0px 0px 20px 2px rgba(54, 54, 54, 0.185);
+ 
+}
+.answerDiv{
+    text-align: center
+}
+.answerLand{
+    color:rgb(114, 113, 113);
+    text-align: justify;
+    font-size:17px;
+    
+
+}
+.footerDiv{
+    /* background-color: #eeee; */
+    padding: 0px 20px 0px 20px;
+    box-shadow: 0px 0px 20px 2px rgba(54, 54, 54, 0.185);
+
+}
+@media (min-width: 700px) {
+    .landingMainContain{
+        min-height:100vh;
+        margin-top:-5px;
+        padding: 0px 15% 0px 15%;
+}
+.fistDivision{
+    display:Grid;
+    grid-template-columns: 50% 50%;
+     grid-column-gap: 40px;
+}
+.partOfGrid{
+    margin-bottom:0px;
+}
+.answerLand{
+    
+    font-size:20px;
+}
+.questionLand{
+    font-size:45px;
+}
+}
+

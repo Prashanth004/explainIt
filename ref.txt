@@ -18,6 +18,9 @@ https://developer.twitter.com/en/docs/basics/authentication/guides/authorizing-a
 psql dbname username
 psql toolArchi bookmane
 
+for letsencrypt kets and cret.pem
+/etc/letsencrypt/live/explain.bookmane.in
+
 pg_dump -U bookmane -d toolArchi > dump.sql
 
 
