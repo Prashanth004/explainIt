@@ -48,6 +48,9 @@ export default (state=initialState, action)=>{
                 doneFetching:false,
                 twitterHandle:null ,
                 tweeetSent:false, 
+                name:null,
+                twitterHandles:[],
+                fetchHanldesSuggest : false,
             }
         }
         case SEND_TWEETS:

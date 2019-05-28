@@ -6,7 +6,7 @@ import '../../css/emailvarify.css';
 import OTP from 'otp-client';
 import ConfirmEmail from './confrimEmail'
 import config from '../../../config/config';
-import {varifyActivation,activateProfile,resendOtp, sendOtp} from '../../../actions/emailAction'
+import {varifyEmail,activateProfile,resendOtp, sendOtp} from '../../../actions/emailAction'
 
 class EmailVarify extends Component {
   constructor(props){
@@ -32,7 +32,7 @@ class EmailVarify extends Component {
     this.confirmedEmail = this.confirmedEmail.bind(this);
   }
   componentWillMount(){
-    this.props.varifyActivation()
+    this.props.varifyEmail()
   }
  onEmailChange(e){
      this.setState({
@@ -152,7 +152,7 @@ class EmailVarify extends Component {
 
 
     return (this.props.doneVarification)?((this.props.isVarified || this.props.profileActivated)?(
-        <Redirect to={{ pathname: './' }} />
+        <Redirect to={{ pathname: '../application' }} />
     ):(
         <div className="emailVarify">
         <div className="emailboxCotainer">
@@ -189,6 +189,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, { 
-    varifyActivation,sendOtp,activateProfile,
+    varifyEmail,sendOtp,activateProfile,
     resendOtp
 })(EmailVarify)

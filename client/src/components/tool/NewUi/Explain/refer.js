@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {clickAction,changeTwiiterHandle} from '../../../../actions/landingAction';
 import {getProfileByTwitterHandle} from '../../../../actions/visitProfileAction';
-import { Redirect} from 'react-router-dom';
+import TweetToRefer from './tweetToRefer'
 
  
 const landinForm = (props) => {
+  
     const clickFunction = ()=>{
         if(props.twitterHandleValue.includes("@"))
         {
@@ -26,7 +27,7 @@ const landinForm = (props) => {
                 (null)):
             (null)
   
-    return (!props.clicked) ? (
+    return (!props.clicked || props.inValidTwitterHandle) ? (
         <div>
             <br />
             <h6>Enter your twitter handle</h6>
@@ -40,19 +41,7 @@ const landinForm = (props) => {
             <br />
             <br />
         </div>
-    ) : (!props.isPresent?(
-            <div>
-                <br />
-                <h5>Thank you!!</h5>
-                <br />
-                <h5>We'l get back to you once we are ready ! </h5>
-                <br />
-                <br />
-                <br />
-            </div>
-        ):((<Redirect to={(props.twitterHandleValue.includes("@"))?
-            ({pathname: './signin/'+props.twitterHandleValue }):
-            ({pathname: './signin/@'+props.twitterHandleValue })} />) ))
+    ) : (<TweetToRefer questionProject={props.questionProject}/>)
 }
 
 const mapStateToProps = function(state) {

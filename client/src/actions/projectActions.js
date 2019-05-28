@@ -146,38 +146,33 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
             "Authorization": token,
         }
     }).then(response=>{
+        
+        var promises = [];
         if(response.status === 200){
             allProjects = response.data.data
-
-             questProject =  allProjects.find(preojects=> preojects.isquestion ==="true");
-             answerProject = allProjects.filter(project => project.isquestion !=="true")
              var getEmails = new Promise(function(resolve, reject){
-             answerProject.forEach(function(projects, index){
-                axios({
-                    method:'get',
-                    url:config.base_dir+'/api/users/email/'+projects.email,
-                }).then(response=>{
+                allProjects.forEach(function(projects, index){
+                promises.push(axios.get(config.base_dir+'/api/users/email/'+projects.email))
+             })
+             axios.all(promises).then(function(results) {
+                results.forEach(function(response, index) {
+                    console.log("response : ",response)
                     if(response.status===200){
-                        const newTestJson = JSON.parse(JSON.stringify(answerProject));
-                        newTestJson[index]['profilepic']=response.data.data.profilepic;
-                        newTestJson[index]['username']=response.data.data.username;
-                        answerProject =newTestJson
+                        const newTestJson = JSON.parse(JSON.stringify(allProjects));
+                                newTestJson[index]['profilepic']=response.data.data.profilepic;
+                                newTestJson[index]['username']=response.data.data.username;
+                                newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
+                                allProjects =newTestJson
                     }
-                    dispatch({
-                        type: FETCH_PROJ_BY_ISSUE,
-                        questProject: questProject,
-                        answerProject: answerProject
-                    })
-                }).catch(err=>{
-                    
-                    console.log("error in fetch user data : ",err)
+                })
+                questProject =  allProjects.find(preojects=> preojects.isquestion ==="true");
+                answerProject = allProjects.filter(project => project.isquestion !=="true")
+                dispatch({
+                    type: FETCH_PROJ_BY_ISSUE,
+                    questProject: questProject,
+                    answerProject: answerProject
                 })
              })
-             dispatch({
-                type: FETCH_PROJ_BY_ISSUE,
-                questProject: questProject,
-                answerProject: answerProject
-            })
             })
             getEmails.then(function(ansProj){
             })
@@ -265,28 +260,27 @@ export const clearAnswers = ()=>(dispatch)=>{
 }
 
 export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
-  
-    var key =0
-    for(var item in projects){
-        axios({
-            method:'get',
-            url:config.base_dir+'/api/users/email/'+projects[item].email,
-        }).then(response=>{
-            if(response.status===200){
-               projects[key]["profilepic"]=response.data.data.profilepic;
-               projects[key]["username"]=response.data.data.username;
-               key=key+1;
+    var promises = []
+    projects.forEach((project,index)=>{
+        promises.push(axios.get(config.base_dir+'/api/users/email/'+projects[index].email))
+    })
+    axios.all(promises).then(results=>{
+        results.forEach(function(response, index) {
+            if(response.staus === 200){
+                projects[index]["profilepic"]=response.data.data.profilepic;
+                projects[index]["username"]=response.data.data.username;
+                projects[index]["twitterhandle"]=response.data.data.twitterhandle
             }
-        }).catch(err=>{
-            console.log("error in fetch user data : ",err)
+        })
+        dispatch({
+            type:UPDATE_ANSWER_WITH_IMAGE,
+            payload:projects
         })
 
-    
-    }
-    dispatch({
-        type:UPDATE_ANSWER_WITH_IMAGE,
-        payload:projects
+    }).catch(err=>{
+        console.log("error in fetch user data : ",err)
     })
+
 }
 
 export const deleteProjects =(issueId)=>(dispatch)=>{

@@ -33,7 +33,7 @@ import config from '../../../config/config'
     }
        
       var images= (!this.props.showAllPeople)?(limitPeople.map((People,index)=>(
-                    <div id={this.props.issueid} key={this.props.projectid}  className="imagePeopleDiv">
+                    <div id={this.props.issueid} key={index+656}  className="imagePeopleDiv">
                     <span>
                             <img alt="people" id="imageOfPeople" src={People.profilepic} className="peopleImage"></img>
                             </span>

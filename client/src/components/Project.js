@@ -7,7 +7,7 @@ import './css/toggle.css';
 import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
-import ExplainPage from './tool/NewUi/ExplainPage';
+import ExplainPage from './tool/NewUi/Explain/ExplainPage';
 import {explainIssue} from '../actions/messageAction'
 import {clearAnswers, fetchProjectbyIssue} from '../actions/projectActions'
 import Navbar from './tool/NewUi/Navbar';
@@ -18,7 +18,10 @@ import ReactModal from 'react-modal';
 import { cancelAllMessageAction } from '../actions/messageAction';
 import { restAllToolValue } from "../actions/toolActions";
 import { resetValues } from '../actions/twitterApiAction';
+import {resetExplainAction} from '../actions/explainAction';
+import {resetLandingAction } from '../actions/landingAction'
 import { saveExtensionDetails } from "../actions/extensionAction";
+import axios from 'axios';
 
 class Project extends Component {
   constructor(props){
@@ -49,9 +52,12 @@ handleCloseModal() {
   this.props.cancelAllMessageAction();
   this.props.restAllToolValue();
   this.props.resetValues();
+  this.props.resetLandingAction();
+  this.props.resetExplainAction();
 }
   componentWillMount(){
       var issueId=this.props.match.params.projectid;
+     
       this.props.clearAnswers(issueId)
       this.props.fetchProjectbyIssue(issueId);
       this.setState({
@@ -142,6 +148,7 @@ handleCloseModal() {
                                     </span>
                                 </div>
                                 <ExplainPage
+                                   questionProject = {this.props.questionProject}
                                     handleCloseModal={this.handleCloseModal} />
                             </div>
                             {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
@@ -162,6 +169,7 @@ Project.PropType = {
   
 };
 const mapStateToProps = state => ({
+  questionProject: state.projects.questProject,
   isAauthenticated: state.auth.isAuthenticated,
   userId: state.auth.id,
 })
@@ -169,6 +177,8 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {clearAnswers,
   saveExtensionDetails, 
   cancelAllMessageAction,
+  resetExplainAction,
+  resetLandingAction,
   explainIssue,
   restAllToolValue,
   resetValues,

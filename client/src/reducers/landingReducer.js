@@ -1,5 +1,5 @@
 
-import {CLICKED_SUBMIT,CLICKED_SUBMIT_START, CHANGE_FORM_INPUT,INVALID_TWITTER_HANDLE} from '../actions/types'
+import {CLICKED_SUBMIT,RESET_LANDING_ACTION,CLICKED_SUBMIT_START, CHANGE_FORM_INPUT,INVALID_TWITTER_HANDLE} from '../actions/types'
 
 
 const initialState ={
@@ -36,6 +36,16 @@ export default function(state = initialState, action){
             ...state,
             doneCkecking:true,
             inValidTwitterHandle:true
+        }
+        
+        case RESET_LANDING_ACTION:
+        return{
+            ...state,
+            isClicked:false,
+            twitterHandleValue:"",
+            inValidTwitterHandle:false,
+            checkVAlididyStarted:false,
+            doneCkecking:false
         }
         default:
         return state;

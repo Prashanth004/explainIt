@@ -9,7 +9,7 @@ import PropType from 'prop-types';
 import { setIssueId } from '../../../actions/issueActions';
 import TwitterLogin from './TwitterLogin'
 import { FiX } from "react-icons/fi";
-import ExplainPage from './ExplainPage';
+import ExplainPage from './Explain/ExplainPage';
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction'

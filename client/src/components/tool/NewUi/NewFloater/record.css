@@ -12,8 +12,16 @@
     grid-template-columns: 50% 50%; 
   }
   .Share{
+      height:45px;
     display:grid;
   grid-template-columns: 33.333% 33.333% 33.333% 
+  }
+  .callPage-recieverImageFloat{
+margin-top:-62px;
+width:35px;
+height:35px;
+border-radius:50%;
+
   }
  
 .callPage-recieverImageDiv{
@@ -21,6 +29,7 @@
     width:35px;
     border-radius:50%;
     margin:auto;
+    /* margin-top:-25px; */
     text-align: center;
     box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
 

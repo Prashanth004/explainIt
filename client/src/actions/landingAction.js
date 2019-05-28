@@ -1,4 +1,4 @@
-import {CLICKED_SUBMIT,CLICKED_SUBMIT_START,INVALID_TWITTER_HANDLE,CHANGE_FORM_INPUT} from './types';
+import {CLICKED_SUBMIT,RESET_LANDING_ACTION,CLICKED_SUBMIT_START,INVALID_TWITTER_HANDLE,CHANGE_FORM_INPUT} from './types';
 import axios from 'axios'
 import config from '../config/config'
 
@@ -42,4 +42,9 @@ export const changeTwiiterHandle = (twitterHandle)=>(dispatch)=>{
         type:CHANGE_FORM_INPUT,
         payload:twitterHandle
     })
+}
+export const resetLandingAction = ()=>(dispatch)=>{
+    dispatch({
+        type:RESET_LANDING_ACTION,
+        })
 }

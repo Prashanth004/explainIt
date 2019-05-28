@@ -231,6 +231,8 @@ margin-top:10px;
 }
 .fullHome{
   min-height:100vh;
+  background-color: rgb(230,236,240);
+
 }
 .displayNumber{
   color:black;
@@ -575,8 +577,8 @@ border-top-width:0.5px;
 
   }
   .explainItBtn{
-    width:85px;
-   color:rgb(77, 76, 76);
+    width:105px;
+   color:white;
     float:right;
     font-size:13px;
     align-self: right;

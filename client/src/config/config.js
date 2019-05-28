@@ -88,6 +88,9 @@ const conf = {
     FULL_SCREEN_SHARE:"fullScreenShare",
     END_RECORD_FROM_FLOATER:"endRecordFromFloater",
     END_RECORD_FROM_EXTENSION:"endRecordFromExtension",
-    END_RECORD_TIMEOUT : "endRecordTimeOut"
+    END_RECORD_TIMEOUT : "endRecordTimeOut",
+    ENVIRONMENT:"test",
+    RECORD_SCREEEN_EXPLAIN:"recordScreenExpalin",
+    REFER_EXPLAIN:"referExplain"
 }
 export default conf

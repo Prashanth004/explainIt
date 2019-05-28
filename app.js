@@ -35,12 +35,6 @@ const connectionString = {
 
 var app = express();
 
-
-
-
-
-
-
 // for data base
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,24 +43,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(helmet())
-app.use(helmet({
-  frameguard: false
-}))
-app.use(helmet.noCache())
-app.use(helmet.featurePolicy({
-  features: {
-    fullscreen: ["'self'"],
-    vibrate: ["'none'"],
-    payment: ['example.com'],
-    syncXhr: ["'none'"]
-  }
-}))
-// app.use(expectCt({
-//   enforce: true,
-//   maxAge: 123
+// app.use(helmet())
+// app.use(helmet({
+//   frameguard: false
 // }))
-app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
+// app.use(helmet.noCache())
+// app.use(helmet.featurePolicy({
+//   features: {
+//     fullscreen: ["'self'"],
+//     vibrate: ["'none'"],
+//     payment: ['example.com'],
+//     syncXhr: ["'none'"]
+//   }
+// }))
+// // app.use(expectCt({
+// //   enforce: true,
+// //   maxAge: 123
+// // }))
+// app.use(helmet.referrerPolicy({ policy: 'same-origin' }))
 app.use(cors());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -84,14 +78,7 @@ var messageRouter = require('./routes/message')
 var tweetRouter = require('./routes/tweetAction')
 var adminRouter = require('./routes/admin')
 var activityRouter = require('./routes/activity')
-
-
-
-
-
-
-
-
+var referralRouter = require('./routes/referral')
 // app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -120,7 +107,8 @@ app.use('/api/project', projectRouter);
 app.use('/api/issues',issueRouter);
 app.use('/api/message',messageRouter);
 app.use('/api/tweetactions', tweetRouter);
-app.use('/api/activity',activityRouter)
+app.use('/api/activity',activityRouter);
+app.use('/api/referral',referralRouter)
 app.use("/public", express.static(__dirname + "/public"));
 //peerjs for screen sharing
 app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
@@ -213,7 +201,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-exports.db = db;
 exports.db = db;
 
 

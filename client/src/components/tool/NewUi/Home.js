@@ -21,7 +21,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import { Button, Modal, ModalBody } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import { SCREEN_SHARE, SCREEN_RECORD,INBOX_FEED, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
+import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
 import CopyToClipboard from '../CopytoClipboard'
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
@@ -643,7 +643,7 @@ class NewHome extends Component {
             profileCardElement = (<Content />)
         }
 
-        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to="/login" />) : (
+        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"}/>) : (
             <div className="fullHome">
                 <Navbar />
 

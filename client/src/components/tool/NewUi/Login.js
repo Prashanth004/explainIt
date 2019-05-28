@@ -3,6 +3,9 @@ import '../../css/NewSignin.css'
 import TwitterLogin from 'react-twitter-auth';
 import { Redirect} from 'react-router-dom';
 import config from '../../../config/config';
+import {varifyActivation} from '../../../actions/emailAction'
+import {getProfileByTwitterHandle} from '../../../actions/visitProfileAction'
+import {getRecpientId} from '../../../actions/twitterApiAction'
 import { signInWithGoogle, stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
@@ -26,7 +29,24 @@ class Login extends Component {
         window.open(url,'_self')
     }
     componentWillMount(){
+        var { twitterhandle } = this.props.match.params
+        if(twitterhandle.includes("@"))
+        {
+            this.props.getProfileByTwitterHandle(twitterhandle.replace("@",""));
+            this.props.getRecpientId(twitterhandle.replace("@",""));
+            this.props.varifyActivation(twitterhandle.replace("@",""))
+        }
+        else{
+            this.props.getProfileByTwitterHandle(twitterhandle);
+            this.props.getRecpientId(twitterhandle);
+            this.props.varifyActivation(twitterhandle)
+        }
         this.props.stillAuthenicated()
+       
+        // this.props.getProfileByTwitterHandle('cprashnth004');
+        // this.props.getRecpientId('cprashnth004');
+
+
     }
     twitterPressed(){
        
@@ -47,42 +67,82 @@ class Login extends Component {
     onFailed = (error) => {
         alert(error);
     };
-
+    
     render() {
-        let content = !this.props.isAuthenticated ?
-            ((this.state.istwitterPressed && !this.props.twitterLoginFailed)?
-            ( <div className="loginSection">
-            <div className="Logininfo">
-                <h4><b>Redirecting..</b></h4>
-            </div>
-            </div>):(<div className="ShapeImage">
-                {/* <div className="ShapeImage">
-                </div> */}
-                <div className="loginSection">
-                    <div className="Logininfo">
-                        <h3>
-                            <b>
-                            Making visual explanations quick and easy 
-                        </b>
-                        </h3>
-                        <br/>
-                        <h5>
-                            <b>
-                              
-                        </b>
-                        </h5>
-                        <br />
-                            <div onClick={this.twitterPressed} className="buttonDiv">
-                                <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
-                                    onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
-                                    requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />
-                            </div>
-                           
-                        
-                    </div>
-                </div>
-            </div>
-            )): (<Redirect to={{ pathname: './emailvarify' }} />) 
+        let content = this.props.doneFetching?(
+            (this.props.profilePresent)?(
+                                this.props.isPresent?(
+                                    this.props.isActivated?(
+
+                                    !this.props.isAuthenticated ?
+                                    ((this.state.istwitterPressed && !this.props.twitterLoginFailed)?
+                                    ( <div className="loginSection">
+                                    <div className="Logininfo">
+                                        <h4><b>Redirecting..</b></h4>
+                                    </div>
+                                    </div>):(
+                                    <div className="ShapeImage">
+                                    {/* <div className="ShapeImage">
+                                    </div> */}
+                                    <div className="loginSection">
+                                        <div className="Logininfo">
+                                        <h4> <b>Hi {this.props.visitUser}. Good to see you again!!</b></h4>
+                                        <br/>
+    
+                                            <br/>
+                                            <br />
+                                                <div onClick={this.twitterPressed} className="buttonDiv">
+                                                    <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
+                                                        onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
+                                                        requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                     )) : (<Redirect to={{ pathname: '../emailvarify' }} />) )
+                                     :( <div className="ShapeImage">
+                                       
+                                     <div className="loginSection">
+                                         <div className="Logininfo">
+                                         <h4><b> Hi {this.props.name},Good to see you again!!</b></h4>
+                                         <br/>
+                                         <h4>We appriciate your patience!</h4>
+                                            <br/>
+                                            <h4>We'l get back to you once we are ready</h4>
+                                         </div>
+                                         </div>
+                                         </div>
+                                     )
+                                    ):(
+                                        <div className="ShapeImage">
+                                       
+                                        <div className="loginSection">
+                                            <div className="Logininfo">
+                                            <h4> Hi {this.props.name},PLease visit our home page to get started!!</h4>
+                                            <br/>
+                                            <h4> <a href={config.react_url}>Click Here</a></h4>
+
+                                            </div>
+                                            </div>
+                                            </div>
+                                    )):(
+                                        <div className="loginSection">
+                                    <div className="Logininfo">
+                                    <h4> Not valid Twitter handle. Please try again</h4>
+                                    <br/>
+                                    </div>
+                                    </div>
+                                    )
+                                    ):(<div className="loginSection">
+                                    <div className="Logininfo">
+                                    <h4> Getting you ready. please wait</h4>
+                                    <br/>
+                                    </div>
+                                    </div>)
+
+
+          
+         
         return (
             <div>
                 {content}
@@ -97,11 +157,21 @@ Login.PropType = {
     twitterAuthFailure:PropType.func.isRequired,
     signInWithTwitter:PropType.func.isRequired,
     stillAuthenicated:PropType.func.isRequired,
+    varifyActivation:PropType.func.isRequired,
+    getRecpientId:PropType.func.isRequired,
+    getProfileByTwitterHandle:PropType.func.isRequired,
+    
 };
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     authAction :state.auth.authAction,
-    twitterLoginFailed:state.auth.twitterLoginFailed
+    twitterLoginFailed:state.auth.twitterLoginFailed,
+    visitUser:state.visitProfile.userName,
+    isPresent:state.visitProfile.isPresent,
+    profilePresent:state.twitterApi.profilePresent,
+    doneFetching:state.twitterApi.doneFetching,
+    name:state.twitterApi.name,
+    isActivated:state.email.isActivated
 })
-export default connect(mapStateToProps, { signInWithGoogle, stillAuthenicated, twitterAuthFailure, signInWithTwitter})(Login)
+export default connect(mapStateToProps, { varifyActivation,getRecpientId,getProfileByTwitterHandle,signInWithGoogle, stillAuthenicated, twitterAuthFailure, signInWithTwitter})(Login)
 

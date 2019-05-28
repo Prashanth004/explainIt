@@ -1,5 +1,4 @@
 import React from 'react'
-import Inbox from './Inbox'
 
 export default () => {
   return (

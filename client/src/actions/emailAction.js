@@ -3,6 +3,8 @@ import axios from 'axios'
 import {SEND_OTP,
     SEND_OTP_FAILED,
     VARIFY_ACTIVATED,
+    ACTIVATED_ACCOUNT,
+    NOT_ACTIVATED_ACCOUNT,
     ACTIVATED_PROFILE,
     VARIFY_ACTIVATED_FAILED,
     RE_SEND_OTP,
@@ -163,12 +165,42 @@ export const activateProfile=(email)=>(dispatch)=>{
     })
 
 }
+export const varifyActivation=(twitterHandle)=>(dispatch)=>{
+    axios({
+        method:'get',
+        url:config.base_dir+'/api/users/activationstatus/'+twitterHandle,
+    })
+    .then(response=>{
+        if(response.status===200||response.status===304){
+            if(response.data.success === 1)
+                dispatch({
+                    type:ACTIVATED_ACCOUNT,
+                    isvarified:response.data.success
+                })
+            else
+                dispatch({
+                    type:NOT_ACTIVATED_ACCOUNT, 
+                })
+        }
+        else{
+            dispatch({
+                type:NOT_ACTIVATED_ACCOUNT,
+            })
+        }
+    })
+    .catch(()=>{
+        dispatch({
+            type:NOT_ACTIVATED_ACCOUNT,
+        })
+    })
 
-export const varifyActivation=()=>(dispatch)=>{
+}
+
+export const varifyEmail=()=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
     axios({
         method:'get',
-        url:config.base_dir+'/api/users/activationstatus',
+        url:config.base_dir+'/api/users/emailStatus',
         headers:{
             "Authorization": token,
         }

@@ -16,11 +16,15 @@ import profileHoverReducer from './profileHoverReducer'
 import secondScreenShareReducer from './secondShareReducer'
 import emailReducer from './emailReducer';
 import adminReducer from './adminReducer';
-import landingReducer from './landingReducer'
+import landingReducer from './landingReducer';
+import explainReducer from './explainReducer';
+import referralReducer from './referral'
  
 export default combineReducers({
     email:emailReducer,
     auth : signinReducer,
+    explain:explainReducer,
+    referral:referralReducer,
     landing:landingReducer,
     issues: issueReducer,
     projects: projectReducer,

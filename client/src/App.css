@@ -2,9 +2,9 @@
   /* background-color:#fcf6ff; */
   /* background-color:#f6fdff; */
   /* background-clip: #fcf8ff; */
-  /* background-color: white; */
+  background-color: white;
   /* background-color: rgb(155, 155, 155); */
-  background-color: rgb(230,236,240);
+  /* background-color: rgb(230,236,240); */
   /* background-color: rgb(251,251,251); */
   /* background-color:rgb(230,236,240); */
   /* background-color: #2b8b8f; */
@@ -13,7 +13,7 @@
   /* font-weight:  */
 
 
-  /* font-family: "Helvetica"; */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: '100vh';
 }
 p{
@@ -22,7 +22,7 @@ p{
   /* font-weight: bold; */
 }
 span{
-  color:#333;
+  /* color:#333; */
   font-size: 14px;
   /* font-weight: bold; */
 }
@@ -50,7 +50,7 @@ div{
   margin-bottom:0px;
 }
 body{
- color:rgb(32, 32, 32);
+
  overflow: auto;
 font-family: "Frutiger Neue W02 Book ,Arial,Helvetica,sans-serif"
   

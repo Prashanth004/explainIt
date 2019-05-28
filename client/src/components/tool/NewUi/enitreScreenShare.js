@@ -346,18 +346,21 @@ class ScreenRecorder extends Component {
 
         this.props.stillAuthenicated();
         const result = browser();
-        if (result.name === "chrome") {
-            var img;
-            img = new Image();
-            img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
-            img.onload = function () {
-            };
-            img.onerror = function () {
-                self.setState({
-                    isInstalled: false
-                })
-            };
+        if(config.ENVIRONMENT!=="test"){
+            if (result.name === "chrome") {
+                var img;
+                img = new Image();
+                img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
+                img.onload = function () {
+                };
+                img.onerror = function () {
+                    self.setState({
+                        isInstalled: false
+                    })
+                };
+            }
         }
+      
 
         this.setState({
             socket: this.props.socket

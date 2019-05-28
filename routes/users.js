@@ -33,7 +33,8 @@ router.put('/onlinestatus',passport.authenticate('jwt', { session: false }),user
 router.post('/authenticate',user.authenticate);
 router.put('/deactivate',passport.authenticate('local', { session: false }), user.deactivate)
 router.put('/activate',passport.authenticate('local', { session: false }), user.activate)
-router.get('/activationstatus',passport.authenticate('jwt', { session: false }), user.getActivationStatus)
+router.get('/activationstatus/:twitterhandle', user.getActivationStatus);
+router.get('/emailStatus',passport.authenticate('jwt', { session: false }), user.getEmailStatus)
 router.put('/emailactivation', passport.authenticate('jwt', { session: false }), user.emailActivation)
 router.post('/sendotp',passport.authenticate('jwt', { session: false }),user.sendotp);
 router.post('/resendotp',passport.authenticate('jwt', { session: false }), user.resend); 

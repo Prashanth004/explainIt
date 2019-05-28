@@ -195,7 +195,6 @@ class FullScreenRecorder extends Component {
                 type:config.END_RECORD_TIMEOUT
             }
             if (this.props.extSource !== null) {
-                console.log("posting from webpage")
                 source.postMessage(END_RECORD_TIME_END, origin);
             }
             this.recordScreenStop()
@@ -300,6 +299,7 @@ class FullScreenRecorder extends Component {
     componentWillMount() {
         var self = this
         const result = browser();
+        if(config.ENVIRONMENT!=="test"){
         if (result.name === "chrome") {
 
             var img;
@@ -314,6 +314,7 @@ class FullScreenRecorder extends Component {
                 })
             };
         }
+    }
     }
     sendMessageLocal() {
         this.setState({

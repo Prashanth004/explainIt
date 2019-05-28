@@ -7,6 +7,14 @@
     margin-bottom:10px;
     text-align: center;
 }
+.optionBtnPlacement{
+    width:60%;
+    margin:auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    text-align: center;
+    /* background-color: blue; */
+}
 .shareTime{
     width:100%;
     margin:auto;

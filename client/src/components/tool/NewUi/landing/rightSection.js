@@ -4,11 +4,12 @@ import './landing.css'
 import Form from './form'
 export default () => {
   return (
-    <div className="righSection">
+    <div className="righSectionLand">
         <div className="onboardSection">
             <LogoContainer />
          <div className="onboardMessage">
-            <h5>Alright then, tell us if you are interested and if we can send an email to you to test out our app</h5>
+            <h6>Alright then, tell us if you are interested and if we can notify you to test out our app
+</h6>
             <br/>
             <Form />
          </div>

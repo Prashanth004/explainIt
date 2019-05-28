@@ -4,12 +4,13 @@ import ImagesOfExplainers from './DisplayExplained';
 import CopyToClipboard from '../CopytoClipboard'
 import config from '../../../config/config';
 import '../../css/toggle.css';
+import {resetExplainAction} from '../../../actions/explainAction'
 import { saveReplyEmailOption } from '../../../actions/emailAction'
 import axios from 'axios';
 import { explainIssue } from '../../../actions/messageAction'
 import EditReason from './EditReason'
 import ReactModal from 'react-modal';
-import ExplainPage from './ExplainPage';
+import ExplainPage from './Explain/ExplainPage';
 import { setIssueId } from '../../../actions/issueActions';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -20,6 +21,7 @@ import { openEditModal, closeEditModal } from '../../../actions/projectActions'
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction'
+import {resetLandingAction } from '../../../actions/landingAction'
 class issueCard extends Component {
     constructor(props) {
         super(props)
@@ -69,9 +71,9 @@ class issueCard extends Component {
     handleOpenModal(e) {
         if (this.props.isAauthenticated) {
             this.props.explainIssue()
-            console.log("settingIssueId : ", e.target.id)
             this.props.setIssueId(e.target.id)
             localStorage.setItem("issueId", e.target.id)
+            
             this.setState({ showModalExplain: true });
             this.props.saveReplyEmailOption(e.target.id, this.props.userid)
         }
@@ -85,12 +87,15 @@ class issueCard extends Component {
         })
     }
     handleCloseModal() {
-
         this.setState({ showModalExplain: false });
         this.setState({ showModalTwitterLogin: false });
         this.props.cancelAllMessageAction();
-        this.props.restAllToolValue();
         this.props.resetValues();
+        this.props.resetLandingAction();
+        this.props.resetExplainAction();
+        this.props.restAllToolValue();
+      
+       
     }
     changeVideo(e) {
         var clickedProj = this.state.answerProjects.find(proj => proj.projectid === e.target.id)
@@ -99,7 +104,6 @@ class issueCard extends Component {
                 this.videoExplain.src = clickedProj.videofilepath;
             }
         }
-
     }
     componentWillMount() {
         var self = this;
@@ -114,41 +118,41 @@ class issueCard extends Component {
         }).then((response) => {
             if (response.status === 200 || response.status === 304) {
                 var allProjects = response.data.data
+                var promises = []
 
                 if (allProjects.length !== 0) {
-                    allProjects.forEach(function (projects, index) {
-                        axios({
-                            method: 'get',
-                            url: config.base_dir + '/api/users/email/' + projects.email,
-                        }).then(response => {
-                            if (response.status === 200) {
-                                const newTestJson = JSON.parse(JSON.stringify(allProjects));
-                                newTestJson[index]['profilepic'] = response.data.data.profilepic;
-                                newTestJson[index]['username'] = response.data.data.username;
-                                newTestJson[index]['id'] = response.data.data.id
-                                newTestJson[index]['twitterhandle'] = response.data.data.twitterhandle
-                                allProjects = newTestJson
-                                var answerProject = allProjects.filter(project => project.isquestion !== "true")
-                                var questionProject = allProjects.filter(projects => projects.isquestion === 'true')
-                                self.setState({
-                                    answerProjects: answerProject,
-                                    DetailsOfPeople: answerProject,
-                                    questionProject: questionProject,
-                                    accessToDbDone: true
-                                })
-                                console.log("questionProject : ", questionProject)
+                    allProjects.forEach((projects,index)=>{
+                        promises.push(axios.get(config.base_dir + '/api/users/email/'+ allProjects[index].email))
+                    })
+
+                    axios.all(promises).then(results=>{
+                        results.forEach((response, index)=>{
+                            if(response.status === 200){
+                            
+                                allProjects[index]["profilepic"]=response.data.data.profilepic;
+                                allProjects[index]["username"]=response.data.data.username;
+                                allProjects[index]["twitterhandle"]=response.data.data.twitterhandle
+                                allProjects[index]['id'] = response.data.data.id
                             }
                         })
-                            .catch(err => {
-                                console.log("error : ", err)
-                            })
+                        var answerProject = allProjects.filter(project => project.isquestion !== "true")
+                        var questionProject = allProjects.filter(projects => projects.isquestion === 'true')
+                        self.setState({
+                            answerProjects: answerProject,
+                            DetailsOfPeople: answerProject,
+                            questionProject: questionProject,
+                            accessToDbDone: true
+                        })
+
+                    }).catch(err => {
+                        console.log("error : ", err)
                     })
                 }
 
             }
         })
             .catch(err => {
-                console.log("error while fetchinf projects : ", err)
+                console.log("error while fetching projects : ", err)
             })
 
     }
@@ -224,7 +228,7 @@ class issueCard extends Component {
                     </div>
 
                     <div className="explainIt">
-                        <button id={this.props.issue.issueid} className="buttonLight explainItBtn" onClick={this.handleOpenModal}>Explain it</button>
+                        <button id={this.props.issue.issueid} className="buttonLight explainItBtn" style={{color:"white"}} onClick={this.handleOpenModal}>Explain it</button>
                     </div>
                     <ReactModal
                         isOpen={this.props.isopenEditModal}
@@ -268,13 +272,14 @@ class issueCard extends Component {
                         className="ModalA"
                         overlayClassName="OverlayA">
                         <div >
-                            <div onclick={this.handleCloseModal} className="closeModalBtn">
+                            <div onClick={this.handleCloseModal} className="closeModalBtn">
                                 <span>
                                     <FiX className="closeIcon" onClick={this.handleCloseModal} />
                                 </span>
                             </div>
                             <ExplainPage
-                                handleCloseModal={this.handleCloseModal} />
+                                handleCloseModal={this.handleCloseModal}
+                                questionProject = {this.state.questionProject[0]} />
                         </div>
                         {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
                     </ReactModal>
@@ -318,9 +323,11 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     setIssueId,
+    resetLandingAction,
     cancelAllMessageAction,
     restAllToolValue,
     explainIssue,
+    resetExplainAction,
     saveReplyEmailOption,
     openEditModal,
     closeEditModal,

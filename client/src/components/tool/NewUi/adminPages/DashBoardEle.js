@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import config from '../../../../config/config'
 import {deactivateUser,activateUser} from '../../../../actions/adminAction'
 class DashboardEle extends Component {
     constructor(props) {
@@ -8,6 +9,7 @@ class DashboardEle extends Component {
         super(props)
         this.activateUser = this.activateUser.bind(this);
         this.deactivateUser = this.deactivateUser.bind(this);
+        this.tweetInvite = this.tweetInvite.bind(this)
     }
     componentWillMount(){
         this.setState({
@@ -16,6 +18,29 @@ class DashboardEle extends Component {
         })
      
     }
+    tweetInvite(e){
+        var sharableURL = config.react_url + '/signin/@' + this.props.user.twitterhandle;
+        var text = 'Hi @'+this.props.user.twitterhandle+', we are happy to inform you that application explain is ready to serve you. Signup using this link below';
+        var encSharableURL = encodeURI(sharableURL);
+        var encText = encodeURI(text);
+
+        var href = "https://twitter.com/intent/tweet?text=" + encText + "&url=" + encSharableURL
+        var width = 555,
+            height = 300,
+            top = window.innerHeight / 4,
+            left = window.innerWidth / 4,
+            url = href,
+            opts = 'status=1' +
+                ',width=' + width +
+                ',height=' + height +
+                ',top=' + top +
+                ',left=' + left;
+        window.open(url, 'twitter', opts);
+        this.setState({btnText:"Deactivate",status:"Active"})
+        this.props.activateUser(e.target.id, this.props.username, this.props.password)
+
+    }
+    
     activateUser(e){
         this.setState({btnText:"Deactivate",status:"Active"})
         this.props.activateUser(e.target.id, this.props.username, this.props.password)
@@ -46,7 +71,7 @@ class DashboardEle extends Component {
                 <div>
                     <button id={user.id} disabled={Number(!user.activation)}
                         onClick={Number(user.activation) ?(this.deactivateUser) :
-                            (this.activateUser)}>{this.state.btnText}</button>
+                            (this.tweetInvite)}>{this.state.btnText}</button>
                 </div>
             </div>
         )

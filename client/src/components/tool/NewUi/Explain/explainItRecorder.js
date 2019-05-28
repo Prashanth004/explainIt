@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
-import config from '../../../config/config'
-import {setStream} from '../../../actions/streamActions'
-import { saveSourceId } from "../../../actions/extensionAction";
-import Dummy from './dummy';
-import SaveElement from './saveRecoding'
-import Form from '../Form'
-import { cancelAllMessageAction } from '../../../actions/messageAction'
-import { restAllToolValue } from "../../../actions/toolActions";
+import config from '../../../../config/config'
+import {setStream} from '../../../../actions/streamActions'
+import { saveSourceId } from "../../../../actions/extensionAction";
+import Dummy from '../dummy';
+import SaveElement from '../saveRecoding'
+import Form from '../../Form'
+import { cancelAllMessageAction } from '../../../../actions/messageAction'
+import { restAllToolValue } from "../../../../actions/toolActions";
 
-import {showCanvas, hideCanvas} from '../../../actions/canvasAction'
-import TimerBar from './TimerBar'
+import {showCanvas, hideCanvas} from '../../../../actions/canvasAction'
+import TimerBar from '../TimerBar'
 import browser from 'browser-detect';
 import {fullStartedRecording,
-    fullStopedRecording,discardAfterRecord} from'../../../actions/toolActions'
+    fullStopedRecording,discardAfterRecord} from'../../../../actions/toolActions'
 import {connect} from 'react-redux';
 import PropType from  'prop-types'; 
 
@@ -48,23 +48,22 @@ class FullScreenRecorder extends Component {
         this.receiveMessage = this.receiveMessage.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
         this.toggleCanvas = this.toggleCanvas.bind(this);
-        this.closeFunction = this.closeFunction.bind(this)
 
     }
     startBar(){
-        var timeAloted = config.RECORD_TIME*60*16
+      
         var source = this.props.extSource
         var origin = this.props.extOrigin
         const callStart = {
             type:config.START_CALL,
-            data:{timer:timeAloted,
+            data:{timer:this.props.timeAloted,
             action:config.FULL_SCREEN_RECORD}
         }
         if (this.props.extSource !== null) {
             console.log("posting start call from web application")
             source.postMessage(callStart, origin);
         }
-       
+        var timeAloted = this.props.timeAloted * 60 * 16
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
          progresDiv.style.display = "block";
@@ -209,9 +208,9 @@ class FullScreenRecorder extends Component {
        window.location.reload();
     }
     receiveMessage() {
-        var mainBtn = document.querySelector('.mainBtn');
-        mainBtn.style.backgroundColor="rgb(133, 39, 39)";
-        this.convey.style.display="none"
+        // var mainBtn = document.querySelector('.mainBtn');
+        // mainBtn.style.backgroundColor="rgb(133, 39, 39)";
+        // this.convey.style.display="none"
         var source = this.props.extSource
         var origin = this.props.extOrigin
         const GET_SOURCE_ID = {
@@ -263,6 +262,7 @@ toggleCanvas(){
        
         var audioStream = this.props.audioStream;
         var  screenStream=this.props.screenStream;
+        var finalStream = this.props.finalStream
         if (recorder1) {
             recorder1.stopRecording(function () {
                 var blob = recorder1.getBlob();
@@ -273,13 +273,23 @@ toggleCanvas(){
 
                 audioStream.stop();
                 screenStream.stop();
+                finalStream.stop()
                 // 
             });
         }
+        else{
+            if(audioStream!==null)  audioStream.stop();
+            if(screenStream!=null) screenStream.stop();
+            if(finalStream!=null) finalStream.stop();
+            
+        }
         audioStream = this.state.audioStream;
         screenStream = this.state.screenStream;
-        audioStream.stop();
-        screenStream.stop();
+        finalStream = this.state.finalStream;
+        if(audioStream!==null)  audioStream.stop();
+        if(finalStream!==null)  finalStream.stop();
+        if(screenStream!=null) screenStream.stop();
+        
         self.props.fullStopedRecording()
       
         this.setState({
@@ -291,19 +301,24 @@ toggleCanvas(){
     componentWillMount(){
         var self = this
         const result = browser();
+        if(config.ENVIRONMENT!=="test"){
         if (result.name === "chrome") {
     
           var img;
           img = new Image();
           img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
           img.onload = function () {
-    
+           self.toggle();
           };
           img.onerror = function () {
             self.setState({
               isInstalled: false
             })
           };
+        }
+        }
+        else{
+            self.toggle();
         }
     }
     componentWillUnmount(){
@@ -316,27 +331,7 @@ toggleCanvas(){
         }
        
     }
-    closeFunction(){
-        this.setState({
-            recorder: null,
-            downloadUrl:null,
-            audioStream: null,
-            screenStream: null,
-            blob: null,
-            finalStream: null,
-            percentage:"0%",
-            copyStatus:"copy link",
-            saveBtnClicked:false,
-            showCanvas:false,
-            isInstalled:true
-        })
-        this.props.cancelAllMessageAction();
-        this.props.restAllToolValue();
-        // this.props.resetValues();
-        this.props.handleCloseModal()
-        // window.close()
-    }
-
+  
     render() {
        var recordingEle = null;
        var recordingElements = null;
@@ -368,7 +363,7 @@ toggleCanvas(){
        
      
         var videoplayer = " ";
-        var convey ="Start"
+        // var convey ="Start"
        
         if (this.state.downloadUrl) {
             videoplayer = (<video className="videoPlayer2" src={this.state.downloadUrl} controls={true}></video>)
@@ -396,9 +391,9 @@ toggleCanvas(){
                <TimerBar />
                 {timer}
                 
-                <div className="btDiv">
+                {/* <div className="btDiv">
                         <button className="mainBtn" ref={a=>this.convey=a} onClick={this.toggle}>{convey}</button>
-                </div>
+                </div> */}
                 {/* <div className="convey">
                     {convey}
                 </div> */}
@@ -415,7 +410,7 @@ toggleCanvas(){
      
         if(this.props.isFullRecordCompleted === true && this.props.isSaved===false){
             postShareElements= (<div className = "postRecord">
-            <div classNam="showVideoElement">
+            <div className="showVideoElement">
             {videoplayer}
             </div>
             <SaveElement
@@ -423,7 +418,7 @@ toggleCanvas(){
             isSaveClicked={this.state.saveBtnClicked}
             saveClicked={this.saveClicked}
             discard={this.discardChanges}
-            closeImidiate={this.closeFunction}
+            closeImidiate={this.props.reStoreDefault}
             savefilePublic={this.savefilePublic}
             savefilePrivate={this.savefilePrivate} />
        
@@ -498,6 +493,8 @@ const mapStateToProps = state =>({
     extSourceId:state.extension.sourceId,
     audioStream :state.stream.audioStream,
     screenStream : state.stream.screenStream,
+    timeAloted: state.call.noOfMinutes,
+
 }) 
 
 export default connect(mapStateToProps,{saveSourceId,

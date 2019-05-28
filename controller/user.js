@@ -154,11 +154,38 @@ exports.getUserByEmail = function (req, res) {
             }
         })
 }
-exports.getActivationStatus = (req, res) => {
-    database.db.oneOrNone('select * from users where id=$1 and activation =$2', [req.user.id, 1])
+exports.getEmailStatus = (req, res) => {
+    database.db.oneOrNone('select * from users where id=$1', [req.user.id])
         .then(data => {
             if (data) {
-                if (data !== null) {
+                if (data.email!==null) {
+
+                    res.status(200).send({
+                        success: 1,
+                        data: data
+                    })
+
+                }
+            }
+            else
+                res.status(200).send({
+                    success: 0
+                })
+        })
+        .catch(error => {
+            res.status(500).send({
+                success: 0,
+                error: error
+            })
+        })
+}
+exports.getActivationStatus = (req, res) => {
+    console.log(req.params.twitterhandle)
+    database.db.oneOrNone('select * from users where UPPER(twitterhandle) = $1 and activation = $2', [req.params.twitterhandle.toUpperCase(),1])
+        .then(data => {
+            console.log(data)
+            if (data) {
+                if (data!==null) {
 
                     res.status(200).send({
                         success: 1,

@@ -38,7 +38,7 @@ class Navigationbar extends React.Component {
   }
   logout = () => {
     
-    if (this.props.screenAction !== null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted) {
+    if ((this.props.isSceenSharing  || this.props.isFullScreenRecording)) {
 
         confirmAlert({
             title: "Are you sure?",
@@ -89,8 +89,9 @@ handleConfirm() {
     this.setState({ state: this.state });
   }
   openHome() {
-    if ((window.location.pathname).length > 1)
-      window.open(config.react_url, '_self')
+    console.log(window.location.pathname)
+    if (!(window.location.pathname).includes('application'))
+      window.open(config.react_url+'/application', '_self')
     else {
       this.props.openHome()
     }
@@ -162,7 +163,7 @@ handleConfirm() {
           <img alt="profilr pic" className="profileImages" src={this.props.profilePic}></img>
         </div>
         <div className="dropdown-content">
-          <button onClick={this.logout} className=" buttonLight navButton1"> Logout</button>
+          <button onClick={this.logout} className="navButton1"> Logout</button>
           <div className="imageLogout">
             <span>
               <img alt="logout"onClick={this.logout} height="100%" width="100%" src={require('../../images/logout.png')} />
@@ -287,7 +288,6 @@ const mapStateToProps = state => ({
   screenAction: state.tools.screenAction,
   isSharingCompleted: state.tools.isSharingCompleted,
   isFullSharingCompleted: state.tools.isFullSharingCompleted,
-
   profilePic: state.auth.profilePic,
   logoutSuccess: state.auth.logoutSuccess,
   userId: state.auth.id,

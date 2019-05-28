@@ -105,7 +105,7 @@ class ShareFloater extends Component {
                                 }} />
                         </span>
                         <span className="hint--top" aria-label={this.props.otherPersonName}>
-                            <img alt="reciever profile pic" className="callPage-recieverImage" src={this.state.otherPersonPic}></img>
+                            <img alt="reciever profile pic" className="callPage-recieverImageFloat" src={this.state.otherPersonPic}></img>
                         </span>
                     </div>
                     <div style={{ display: this.state.shouldDisplay }} className="callPage-recieverImageDiv endCall">

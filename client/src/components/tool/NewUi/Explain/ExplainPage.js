@@ -1,24 +1,21 @@
 import React, { Component } from 'react'
 import { Button } from 'reactstrap'; 
-import { cancelAllMessageAction} from '../../../actions/messageAction'
-import { restAllToolValue } from "../../../actions/toolActions";
-import { resetValues } from '../../../actions/twitterApiAction'
-import {cancelSuccess} from '../../../actions/issueActions'
-
+import { cancelAllMessageAction} from '../../../../actions/messageAction'
+import { restAllToolValue } from "../../../../actions/toolActions";
+import { resetValues } from '../../../../actions/twitterApiAction'
+import {cancelSuccess} from '../../../../actions/issueActions'
 import TwitterLogin from 'react-twitter-auth';
-import Screenrecorder from './explainItRecorder';
+import ExplainOptions from './explainOptions'
 import { connect } from 'react-redux';
-import config from '../../../config/config'
-import { twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
-
+import {resetLandingAction } from '../../../../actions/landingAction'
+import config from '../../../../config/config'
+import { twitterAuthFailure,signInWithTwitter } from '../../../../actions/signinAction';
+import {resetExplainAction} from '../../../../actions/explainAction'
 import { confirmAlert } from 'react-confirm-alert'; // Import
-import '../../css/ExplainpPage.css'
+import '../../../css/ExplainpPage.css'
 import PropType from 'prop-types';
-import { creatAnsProject } from '../../../actions/projectActions';
-import { saveExtensionDetails} from "../../../actions/extensionAction";
-
-
-import '../../css/ExplainpPage.css'
+import { creatAnsProject } from '../../../../actions/projectActions';
+import { saveExtensionDetails} from "../../../../actions/extensionAction";
 class ExplainPage extends Component {
     constructor(props) {
         super(props)
@@ -34,32 +31,42 @@ class ExplainPage extends Component {
         this.setState({
             twitterHandle:twitterHandle
         })
+        this.props.resetExplainAction();
         this.props.cancelAllMessageAction();
+        this.props.resetLandingAction();
         this.props.restAllToolValue();
         this.props.resetValues();
         this.props.cancelSuccess();
+      
     }
   
     closeFunction(){
-        this.props.cancelAllMessageAction();
-        this.props.restAllToolValue();
+      
         this.props.handleCloseModal();
+       
+      
     }
     reStoreDefault = () => {
-        confirmAlert({
-            title: "Are you sure?",
-            message: "You won't be able to revert this!",
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => this.handleConfirm()
-                },
-                {
-                    label: 'No',
-                    onClick: () => this.handleCancel()
-                }
-            ]
-        })
+        if(this.props.isFullScreenRecording){
+            confirmAlert({
+                title: "Are you sure?",
+                message: "You won't be able to revert this!",
+                buttons: [
+                    {
+                        label: 'Yes',
+                        onClick: () => this.closeFunction()
+                    },
+                    {
+                        label: 'No',
+                        onClick: () => this.handleCancel()
+                    }
+                ]
+            })
+        }
+        else{
+            this.closeFunction()
+        }
+       
     }
     handleCancel = () => {
 
@@ -91,17 +98,13 @@ class ExplainPage extends Component {
         else {
             widthDiv = "95%";
         }
-        return (this.props.isAuthenticated)?(
-            <div className="explainMain">
-                <div className="recorderConatainerPage" style={{ width: widthDiv }}>
-                    <Screenrecorder
-                        handleCloseModal={this.props.handleCloseModal}
-                        reStoreDefault={this.reStoreDefault}
-                        savefile={this.saveVideoData} />
-                </div>
-
-
-            </div>):(
+        return (this.props.isAuthenticated)?
+        (<ExplainOptions
+            widthDiv={widthDiv}
+            questionProject={this.props.questionProject}
+            handleCloseModal={this.props.handleCloseModal}
+            reStoreDefault={this.reStoreDefault}
+            savefile={this.saveVideoData} />):(
                 <div>
                 <Button close onClick={this.closeFunction} />
                 <div className="requestLogin">
@@ -120,13 +123,16 @@ ExplainPage.PropType = {
     creatAnsProject: PropType.func.isRequired,
     saveExtensionDetails: PropType.func.isRequired,
     twitterAuthFailure:PropType.func.isRequired,
-    signInWithTwitter:PropType.func.isRequired
+    signInWithTwitter:PropType.func.isRequired,
+    resetExplainAction:PropType.func.isRequired,
+    resetLandingAction:PropType.func.isRequired
 
 
 };
 const mapStateToProps = state => ({
     error: state.issues.error,
     issueId: state.issues.currentIssueId,
+    isFullScreenRecording: state.tools.isFullScreenRecording,
     success: state.issues.successCreation,
     showCanvas: state.canvasActions.showCanvas,
     isAuthenticated: state.auth.isAuthenticated,
@@ -139,6 +145,8 @@ export default connect(mapStateToProps, {
     saveExtensionDetails, 
     cancelAllMessageAction,
     restAllToolValue,
+    resetLandingAction,
+    resetExplainAction,
     resetValues,
     twitterAuthFailure,
     signInWithTwitter,

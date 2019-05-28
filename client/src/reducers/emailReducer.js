@@ -2,6 +2,8 @@ import {SEND_OTP,
     ACTIVATED_PROFILE,
     SEND_OTP_FAILED,
     VARIFY_ACTIVATED,
+    ACTIVATED_ACCOUNT,
+    NOT_ACTIVATED_ACCOUNT,
     VARIFY_ACTIVATED_FAILED,
     REPLY_EMAIL_SENT,
     SAVE_REPLY_EMAIL_OPTION,
@@ -12,6 +14,7 @@ import {SEND_OTP,
 
 const initialState ={
   isVarified:false,
+  isActivated:false,
   reSentOtp:false,
   reSendOtpFailed:false,
   sentOtp:false,
@@ -33,12 +36,22 @@ export default function(state = initialState, action){
                 userid:action.userid,
                 replying:true
             }
-        case REPLY_EMAIL_SENT:{
+        case REPLY_EMAIL_SENT:
             return{
                 ...state,
                 replyEmailSend:true,
             }
-        }
+        
+        case ACTIVATED_ACCOUNT:
+            return{
+                ...state,
+                isActivated:true
+            }
+        case NOT_ACTIVATED_ACCOUNT:
+            return{
+                ...state,
+                isActivated:false
+            }
         case CANCEL_EMAIL_OPTION:{
             return{
                 ...state,
