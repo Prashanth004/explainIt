@@ -5,8 +5,8 @@ import InputNumber from './InputNumber';
 import { FiX, FiVideo } from "react-icons/fi";
 import AcceptTopic from './Saveproject'
 import config from '../../../config/config';
-import { setNoOfMinutes,updateCurrentTime } from '../../../actions/callAction'
-import { FaArrowLeft,FaArrowRight } from "react-icons/fa";
+import { setNoOfMinutes, updateCurrentTime } from '../../../actions/callAction'
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import ProfileNotOnExplain from "./ProfileNotOnExplain"
@@ -22,6 +22,7 @@ class tweetSearch extends Component {
             isVisitProfile: false,
             limitExce: false,
             emptyNumber: false,
+            emptyUserName:false,
             negNumber: false,
             noText: false,
             maxTimeForVideo: null,
@@ -47,22 +48,31 @@ class tweetSearch extends Component {
 
     testHandle() {
         // if () {
-        if (!this.props.limitExce &&
-            !this.props.negNumber &&
-            !this.state.noText
-            && !this.state.negNumber
-            && !this.state.emptyNumber) {
+        if((this.state.twitterHandle.length) === 0){
             this.setState({
-                tweetTested: true
+                emptyUserName: true
             })
-            this.props.getProfileByTwitterHandle(this.state.twitterHandle)
-            this.props.getRecpientId(this.state.twitterHandle)
+
+        }
+        else{
+            if (!this.props.limitExce &&
+                !this.props.negNumber &&
+                !this.state.noText
+                && !this.state.negNumber
+                && !this.state.emptyNumber) {
+                this.setState({
+                    tweetTested: true
+                })
+                this.props.getProfileByTwitterHandle(this.state.twitterHandle)
+                this.props.getRecpientId(this.state.twitterHandle)
+            }
         }
     }
     updateTwitterHandleBox(e) {
         this.setState({
             twitterHandle: e.target.value,
-            tweetTested: false
+            tweetTested: false,
+            emptyUserName:false
         })
         this.props.resetValues();
     }
@@ -135,6 +145,7 @@ class tweetSearch extends Component {
             <span > for </span>
             <InputNumber
                 empty={this.state.emptyNumber}
+                emptyUserName={this.state.emptyUserName}
                 limitOfChar={this.state.maxTimeForVideo}
                 limitExce={this.state.limitExce}
                 changeInputValue={this.changeImputNumber}
@@ -143,7 +154,7 @@ class tweetSearch extends Component {
                 noText={this.state.noText} />
             <br />
 
-            <button onClick={this.testHandle} style={{ marginTop: "15px" }}className="buttonLight" >Next</button>
+            <button onClick={this.testHandle} style={{ marginTop: "15px" }} className="buttonLight" >Next</button>
         </div>)
         if (this.state.tweetTested && !this.state.doneTweeting) {
             if (this.props.doneFetching && this.props.fetchProfile) {
@@ -202,52 +213,52 @@ class tweetSearch extends Component {
                 else {
 
                     validatinginfo = (<div>
-                            <span style={{
-                                float: "left",
-                                fontSize: "15px"
-                            }}>
-                                <FaArrowLeft onClick={this.changeTweetStateNeg} />
-                            </span>
-                            <AcceptTopic tweetTheMessage={this.tweetTheMessage} />
-                            </div>)
-                        mainContainer = (null)
-                    }
+                        <span style={{
+                            float: "left",
+                            fontSize: "15px"
+                        }}>
+                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                        </span>
+                        <AcceptTopic tweetTheMessage={this.tweetTheMessage} />
+                    </div>)
+                    mainContainer = (null)
                 }
-            else {
-                                validatinginfo = (<p className="info">checking handle validity</p>)
-                            }
-                            }
-                            return (
-            <div>
-                                {mainContainer}
-                                {validatinginfo}
-                            </div>
-                            )
-                        }
-                    }
-                    
-tweetSearch.PropType = {
-                    getRecpientId: PropType.func.isRequired,
-                resetValues: PropType.func.isRequired,
-                getTwitterHandles: PropType.func.isRequired,
-                getProfileByTwitterHandle: PropType.func.isRequired
             }
-        const mapStateToProps = state => ({
-                    twitterHandleValid: state.twitterApi.profilePresent,
-                doneFetching: state.twitterApi.doneFetching,
-                twiterHandleArray: state.twitterApi.twitterHandle,
-                fetchProfile: state.visitProfile.fetchProfile,
-                noOfMinutes:state.call.noOfMinutes,
-                userName:state.visitProfile.userName,
-                onlineStatus:state.visitProfile.onlineStatus,
-                isPresentInExplain: state.visitProfile.isPresent,
-            })
-    export default connect(mapStateToProps, {
-                    getProfileByTwitterHandle,
-                getTwitterHandles,
-                setNoOfMinutes,
-                updateCurrentTime,
-                getRecpientId,
-                resetValues
-            })(tweetSearch)
-                        
+            else {
+                validatinginfo = (<p className="info">checking handle validity</p>)
+            }
+        }
+        return (
+            <div>
+                {mainContainer}
+                {validatinginfo}
+            </div>
+        )
+    }
+}
+
+tweetSearch.PropType = {
+    getRecpientId: PropType.func.isRequired,
+    resetValues: PropType.func.isRequired,
+    getTwitterHandles: PropType.func.isRequired,
+    getProfileByTwitterHandle: PropType.func.isRequired
+}
+const mapStateToProps = state => ({
+    twitterHandleValid: state.twitterApi.profilePresent,
+    doneFetching: state.twitterApi.doneFetching,
+    twiterHandleArray: state.twitterApi.twitterHandle,
+    fetchProfile: state.visitProfile.fetchProfile,
+    noOfMinutes: state.call.noOfMinutes,
+    userName: state.visitProfile.userName,
+    onlineStatus: state.visitProfile.onlineStatus,
+    isPresentInExplain: state.visitProfile.isPresent,
+})
+export default connect(mapStateToProps, {
+    getProfileByTwitterHandle,
+    getTwitterHandles,
+    setNoOfMinutes,
+    updateCurrentTime,
+    getRecpientId,
+    resetValues
+})(tweetSearch)
+

@@ -11,7 +11,6 @@ import {resetLandingAction } from '../../../../actions/landingAction'
 import config from '../../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../../actions/signinAction';
 import {resetExplainAction} from '../../../../actions/explainAction'
-import { confirmAlert } from 'react-confirm-alert'; // Import
 import '../../../css/ExplainpPage.css'
 import PropType from 'prop-types';
 import { creatAnsProject } from '../../../../actions/projectActions';
@@ -23,7 +22,7 @@ class ExplainPage extends Component {
             twitterHandle:null
         }
         this.saveVideoData = this.saveVideoData.bind(this);
-        this.closeFunction = this.closeFunction.bind(this)
+        this.reStoreDefault = this.reStoreDefault.bind(this);
     }
 
     componentWillMount(){
@@ -40,41 +39,10 @@ class ExplainPage extends Component {
       
     }
   
-    closeFunction(){
-      
+    reStoreDefault(){
         this.props.handleCloseModal();
-       
-      
     }
-    reStoreDefault = () => {
-        if(this.props.isFullScreenRecording){
-            confirmAlert({
-                title: "Are you sure?",
-                message: "You won't be able to revert this!",
-                buttons: [
-                    {
-                        label: 'Yes',
-                        onClick: () => this.closeFunction()
-                    },
-                    {
-                        label: 'No',
-                        onClick: () => this.handleCancel()
-                    }
-                ]
-            })
-        }
-        else{
-            this.closeFunction()
-        }
-       
-    }
-    handleCancel = () => {
-
-    }
-
-    handleConfirm = () => {
-        window.close()
-    }
+ 
     saveVideoData(data,isPublic,text) {
         var issueId = null
         var textExplain = text
@@ -106,7 +74,7 @@ class ExplainPage extends Component {
             reStoreDefault={this.reStoreDefault}
             savefile={this.saveVideoData} />):(
                 <div>
-                <Button close onClick={this.closeFunction} />
+                <Button close onClick={this.reStoreDefault} />
                 <div className="requestLogin">
                 <h3>You need to Login</h3>
                 <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/visit/auth/twitter"}

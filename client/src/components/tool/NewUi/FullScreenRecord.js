@@ -271,6 +271,7 @@ class FullScreenRecorder extends Component {
         var screenStream1 = this.props.screenStream;
         var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
+        var finalSTream = this.state.finalStream;
         if (recorder1) {
             recorder1.stopRecording(function () {
                 var blob = recorder1.getBlob();
@@ -284,6 +285,7 @@ class FullScreenRecorder extends Component {
         if (screenStream1 !== null) screenStream1.stop();
         if (audioStream !== null) audioStream.stop();
         if (screenStream !== null) screenStream.stop();
+        if(finalSTream!== null) finalSTream.stop()
         self.props.fullStopedRecording()
         this.setState({
             recorder: null,

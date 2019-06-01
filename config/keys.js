@@ -46,7 +46,9 @@ module.exports = {
     ACCEPT_SHARE_OTHRT_PEER_SCREEN : "acceptOtherPeerScreen",
     FAILED_TO_GET_ISSUE_DETAILS:"failedToGetIssueDetails",
     FAILED_TO_GET_CREATOR_DETAILS:"failedToGetCreatorDetails",
-    FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails"
+    FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails",
+    ACCEPT_SHARE_REQUEST:"acceptShareRequest",
+    UPDATE_RECORDER_BLOB:"updateRecorderBlob"
 
 };
 

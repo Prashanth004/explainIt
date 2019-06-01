@@ -82,6 +82,7 @@ exports.updateProjectprivate = function(req, res){
         var issueID = null
         var videopathName = null;
         if (!req.file) {
+
         }
         else if (req.file) {
             // if (req.file.size > (1024 * 1024 * 35)) {
@@ -92,6 +93,7 @@ exports.updateProjectprivate = function(req, res){
             //     })
             // }
             videopathName = config.domain + '/public/audio/' + req.body.projectName + '.webm'
+            
         }
         if (req.body.imageData != "null") {
             var imageBuffer = decodeBase64Image(req.body.imageData);
@@ -105,6 +107,8 @@ exports.updateProjectprivate = function(req, res){
             issueID = req.body.issueID;
         }
         if (req.body.imageData != "null") {
+            try {
+        
             fs.writeFile('public/images/' + req.body.projectName + '.png', imageBuffer.data, function (err) {
                 if (err) {
                     console.log("error : ", err)
@@ -115,6 +119,9 @@ exports.updateProjectprivate = function(req, res){
                 }
             })
             var imgurl = config.domain + '/images/' + req.body.projectName + '.png';
+        } catch (e) {
+            res.status(400).send('filesaving failed')
+          }
         }
         else {
             var imgurl = config.domain + '/images/default.png'

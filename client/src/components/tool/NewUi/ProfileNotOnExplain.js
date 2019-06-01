@@ -99,8 +99,8 @@ class ProfileNotFound extends Component {
                             <span>May be he can add lot of value being here</span>
                             <span>Would you help him to know?</span>
                            <br/>
-                            <button className="buttonDark twitterBtn"
-                                onClick={this.SendInvite}><i className="fa fa-twitter twitterBtn">  Invite</i></button>
+                            <button className="buttonDark"
+                                onClick={this.SendInvite}><i style={{color:"black"}}>  Invite</i></button>
                         </div>
                     </div>
                 </div>

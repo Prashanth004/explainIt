@@ -7,6 +7,8 @@ import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
 // import './Floater/floater.css';
 import { FiLink2 } from "react-icons/fi";
+import {resetCallAction} from '../../../actions/callAction'
+
 import { JustRecord } from '../../../actions/messageAction'
 import {getAllActivities} from '../../../actions/callAction'
 import NotificationBadge from 'react-notification-badge';
@@ -50,6 +52,7 @@ class ProfileCard extends Component {
         this.props.resetValues();
         this.props.cancelSuccess();
         this.props.shareFullScreenShare()
+        this.props.resetCallAction();
     }
 
     openProfile() {
@@ -203,6 +206,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     JustRecord,
+    resetCallAction,
     setIssueIdToNull, cancelSuccess, cancelAllMessageAction,
     resetValues, restAllToolValue,
     changeOnlinestatus,

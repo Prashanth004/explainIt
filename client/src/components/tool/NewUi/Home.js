@@ -135,6 +135,7 @@ class NewHome extends Component {
         function postMessageHandler(event) {
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
+                
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -175,6 +176,17 @@ class NewHome extends Component {
                 this.props.getAllActivities()
             }
         })
+        
+        socket.on('connect_failed', function() {
+            document.write("Sorry, there seems to be an issue with the connection!");
+        })
+        socket.on('error', function (err) {
+            console.log("err : ",err);
+        });
+        socket.on('connect_timeout', function (err) {
+        socket.reconnect()
+        });
+        
         socket.on(config.LINK_TO_CALL, data => {
             setTimeout(() => {
                 this.props.missCall();
@@ -334,6 +346,13 @@ class NewHome extends Component {
     answerCall() {
         window.open(this.props.callActionLink);
         this.props.answerCall();
+        var socket =  this.state.socket;
+
+        socket.emit(config.ACCEPT_SHARE_REQUEST, {
+            'toUserId':this.state.callerId,
+            'message': config.REPLY_TO_SHARE_REQ
+        })
+
         // this.setState({callAnswered:true})
         // var self = this
         // setTimeout(()=>{
@@ -708,6 +727,7 @@ const mapStateToProps = state => ({
     email: state.auth.email,
     userId: state.auth.id,
     callerName: state.call.userName,
+    callerId : state.call.id,
     callerProfilePic: state.call.profilePic,
     callActionLink: state.call.link,
     incommingCall: state.call.incommingCall,

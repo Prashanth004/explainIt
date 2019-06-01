@@ -3,6 +3,8 @@ import DisplayIssueTopBtns from './DisplayIssueTpBtns'
 import ImagesOfExplainers from './DisplayExplained';
 import CopyToClipboard from '../CopytoClipboard'
 import config from '../../../config/config';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+
 import '../../css/toggle.css';
 import {resetExplainAction} from '../../../actions/explainAction'
 import { saveReplyEmailOption } from '../../../actions/emailAction'
@@ -42,7 +44,8 @@ class issueCard extends Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.toggleAllPeopleList = this.toggleAllPeopleList.bind(this);
-        this.changepublicStatus = this.changepublicStatus.bind(this)
+        this.changepublicStatus = this.changepublicStatus.bind(this);
+        this.reStoreDefault = this.reStoreDefault.bind(this);
     }
     openEditReason() {
         this.setState({
@@ -86,6 +89,31 @@ class issueCard extends Component {
             showAllPeople: !this.state.showAllPeople
         })
     }
+    reStoreDefault = () => {
+        if(this.props.isFullScreenRecording){
+            confirmAlert({
+                title: "Are you sure?",
+                message: "You won't be able to revert this!",
+                buttons: [
+                    {
+                        label: 'Yes',
+                        onClick: () => this.handleCloseModal()
+                    },
+                    {
+                        label: 'No',
+                        onClick: () => this.handleCancel()
+                    }
+                ]
+            })
+        }
+        else{
+            this.handleCloseModal()
+        }
+       
+    }
+    handleCancel(){
+
+    }
     handleCloseModal() {
         this.setState({ showModalExplain: false });
         this.setState({ showModalTwitterLogin: false });
@@ -94,9 +122,19 @@ class issueCard extends Component {
         this.props.resetLandingAction();
         this.props.resetExplainAction();
         this.props.restAllToolValue();
-      
-       
-    }
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        const END_RECORD_TIME_END = {
+            type:config.END_RECORD_TIMEOUT
+        }
+        if (this.props.extSource !== null) {
+            console.log("posting from webpage")
+            source.postMessage(END_RECORD_TIME_END, origin);
+        }
+        else{
+            window.postMessage(END_RECORD_TIME_END, origin);
+        }
+   }
     changeVideo(e) {
         var clickedProj = this.state.answerProjects.find(proj => proj.projectid === e.target.id)
         if (clickedProj.videofilepath) {
@@ -256,13 +294,13 @@ class issueCard extends Component {
                         overlayClassName="OverlayA">
                         <div>
 
-                            <div onclick={this.handleCloseModal} className="closeModalBtn">
+                            <div onclick={this.reStoreDefault} className="closeModalBtn">
                                 <span>
-                                    <FiX className="closeIcon" onClick={this.handleCloseModal} />
+                                    <FiX className="closeIcon" onClick={this.reStoreDefault} />
                                 </span>
                             </div>
                             <TwitterLogin
-                                handleCloseModal={this.handleCloseModal} />
+                                handleCloseModal={this.reStoreDefault} />
                         </div>
 
                     </ReactModal>
@@ -272,13 +310,13 @@ class issueCard extends Component {
                         className="ModalA"
                         overlayClassName="OverlayA">
                         <div >
-                            <div onClick={this.handleCloseModal} className="closeModalBtn">
+                            <div onClick={this.reStoreDefault} className="closeModalBtn">
                                 <span>
-                                    <FiX className="closeIcon" onClick={this.handleCloseModal} />
+                                    <FiX className="closeIcon" onClick={this.reStoreDefault} />
                                 </span>
                             </div>
                             <ExplainPage
-                                handleCloseModal={this.handleCloseModal}
+                                handleCloseModal={this.reStoreDefault}
                                 questionProject = {this.state.questionProject[0]} />
                         </div>
                         {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
@@ -311,13 +349,18 @@ issueCard.PropType = {
     cancelAllMessageAction: PropType.func.isRequired,
     restAllToolValue: PropType.func.isRequired,
     resetValues: PropType.func.isRequired,
-    saveReplyEmailOption: PropType.func.isRequired
+    saveReplyEmailOption: PropType.func.isRequired,
+    
 
 };
 const mapStateToProps = state => ({
     isAauthenticated: state.auth.isAuthenticated,
     isopenEditModal: state.projects.openEditModal,
-    userid: state.auth.id
+    userid: state.auth.id,
+    extSource:state.extension.source,
+    extOrigin:state.extension.origin,
+    isFullScreenRecording: state.tools.isFullScreenRecording,
+
 
 })
 

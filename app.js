@@ -22,9 +22,7 @@ var options = {
     promiseLib: promise
 };
 
-var optionsForPeerjs = {
-  debug: true
-} 
+
 const connectionString = {
     host: 'localhost',  
     port: 5432,
@@ -34,6 +32,7 @@ const connectionString = {
 };
 
 var app = express();
+
 
 // for data base
 app.use(passport.initialize());
@@ -110,10 +109,23 @@ app.use('/api/tweetactions', tweetRouter);
 app.use('/api/activity',activityRouter);
 app.use('/api/referral',referralRouter)
 app.use("/public", express.static(__dirname + "/public"));
-//peerjs for screen sharing
-app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
 app.use(logger('dev'));
+//peerjs for screen sharing
+var optionsForPeerjs = {
+  debug: true
+} 
+// app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
+const peerserver = ExpressPeerServer(server, optionsForPeerjs);
 
+
+app.use('/peerjs', peerserver);
+
+peerserver.on('connection', (client) => { 
+  console.log("client : ",client)
+});
+server.on('disconnect', (client) => { 
+  console.log("client : ",client)
+});
 
 
 // app.use('/', basic );
@@ -141,9 +153,16 @@ io.on("connection", socket => {
     socket.on(key.ENDCALL_ACK,(data)=>{
       io.emit(key.ENDCALL_ACK, data);
     })
+    socket.on(key.ACCEPT_SHARE_REQUEST,(data)=>{
+      io.emit(key.ACCEPT_SHARE_REQUEST, data);
+    })
 
     socket.on(key.END_CALL,(data)=>{
       io.emit(key.END_CALL, data);
+    })
+
+    socket.on(key.UPDATE_RECORDER_BLOB, data=>{
+      io.emit(key.UPDATE_RECORDER_BLOB, data)
     })
 
     socket.on(key.CALL_ACK_MESSAGE,(data)=>{

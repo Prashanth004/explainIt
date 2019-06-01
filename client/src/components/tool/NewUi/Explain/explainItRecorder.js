@@ -195,6 +195,9 @@ class FullScreenRecorder extends Component {
                 console.log("posting from webpage")
                 source.postMessage(END_RECORD_TIME_END, origin);
             }
+            else{
+                window.postMessage(END_RECORD_TIME_END, origin);
+            }
             this.recordScreenStop()
             return (<Dummy></Dummy>)
 

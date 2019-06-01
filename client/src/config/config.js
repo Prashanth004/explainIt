@@ -27,7 +27,7 @@ const conf = {
     SECRET : "thebookmaneisawesomeiguess",
     LINK_TO_CALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
-    REPLY_TO_SHARE_REQ:"Please send me the recoding.",
+    REPLY_TO_SHARE_REQ:"Please send me the recording.",
     CALL_ACK_MESSAGE : "callAckMessage",
     END_CALL : "endCall",
     CHECK_TOKEN_VALIDITY : "checkTokenValidity",
@@ -89,8 +89,12 @@ const conf = {
     END_RECORD_FROM_FLOATER:"endRecordFromFloater",
     END_RECORD_FROM_EXTENSION:"endRecordFromExtension",
     END_RECORD_TIMEOUT : "endRecordTimeOut",
-    ENVIRONMENT:"test",
     RECORD_SCREEEN_EXPLAIN:"recordScreenExpalin",
-    REFER_EXPLAIN:"referExplain"
+    REFER_EXPLAIN:"referExplain",
+    ENVIRONMENT:"test",
+    DEV_ENV:true,
+    CALL_LOGS:true,
+    ACCEPT_SHARE_REQUEST:"acceptShareRequest",
+    UPDATE_RECORDER_BLOB:"updateRecorderBlob"
 }
 export default conf

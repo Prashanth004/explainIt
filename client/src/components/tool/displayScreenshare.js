@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import config from '../../config/config'
+import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
@@ -22,6 +23,7 @@ class DisplayShare extends Component {
         super(props)
         this.state = {
             peer: null,
+            recorder: null,
             host: config.peerHost,
             port: config.peerPort,
             path: config.peerPath,
@@ -71,6 +73,7 @@ class DisplayShare extends Component {
     componentDidMount() {
         var self = this
         const result = browser();
+        if(config.ENVIRONMENT!=="test"){
         if (result.name === "chrome") {
             var img;
             img = new Image();
@@ -82,11 +85,14 @@ class DisplayShare extends Component {
                     isInstalled: false
                 })
             };
+          }
         }
         var socket = this.state.socket;
         var peerIdFrmPeer = this.state.peerIdFrmPeer;
         function postMessageHandler(event) {
+            console.log("event : ",event)
             if (event.data === 'rtcmulticonnection-extension-loaded') {
+                console.log("saving the extension credentials")
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -95,6 +101,7 @@ class DisplayShare extends Component {
                 self.props.saveExtensionDetails(event.source, event.origin)
             }
             if (event.data.sourceId !== undefined) {
+                console.log("got the source id")
                 self.props.saveSourceId(event.data.sourceId)
                 self.startCall()
             }
@@ -112,11 +119,18 @@ class DisplayShare extends Component {
                 })
             }
         }, 4000)
-        socket.emit(config.CHECK_TOKEN_VALIDITY, {
-            'clientId': peerIdFrmPeer
-        })
+        socket.on('connect_failed', function() {
+            document.write("Sorry, there seems to be an issue with the connection!");
+         })
+         socket.on('error', function (err) {
+            console.log("err : ",err);
+        });
+        socket.on('connect_timeout', function (err) {
+           console.log("ceonnection time out")
+        });
+        
         socket.on(config.SEND_SHARABLE_LINK, data=>{
-          
+             console.log("data : ",data)
             if(data.otherPeerId === self.state.peerIdFrmPeer){
                 self.setState({
                     sharablelink:data.sharableLink,
@@ -124,6 +138,7 @@ class DisplayShare extends Component {
                 })
             }
         })
+        
         socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN,data=>{
             if(data.otherPeerId === self.state.peerIdFrmPeer){
                 self.setState({
@@ -140,7 +155,7 @@ class DisplayShare extends Component {
         socket.on(config.RETRYCALL, data => {
 
             if (data.peerId === self.state.peerIdFrmPeer) {
-                self.peerConnections(socket)
+                self.peerConnections(socket,data.peerId)
                 self.setState({
                     callEnded: false
                 })
@@ -210,21 +225,58 @@ class DisplayShare extends Component {
                 connected: true
             })
         });
-        var startConnection = new Promise((resolve, reject) => {
+        // var startConnection = new Promise((resolve, reject) => {
             var conn = peer.connect(peerIdFrmPeer);
             conn.on('open', function () {
-                // resolve(conn)
-                conn.send({
-                    clientId: self.state.clientPeerid,
+           
 
-                });
+                conn.on('data',data=>{
+                    if(data.data ==="sendID"){
+                        if(config.CALL_LOGS){
+                            console.log("got connection acknowledge")
+                            console.log("sending message")
+                        }
+                       
+                        conn.send({
+                            clientId: self.state.clientPeerid,
+            
+                        });
+                    }
+                })
+               
+               
             });
 
-        });
+        // });
+        // startConnection.then((conn=>{
+            // 
+           
+        // }))
 
         peer.on('call', function (call) {
+          
             navigator.mediaDevices.getUserMedia({ audio: true}).then(function(audiostream) {
                 call.answer(audiostream)
+                var recorder1 = RecordRTC(audiostream, {
+                    type: 'audio'
+                });
+                recorder1.startRecording();
+                self.setState({
+                    recorder: recorder1
+                })
+                // var sendInterVal = setInterval(()=>{
+                //     console.log('recorder1 : ', recorder1)
+
+                //     if(self.state.callEnded)
+                //     clearInterval(sendInterVal)
+                //     socket.emit(config.UPDATE_RECORDER, {
+                //         'clientId': self.state.clientPeerid,
+                //         'recorder': recorder1
+                //     })
+                // },2000)
+             
+                if(config.CALL_LOGS)
+                console.log("answering call..")
                 call.on('stream', function (stream) {
                     socket.emit(config.CALL_ACK_MESSAGE, {
                         'clientId': self.state.clientPeerid,
@@ -313,15 +365,20 @@ class DisplayShare extends Component {
             })
         }
         else{
-
-        
-       
+     
         // var ua = window.detect.parse(navigator.userAgent);
         const result = browser();
         if (result.name === "chrome") {
+            console.log("detected chome")
+            if(config.ENVIRONMENT!=="test"){
             if (this.state.isInstalled) {
                 self.receiveMessage()
             }
+        }
+        else{
+            console.log("sending requesto recieve message")
+            self.receiveMessage()
+        }
         }
         else if (result.name === "firefox") {
             self.startCall()
@@ -329,13 +386,22 @@ class DisplayShare extends Component {
     }
     }
     receiveMessage() {
-
+        console.log("recieving message")
         var source = this.props.extSource
         var origin = this.props.extOrigin
-     
-        if (this.props.extSource !== null) {
-            source.postMessage('audio-plus-tab', origin);
+        const GET_SOURCE_ID = {
+            type:config.GET_SOURCE_ID_AUDIO_TAB
         }
+        if (this.props.extSource !== null) {
+            if(config.CALL_LOGS)
+            console.log("requesting for source id");
+            source.postMessage(GET_SOURCE_ID, origin);
+        }
+        else{
+            window.postMessage(GET_SOURCE_ID, '*');
+            console.log("NUll")
+        }
+     
     }
     startCall() {
         const self = this;
@@ -381,6 +447,21 @@ class DisplayShare extends Component {
 
     }
     closeConnection() {
+        var socket = this.state.socket
+        var self = this
+        var recorder1 = this.state.recorder
+        if (recorder1 != null){
+            recorder1.stopRecording(function () {
+                var blob = recorder1.getBlob();
+                console.log("blob : ",blob)
+                socket.emit(config.UPDATE_RECORDER_BLOB, {
+                            'clientId': self.state.clientPeerid,
+                            'recorderBlob': blob
+                        })
+            })
+        }
+     
+        // closeConnection
         if (this.state.secondVideoStream !== null) {
             this.state.secondVideoStream.stop()
         }
@@ -422,7 +503,6 @@ class DisplayShare extends Component {
         else {
             ProfileHover = null
         }
-        var profileUrl = config.react_url + '/profile/' + this.state.twitterhandle
 
         // var callAnim=(this.state.connected)?
         // (<CallImage action="notWaiting" recieverImageUrl={this.state.peerProfilePic} callerImageUrl={this.props.profilePic}/>)
@@ -459,7 +539,7 @@ class DisplayShare extends Component {
                 <div className="shareVideoDisplay">
                    <div className="videoContainer">
                    {messageOfScreenShare}
-        <video className="VideoElementReciever" style={{display:shouldDisplay}} autoPlay={true} id="video" srcObject={this.state.videoStream} ></video>
+        <video className="VideoElementReciever" style={{display:shouldDisplay}} autoPlay={true} id="video" srcobject={this.state.videoStream} ></video>
     </div>
 
                      <Draggable>
@@ -468,7 +548,7 @@ class DisplayShare extends Component {
                             <div className="callPage-recieverImageDiv">
                             <span>
                                 <MdCallEnd onClick={this.endCall}
-                                    className="img__overlay"
+                                    className="img__overlayRec"
                                     style={{
                                         padding: "10px"
                                     }} />
@@ -480,8 +560,8 @@ class DisplayShare extends Component {
 
                                     </div></span>
 
-                                <img alt=" " className="callPage-recieverImage"
-                                    style={{ marginTop: "-62px" }}
+                                <img alt=" " className="callPage-recieverImageRecieve"
+                                   
                                     src={this.state.picture}></img>
                             </div>
                             {/* <span style={{fontSize:"12px"}}>End Call</span> */}

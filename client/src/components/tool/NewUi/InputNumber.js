@@ -10,8 +10,11 @@ export default (props) => {
         <span className="spanElement" >Only numbers</span>
 
       ):((props.empty)?(
+        
         <span className="spanElement">Cant be empty</span>
-      ):(null))))
+      ):(props.emptyUserName?(
+        <span className="spanElement">User name cant be empty</span>
+      ):(null)))))
   return (
     <div className="inputNumberDiv">
         <input className="inputNumber"

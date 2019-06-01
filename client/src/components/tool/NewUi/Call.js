@@ -32,6 +32,7 @@ class Call extends Component {
                 })
             }
             if(event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION){
+             
                 self.props.shareMyScreen();
             }
         }
@@ -39,6 +40,21 @@ class Call extends Component {
             window.addEventListener("message", postMessageHandler, false);
         } else {
             window.attachEvent("onmessage", postMessageHandler);
+        }
+    }
+    componentWillUnmount(){
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        const endCall = {
+            type:config.END_CALL_PEER_FROM_EXTNESION,
+            data:{timer:this.props.timeAloted,
+            profilePic:this.props.otherPersonPic}
+        }
+        if (this.props.extSource !== null) {
+            source.postMessage(endCall, origin);
+        }
+        else{
+            window.postMessage(endCall, "*")
         }
     }
     componentWillMount(){
@@ -105,8 +121,7 @@ class Call extends Component {
                 autoPlay
                 style={{ display: shouldDisplay }}
 
-                width="100%"
-            ></video>
+                width="100%"></video>
 
         </div>)
         return (

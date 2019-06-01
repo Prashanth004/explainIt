@@ -47,6 +47,32 @@
    display:grid;
   grid-template-columns: 33.333% 33.333% 33.333%; 
   }
+  .img__overlayRec{
+    padding:20px;
+    border-style:none;
+    height:36px;
+    width:36px;
+    border-radius:50%;
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    opacity: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+    background-color: rgb(184, 33, 6);
+    background: linear-gradient(65deg, rgb(233, 112, 13),rgb(248, 21, 5));
+    color: #fafafa;
+    font-size: 14px; 
+  }
+  .img__overlayRec:hover {
+    opacity: 1;
+  }
+
 
   .img__overlay {
     padding:20px;
@@ -115,6 +141,17 @@
     width:"100%";
     height:"100%";
   }
+
+  .callPage-recieverImageRecieve{
+    height:36px;
+    width:36px;
+    margin:auto;
+    margin-top:-110px;
+    border-radius:50%;
+
+  }
+  /* callPage-recieverImageRecieve */
+
   
   
   .callPage-recieverImageDiv .tooltiptext {

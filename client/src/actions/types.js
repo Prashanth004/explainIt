@@ -23,6 +23,7 @@ export const FILE_SIZE_TOO_LARGE = "FILE_SIZE_TOO_LARGE"
 
 
 
+
 //Tool related
 
 export const DISPLAY_SCREEN_RECORD = "DISPLAY_SCREEN_RECORD"
@@ -184,3 +185,7 @@ export const RESET_LANDING_ACTION = "RESET_LANDING_ACTION"
 //referral Action
 
 export const SAVE_REFERRAL = "SAVE_REFERRAL";
+
+
+//update Recorder 
+export const SAVE_RECORDER = "SAVE_RECORDER"

@@ -31,7 +31,7 @@ exports.addActivity = (req,res)=>{
 })
 }
 exports.getAcitivies=(req,res)=>{
-    database.db.manyOrNone('select * from activities where touser = $1 or fromuser = $2 ORDER BY id ASC',
+    database.db.manyOrNone('select * from activities where touser = $1 or fromuser = $2 ORDER BY id DESC',
     [String(req.user.id),String(req.user.id)])
     .then(data=>{
         res.status(200).send({
