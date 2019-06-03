@@ -29,6 +29,9 @@ router.get('/id/:id',user.getUserById)
 router.post('/updateprofile',passport.authenticate('jwt', { session: false }),user.updateProfile)
 router.get('/twitterhandle/:enctwitterhandle', user.getUserByTwitteHandle)
 router.post('/register', user.createUser);
+router.get('/busystatus', passport.authenticate('jwt', { session: false }),user.getBusyStatus)
+router.put('/turnbusy',passport.authenticate('jwt', { session: false }),user.turnBusy)
+router.put('/turnnotbusy',passport.authenticate('jwt', { session: false }), user.turnNotBusy)
 router.put('/onlinestatus',passport.authenticate('jwt', { session: false }),user.updateOnlineStatus)
 router.post('/authenticate',user.authenticate);
 router.put('/deactivate',passport.authenticate('local', { session: false }), user.deactivate)

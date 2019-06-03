@@ -19,9 +19,13 @@ import {DISPLAY_SCREEN_SHARE,
     FULL_SCREEN_RECORD,
     RESET_TOOL_STATES,
     CANCEL_MESSAGE_STATE,
-    CANCEL_CREATION
 
-} from './types'
+} from './types';
+import axios from 'axios';
+import config from '../config/config';
+
+var token = JSON.parse(localStorage.getItem('token'))
+
 
 
 export const displayShareScreen=()=>(dispatch)=>{
@@ -82,15 +86,46 @@ export const stopedSharing = () =>(dispatch)=>{
     })
 }
 export const fullStartedSharing = () =>(dispatch)=>{
+
     dispatch({
         type:FULL_START_SHARING,
         payload:true
+    })
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/users/turnbusy',
+        headers:{
+            "Authorization":token,
+        }
+    })
+    .then(response=>{
+        if(response.status === 200 || response.status === 202 || response.status === 204){
+            console.log("success full")
+        }
+    })
+    .catch(error=>{
+        console.log("error : ",error)
     })
 }
 export const fullStopedSharing = () =>(dispatch)=>{
     dispatch({
         type:FULL_STOP_SHARING,
         payload:false
+    })
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/users/turnnotbusy',
+        headers:{
+            "Authorization":token,
+        }
+    })
+    .then(response=>{
+        if(response.status === 200 || response.status === 202 || response.status === 204){
+            console.log("success full")
+        }
+    })
+    .catch(error=>{
+        console.log("error : ",error)
     })
 }
 export const stopedRcording = () =>(dispatch)=>{
@@ -106,11 +141,42 @@ export const fullStartedRecording = () =>(dispatch)=>{
         type:FULL_START_RECORD,
         payload:true
     })
+
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/users/turnbusy',
+        headers:{
+            "Authorization":token,
+        }
+    })
+    .then(response=>{
+        if(response.status === 200 || response.status === 202 || response.status === 204){
+            console.log("success full")
+        }
+    })
+    .catch(error=>{
+        console.log("error : ",error)
+    })
 }
 export const fullStopedRecording = () =>(dispatch)=>{
     dispatch({
         type:FULL_STOP_RECORD,
         payload:false
+    })
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/users/turnnotbusy',
+        headers:{
+            "Authorization":token,
+        }
+    })
+    .then(response=>{
+        if(response.status === 200 || response.status === 202 || response.status === 204){
+            console.log("success full")
+        }
+    })
+    .catch(error=>{
+        console.log("error : ",error)
     })
 }
 

@@ -31,13 +31,16 @@ class tweetSearch extends Component {
 
     }
     testHandle() {
+
+        var twitterHandleTemp = (this.state.twitterHandle.includes('@'))?
+        (this.state.twitterHandle.replace("@","")):(this.state.twitterHandle)
         if (!this.props.limitExce &&
             !this.props.negNumber) {
             this.setState({
                 tweetTested: true
             })
-            this.props.getProfileByTwitterHandle(this.state.twitterHandle)
-            this.props.getRecpientId(this.state.twitterHandle)
+            this.props.getProfileByTwitterHandle(twitterHandleTemp)
+            this.props.getRecpientId(twitterHandleTemp)
         }
     }
     updateTwitterHandleBox(e, value) {

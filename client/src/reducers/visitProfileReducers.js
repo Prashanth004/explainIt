@@ -7,7 +7,8 @@ const initalState = {
     email:null,
     id:null,
     isPresent:false,
-    onlineStatus:0
+    onlineStatus:0,
+    busyStatus:0
 }
 
 
@@ -19,6 +20,7 @@ export default function(state = initalState, action){
                 isPresent:true,
                 fetchProfile:true,
                 onlineStatus:action.onlineStatus,
+                busyStatus:action.busyStatus,
                 userName:action.userName,
                 profilePic:action.profilePic,
                 id:action.id,

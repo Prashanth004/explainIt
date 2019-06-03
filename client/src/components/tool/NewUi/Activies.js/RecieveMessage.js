@@ -7,8 +7,6 @@ import PropType from 'prop-types';
 import './activity.css';
 import { changeReadStatus } from '../../../../actions/messageAction'
 
-import CopyToClipboard from '../../CopytoClipboard'
-
 
 class RecievedMessage extends Component {
     constructor(props) {
@@ -38,7 +36,6 @@ class RecievedMessage extends Component {
         })
     }
     render() {
-        var timetaken = this.props.activity.duration;
         var date = this.props.activity.date.slice(5, 7)
         return (
             <div className="activityContentWithDate">
@@ -54,8 +51,7 @@ class RecievedMessage extends Component {
                     </div>
                     <div style={{ textAlign: "left" }}>
                         <p><b>@{this.state.userName}</b> sent a recorded message to you  on the topic <b>{this.props.activity.subject}</b></p>
-                        <span>Link to access the recorded message:</span>
-                        <CopyToClipboard sharablelink={this.props.activity.link} />
+                        <span><a href={this.props.activity.link}>Click here acess the recordeing</a></span>
 
                     </div>
 

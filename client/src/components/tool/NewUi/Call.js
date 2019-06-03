@@ -15,16 +15,16 @@ class Call extends Component {
             showCanvas: false,
             socket:null
         }
-
         this.toggleCanvas = this.toggleCanvas.bind(this);
         this.increaseTime = this.increaseTime.bind(this);
     }
-    // 'type': config.END_CALL_FROM_EXTENSION,
     componentDidMount(){
         var self=this
         var socket = this.props.socket
         function postMessageHandler(event) {
+            console.log("eevbnt :", event)
             if(event.data.type===config.END_CALL_FROM_EXTENSION){
+                console.log("peforming the endcall Action")
                 self.props.endCall();
                 socket.emit(config.END_CALL, {
                     'peerId': self.props.peerId,
@@ -32,7 +32,6 @@ class Call extends Component {
                 })
             }
             if(event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION){
-             
                 self.props.shareMyScreen();
             }
         }
@@ -72,6 +71,9 @@ class Call extends Component {
         if (this.props.extSource !== null) {
             source.postMessage(callStart, origin);
         }
+        else{
+            window.postMessage(callStart, "*")
+        }
     }
     increaseTime(){
         this.props.increaseTimer();
@@ -90,6 +92,9 @@ class Call extends Component {
         if (this.props.extSource !== null) {
             source.postMessage(addMinute, origin);
         }
+        else{
+            window.postMessage(addMinute, '*');
+        }
     }
     toggleCanvas() {
         if (this.state.showCanvas)
@@ -101,7 +106,7 @@ class Call extends Component {
 
     }
     render() {
-        const messageOfScreenShare = (!this.props.myscreenSharing) ? (<h4><b>Screen of other peer</b></h4>) :
+        const messageOfScreenShare = (!this.props.myscreenSharing) ? (<h4><b>Screen of {this.props.otherPersonName}</b></h4>) :
             (<h4><b>Your screen is being shared</b></h4>)
 
         const shouldDisplay = (!this.props.myscreenSharing) ? ("block") : ("none")
@@ -116,11 +121,10 @@ class Call extends Component {
             {messageOfScreenShare}
             <button  className={this.props.buttonClassName} onClick={this.increaseTime}>Add 1 minute</button>
 
-            <video srcObject={Object(this.props.videoStream)}
+            <video srcobject={this.props.videoStream}
                 id="secondShareVideo"
                 autoPlay
                 style={{ display: shouldDisplay }}
-
                 width="100%"></video>
 
         </div>)
@@ -128,7 +132,6 @@ class Call extends Component {
             <div className="callDiv">
                 <div className="statusBarCall">
                     <div className="timerDiv">
-                    {/* {audioWarning} */}
                         <Countdown
                             date={Date.now() + this.props.timeAloted * 60 * 1000}
                             renderer={this.props.renderer}
@@ -139,58 +142,11 @@ class Call extends Component {
 
                     </div>
                     <div>
-                        {/* <p onClick={this.toggleCanvas}>Canvas</p> */}
                     </div>
 
                 </div>
                 {showCanv}
-                {/* <Draggable>
-                    <div className="callImageDivAnwserMain">
-
-                        <div className="callPage-recieverImageDiv">
-                            <span>
-                                <MdCallEnd
-                                    onClick={this.props.endCall}
-                                    className="img__overlay"
-                                    style={{
-                                        padding: "10px"
-                                    }} />
-                            </span>
-                            <span className="tooltiptext" >
-                                <div>
-                                    {ProfileHover}
-
-                                </div></span>
-
-                            {/* <span className="hint--top" aria-label={this.props.otherPersonName}> */}
-                            {/* <img alt="reciever profile pic" className="callPage-recieverImage" src={this.props.otherPersonPic}></img>
-                            {/* </span> */}
-                        {/* </div>
-                        <div   style={{ display: shouldDisplay }} className="callPage-recieverImageDiv endCall">
-                            <span className="hint--top" aria-label="Share my screen">
-                                <MdFilterNone onClick={this.props.shareMyScreen} className="endButton" />
-                            </span>
-                        </div>
-                        <div fontSize="13px" style={{ color: "white" }}>
-                            <Countdown
-
-                                date={Date.now() + this.props.timeAloted * 60 * 1000}
-                                renderer={this.props.renderer}
-                            />
-                        </div> */} 
-
-
-                        {/* <div className="callPage-recieverImageDiv endCall">
-                        <span className="hint--top" aria-label="End Call">
-                            <MdCallEnd  className="endButton" />
-                        </span>
-                        {/* <span style={{fontSize:"12px"}}>End Call</span> */}
-                        {/* </div> */}
-                    {/* </div>
-                </Draggable> */} 
-
-
-            </div>
+             </div>
         )
     }
 }
@@ -205,8 +161,6 @@ const mapStateToProps = state => ({
     timeAloted: state.call.noOfMinutes,
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
-    // currentTimeLeft:state.call.currentTimeLeft,
-
 })
 
 export default connect(mapStateToProps, { showCanvas,increaseTimer, hideCanvas })(Call)

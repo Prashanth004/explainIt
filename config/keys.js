@@ -48,7 +48,10 @@ module.exports = {
     FAILED_TO_GET_CREATOR_DETAILS:"failedToGetCreatorDetails",
     FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails",
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",
-    UPDATE_RECORDER_BLOB:"updateRecorderBlob"
+    UPDATE_RECORDER_BLOB:"updateRecorderBlob",
+    DEV_ENV:true,
+    SERVER_RECORDING:"serverRecording",
+    SERVER_SHARING : "serverSharing"
 
 };
 

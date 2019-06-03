@@ -82,7 +82,7 @@ const conf = {
     END_CALL_PEER_FROM_EXTNESION:"endCallPeerFromExtension",
     ADD_EXTRA_MIUTE_TO_EXTENSION:"addExtraTimeToExtension",
     ADD_EXTRA_TIME_TO_FLOATER:"addExtraTimeToFloater",
-    SHARE_MY_SCREEN_FROM_FLOATER:"shareMyScreenFromFloater",
+    SHARE_MY_SCREEN_FROM_FLOATER:"shareMyScreenFromFloaterOnly",
     SHARE_MYSCREEN_FROM_EXTENSION:"shareMyScreenFromExtension",
     FULL_SCREEN_RECORD:"fullScreenRecord",
     FULL_SCREEN_SHARE:"fullScreenShare",
@@ -95,6 +95,10 @@ const conf = {
     DEV_ENV:true,
     CALL_LOGS:true,
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",
-    UPDATE_RECORDER_BLOB:"updateRecorderBlob"
+    UPDATE_RECORDER_BLOB:"updateRecorderBlob",
+    REFRESH_EXPLAIN_FLOATER:"refreshFloaterExpalin",
+    SERVER_RECORDING:"serverRecording",
+    SERVER_SHARING : "serverSharing",
+    SELF_CLOSE_TIME:1
 }
 export default conf

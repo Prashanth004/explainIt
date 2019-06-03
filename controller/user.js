@@ -92,6 +92,71 @@ exports.onBoardUser = function (req,res){
 }
 
 
+exports.getBusyStatus = (req,res)=>{
+    database.db.oneOrNone('select * from users where id = $1',req.user.id)
+    .then(data=>{
+        if(data && data!==null){
+            if(data.busy === 1){
+                res.status(200).send({
+                    success:1,
+                    bussystatus:1
+                })
+            }
+            else{
+                res.status(200).send({
+                    success:1,
+                    bussystatus:0
+                })
+            }
+        }
+        else{
+            res.status(200).send({
+                success:1,
+                bussystatus:0
+            })
+        }
+    })
+    .catch(err=>{
+        console.log("error : ".err)
+        res.status(500).send({
+            success:0,
+           msg:err
+        })
+    })
+}
+exports.turnBusy = (req,res)=>{
+database.db.oneOrNone('update users SET busy = $1 WHERE id = $2', [1, req.user.id])
+.then(data=>{
+    res.status(202).send({
+        success:1
+    })
+})
+.catch(error=>{
+    console.log("error : ",error)
+    res.status(500).send({
+        success:0,
+        msg:error
+    })
+})
+
+}
+exports.turnNotBusy =(req,res)=>{
+    database.db.oneOrNone('update users SET busy = $1 WHERE id = $2', [0, req.user.id])
+    .then(data=>{
+        res.status(202).send({
+            success:1
+        })
+    })
+    .catch(error=>{
+        console.log("error : ",error)
+        res.status(500).send({
+            success:0,
+            msg:error
+        })
+    })
+}
+
+
 exports.updateProfile = function (req, res) {
 
     database.db.none('update users SET bio = $1, cost =$2, angellist =$3,linkedin =$4, github=$5,goodat=$6, works=$7 WHERE id = $8',

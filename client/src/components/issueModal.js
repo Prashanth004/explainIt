@@ -125,7 +125,10 @@ class issueDetails extends Component {
             {/* <video  controls  src={this.props.questionProject.videofilepath}  >
    
 </video> */}
-            <video src={this.props.questionProject.videofilepath} controls  className="videoPlayer" ref={vid => this.videoExplain = vid} ></video>
+                {/* <video width="320" height="240" controls>
+                    <source src={this.props.questionProject.videofilepath} type="video/mp4">
+                </video> */}
+            <video src={this.props.questionProject.videofilepath} type="video/webm" controls  className="videoPlayer" ref={vid => this.videoExplain = vid} ></video>
             {/* <Player
     className="videoPlayer"
       ref={vid => this.videoExplain = vid}

@@ -69,6 +69,9 @@ class FullScreenRecorder extends Component {
             console.log("posting start call from web application")
             source.postMessage(callStart, origin);
         }
+        else{
+            window.postMessage(callStart, "*");
+        }
         var timeAloted = this.props.timeAloted * 60 * 16
         var progressbar = document.querySelector('#pbar');
         var progresDiv = document.querySelector(".progresDiv")
@@ -197,6 +200,9 @@ class FullScreenRecorder extends Component {
             if (this.props.extSource !== null) {
                 source.postMessage(END_RECORD_TIME_END, origin);
             }
+            else{
+                source.postMessage(END_RECORD_TIME_END, '*');
+            }
             this.recordScreenStop()
             return (<Dummy></Dummy>)
 
@@ -222,6 +228,10 @@ class FullScreenRecorder extends Component {
             console.log("posting from webpage")
             source.postMessage(GET_SOURCE_ID, origin);
         }
+        else{
+            console.log("posting from webpage")
+            window.postMessage(GET_SOURCE_ID, '*');
+        }
     }
 
     toggle() {
@@ -245,7 +255,7 @@ class FullScreenRecorder extends Component {
     }
 
     savefilePublic(textData) {
-        this.props.savefile(this.state.blob, 1, textData)
+        this.props.savefile(this.state.blob,null, 1, textData,config.SERVER_RECORDING)
 
     }
     savefilePrivate(textData) {
@@ -253,7 +263,7 @@ class FullScreenRecorder extends Component {
         this.setState({
             subjectOfMessage: textData
         })
-        this.props.savefile(blob, 0, textData)
+        this.props.savefile(blob,null, 0, textData,config.SERVER_RECORDING)
     }
 
     toggleCanvas() {
@@ -298,8 +308,24 @@ class FullScreenRecorder extends Component {
         window.open(config.EXTENSION_URL, "_self")
 
     }
+  
     componentWillMount() {
         var self = this
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        const refreshFloater = {
+            type:config.REFRESH_EXPLAIN_FLOATER,
+            data:{
+
+            }
+        }
+        if (this.props.extSource !== null) {
+            source.postMessage(refreshFloater, origin);
+        }
+        else{
+            window.postMessage(refreshFloater, "*")
+        }
+
         const result = browser();
         if(config.ENVIRONMENT!=="test"){
         if (result.name === "chrome") {
@@ -326,6 +352,7 @@ class FullScreenRecorder extends Component {
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
+        this.props.fullStopedRecording()
         var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
         if (audioStream !== null && screenStream !== null) {

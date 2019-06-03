@@ -7,6 +7,8 @@ import {cancelSuccess} from '../../../../actions/issueActions'
 import TwitterLogin from 'react-twitter-auth';
 import ExplainOptions from './explainOptions'
 import { connect } from 'react-redux';
+import {resetIssueActions} from '../../../../actions/projectActions'
+
 import {resetLandingAction } from '../../../../actions/landingAction'
 import config from '../../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../../actions/signinAction';
@@ -26,24 +28,29 @@ class ExplainPage extends Component {
     }
 
     componentWillMount(){
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        const refreshFloater = {type:config.REFRESH_EXPLAIN_FLOATER,
+            data:{}}
+        if (this.props.extSource !== null) source.postMessage(refreshFloater, origin);
+        else window.postMessage(refreshFloater, "*")
         const twitterHandle = (window.location.href).split("/")[3]
-        this.setState({
-            twitterHandle:twitterHandle
-        })
+        this.setState({twitterHandle:twitterHandle})
         this.props.resetExplainAction();
         this.props.cancelAllMessageAction();
         this.props.resetLandingAction();
         this.props.restAllToolValue();
         this.props.resetValues();
         this.props.cancelSuccess();
-      
+        this.props.resetIssueActions();
+
     }
   
     reStoreDefault(){
         this.props.handleCloseModal();
     }
  
-    saveVideoData(data,isPublic,text) {
+    saveVideoData(data,isPublic,text, action) {
         var issueId = null
         var textExplain = text
         var imgData = "null"
@@ -56,7 +63,7 @@ class ExplainPage extends Component {
           isquestion = "false"
           issueId = this.props.issueId
         }
-        this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId,isPublic)
+        this.props.creatAnsProject(textExplain, imgData, data,null, items, isquestion, issueId,isPublic,action)
     }
     render() {
         var widthDiv = null;
@@ -105,7 +112,10 @@ const mapStateToProps = state => ({
     showCanvas: state.canvasActions.showCanvas,
     isAuthenticated: state.auth.isAuthenticated,
     cancelAllMessageAction:PropType.func.isRequired,
-    restAllToolValue:PropType.func.isRequired
+    restAllToolValue:PropType.func.isRequired,
+    extSource: state.extension.source,
+    extOrigin: state.extension.origin,
+    extSourceId: state.extension.sourceId,
 
 })
 
@@ -119,6 +129,7 @@ export default connect(mapStateToProps, {
     twitterAuthFailure,
     signInWithTwitter,
     cancelSuccess,
+    resetIssueActions,
     creatAnsProject })(ExplainPage)
 
 

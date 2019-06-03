@@ -206,7 +206,9 @@ class SaveProjects extends Component {
              /> */}
                 </div>
 
-            ) :((this.state.privatePublic) ? (<div><p>saving..</p></div>) : (
+            ) :((this.state.privatePublic) ? (!this.props.failedToSave?(<div><p>saving..</p></div>):(
+                <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
+            )) : (
                     <div style={{
                         width: "70%",
                         margin: "auto"
@@ -239,7 +241,9 @@ const mapStateToProps = state => ({
     issueId: state.email.issueId,
     userid: state.email.userid,
     replying: state.email.replying,
-    topicOfTheCall: state.call.topicOfTheCall
+    topicOfTheCall: state.call.topicOfTheCall,
+    failedToSave:state.issues.failedToSave,
+
 
 })
 

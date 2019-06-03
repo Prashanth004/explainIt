@@ -4,32 +4,29 @@ var project = require('../controller/project')
 const passport = require('passport');
 require('../config/passport')(passport)
 const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, 'public/audio');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, 'public/audio');
     },
-    filename :  function(req, file, cb){
-        cb(null, req.body.projectName+'.webm')
-    } 
-   
-})
-//  const fileFilter = (req, file, cb)=>{
-// if( file.mimetype === 'video/webm' || file.mimetype === 'audio/mp3 '){
-//  cb(null, true);
-// }
-// else{
-//     cb(null, false);
-// }
-// }
+    filename: function (req, file, callback) {
+      callback(null, req.body.projectName+file.originalname);
+    }
+  });
+  const  fileFilter = (req, file, cb)=> {
+    if (file.mimetype === 'video/mkv' || file.mimetype === 'audio/mp3' ){
+        cb(null, true)
+    }
+    else{
+      cd(new Error(' not a valid mimeType'), false)
+    }
+}
 
-
-
-const upload =  multer({
-    storage:storage, 
-    // limits:{
-    //     fileSize : 1024 * 1025 * 12 
-    // }  
-})
+  var upload = multer({ storage : storage,
+    limits:{
+          fileSize : 1024 * 1025 *  25
+      },
+    fileFilter:fileFilter })
 
 router.all('/', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -45,7 +42,7 @@ router.all('/', function(req, res, next) {
    
 // 
 router.put('/edittext',passport.authenticate('jwt', { session: false }),project.editReason )
-router.post('/',upload.single('audioData'), passport.authenticate('jwt', { session: false }), project.saveProject)
+router.post('/',upload.array('videoData',2), passport.authenticate('jwt', { session: false }), project.saveProject)
 router.delete('/:issueid', passport.authenticate('jwt', { session: false }),project.deleteItems )
 router.get('/',project.getAllProject)
 router.get('/project/:id', passport.authenticate('jwt', { session: false }),project.getProjectById)

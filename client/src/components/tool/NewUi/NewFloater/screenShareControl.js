@@ -40,10 +40,21 @@ class ShareFloater extends Component {
             };
         window.parent.postMessage(msg, "*");
     }
+    shareMyscreen() {
+        var msg = {
+            'type': config.SHARE_MY_SCREEN_FROM_FLOATER,
+            'data': {
+                'tabId': this.state.callTabid
+            }
+        };
+        window.parent.postMessage(msg, "*");
+    }
     componentDidMount() {
         var self = this;
         function postMessageHandler(event) {
+            console.log("event: ",event)
             if (event.data.action === config.START_CALL) {
+                console.log("opening floater")
                 self.setState({
                     timeAloted: event.data.data.timer,
                     otherPersonPic: event.data.data.profilePic,
@@ -61,6 +72,7 @@ class ShareFloater extends Component {
                 }
             }
             if (event.data.action === config.ADD_EXTRA_TIME_TO_FLOATER) {
+                console.log(JSON.parse(localStorage.getItem("timer")))
                 var presentTime = JSON.parse(localStorage.getItem("timer"));
                 var updateTime = presentTime;
                 self.setState({
@@ -74,15 +86,7 @@ class ShareFloater extends Component {
             window.attachEvent("onmessage", postMessageHandler);
         }
     }
-    shareMyscreen() {
-        var msg = {
-            'type': config.SHARE_MY_SCREEN_FROM_FLOATER,
-            'data': {
-                'tabId': this.state.callTabid
-            }
-        };
-        window.parent.postMessage(msg, "*");
-    }
+
         renderer = ({ hours, minutes, seconds, completed }) => {
             if (completed) {
                 return (null)

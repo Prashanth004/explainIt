@@ -2,8 +2,10 @@ import {FETCH_PROJ_BY_ISSUE,
     AUTH_FAIL,
     CLEAR_ANSWER,
     FILE_SIZE_TOO_LARGE,
+    RESET_ISSUE_ACTION,
     UPDATE_ANSWER_WITH_IMAGE,
     CREATE_ISSUE_PROJECT_FAILED,
+    CLEAR_SAVE_ACTIONS,
      CREATE_ISSUE_PROJECT,
      FETCH_STARTED,
      DELETE_SUCCESSFULL,
@@ -186,10 +188,15 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
         console.log("error : ",err)
     })
 }
-export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion,issueIdFrmCpm,isPublic)=> (dispatch) =>{
-    var file = new File([audioData], 'filename.webm', {
-        type: 'video/webm'
+export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,isquestion,issueIdFrmCpm,isPublic,action )=> (dispatch) =>{
+    var videoFile = new File([videoData], 'video.mkv', {
+        type: 'video/mkv'
     });
+    if(action === config.SERVER_SHARING)
+    var AudioFile = new File([audioData], 'audio.mp3',{
+        type:'audio/mp3'
+    })
+
    var issueID
    var token = JSON.parse(localStorage.getItem('token'))
     if(isquestion === "false"){
@@ -203,16 +210,30 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
         isquestion = "true";
         issueID = null
     }
-
-    var projectName = config.dataTime
     var fd = new FormData();
-    fd.append('imageData', imgData);
-    fd.append('projectName', projectName);
-    fd.append('audioData', file);
-    fd.append('issueID',issueID);
-    fd.append('textExplain',textExplain);
-    fd.append('isquestion',isquestion);
-    fd.append('public', isPublic);
+    var projectName = config.dataTime
+    if(action === config.SERVER_SHARING){
+        fd.append('imageData', imgData);
+        fd.append('projectName', projectName);
+        fd.append('videoData', videoFile);
+        fd.append('videoData', AudioFile);
+        fd.append('issueID',issueID);
+        fd.append('textExplain',textExplain);
+        fd.append('isquestion',isquestion);
+        fd.append('public', isPublic);
+        fd.append('action',config.SERVER_SHARING)
+    }
+    else{
+        fd.append('imageData', imgData);
+        fd.append('projectName', projectName);
+        fd.append('videoData', videoFile);
+        fd.append('issueID',issueID);
+        fd.append('textExplain',textExplain);
+        fd.append('isquestion',isquestion);
+        fd.append('public', isPublic);
+        fd.append('action',config.SERVER_RECORDING);
+    }
+   
     axios({
         method:'post',
         url: config.base_dir + '/api/project',
@@ -236,7 +257,7 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
                 type:FILE_SIZE_TOO_LARGE
             })
         }
-        if(response.status === 500 || response.status === 450){
+        if(response.status === 500 || response.status === 451){
             dispatch({
                 type:CREATE_ISSUE_PROJECT_FAILED,
                 error:true
@@ -256,6 +277,12 @@ export const creatAnsProject =(textExplain, imgData, audioData, items,isquestion
 export const clearAnswers = ()=>(dispatch)=>{
     dispatch({
         type:CLEAR_ANSWER
+    })
+}
+
+export const ClearSavedActions = ()=>(dispatch)=>{
+    dispatch({
+        type:CLEAR_SAVE_ACTIONS
     })
 }
 
@@ -281,6 +308,12 @@ export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
         console.log("error in fetch user data : ",err)
     })
 
+}
+
+export const resetIssueActions =()=>dispatch=>{
+    dispatch({
+        type:RESET_ISSUE_ACTION
+    })
 }
 
 export const deleteProjects =(issueId)=>(dispatch)=>{

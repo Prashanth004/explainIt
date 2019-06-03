@@ -106,7 +106,7 @@ class Login extends Component {
                                          <div className="Logininfo">
                                          <h4><b> Hi {this.props.name},Good to see you again!!</b></h4>
                                          <br/>
-                                         <h4>We appriciate your patience!</h4>
+                                         <h4>We appreciate your patience!</h4>
                                             <br/>
                                             <h4>We'l get back to you once we are ready</h4>
                                          </div>
@@ -118,7 +118,7 @@ class Login extends Component {
                                        
                                         <div className="loginSection">
                                             <div className="Logininfo">
-                                            <h4> Hi {this.props.name},PLease visit our home page to get started!!</h4>
+                                            <h4> Hi {this.props.name},Please visit our home page to get started!!</h4>
                                             <br/>
                                             <h4> <a href={config.react_url}>Click Here</a></h4>
 

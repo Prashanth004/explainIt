@@ -6,7 +6,7 @@ import { FiX, FiVideo } from "react-icons/fi";
 import AcceptTopic from './Saveproject'
 import config from '../../../config/config';
 import { setNoOfMinutes, updateCurrentTime } from '../../../actions/callAction'
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import ProfileNotOnExplain from "./ProfileNotOnExplain"
@@ -27,7 +27,8 @@ class tweetSearch extends Component {
             noText: false,
             maxTimeForVideo: null,
             tweetAction: false,
-            timeInputDone: false
+            timeInputDone: false,
+            noInternet:false
 
 
         }
@@ -47,8 +48,18 @@ class tweetSearch extends Component {
     }
 
     testHandle() {
+        var twitterHandleTemp = (this.state.twitterHandle.includes('@'))?
+        (this.state.twitterHandle.replace("@","")):(this.state.twitterHandle)
         // if () {
-        if((this.state.twitterHandle.length) === 0){
+            if(!window.navigator.onLine){
+                this.setState({
+                    noInternet: true
+                }) 
+            }
+         
+
+            
+        if((twitterHandleTemp.length) === 0){
             this.setState({
                 emptyUserName: true
             })
@@ -63,16 +74,21 @@ class tweetSearch extends Component {
                 this.setState({
                     tweetTested: true
                 })
-                this.props.getProfileByTwitterHandle(this.state.twitterHandle)
-                this.props.getRecpientId(this.state.twitterHandle)
+                this.props.getProfileByTwitterHandle(twitterHandleTemp)
+                this.props.getRecpientId(twitterHandleTemp)
             }
         }
+    
     }
     updateTwitterHandleBox(e) {
+
+      
+   
         this.setState({
             twitterHandle: e.target.value,
             tweetTested: false,
-            emptyUserName:false
+            emptyUserName:false,
+            noInternet:false
         })
         this.props.resetValues();
     }
@@ -159,11 +175,20 @@ class tweetSearch extends Component {
         if (this.state.tweetTested && !this.state.doneTweeting) {
             if (this.props.doneFetching && this.props.fetchProfile) {
                 if (!this.props.twitterHandleValid) {
-                    validatinginfo = (<div>
-                        <p className="info">Incorrect twitter handle<br />
-                            Please check and try again</p>
-                    </div>
-                    )
+                    if(this.state.noInternet){
+                        validatinginfo = (<div>
+                            <p className="info">Please check the internet connectivity</p>
+                        </div>
+                        )
+                    }
+                    else{
+                        validatinginfo = (<div>
+                            <p className="info">Incorrect twitter handle<br />
+                                Please check and try again</p>
+                        </div>
+                        )
+                    }
+                   
                 }
                 else if (!this.props.isPresentInExplain) {
                     validatinginfo = (<div>
@@ -210,6 +235,30 @@ class tweetSearch extends Component {
                     </div>)
                     mainContainer = (null)
                 }
+                else if(this.props.busyStatus){
+                    validatinginfo = (<div>
+                        <span style={{
+                            float: "left",
+                            fontSize: "15px"
+                        }}>
+                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                        </span>
+                        <br />
+                        <br />
+                        <span>{this.props.userName} is currently involved in Sharing or Recording activity. Try again after some time.</span>
+                        <br />
+                        <span>You can record the screen and send</span>
+                        <br />
+                        <br />
+                        <span className="hint--bottom" aria-label="Record call and send">
+                            <FiVideo className="icons" onClick={this.props.recordCallAfterShare} />
+                        </span>                <span className="hint--bottom" aria-label="Cancel">
+                            <FiX className="icons" onClick={this.props.closeImidiate} />
+                        </span>
+                    </div>)
+                    mainContainer = (null)
+
+                }
                 else {
 
                     validatinginfo = (<div>
@@ -251,6 +300,7 @@ const mapStateToProps = state => ({
     noOfMinutes: state.call.noOfMinutes,
     userName: state.visitProfile.userName,
     onlineStatus: state.visitProfile.onlineStatus,
+    busyStatus:state.visitProfile.busyStatus,
     isPresentInExplain: state.visitProfile.isPresent,
 })
 export default connect(mapStateToProps, {

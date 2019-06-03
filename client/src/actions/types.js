@@ -189,3 +189,5 @@ export const SAVE_REFERRAL = "SAVE_REFERRAL";
 
 //update Recorder 
 export const SAVE_RECORDER = "SAVE_RECORDER"
+export const CLEAR_SAVE_ACTIONS= "CLEAR_SAVE_ACTIONS";
+export const RESET_ISSUE_ACTION = "RESET_ISSUE_ACTION";

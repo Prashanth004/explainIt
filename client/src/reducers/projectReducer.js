@@ -1,5 +1,6 @@
 import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER , 
     UPDATE_ANSWER_WITH_IMAGE,FETCH_STARTED,
+    CLEAR_SAVE_ACTIONS,
     DELETE_SUCCESSFULL,
     OPEN_EDIT_TEXT_MODAL,
     UPDATE_TEXT_EXPLAIN,
@@ -16,6 +17,7 @@ const initialState = {
     openEditModal:false,
     doneUpdating:false,
     editModalId:null,
+    largeFileAize:false,
    
 }
 
@@ -34,6 +36,12 @@ export default function(state = initialState, action){
                 doneUpdating:true,
                 openEditModal:false
             }
+        case FILE_SIZE_TOO_LARGE : 
+        return{
+            ...state,
+            largeFileAize:true
+        }
+      
         case CLOSE_EDIT_TEXT_MODAL:
             return{
                 ...state,
@@ -53,17 +61,26 @@ export default function(state = initialState, action){
                 questProject:[],
                 answerProject : []
             }
-       
+        case CLEAR_SAVE_ACTIONS:
+            return{
+                isFetchDone:false,
+                deleteSuccess :false,
+                openEditModal:false,
+                doneUpdating:false,
+                editModalId:null,
+                largeFileAize:false,
+                failedToSave:false
+            }
         case FETCH_STARTED:
             return{
                 ...state,
                 isFetchDone:false
             }
-            case UPDATE_ANSWER_WITH_IMAGE:
-                return{
-                    ...state,
-                    answerProject:action.payload
-                }
+        case UPDATE_ANSWER_WITH_IMAGE:
+            return{
+                ...state,
+                answerProject:action.payload
+            }
         case DELETE_SUCCESSFULL:
                 return{
                     ...state,

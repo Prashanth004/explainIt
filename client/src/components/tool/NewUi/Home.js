@@ -93,7 +93,7 @@ class NewHome extends Component {
     resize(){
         this.setState({reducedWidth: window.innerWidth <= 700});
       }
-    saveVideoData(data, isPublic, text) {
+    saveVideoData(videoData,audioData, isPublic,text,action) {
         var issueId = null
         var textExplain = text
         var imgData = "null"
@@ -106,7 +106,7 @@ class NewHome extends Component {
             isquestion = "false"
             issueId = this.props.issueId
         }
-        this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId, isPublic)
+        this.props.creatAnsProject(textExplain, imgData, videoData,audioData, items, isquestion, issueId, isPublic,action)
     }
     reloadPage() {
         window.location.reload();
@@ -184,7 +184,7 @@ class NewHome extends Component {
             console.log("err : ",err);
         });
         socket.on('connect_timeout', function (err) {
-        socket.reconnect()
+        console.log("socket. timeout")
         });
         
         socket.on(config.LINK_TO_CALL, data => {
@@ -497,6 +497,7 @@ class NewHome extends Component {
         }
         else if (this.props.screenAction === FULL_SCREEN_SHARE) {
             shareRecord = (<FullScreenShare
+                toggleInbox={this.toggleInbox}
             socket={this.state.socket}
                 onRef={ref => (this.child = ref)}
                 closeImidiate={this.handleConfirm}

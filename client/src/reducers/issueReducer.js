@@ -6,6 +6,7 @@ import {SET_ISUUE_ID,
     CREATE_ISSUE_PROJECT,
     CANCEL_PROJ_CREATION_ERROR , 
     CREATE_ISSUE_PROJECT_FAILED,
+    RESET_ISSUE_ACTION,
     CANCEL_SUCCESS,
     CANCEL_CREATION} from '../actions/types'
 
@@ -20,7 +21,8 @@ const initialState ={
     successCreation : false,
     detailsOfExplained:[],
     sharablelink:null,
-    sizeTooLarge:false
+    sizeTooLarge:false,
+    failedToSave:false
 }  
 
 export default function(state = initialState, action){
@@ -45,6 +47,18 @@ export default function(state = initialState, action){
                 sharablelink:config.react_url+"/project/"+action.payload.issueid,
                 successCreation:true
             }
+            case RESET_ISSUE_ACTION:
+            return{
+                ...state,
+                newissueIem:{},
+                currentIssueId:null,
+                error:false,
+                successCreation : false,
+                detailsOfExplained:[],
+                sharablelink:null,
+                sizeTooLarge:false,
+                failedToSave:false
+            }
         case CANCEL_CREATION:
             return{
                 error:false,
@@ -53,6 +67,7 @@ export default function(state = initialState, action){
         case CREATE_ISSUE_PROJECT_FAILED :
             return{
                 ...state,
+                failedToSave:true,
                 error:action.error
             }
         case CANCEL_SUCCESS:

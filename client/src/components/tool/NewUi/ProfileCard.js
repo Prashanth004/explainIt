@@ -8,7 +8,7 @@ import { cancelSuccess } from '../../../actions/issueActions';
 // import './Floater/floater.css';
 import { FiLink2 } from "react-icons/fi";
 import {resetCallAction} from '../../../actions/callAction'
-
+import {resetIssueActions} from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
 import {getAllActivities} from '../../../actions/callAction'
 import NotificationBadge from 'react-notification-badge';
@@ -45,6 +45,7 @@ class ProfileCard extends Component {
         this.props.setIssueIdToNull();
         this.props.cancelSuccess();
         this.props.recordFullScreen();
+        this.props.resetIssueActions();
     }
     startSharingScreen() {
         this.props.cancelAllMessageAction();
@@ -53,6 +54,7 @@ class ProfileCard extends Component {
         this.props.cancelSuccess();
         this.props.shareFullScreenShare()
         this.props.resetCallAction();
+        this.props.resetIssueActions();
     }
 
     openProfile() {
@@ -211,6 +213,7 @@ export default connect(mapStateToProps, {
     resetValues, restAllToolValue,
     changeOnlinestatus,
     getAllActivities,
+    resetIssueActions,
  getProfileDetails
 })(ProfileCard)
 

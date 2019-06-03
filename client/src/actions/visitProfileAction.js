@@ -19,7 +19,8 @@ export const getProfileByTwitterHandle = (TwitterHandle) => (dispatch)=>{
                 userName : response1.data.data.username,
                 profilePic : response1.data.data.profilepic,
                 id : response1.data.data.id,
-                onlineStatus:response1.data.data.online
+                onlineStatus:response1.data.data.online,
+                busyStatus:response1.data.data.busy
             })
         }
         else{

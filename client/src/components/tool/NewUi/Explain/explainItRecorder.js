@@ -63,6 +63,10 @@ class FullScreenRecorder extends Component {
             console.log("posting start call from web application")
             source.postMessage(callStart, origin);
         }
+        else{
+            source.postMessage(callStart, '*');
+        }
+        
         var timeAloted = this.props.timeAloted * 60 * 16
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
@@ -196,7 +200,7 @@ class FullScreenRecorder extends Component {
                 source.postMessage(END_RECORD_TIME_END, origin);
             }
             else{
-                window.postMessage(END_RECORD_TIME_END, origin);
+                window.postMessage(END_RECORD_TIME_END, '*');
             }
             this.recordScreenStop()
             return (<Dummy></Dummy>)
@@ -222,6 +226,9 @@ class FullScreenRecorder extends Component {
         if (this.props.extSource!==null) {
             source.postMessage(GET_SOURCE_ID, origin);
         }
+        else{
+            window.postMessage(GET_SOURCE_ID, '*');
+        }
     }
 
     toggle(){
@@ -243,12 +250,12 @@ class FullScreenRecorder extends Component {
 }
 
 savefilePublic(textData) {
-    this.props.savefile(this.state.blob, 1, textData)
+    this.props.savefile(this.state.blob,1, textData,config.SERVER_RECORDING)
    
 }
 savefilePrivate(textData) {
     var blob = this.state.blob
-    this.props.savefile(blob, 0, textData)
+    this.props.savefile(blob, 0, textData,config.SERVER_RECORDING)
 }
 
 toggleCanvas(){

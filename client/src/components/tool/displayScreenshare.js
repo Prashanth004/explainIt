@@ -17,6 +17,8 @@ import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { stillAuthenicated } from '../../actions/signinAction';
 import { getProfileByTwitterHandle } from "../../actions/visitProfileAction";
+import Countdown from 'react-countdown-now';
+
 
 class DisplayShare extends Component {
     constructor(props) {
@@ -28,6 +30,7 @@ class DisplayShare extends Component {
             port: config.peerPort,
             path: config.peerPath,
             stream: null,
+            callerProfileName:null,
             sharablelink:null,
             gotSharableLink:false,
             peerIdFrmPeer: null,
@@ -52,7 +55,11 @@ class DisplayShare extends Component {
             isInstalled: true,
             secondVideoStream: null,
             initiatedScreenShare:false,
-            myscreenSharing:false
+            myscreenSharing:false,
+            failedToSaveMessage:false,
+            selfClose:false,
+            selfCloseTime : 1,
+            connectionFailed:false
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -60,6 +67,7 @@ class DisplayShare extends Component {
         this.receiveMessage = this.receiveMessage.bind(this);
         this.startCall = this.startCall.bind(this);
         this.downloadExtension = this.downloadExtension.bind(this);
+        this.renderer = this.renderer.bind(this);
 
     }
      downloadExtension() {
@@ -88,6 +96,9 @@ class DisplayShare extends Component {
           }
         }
         var socket = this.state.socket;
+        socket.emit(config.CHECK_TOKEN_VALIDITY, {
+            'clientId' : this.state.peerIdFrmPeer
+        })  
         var peerIdFrmPeer = this.state.peerIdFrmPeer;
         function postMessageHandler(event) {
             console.log("event : ",event)
@@ -132,10 +143,16 @@ class DisplayShare extends Component {
         socket.on(config.SEND_SHARABLE_LINK, data=>{
              console.log("data : ",data)
             if(data.otherPeerId === self.state.peerIdFrmPeer){
+                if(data.successMessage === "true")
                 self.setState({
                     sharablelink:data.sharableLink,
                     gotSharableLink:true
                 })
+                else{
+                    self.setState({
+                      failedToSaveMessage:true
+                    })
+                }
             }
         })
         
@@ -162,13 +179,15 @@ class DisplayShare extends Component {
             }
         })
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
+            console.log("got the validation  : ", data)
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
                     isTokenValid: true,
                     picture: data.profilePic,
                     twitterhandle: data.twitterHandle,
-                    callerProfileId: data.id
+                    callerProfileId: data.id,
+                    callerProfileName : data.profileName
                 })
             }
         })
@@ -194,14 +213,27 @@ class DisplayShare extends Component {
     }
 
     componentWillMount() {
+        var self = this
+        setTimeout(() => {
+
+            if(self.state.connected){
+                self.setState({ connectionFailed : true})
+
+            }
+            else{
+              
+            }
+        }, 20000);
         const socket = socketIOClient(config.base_dir);
         this.setState({
-            socket: socket
+            socket: socket,
+            selfCloseTime : config.SELF_CLOSE_TIME
         })
         var peerIdFrmPeer = this.props.match.params.callerid;
         this.setState({  peerIdFrmPeer: peerIdFrmPeer})
         this.peerConnections(socket,peerIdFrmPeer);
         this.props.stillAuthenicated();
+        
     }
 
     peerConnections(socket,peerIdFrmPeer) {
@@ -314,18 +346,23 @@ class DisplayShare extends Component {
             })
         })
         peer.on('close', () => {
-            if (!self.state.callEnded) {
-                self.closeConnection()
-            }
             socket.emit(config.ENDCALL_ACK, {
                 'clientId': self.state.clientPeerid,
                 'encCallAck': true
             })
+            setTimeout(()=>{
+                if (!self.state.callEnded) {
+                    self.closeConnection()
+                }
+            },4000)
+          
         })
         peer.on('disconnected', function () {
+            setTimeout(()=>{
             if (!self.state.callEnded) {
                 self.closeConnection()
             }
+        },4000)
             socket.emit(config.ENDCALL_ACK, {
                 'clientId': self.state.clientPeerid,
                 'encCallAck': true
@@ -385,6 +422,16 @@ class DisplayShare extends Component {
         }
     }
     }
+    
+        renderer = ({ hours, minutes, seconds, completed }) => {
+            if (completed) {
+                window.open('','_self').close();
+            } else {
+                // Render a countdown
+                return <span>{hours}:{minutes}:{seconds}</span>;
+            }
+        }
+    
     receiveMessage() {
         console.log("recieving message")
         var source = this.props.extSource
@@ -471,7 +518,8 @@ class DisplayShare extends Component {
             })
         }
         this.setState({
-            callEnded: true
+            callEnded: true,
+            selfClose:true
         })
         var stream = this.state.stream
         if (stream !== null) {
@@ -481,15 +529,27 @@ class DisplayShare extends Component {
     }
 
     render() {
-        var sharableLinkMessage = !this.state.gotSharableLink?(<p>Preparing a link to access the call..</p>):
+
+        var selfCloseTimer = (this.state.selfClose)?(<div>
+            
+                        <p>This tab will close automatically  </p>
+            <Countdown
+            date={Date.now() + this.state.selfCloseTime * 60 * 1000}
+            renderer={this.renderer}
+            />
+        </div>):(null)
+        var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage)?(<p>Preparing a link to access the call..</p>):
+        (!this.state.failedToSaveMessage?
         (<div className="sharableLinkDiv">
             <span>Link to access you saved call : </span>
             <CopyToClipboard sharablelink={this.state.sharablelink}/>
-        </div>)
+        </div>):(<div>
+            <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
+        </div>))
         var ShareElement = null;
         var ProfileHover = null;
         const shouldDisplay = (!this.state.myscreenSharing)?("block"):("none")
-        const messageOfScreenShare =(!this.state.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
+        const messageOfScreenShare =(!this.state.myscreenSharing)?(<h4><b>Screen of {this.state.callerProfileName}</b></h4>):
         (<h4><b>Your screen is being shared</b></h4>)
         const DownloadExt = (this.state.isInstalled) ? (
             null) : (<div className="messageToDownload">
@@ -516,24 +576,33 @@ class DisplayShare extends Component {
                 (<div>
                     <h5>Call Ended</h5>
                    {sharableLinkMessage}
+                   {selfCloseTimer}
                 </div>) :
                 (<h5>
                     Disconnected from other peer
                     {sharableLinkMessage}
+                    {selfCloseTimer}
                 </h5>)
         ) : (
                 ((this.state.timerEnded) ? (
                     <div>
                         <h3>Call ended as the time exceeded alloted time by the caller</h3>
-                        <p>You can expect another link from the caller to continue the conversation</p>
+                        {/* <p>You can expect another link from the caller to continue the conversation</p> */}
                         {sharableLinkMessage}
+                        {selfCloseTimer}
                     </div>
-                ) : (<div><h5>
+                ) : (!this.state.gotSharableLink?(<div><h5>
                     <b>Call ended due to network issues</b>
                 </h5>
                     <p>Please wait.. Caller will retry to call you </p>
-                </div>))
-            )
+                </div>):(
+                    <div><h5>
+                    <b>Disconnected .</b></h5>
+                    {sharableLinkMessage}
+                    {selfCloseTimer}
+                </div>))))
+               
+                
         if (!this.state.callEnded) {
             ShareElement = (
                 <div className="shareVideoDisplay">
@@ -610,13 +679,22 @@ class DisplayShare extends Component {
                 </div>
             )
         }
-        var precallActivity = (this.state.connected) ? (<div className="initialMessage">
+        var precallActivity = (this.state.connected && !this.state.connectionFailed) ? (<div className="initialMessage">
             <h2>Connecting..</h2>
             <p>Please wait</p>
             <div className="callPage-recieverImageDiv">
                 <img alt=" " className="callPage-recieverImage wait" src={this.state.picture}></img>
             </div>
-        </div>) : (null)
+        </div>) : ((this.state.connectionFailed)?(
+             <div className="postCalltextDisplay">
+             <div>
+                <h5>
+                    Connection failed due to network issues.
+                    {selfCloseTimer}
+                </h5>
+                </div>
+            </div>
+        ):(null))
         return (<div>
                     {precallActivity}
                     <div className="screenShareDiv">

@@ -3,7 +3,6 @@ import axios from 'axios';
 import config from '../../../../config/config';
 import React, { Component } from 'react';
 import './activity.css';
-import CopyToClipboard from '../../CopytoClipboard'
 
 
 export default class componentName extends Component {
@@ -49,8 +48,7 @@ export default class componentName extends Component {
                     </div>
                     <div style={{ textAlign: "left" }}>
                         <p>You were in call with <b>@{this.state.userName}</b> for the topic <b>{this.props.activity.subject}</b> for <b>{Math.floor(timetaken)} minutes and
-             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>.<br/> Link to access the screen share : </p>
-                        <CopyToClipboard sharablelink={this.props.activity.link} />
+             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>.<a href={this.props.activity.link}>Click here acess the recordeing</a> </p>
 
                     </div>
                 </div>
