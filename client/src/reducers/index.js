@@ -19,7 +19,8 @@ import adminReducer from './adminReducer';
 import landingReducer from './landingReducer';
 import explainReducer from './explainReducer';
 import referralReducer from './referral';
-import recorderReducer from './recorderReducer'
+import recorderReducer from './recorderReducer';
+import floaterReducer from './floaterReducer'
  
 export default combineReducers({
     email:emailReducer,
@@ -42,5 +43,6 @@ export default combineReducers({
     canvasActions:canvasActionsReducer,
     profileHover:profileHoverReducer,
     secondScreenShare :secondScreenShareReducer,
-    recorder : recorderReducer
+    recorder : recorderReducer,
+    floater:floaterReducer
 })

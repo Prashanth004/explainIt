@@ -5,7 +5,7 @@ import TweetSuggest from './TweetSug';
 import { FaArrowLeft } from "react-icons/fa";
 import {showTextBoxAfterRecord} from '../../../actions/messageAction'
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
-import ProfileNotOnExplain from "./ProfileNotOnExplain"
+import ProfileNotOnExplain from "./ProfileNotOnTwitter/ProfileNotOnExplain"
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
 
 

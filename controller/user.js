@@ -124,24 +124,10 @@ exports.getBusyStatus = (req,res)=>{
         })
     })
 }
-exports.turnBusy = (req,res)=>{
-database.db.oneOrNone('update users SET busy = $1 WHERE id = $2', [1, req.user.id])
-.then(data=>{
-    res.status(202).send({
-        success:1
-    })
-})
-.catch(error=>{
-    console.log("error : ",error)
-    res.status(500).send({
-        success:0,
-        msg:error
-    })
-})
 
-}
-exports.turnNotBusy =(req,res)=>{
-    database.db.oneOrNone('update users SET busy = $1 WHERE id = $2', [0, req.user.id])
+
+const UpdateBusy =(res,queryObj)=>{
+    database.db.oneOrNone(queryObj.sql,queryObj.data)
     .then(data=>{
         res.status(202).send({
             success:1
@@ -154,6 +140,87 @@ exports.turnNotBusy =(req,res)=>{
             msg:error
         })
     })
+}
+
+exports.turnBusy = (req,res)=>{
+    var query1 = {
+        'sql':'update users SET busy = $1 WHERE id = $2',
+        'data': [1, req.user.id]
+    }
+    var query2 ={}
+    if(req.body.action === config.FULL_SCREEN_RECORD){
+        UpdateBusy(res,query1)
+    }
+    else if(req.body.action === config.FULL_SCREEN_SHARE){
+        query2 = {
+            'sql':'update users SET busy = $1 WHERE id = $2',
+            'data': [1, req.body.recieverCallId]
+        }
+        database.db.oneOrNone(query1.sql,query1.data)
+        .then(data=>{
+            database.db.oneOrNone(query2.sql,query2.data)
+            .then(data=>{
+                res.status(202).send({
+                    success:1
+                })
+            })
+        })
+        .catch(error=>{
+            console.log("error : ",error)
+            res.status(500).send({
+                success:0,
+                msg:error
+            })
+        })
+    }
+    else
+        res.status(500).send({
+            success:0,
+            msg:"in valid action"
+        })
+}
+
+exports.turnNotBusy =(req,res)=>{
+    var query1 = {
+        'sql':'update users SET busy = $1 WHERE id = $2',
+        'data': [0, req.user.id]
+    }
+    var query2 ={}
+    if(req.body.action === config.FULL_SCREEN_RECORD){
+        console.log("considering it as recording")
+        UpdateBusy(res,query1)
+    }
+    else if(req.body.action === config.FULL_SCREEN_SHARE){
+        console.log("considering it as sharing")
+        console.log('req.body.recieverCallId : ',req.body.recieverCallId)
+        console.log('req.body.recieverCallId : ',typeof(req.body.recieverCallId))
+        query2 = {
+            'sql':'update users SET busy = $1 WHERE id = $2',
+            'data': [0, req.body.recieverCallId]
+        }
+        database.db.oneOrNone(query1.sql,query1.data)
+        .then(data=>{
+            database.db.oneOrNone(query2.sql,query2.data)
+            .then(data=>{
+                res.status(202).send({
+                    success:1
+                })
+            })
+        })
+        .catch(error=>{
+            console.log("error : ",error)
+            res.status(500).send({
+                success:0,
+                msg:error
+            })
+        })
+    }
+    else
+     res.status(500).send({
+        success:0,
+        msg:"in valid action"
+    })
+
 }
 
 

@@ -26,7 +26,7 @@ import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
 import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import {getRecpientId} from '../../../actions/twitterApiAction'
 import {openInbox, openParticipated,openCreated } from "../../../actions/navAction";
-import ProfileNotOnExplain from './ProfileNotOnExplain'
+import ProfileNotOnExplain from './ProfileNotOnTwitter/ProfileNotOnExplain'
 
 class NewHome extends Component {
     constructor(props) {
@@ -361,7 +361,8 @@ class NewHome extends Component {
                     (this.props.profilePresentOnTwitter)?(
                     <ProfileNotOnExplain
                     isVisitProfile={this.state.isVisitProfile}
-                    twitterhandle={this.props.match.params.encrTwitterHandle} />
+                    twitterhandle={this.props.match.params.encrTwitterHandle}
+                    source={config.VISIT_PROFILE_PAGE} />
              ):(
                  <PageNotFount />
              )

@@ -7,6 +7,7 @@ import CopyToClipboard from '../CopytoClipboard';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
 import Dummy from './dummy';
+import {postStartCall} from '../../../actions/extensionAction'
 import SaveElement from './saveRecoding'
 import Form from '../Form'
 import { showCanvas, hideCanvas } from '../../../actions/canvasAction'
@@ -58,21 +59,10 @@ class FullScreenRecorder extends Component {
         this.sendButtonClick = this.sendButtonClick.bind(this)
     }
     startBar() {
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
-        const callStart = {
-            type:config.START_CALL,
-            data:{timer:this.props.timeAloted,
-            action:config.FULL_SCREEN_RECORD}
-        }
-        if (this.props.extSource !== null) {
-            console.log("posting start call from web application")
-            source.postMessage(callStart, origin);
-        }
-        else{
-            window.postMessage(callStart, "*");
-        }
-        var timeAloted = this.props.timeAloted * 60 * 16
+        const {extSource,origin,timeAloted,postStartCall} = this.props
+        postStartCall(config.FULL_SCREEN_RECORD,
+            origin,null,extSource,3,null);
+        var timeAlotedNew = timeAloted * 60 * 16
         var progressbar = document.querySelector('#pbar');
         var progresDiv = document.querySelector(".progresDiv")
         progresDiv.style.display = "block";
@@ -82,7 +72,7 @@ class FullScreenRecorder extends Component {
             if (width >= 100) {
                 clearInterval(id);
             } else {
-                width = width + (100 / timeAloted);
+                width = width + (100 / timeAlotedNew);
                 progressbar.style.width = width + '%';
             }
         }
@@ -191,6 +181,7 @@ class FullScreenRecorder extends Component {
 
 
     renderer = ({ hours, minutes, seconds, completed }) => {
+        localStorage.setItem("timer",(minutes + (seconds / 60)))
         if (completed) {
             var source = this.props.extSource
             var origin = this.props.extOrigin
@@ -310,22 +301,21 @@ class FullScreenRecorder extends Component {
     }
   
     componentWillMount() {
-        var self = this
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
+
+        const self = this
+        const {extSource,extOrigin} = this.props;
+        localStorage.setItem('action',JSON.stringify(config.FULL_SCREEN_RECORD))
         const refreshFloater = {
             type:config.REFRESH_EXPLAIN_FLOATER,
-            data:{
+            data:{}
+                }
+        if (extSource !== null)  
+        extSource.postMessage(refreshFloater, extOrigin);
+        else
+         window.postMessage(refreshFloater, "*")
 
-            }
-        }
-        if (this.props.extSource !== null) {
-            source.postMessage(refreshFloater, origin);
-        }
-        else{
-            window.postMessage(refreshFloater, "*")
-        }
-
+         localStorage.setItem('timer', JSON.stringify(config.RECORD_TIME))
+        
         const result = browser();
         if(config.ENVIRONMENT!=="test"){
         if (result.name === "chrome") {
@@ -432,9 +422,6 @@ class FullScreenRecorder extends Component {
                     <div className="btDiv">
                         <button className="mainBtn" ref={a => this.convey = a} onClick={this.toggle}>{convey}</button>
                     </div>
-                    {/* <div className="convey">
-                    {convey}
-                </div> */}
                 </div>
             </div>
             )
@@ -516,6 +503,7 @@ FullScreenRecorder.PropType = {
     showCanvas: PropType.func.isRequired,
     hideCanvas: PropType.func.isRequired,
     sendMessage: PropType.func.isRequired,
+    postStartCall:PropType.func.isRequired
 
 }
 const mapStateToProps = state => ({
@@ -535,5 +523,5 @@ const mapStateToProps = state => ({
     timeAloted: state.call.noOfMinutes,
 })
 
-export default connect(mapStateToProps, { sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
+export default connect(mapStateToProps, {postStartCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
 

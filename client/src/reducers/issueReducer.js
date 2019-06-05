@@ -7,6 +7,7 @@ import {SET_ISUUE_ID,
     CANCEL_PROJ_CREATION_ERROR , 
     CREATE_ISSUE_PROJECT_FAILED,
     RESET_ISSUE_ACTION,
+    FILE_SIZE_TOO_LARGE,
     CANCEL_SUCCESS,
     CANCEL_CREATION} from '../actions/types'
 
@@ -21,7 +22,7 @@ const initialState ={
     successCreation : false,
     detailsOfExplained:[],
     sharablelink:null,
-    sizeTooLarge:false,
+    largeFileSize:false,
     failedToSave:false
 }  
 
@@ -38,6 +39,11 @@ export default function(state = initialState, action){
             return{
                 ...state,
 
+            }
+            case FILE_SIZE_TOO_LARGE : 
+            return{
+                ...state,
+                largeFileSize:true
             }
         
             case CREATE_ISSUE_PROJECT : 
@@ -56,7 +62,7 @@ export default function(state = initialState, action){
                 successCreation : false,
                 detailsOfExplained:[],
                 sharablelink:null,
-                sizeTooLarge:false,
+                largeFileSize:false,
                 failedToSave:false
             }
         case CANCEL_CREATION:

@@ -5,6 +5,8 @@ var date = today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate();
 var time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
 var token = JSON.parse(localStorage.getItem("token"))
 
+
+
 const conf = {
     base_dir:"http://localhost:9000",
     react_url:"http://localhost:3000",
@@ -86,6 +88,7 @@ const conf = {
     SHARE_MYSCREEN_FROM_EXTENSION:"shareMyScreenFromExtension",
     FULL_SCREEN_RECORD:"fullScreenRecord",
     FULL_SCREEN_SHARE:"fullScreenShare",
+    RECIEVER_SCREEN_SHARE : "recieverScreenShare",
     END_RECORD_FROM_FLOATER:"endRecordFromFloater",
     END_RECORD_FROM_EXTENSION:"endRecordFromExtension",
     END_RECORD_TIMEOUT : "endRecordTimeOut",
@@ -99,6 +102,20 @@ const conf = {
     REFRESH_EXPLAIN_FLOATER:"refreshFloaterExpalin",
     SERVER_RECORDING:"serverRecording",
     SERVER_SHARING : "serverSharing",
-    SELF_CLOSE_TIME:1
+    SELF_CLOSE_TIME:1,
+    ERROR_CODE_FILE_TOO_LARGE:413,
+    SCREEN_SHARE_PAGE:"screenSharePage",
+    VISIT_PROFILE_PAGE:"visitProfilePage",
+    END_CALL_RECIEVER_FROM_FLOATER:"endCallReceiverFromFLoater",
+    END_CALL_RECEIVER_TO_EXTENSION : "endCallReceiverToExtension",
+    END_CALL_RECIEVER_TO_WEB:"endCallRecieverToWeb",
+    END_CALL_RECIEVER_PEER_FROM_WEB:"endCallRecieverPeerFromExtension",
+    ADD_EXTRA_MIUTE_TO_EXTENSION_RECIEVER:"addExtraMinuteToExtensionReceiver",
+    ADD_EXTRA_MIUTE_TO_FLOATER_RECIEVER:"addExtraMinuteToFloaterReceiver",
+    DISPLAY_SHARE_ICON_TO_EXTENSION : "displayShareIconToExetesion",
+    DISPLAY_SHARE_ICON_TO_FLOATER : "displayShareIconToFloater",
+    HIDE_SHARE_ICON_TO_EXTENSION:"hideShareIconToExtension",
+    HIDE_SHARE_ICON_TO_FLOATER:"hideShareIconToFloater"
+
 }
 export default conf

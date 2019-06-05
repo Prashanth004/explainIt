@@ -98,15 +98,7 @@ export class ScreenRecorder extends Component {
         this.props.discardAfterRecord();
 
     }
-    // copyToClipboard(){
-    //     var copyText = document.querySelector('.myInput');
-    //     copyText.select();
-    //     document.execCommand("copy");
-    //     this.setState({
-    //         copyStatus:"link copied"
-    //     })
-    // }
-
+ 
     toggle(){
         if(this.props.isScreenRecording){
             this.recordScreenStop()

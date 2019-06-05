@@ -5,7 +5,7 @@ import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER ,
     OPEN_EDIT_TEXT_MODAL,
     UPDATE_TEXT_EXPLAIN,
     CLOSE_EDIT_TEXT_MODAL,
-    FILE_SIZE_TOO_LARGE,
+   
     DELETE_FAILED} from '../actions/types'
 
 const initialState = {
@@ -17,7 +17,7 @@ const initialState = {
     openEditModal:false,
     doneUpdating:false,
     editModalId:null,
-    largeFileAize:false,
+    largeFileSize:false,
    
 }
 
@@ -36,11 +36,7 @@ export default function(state = initialState, action){
                 doneUpdating:true,
                 openEditModal:false
             }
-        case FILE_SIZE_TOO_LARGE : 
-        return{
-            ...state,
-            largeFileAize:true
-        }
+       
       
         case CLOSE_EDIT_TEXT_MODAL:
             return{
@@ -68,7 +64,7 @@ export default function(state = initialState, action){
                 openEditModal:false,
                 doneUpdating:false,
                 editModalId:null,
-                largeFileAize:false,
+                largeFileSize:false,
                 failedToSave:false
             }
         case FETCH_STARTED:

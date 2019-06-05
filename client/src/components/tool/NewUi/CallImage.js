@@ -22,8 +22,8 @@ export default (props) => {
                                 <img alt="caller profile pipc"className="profileImageElementCall" src={props.callerImageUrl}/>
                             </div>
                         </div>
-                        <div className="loader" >
-                      <p>Connecting...</p>
+                        <div className="loaderCall" >
+                            <p>connecting...</p>
                         </div>
                         <div className="recieverImageDiv">
                         <div className="profileImageCall">

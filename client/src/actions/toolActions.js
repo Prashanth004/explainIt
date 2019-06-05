@@ -85,18 +85,24 @@ export const stopedSharing = () =>(dispatch)=>{
         payload:false
     })
 }
-export const fullStartedSharing = () =>(dispatch)=>{
+export const fullStartedSharing = (recieverUserId) =>(dispatch)=>{
 
     dispatch({
         type:FULL_START_SHARING,
         payload:true
     })
+    const postData = {
+        action : config.FULL_SCREEN_SHARE,
+        recieverCallId:recieverUserId
+    }
     axios({
         method:'put',
         url:config.base_dir+'/api/users/turnbusy',
         headers:{
             "Authorization":token,
-        }
+        },
+        data:postData
+
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
@@ -107,17 +113,22 @@ export const fullStartedSharing = () =>(dispatch)=>{
         console.log("error : ",error)
     })
 }
-export const fullStopedSharing = () =>(dispatch)=>{
+export const fullStopedSharing = (recieverUserId) =>(dispatch)=>{
     dispatch({
         type:FULL_STOP_SHARING,
         payload:false
     })
+    const postData = {
+        action : config.FULL_SCREEN_SHARE,
+        recieverCallId:recieverUserId
+    }
     axios({
         method:'put',
         url:config.base_dir+'/api/users/turnnotbusy',
         headers:{
             "Authorization":token,
-        }
+        },
+        data:postData
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
@@ -141,13 +152,17 @@ export const fullStartedRecording = () =>(dispatch)=>{
         type:FULL_START_RECORD,
         payload:true
     })
+    const postData = {
+        action : config.FULL_SCREEN_RECORD,
+    }
 
     axios({
         method:'put',
         url:config.base_dir+'/api/users/turnbusy',
         headers:{
             "Authorization":token,
-        }
+        },
+        data:postData
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
@@ -163,12 +178,16 @@ export const fullStopedRecording = () =>(dispatch)=>{
         type:FULL_STOP_RECORD,
         payload:false
     })
+    const postData = {
+        action : config.FULL_SCREEN_RECORD,
+    }
     axios({
         method:'put',
         url:config.base_dir+'/api/users/turnnotbusy',
         headers:{
             "Authorization":token,
-        }
+        },
+        data:postData
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){

@@ -1,16 +1,9 @@
-var appMethods = require('../app')
-var database = appMethods.db
 var promise = require('bluebird');
-var buffer = require('buffer');
-var util = require('util');
 var fs = require('fs');
 var config = require('../config/keys')
 var key = require('../config/keys')
-const multer = require('multer');
-const upload = multer({ dest: '/images' });
 var shell = require('./shellHelper');
 // var exec = require('child_process').execFile;
-var child_process = require('child_process');
 var options = {
     promiseLib: promise
 };
@@ -85,9 +78,10 @@ exports.updateProjectprivate = function (req, res) {
 
 exports.saveProject = function (req, res) {
     var videopathName = null;
-    var imgurl = null;
-    var exec = child_process.exec;
-    var commands = null
+    var commands = null;
+    console.log("files ", req.files)
+    console.log('req. body : ', req.body)
+
 if (!req.files) {
         console.log("no files found")
         return res.status(451).send({
@@ -96,6 +90,14 @@ if (!req.files) {
         })
     }
     else if (req.files) {
+        if(typeof req.fileSizeError != "undefined") {
+            console.log("file size too large")
+            res.status(413).send({
+                "success":0,
+                "error":"File too large"});// to display filesize error
+        } else {
+            
+        
         console.log("req.files : ", req.files);
         console.log("req.body : ", req.body)
         console.log("files found");
@@ -142,6 +144,7 @@ if (!req.files) {
             saveToDb(req,res, videopathName )
     }
     }
+}
 }
 
 

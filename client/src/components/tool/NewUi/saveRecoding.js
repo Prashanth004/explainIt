@@ -206,7 +206,8 @@ class SaveProjects extends Component {
              /> */}
                 </div>
 
-            ) :((this.state.privatePublic) ? (!this.props.failedToSave?(<div><p>saving..</p></div>):(
+            ) :((this.state.privatePublic) ? (!this.props.failedToSave?((this.props.fromShareToRecord)?(<div><p>Saving the recording..</p></div>):
+            (<div><p>Sending the recording..</p></div>)):(
                 <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
             )) : (
                     <div style={{

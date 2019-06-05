@@ -236,12 +236,21 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
    
     axios({
         method:'post',
-        url: config.base_dir + '/api/project',
+        url: config.base_dir + '/api/project/file',
         headers: {
             "Authorization":token,
         },
-        data: fd
+        data: fd,
+        onUploadProgress: (progressEvent) => {
+            console.log("progressEvent : ",progressEvent)
+            const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+            console.log("onUploadProgress", totalLength);
+            // if (totalLength !== null) {
+            //     this.updateProgressBarValue(Math.round( (progressEvent.loaded * 100) / totalLength ));
+            // }
+        }
     }).then(response => {
+        console.log("response : ", response)
         if(response.status===201)
         {
             if(response.data.data.isquestion){
@@ -252,26 +261,28 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
             }
            
         }
-        if(response.status === 450){
+       
+    }).catch(error=>{
+        if(error.response.status === config.ERROR_CODE_FILE_TOO_LARGE){
             dispatch({
                 type:FILE_SIZE_TOO_LARGE
             })
         }
-        if(response.status === 500 || response.status === 451){
+        else if(error.response.status === 500 || error.response.status === 451){
             dispatch({
                 type:CREATE_ISSUE_PROJECT_FAILED,
                 error:true
             })
 
         }
-       
-    }).catch(err=>{
-
-        dispatch({
-            type:CREATE_ISSUE_PROJECT_FAILED,
-            error : true
-        })
-        console.log("error : ",err)
+        else{
+            dispatch({
+                type:CREATE_ISSUE_PROJECT_FAILED,
+                error : true
+            })
+          
+        }
+        console.log("error : ",error.response)
     })
 }
 export const clearAnswers = ()=>(dispatch)=>{

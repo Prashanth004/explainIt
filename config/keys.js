@@ -51,7 +51,12 @@ module.exports = {
     UPDATE_RECORDER_BLOB:"updateRecorderBlob",
     DEV_ENV:true,
     SERVER_RECORDING:"serverRecording",
-    SERVER_SHARING : "serverSharing"
+    SERVER_SHARING : "serverSharing",
+    MAX_UPLOAD_LIMIT:125,
+    ERROR_CODE_FILE_TOO_LARGE:413,
+    
+    FULL_SCREEN_RECORD:"fullScreenRecord",
+    FULL_SCREEN_SHARE:"fullScreenShare",
 
 };
 

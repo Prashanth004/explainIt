@@ -19,11 +19,12 @@ const endCallFloater = ()=>{
   msg = {
       'type': config.END_RECORD_FROM_FLOATER,
       'data': {
-          'tabId': state.callTabid
+         
       }
   };
   console.log("posting messages from floater")
 window.parent.postMessage(msg, "*");
+
 }
 export default (props) => {
   state.callTabid = props.callTabid;

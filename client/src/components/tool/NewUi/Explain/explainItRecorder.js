@@ -9,6 +9,7 @@ import SaveElement from '../saveRecoding'
 import Form from '../../Form'
 import { cancelAllMessageAction } from '../../../../actions/messageAction'
 import { restAllToolValue } from "../../../../actions/toolActions";
+import {postStartCall} from '../../../../actions/extensionAction'
 
 import {showCanvas, hideCanvas} from '../../../../actions/canvasAction'
 import TimerBar from '../TimerBar'
@@ -51,23 +52,10 @@ class FullScreenRecorder extends Component {
 
     }
     startBar(){
-      
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
-        const callStart = {
-            type:config.START_CALL,
-            data:{timer:this.props.timeAloted,
-            action:config.FULL_SCREEN_RECORD}
-        }
-        if (this.props.extSource !== null) {
-            console.log("posting start call from web application")
-            source.postMessage(callStart, origin);
-        }
-        else{
-            source.postMessage(callStart, '*');
-        }
-        
-        var timeAloted = this.props.timeAloted * 60 * 16
+        const {extSource,origin,timeAloted,postStartCall} =  this.props
+        postStartCall(config.FULL_SCREEN_RECORD,
+            origin,null,extSource,3,null)
+        var timeAlotedNew = timeAloted * 60 * 16
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
          progresDiv.style.display = "block";
@@ -77,7 +65,7 @@ class FullScreenRecorder extends Component {
            if (width >= 100) {
              clearInterval(id);
            } else {
-             width= width+(100/timeAloted); 
+             width= width+(100/timeAlotedNew); 
              progressbar.style.width=width+'%';
                    }
          }   
@@ -491,7 +479,8 @@ FullScreenRecorder.PropType={
     showCanvas: PropType.func.isRequired, 
     hideCanvas: PropType.func.isRequired,
     cancelAllMessageAction:PropType.func.isRequired,
-    restAllToolValue:PropType.func.isRequired
+    restAllToolValue:PropType.func.isRequired,
+    postStartCall:PropType.func.isRequired
 }
 const mapStateToProps = state =>({
     isFullScreenRecording :state.tools.isFullScreenRecording,
@@ -510,5 +499,5 @@ const mapStateToProps = state =>({
 export default connect(mapStateToProps,{saveSourceId,
     cancelAllMessageAction,
     restAllToolValue,
-     showCanvas, hideCanvas,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
+     showCanvas, hideCanvas,postStartCall,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
 

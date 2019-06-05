@@ -17,7 +17,7 @@ export default class componentName extends Component {
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method: 'get',
-            url: config.base_dir + "/api/users/id/" + this.props.activity.touser,
+            url: config.base_dir + "/api/users/id/" + this.props.activity.fromuser,
             headers: {
                 "Authorization": token,
             }
@@ -33,7 +33,7 @@ export default class componentName extends Component {
     }
     render() {
         var date = this.props.activity.date.slice(5, 7)
-        var timetaken = this.props.activity.duration;
+        var timetaken = this.props.activity.duration
         return (
             <div className="activityContentWithDate">
                 <div className="date">
@@ -48,10 +48,11 @@ export default class componentName extends Component {
                     </div>
                     <div style={{ textAlign: "left" }}>
                         <p>You were in call with <b>@{this.state.userName}</b> for the topic <b>{this.props.activity.subject}</b> for <b>{Math.floor(timetaken)} minutes and
-             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>.<a href={this.props.activity.link}>Click here acess the recordeing</a> </p>
+             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>. Call not saved</p>
 
                     </div>
                 </div>
+
             </div>
         )
     }

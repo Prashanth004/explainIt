@@ -91,9 +91,13 @@ handleConfirm() {
   openHome() {
     console.log(window.location.pathname)
     if (!(window.location.pathname).includes('application'))
-      window.open(config.react_url+'/application', '_self')
+      window.open(config.react_url+'/application', '_self')         
     else {
+      if(this.props.isSceenSharing || this.props.isFullScreenRecording)
+        window.open(config.react_url+'/application', '_blank')
+      else
       this.props.openHome()
+     
     }
 
   }
@@ -285,6 +289,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   userName: state.auth.userName,
   isSceenSharing: state.tools.isFullScreenSharing,
+  isFullScreenRecording: state.tools.isFullScreenRecording,
   screenAction: state.tools.screenAction,
   isSharingCompleted: state.tools.isSharingCompleted,
   isFullSharingCompleted: state.tools.isFullSharingCompleted,

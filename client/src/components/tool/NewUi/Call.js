@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Countdown from 'react-countdown-now';
 import config from '../../../config/config'
 import PropType from 'prop-types';
+import {postStartCall} from '../../../actions/extensionAction'
 import {increaseTimer} from '../../../actions/callAction'
 import { showCanvas, hideCanvas } from '../../../actions/canvasAction';
 
@@ -22,7 +23,7 @@ class Call extends Component {
         var self=this
         var socket = this.props.socket
         function postMessageHandler(event) {
-            console.log("eevbnt :", event)
+           
             if(event.data.type===config.END_CALL_FROM_EXTENSION){
                 console.log("peforming the endcall Action")
                 self.props.endCall();
@@ -57,26 +58,19 @@ class Call extends Component {
         }
     }
     componentWillMount(){
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
-        this.setState({
-            socket:this.props.socket
-        })
-        const callStart = {
-            type:config.START_CALL,
-            data:{timer:this.props.timeAloted,
-            profilePic:this.props.otherPersonPic,
-            action:config.FULL_SCREEN_SHARE}
-        }
-        if (this.props.extSource !== null) {
-            source.postMessage(callStart, origin);
-        }
-        else{
-            window.postMessage(callStart, "*")
-        }
+        localStorage.setItem('action',JSON.stringify(config.FULL_SCREEN_SHARE))
+        const {origin,postStartCall,otherPersonPic,otherPersonProfileId,extSource,socket,timeAloted}  = this.props;
+        postStartCall(config.FULL_SCREEN_SHARE,
+            origin,otherPersonPic,extSource,
+            timeAloted,otherPersonProfileId)
+        this.setState({ socket:socket })
     }
     increaseTime(){
+        console.log("call")
         this.props.increaseTimer();
+        this.props.conn.send({
+            data: "addtimer",
+        })
         var source = this.props.extSource
         var origin = this.props.extOrigin
         this.setState({
@@ -152,7 +146,8 @@ class Call extends Component {
 }
 Call.PropType = {
     showCanvas: PropType.func.isRequired,
-    hideCanvas: PropType.func.isRequired
+    hideCanvas: PropType.func.isRequired,
+    postStartCall:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
@@ -163,7 +158,7 @@ const mapStateToProps = state => ({
     extOrigin: state.extension.origin,
 })
 
-export default connect(mapStateToProps, { showCanvas,increaseTimer, hideCanvas })(Call)
+export default connect(mapStateToProps, {postStartCall, showCanvas,increaseTimer, hideCanvas })(Call)
 
 
 

@@ -16,11 +16,31 @@
     margin-top:-5px;
 }
 
-.righSectionLand{
-   
- 
+.loadinContainerDiv{
+    width:10%;
+    margin:auto;
+    margin-top:40vh;
+    text-align: center;
+    align-self: auto;
+    align-items: center;
 }
-
+.loader {
+    border: 12px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #2b8b8f;
+  border-bottom: 16px solid #2b8b8f;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  }
+  
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
 .onboardSection{
 
     margin-top:100px;

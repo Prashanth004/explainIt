@@ -5,6 +5,7 @@
     grid-template-columns: 25% 50% 25%
 }
 
+
 .profileImageCall{
     height:55px;
     width:55px;
@@ -31,7 +32,7 @@
       padding:10px;
 
   }
-  .loader{
+  .loaderCall{
       text-align:center;
       padding-left:15%;
       padding-top:40px;

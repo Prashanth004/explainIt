@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from './InputNumber';
-import { FiX, FiVideo } from "react-icons/fi";
 import AcceptTopic from './Saveproject'
 import config from '../../../config/config';
 import { setNoOfMinutes, updateCurrentTime } from '../../../actions/callAction'
 import { FaArrowLeft } from "react-icons/fa";
 import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
-import ProfileNotOnExplain from "./ProfileNotOnExplain"
+import ProfileNotOnExplain from "./ProfileNotOnTwitter/ProfileNotOnExplain"
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
 
 
@@ -200,7 +199,8 @@ class tweetSearch extends Component {
                         </span>
                         <ProfileNotOnExplain
                             isVisitProfile={this.state.isVisitProfile}
-                            twitterhandle={this.state.twitterHandle} />
+                            twitterhandle={this.state.twitterHandle}
+                            source = {config.SCREEN_SHARE_PAGE} />
 
                         <span style={{ fontSize: "14px" }}>
                             You can manually share the link now to get connected
@@ -212,53 +212,7 @@ class tweetSearch extends Component {
                     mainContainer = (null)
 
                 }
-                else if (!this.props.onlineStatus) {
-                    validatinginfo = (<div>
-                        <span style={{
-                            float: "left",
-                            fontSize: "15px"
-                        }}>
-                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
-                        </span>
-                        <br />
-                        <br />
-                        <span>{this.props.userName} is not ready accept screen share requests at the moment</span>
-                        <br />
-                        <span>You can record the screen and send</span>
-                        <br />
-                        <br />
-                        <span className="hint--bottom" aria-label="Record call and send">
-                            <FiVideo className="icons" onClick={this.props.recordCallAfterShare} />
-                        </span>                <span className="hint--bottom" aria-label="Cancel">
-                            <FiX className="icons" onClick={this.props.closeImidiate} />
-                        </span>
-                    </div>)
-                    mainContainer = (null)
-                }
-                else if(this.props.busyStatus){
-                    validatinginfo = (<div>
-                        <span style={{
-                            float: "left",
-                            fontSize: "15px"
-                        }}>
-                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
-                        </span>
-                        <br />
-                        <br />
-                        <span>{this.props.userName} is currently involved in Sharing or Recording activity. Try again after some time.</span>
-                        <br />
-                        <span>You can record the screen and send</span>
-                        <br />
-                        <br />
-                        <span className="hint--bottom" aria-label="Record call and send">
-                            <FiVideo className="icons" onClick={this.props.recordCallAfterShare} />
-                        </span>                <span className="hint--bottom" aria-label="Cancel">
-                            <FiX className="icons" onClick={this.props.closeImidiate} />
-                        </span>
-                    </div>)
-                    mainContainer = (null)
 
-                }
                 else {
 
                     validatinginfo = (<div>
