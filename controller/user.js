@@ -358,11 +358,11 @@ exports.updateOnlineStatus = (req, res) => {
 }
 
 const sendEmail = (toAddress, Subject, emailContent) => {
-    var transporter = nodemailer.createTransport({
-        service: config.EMAIL_SERVICE,
+     var transporter = nodemailer.createTransport({
+       host: "smtp.gmail.com", // hostname
+	secure: true,// use SSL
         port: 465,
-        secure: true,
-        auth: {
+               auth: {
             user: config.ADMIN_EMAIL,
             pass: config.EMAIL_PASSWORD
         }

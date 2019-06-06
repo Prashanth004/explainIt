@@ -35,7 +35,7 @@ router.post('/auth/twitter/reverse', function (req, res) {
     var qs = require('querystring')
         , oauth =
         {
-            callback: "http://localhost:3000/emailvarify"
+            callback: "https://explain.bookmane.in/emailvarify"
             , consumer_key: key.twitter.key,
             consumer_secret: key.twitter.secret
         }
@@ -111,7 +111,7 @@ router.post('/visit/auth/twitter/reverse/:twitterhandle', function (req, res) {
     var qs = require('querystring')
         , oauth =
         {
-            callback: "http://localhost:3000"
+            callback: "https://explain.bookmane.in/"
             , consumer_key: key.twitter.key,
             consumer_secret: key.twitter.secret
         }
