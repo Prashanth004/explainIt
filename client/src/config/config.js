@@ -8,8 +8,8 @@ var token = JSON.parse(localStorage.getItem("token"))
 
 
 const conf = {
-    base_dir:"https://explain.bookmane.in",
-    react_url:"https://explain.bookmane.in",
+    base_dir:"http://localhost:9000",
+    react_url:"http://localhost:3000",
     dataTime : date+"__"+time,
     token:token,
     googleClientId:"308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com",
