@@ -278,11 +278,13 @@ class ScreenRecorder extends Component {
 
         socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, data => {
             if (data.otherPeerId === self.state.destkey) {
+                console.log("got the message teeling peer wants to share his screen")
                 self.props.updateRemainingTime(self.props.currentTimeLeft)
                 //post a message to show floater
                 console.log("dsknskfnjn")
                 const {extSource, extOrigin} = self.props
-                self.props.displayScreenSharebutton(extSource,extOrigin)
+                self.props.displayScreenSharebutton(extSource,extOrigin);
+            
                 self.setState({
                     myscreenSharing: false
                 })

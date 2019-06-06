@@ -420,20 +420,23 @@ class DisplayShare extends Component {
         this.closeConnection()
     }
     shareScreen() {
+        console.log("this.state.initiatedScreenShare : ",this.state.initiatedScreenShare)
         var self = this;
         var socket = this.state.socket;
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime)
         if (this.state.initiatedScreenShare) {
+            console.log("initiated screen share already send socket message")
             this.setState({
                 myscreenSharing: true
             })
             socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, {
                 'otherPeerId': self.state.clientPeerid
             })
+            console.log("sending message on socket")
         }
         else {
-
+            console.log("initiated screen not happened so starting call")
             // var ua = window.detect.parse(navigator.userAgent);
             const result = browser();
             if (result.name === "chrome") {
