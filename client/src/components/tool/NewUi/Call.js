@@ -59,9 +59,9 @@ class Call extends Component {
     }
     componentWillMount(){
         localStorage.setItem('action',JSON.stringify(config.FULL_SCREEN_SHARE))
-        const {origin,postStartCall,otherPersonPic,otherPersonProfileId,extSource,socket,timeAloted}  = this.props;
+        const {extOrigin,postStartCall,otherPersonPic,otherPersonProfileId,extSource,socket,timeAloted}  = this.props;
         postStartCall(config.FULL_SCREEN_SHARE,
-            origin,otherPersonPic,extSource,
+            extOrigin,otherPersonPic,extSource,
             timeAloted,otherPersonProfileId)
         this.setState({ socket:socket })
     }

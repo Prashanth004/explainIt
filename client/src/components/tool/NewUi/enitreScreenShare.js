@@ -169,8 +169,8 @@ class ScreenRecorder extends Component {
         });
     }
     endCall() {
-        const {extSource, origin} = this.props
-        postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,origin)
+        const {extSource, extOrigin} = this.props
+        postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,extOrigin)
         var self = this
         var peer = this.state.peer;
         var socket = this.state.socket
@@ -320,8 +320,8 @@ class ScreenRecorder extends Component {
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
             if (data.otherPeerId === self.state.destkey) {
                 self.stopShare();
-                const {extSource, origin} = this.props
-                postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,origin)
+                const {extSource, extOrigin} = this.props
+                postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,extOrigin)
                 self.setState({
                     initiatedCloseCall: true
                 })
@@ -332,8 +332,8 @@ class ScreenRecorder extends Component {
             console.log("data : ", data)
 
             if (data.clientId === self.state.destkey) {
-                const {extSource, origin} = this.props
-                postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,origin)
+                const {extSource, extOrigin} = this.props
+                postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,extOrigin)
                 console.log("ending the call")
                 if (peer !== null) {
                     console.log("destroying peer")
@@ -751,11 +751,11 @@ class ScreenRecorder extends Component {
 
     stopShare() {
         const { twitterUserId, endSecondScreenShare, saveVideoBlob,
-            fullStopedSharing, isSceenSharing, origin,
+            fullStopedSharing, isSceenSharing, extOrigin,
             extSource,postEndCall} = this.props
         const { stopedSharing, recorder, call, closedHere, timerEnded } = this.state
         const self = this;
-       postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,origin)
+       postEndCall( config.END_CALL_PEER_FROM_EXTNESION, extSource,extOrigin)
         if (!stopedSharing) {
             this.setState({ stopedSharing: true })
 

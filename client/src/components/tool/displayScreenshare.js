@@ -4,15 +4,15 @@ import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
-import { MdCallEnd } from "react-icons/md";
+// import { MdCallEnd } from "react-icons/md";
 import Countdown from 'react-countdown-now';
-import { MdFilterNone } from "react-icons/md";
+// import { MdFilterNone } from "react-icons/md";
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
 import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
 import { answerCall } from '../../actions/callAction'
 import { connect } from 'react-redux';
-import ProfileCard from './NewUi/ProfileHover'
+// import ProfileCard from './NewUi/ProfileHover'
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { postStartCall, addExtraTimerfromReciever, postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
@@ -575,22 +575,22 @@ class DisplayShare extends Component {
                     <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
                 </div>))
         var ShareElement = null;
-        var ProfileHover = null;
+        // var ProfileHover = null;
         const shouldDisplay = (!this.state.myscreenSharing) ? ("block") : ("none")
         const messageOfScreenShare = (!this.state.myscreenSharing) ? (<h4><b>Screen of {this.state.callerProfileName}</b></h4>) :
             (<h4><b>Your screen is being shared</b></h4>)
-        const DownloadExt = (this.state.isInstalled) ? (
-            null) : (<div className="messageToDownload">
-                <h3>Please download the chrome extension to continue</h3>
-                <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-            </div>)
-        if (this.state.callerProfileId !== null) {
-            ProfileHover = (<ProfileCard
-                userId={this.state.callerProfileId} />)
-        }
-        else {
-            ProfileHover = null
-        }
+        // const DownloadExt = (this.state.isInstalled) ? (
+        //     null) : (<div className="messageToDownload">
+        //         <h3>Please download the chrome extension to continue</h3>
+        //         <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
+        //     </div>)
+        // if (this.state.callerProfileId !== null) {
+        //     ProfileHover = (<ProfileCard
+        //         userId={this.state.callerProfileId} />)
+        // }
+        // else {
+        //     ProfileHover = null
+        // }
 
         var displayLoginMessage = (!!this.props.isLoggedIn) ? (<div><p></p></div>) :
             (<div><p><b>Login in to explain to be able initiate screen shares</b></p>
@@ -642,44 +642,6 @@ class DisplayShare extends Component {
                         <video className="VideoElementReciever" style={{ display: shouldDisplay }} autoPlay={true} id="video" srcobject={this.state.videoStream} ></video>
                     </div>
 
-
-                    <div className="callImageDivAnwserMainRecieve">
-                        <div className="decreasePadding">
-                            <div className="callPage-recieverImageDiv">
-                                <span>
-                                    <MdCallEnd onClick={this.endCall}
-                                        className="img__overlayRec"
-                                        style={{
-                                            padding: "10px"
-                                        }} />
-                                </span>
-
-                                <span className="tooltiptext" >
-                                    <div>
-                                        {ProfileHover}
-
-                                    </div></span>
-
-                                <img alt=" " className="callPage-recieverImageRecieve"
-
-                                    src={this.state.picture}></img>
-                            </div>
-
-                        </div>
-                        <div className="screenShareFloat">
-                            <span className="tooltiptextChrome" >
-                                <div>
-                                    {DownloadExt}
-
-                                </div>
-                            </span>
-                            <div style={{ display: shouldDisplay }} className="callPage-recieverImageDiv endCall">
-                                <span className="hint--top" aria-label="Share my screen">
-                                    <MdFilterNone onClick={this.shareScreen} className="endButton" />
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             )
