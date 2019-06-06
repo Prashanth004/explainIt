@@ -111,9 +111,12 @@ class ShareFloater extends Component {
                 if(event.data.data.action === config.FULL_SCREEN_SHARE){
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay',JSON.stringify("none"));
+                    this.props.setDiplayOfFloater("none");
                 }
                 else{
                     localStorage.setItem('shareDisplay',JSON.stringify("block"));
+                    this.props.setDiplayOfFloater("block");
+
                 }
                
                 self.props.setTime(event.data.data.timer)
