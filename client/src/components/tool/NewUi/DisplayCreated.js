@@ -82,7 +82,7 @@ else
           issueItems =this.state.issueArray.map((issue, index) => (
             <div   key={index+123456} className="createdCard">
              <IssueCard 
-           
+              socket={this.props.socket}
              deleteProjects={this.deleteProjects}
              projectId={this.state.projectId}
              itsHome={this.state.itsHome}
