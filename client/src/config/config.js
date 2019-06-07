@@ -115,7 +115,12 @@ const conf = {
     DISPLAY_SHARE_ICON_TO_EXTENSION : "displayShareIconToExetesion",
     DISPLAY_SHARE_ICON_TO_FLOATER : "displayShareIconToFloater",
     HIDE_SHARE_ICON_TO_EXTENSION:"hideShareIconToExtension",
-    HIDE_SHARE_ICON_TO_FLOATER:"hideShareIconToFloater"
+    HIDE_SHARE_ICON_TO_FLOATER:"hideShareIconToFloater",
+    PEER_SHARE_SCREEN_REQUEST :"perrShareScreenRequest",
+    MESSSAGE_FOR_CONNECTION_WITH_ID:"messageForConnectionWithId",
+    UPDATE_INFO : "updateInfo",
+    PERMISSION_DENIED :'PermissionDeniedError',
+    END_WHILE_DIALING:'endWhileDialing'
 
 }
 export default conf

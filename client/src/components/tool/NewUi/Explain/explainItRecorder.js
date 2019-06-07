@@ -33,7 +33,8 @@ class FullScreenRecorder extends Component {
             copyStatus:"copy link",
             saveBtnClicked:false,
             showCanvas:false,
-            isInstalled:true
+            isInstalled:true,
+            permissonDenied:false
            
             
         }
@@ -151,6 +152,9 @@ class FullScreenRecorder extends Component {
                 if(event.data.type === config.END_RECORD_FROM_EXTENSION){
                     self.recordScreenStop()
                 }
+            }
+            if(event.data.type === config.PERMISSION_DENIED){
+                self.setState({permissonDenied:true})
             }
             if (event.data.sourceId !== undefined) {
              
@@ -345,10 +349,12 @@ toggleCanvas(){
                 </div>)
         }
         else{
-            recordingEle = ( <div >
-                <p>Explain by recording screen.</p>
-            
-                </div>)
+            recordingEle = (!this.state.permissonDenied?(<div >
+                <p>Record the screen and share</p>
+            </div>):(<div>
+                <p>Permission enied to record the screen</p>
+                <button className="buttonLight" onClick={this.props.reStoreDefault}>Close</button>
+            </div>))
         }
         var showCanv = (this.state.showCanvas)?(
             <div className="canvToolDivCall">

@@ -63,7 +63,8 @@ class DisplayShare extends Component {
             selfClose: false,
             selfCloseTime: 1,
             connectionFailed: false,
-            timeAloted: 3
+            timeAloted: 3,
+            muted:false
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -73,6 +74,8 @@ class DisplayShare extends Component {
         this.downloadExtension = this.downloadExtension.bind(this);
         this.renderer = this.renderer.bind(this);
         this.renderer2 = this.renderer2.bind(this);
+        this.muteAudio = this.muteAudio.bind(this);
+        this.unMuteAudio = this.unMuteAudio.bind(this);
     }
     downloadExtension() {
         window.open(config.EXTENSION_URL)
@@ -82,8 +85,28 @@ class DisplayShare extends Component {
         window.close();
     }
 
+    
+    muteAudio(){
+        const {stream} = this.state;
+        var audioTracks = stream.getAudioTracks();
+        if (audioTracks[0]) {
+                audioTracks[0].enabled = false;
+            }
+            this.setState({muted:true})
+    }
+    unMuteAudio(){
+        const {stream} = this.state;
+        var audioTracks = stream.getAudioTracks();
+        if (audioTracks[0]) {
+                audioTracks[0].enabled = true;
+            }
+            this.setState({muted:false})
+    }
+
     componentDidMount() {
-        var self = this
+        var self = this;
+        const {extSource, extOrigin} = this.props;
+        this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE,extSource,extOrigin)
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
@@ -107,7 +130,6 @@ class DisplayShare extends Component {
         function postMessageHandler(event) {
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                console.log("saving the extension credentials")
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -116,14 +138,12 @@ class DisplayShare extends Component {
                 self.props.saveExtensionDetails(event.source, event.origin)
             }
             if (event.data.type === config.END_CALL_RECIEVER_TO_WEB) {
-                console.log(" got command to end Call----")
                 self.endCall()
             }
             if (event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION) {
                 self.shareScreen();
             }
             if (event.data.sourceId !== undefined) {
-                console.log("got the source id")
                 self.props.saveSourceId(event.data.sourceId)
                 self.startCall()
             }
@@ -158,7 +178,6 @@ class DisplayShare extends Component {
         })
         
         socket.on(config.SEND_SHARABLE_LINK, data => {
-            console.log("data : ", data)
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
                 if (data.successMessage === "true")
                     self.setState({
@@ -173,18 +192,7 @@ class DisplayShare extends Component {
             }
         })
 
-        socket.on(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, data => {
-            if (data.otherPeerId === self.state.peerIdFrmPeer) {
-                var presentTime = JSON.parse(localStorage.getItem("timer"));
-                this.props.setTime(presentTime);
-                const { extSource, extOrigin } = self.props
-                self.props.displayScreenSharebutton(extSource, extOrigin)
-                self.setState({
-                    myscreenSharing: false
-                })
-            }
-        })
-        socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+          socket.on(config.CLOSE_NETWORK_ISSUE, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
                 self.closeConnection()
             }
@@ -200,7 +208,6 @@ class DisplayShare extends Component {
             }
         })
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
-            console.log("got the validation  : ", data)
             if (data.success === 1) {
                 self.setState({
                     validCheckComplete: true,
@@ -235,17 +242,12 @@ class DisplayShare extends Component {
 
     componentWillMount() {
         localStorage.setItem('action', JSON.stringify(config.RECIEVER_SCREEN_SHARE))
-
-
         var self = this
         setTimeout(() => {
-
             if (self.state.connected) {
                 self.setState({ connectionFailed: true })
-
             }
             else {
-
             }
         }, 20000);
         const socket = socketIOClient(config.base_dir);
@@ -257,7 +259,6 @@ class DisplayShare extends Component {
         this.setState({ peerIdFrmPeer: peerIdFrmPeer })
         this.peerConnections(socket, peerIdFrmPeer);
         this.props.stillAuthenicated();
-
     }
 
     peerConnections(socket, peerIdFrmPeer) {
@@ -277,38 +278,42 @@ class DisplayShare extends Component {
             })
         });
         // var startConnection = new Promise((resolve, reject) => {
+            
         var conn = peer.connect(peerIdFrmPeer);
         conn.on('open', function () {
             conn.on('data', data => {
-
-                if (data.data === "addtimer") {
-                    console.log("DisPL")
-                    self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin)
+                var presentTime = null
+                if(data.type === config.PEER_SHARE_SCREEN_REQUEST){
+                    if (data.otherPeerId === self.state.peerIdFrmPeer) {
+                        presentTime = JSON.parse(localStorage.getItem("timer"));
+                        this.props.setTime(presentTime);
+                        const { extSource, extOrigin } = self.props
+                        self.props.displayScreenSharebutton(extSource, extOrigin)
+                        self.setState({myscreenSharing: false })
+                    }
                 }
-                var presentTime = JSON.parse(localStorage.getItem("timer"));
-                var updateTime = presentTime + 1;
-
-                self.props.setTime(updateTime)
-
+                if (data.data === "addtimer") {
+                    self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
+                    presentTime = JSON.parse(localStorage.getItem("timer"));
+                    var updateTime = presentTime + 1;
+                    self.props.setTime(updateTime)
+                }
             })
 
 
             conn.on('data', data => {
-
                 if (data.data === "sendID") {
                     if (config.CALL_LOGS) {
-                        console.log("got connection acknowledge")
-                        console.log("sending message")
-                        console.log("timer : ", data.timer)
+                     
                     }
 
                     conn.send({
+                        type:config.MESSSAGE_FOR_CONNECTION_WITH_ID,
                         clientId: self.state.clientPeerid,
                     });
                     localStorage.setItem('profilePic', JSON.stringify(data.profilePic));
                     self.props.setTime(data.timer)
-                    const { extSource, extOrigin } = self.props
-                    self.props.refreshExtension(config.RECIEVER_SCREEN_SHARE, extSource, extOrigin)
+                  
                 }
             })
 
@@ -331,12 +336,11 @@ class DisplayShare extends Component {
                     null
                 )
                 self.setState({
-                    recorder: recorder1
+                    recorder: recorder1,
                 })
 
 
                 if (config.CALL_LOGS)
-                    console.log("answering call..")
                 call.on('stream', function (stream) {
                     socket.emit(config.CALL_ACK_MESSAGE, {
                         'clientId': self.state.clientPeerid,
@@ -359,7 +363,6 @@ class DisplayShare extends Component {
                 });
 
                 call.on('close', function () {
-                    console.log("call.on'close' ")
                     if (!self.state.callEnded) {
                         self.closeConnection()
                     }
@@ -420,34 +423,32 @@ class DisplayShare extends Component {
         this.closeConnection()
     }
     shareScreen() {
-        console.log("this.state.initiatedScreenShare : ",this.state.initiatedScreenShare)
+        const { conn } = this.state;
         var self = this;
-        var socket = this.state.socket;
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime)
         if (this.state.initiatedScreenShare) {
-            console.log("initiated screen share already send socket message")
             this.setState({
                 myscreenSharing: true
             })
-            socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, {
+            conn.send({
+                'type' : config.PEER_SHARE_SCREEN_REQUEST,
                 'otherPeerId': self.state.clientPeerid
             })
-            console.log("sending message on socket")
+            // socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, {
+            //     'otherPeerId': self.state.clientPeerid
+            // })
         }
         else {
-            console.log("initiated screen not happened so starting call")
             // var ua = window.detect.parse(navigator.userAgent);
             const result = browser();
             if (result.name === "chrome") {
-                console.log("detected chome")
                 if (config.ENVIRONMENT !== "test") {
                     if (this.state.isInstalled) {
                         self.receiveMessage()
                     }
                 }
                 else {
-                    console.log("sending requesto recieve message")
                     self.receiveMessage()
                 }
             }
@@ -476,7 +477,6 @@ class DisplayShare extends Component {
     }
 
     receiveMessage() {
-        console.log("recieving message")
         var source = this.props.extSource
         var origin = this.props.extOrigin
         const GET_SOURCE_ID = {
@@ -484,12 +484,10 @@ class DisplayShare extends Component {
         }
         if (this.props.extSource !== null) {
             if (config.CALL_LOGS)
-                console.log("requesting for source id");
             source.postMessage(GET_SOURCE_ID, origin);
         }
         else {
             window.postMessage(GET_SOURCE_ID, '*');
-            console.log("NUll")
         }
 
     }
@@ -533,7 +531,6 @@ class DisplayShare extends Component {
         });
     }
     closeConnection() {
-        console.log("ending the connection in close connection")
         const { socket, recorder, clientPeerid, closedHere, stream, secondVideoStream } = this.state;
         const { extSource, extOrigin, postEndCall } = this.props;
         const action = config.END_CALL_RECIEVER_PEER_FROM_WEB
@@ -628,12 +625,17 @@ class DisplayShare extends Component {
                             {sharableLinkMessage}
                             {selfCloseTimer}
                         </div>))))
+        const MuteButton=(this.state.muted)?(
+            <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
 
+        ):(                        <button className="buttonLight" onClick={this.muteAudio}>Mute </button>
+        )
 
         if (!this.state.callEnded) {
             ShareElement = (
                 <div className="shareVideoDisplay">
                     <div className="videoContainer">
+                        {MuteButton}
                         {messageOfScreenShare}
                         <div className="timerDiv">
                             <Countdown

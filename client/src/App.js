@@ -17,6 +17,7 @@ import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
 import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
+import Info from './components/tool/NewUi/NewFloater/info'
 import inbox from './components/tool/NewUi/Inbox'
 import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
@@ -44,6 +45,7 @@ class App extends Component {
             <Route exact path = '/' component = {landing}/>
             <Route exaxt path ='/emailvarify' component={emailvarify}/>
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
+            <Route exact path = "/info" component = {Info} />
             <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>
             <Route component={NoMatch} />
             </Switch>

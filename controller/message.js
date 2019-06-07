@@ -47,8 +47,8 @@ exports.checkReplyInfo = (req, res) => {
 }
 
 exports.getUnreadNumber = (req, res) => {
-    database.db.manyOrNone('select * from activities where unread =$1 and touser=$2 and activity=$3',
-    [1, req.user.id,config.MESSAGE_ACTIVITY])
+    database.db.manyOrNone('select * from activities where unread =$1 and touser=$2',
+    [1, req.user.id])
     .then(data=>{
             if (data !== null) {
                 res.status(200).send({
@@ -75,7 +75,7 @@ exports.changeUnread = (req, res) => {
     // update projects SET public = $1 
     // database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,time,unread)' +
     // 'values(${id},${link},${subject}, ${fromuser}, ${touser}, ${time},${unread})',
-    database.db.none('update activities SET unread = $1 WHERE touser = $2 and id= $3 and activity=$4', [0, req.user.id, req.params.messageid, config.MESSAGE_ACTIVITY])
+    database.db.none('update activities SET unread = $1 WHERE touser = $2 and id= $3', [0, req.user.id, req.params.messageid])
         .then(data => {
             res.io.emit(config.UPDATE_BADGE, {
                 "userId": req.user.id

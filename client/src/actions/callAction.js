@@ -5,10 +5,12 @@ import {CALL_DETAILS_ACCEPT,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,
     INITIATE_SEND,
+    ANSWERED_CALL,
     RESET_CALL_ACTIONS,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     BASIC_INFO_OF_CALL,
+    DISABLE_CALL_ACTION,
     UPATE_CURRENT_TIME_TO_DISPLAY,
     SAVE_TOPIC_OF_THE_CALL,
     SET_NUMBER_MINUTES } from './types'
@@ -34,12 +36,23 @@ export const setpeerId = (peerId)=>(dispatch)=>{
     })
 }
 
+export const answeredCall = ()=>(dispatch)=>{
+    dispatch({
+        type:ANSWERED_CALL
+    })
+}
+
 export const updateRemainingTime = (timeRem)=>dispatch=>{
     dispatch({
         type:UPATE_CURRENT_TIME_TO_DISPLAY,
         payload:timeRem
     })
     return true
+}
+export const disableCallAction = ()=>(dispatch)=>{
+   dispatch({
+        type:DISABLE_CALL_ACTION
+   }) 
 }
 export const saveTopicOfTheCall = (topic)=>(dispatch)=>{
     dispatch({

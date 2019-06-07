@@ -25,10 +25,12 @@ class ShareFloater extends Component {
         this.endCallFloater = this.endCallFloater.bind(this);
         this.renderer = this.renderer.bind(this);
     }
+
     componentWillMount() {
         var presentTime = null;
         var otherpersonProfilePic =  null;
         var action = null;
+      
         try{
             presentTime =JSON.parse(localStorage.getItem("timer"));
             otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
@@ -37,6 +39,7 @@ class ShareFloater extends Component {
         catch(e){
             console.log("error : ",e)
         }
+     
         this.props.setTime(presentTime)
         if(action === config.FULL_SCREEN_SHARE){
             this.setState({
@@ -52,16 +55,17 @@ class ShareFloater extends Component {
             })
             
         }
-        else{
+        else if(action === config.RECIEVER_SCREEN_SHARE){
             this.setState({
                 action: config.RECIEVER_SCREEN_SHARE,
                 otherPersonPic: otherpersonProfilePic,
             })            
         }
         var displayOption = JSON.parse(localStorage.getItem('shareDisplay'));
+        
         this.props.setDiplayOfFloater(displayOption)
-       
     }
+
     endCallFloater() {
         const {action} = this.state;
         console.log("action : ",action)
@@ -80,8 +84,8 @@ class ShareFloater extends Component {
         }
          window.parent.postMessage(msg, "*");
     }
+
     shareMyscreen() {
-      
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         var updateTime = presentTime;
         this.props.setTime(updateTime)
@@ -111,17 +115,12 @@ class ShareFloater extends Component {
                 if(event.data.data.action === config.FULL_SCREEN_SHARE){
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay',JSON.stringify("none"));
-                    this.props.setDiplayOfFloater("none");
                 }
-                else{
+                else if(event.data.data.action === config.RECIEVER_SCREEN_SHARE){
                     localStorage.setItem('shareDisplay',JSON.stringify("block"));
-                    this.props.setDiplayOfFloater("block");
-
+                    self.props.setDiplayOfFloater("block");
                 }
-               
                 self.props.setTime(event.data.data.timer)
-             
-               
             }
             if(event.data.action === config.DISPLAY_SHARE_ICON_TO_FLOATER){
                 self.props.setDiplayOfFloater("block");
@@ -129,7 +128,6 @@ class ShareFloater extends Component {
                 updateTime = presentTime;
                 self.props.setTime(updateTime);
                 localStorage.setItem('shareDisplay',JSON.stringify("block"));
-                // this.props.setTime
             }
             if(event.data.action === config.HIDE_SHARE_ICON_TO_FLOATER){
                 self.props.setDiplayOfFloater("none");
@@ -143,7 +141,6 @@ class ShareFloater extends Component {
                 console.log("fltr")
                 presentTime = JSON.parse(localStorage.getItem("timer"));
                 updateTime = presentTime;
-               
                 self.props.setTime(updateTime)
             }
             if (event.data.action === config.ADD_EXTRA_TIME_TO_FLOATER) {

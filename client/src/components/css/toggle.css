@@ -47,6 +47,13 @@
   width:20px;
 }
 
+.ExplainItDivBottom{
+  margin:auto;
+  margin-top:20px;
+  margin-bottom: 20px;
+  
+}
+
     .OverlayA {
     position: fixed;
     top: -2px;

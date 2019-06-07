@@ -39,7 +39,8 @@ class FullScreenRecorder extends Component {
             isInstalled: true,
             subjectOfMessage: null,
             sendBtnClicked: false,
-            savedfuncCalled: false
+            savedfuncCalled: false,
+            permissonDenied:false
 
         }
         this.downloadExtension = this.downloadExtension.bind(this);
@@ -56,7 +57,7 @@ class FullScreenRecorder extends Component {
         this.copyToClipboard = this.copyToClipboard.bind(this);
         this.toggleCanvas = this.toggleCanvas.bind(this);
         this.sendMessageLocal = this.sendMessageLocal.bind(this);
-        this.sendButtonClick = this.sendButtonClick.bind(this)
+        this.sendButtonClick = this.sendButtonClick.bind(this);
     }
     startBar() {
         const {extSource,extOrigin,timeAloted,postStartCall} = this.props
@@ -157,6 +158,9 @@ class FullScreenRecorder extends Component {
                     self.recordScreenStop()
                 }
             }
+            if(event.data.type === config.PERMISSION_DENIED){
+                self.setState({permissonDenied:true})
+            }
              else if(event.data.sourceId !== undefined) {
                 self.props.saveSourceId(event.data.sourceId)
                 self.startRecoding()
@@ -206,9 +210,9 @@ class FullScreenRecorder extends Component {
         // this.props.discardAfterRecord();
         window.location.reload();
     }
+  
     receiveMessage() {
-        var mainBtn = document.querySelector('.mainBtn');
-        mainBtn.style.backgroundColor = "rgb(133, 39, 39)";
+       
         this.convey.style.display = "none"
         var source = this.props.extSource
         var origin = this.props.extOrigin
@@ -378,10 +382,12 @@ class FullScreenRecorder extends Component {
             </div>)
         }
         else {
-            recordingEle = (<div >
+            recordingEle = (!this.state.permissonDenied?(<div >
                 <p>Record the screen and share</p>
-
-            </div>)
+            </div>):(<div>
+                <p>Permission enied to record the screen</p>
+                <button className="buttonLight" onClick={closeFunction}>Close</button>
+            </div>))
         }
         var showCanv = (this.state.showCanvas) ? (
             <div className="canvToolDivCall">
@@ -420,7 +426,7 @@ class FullScreenRecorder extends Component {
                     {timer}
 
                     <div className="btDiv">
-                        <button className="mainBtn" ref={a => this.convey = a} onClick={this.toggle}>{convey}</button>
+                        <button className="buttonLight" ref={a => this.convey = a} onClick={this.toggle}>{convey}</button>
                     </div>
                 </div>
             </div>

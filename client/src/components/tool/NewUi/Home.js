@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar';
-import { MdCallEnd,MdCall } from "react-icons/md";
+import { MdCallEnd, MdCall } from "react-icons/md";
 import Activity from './Activies.js/indexActivity'
 import DisplatCreated from './DisplayCreated';
-import {cancelSuccess} from '../../../actions/issueActions'
+import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
 import Profile from './Profile'
 import { getProfileDetails } from '../../../actions/profileAction';
-import {getAllMessages} from '../../../actions/messageAction'
+import { getAllMessages } from '../../../actions/messageAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
-import {getTotalUnread} from '../../../actions/messageAction'
+import { getTotalUnread } from '../../../actions/messageAction'
 import FullScreenShare from './enitreScreenShare'
 import FullScreenRecord from './FullScreenRecord'
 import socketIOClient from "socket.io-client";
@@ -27,11 +27,11 @@ import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
 import PropType from 'prop-types';
-import { FiGrid,FiList } from "react-icons/fi";
+import { FiGrid, FiList } from "react-icons/fi";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Swal from 'sweetalert2'
 import config from '../../../config/config';
-import {resetCallAction,getAllActivities} from '../../../actions/callAction'
+import { resetCallAction, getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
 import Content from './Content'
@@ -39,7 +39,7 @@ import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
 import { answerCall, missCall } from '../../../actions/callAction';
-import { openParticipated,openInbox, openCreated } from "../../../actions/navAction";
+import { openParticipated, openInbox, openCreated } from "../../../actions/navAction";
 import { cancelAllMessageAction } from '../../../actions/messageAction'
 
 
@@ -57,9 +57,11 @@ class NewHome extends Component {
             socket: null,
             showDetails: false,
             typeOfView: "list",
-            displayDetails:false,
-            reducedWidth:false,
-            callerId:null
+            displayDetails: false,
+            reducedWidth: false,
+            callerId: null,
+            endedCallFromOtherPeer: false,
+            newCall:true
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -79,21 +81,22 @@ class NewHome extends Component {
         this.changeViewToGrid = this.changeViewToGrid.bind(this);
         this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
         this.recordFullScreen = this.recordFullScreen.bind(this);
-        this.toggleInbox =this.toggleInbox.bind(this);
+        this.toggleInbox = this.toggleInbox.bind(this);
         this.saveVideoData = this.saveVideoData.bind(this);
         this.showInbox = this.showInbox.bind(this);
+    
     }
     toggleDisplayLink() {
         this.setState({
             displayLink: !this.state.displayLink,
-            showDetails:false,
-            displayDetails:false
+            showDetails: false,
+            displayDetails: false
         })
     }
-    resize(){
-        this.setState({reducedWidth: window.innerWidth <= 700});
-      }
-    saveVideoData(videoData,audioData, isPublic,text,action) {
+    resize() {
+        this.setState({ reducedWidth: window.innerWidth <= 700 });
+    }
+    saveVideoData(videoData, audioData, isPublic, text, action) {
         var issueId = null
         var textExplain = text
         var imgData = "null"
@@ -106,7 +109,7 @@ class NewHome extends Component {
             isquestion = "false"
             issueId = this.props.issueId
         }
-        this.props.creatAnsProject(textExplain, imgData, videoData,audioData, items, isquestion, issueId, isPublic,action)
+        this.props.creatAnsProject(textExplain, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
     }
     reloadPage() {
         window.location.reload();
@@ -114,8 +117,8 @@ class NewHome extends Component {
     openDtailsTab() {
         this.setState({
             showDetails: !this.state.showDetails,
-            displayDetails:false,
-            displayLink:false
+            displayDetails: false,
+            displayLink: false
         })
     }
 
@@ -128,14 +131,14 @@ class NewHome extends Component {
     }
 
     componentDidMount() {
-    
+
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
         var self = this
         function postMessageHandler(event) {
 
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-                
+
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -151,61 +154,67 @@ class NewHome extends Component {
         }
 
         var socket = this.state.socket
-        socket.on(config.UPDATE_BADGE,data=>{
-            if(data.userId===this.props.userId){
-            this.props.getTotalUnread()
-        }
+        socket.on(config.UPDATE_BADGE, data => {
+            if (data.userId === this.props.userId) {
+                this.props.getTotalUnread()
+            }
         })
-        socket.on(config.ENDING_RING,data=>{
-            if(data.ToUserId === this.props.userId){
-               
-                socket.emit(config.ENDING_RING_ACK,{
-                    "ToUserId":data.fromUserId
+        socket.on(config.END_WHILE_DIALING, data => {
+            if (data.ToUserId === this.props.userId) {
+                this.setState({ endedCallFromOtherPeer: true })
+            }
+        })
+        socket.on(config.ENDING_RING, data => {
+            if (data.ToUserId === this.props.userId) {
+
+                socket.emit(config.ENDING_RING_ACK, {
+                    "ToUserId": data.fromUserId
                 })
             }
         })
-      
-        socket.on(config.SAVED_NEW_PROJECT,data=>{
-            if(data.userId === this.props.userId){
-              
+
+        socket.on(config.SAVED_NEW_PROJECT, data => {
+            if (data.userId === this.props.userId) {
+
                 this.props.getProfileDetails(this.props.userId, config.SELF)
             }
         })
-        socket.on(config.NEW_MESSAGE,data=>{
-           if(data.touser === (this.props.userId)){
+        socket.on(config.NEW_MESSAGE, data => {
+            if (data.touser === (this.props.userId)) {
                 this.props.getTotalUnread();
                 this.props.getAllActivities()
             }
         })
-        socket.on('connect_failed', function() {
+        socket.on('connect_failed', function () {
             console.log("Sorry, there seems to be an issue with the connection!");
         })
         socket.on('error', function (err) {
-            console.log("err : ",err);
+            console.log("err : ", err);
         });
         socket.on('connect_timeout', function (err) {
-        console.log("socket. timeout")
+            console.log("socket. timeout")
         });
-        socket.on("disconnect",()=>{
+        socket.on("disconnect", () => {
             console.log("disconnected")
         })
-        socket.io.on("connect_error",()=>{
+        socket.io.on("connect_error", () => {
             console.log("server offfilene")
         })
-        
-        
+
+
         socket.on(config.LINK_TO_CALL, data => {
+            self.setState({endedCallFromOtherPeer:false})
             setTimeout(() => {
                 this.props.missCall();
             }, 18000)
             localStorage.setItem("profilePic", data.fromProfilePic)
             if (String(data.ToUserId) === this.props.userId) {
-                socket.emit(config.LINK_TO_CALL_ACK,{
-                    "fromUserId":data.fromUserId,
-                    "toUserId":data.toUserId
+                socket.emit(config.LINK_TO_CALL_ACK, {
+                    "fromUserId": data.fromUserId,
+                    "toUserId": data.toUserId
                 })
                 this.setState({
-                    callerId:data.fromUserId
+                    callerId: data.fromUserId
                 })
                 this.props.acceptCallDetails(
                     data.link,
@@ -234,22 +243,23 @@ class NewHome extends Component {
             showParticipatedIssue: false
         })
     }
-    toggleInbox(){
-        
+    toggleInbox() {
+
         this.setState({
             showProjects: true,
             openExplain: false,
-            showDetails:false
+            showDetails: false
         })
+        this.handleConfirm()
         this.props.openInbox()
     }
     toggleCreatedIssue() {
         this.setState({
-            showDetails:false,
-            displayDetails:false,
-         
+            showDetails: false,
+            displayDetails: false,
+
         })
-        
+
         this.setState({
             showProjects: true,
             openExplain: false
@@ -258,10 +268,10 @@ class NewHome extends Component {
     }
     toggleParticipatedIssue() {
         this.setState({
-            showDetails:false,
-            displayDetails:false,
+            showDetails: false,
+            displayDetails: false,
         })
-       
+
         this.setState({
             showProjects: true,
             openExplain: false
@@ -270,8 +280,8 @@ class NewHome extends Component {
     }
     recordFullScreen() {
         this.setState({
-            showDetails:false,
-            displayLink:false
+            showDetails: false,
+            displayLink: false
         })
         if (!this.state.displayDetails) {
             this.setState({
@@ -285,10 +295,10 @@ class NewHome extends Component {
             })
         }
     }
-    showInbox(){
+    showInbox() {
         this.setState({
-            showDetails:false,
-            displayLink:false
+            showDetails: false,
+            displayLink: false
         })
         if (!this.state.displayDetails) {
             this.setState({
@@ -305,8 +315,8 @@ class NewHome extends Component {
 
     shareFullScreenShare() {
         this.setState({
-            showDetails:false,
-            displayLink:false
+            showDetails: false,
+            displayLink: false
         })
         if (!this.state.displayDetails) {
             this.setState({
@@ -353,10 +363,10 @@ class NewHome extends Component {
     answerCall() {
         window.open(this.props.callActionLink);
         this.props.answerCall();
-        var socket =  this.state.socket;
+        var socket = this.state.socket;
 
         socket.emit(config.ACCEPT_SHARE_REQUEST, {
-            'toUserId':this.state.callerId,
+            'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
 
@@ -369,7 +379,7 @@ class NewHome extends Component {
     rejectCall() {
         var socket = this.state.socket
         socket.emit(config.REJECT_REPLY, {
-            'toUserId':this.state.callerId,
+            'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
         this.props.answerCall();
@@ -456,84 +466,84 @@ class NewHome extends Component {
     }
 
     render() {
-       var issuepercentage="65%";
-        var percentage ="35%";
-        var displayLinkDiv=null;
+        var issuepercentage = "65%";
+        var percentage = "35%";
+        var displayLinkDiv = null;
         var profileCardElement = null;
-        if(this.state.reducedWidth){
-            issuepercentage="100%"
+        if (this.state.reducedWidth) {
+            issuepercentage = "100%"
         }
         if (this.props.screenAction === SCREEN_RECORD ||
             this.props.screenAction === SCREEN_SHARE) {
-              percentage = "85%";
-          }
-          else {
+            percentage = "85%";
+        }
+        else {
             if (this.props.screenAction === FULL_SCREEN_SHARE ||
-              this.props.screenAction === FULL_SCREEN_RECORD){
-               
-                if(this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare){
-                  percentage = "100%";
-                  
+                this.props.screenAction === FULL_SCREEN_RECORD) {
+
+                if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
+                    percentage = "100%";
+
                 }
-                else{
-                  percentage = "30%";
+                else {
+                    percentage = "30%";
                 }
-              
-              }
-              else{
-                if(this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare){
-                 
-                  percentage = "100%";
-                  
+
+            }
+            else {
+                if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
+
+                    percentage = "100%";
+
                 }
-                else{
-                  percentage = "30%";
+                else {
+                    percentage = "30%";
                 }
             }
         }
-       
+
         var shareRecord = null
-        if(!this.props.inbox &&!this.props.created && !this.props.participated){
-        if (this.props.screenAction === FULL_SCREEN_RECORD) {
-            shareRecord = (<FullScreenRecord
-                socket={this.state.socket}
-                closeImidiate={this.handleConfirm}
-                reStoreDefault={this.reStoreDefault}
-                savefile={this.saveVideoData}
-            />)
+        if (!this.props.inbox && !this.props.created && !this.props.participated) {
+            if (this.props.screenAction === FULL_SCREEN_RECORD) {
+                shareRecord = (<FullScreenRecord
+                    socket={this.state.socket}
+                    closeImidiate={this.handleConfirm}
+                    reStoreDefault={this.reStoreDefault}
+                    savefile={this.saveVideoData}
+                />)
+            }
+            else if (this.props.screenAction === FULL_SCREEN_SHARE) {
+                shareRecord = (<FullScreenShare
+                    toggleInbox={this.toggleInbox}
+                    socket={this.state.socket}
+                    onRef={ref => (this.child = ref)}
+                    closeImidiate={this.handleConfirm}
+                    reStoreDefault={this.reStoreDefault}
+                    savefile={this.saveVideoData}
+                />)
+            }
+            else {
+                shareRecord = (<Inboxfeed />)
+            }
         }
-        else if (this.props.screenAction === FULL_SCREEN_SHARE) {
-            shareRecord = (<FullScreenShare
-                toggleInbox={this.toggleInbox}
-            socket={this.state.socket}
-                onRef={ref => (this.child = ref)}
-                closeImidiate={this.handleConfirm}
-                reStoreDefault={this.reStoreDefault}
-                savefile={this.saveVideoData}
-            />)
-        }
-        else{
-            shareRecord = (<Inboxfeed />)
-        }
-    }
-        const activityDiv =(this.state.displayDetails)?(
-            <div style={{width:percentage, margin:"auto"}}>
-            {shareRecord}
-         </div>
-        ):(null)
-        const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated)?(
-            null
-        ):( <Profile 
-        isHome ={this.state.isHome}/>))
-           
+        const activityDiv = (this.state.displayDetails) ? (
+            <div style={{ width: percentage, margin: "auto" }}>
+                {shareRecord}
+            </div>
         ) : (null)
-      
+        const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated) ? (
+            null
+        ) : (<Profile
+            isHome={this.state.isHome} />))
+
+        ) : (null)
+
         const externalCloseBtn = <button className="close modalClose" style={{ position: 'absolute', top: '25px', height: '45px', width: '45', right: '25px', color: 'white' }} onClick={this.toggle}>&times;</button>;
         var self = this
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         var deatilsModal = null
-        if(this.props.myissues!==null)
-        var issuesCreated = (this.props.myissues)
+        if (this.props.myissues !== null)
+            var issuesCreated = (this.props.myissues)
         var feedDiv = null;
 
         window.addEventListener('storage', function (event) {
@@ -542,77 +552,71 @@ class NewHome extends Component {
             }
         })
 
-        const callNotificationDiv = (this.props.incommingCall) ? (
+        const callNotificationDiv = (this.props.incommingCall && !this.state.endedCallFromOtherPeer) ? (
             <div className="callNotification">
                 <div>
                     <div className="callerProfileImage">
-                        <img alt="caller profile Pic"className="callerProfileImageElement" src={this.props.callerProfilePic} />
+                        <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
                     </div>
-                    <audio style={{ display: "none" }} autoPlay  loop src={require('../../audio/simple_beep.mp3')}></audio>
-
+                    <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio>
                     <p>{this.props.callerName}</p>
                     <div className="acceptRejectDiv">
-                    <span className="hint--top" aria-label="Accept Request">
-                        <div onClick={this.answerCall} className="acceptCall">
-                            <MdCall />
-                        </div>
+                        <span className="hint--top" aria-label="Accept Request">
+                            <div onClick={this.answerCall} className="acceptCall">
+                                <MdCall />
+                            </div>
                         </span>
                         <span className="hint--top" aria-label="Ask to send recording">
-                        <div  onClick={this.rejectCall} className="acceptCall reject">
-                            <MdCallEnd/>
-                        </div>
+                            <div onClick={this.rejectCall} className="acceptCall reject">
+                                <MdCallEnd />
+                            </div>
                         </span>
-                        {/* <button className="acceptCall">Accept Share Request</button>
-                        <br/>
-                        <button className="buttonLight">Ask to send recording</button>
-                        {/* <p onClick={this.answerCall}><a href="#">Accept Screen-share Request</a></p>
-                        <p onClick={this.rejectCall}><a href="#">Ask to send the recording</a></p> */} 
                     </div>
                 </div>
             </div>
         ) : (null)
 
         deatilsModal = (<IssueDetils />)
-       
+
         if (this.props.isAauthenticated) {
             if (!this.props.incommingCall && (this.props.participated || this.props.created)) {
                 var participatedDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{ width: issuepercentage }} >
                         <div className="closeBtnHolder">
                         </div>
-                        <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool}/>
+                        <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} />
                     </div>
                 ) : (<div className="issueContainer" style={{ width: "80%" }} >
-        
+
                     <div className="closeBtnHolder">
                     </div>
-                    <DisplatCreated home={config.HOME} issueArray={(this.props.participated)?this.props.participatedIssues:issuesCreated} />
+                    <DisplatCreated home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
                 </div>)
                 // explainDiv = null
                 feedDiv = (
                     // <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
-                       <div>
-                       <div style={{float:"right"}} >
+                    <div>
+                        <div style={{ float: "right" }} >
                             <span className="hint--top" aria-label="List View">
-                            <FiList onClick={this.changeViewToList} className="listView"/>
+                                <FiList onClick={this.changeViewToList} className="listView" />
                             </span>
                             <span className="hint--top" aria-label="Grid View">
-                            <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
+                                <FiGrid onClick={this.changeViewToGrid} className="gridView" />
                             </span>
                         </div>
-                        
+
                         {participatedDiv}
-                        </div>
+                    </div>
                 )
-                    // </Animated>)
+                // </Animated>)
 
             }
-            else if(this.props.inbox){
+            else if (this.props.inbox) {
                 // explainDiv = null
-                feedDiv =(<Activity userId={this.props.userId}/>)
+                feedDiv = (<Activity userId={this.props.userId} />)
             }
             else {
-                
+
             }
         }
 
@@ -621,6 +625,7 @@ class NewHome extends Component {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
                 this.props.isSceenSharing ||
+                this.props.callAction ||
                 this.props.isFullScreenRecording ||
                 // this.props.screenAction === FULL_SCREEN_SHARE ||
                 // this.props.screenAction === FULL_SCREEN_RECORD ||
@@ -631,11 +636,11 @@ class NewHome extends Component {
             }
             else if (this.props.userId !== null) {
                 if (this.state.displayLink &&
-                    !this.props.incommingCall && 
+                    !this.props.incommingCall &&
                     !this.props.inbox &&
-                    !this.props.created && 
-                    !this.props.participated 
-                    ){
+                    !this.props.created &&
+                    !this.props.participated
+                ) {
                     displayLinkDiv = (<div className="sharableLinkSection">
                         <Button close onClick={this.toggleDisplayLink} />
                         <p>Your shareable Link</p>
@@ -645,7 +650,7 @@ class NewHome extends Component {
                 else {
                     displayLinkDiv = null
                 }
-              
+
 
                 profileCardElement = (
                     <div className="ProfileDiv"><ProfileCard
@@ -670,7 +675,7 @@ class NewHome extends Component {
             profileCardElement = (<Content />)
         }
 
-        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"}/>) : (
+        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             <div className="fullHome">
                 <Navbar />
 
@@ -680,7 +685,7 @@ class NewHome extends Component {
                         {profileCardElement}
                         {/* {explainItBt/n} */}
                     </div>
-                   {activityDiv}
+                    {activityDiv}
                     <div>
                         {feedDiv}
                     </div>
@@ -713,12 +718,12 @@ NewHome.PropType = {
     openCreated: PropType.func.isRequired,
     cancelAllMessageAction: PropType.func.isRequired,
     resetValues: PropType.func.isRequired,
-    creatAnsProject:PropType.func.isRequired,
-    openInbox:PropType.func.isRequired,
-    getAllMessages:PropType.func.isRequired,
-    resetCallAction:PropType.func.isRequired,
-    getProfileDetails:PropType.func.isRequired,
-    getAllActivities:PropType.func.isRequired
+    creatAnsProject: PropType.func.isRequired,
+    openInbox: PropType.func.isRequired,
+    getAllMessages: PropType.func.isRequired,
+    resetCallAction: PropType.func.isRequired,
+    getProfileDetails: PropType.func.isRequired,
+    getAllActivities: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
@@ -735,20 +740,20 @@ const mapStateToProps = state => ({
     email: state.auth.email,
     userId: state.auth.id,
     callerName: state.call.userName,
-    callerId : state.call.id,
+    callerId: state.call.id,
     callerProfilePic: state.call.profilePic,
     callActionLink: state.call.link,
     incommingCall: state.call.incommingCall,
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
-    inbox:state.nav.openInbox,
+    inbox: state.nav.openInbox,
     isSceenSharing: state.tools.isFullScreenSharing,
     isFullScreenRecording: state.tools.isFullScreenRecording,
-    showCanvas:state.canvasActions.showCanvas,
-    issueId:state.issues.currentIssueId,
+    showCanvas: state.canvasActions.showCanvas,
+    issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
-    
+    callAction: state.call.callAction
 
 
 
@@ -772,7 +777,7 @@ export default connect(mapStateToProps, {
     setIssueId,
     getTotalUnread,
     displayFullScrenRecord,
-     displayFullScreShare ,
+    displayFullScreShare,
     creatAnsProject,
     cancelSuccess,
     clearAnswers, stillAuthenicated,

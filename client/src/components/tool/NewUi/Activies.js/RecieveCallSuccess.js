@@ -2,10 +2,14 @@
 import axios from 'axios';
 import config from '../../../../config/config';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropType from 'prop-types';
 import './activity.css';
+import { changeReadStatus } from '../../../../actions/messageAction'
 
 
-export default class componentName extends Component {
+
+class recCallSuc extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -14,6 +18,8 @@ export default class componentName extends Component {
         }
     }
     componentWillMount() {
+        this.props.changeReadStatus(this.props.activity.id)
+
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method: 'get',
@@ -48,7 +54,7 @@ export default class componentName extends Component {
                     </div>
                     <div style={{ textAlign: "left" }}>
                         <p>You were in call with <b>@{this.state.userName}</b> for the topic <b>{this.props.activity.subject}</b> for <b>{Math.floor(timetaken)} minutes and
-             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>. <a href={this.props.activity.link}>Click here acess the recordeing</a> </p>
+             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>. <a href={this.props.activity.link}>Click here acess the recording</a> </p>
 
                     </div>
                 </div>
@@ -57,5 +63,18 @@ export default class componentName extends Component {
         )
     }
 }
+
+
+recCallSuc.PropType = {
+    changeReadStatus: PropType.func.isRequired
+};
+const mapStateToProps = state => ({
+
+
+})
+export default connect(mapStateToProps, { changeReadStatus })(recCallSuc)
+
+
+
 
 

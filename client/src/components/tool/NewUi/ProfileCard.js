@@ -29,6 +29,7 @@ class ProfileCard extends Component {
         this.openProfile = this.openProfile.bind(this);
         this.startSharingScreen = this.startSharingScreen.bind(this);
         this.startRecordScreen = this.startRecordScreen.bind(this);
+        this.startAction = this.startAction.bind(this)
     }
     componentWillMount() {
         if (this.props.userId === this.props.profileId)
@@ -37,25 +38,28 @@ class ProfileCard extends Component {
             this.props.getProfileDetails(this.props.userId, config.VISIT_PROF)
         this.props.getAllActivities()
     }
-    startRecordScreen() {
+    startAction(){
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
         this.props.resetValues();
+        this.props.cancelSuccess();
+        this.props.resetIssueActions();
+    }
+    startRecordScreen() {
+        this.startAction()
         this.props.JustRecord();
         this.props.setIssueIdToNull();
-        this.props.cancelSuccess();
         this.props.recordFullScreen();
-        this.props.resetIssueActions();
+      
+       
     }
     startSharingScreen() {
-        this.props.cancelAllMessageAction();
-        this.props.restAllToolValue();
-        this.props.resetValues();
-        this.props.cancelSuccess();
+        this.startAction()
         this.props.shareFullScreenShare()
         this.props.resetCallAction();
-        this.props.resetIssueActions();
+       
     }
+
 
     openProfile() {
         window.open("https://twitter.com/" + this.props.twitterHandle, '_blank')

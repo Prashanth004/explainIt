@@ -57,6 +57,7 @@ module.exports = {
     
     FULL_SCREEN_RECORD:"fullScreenRecord",
     FULL_SCREEN_SHARE:"fullScreenShare",
+    END_WHILE_DIALING:'endWhileDialing'
 
 };
 

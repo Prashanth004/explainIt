@@ -17,6 +17,7 @@ class RecievedMessage extends Component {
         }
     }
     componentWillMount() {
+        
         this.props.changeReadStatus(this.props.activity.id)
         var token = JSON.parse(localStorage.getItem('token'))
         axios({

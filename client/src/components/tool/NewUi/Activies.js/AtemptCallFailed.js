@@ -2,9 +2,13 @@
 import axios from 'axios';
 import config from '../../../../config/config';
 import React, { Component } from 'react';
-import './activity.css'
+import { connect } from 'react-redux';
+import PropType from 'prop-types';
+import './activity.css';
+import { changeReadStatus } from '../../../../actions/messageAction'
 
-export default class componentName extends Component {
+
+class AtempCallFail extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -13,6 +17,8 @@ export default class componentName extends Component {
         }
     }
     componentWillMount() {
+        this.props.changeReadStatus(this.props.activity.id)
+
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method: 'get',
@@ -52,6 +58,18 @@ export default class componentName extends Component {
         )
     }
 }
+AtempCallFail.PropType = {
+    changeReadStatus: PropType.func.isRequired
+};
+const mapStateToProps = state => ({
+
+
+})
+export default connect(mapStateToProps, { changeReadStatus })(AtempCallFail)
+
+
+
+
 
 
 // export default (props) => {

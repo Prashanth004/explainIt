@@ -1,6 +1,14 @@
 .floaterContainerTans{
     background-color:rgba(255, 255, 255, 0);
 }
+.infoConatiner{
+  width:100%;
+  color:White;
+  margin-top:-10px;
+  padding:14px;
+  text-align: center;
+  background-color: rgb(51, 39, 58);
+}
  
 .callImageDivAnwserMain{
     width:100%;

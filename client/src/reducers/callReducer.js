@@ -3,12 +3,14 @@ import {CALL_DETAILS_ACCEPT,
     SET_NUMBER_MINUTES,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,
+    ANSWERED_CALL,
     BASIC_INFO_OF_CALL,
     INITIATE_SEND,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     INCREASE_CALL_BY_MINUTE,
     SAVE_TOPIC_OF_THE_CALL,
+    DISABLE_CALL_ACTION,
     RESET_CALL_ACTIONS,
     UPATE_CURRENT_TIME_TO_DISPLAY,
      ANSWER_CALL,MISS_CALL} from '../actions/types'
@@ -33,7 +35,10 @@ const initialState={
     gotAllActivities:false,
     activities:[],
     sendinitiated:false,
-    buttonClassName:"buttonLight"
+    buttonClassName:"buttonLight",
+    callAction:false,
+    newCall:true,
+    isCallAnswered:false
 }
 
 export default function(state= initialState, action){
@@ -70,17 +75,30 @@ export default function(state= initialState, action){
             noOfIncreaseInTime:0,
             currentTimeLeft : 3,
             noOfMinutes:3,
+            callAction:false
         }
+        case ANSWERED_CALL:
+            return{
+                ...state,
+                isCallAnswered:true
+            }
         case GET_ALL_ACTIVITES_FAILED:
         return{
             ...state,
             gotAllActivities:true,
             errorGetAllActivities:action.payload
         }
+        case DISABLE_CALL_ACTION:
+            return{
+                ...state,
+                callAction:false
+            }
         case BASIC_INFO_OF_CALL:
         return{
             ...state,
-            touser:action.payload.touser
+            touser:action.payload.touser,
+            callAction:true,
+            isCallAnswered:false
                 }
         case SET_PEER_ID:
         return{

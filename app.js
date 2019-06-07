@@ -165,6 +165,10 @@ io.on("connection", socket => {
       io.emit(key.UPDATE_RECORDER_BLOB, data)
     })
 
+    socket.on(key.END_WHILE_DIALING, data=>{
+      io.emit(key.END_WHILE_DIALING, data)
+    })
+
     socket.on(key.CALL_ACK_MESSAGE,(data)=>{
       io.emit(key.CALL_ACK_MESSAGE, data);
     })
