@@ -291,7 +291,7 @@ class DisplayShare extends Component {
                 if(data.type === config.PEER_SHARE_SCREEN_REQUEST){
                     if (data.otherPeerId === self.state.peerIdFrmPeer) {
                         presentTime = JSON.parse(localStorage.getItem("timer"));
-                        this.props.setTime(presentTime);
+                        self.props.setTime(presentTime);
                         const { extSource, extOrigin } = self.props
                         self.props.displayScreenSharebutton(extSource, extOrigin)
                         self.setState({myscreenSharing: false })
