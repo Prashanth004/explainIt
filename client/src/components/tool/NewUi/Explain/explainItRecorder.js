@@ -460,7 +460,7 @@ toggleCanvas(){
         //     var linkElement = (<p>{this.state.shareScreenLink}</p>)
         // }
         return (this.state.isInstalled) ? (
-            <div className="recordMainScreen">
+            <div className="recordMainScreen explainItRec">
             {/* {closeBtn} */}
             
                {recordingElements}

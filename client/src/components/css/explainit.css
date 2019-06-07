@@ -7,13 +7,17 @@
     margin-bottom:10px;
     text-align: center;
 }
+.formContainerExplain{
+    background-color: #ddd;
+}
 .optionBtnPlacement{
     width:60%;
     margin:auto;
+    padding-top:45px;
     display: grid;
     grid-template-columns: 50% 50%;
     text-align: center;
-    /* background-color: blue; */
+    background-color: #ddd;
 }
 .shareTime{
     width:100%;

@@ -14,6 +14,9 @@
     box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
 
 }
+.explainItRec{
+    background-color: #dddd;   
+}
 .screenShareDiv{
     min-height: 100vh;
     width:100%;

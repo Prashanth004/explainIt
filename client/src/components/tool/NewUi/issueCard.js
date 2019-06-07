@@ -37,7 +37,8 @@ class issueCard extends Component {
             publicStatus: "public",
             thisProjectId: null,
             textexplain: "",
-            accessToDbDone: false
+            accessToDbDone: false,
+            socket : null
         }
         this.changeVideo = this.changeVideo.bind(this);
         this.openEditReason = this.openEditReason.bind(this);
@@ -59,6 +60,15 @@ class issueCard extends Component {
         })
     }
     componentDidMount() {
+        const self = this;
+        var socket = this.state.socket;
+        socket.on(config.SAVED_NEW_PROJECT, data => {
+            if (data.userId === this.props.userId) {
+                self.setState({
+                    state:self.state
+                })
+            }
+        })
         this.setState({
             thisProjectId: this.props.issue.projectid,
             textexplain: this.props.issue.textexplain
@@ -75,10 +85,10 @@ class issueCard extends Component {
         if (this.props.isAauthenticated) {
             this.props.explainIssue()
             this.props.setIssueId(e.target.id)
-            localStorage.setItem("issueId", e.target.id)
+            localStorage.setItem("issueId", JSON.stringify(e.target.id));
 
             this.setState({ showModalExplain: true });
-            window.scrollBy(0,150);
+            // window.scrollBy(0,150);
             this.props.saveReplyEmailOption(e.target.id, this.props.userid)
         }
         else {
@@ -147,9 +157,10 @@ class issueCard extends Component {
             }
         }
     }
+
     componentWillMount() {
         var self = this;
-
+        this.setState({socket:this.props.socket})
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method: 'get',

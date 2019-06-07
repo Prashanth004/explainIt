@@ -6,6 +6,8 @@ import {CALL_DETAILS_ACCEPT,
     ANSWERED_CALL,
     BASIC_INFO_OF_CALL,
     INITIATE_SEND,
+    MUTE_AUDIO,
+    UNMUTE_AUDIO,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     INCREASE_CALL_BY_MINUTE,
@@ -38,7 +40,8 @@ const initialState={
     buttonClassName:"buttonLight",
     callAction:false,
     newCall:true,
-    isCallAnswered:false
+    isCallAnswered:false,
+    isMuted:false
 }
 
 export default function(state= initialState, action){
@@ -55,6 +58,16 @@ export default function(state= initialState, action){
             gotAllActivities:true,
             activities:action.payload
         }
+        case MUTE_AUDIO:
+            return{
+                ...state,
+                isMuted:true
+            }
+        case UNMUTE_AUDIO:
+                return{
+                    ...state,
+                    isMuted:false
+                }
         case INITIATE_SEND:
         return{
             ...state,

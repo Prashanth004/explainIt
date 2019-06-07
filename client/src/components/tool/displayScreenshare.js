@@ -10,7 +10,7 @@ import Countdown from 'react-countdown-now';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
 import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
-import { answerCall } from '../../actions/callAction'
+import { answerCall, muteAudio, unMuteAudio } from '../../actions/callAction'
 import { connect } from 'react-redux';
 // import ProfileCard from './NewUi/ProfileHover'
 import PropType from 'prop-types';
@@ -64,7 +64,6 @@ class DisplayShare extends Component {
             selfCloseTime: 1,
             connectionFailed: false,
             timeAloted: 3,
-            muted:false
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -92,15 +91,21 @@ class DisplayShare extends Component {
         if (audioTracks[0]) {
                 audioTracks[0].enabled = false;
             }
-            this.setState({muted:true})
+            var presentTime = JSON.parse(localStorage.getItem("timer"));
+            this.props.setTime(presentTime)
+            // muteAudio, unMuteAudio
+            this.props.muteAudio()
     }
     unMuteAudio(){
+        var presentTime = JSON.parse(localStorage.getItem("timer"));
+            this.props.setTime(presentTime)
         const {stream} = this.state;
         var audioTracks = stream.getAudioTracks();
         if (audioTracks[0]) {
                 audioTracks[0].enabled = true;
             }
-            this.setState({muted:false})
+            
+            this.props.unMuteAudio();
     }
 
     componentDidMount() {
@@ -293,10 +298,14 @@ class DisplayShare extends Component {
                     }
                 }
                 if (data.data === "addtimer") {
-                    self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
                     presentTime = JSON.parse(localStorage.getItem("timer"));
                     var updateTime = presentTime + 1;
                     self.props.setTime(updateTime)
+                    setTimeout(()=>{
+                        self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
+
+                    },500)
+                    
                 }
             })
 
@@ -625,10 +634,10 @@ class DisplayShare extends Component {
                             {sharableLinkMessage}
                             {selfCloseTimer}
                         </div>))))
-        const MuteButton=(this.state.muted)?(
+        const MuteButton=(this.props.isMuted)?(
             <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
 
-        ):(                        <button className="buttonLight" onClick={this.muteAudio}>Mute </button>
+        ):(                        <button className="buttonDark" onClick={this.muteAudio}>Mute </button>
         )
 
         if (!this.state.callEnded) {
@@ -706,7 +715,9 @@ DisplayShare.PropType = {
     saveSourceId: PropType.isRequired,
     saveExtensionDetails: PropType.func.isRequired,
     postStartCall: PropType.func.isRequired,
-    setTime:PropType.func.isRequired
+    setTime:PropType.func.isRequired,
+    
+
     
 }
 
@@ -717,12 +728,13 @@ const mapStateToProps = state => ({
     peerProfilePic: state.visitProfile.profilePic,
     isLoggedIn: state.auth.isAuthenticated,
     extSource: state.extension.source,
+    isMuted:state.call.isMuted,
     extSourceId: state.extension.sourceId,
     extOrigin: state.extension.origin,
     floaterTime:state.floater.floaterTime
 })
 
-export default connect(mapStateToProps, { postEndCall,setTime, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall,setTime, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 
 

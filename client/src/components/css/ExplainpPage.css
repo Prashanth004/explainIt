@@ -2,13 +2,19 @@
     width:100%;
    margin:auto;
      /* margin-top:25px; */
-    background-color:white;
+     /* margin-top:55px; */
+    background-color:#ddd;
     border-radius:8px;
     border-style:none;
     border-width:0.5px;
     border-color:#FFFF;
     padding:15px;
 
+}
+.explainItBackgroung{
+    min-height:150px;
+    background-color: #ddd;
+    
 }
 
 .requestLogin{

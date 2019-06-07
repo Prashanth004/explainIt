@@ -55,14 +55,9 @@ class ExplainPage extends Component {
         var textExplain = text
         var imgData = "null"
         var items = {}
-        var isquestion = " "
-        if (this.props.issueId == null || this.props.issueId === undefined) {
-          isquestion = "true"
-        }
-        else {
-          isquestion = "false"
-          issueId = this.props.issueId
-        }
+        var isquestion = "false"
+        issueId = JSON.parse(localStorage.getItem("issueId"));
+
         this.props.creatAnsProject(textExplain, imgData, data,null, items, isquestion, issueId,isPublic,action)
     }
     render() {
@@ -74,12 +69,13 @@ class ExplainPage extends Component {
             widthDiv = "95%";
         }
         return (this.props.isAuthenticated)?
-        (<ExplainOptions
+        (<div className="explainItBackgroung"><ExplainOptions
             widthDiv={widthDiv}
             questionProject={this.props.questionProject}
             handleCloseModal={this.props.handleCloseModal}
             reStoreDefault={this.reStoreDefault}
-            savefile={this.saveVideoData} />):(
+            savefile={this.saveVideoData} />
+            </div>):(
                 <div>
                 <Button close onClick={this.reStoreDefault} />
                 <div className="requestLogin">

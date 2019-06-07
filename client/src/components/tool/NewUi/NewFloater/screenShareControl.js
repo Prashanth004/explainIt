@@ -138,7 +138,7 @@ class ShareFloater extends Component {
                 // this.props.setTime
             }
             if(event.data.action === config.ADD_EXTRA_MIUTE_TO_FLOATER_RECIEVER){
-                console.log("fltr")
+                console.log("i am being reached here")
                 presentTime = JSON.parse(localStorage.getItem("timer"));
                 updateTime = presentTime;
                 self.props.setTime(updateTime)

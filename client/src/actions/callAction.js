@@ -11,6 +11,8 @@ import {CALL_DETAILS_ACCEPT,
     GET_ALL_ACTIVITES_FAILED,
     BASIC_INFO_OF_CALL,
     DISABLE_CALL_ACTION,
+    MUTE_AUDIO,
+    UNMUTE_AUDIO,
     UPATE_CURRENT_TIME_TO_DISPLAY,
     SAVE_TOPIC_OF_THE_CALL,
     SET_NUMBER_MINUTES } from './types'
@@ -35,7 +37,16 @@ export const setpeerId = (peerId)=>(dispatch)=>{
         payload:peerId
     })
 }
-
+export const muteAudio = ()=>(dispatch)=>{
+    dispatch({
+        type:MUTE_AUDIO,
+    })
+}
+export const unMuteAudio =()=>(dispatch)=>{
+    dispatch({
+        type:UNMUTE_AUDIO
+    })
+}
 export const answeredCall = ()=>(dispatch)=>{
     dispatch({
         type:ANSWERED_CALL

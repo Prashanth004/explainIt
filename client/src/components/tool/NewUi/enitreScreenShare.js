@@ -5,7 +5,7 @@ import bigInt from "big-integer";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
 import { openCreated } from '../../../actions/navAction'
-import { updateCurrentTime, setpeerId, answeredCall,updateRemainingTime, basicInfoCall,disableCallAction, callFailedUpdate } from '../../../actions/callAction'
+import { updateCurrentTime, setpeerId, answeredCall,updateRemainingTime, basicInfoCall,disableCallAction, callFailedUpdate, muteAudio, unMuteAudio} from '../../../actions/callAction'
 import { stillAuthenicated } from '../../../actions/signinAction';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
@@ -87,7 +87,6 @@ class ScreenRecorder extends Component {
             triedCallingUpdated:false,
             permissonDenied:false,
             onGoingCallEnded:false,
-            muted:false
            
         }
         this.renderer = this.renderer.bind(this);
@@ -118,27 +117,13 @@ class ScreenRecorder extends Component {
         this.unMuteAudio = this.unMuteAudio.bind(this);
     }
 
-
-//     var audioTracks = localMediaStream.getAudioTracks();
-// var videoTracks = localMediaStream.getVideoTracks();
-
-// // if MediaStream has reference to microphone
-// if (audioTracks[0]) {
-//     audioTracks[0].enabled = false;
-// }
-
-// // if MediaStream has reference to webcam
-// if (videoTracks[0]) {
-//     videoTracks[0].enabled = false;
-// }
-
     muteAudio(){
         const {audioStream} = this.state;
         var audioTracks = audioStream.getAudioTracks();
         if (audioTracks[0]) {
                 audioTracks[0].enabled = false;
             }
-            this.setState({muted:true})
+            this.props.muteAudio()
     }
     unMuteAudio(){
         const {audioStream} = this.state;
@@ -146,7 +131,7 @@ class ScreenRecorder extends Component {
         if (audioTracks[0]) {
                 audioTracks[0].enabled = true;
             }
-            this.setState({muted:false})
+            this.props.unMuteAudio()
     }
 
     startScreenShareSend() {
@@ -541,7 +526,7 @@ class ScreenRecorder extends Component {
             myscreenSharing: true
         })
         conn.send({
-            'type':config.MESSSAGE_FOR_CONNECTION_WITH_ID,
+            'type':config.PEER_SHARE_SCREEN_REQUEST,
             'otherPeerId': self.state.peerId
         });
         // socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, {
@@ -745,7 +730,7 @@ class ScreenRecorder extends Component {
         })
         this.props.basicInfoCall(this.props.twitterUserId)
         setTimeout(() => {
-            if (!this.state.answerFrmPeer && !this.props.isCallAnswered && !this.state.clickedOnLink &&!this.state.triedCallingUpdated) {
+            if (!this.state.answerFrmPeer &&!this.state.onGoingCallEnded && !this.props.isCallAnswered && !this.state.clickedOnLink &&!this.state.triedCallingUpdated) {
               
                 self.props.callFailedUpdate(self.props.touser, self.props.callTopic);
                 self.props.disableCallAction()
@@ -1001,10 +986,10 @@ class ScreenRecorder extends Component {
                 this.props.twitterUserId
             ) : (this.state.recieverProfileId)
 
-            const MuteButton=(this.state.muted)?(
+            const MuteButton=(this.props.isMuted)?(
                 <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
     
-            ):(                        <button className="buttonLight" onClick={this.muteAudio}>Mute </button>
+            ):(                        <button className="buttonDark" onClick={this.muteAudio}>Mute </button>
             )
             shareTimeElements = (
                 <div>
@@ -1233,10 +1218,12 @@ ScreenRecorder.PropType = {
     callFailedUpdate: PropType.func.isRequired,
     basicInfoCall: PropType.func.isRequired,
     initiateSend: PropType.func.isRequired,
+    
 }
 const mapStateToProps = state => ({
     CalluserName: state.visitProfile.userName,
     peerId: state.call.peerId,
+    isMuted:state.call.isMuted,
     timeAloted: state.call.noOfMinutes,
     isSharingCompleted: state.tools.isFullSharingCompleted,
     failedToSave: state.issues.failedToSave,
@@ -1275,6 +1262,8 @@ export default connect(mapStateToProps, {
     resetValues,
     refreshExtension,
     postEndCall,
+    muteAudio, unMuteAudio,
+
     disableCallAction,
     displayFullScrenRecord,
     displayScreenSharebutton,

@@ -584,7 +584,7 @@ class NewHome extends Component {
                     <div className="issueContainer" style={{ width: issuepercentage }} >
                         <div className="closeBtnHolder">
                         </div>
-                        <IssueDisplay togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} />
+                        <IssueDisplay socket={this.state.socket}togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} />
                     </div>
                 ) : (<div className="issueContainer" style={{ width: "80%" }} >
 

@@ -142,6 +142,7 @@ class DisplayIssue extends Component {
                         issueItems =this.state.issueArray.map((issue, index) => (
                             <IssueCard 
                             key={index+1000}
+                            socket={this.props.socket}
                             itsHome={this.state.itsHome}
                             displayCopyEle={this.state.displayCopyEle}
                             deleteProjects={this.deleteProjects}
@@ -154,9 +155,6 @@ class DisplayIssue extends Component {
                             explainTool={this.props.explainTool}/>
                         ))
                     }
-
-                       
- 
             }
             else if(this.props.participated){
                 if(this.props.participatedIssues!==null)
