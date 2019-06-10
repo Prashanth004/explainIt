@@ -64,6 +64,7 @@ class DisplayShare extends Component {
             selfCloseTime: 1,
             connectionFailed: false,
             timeAloted: 3,
+            blob : null
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -75,6 +76,7 @@ class DisplayShare extends Component {
         this.renderer2 = this.renderer2.bind(this);
         this.muteAudio = this.muteAudio.bind(this);
         this.unMuteAudio = this.unMuteAudio.bind(this);
+        this.saveBlobtimeOut = this.saveBlobtimeOut.bind(this)
     }
     downloadExtension() {
         window.open(config.EXTENSION_URL)
@@ -244,6 +246,11 @@ class DisplayShare extends Component {
 
         })
     }
+  
+        componentWillUnmount() {
+            clearTimeout(this.saveBlobtimeOut);
+        }
+    
 
     componentWillMount() {
         localStorage.setItem('action', JSON.stringify(config.RECIEVER_SCREEN_SHARE))
@@ -254,7 +261,7 @@ class DisplayShare extends Component {
             }
             else {
             }
-        }, 20000);
+        }, 30000);
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket,
@@ -265,6 +272,8 @@ class DisplayShare extends Component {
         this.peerConnections(socket, peerIdFrmPeer);
         this.props.stillAuthenicated();
     }
+
+    saveBlobtimeOut = ()=>{}
 
     peerConnections(socket, peerIdFrmPeer) {
         this.setState({
@@ -285,6 +294,7 @@ class DisplayShare extends Component {
         // var startConnection = new Promise((resolve, reject) => {
             
         var conn = peer.connect(peerIdFrmPeer);
+        this.setState({conn : conn})
         conn.on('open', function () {
             conn.on('data', data => {
                 var presentTime = null
@@ -329,6 +339,7 @@ class DisplayShare extends Component {
 
         });
         const { postStartCall } = self.props
+        // const { recorder } = self.state
         peer.on('call', function (call) {
 
             navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audiostream) {
@@ -337,6 +348,25 @@ class DisplayShare extends Component {
                     type: 'audio'
                 });
                 recorder1.startRecording();
+                self.setState({ recorder: recorder1 });
+                self.saveBlobtimeOut = setTimeout(()=>{
+                    console.log("BLobss  ahahaha ")
+                    const { recorder } = self.state;
+                    console.log("recorder : ",recorder)
+                    if(recorder!== null){
+                        console.log(" I am here ")
+                        recorder.stopRecording(function () {
+                            var blob = recorder.getBlob();
+                            self.setState({
+                                downloadUrlVideo: URL.createObjectURL(blob),
+                                blob: blob,
+                                recorder:null
+                            })
+                           
+                        });
+                    }
+                },config.VIDEO_RECORDING_SAVE_LIMIT * 1000)
+                // self.saveBlobtimeOut()
                 postStartCall(config.RECIEVER_SCREEN_SHARE,
                     self.props.extOrigin,
                     self.state.picture,
@@ -344,10 +374,7 @@ class DisplayShare extends Component {
                     self.props.floaterTime,
                     null
                 )
-                self.setState({
-                    recorder: recorder1,
-                })
-
+               
 
                 if (config.CALL_LOGS)
                 call.on('stream', function (stream) {
@@ -437,12 +464,13 @@ class DisplayShare extends Component {
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime)
         if (this.state.initiatedScreenShare) {
-            this.setState({
-                myscreenSharing: true
-            })
+            console.log("conn : ", conn)
             conn.send({
                 'type' : config.PEER_SHARE_SCREEN_REQUEST,
                 'otherPeerId': self.state.clientPeerid
+            })
+            this.setState({
+                myscreenSharing: true
             })
             // socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, {
             //     'otherPeerId': self.state.clientPeerid
@@ -477,8 +505,10 @@ class DisplayShare extends Component {
     };
 
     renderer = ({ hours, minutes, seconds, completed }) => {
+        const self = this
         if (completed) {
-            return (null)
+            // return (null)
+            self.closeWindow()
         } else {
             // Render a countdown
             return <span>{hours}:{minutes}:{seconds}</span>;
@@ -540,6 +570,7 @@ class DisplayShare extends Component {
         });
     }
     closeConnection() {
+        const self = this;
         const { socket, recorder, clientPeerid, closedHere, stream, secondVideoStream } = this.state;
         const { extSource, extOrigin, postEndCall } = this.props;
         const action = config.END_CALL_RECIEVER_PEER_FROM_WEB
@@ -549,8 +580,15 @@ class DisplayShare extends Component {
                 var blob = recorder.getBlob();
                 socket.emit(config.UPDATE_RECORDER_BLOB, {
                     'clientId': clientPeerid,
-                    'recorderBlob': blob
+                    'recorderBlob': blob,
                 });
+                self.setState({recorder : null, blob:blob})
+            });
+
+        }else{
+            socket.emit(config.UPDATE_RECORDER_BLOB, {
+                'clientId': clientPeerid,
+                'recorderBlob': self.state.blob,
             });
         }
 

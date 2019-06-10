@@ -5,7 +5,8 @@ import PageNotFount from './NoMatch';
 import DisplatCreated from './DisplayCreated';
 import { FiGrid,FiList } from "react-icons/fi";
 import Navbar from './Navbar'
-import '../../css/NewSignin.css'
+import '../../css/NewSignin.css';
+import socketIOClient from "socket.io-client";
 import TwitterLogin from 'react-twitter-auth';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
@@ -41,7 +42,8 @@ class NewHome extends Component {
             showProjects: false,
             isHome : false,
             isVisitProfile:true,
-            typeOfView:"list"
+            typeOfView:"list",
+            socket: null,
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -82,6 +84,23 @@ class NewHome extends Component {
         })
     }
     componentDidMount() {
+        var socket = this.state.socket;
+        socket.on('connect_failed', function () {
+            console.log("Sorry, there seems to be an issue with the connection!");
+        })
+        socket.on('error', function (err) {
+            console.log("err : ", err);
+        });
+        socket.on('connect_timeout', function (err) {
+            console.log("socket. timeout")
+        });
+        socket.on("disconnect", () => {
+            console.log("disconnected")
+        })
+        socket.io.on("connect_error", () => {
+            console.log("server offfilene")
+        })
+
         if(!this.props.isPresentInExplain){
             // alert("dnvnvnfkn")
             const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
@@ -110,6 +129,8 @@ class NewHome extends Component {
     }
     componentWillMount() {
         this.props.stillAuthenicated()
+        const socket = socketIOClient(config.base_dir);
+        this.setState({socket: socket })       
         if(this.props.match.params.encrTwitterHandle===null){
             alert("empty")
         }
@@ -228,6 +249,7 @@ class NewHome extends Component {
     }
 
     render() {
+       
         var issuepercentage="55%";
         if(this.state.reducedWidth){
             issuepercentage="90%"
@@ -258,13 +280,13 @@ class NewHome extends Component {
                     <div className="issueContainer" style={{width:issuepercentage}}>
                     <div className="closeBtnHolder">
                     </div>
-                    <IssueDisplay togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={(issuesCreated)} />
+                    <IssueDisplay socket={this.state.socket} togglemodal={this.togglemodal} home={config.NOT_HOME} explainTool={this.explainTool} issueArray={(issuesCreated)} />
                 </div>
                 ):(
                     <div className="issueContainerMore" >
                     <div className="closeBtnHolder">
                     </div>
-                    <DisplatCreated home={config.NOT_HOME} issueArray={(issuesCreated)} />
+                    <DisplatCreated socket={this.state.socket}   home={config.NOT_HOME} issueArray={(issuesCreated)} />
                 </div>
                 )
                 feedDiv = (<div>

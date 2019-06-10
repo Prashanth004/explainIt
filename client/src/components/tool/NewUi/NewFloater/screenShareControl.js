@@ -51,7 +51,6 @@ class ShareFloater extends Component {
         else if(action === config.FULL_SCREEN_RECORD){
             this.setState({
                 action: config.FULL_SCREEN_RECORD,
-                otherPersonPic: otherpersonProfilePic,
             })
             
         }
@@ -120,6 +119,7 @@ class ShareFloater extends Component {
                     localStorage.setItem('shareDisplay',JSON.stringify("block"));
                     self.props.setDiplayOfFloater("block");
                 }
+              
                 self.props.setTime(event.data.data.timer)
             }
             if(event.data.action === config.DISPLAY_SHARE_ICON_TO_FLOATER){

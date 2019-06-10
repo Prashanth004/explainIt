@@ -120,7 +120,9 @@ const conf = {
     MESSSAGE_FOR_CONNECTION_WITH_ID:"messageForConnectionWithId",
     UPDATE_INFO : "updateInfo",
     PERMISSION_DENIED :'PermissionDeniedError',
-    END_WHILE_DIALING:'endWhileDialing'
+    END_WHILE_DIALING:'endWhileDialing',
+    VIDEO_RECORDING_SAVE_LIMIT: 120//mins,
+    
 
 }
 export default conf

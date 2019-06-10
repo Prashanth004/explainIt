@@ -150,8 +150,8 @@ if (!req.files) {
 
 const saveToDb = (req, res, videopathName)=>{
     var rand2 = rn(options)
-    const issueID = (req.body.isquestion == "true" || req.body.issueID == null) ?
-        (rand2) : (req.body.issueID);
+    // const issueID = (req.body.isquestion == "true" || req.body.issueID == null) ?
+    //     (rand2) : (req.body.issueID);
     var imgurl = config.domain + '/images/default.png';
     var rand = rn(options)
     database.db.oneOrNone('insert into projects(name,email, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
@@ -159,15 +159,15 @@ const saveToDb = (req, res, videopathName)=>{
         {
             name: req.body.projectName,
             email: req.user.email,
-            projectid: rand,
+            projectid: req.body.projectid,
             imgurl: imgurl,
             textExplain: req.body.textExplain,
             isquestion: req.body.isquestion,
-            issueid: issueID,
+            issueid: req.body.issueID,
             videofilepath: videopathName,
             public: Number(req.body.public)
         }).then((response) => {
-            database.db.one('select * from projects where projectid = $1', rand)
+            database.db.one('select * from projects where projectid = $1', req.body.projectid)
                 .then(data => {
                     res.io.emit(key.SAVED_NEW_PROJECT, {
                         "userId": req.user.id
@@ -358,6 +358,7 @@ exports.getIssueById = function (req, res) {
 
     database.db.one('select * from projects where issueid = $1', req.params.id)
         .then(projects => {
+
             res.status(200).send({
                 success: 1,
                 data: projects
@@ -392,14 +393,30 @@ exports.getProjectById = function (req, res) {
 exports.getAllProjectByIssue = function (req, res) {
     database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date ASC', req.params.issueid)
         .then(projects => {
-
-            if (projects) {
-                res.status(200).send({
-                    success: 1,
-                    data: projects
+            console.log("projects : ", projects.length)
+            if(projects.length !== 0)
+            {
+                if (projects) {
+                    res.status(200).send({
+                        success: 1,
+                        data: projects
+                    })
+                }
+            }
+            else{
+                res.status(500).send({
+                    success:0,
+                    errors:err
                 })
             }
+           
 
+        })
+        .catch(err=>{
+            res.status(500).send({
+                success:0,
+                errors:err
+            })
         })
 }
 

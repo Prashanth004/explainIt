@@ -1,12 +1,15 @@
-import {FETCH_PROJ_BY_ISSUE,CLEAR_ANSWER , 
+import {FETCH_PROJ_BY_ISSUE,
+    GOT_NO_PROJECT,
+    CLEAR_ANSWER , 
     UPDATE_ANSWER_WITH_IMAGE,FETCH_STARTED,
     CLEAR_SAVE_ACTIONS,
     DELETE_SUCCESSFULL,
     OPEN_EDIT_TEXT_MODAL,
     UPDATE_TEXT_EXPLAIN,
     CLOSE_EDIT_TEXT_MODAL,
-   
-    DELETE_FAILED} from '../actions/types'
+    UPDATE_LINK,
+    DELETE_FAILED} from '../actions/types';
+import config from '../config/config' 
 
 const initialState = {
     questProject:{},
@@ -18,6 +21,8 @@ const initialState = {
     doneUpdating:false,
     editModalId:null,
     largeFileSize:false,
+    linkToAccess:null,
+    failedToGet:false
    
 }
 
@@ -36,6 +41,14 @@ export default function(state = initialState, action){
                 doneUpdating:true,
                 openEditModal:false
             }
+
+
+        case GOT_NO_PROJECT:
+            return{
+                ...state,
+                failedToGet:true,
+                isFetchDone:true
+            }
        
       
         case CLOSE_EDIT_TEXT_MODAL:
@@ -47,10 +60,16 @@ export default function(state = initialState, action){
         case FETCH_PROJ_BY_ISSUE :
             return{
                 ...state,
+                failedToGet:false,
                 questProject:action.questProject,
                 answerProject: action.answerProject,
                 isFetchDone:true
             }
+            case UPDATE_LINK:
+            return{
+                ...state,
+                linkToAccess : config.react_url+'/project/'+action.payload
+                }
         case CLEAR_ANSWER:
             return{
                 ...state,

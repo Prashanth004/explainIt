@@ -12,9 +12,18 @@ import {FETCH_PROJ_BY_ISSUE,
      UPDATE_TEXT_EXPLAIN,
      OPEN_EDIT_TEXT_MODAL,
      CLOSE_EDIT_TEXT_MODAL,
+     UPDATE_LINK,
+     GOT_NO_PROJECT,
      DELETE_FAILED} from './types'
 import axios from 'axios'
-import config from '../config/config'
+import config from '../config/config';
+import rn from 'random-number'
+var options = {
+    min: -1000000
+    , max: 10000000
+    , integer: true
+}
+
 
 export const checkPublicValue = (issueId) =>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
@@ -119,6 +128,7 @@ export const updatProjectReason =(title,projectid)=>dispatch=>{
 
 
 export const fetchProjectbyIssue = (issueId)=>dispatch =>{
+    console.log("sdkmaosfhidfhahdfsjavh")
     const UNAUTHORIZED = 401;
     axios.interceptors.response.use(
       response => response,
@@ -148,7 +158,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
             "Authorization": token,
         }
     }).then(response=>{
-        
+        console.log("response : ",response)
         var promises = [];
         if(response.status === 200){
             allProjects = response.data.data
@@ -183,12 +193,25 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
            
         }
         else{
+            dispatch({
+                type:GOT_NO_PROJECT
+            })
         }
     }).catch(err=>{
+        dispatch({
+            type:GOT_NO_PROJECT
+        })
         console.log("error : ",err)
     })
 }
 export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,isquestion,issueIdFrmCpm,isPublic,action )=> (dispatch) =>{
+    var rand = rn(options)
+    var rand2 = rn(options)
+    localStorage.setItem('newIssueId', JSON.stringify(rand2))
+    dispatch({
+        type:UPDATE_LINK,
+        payload : rand2
+    })
     var videoFile = new File([videoData], 'video.mkv', {
         type: 'video/mkv'
     });
@@ -204,11 +227,11 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         issueID = issueIdFrmCpm
     }
     else{
-        issueID = null
+        issueID = rand2
     }
     if(issueID === undefined ){
         isquestion = "true";
-        issueID = null
+        issueID = rand2
     }
     var fd = new FormData();
     var projectName = config.dataTime
@@ -221,7 +244,8 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         fd.append('textExplain',textExplain);
         fd.append('isquestion',isquestion);
         fd.append('public', isPublic);
-        fd.append('action',config.SERVER_SHARING)
+        fd.append('action',config.SERVER_SHARING);
+        fd.append('projectid',rand)
     }
     else{
         fd.append('imageData', imgData);

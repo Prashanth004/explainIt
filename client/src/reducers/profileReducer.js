@@ -4,8 +4,8 @@ import {GET_PROFILE_DETAILS,
     OPEN_EDIT_PROFILE,
     CLOSE_EDIT_PROFILE,
     CHANGE_ONLINE_STATUS,
-    CHANGE_ONLINE_STATUS_FAILED,
-    GET_PROFILE_DETAILS_FAIL} from '../actions/types'
+    GET_PROFILE_DETAILS_FAIL} from '../actions/types';
+
 
 const initialState = {
    donefetching:false,
@@ -56,6 +56,7 @@ export default function(state=initialState, action){
             ...state,
             onlineStatus:action.payload
         }
+    
         case OPEN_EDIT_PROFILE:
         return{
             ...state,

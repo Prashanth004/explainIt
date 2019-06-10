@@ -95,7 +95,7 @@ export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,
         }
     }
     else if(action === config.FULL_SCREEN_RECORD){
-        localStorage.setItem('timer',JSON.stringify(3));
+        localStorage.setItem('timer',JSON.stringify(timeAloted));
         callStart = {
             type:config.START_CALL,
             data:{

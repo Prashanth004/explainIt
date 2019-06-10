@@ -88,7 +88,8 @@ export default function(state= initialState, action){
             noOfIncreaseInTime:0,
             currentTimeLeft : 3,
             noOfMinutes:3,
-            callAction:false
+            callAction:false,
+            isMuted:false
         }
         case ANSWERED_CALL:
             return{

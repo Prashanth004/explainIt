@@ -50,6 +50,7 @@ class ProfileCard extends Component {
         this.props.JustRecord();
         this.props.setIssueIdToNull();
         this.props.recordFullScreen();
+        this.props.resetCallAction();
       
        
     }

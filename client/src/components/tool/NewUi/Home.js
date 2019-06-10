@@ -590,7 +590,7 @@ class NewHome extends Component {
 
                     <div className="closeBtnHolder">
                     </div>
-                    <DisplatCreated home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
+                    <DisplatCreated socket={this.state.socket} home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
                 </div>)
                 // explainDiv = null
                 feedDiv = (

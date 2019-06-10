@@ -53,10 +53,11 @@ class FullScreenRecorder extends Component {
 
     }
     startBar(){
-        const {extSource,extOrigin,timeAloted,postStartCall} =  this.props
+        const {extSource,extOrigin,postStartCall} =  this.props
+        
         postStartCall(config.FULL_SCREEN_RECORD,
-            extOrigin,null,extSource,3,null)
-        var timeAlotedNew = timeAloted * 60 * 16
+            extOrigin,null,extSource,config.RECORD_TIME,null)
+        var timeAlotedNew = config.RECORD_TIME * 60 * 16
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
          progresDiv.style.display = "block";

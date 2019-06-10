@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import {getImagesByemail} from '../actions/projectActions'
 
-
-
 class issueDetails extends Component {
     constructor(props) {
         super(props)
@@ -28,13 +26,10 @@ class issueDetails extends Component {
             displayCopyEle : !this.state.displayCopyEle
         })
     }
-    
-
-    changeDisplay(e){
+   changeDisplay(e){
         this.setState({ state: this.state });
-      var clickedProj = this.props.answerProject.find(proj=>proj.projectid == e.target.id)
+      var clickedProj = this.props.answerProject.find(proj=>proj.projectid === e.target.id)
         this.textExplain.textContent = clickedProj.textexplain;
-        // this.userName.textContent = clickedProj.username;
         if(clickedProj.videofilepath){
             if(!this.videoExplain){
                 this.setState({
@@ -90,51 +85,18 @@ class issueDetails extends Component {
       for(var proj in projects){
             emailOfanswers.push(projects[proj].email)
       }
-    //   this.props.getImagesByemail(emailOfanswers,projects)
-        // projects.ForEach((projects)=>{
-        //    
-        // })
-
-        
-
-    }
-
-    
-
-
+      }
     render() {
         var copyElement = null
-        // if(this.state.displayCopyEle){
-        //     copyElement = ( <div className="copyDisplay">
-        //     <CopyToClipboard sharablelink = {config.react_url + '/project/' + this.props.questionProject.issueid} />
-        //     </div>)
-        // }
-     
-
-
         var displayElement = ""
-   
         const bottomImages = this.props.answerProject.map((proj,key )=>(
             <div key={key}className="imagePeopleModal ">
                 <img alt=" " id={proj.projectid} onClick={this.changeDisplay} src={proj.profilepic} className="peopleImage"></img>
             </div>
         ))
         if(this.state.element === this.state.video){
-           
             displayElement  = (<div  ref={a=>this.imgDiv = a} className="audioModal">
-            {/* <video  controls  src={this.props.questionProject.videofilepath}  >
-   
-</video> */}
-                {/* <video width="320" height="240" controls>
-                    <source src={this.props.questionProject.videofilepath} type="video/mp4">
-                </video> */}
             <video src={this.props.questionProject.videofilepath} type="video/webm" controls  className="videoPlayer" ref={vid => this.videoExplain = vid} ></video>
-            {/* <Player
-    className="videoPlayer"
-      ref={vid => this.videoExplain = vid}
-      src={this.props.questionProject.videofilepath}
-    /> */}
-        
         </div>)
         }
         else{
@@ -152,8 +114,6 @@ class issueDetails extends Component {
                             <p  ref={p => this.textExplain = p}  >{this.props.questionProject.textexplain}</p>
                         </div>
                     {displayElement}
-                       
-                       
                     </div>
                 </div>
                 <div className="explainModal ">

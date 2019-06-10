@@ -202,3 +202,5 @@ export const ANSWERED_CALL ="ANSWERED_CALL"
 
 export const MUTE_AUDIO = "MUTE_AUDIO";
 export const UNMUTE_AUDIO ="UNMUTE_AUDIO";
+export const UPDATE_LINK ="UPDATE_LINK";
+export const GOT_NO_PROJECT = "GOT_NO_PROJECT";
