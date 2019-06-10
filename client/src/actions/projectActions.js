@@ -255,6 +255,7 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         fd.append('textExplain',textExplain);
         fd.append('isquestion',isquestion);
         fd.append('public', isPublic);
+        fd.append('projectid',rand);
         fd.append('action',config.SERVER_RECORDING);
     }
    

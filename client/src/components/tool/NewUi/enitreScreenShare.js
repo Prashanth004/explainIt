@@ -120,6 +120,7 @@ class ScreenRecorder extends Component {
         this.saveBlobtimeOut = this.saveBlobtimeOut.bind(this);
         this.callEndBeforeRecieve = this.callEndBeforeRecieve.bind(this);
         this.play_clicked = this.play_clicked.bind(this);
+        this.pause_clicked =  this.pause_clicked.bind(this);
     }
 
     muteAudio() {
@@ -260,6 +261,9 @@ class ScreenRecorder extends Component {
     }
     play_clicked() {
        this.AudioPlyr.play()
+    }
+    pause_clicked(){
+        this.AudioPlyr.pause()
     }
 
     componentDidMount() {
@@ -894,7 +898,7 @@ class ScreenRecorder extends Component {
 
     render() {
         const videoAudio = (<div>
-            <video ref={a => this.VideoPlyr = a}  onPlay={this.play_clicked} className="videoPlayer2" src={this.state.downloadUrlVideo} controls={true}></video>
+            <video ref={a => this.VideoPlyr = a}  onPlay={this.play_clicked} onPause={this.pause_clicked}className="videoPlayer2" src={this.state.downloadUrlVideo} controls={true}></video>
             <audio ref={a => this.AudioPlyr = a} style={{ display: "none" }} className="videoPlayer2" src={this.state.downloadUrlAudio}></audio>
         </div>)
 

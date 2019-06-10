@@ -201,7 +201,7 @@ class Project extends Component {
         </div>):(
           (this.props.match.params.projectid === this.state.newIssueId)?(<div style={msgStyling}><h3>
             <b>
-            Processing your video. Please try after some time
+            Processing your video. Please wait or try after some time
             </b>
             </h3></div>):(
               <div style={msgStyling}>
