@@ -196,14 +196,6 @@ class Project extends Component {
 
             </ReactModal>
 
-            {/* <ReactModal
-                            isOpen={this.state.showModalExplain}
-                            contentLabel="Minimal Modal Example"
-                            className="ModalA"
-                            overlayClassName="OverlayA">
-                           
-                            {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-            {/* </ReactModal> */}
 
           </div>
         </div>):(

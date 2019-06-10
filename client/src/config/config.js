@@ -121,7 +121,7 @@ const conf = {
     UPDATE_INFO : "updateInfo",
     PERMISSION_DENIED :'PermissionDeniedError',
     END_WHILE_DIALING:'endWhileDialing',
-    VIDEO_RECORDING_SAVE_LIMIT: 120//mins,
+    VIDEO_RECORDING_SAVE_LIMIT: 360//seconds,
     
 
 }
