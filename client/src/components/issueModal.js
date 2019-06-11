@@ -64,7 +64,8 @@ class issueDetails extends Component {
         }
         this.imgDiv.innerHtml = null
     }
-
+    componentWillMount(){
+    }
     componentDidMount(){
         if(this.props.questionProject.videofilepath === null){
             this.setState({

@@ -122,6 +122,7 @@ class Project extends Component {
     var self = this;
     socket.on(config.SAVED_NEW_PROJECT, data => {
       if (data.userId === this.props.userId) {
+        self.setState({ showModalExplain: false });
         self.setState({reAtempte: true })
         clearTimeout(self.reAtemptToFetch)
         this.props.fetchProjectbyIssue(this.props.match.params.projectid);

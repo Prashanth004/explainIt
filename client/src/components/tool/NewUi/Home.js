@@ -592,11 +592,7 @@ class NewHome extends Component {
                     </div>
                     <DisplatCreated socket={this.state.socket} home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
                 </div>)
-                // explainDiv = null
-                feedDiv = (
-                    // <Animated animationIn="slideInRight" animationOut="zoomOut" isVisible={this.props.participated && !this.props.created}>
-                    <div>
-                        <div style={{ float: "right" }} >
+                feedDiv = (<div><div style={{ float: "right" }} >
                             <span className="hint--top" aria-label="List View">
                                 <FiList onClick={this.changeViewToList} className="listView" />
                             </span>
@@ -604,10 +600,8 @@ class NewHome extends Component {
                                 <FiGrid onClick={this.changeViewToGrid} className="gridView" />
                             </span>
                         </div>
-
                         {participatedDiv}
-                    </div>
-                )
+                    </div>)
                 // </Animated>)
 
             }

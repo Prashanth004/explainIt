@@ -28,6 +28,9 @@ class ExplainPage extends Component {
     }
 
     componentWillMount(){
+
+        //setOptions to null
+        this.props.resetExplainAction();
         var source = this.props.extSource
         var origin = this.props.extOrigin
         const refreshFloater = {type:config.REFRESH_EXPLAIN_FLOATER,
@@ -36,7 +39,6 @@ class ExplainPage extends Component {
         else window.postMessage(refreshFloater, "*")
         const twitterHandle = (window.location.href).split("/")[3]
         this.setState({twitterHandle:twitterHandle})
-        this.props.resetExplainAction();
         this.props.cancelAllMessageAction();
         this.props.resetLandingAction();
         this.props.restAllToolValue();
@@ -44,6 +46,9 @@ class ExplainPage extends Component {
         this.props.cancelSuccess();
         this.props.resetIssueActions();
 
+    }
+    componentWillUnmount(){
+        this.props.resetExplainAction();
     }
   
     reStoreDefault(){

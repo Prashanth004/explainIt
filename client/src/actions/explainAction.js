@@ -11,6 +11,7 @@ export const explainByRefer = ()=>(dispatch)=>{
         type:EXPLAIN_BY_REFER
     })
 }
+
 export const resetExplainAction = ()=>(dispatch)=>{
     dispatch({
         type:RESET_EXPLAIN_ACTIONS
