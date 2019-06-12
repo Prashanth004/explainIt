@@ -48,7 +48,7 @@ class tweetSearch extends Component {
             twitterHandle: value,
             tweetTested: false
         })
-        this.props.resetValues();
+        // this.props.resetValues();
     }
     sendRecordding() {
 
@@ -88,8 +88,9 @@ class tweetSearch extends Component {
             <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="Enter @username"
-                classOfInput="myInput"
+                classOfInput={this.state.twitterHandle}
                 tweetTextvalue={this.state.twitterHandle}
+                classOfMenu = "menu"
                 array={this.props.twiterHandleArray}
             />
 
@@ -160,7 +161,8 @@ tweetSearch.PropType = {
 const mapStateToProps = state => ({
     twitterHandleValid: state.twitterApi.profilePresent,
     doneFetching: state.twitterApi.doneFetching,
-    twiterHandleArray: state.twitterApi.twitterHandle,
+    // twiterHandleArray: state.twitterApi.twitterHandle,
+    twiterHandleArray: state.twitterApi.twitterHandles,
     fetchProfile: state.visitProfile.fetchProfile,
     isPresentInExplain: state.visitProfile.isPresent,
 })

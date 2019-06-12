@@ -80,6 +80,8 @@ class displayTopBtns extends Component {
 
     render() {
         var profilePic = null;
+        const defaultToggle = (Number(this.props.issue.public) === 1) ? true : false
+
         const createdMenuItems = (this.props.participated || !this.props.itsHome) ? (null) : (
             <div>
             <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
@@ -127,7 +129,6 @@ class displayTopBtns extends Component {
         else {
             profilePic = null
         }
-        const defaultToggle = (Number(this.props.issue.public) === 1) ? true : false
     
 
         const deleteDiv = (
@@ -171,20 +172,12 @@ class displayTopBtns extends Component {
                         <span
                             className="ProfileNameCard">
                             {profileName}</span>
-                        {/* <div className="date">
-                {this.props.issue.date.slice(0,15)}
-                </div> */}
                     </div>
-
                     <div id={this.props.issue.issueid} className="twitterHolder">
                         <div id={this.props.issue.issueid} className="icons">
-
                         </div>
                         {deleteDiv}
-                        {/* <button  id={this.props.issue.issueid} className="buttonDark twitterBtn"
-                       onClick={this.tweetWindow}><i class="fa fa-twitter twitterBtn">  Tweet</i></button> */}
-
-                    </div>
+                     </div>
                 </div >
             </div>
         )

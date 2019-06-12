@@ -106,7 +106,6 @@ export const fullStartedSharing = (recieverUserId) =>(dispatch)=>{
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
-            console.log("success full")
         }
     })
     .catch(error=>{
@@ -132,7 +131,6 @@ export const fullStopedSharing = (recieverUserId) =>(dispatch)=>{
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
-            console.log("success full")
         }
     })
     .catch(error=>{
@@ -166,7 +164,6 @@ export const fullStartedRecording = () =>(dispatch)=>{
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
-            console.log("success full")
         }
     })
     .catch(error=>{
@@ -191,7 +188,6 @@ export const fullStopedRecording = () =>(dispatch)=>{
     })
     .then(response=>{
         if(response.status === 200 || response.status === 202 || response.status === 204){
-            console.log("success full")
         }
     })
     .catch(error=>{

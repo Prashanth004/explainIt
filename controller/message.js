@@ -13,7 +13,6 @@ var options = {
 exports.checkReplyInfo = (req, res) => {
     database.db.manyOrNone('select * from projects where email =$1 and issueid =$2', [req.user.email, Number(req.params.issueid)])
         .then(data => {
-            console.log("data : ",data.length)
             if (data) {
                 if (data.length == 0) {
                     res.status(200).send({
@@ -127,7 +126,6 @@ exports.replyaction = (req, res) => {
                                     }
                                 })
                                 .catch(error => {
-                                    console.log("error in fetching replier's details")
                                     console.log("error : ", error)
                                     res.status(500).send({
                                         success: 0,
@@ -138,7 +136,6 @@ exports.replyaction = (req, res) => {
                         }
                     })
                     .catch(error => {
-                        console.log("error in fetching creator's details")
                         console.log("error : ", error)
                         res.status(500).send({
                             success: 0,
@@ -149,7 +146,6 @@ exports.replyaction = (req, res) => {
             }
         })
         .catch(error => {
-            console.log("error in fetching issue's details")
             console.log("error : ", error)
             res.status(500).send({
                 success: 0,

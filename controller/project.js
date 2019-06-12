@@ -79,11 +79,8 @@ exports.updateProjectprivate = function (req, res) {
 exports.saveProject = function (req, res) {
     var videopathName = null;
     var commands = null;
-    console.log("files ", req.files)
-    console.log('req. body : ', req.body)
-
+ 
 if (!req.files) {
-        console.log("no files found")
         return res.status(451).send({
             success: 0,
             msg:"no file found in the request"
@@ -91,18 +88,11 @@ if (!req.files) {
     }
     else if (req.files) {
         if(typeof req.fileSizeError != "undefined") {
-            console.log("file size too large")
             res.status(413).send({
                 "success":0,
                 "error":"File too large"});// to display filesize error
         } else {
-            
-        
-        console.log("req.files : ", req.files);
-        console.log("req.body : ", req.body)
-        console.log("files found");
-        
-
+     
         if(req.body.action === key.SERVER_SHARING)
         {
         if(key.DEV_ENV)
@@ -181,108 +171,7 @@ const saveToDb = (req, res, videopathName)=>{
             console.log("error : ", err)
             res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
         })
-        console.log('executed many commands in a row'); 
 }
-
-
-
-
-
-
-
-        // videopathName = config.domain + '/public/audio/' + req.body.projectName + '_final.mp4'
-        // if(key.DEV_ENV)
-        // // -map 0:0 -map 1:0
-        // // exec('ffmpeg -analyzeduration 100M -probesize 100M -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename + ' -i ' + __dirname + '\\..\\public\\audio\\' + req.files[1].filename + ' -map 0 -map 1 -c copy ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mxf', puts);
-        // exec('ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename + ' -i ' + __dirname + '\\..\\public\\audio\\' + req.files[1].filename + ' -map 0:0 -map 1:0 ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mp4', puts);
-        
-        // else
-        // exec('avconv -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename + ' -i ' + __dirname + '\/..\/public\/audio\/' + req.files[1].filename + ' -map 0:0 -map 1:0 ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mp4', puts);
-        // function puts(error, stdout, stderr) {
-        //     if (!error) {
-        //         msg = (stdout)?stdout:stderr
-        //         console.log("msg : ",msg)
-                // if (req.body.imageData != "null") {
-                //     var imageBuffer = decodeBase64Image(req.body.imageData);
-                //     fs.writeFile('public/images/' + req.body.projectName + '.png', imageBuffer.data, function (err) {
-                //                 if (err) {
-                //                     console.log("error : ", err)
-                //                     return res.status(500).send({
-                //                         success: 0,
-                //                         msg: "some error occured while saving you idea. Please try again agter some time"
-                //                     })
-                //                 }
-                //             })
-                //             imgurl = config.domain + '/images/' + req.body.projectName + '.png';
-                // }
-                // else 
-        //     }
-         
-        // }
-    // }
-    
-
-    
-
-
-
-
-    // if (req.body.imageData != "null") {
-    //     var imageBuffer = decodeBase64Image(req.body.imageData);
-    // }
-    // var rand2 = rn(options)
-
-    // if (req.body.isquestion == "true" || req.body.issueID == null) {
-    //     issueID = rand2
-    // }
-    // else {
-    //     issueID = req.body.issueID;
-    // }
-
-    //     fs.writeFile('public/images/' + req.body.projectName + '.png', imageBuffer.data, function (err) {
-    //         if (err) {
-    //             console.log("error : ", err)
-    //             return res.status(500).send({
-    //                 success: 0,
-    //                 msg: "some error occured while saving you idea. Please try again agter some time"
-    //             })
-    //         }
-    //     })
-    //     var imgurl = config.domain + '/images/' + req.body.projectName + '.png';
-
-    // else {
-    // }
-    // var rand = rn(options)
-    // database.db.oneOrNone('insert into projects(name,email, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
-    //     'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
-    //     {
-    //         name: req.body.projectName,
-    //         email: req.user.email,
-    //         projectid: rand,
-    //         imgurl: imgurl,
-    //         textExplain: req.body.textExplain,
-    //         isquestion: req.body.isquestion,
-    //         issueid: issueID,
-    //         videofilepath: videopathName,
-    //         public : Number(req.body.public)
-    //     }).then((respponse) => {
-    //         database.db.one('select * from projects where projectid = $1', rand)
-    //             .then(data => {
-    //                 res.io.emit(key.SAVED_NEW_PROJECT,{
-    //                     "userId":req.user.id
-    //                 })
-    //                 res.status(201).send({
-    //                     success: 1,
-    //                     data: data
-    //                 })
-
-    //             })
-    //     })
-    //     .catch((err) => {
-    //         console.log("error : ", err)
-    //         res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
-    //     })
-
 
 exports.storeItems = function (req, res) {
     projectid = ""
@@ -393,7 +282,6 @@ exports.getProjectById = function (req, res) {
 exports.getAllProjectByIssue = function (req, res) {
     database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date ASC', req.params.issueid)
         .then(projects => {
-            console.log("projects : ", projects.length)
             if(projects.length !== 0)
             {
                 if (projects) {

@@ -134,7 +134,6 @@ class issueCard extends Component {
             type: config.END_RECORD_TIMEOUT
         }
         if (this.props.extSource !== null) {
-            console.log("posting from webpage")
             source.postMessage(END_RECORD_TIME_END, origin);
         }
         else {

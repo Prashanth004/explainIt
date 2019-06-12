@@ -136,7 +136,6 @@ class DisplayProjectDetail extends Component {
     var ExplainItbutton = null;
     var explainText = null
     if ((this.state.questionProject).length > 0) {
-      console.log("####this.state.questionProject#####: ", this.state.questionProject)
       video = ((this.state.questionProject).length > 0) ? (
         <video controls    ref={a => this.video = a} className="detailVideoElement" src={this.state.questionProject[0].videofilepath}></video>
       ) : (null)
@@ -154,7 +153,6 @@ class DisplayProjectDetail extends Component {
 
 
     if ((this.state.answerProjects).length > 0) {
-      console.log("this.state.answerProjects : ", this.state.answerProjects)
       explained = (this.state.answerProjects).map((issue, index) => (
         <div 
         id={issue.projectid} 

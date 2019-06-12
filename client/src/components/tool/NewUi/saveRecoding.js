@@ -7,6 +7,7 @@ import PropType from 'prop-types';
 import TweetSendMessage from './TweetSendMessage';
 import { sendEmail } from '../../../actions/emailAction'
 
+import { getTwitterHandles } from '../../../actions/twitterApiAction'
 
 
 class SaveProjects extends Component {
@@ -36,6 +37,9 @@ class SaveProjects extends Component {
         this.setState({
             tweetStarted: true
         })
+    }
+    componentWillMount(){
+        this.props.getTwitterHandles();
     }
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {
@@ -249,7 +253,7 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-    sendEmail
+    sendEmail,getTwitterHandles
 })(SaveProjects)
 
 

@@ -106,6 +106,7 @@ const conf = {
     ERROR_CODE_FILE_TOO_LARGE:413,
     SCREEN_SHARE_PAGE:"screenSharePage",
     VISIT_PROFILE_PAGE:"visitProfilePage",
+    END_SCREED_RECORD_FROM_WEB:"endScreenRecordFromWEb",
     END_CALL_RECIEVER_FROM_FLOATER:"endCallReceiverFromFLoater",
     END_CALL_RECEIVER_TO_EXTENSION : "endCallReceiverToExtension",
     END_CALL_RECIEVER_TO_WEB:"endCallRecieverToWeb",

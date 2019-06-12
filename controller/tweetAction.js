@@ -53,12 +53,8 @@ const client = new Twitter({
                 console.log("error in checking if present : ", err)
             })
         }
-           
-
-         }
-         
-        //   window.open("https://twitter.com/messages/compose?recipient_id="+id, target="_blank")
-      });
+        }
+     });
 
   }
 
@@ -105,9 +101,7 @@ const client = new Twitter({
         }
 
       });
-    
   }
-
 
   exports.twitterlist = (req, res)=>{
       const user = req.user.id

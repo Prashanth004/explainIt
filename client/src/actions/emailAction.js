@@ -40,7 +40,6 @@ export const sendEmail=(issueid,userid)=>(dispatch)=>{
             "Authorization":token
         }
     }).then(response=>{
-        console.log("its happened")
         if(response.status===201){
             dispatch({
                 type:REPLY_EMAIL_SENT
@@ -48,7 +47,7 @@ export const sendEmail=(issueid,userid)=>(dispatch)=>{
         }
     })
     .catch(err=>{
-        console.log("it did not hapoend")
+        console.log("it did not hapoend : ",err)
     })
 }
 export const resendOtp =(email)=>(dispatch)=>{

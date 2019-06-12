@@ -135,7 +135,6 @@ export const updatProjectReason =(title,projectid)=>dispatch=>{
 
 
 export const fetchProjectbyIssue = (issueId)=>dispatch =>{
-    console.log("sdkmaosfhidfhahdfsjavh")
     const UNAUTHORIZED = 401;
     axios.interceptors.response.use(
       response => response,
@@ -165,7 +164,6 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
             "Authorization": token,
         }
     }).then(response=>{
-        console.log("response : ",response)
         var promises = [];
         if(response.status === 200){
             allProjects = response.data.data
@@ -175,7 +173,6 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
              })
              axios.all(promises).then(function(results) {
                 results.forEach(function(response, index) {
-                    console.log("response : ",response)
                     if(response.status===200){
                         const newTestJson = JSON.parse(JSON.stringify(allProjects));
                                 newTestJson[index]['profilepic']=response.data.data.profilepic;
@@ -274,15 +271,12 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         },
         data: fd,
         onUploadProgress: (progressEvent) => {
-            console.log("progressEvent : ",progressEvent)
-            const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-            console.log("onUploadProgress", totalLength);
+            // const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
             // if (totalLength !== null) {
             //     this.updateProgressBarValue(Math.round( (progressEvent.loaded * 100) / totalLength ));
             // }
         }
     }).then(response => {
-        console.log("response : ", response)
         if(response.status===201)
         {
             if(response.data.data.isquestion){

@@ -32,12 +32,15 @@
   /* background-color: blue; */
 }
 .handleInput{
-  width:30%;
+  width:100px;
   text-align: center;
   border-style:none;
   border-bottom-style: solid;
   border-bottom-color: rgba(0, 0, 0, 0.486);
 
+}
+.handleInput:focus{
+  outline:none;
 }
   .sharableLinkSection{
     width:90%;

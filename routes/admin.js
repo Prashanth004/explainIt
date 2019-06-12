@@ -6,7 +6,6 @@ const passport = require('passport');
 var admin = require('../controller/admin')
 
 var createToken = function(auth) {
-    console.log(auth)
     return jwt.sign({
       id: auth.id
     },key.secret,
@@ -17,11 +16,9 @@ var createToken = function(auth) {
 
 var generateToken = function (req, res, next) {
     var token = createToken(req.user);
-    console.log(req.user)
     res.json({ success: 1, token: 'JWT ' + token, user:req.user });};
 
 router.post('/authenticate', passport.authenticate('local', { session: false }),(req,res)=>{
-    console.log(req.user)
     generateToken(req, res)
 })
 module.exports = router;

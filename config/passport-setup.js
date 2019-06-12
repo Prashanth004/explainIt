@@ -148,7 +148,6 @@ passport.use(new LocalStrategy(
     function (usernameField, password, done) {
         database.db.oneOrNone('select * from admin where username = $1', usernameField).then((User) => {
             if (User) {
-                console.log("cdcd",User)
                 if (User.password == password) {
                     done(null, User);
                 }
@@ -184,7 +183,6 @@ passport.use(new TwitterTokenStrategy({
             .then((currentUser) => {
                 if (currentUser) {
                     // already have this user
-                    console.log("already a user")
                     done(null, currentUser);
                 } else {
                     database.db.none('insert into users(username, password, profilepic,date, payment, id, twitterhandle)' +

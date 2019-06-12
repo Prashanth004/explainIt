@@ -26,7 +26,6 @@ class Call extends Component {
 
            
             if(event.data.type===config.END_CALL_FROM_EXTENSION){
-                console.log("peforming the endcall Action")
                 self.props.endCall();
                 socket.emit(config.END_CALL, {
                     'peerId': self.props.peerId,
@@ -35,7 +34,6 @@ class Call extends Component {
                 return
             }
             if(event.data.type ===  config.ADD_EXTRA_MINUTE_TO_WEB_SITE){
-                console.log("web page add extra")
 
                 self.increaseTime()
                 return

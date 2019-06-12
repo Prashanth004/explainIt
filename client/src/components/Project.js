@@ -98,7 +98,6 @@ class Project extends Component {
       }
     },25000)
     var newIssueIdtemp = (localStorage.getItem('newIssueId'))
-    console.log("newIssueIdtemp : ",newIssueIdtemp)
     this.setState({ newIssueId : newIssueIdtemp})
   
   

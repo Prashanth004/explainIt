@@ -15,7 +15,6 @@ export const clickAction =(twitterHandle)=>(dispatch)=>{
         url: config.base_dir + '/api/users/onboard',
         data:data
     }).then(response=>{
-        console.log('response : ',response)
         if(response.status===200){
             if(response.data.success ===1){
                 dispatch({

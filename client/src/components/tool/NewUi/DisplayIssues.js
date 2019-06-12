@@ -170,6 +170,7 @@ class DisplayIssue extends Component {
                         <IssueCard 
                         key={index+1000}
                         itsHome={this.state.itsHome}
+                        socket={this.props.socket}
                         displayCopyEle={this.state.displayCopyEle}
                         deleteProjects={this.deleteProjects}
                         tweetWindow={this.tweetWindow}

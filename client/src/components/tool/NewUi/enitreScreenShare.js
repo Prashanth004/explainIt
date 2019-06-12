@@ -274,9 +274,15 @@ class ScreenRecorder extends Component {
         this.AudioPlyr.pause()
     }
     onUnload(event) { // the method that will be used for both add and remove event
-        console.log("hellooww")
-        
+     if(this.props.isSceenSharing){
+        this.endCall()
         event.returnValue = "Hellooww"
+        console.log("HELLO WORLD");
+     }
+     else{
+        //  event.preventDefault();
+     }
+      
     }
 
 
@@ -427,6 +433,7 @@ class ScreenRecorder extends Component {
         })
     }
     componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.onUnload)
         this.props.fullStopedSharing()
         clearTimeout(this.saveBlobtimeOut);
         clearTimeout(this.callEndBeforeRecieve);
@@ -578,7 +585,7 @@ class ScreenRecorder extends Component {
     peerCall() {
         const { twitterUserId, fullStartedSharing } = this.props
         const self = this
-        const { socket, peer, destkey, finalStream, recorder } = this.state
+        const { socket, peer, destkey, finalStream } = this.state
         if (config.CALL_LOGS)
             console.log("calling...")
         var call = peer.call(destkey, finalStream);

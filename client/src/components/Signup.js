@@ -80,7 +80,6 @@ this.setState({
     })
     .catch(err=>{
         alert("Not able to SignUp ");
-        console.log(err)
     })
     alert("i get excecuted")
     setTimeout(function(){

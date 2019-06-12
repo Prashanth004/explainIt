@@ -73,7 +73,6 @@ class ShareFloater extends Component {
 
     endCallFloater() {
         const { action } = this.state;
-        console.log("action : ", action)
         var msg = null
         if (action === config.FULL_SCREEN_SHARE) {
             msg = {
@@ -120,13 +119,11 @@ class ShareFloater extends Component {
 
     muteAudio() {
         var msg ={}
-        console.log("floate mute")
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         var updateTime = presentTime;
         this.props.setTime(updateTime);
       
         if(this.props.muteState === config.UN_MUTED){
-            console.log("def unmuted")
             localStorage.setItem('muteState',JSON.stringify(config.MUTED))
             msg = {
                 'type': config.MUTE_FROM_FLOATER,
@@ -137,7 +134,6 @@ class ShareFloater extends Component {
             this.props.changeStateToMute()
         }
         else{  
-            console.log("def muted")
             localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
             msg = {
                 'type': config.UNMUTE_FROM_FLOATER,
@@ -156,18 +152,14 @@ class ShareFloater extends Component {
         var otherpersonProfilePic = null
         function postMessageHandler(event) {
             if (event.data.action === config.START_CALL) {
+                self.props.changeStateToUnmute()
                 otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
                 self.setState({
                     otherPersonPic: otherpersonProfilePic,
                     callTabid: event.data.data.tabid,
                     action: event.data.data.action
                 })
-                if(event.data.data.action === config.UNMUTE_TO_FLOATER){
-                    self.props.changeStateToUnmute()
-                }
-                if(event.data.data.action === config.MUTE_TO_FLOATER){
-                    self.props.changeStateToMute()
-                }
+             
                 if (event.data.data.action === config.FULL_SCREEN_SHARE) {
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay', JSON.stringify("none"));
@@ -179,6 +171,12 @@ class ShareFloater extends Component {
                 }
 
                 self.props.setTime(event.data.data.timer)
+            }
+            if(event.data.action === config.UNMUTE_TO_FLOATER){
+                self.props.changeStateToUnmute()
+            }
+            if(event.data.action === config.MUTE_TO_FLOATER){
+                self.props.changeStateToMute()
             }
             if (event.data.action === config.DISPLAY_SHARE_ICON_TO_FLOATER) {
                 self.props.setDiplayOfFloater("block");
@@ -196,13 +194,11 @@ class ShareFloater extends Component {
                 // this.props.setTime
             }
             if (event.data.action === config.ADD_EXTRA_MIUTE_TO_FLOATER_RECIEVER) {
-                console.log("i am being reached here")
                 presentTime = JSON.parse(localStorage.getItem("timer"));
                 updateTime = presentTime;
                 self.props.setTime(updateTime)
             }
             if (event.data.action === config.ADD_EXTRA_TIME_TO_FLOATER) {
-                console.log(JSON.parse(localStorage.getItem("timer")))
                 presentTime = JSON.parse(localStorage.getItem("timer"));
                 updateTime = presentTime;
 

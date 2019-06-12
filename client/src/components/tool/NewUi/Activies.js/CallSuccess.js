@@ -5,7 +5,6 @@ import RecieveCallSuccess from './RecieveCallSuccess';
 import AtemptCallSuccessNoLink from './AttemptCallSuccessNoLInk';
 import RecieveCallSuccessNoLink from './RecieveCallSuccessNoLink';
 const CallSuccess= (props) => {
-  console.log(" props.activity.link : ", props.activity)
   return props.activity.link!==null?((props.activity.fromuser === props.userId)?
   (<AtemptCallSuccess activity={props.activity} />):(<RecieveCallSuccess activity={props.activity}/>))
   :((props.activity.fromuser === props.userId)?

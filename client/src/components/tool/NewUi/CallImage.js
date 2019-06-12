@@ -5,14 +5,7 @@ export default (props) => {
     const burProps = (props.action==="waiting")?
     "profileImageElementCall burImage":
     "profileImageElementCall"
-    // const loadingAnim = (props.action==="waiting")?
-    // (<div class="lds-ellipsis">
-    // <div></div>
-    // <div></div>
-    // <div></div>
-    // <div></div>
-    // </div>):
-    // null
+
       
   return (
     <div>

@@ -28,8 +28,10 @@ class Search2 extends Component {
         window.open(config.react_url + '/project/'+this.state.selecctedId, "_blank")
     }
     matchStocks(state, value) {
+        var tempValue = (value.includes('@'))?
+        (value.replace("@","")):(value)
         return (
-            state.twitterhandle.toLowerCase().indexOf(value.toLowerCase()) !== -1 
+            state.twitterhandle.toLowerCase().indexOf(tempValue.toLowerCase()) !== -1 
             // state.abbr.toLowerCase().indexOf(value.toLowerCase()) !== -1
         );
     }
@@ -45,20 +47,21 @@ class Search2 extends Component {
   
 
     render() {
+        console.log("this.props.twiterHandleArray : ",this.props.twiterHandleArray);
         return (
 
             <div style={{ borderradius:"5%", display:"inline" }}>
                 <Autocomplete
                     className="inputTweet"
                     value={this.props.tweetTextvalue}
-                    style={{ borderRadius:"5%", margin:"10px",padding:"5px" }}
+                    // style={{ borderRadius:"5%", margin:"10px",padding:"5px" }}
                     inputProps={{
-                         id: 'states-autocomplete',
-                         className:this.props.classOfInput,
-                         placeholder:this.props.placeholder
-                         }}
-                    wrapperProps={{ borderRadius:"5%",margin:"10px", padding:"5px" }}
-                    wrapperStyle={{ position: 'relative', display: 'inline-block' }}
+                        id: 'states-autocomplete',
+                        className:this.props.classOfInput,
+                        placeholder:this.props.placeholder
+                        }}
+                        wrapperProps={{ borderRadius:"5%",margin:"10px", padding:"5px" }}
+                        wrapperStyle={{ position: 'relative', display: 'inline-block' }}
                     items={this.props.twiterHandleArray}
                     getItemValue={item => item.twitterhandle}
                     shouldItemRender={this.matchStocks}
@@ -66,19 +69,19 @@ class Search2 extends Component {
                     autoHighlight={true}
                     onSelect={this.selectValue}
                     renderMenu={children => (
-                        <div className="menu">
+                        <div className={this.props.classOfMenu}>
                             {children}
                         </div>  
                     )}
                     renderItem={
-                       (item, isHighlighted) => (null
-                        // (item.lenght>0)?(
-                        // <div
-                        //     className={`item ${isHighlighted ? 'item-highlighted' : ''}`}
-                        //     key={item.issueid} >
-                        //     <p>{item.twitterhandle}</p>
-                        // </div >
-                        // )
+                       (item, isHighlighted) => (
+                        // (item.length>0)?(
+                        <div
+                            className={`item ${isHighlighted ? 'item-highlighted' : ''}`}
+                            key={item.id} >
+                            <span>@{item.twitterhandle}</span>
+                        </div >
+                        // ):(null)
                     )}
                 />
                

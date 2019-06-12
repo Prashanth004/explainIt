@@ -89,7 +89,6 @@ handleConfirm() {
     this.setState({ state: this.state });
   }
   openHome() {
-    console.log(window.location.pathname)
     if (!(window.location.pathname).includes('application'))
       window.open(config.react_url+'/application', '_self')         
     else {

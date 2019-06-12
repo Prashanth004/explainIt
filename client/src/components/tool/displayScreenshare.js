@@ -177,28 +177,25 @@ class DisplayShare extends Component {
             }
         }, 4000)
         socket.on('connect_failed', function() {
-           console.log("Sorry, there seems to be an issue with the connection!");
         })
         socket.on('error', function (err) {
-            console.log("err : ",err);
         });
         socket.on('connect_timeout', function (err) {
-        console.log("socket. timeout")
         });
         socket.on("disconnect",()=>{
-            console.log("disconnected")
         })
         socket.io.on("connect_error",()=>{
-            console.log("server offfilene")
         })
         
         socket.on(config.SEND_SHARABLE_LINK, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
-                if (data.successMessage === "true")
+                if (data.successMessage === "true"){
+                    localStorage.setItem('newIssueId', JSON.stringify(data.sharableLink))
                     self.setState({
                         sharablelink: data.sharableLink,
                         gotSharableLink: true
                     })
+                }
                 else {
                     self.setState({
                         failedToSaveMessage: true
@@ -262,6 +259,7 @@ class DisplayShare extends Component {
 
     componentWillMount() {
         localStorage.setItem('action', JSON.stringify(config.RECIEVER_SCREEN_SHARE))
+        localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
         var self = this
         setTimeout(() => {
             if (self.state.connected) {
@@ -359,11 +357,8 @@ class DisplayShare extends Component {
                 recorder1.startRecording();
                 self.setState({ recorder: recorder1 });
                 self.saveBlobtimeOut = setTimeout(()=>{
-                    console.log("BLobss  ahahaha ")
                     const { recorder } = self.state;
-                    console.log("recorder : ",recorder)
                     if(recorder!== null){
-                        console.log(" I am here ")
                         recorder.stopRecording(function () {
                             var blob = recorder.getBlob();
                             self.setState({
@@ -473,7 +468,6 @@ class DisplayShare extends Component {
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime)
         if (this.state.initiatedScreenShare) {
-            console.log("conn : ", conn)
             conn.send({
                 'type' : config.PEER_SHARE_SCREEN_REQUEST,
                 'otherPeerId': self.state.clientPeerid
@@ -481,12 +475,9 @@ class DisplayShare extends Component {
             this.setState({
                 myscreenSharing: true
             })
-            // socket.emit(config.ACCEPT_SHARE_OTHRT_PEER_SCREEN, {
-            //     'otherPeerId': self.state.clientPeerid
-            // })
+          
         }
         else {
-            // var ua = window.detect.parse(navigator.userAgent);
             const result = browser();
             if (result.name === "chrome") {
                 if (config.ENVIRONMENT !== "test") {
@@ -513,16 +504,6 @@ class DisplayShare extends Component {
         }
     };
 
-    // renderer = ({ hours, minutes, seconds, completed }) => {
-    //     const self = this
-    //     if (completed) {
-    //         // return (null)
-    //         self.closeWindow()
-    //     } else {
-    //         // Render a countdown
-    //         return <span>{hours}:{minutes}:{seconds}</span>;
-    //     }
-    // }
 
     receiveMessage() {
         var source = this.props.extSource
@@ -681,17 +662,11 @@ class DisplayShare extends Component {
                             {sharableLinkMessage}
                             {selfCloseTimer}
                         </div>))))
-        const MuteButton=(this.props.isMuted)?(
-            <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
-
-        ):(                        <button className="buttonDark" onClick={this.muteAudio}>Mute </button>
-        )
-
+       
         if (!this.state.callEnded) {
             ShareElement = (
                 <div className="shareVideoDisplay">
                     <div className="videoContainer">
-                        {/* {MuteButton} */}
                         {messageOfScreenShare}
                         <div className="timerDiv">
                             <Countdown

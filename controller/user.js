@@ -43,7 +43,6 @@ exports.onBoardUser = function (req,res){
     var params = {
         "screen_name":req.body.twitterhandler
      }
-     console.log("req.body.twitterhandler : ",req.body.twitterhandler)
       client.get('users/show.json', params, function(error,body ,response){
          if(error!==null){
              console.log("error : ",error)
@@ -52,7 +51,6 @@ exports.onBoardUser = function (req,res){
             })
          }  
          else{
-            console.log(" no error : ",body)
             var newProfilePic = body.profile_image_url_https.replace("_normal","");
             var currentdate = new Date();
             var datetime = "Last Sync: " + currentdate.getDate() + "/"
@@ -187,13 +185,9 @@ exports.turnNotBusy =(req,res)=>{
     }
     var query2 ={}
     if(req.body.action === config.FULL_SCREEN_RECORD){
-        console.log("considering it as recording")
         UpdateBusy(res,query1)
     }
     else if(req.body.action === config.FULL_SCREEN_SHARE){
-        console.log("considering it as sharing")
-        console.log('req.body.recieverCallId : ',req.body.recieverCallId)
-        console.log('req.body.recieverCallId : ',typeof(req.body.recieverCallId))
         query2 = {
             'sql':'update users SET busy = $1 WHERE id = $2',
             'data': [0, req.body.recieverCallId]
@@ -312,10 +306,8 @@ exports.getEmailStatus = (req, res) => {
         })
 }
 exports.getActivationStatus = (req, res) => {
-    console.log(req.params.twitterhandle)
     database.db.oneOrNone('select * from users where UPPER(twitterhandle) = $1 and activation = $2', [req.params.twitterhandle.toUpperCase(),1])
         .then(data => {
-            console.log(data)
             if (data) {
                 if (data!==null) {
 
@@ -339,7 +331,6 @@ exports.getActivationStatus = (req, res) => {
         })
 }
 exports.updateOnlineStatus = (req, res) => {
-    console.log('req.body.onlineStatus : ', req.body.onlineStatus)
     const onlineStatus = (req.body.onlineStatus) ? (1) : (0)
     database.db.none('UPDATE users SET online = $1 where id = $2', [onlineStatus, req.user.id])
         .then(data => {
@@ -399,7 +390,6 @@ const sendEmail = (toAddress, Subject, emailContent) => {
             console.log("email send failed: ", err)
             // return 
         }
-        console.log("successfull")
         // return     
     });
 
@@ -531,7 +521,6 @@ exports.getUserById = function (req, res) {
 exports.activate = (req,res)=>{
     database.db.none("UPDATE users SET activation = $1 where id = $2",[1,req.body.userid])
     .then(data=>{
-        console.log("activated user")
         res.status(200).send({
             success :1,
             data:data
@@ -562,7 +551,6 @@ exports.deactivate = (req,res)=>{
     })
 }
 exports.getAllUsers = (req, res)=>{
-    console.log("req user ",req.user)
     database.db.manyOrNone('select * from users')
         .then(data => {
             res.status(200).send({

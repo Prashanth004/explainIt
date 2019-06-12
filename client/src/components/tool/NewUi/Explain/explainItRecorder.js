@@ -9,7 +9,7 @@ import SaveElement from '../saveRecoding'
 import Form from '../../Form'
 import { cancelAllMessageAction } from '../../../../actions/messageAction'
 import { restAllToolValue } from "../../../../actions/toolActions";
-import {postStartCall} from '../../../../actions/extensionAction'
+import {postStartCall,postEndCall,} from '../../../../actions/extensionAction'
 
 import {showCanvas, hideCanvas} from '../../../../actions/canvasAction'
 import TimerBar from '../TimerBar'
@@ -50,6 +50,7 @@ class FullScreenRecorder extends Component {
         this.receiveMessage = this.receiveMessage.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
         this.toggleCanvas = this.toggleCanvas.bind(this);
+        this.onUnload = this.onUnload.bind(this);
 
     }
     startBar(){
@@ -146,7 +147,17 @@ class FullScreenRecorder extends Component {
             console.log("error ouucres : ", err)
         })
     }
+    onUnload(event) { // the method that will be used for both add and remove event
+        if(this.props.isFullScreenRecording){
+            const { extSource, extOrigin,postEndCall } = this.props;
+            postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
+            this.recordScreenStop();
+            event.returnValue = " "
+        }
+        else{}
+       }
     componentDidMount(){
+        window.addEventListener("beforeunload", this.onUnload);
     var self = this
         function postMessageHandler(event) {
             if(event.data.type){
@@ -189,7 +200,6 @@ class FullScreenRecorder extends Component {
                 type:config.END_RECORD_TIMEOUT
             }
             if (this.props.extSource !== null) {
-                console.log("posting from webpage")
                 source.postMessage(END_RECORD_TIME_END, origin);
             }
             else{
@@ -325,6 +335,7 @@ toggleCanvas(){
         }
     }
     componentWillUnmount(){
+        window.removeEventListener("beforeunload", this.onUnload)
         var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
         if(audioStream!==null && screenStream!== null)
@@ -506,5 +517,5 @@ const mapStateToProps = state =>({
 export default connect(mapStateToProps,{saveSourceId,
     cancelAllMessageAction,
     restAllToolValue,
-     showCanvas, hideCanvas,postStartCall,fullStartedRecording, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
+     showCanvas, hideCanvas,postStartCall,fullStartedRecording,postEndCall, setStream,discardAfterRecord, fullStopedRecording})(FullScreenRecorder)
 

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from './InputNumber';
-import AcceptTopic from './Saveproject'
+import AcceptTopic from './Saveproject';
+import TweetSuggest from './TweetSug';
 import config from '../../../config/config';
 import { setNoOfMinutes, updateCurrentTime } from '../../../actions/callAction'
 import { FaArrowLeft } from "react-icons/fa";
@@ -79,17 +80,17 @@ class tweetSearch extends Component {
         }
     
     }
-    updateTwitterHandleBox(e) {
+    updateTwitterHandleBox(e,value) {
 
       
    
         this.setState({
-            twitterHandle: e.target.value,
+            twitterHandle:value,
             tweetTested: false,
             emptyUserName:false,
             noInternet:false
         })
-        this.props.resetValues();
+        // this.props.resetValues();
     }
     sendRecordding() {
 
@@ -149,12 +150,24 @@ class tweetSearch extends Component {
         var validatinginfo = null;
         var mainContainer = (<div className="startShare">
             <span style={{ margin: "10px" }}>Initiate screen share with</span>
-
+{/* 
             <input
                 onChange={this.updateTwitterHandleBox}
                 className="handleInput"
                 placeholder="Username"
-                value={this.state.twitterHandle} />
+                value={this.state.twitterHandle} /> */}
+                <TweetSuggest
+                onChange={this.updateTwitterHandleBox}
+                placeholder="@username"
+                classOfInput="handleInput"
+                tweetTextvalue={this.state.twitterHandle}
+                classOfMenu="screeShareMenu"
+                
+            />
+
+
+
+
 
 
             <span > for </span>

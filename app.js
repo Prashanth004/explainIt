@@ -186,7 +186,6 @@ io.on("connection", socket => {
       io.emit(key.ENDING_RING_ACK, data);
     })
     socket.on(key.SEND_SHARABLE_LINK, (data)=>{
-      console.log("SEND_SHARABLE_LINK : ",data)
       io.emit(key.SEND_SHARABLE_LINK, data);
     })
     socket.on(key.SHARE_MY_SCREEN, (data)=>{
