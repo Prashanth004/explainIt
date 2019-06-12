@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar';
 import { MdCallEnd, MdCall } from "react-icons/md";
-import Activity from './Activies.js/indexActivity'
+import Activity from './Activies/indexActivity'
 import DisplatCreated from './DisplayCreated';
 import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';

@@ -1,14 +1,14 @@
 
 import axios from 'axios';
-import config from '../../../../config/config';
+import config from '../../../../../config/config';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import './activity.css';
-import { changeReadStatus } from '../../../../actions/messageAction'
+import '../activity.css';
+import { changeReadStatus } from '../../../../../actions/messageAction'
 
 
-class RecCallFailed extends Component {
+class RecievedMessage extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -17,8 +17,8 @@ class RecCallFailed extends Component {
         }
     }
     componentWillMount() {
+        
         this.props.changeReadStatus(this.props.activity.id)
-
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method: 'get',
@@ -51,20 +51,27 @@ class RecCallFailed extends Component {
                         <img className="activityImage" src={this.state.profilePic} alt="Profilepic"></img>
                     </div>
                     <div style={{ textAlign: "left" }}>
-                        <p><b>@{this.state.userName}</b> tried calling you for the topic <b>{this.props.activity.subject}</b></p>
+                        <p><b>@{this.state.userName}</b> sent a recorded message to you  on the topic <b>{this.props.activity.subject}</b></p>
+                        <span><a href={this.props.activity.link}>Click here acess the recordeing</a></span>
 
                     </div>
-                </div>
 
+                </div>
             </div>
         )
     }
 }
-RecCallFailed.PropType = {
+RecievedMessage.PropType = {
     changeReadStatus: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
 
 
 })
-export default connect(mapStateToProps, { changeReadStatus })(RecCallFailed)
+export default connect(mapStateToProps, { changeReadStatus })(RecievedMessage)
+
+
+
+
+
+
