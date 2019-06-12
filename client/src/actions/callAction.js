@@ -91,12 +91,10 @@ export const increaseTimer = ()=>(dispatch)=>{
     })
 }
 export const durationInMinutes = (intialTime, numberOfIncrease, currentTime)=>{
-    console.log("typeof(intialTime) : ",typeof(intialTime))
-    console.log("Number(intialTime) : ",Number(intialTime))
+   
     const tInitialTime=(typeof(intialTime)==="string")?(Number(intialTime)):intialTime
     const tNumberOfIncrease=(typeof(numberOfIncrease)==="string")?(Number(numberOfIncrease)):numberOfIncrease
     const tCurrentTime=(typeof(currentTime)==="string")?(Number(currentTime)):currentTime
-    console.log(tInitialTime,tNumberOfIncrease,tCurrentTime)
     return tInitialTime+tNumberOfIncrease-tCurrentTime
 }
 export const setNoOfMinutes =(numberMinutes)=>(dispatch)=>{

@@ -25,7 +25,6 @@ export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
 }
 
 export const displayScreenSharebutton = (source,origin)=>(dispatch)=>{
-    console.log("got herr to host");
     
     const displayIcon = {
         type:config.DISPLAY_SHARE_ICON_TO_EXTENSION,
@@ -51,7 +50,6 @@ export const saveSourceId = (sourceId)=>(dispatch)=>{
 
 }
 export const postEndCall = (action,source,origin)=>dispatch=>{
-    console.log("action ",action)
     const callEnd = {
         type: action,
         data: {}
@@ -84,7 +82,6 @@ export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,
     const token = JSON.parse(localStorage.getItem('token'));
     localStorage.setItem('action',JSON.stringify(action))
     var callStart = null;
-    console.log("uploading action :",action)
     if(action === config.FULL_SCREEN_SHARE){
         localStorage.setItem('shareDisplay',JSON.stringify("none"))
         localStorage.setItem('profilePic',JSON.stringify(otherPersonPic));
@@ -113,7 +110,6 @@ export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,
     }
     else{
         localStorage.setItem('shareDisplay',JSON.stringify("block"));
-        console.log("otherPersonPic : ",otherPersonPic)
         localStorage.setItem('profilePic',JSON.stringify(otherPersonPic));
         callStart = {
             type:config.START_CALL,

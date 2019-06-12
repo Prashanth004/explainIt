@@ -75,7 +75,7 @@ class Project extends Component {
       this.props.setIssueId(this.props.match.params.projectid)
       localStorage.setItem("issueId", this.props.match.params.projectid)
       this.setState({ showModalExplain: true });
-      this.props.saveReplyEmailOption(e.target.id, this.props.userid)
+      this.props.saveReplyEmailOption(Number(this.state.issueId), this.props.userId)
     }
     else {
       this.setState({ showModalTwitterLogin: true });
@@ -101,13 +101,7 @@ class Project extends Component {
       }
     },25000)
     var newIssueIdtemp = (localStorage.getItem('newIssueId'))
-    console.log("newIssueIdtemp : ",newIssueIdtemp);
-    console.log("issueId : ",issueId)
-
     this.setState({ newIssueId : newIssueIdtemp})
-  
-  
-
     this.props.clearAnswers(issueId)
     this.props.fetchProjectbyIssue(issueId);
     this.setState({
@@ -174,6 +168,7 @@ class Project extends Component {
         foat: "right",
         marginLeft: "80%"
       }}
+    
       onClick={this.handleOpenModal}>Explain</button>)
     return (this.props.isFetchDone ? (
       (!this.props.failedToGet)?(<div className="mainContainer">
