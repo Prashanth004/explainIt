@@ -8,6 +8,7 @@ import {FETCH_PROJ_BY_ISSUE,
     CLEAR_SAVE_ACTIONS,
      CREATE_ISSUE_PROJECT,
      FETCH_STARTED,
+     REST_PROJECT_ACTION,
      DELETE_SUCCESSFULL,
      UPDATE_TEXT_EXPLAIN,
      OPEN_EDIT_TEXT_MODAL,
@@ -79,6 +80,12 @@ export const checkPublicValue = (issueId) =>(dispatch)=>{
     }).catch(err=>{
         console.log("error : ",err)
 
+    })
+}
+
+export const resetProjectActions = ()=>(dispatch)=>{
+    dispatch({
+        type:REST_PROJECT_ACTION
     })
 }
 export const openEditModal=(openEditModal)=>(dispatch)=>{

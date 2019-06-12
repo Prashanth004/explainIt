@@ -1,9 +1,11 @@
-import {SAVE_EXTENSION_DETAILS, GET_SOURCE_ID} from '../actions/types'    
+import {SAVE_EXTENSION_DETAILS,
+     GET_SOURCE_ID} from '../actions/types';
+
 
 const initialState ={
   source:null,
   origin:null,
-  sourceId:null
+  sourceId:null,
 }  
 
 export default function(state = initialState, action){
@@ -14,6 +16,7 @@ export default function(state = initialState, action){
                 source:action.source,
                 origin:action.origin
             }
+   
         case GET_SOURCE_ID : 
             return{
                 ...state,

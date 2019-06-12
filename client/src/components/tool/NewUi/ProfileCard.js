@@ -8,7 +8,7 @@ import { cancelSuccess } from '../../../actions/issueActions';
 // import './Floater/floater.css';
 import { FiLink2 } from "react-icons/fi";
 import {resetCallAction} from '../../../actions/callAction'
-import {resetIssueActions} from '../../../actions/projectActions'
+import {resetIssueActions,resetProjectActions} from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
 import {getAllActivities} from '../../../actions/callAction'
 import NotificationBadge from 'react-notification-badge';
@@ -58,7 +58,7 @@ class ProfileCard extends Component {
         this.startAction()
         this.props.shareFullScreenShare()
         this.props.resetCallAction();
-       
+        this.props.resetProjectActions();
     }
 
 
@@ -194,7 +194,8 @@ ProfileCard.PropType = {
     toggleProjects: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
     changeOnlinestatus: PropType.func.isRequired,
-    getAllActivities:PropType.func.isRequired
+    getAllActivities:PropType.func.isRequired,
+    resetProjectActions:PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
@@ -218,6 +219,7 @@ export default connect(mapStateToProps, {
     resetValues, restAllToolValue,
     changeOnlinestatus,
     getAllActivities,
+    resetProjectActions,
     resetIssueActions,
  getProfileDetails
 })(ProfileCard)

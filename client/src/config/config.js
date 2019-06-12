@@ -121,7 +121,18 @@ const conf = {
     UPDATE_INFO : "updateInfo",
     PERMISSION_DENIED :'PermissionDeniedError',
     END_WHILE_DIALING:'endWhileDialing',
-    VIDEO_RECORDING_SAVE_LIMIT: 360//seconds,
+    VIDEO_RECORDING_SAVE_LIMIT: 360,//seconds,
+    ADD_EXTRA_MINUTE_FROM_FLOATER:"addExtraMinuteFromFloater",
+    ADD_EXTRA_MINUTE_TO_WEB_SITE:"addExtraMinuteToWebsite",
+    MUTE_FROM_FLOATER:"muteFromFloater",
+    MUTE_TO_WEB:"muteToWeb",
+    MUTE_TO_FLOATER:"muteToFloater",
+    UNMUTE_FROM_FLOATER:"unmuteFromFloater",
+    UNMUTE_TO_WEB:"unMuteToWebsite",
+    UNMUTE_TO_FLOATER:"unMuteToFloater",
+    UN_MUTED:"unMuted",
+    MUTED:"muted"
+
     
 
 }

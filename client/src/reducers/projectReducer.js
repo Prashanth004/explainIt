@@ -5,6 +5,7 @@ import {FETCH_PROJ_BY_ISSUE,
     CLEAR_SAVE_ACTIONS,
     DELETE_SUCCESSFULL,
     OPEN_EDIT_TEXT_MODAL,
+    REST_PROJECT_ACTION,
     UPDATE_TEXT_EXPLAIN,
     CLOSE_EDIT_TEXT_MODAL,
     UPDATE_LINK,
@@ -107,6 +108,21 @@ export default function(state = initialState, action){
                     ...state,
                     deleteSuccess:false
 
+                }
+        case REST_PROJECT_ACTION:
+                return{
+                    ...state,
+                    questProject:{},
+                    answerProject:[],
+                    newprojectIem :{},
+                    isFetchDone:false,
+                    deleteSuccess :false,
+                    openEditModal:false,
+                    doneUpdating:false,
+                    editModalId:null,
+                    largeFileSize:false,
+                    linkToAccess:null,
+                    failedToGet:false
                 }
         default :
             return state;

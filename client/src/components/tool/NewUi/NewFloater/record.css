@@ -12,29 +12,37 @@
  
 .callImageDivAnwserMain{
     width:100%;
+    border-style:none;
     background-color: rgb(51, 39, 58);
-    border-radius: 25px;
+    /* border-radius: 21px; */
     padding:5px;
+    margin-top:-5px;
+    padding-right:3px;
+    padding-left:1.5px;
     right:25px;
     display:grid;
     grid-template-columns: 50% 50%; 
   }
   .Share{
-      height:45px;
+      height:50px;
     display:grid;
-  grid-template-columns: 33.333% 33.333% 33.333% 
+  grid-template-columns: 21% 21% 25% 21% 12%; 
+  }
+  .record{
+    grid-template-columns: 42% 16% 42%; 
   }
   .callPage-recieverImageFloat{
-margin-top:-62px;
-width:35px;
-height:35px;
+margin-top:-66px;
+margin-left:px;
+width:38px;
+height:38px;
 border-radius:50%;
 
   }
  
-.callPage-recieverImageDiv{
-    height:35px;
-    width:35px;
+.callPage-recieverImageDivFloat{
+    height:38px;
+    width:38px;
     border-radius:50%;
     margin:auto;
     /* margin-top:-25px; */
@@ -42,11 +50,72 @@ border-radius:50%;
     box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
 
 }
-.img__overlay{
+.Shareicon{
+  height:32px;
+  width:32px;
+  margin-top:3px;
+  /* padding:3px; */
+
+}
+
+.endButton{
+  width:42px;
+  height:42px;
+margin-top:-4px;
+margin-left:-4px;
+  font-size: 34px;
+  
+}
+.muteButton{
+  margin-top:-8px;
+  width:35px;
+  height:49px;
+  padding:0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+background-color:  rgb(233, 112, 13)
+}
+.unmuteButton{
+
+  background-color: rgb(4, 119, 62)
+}
+.muteButton:focus{
+  outline:0px;
+  padding:0;
+}
+
+.addMin{
+  border-style:solid;
+  border-width:0.5px;
+  border-color:white;
+  color:white;
+  background-color:  #34a9ad;
+  font-size:12px;
+  border-radius:5px;
+  padding:0px;
+ font-weight:lighter;
+  margin-top:-15px;
+  width:45px;
+ height:30px;
+}
+
+.number{
+
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom:-15px;
+}
+
+/* .endCall{
+  margin-top:0px;
+} */
+.img__overlayFloat{
+  /* margin-top:25px; */
     padding:20px;
     border-style:none;
-    height:36px;
-    width:36px;
+    height:38px;
+    width:38px;
     border-radius:50%;
     align-items: center;
     bottom: 0;

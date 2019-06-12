@@ -10,6 +10,8 @@ export const saveExtensionDetails = (source,origin)=>(dispatch)=>{
     })
 }
 
+
+
 export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
     const addTimer = {
         
@@ -23,7 +25,8 @@ export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
 }
 
 export const displayScreenSharebutton = (source,origin)=>(dispatch)=>{
-    console.log("got herr to host")
+    console.log("got herr to host");
+    
     const displayIcon = {
         type:config.DISPLAY_SHARE_ICON_TO_EXTENSION,
         data:{}
@@ -60,6 +63,7 @@ export const postEndCall = (action,source,origin)=>dispatch=>{
 }
 
 export const refreshExtension = (action,source,origin)=>dispatch=>{
+    localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
     localStorage.setItem('action',JSON.stringify(action))
     const refreshFloater = {
         type: config.REFRESH_EXPLAIN_FLOATER,
@@ -76,6 +80,7 @@ export const refreshExtension = (action,source,origin)=>dispatch=>{
 }
 
 export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,otherPersonProfileId)=>(dispatch)=>{
+    localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
     const token = JSON.parse(localStorage.getItem('token'));
     localStorage.setItem('action',JSON.stringify(action))
     var callStart = null;

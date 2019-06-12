@@ -29,7 +29,6 @@ class ExplainPage extends Component {
 
     componentWillMount(){
 
-        //setOptions to null
         this.props.resetExplainAction();
         var source = this.props.extSource
         var origin = this.props.extOrigin

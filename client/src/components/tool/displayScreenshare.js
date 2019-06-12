@@ -4,15 +4,12 @@ import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
-// import { MdCallEnd } from "react-icons/md";
 import Countdown from 'react-countdown-now';
-// import { MdFilterNone } from "react-icons/md";
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
 import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
 import { answerCall, muteAudio, unMuteAudio } from '../../actions/callAction'
 import { connect } from 'react-redux';
-// import ProfileCard from './NewUi/ProfileHover'
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { postStartCall, addExtraTimerfromReciever, postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
@@ -72,7 +69,6 @@ class DisplayShare extends Component {
         this.receiveMessage = this.receiveMessage.bind(this);
         this.startCall = this.startCall.bind(this);
         this.downloadExtension = this.downloadExtension.bind(this);
-        this.renderer = this.renderer.bind(this);
         this.renderer2 = this.renderer2.bind(this);
         this.muteAudio = this.muteAudio.bind(this);
         this.unMuteAudio = this.unMuteAudio.bind(this);
@@ -88,26 +84,26 @@ class DisplayShare extends Component {
 
     
     muteAudio(){
+        var presentTime = JSON.parse(localStorage.getItem("timer"));
+        this.props.setTime(presentTime)
+        this.props.muteAudio()
         const {stream} = this.state;
+        if(stream !==null){
         var audioTracks = stream.getAudioTracks();
         if (audioTracks[0]) {
-                audioTracks[0].enabled = false;
-            }
-            var presentTime = JSON.parse(localStorage.getItem("timer"));
-            this.props.setTime(presentTime)
-            // muteAudio, unMuteAudio
-            this.props.muteAudio()
+                audioTracks[0].enabled = false; }
+        }
     }
     unMuteAudio(){
         var presentTime = JSON.parse(localStorage.getItem("timer"));
-            this.props.setTime(presentTime)
+        this.props.setTime(presentTime)
         const {stream} = this.state;
+        if(stream !==null){
         var audioTracks = stream.getAudioTracks();
         if (audioTracks[0]) {
-                audioTracks[0].enabled = true;
-            }
-            
+                audioTracks[0].enabled = true;}
             this.props.unMuteAudio();
+        }
     }
 
     componentDidMount() {
@@ -143,16 +139,28 @@ class DisplayShare extends Component {
                     gotmessage: true
                 })
                 self.props.saveExtensionDetails(event.source, event.origin)
+                return
             }
             if (event.data.type === config.END_CALL_RECIEVER_TO_WEB) {
                 self.endCall()
+                return
+            }
+            if(event.data.type === config.MUTE_TO_WEB){
+                self.muteAudio()
+                return
+            }
+            if(event.data.type === config.UNMUTE_TO_WEB){
+                self.unMuteAudio()
+                return
             }
             if (event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION) {
                 self.shareScreen();
+                return
             }
             if (event.data.sourceId !== undefined) {
                 self.props.saveSourceId(event.data.sourceId)
                 self.startCall()
+                return
             }
         }
         if (window.addEventListener) {
@@ -308,9 +316,10 @@ class DisplayShare extends Component {
                     }
                 }
                 if (data.data === "addtimer") {
-                    presentTime = JSON.parse(localStorage.getItem("timer"));
-                    var updateTime = presentTime + 1;
-                    self.props.setTime(updateTime)
+                    // timeAloted:JSON.stringify(self.props.timeAloted)
+                    presentTime = JSON.parse(data.timeAloted);
+                    // var updateTime = presentTime + 1;
+                    self.props.setTime(presentTime)
                     setTimeout(()=>{
                         self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
 
@@ -504,16 +513,16 @@ class DisplayShare extends Component {
         }
     };
 
-    renderer = ({ hours, minutes, seconds, completed }) => {
-        const self = this
-        if (completed) {
-            // return (null)
-            self.closeWindow()
-        } else {
-            // Render a countdown
-            return <span>{hours}:{minutes}:{seconds}</span>;
-        }
-    }
+    // renderer = ({ hours, minutes, seconds, completed }) => {
+    //     const self = this
+    //     if (completed) {
+    //         // return (null)
+    //         self.closeWindow()
+    //     } else {
+    //         // Render a countdown
+    //         return <span>{hours}:{minutes}:{seconds}</span>;
+    //     }
+    // }
 
     receiveMessage() {
         var source = this.props.extSource
@@ -607,11 +616,11 @@ class DisplayShare extends Component {
 
         var selfCloseTimer = (this.state.selfClose) ? (<div>
 
-            <p>This tab will close automatically  </p>
+            {/* <p>This tab will close automatically  </p>
             <Countdown
                 date={Date.now() + this.state.selfCloseTime * 60 * 1000}
                 renderer={this.renderer}
-            />
+            /> */}
         </div>) : (null)
         var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<p>Preparing a link to access the call..</p>) :
             (!this.state.failedToSaveMessage ?
@@ -624,7 +633,7 @@ class DisplayShare extends Component {
         var ShareElement = null;
         // var ProfileHover = null;
         const shouldDisplay = (!this.state.myscreenSharing) ? ("block") : ("none")
-        const messageOfScreenShare = (!this.state.myscreenSharing) ? (<h4><b>Screen of {this.state.callerProfileName}</b></h4>) :
+        const messageOfScreenShare = (!this.state.myscreenSharing) ? (null) :
             (<h4><b>Your screen is being shared</b></h4>)
         // const DownloadExt = (this.state.isInstalled) ? (
         //     null) : (<div className="messageToDownload">
@@ -682,7 +691,7 @@ class DisplayShare extends Component {
             ShareElement = (
                 <div className="shareVideoDisplay">
                     <div className="videoContainer">
-                        {MuteButton}
+                        {/* {MuteButton} */}
                         {messageOfScreenShare}
                         <div className="timerDiv">
                             <Countdown

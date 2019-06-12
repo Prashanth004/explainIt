@@ -121,23 +121,31 @@ class ScreenRecorder extends Component {
         this.callEndBeforeRecieve = this.callEndBeforeRecieve.bind(this);
         this.play_clicked = this.play_clicked.bind(this);
         this.pause_clicked =  this.pause_clicked.bind(this);
+        this.onUnload = this.onUnload.bind(this);
     }
 
     muteAudio() {
         const { audioStream } = this.state;
-        var audioTracks = audioStream.getAudioTracks();
-        if (audioTracks[0]) {
-            audioTracks[0].enabled = false;
+        console.log("this.state.audioStream : ",this.state.audioStream)
+        if(audioStream !==null){
+            console.log("entered once")
+            var audioTracks = audioStream.getAudioTracks();
+            if (audioTracks[0]) {
+                audioTracks[0].enabled = false;
+            }
+            this.props.muteAudio()
         }
-        this.props.muteAudio()
+       
     }
     unMuteAudio() {
         const { audioStream } = this.state;
+        if(audioStream !==null){
         var audioTracks = audioStream.getAudioTracks();
         if (audioTracks[0]) {
             audioTracks[0].enabled = true;
         }
         this.props.unMuteAudio()
+        }
     }
 
     startScreenShareSend() {
@@ -265,10 +273,17 @@ class ScreenRecorder extends Component {
     pause_clicked(){
         this.AudioPlyr.pause()
     }
+    onUnload(event) { // the method that will be used for both add and remove event
+        console.log("hellooww")
+        
+        event.returnValue = "Hellooww"
+    }
+
 
     componentDidMount() {
         // const videoPlayer = this.VideoPlyr;
         // videoPlayer.addEventListener("playing", this.play_clicked, false);
+        window.addEventListener("beforeunload", this.onUnload)
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
@@ -279,9 +294,19 @@ class ScreenRecorder extends Component {
                     console.log("recieved source id : ", event.data.sourceId)
                 self.props.saveSourceId(event.data.sourceId)
                 self.startScreenShareSend()
+                return
             }
             if (event.data.type === config.PERMISSION_DENIED) {
                 self.setState({ permissonDenied: true })
+                return
+            }
+            if(event.data.type === config.MUTE_TO_WEB){
+                self.muteAudio()
+                return
+            }
+            if(event.data.type === config.UNMUTE_TO_WEB){
+                self.unMuteAudio()
+                return
             }
         }
         if (window.addEventListener) {
@@ -876,13 +901,13 @@ class ScreenRecorder extends Component {
     }
     sendLink() {
         const self = this;
-        const { failedToSave, twitterUserId, initiateSend, largeFileSize, sharablelink, callTopic } = this.props
+        const { failedToSave, twitterUserId, initiateSend, largeFileSize, linkToAccess, callTopic } = this.props
 
         initiateSend();
         const socket = this.state.socket;
-        const sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (sharablelink);
+        const sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
         const saveStatus = (failedToSave || largeFileSize) ? ("false") : ("true");
-
+        console.log("sending ... ... .. ... ")
         socket.emit(config.SEND_SHARABLE_LINK, {
             'otherPeerId': self.props.peerId,
             'successMessage': saveStatus,
@@ -907,7 +932,7 @@ class ScreenRecorder extends Component {
         </div>) : (null)
 
 
-        if (this.props.isSaved || this.props.failedToSave || this.props.largeFileSize) {
+        if (this.props.linkToAccess !== null && this.props.isSharingCompleted ) {
             if (!this.props.sendinitiated) {
                 this.sendLink()
             }
@@ -1039,14 +1064,14 @@ class ScreenRecorder extends Component {
                 this.props.twitterUserId
             ) : (this.state.recieverProfileId)
 
-            const MuteButton = (this.props.isMuted) ? (
-                <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
+            // const MuteButton = (this.props.isMuted) ? (
+            //     <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
 
-            ) : (<button className="buttonDark" onClick={this.muteAudio}>Mute </button>
-                )
+            // ) : (<button className="buttonDark" onClick={this.muteAudio}>Mute </button>
+            //     )
             shareTimeElements = (
                 <div>
-                    {MuteButton}
+                    {/* {MuteButton} */}
                     <Call
                         conn={this.state.conn}
                         shareMyScreen={this.shareMyScreen}

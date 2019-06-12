@@ -32,19 +32,22 @@ export default (props) => {
   return (
     <div>
        <div className="floaterContainerTans">
-                <div className="callImageDivAnwserMain">
+                <div className="callImageDivAnwserMain Share record">
 
                     <div className="callPage-recieverImageDiv">
                         <span>
                             <MdCallEnd
-                                className="img__overlay"
+                                className="img__overlayFloat"
                                 onClick={endCallFloater}
                                 style={{
                                     padding: "10px"
                                 }} />
                         </span>
                     </div>
-                    <div fontSize="13px" style={{ color: "white" }}>
+                    <div>
+
+</div>
+                    <div fontSize="13px" style={{ color: "white" , marginTop:"10px"}}>
                         <Countdown
                             date={Date.now() + props.timeAloted * 60 * 1000}
                             renderer={renderer}

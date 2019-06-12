@@ -23,6 +23,7 @@ class Call extends Component {
         var self=this
         var socket = this.props.socket
         function postMessageHandler(event) {
+
            
             if(event.data.type===config.END_CALL_FROM_EXTENSION){
                 console.log("peforming the endcall Action")
@@ -31,9 +32,18 @@ class Call extends Component {
                     'peerId': self.props.peerId,
                     'timerEnded': true,
                 })
+                return
             }
+            if(event.data.type ===  config.ADD_EXTRA_MINUTE_TO_WEB_SITE){
+                console.log("web page add extra")
+
+                self.increaseTime()
+                return
+            }
+
             if(event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION){
                 self.props.shareMyScreen();
+                return
             }
         }
         if (window.addEventListener) {
@@ -67,10 +77,11 @@ class Call extends Component {
         this.setState({ socket:socket })
     }
     increaseTime(){
-        console.log("call")
+        const self = this;
         this.props.increaseTimer();
         this.props.conn.send({
             data: "addtimer",
+            timeAloted:JSON.stringify(self.props.timeAloted)
         })
         var source = this.props.extSource
         var origin = this.props.extOrigin
@@ -81,14 +92,17 @@ class Call extends Component {
         const addMinute = {
             'type':config.ADD_EXTRA_MIUTE_TO_EXTENSION,
             'data':{
-                'currentTime':this.props.timeAloted
+                'currentTime':this.props.timeAloted,
+              
             }
         }
         if (this.props.extSource !== null) {
             source.postMessage(addMinute, origin);
+            return
         }
         else{
             window.postMessage(addMinute, '*');
+            return
         }
     }
     toggleCanvas() {
@@ -101,7 +115,7 @@ class Call extends Component {
 
     }
     render() {
-        const messageOfScreenShare = (!this.props.myscreenSharing) ? (<h4><b>Screen of {this.props.otherPersonName}</b></h4>) :
+        const messageOfScreenShare = (!this.props.myscreenSharing) ? (null) :
             (<h4><b>Your screen is being shared</b></h4>)
 
         const shouldDisplay = (!this.props.myscreenSharing) ? ("block") : ("none")
@@ -114,7 +128,7 @@ class Call extends Component {
             </div>
         ) : (<div className="callDetails">
             {messageOfScreenShare}
-            <button  className={this.props.buttonClassName} onClick={this.increaseTime}>Add 1 minute</button>
+            {/* <button  className={this.props.buttonClassName} onClick={this.increaseTime}>Add 1 minute</button> */}
 
             <video srcobject={this.props.videoStream}
                 id="secondShareVideo"
