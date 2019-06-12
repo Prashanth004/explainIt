@@ -126,9 +126,7 @@ class ScreenRecorder extends Component {
 
     muteAudio() {
         const { audioStream } = this.state;
-        console.log("this.state.audioStream : ",this.state.audioStream)
         if(audioStream !==null){
-            console.log("entered once")
             var audioTracks = audioStream.getAudioTracks();
             if (audioTracks[0]) {
                 audioTracks[0].enabled = false;
@@ -251,7 +249,6 @@ class ScreenRecorder extends Component {
         }
         else {
             window.postMessage(GET_SOURCE_ID, "*");
-            console.log("NUll")
         }
     }
     expireTimer() {
@@ -277,7 +274,6 @@ class ScreenRecorder extends Component {
      if(this.props.isSceenSharing){
         this.endCall()
         event.returnValue = "Hellooww"
-        console.log("HELLO WORLD");
      }
      else{
         //  event.preventDefault();
@@ -294,7 +290,6 @@ class ScreenRecorder extends Component {
         var self = this
         var peer = this.state.peer;
         function postMessageHandler(event) {
-            // console.log(event)
             if (event.data.sourceId !== undefined) {
                 if (config.CALL_LOGS)
                     console.log("recieved source id : ", event.data.sourceId)
@@ -587,7 +582,6 @@ class ScreenRecorder extends Component {
         const self = this
         const { socket, peer, destkey, finalStream } = this.state
         if (config.CALL_LOGS)
-            console.log("calling...")
         var call = peer.call(destkey, finalStream);
         var recorder1 = RecordRTC(finalStream, {
             type: 'video'
@@ -595,11 +589,8 @@ class ScreenRecorder extends Component {
         recorder1.startRecording();
         this.setState({ recorder: recorder1 });
         self.saveBlobtimeOut = setTimeout(() => {
-            console.log("BLobss  ahahaha ");
             const { recorder } = self.state;
-            console.log("recorder : ", recorder);
             if (recorder !== null) {
-                console.log("i am in side");
                 recorder.stopRecording(function () {
                     var blob = recorder.getBlob();
                     self.setState({
@@ -616,7 +607,6 @@ class ScreenRecorder extends Component {
             call.on('stream', function (remoteStream) {
                 fullStartedSharing(twitterUserId)
                 if (config.CALL_LOGS)
-                    console.log("call success full")
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
                 audio.play()
@@ -914,7 +904,6 @@ class ScreenRecorder extends Component {
         const socket = this.state.socket;
         const sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
         const saveStatus = (failedToSave || largeFileSize) ? ("false") : ("true");
-        console.log("sending ... ... .. ... ")
         socket.emit(config.SEND_SHARABLE_LINK, {
             'otherPeerId': self.props.peerId,
             'successMessage': saveStatus,

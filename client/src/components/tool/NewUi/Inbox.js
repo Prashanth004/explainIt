@@ -58,7 +58,6 @@ class Inbox extends Component {
   render() {
       var allMessageEle = null;
      
-      console.log(this.state.filteredInbox)
       if(this.state.filteredInbox!==null ){
           if(this.state.filteredInbox.length>0){
             var revallMessage = this.state.filteredInbox.reverse()

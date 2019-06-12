@@ -190,7 +190,7 @@ class DisplayShare extends Component {
         socket.on(config.SEND_SHARABLE_LINK, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
                 if (data.successMessage === "true"){
-                    localStorage.setItem('newIssueId', JSON.stringify(data.sharableLink))
+                    localStorage.setItem('newIssueId',(data.sharableLink).split('/')[4]);
                     self.setState({
                         sharablelink: data.sharableLink,
                         gotSharableLink: true

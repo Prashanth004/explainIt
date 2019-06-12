@@ -69,16 +69,3 @@ export default connect(mapStateToProps, { changeReadStatus })(AtempCallFail)
 
 
 
-
-
-
-// export default (props) => {
-//     var userData =  getProfile(props.activity.fromuser)
-//     console.log(userData)
-//   return (
-//     <div>
-//         {/* <img src={userData.profilePic}></img> */}
-//         <p>{props.activity.fromuser} tried calling you for the topic {props.activity.subject}</p>
-//     </div>
-//   )
-// }

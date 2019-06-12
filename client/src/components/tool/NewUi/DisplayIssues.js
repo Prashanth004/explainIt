@@ -44,7 +44,6 @@ class DisplayIssue extends Component {
     }
  
     deleteProjects(e) {
-        console.log("e.target.id : ", e.target.id)
         this.setState({
             deleteItemId: e.target.id
         })
@@ -69,13 +68,11 @@ class DisplayIssue extends Component {
 
     handleConfirm() {
         var id = this.state.deleteItemId
-        console.log(this.state.issueArray)
         this.props.deleteProjects(id);
         const newState = this.state;
         const index = newState.issueArray.findIndex(a => a.issueid === id);
 
         if (index === -1) {
-            console.log("nothing found")
             return;
         }
         
@@ -115,7 +112,6 @@ class DisplayIssue extends Component {
         }));
     }
     toggleDisplayLink(e) {
-        console.log("counting")
         var element = document.querySelector('#clipboard_' + e.currentTarget.id)
         if (element.style.display === 'none') {
             element.style.display = 'block'

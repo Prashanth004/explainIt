@@ -17,6 +17,8 @@ import Swal from 'sweetalert2';
 import { FiX } from "react-icons/fi";
 import TwitterLogin from './tool/NewUi/TwitterLogin'
 import ReactModal from 'react-modal';
+import { saveReplyEmailOption } from '../actions/emailAction'
+
 import { cancelAllMessageAction } from '../actions/messageAction';
 import { restAllToolValue } from "../actions/toolActions";
 import { resetValues } from '../actions/twitterApiAction';
@@ -73,6 +75,7 @@ class Project extends Component {
       this.props.setIssueId(this.props.match.params.projectid)
       localStorage.setItem("issueId", this.props.match.params.projectid)
       this.setState({ showModalExplain: true });
+      this.props.saveReplyEmailOption(e.target.id, this.props.userid)
     }
     else {
       this.setState({ showModalTwitterLogin: true });
@@ -98,6 +101,9 @@ class Project extends Component {
       }
     },25000)
     var newIssueIdtemp = (localStorage.getItem('newIssueId'))
+    console.log("newIssueIdtemp : ",newIssueIdtemp);
+    console.log("issueId : ",issueId)
+
     this.setState({ newIssueId : newIssueIdtemp})
   
   
@@ -221,6 +227,7 @@ Project.PropType = {
   restAllToolValue: PropType.func.isRequired,
   resetValues: PropType.func.isRequired,
   saveExtensionDetails: PropType.func.isRequired,
+  saveReplyEmailOption :PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
@@ -242,5 +249,6 @@ export default connect(mapStateToProps, {
   explainIssue,
   restAllToolValue,
   resetValues,
+  saveReplyEmailOption,
   setIssueId, fetchProjectbyIssue
 })(Project)

@@ -186,19 +186,14 @@ class NewHome extends Component {
             }
         })
         socket.on('connect_failed', function () {
-            console.log("Sorry, there seems to be an issue with the connection!");
         })
         socket.on('error', function (err) {
-            console.log("err : ", err);
         });
         socket.on('connect_timeout', function (err) {
-            console.log("socket. timeout")
         });
         socket.on("disconnect", () => {
-            console.log("disconnected")
         })
         socket.io.on("connect_error", () => {
-            console.log("server offfilene")
         })
 
 

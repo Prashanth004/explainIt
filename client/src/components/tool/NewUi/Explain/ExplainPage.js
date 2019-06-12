@@ -61,7 +61,6 @@ class ExplainPage extends Component {
         var items = {}
         var isquestion = "false"
         issueId = JSON.parse(localStorage.getItem("issueId"));
-
         this.props.creatAnsProject(textExplain, imgData, data,null, items, isquestion, issueId,isPublic,action)
     }
     render() {

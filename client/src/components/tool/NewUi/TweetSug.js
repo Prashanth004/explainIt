@@ -47,7 +47,6 @@ class Search2 extends Component {
   
 
     render() {
-        console.log("this.props.twiterHandleArray : ",this.props.twiterHandleArray);
         return (
 
             <div style={{ borderradius:"5%", display:"inline" }}>

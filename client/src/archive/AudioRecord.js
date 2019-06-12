@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../css/audiocomp.css'
 import Countdown from 'react-countdown-now';
-import Dummy from './NewUi/dummy'
+import Dummy from '../components/tool/NewUi/dummy'
 import RecordRTC from 'recordrtc'
 // import Recorder from 'recorder-js';
 // import app from '../app'
@@ -124,7 +124,6 @@ class Recoder extends Component {
             initialsize:false
         })
      
-        console.log("paused");
        
     }
     recordScreenStart() {

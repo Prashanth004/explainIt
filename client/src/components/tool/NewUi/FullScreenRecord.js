@@ -87,7 +87,6 @@ class FullScreenRecorder extends Component {
         var sourceId = this.props.extSourceId;
         const result = browser();
         if (result.name === "chrome") {
-            console.log("this is me")
             constraints = {
                 video: {
                     mandatory: {
@@ -232,11 +231,9 @@ class FullScreenRecorder extends Component {
             type:config.GET_SOURCE_ID_AUDIO_TAB
         }
         if (this.props.extSource !== null) {
-            console.log("posting from webpage")
             source.postMessage(GET_SOURCE_ID, origin);
         }
         else{
-            console.log("posting from webpage")
             window.postMessage(GET_SOURCE_ID, '*');
         }
     }

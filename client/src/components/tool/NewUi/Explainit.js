@@ -111,24 +111,7 @@ class Explainit extends Component {
   savefile(data) {
     this.child.pushData(data);
   }
-  // saveVideoData(data, isPublic,text) {
-  //   console.log("the data whcih is gonna get saved : ", data)
-  //   var issueId = JSON.parse(localStorage.getItem('issueId'))
-  //   var textExplain = text
-  //   var imgData = "null"
-  //   var items = {}
-  //   var isquestion = " "
-  //   if (issueId == null || issueId === undefined) {
-  //     isquestion = "true"
-  //     issueId = null
-  //   }
-  //   else {
-  //     isquestion = "false"
-    
-  //   }
-  //   console.log("type of is public : ",typeof(isPublic))
-  //   this.props.creatAnsProject(textExplain, imgData, data, items, isquestion, issueId,isPublic)
-  // }
+ 
   saveVideoData(data,isPublic,text) {
     var issueId = null
     var textExplain = text
