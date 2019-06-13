@@ -206,18 +206,27 @@ export const varifyEmail=()=>(dispatch)=>{
     })
     .then(response=>{
         if(response.status===200||response.status===304){
+        
+            if(response.data.success === 1)
             dispatch({
                 type:VARIFY_ACTIVATED,
-                isvarified:response.data.success
+                isvarified:true
+            })
+            else
+            dispatch({
+                type:VARIFY_ACTIVATED,
+                isvarified:false
             })
         }
         else{
+            console.log(":sknasflnd")
             dispatch({
                 type:VARIFY_ACTIVATED_FAILED,
             })
         }
     })
     .catch(()=>{
+        console.log(":sknasflnd")
         dispatch({
             type:VARIFY_ACTIVATED_FAILED,
         })

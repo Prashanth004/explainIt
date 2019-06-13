@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar';
+import EmailVarify from './emailvarify'
 import { MdCallEnd, MdCall } from "react-icons/md";
 import Activity from './Activies/indexActivity'
 import DisplatCreated from './DisplayCreated';
@@ -34,7 +35,9 @@ import config from '../../../config/config';
 import { resetCallAction, getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './DisplayIssues'
-import Content from './Content'
+import Content from './Content';
+import {varifyEmail} from '../../../actions/emailAction'
+
 import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
@@ -222,6 +225,7 @@ class NewHome extends Component {
         });
     }
     componentWillMount() {
+        this.props.varifyEmail()
         this.props.stillAuthenicated()
         this.props.getTotalUnread()
         const socket = socketIOClient(config.base_dir);
@@ -663,8 +667,10 @@ class NewHome extends Component {
         else {
             profileCardElement = (<Content />)
         }
-
-        return (this.props.authAction) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
+        // doneVarification : state.email.doneVarification,
+        // isVarified:state.email.isVarified,
+        return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
+            (!this.props.isVarified)?(<EmailVarify /> ):(
             <div className="fullHome">
                 <Navbar />
 
@@ -689,7 +695,7 @@ class NewHome extends Component {
                 </Modal>
                 {/* {iframe} */}
             </div>
-        )) : (null)
+        ))) : (null)
 
 
     }
@@ -712,9 +718,12 @@ NewHome.PropType = {
     getAllMessages: PropType.func.isRequired,
     resetCallAction: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
-    getAllActivities: PropType.func.isRequired
+    getAllActivities: PropType.func.isRequired,
+    varifyEmail:PropType.func.isRequired
 };
 const mapStateToProps = state => ({
+    doneVarification : state.email.doneVarification,
+    isVarified:state.email.isVarified,
     issues: state.issues.items,
     screenAction: state.tools.screenAction,
     isSharingCompleted: state.tools.isSharingCompleted,
@@ -742,7 +751,8 @@ const mapStateToProps = state => ({
     showCanvas: state.canvasActions.showCanvas,
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
-    callAction: state.call.callAction
+    callAction: state.call.callAction,
+    
 
 
 
@@ -764,6 +774,7 @@ export default connect(mapStateToProps, {
     getProfileDetails,
     fetchProjectbyIssue,
     setIssueId,
+    varifyEmail,
     getTotalUnread,
     displayFullScrenRecord,
     displayFullScreShare,

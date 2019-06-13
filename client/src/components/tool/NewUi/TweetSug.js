@@ -31,7 +31,8 @@ class Search2 extends Component {
         var tempValue = (value.includes('@'))?
         (value.replace("@","")):(value)
         return (
-            state.twitterhandle.toLowerCase().indexOf(tempValue.toLowerCase()) !== -1 
+            state.twitterhandle!=null?(
+            state.twitterhandle.toLowerCase().indexOf(tempValue.toLowerCase()) !== -1 ):(null)
             // state.abbr.toLowerCase().indexOf(value.toLowerCase()) !== -1
         );
     }

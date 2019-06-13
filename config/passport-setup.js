@@ -185,8 +185,8 @@ passport.use(new TwitterTokenStrategy({
                     // already have this user
                     done(null, currentUser);
                 } else {
-                    database.db.none('insert into users(username, password, profilepic,date, payment, id, twitterhandle)' +
-                        'values(${name}, ${password}, ${profilepic},${date},${payment},${id},${twitterhandle})',
+                    database.db.none('insert into users(username, password, profilepic,date, payment, id,activation,online,twitterhandle)' +
+                        'values(${name}, ${password}, ${profilepic},${date},${payment},${id},${activation},${online},${twitterhandle})',
                         {
                             name: profile.displayName,
                             password: profile.id,

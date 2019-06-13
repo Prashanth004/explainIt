@@ -17,6 +17,7 @@ const conf = {
     peerPort : 9000,
     peerPath : '/peerjs',
     gitHubClientId:"5c7162c1bd8449fa8b00",
+    EXMAIL_VALIDATE_TOKEN:"8d31cc402c99ec4e3d5545ae6a549c0f",
     gitHubClientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947",
     react_url_git:"https://explain.bookmane.in/git",
     canvBackground : "rgb(205, 243, 224)",
@@ -63,6 +64,7 @@ const conf = {
     CALL_FAILED:"callFailed",
     CALL_SUCCESSFULL:"callSuccessful",
     MESSAGE_ACTIVITY:"messageActivity",
+    FROM_USER_ADMIN_ID:"1090895508699176960",
     monthPicker : {
         "01": "Jan",
         "02": "feb",
@@ -95,8 +97,8 @@ const conf = {
     RECORD_SCREEEN_EXPLAIN:"recordScreenExpalin",
     REFER_EXPLAIN:"referExplain",
     ENVIRONMENT:"test",
-    DEV_ENV:true,
-    CALL_LOGS:true,
+    DEV_ENV:false,
+    CALL_LOGS:false,
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",
     UPDATE_RECORDER_BLOB:"updateRecorderBlob",
     REFRESH_EXPLAIN_FLOATER:"refreshFloaterExpalin",
@@ -132,7 +134,9 @@ const conf = {
     UNMUTE_TO_WEB:"unMuteToWebsite",
     UNMUTE_TO_FLOATER:"unMuteToFloater",
     UN_MUTED:"unMuted",
-    MUTED:"muted"
+    MUTED:"muted",
+   
+
 
     
 

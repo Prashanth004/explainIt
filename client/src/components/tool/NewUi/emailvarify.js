@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import { Redirect} from 'react-router-dom';
 import '../../css/emailvarify.css';
 import OTP from 'otp-client';
 import ConfirmEmail from './confrimEmail'
 import config from '../../../config/config';
+import './landing/landing.css'
+import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import {varifyEmail,activateProfile,resendOtp, sendOtp} from '../../../actions/emailAction'
 
 class EmailVarify extends Component {
@@ -31,9 +32,7 @@ class EmailVarify extends Component {
     this.editEmail = this.editEmail.bind(this);
     this.confirmedEmail = this.confirmedEmail.bind(this);
   }
-  componentWillMount(){
-    this.props.varifyEmail()
-  }
+ 
  onEmailChange(e){
      this.setState({
         emailFlieldValue:e.target.value
@@ -46,6 +45,11 @@ class EmailVarify extends Component {
         invalidOTP:false
     })
  } 
+
+
+
+
+
  varifyOtpValue(){
      this.setState({
         valdatingMessage:true
@@ -55,7 +59,8 @@ class EmailVarify extends Component {
      {
          this.setState({
              otpVarified : true,
-             optIncorrect:false})
+             optIncorrect:false,
+             valdatingMessage:false})
              this.props.activateProfile(this.state.emailFlieldValue)
      }
      else{
@@ -128,7 +133,17 @@ class EmailVarify extends Component {
                 <h5>Enter an email id for us to contact you and update you when needed </h5>
                 <br/>
                 <input type="text" className="emailInput" onChange={this.onEmailChange}></input>
-                <button className="buttonDark" onClick={this.pressSubmit}>Submit</button>
+                <button className="buttonLight" onClick={this.pressSubmit}>Submit</button>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <button className = "buttonDark" onClick={this.props.signout}>Logout</button>
             </div>)
     }
     else{
@@ -141,7 +156,8 @@ class EmailVarify extends Component {
                 <button className="buttonDark" onClick={this.varifyOtpValue}>Submit</button>
                 <br/>
                 <br/>
-              
+                <br/>
+            
             </div>
         ):(
             <h4>Resending passcode to your mail</h4>
@@ -149,12 +165,11 @@ class EmailVarify extends Component {
 
     }
 
+//     isAuthenticated: state.auth.isAuthenticated,
+//     authAction: state.auth.authAction,
+// })
 
-
-    return (this.props.doneVarification)?((this.props.isVarified || this.props.profileActivated)?(
-        <Redirect to={{ pathname: '../application' }} />
-    ):(
-        <div className="emailVarify">
+    return (<div className="emailVarify">
         <div className="emailboxCotainer">
         <div className="logoEmail">
             <span>
@@ -166,9 +181,8 @@ class EmailVarify extends Component {
        {otpAction}  
        {validateOtp}  
        {invalidOTP}  
-
         </div>
-      </div>)):(null)
+      </div>)
   }
 }
 EmailVarify.PropType = {
@@ -185,10 +199,11 @@ const mapStateToProps = state => ({
     profileActivated:state.email.profileActivated,
     reSentOtp:state.email.reSentOtp,
     reSendOtpFailed:state.email.reSendOtpFailed,
-  
+    isAuthenticated: state.auth.isAuthenticated,
+    authAction: state.auth.authAction,
 })
 
 export default connect(mapStateToProps, { 
     varifyEmail,sendOtp,activateProfile,
-    resendOtp
+    resendOtp,signout,stillAuthenicated
 })(EmailVarify)

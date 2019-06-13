@@ -38,8 +38,12 @@ class SaveProjects extends Component {
             tweetStarted: true
         })
     }
-    componentWillMount(){
+    componentWillMount(){   
+        // alert("mounting")
         this.props.getTwitterHandles();
+    }
+    componentWillUnmount(){
+        // alert("umonu nthing")
     }
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {

@@ -4,12 +4,14 @@ import axios from 'axios'
 
 export const getProfileByTwitterHandle = (TwitterHandle) => (dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'));
+   
     axios({
         method: 'get',
         url: config.base_dir+'/api/users/twitterhandle/'+TwitterHandle,
         headers: {
             "Authorization": token,
         }
+       
     }).then(response1=>{
         if (response1.status ===200 || response1.status === 304) {
         if(response1.data.data!==null){

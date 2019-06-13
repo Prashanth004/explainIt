@@ -44,20 +44,18 @@ class ProfileCard extends Component {
         this.props.resetValues();
         this.props.cancelSuccess();
         this.props.resetIssueActions();
+        this.props.resetCallAction();
     }
     startRecordScreen() {
         this.startAction()
         this.props.JustRecord();
         this.props.setIssueIdToNull();
-        this.props.recordFullScreen();
-        this.props.resetCallAction();
-      
+        this.props.recordFullScreen();     
        
     }
     startSharingScreen() {
         this.startAction()
         this.props.shareFullScreenShare()
-        this.props.resetCallAction();
         this.props.resetProjectActions();
     }
 

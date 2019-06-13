@@ -33,12 +33,12 @@ class Login extends Component {
         if(twitterhandle.includes("@"))
         {
             this.props.getProfileByTwitterHandle(twitterhandle.replace("@",""));
-            this.props.getRecpientId(twitterhandle.replace("@",""));
+            this.props.getRecpientId(twitterhandle.replace("@",""),null);
             this.props.varifyActivation(twitterhandle.replace("@",""))
         }
         else{
             this.props.getProfileByTwitterHandle(twitterhandle);
-            this.props.getRecpientId(twitterhandle);
+            this.props.getRecpientId(twitterhandle,null);
             this.props.varifyActivation(twitterhandle)
         }
         this.props.stillAuthenicated()
@@ -99,7 +99,7 @@ class Login extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                     )) : (<Redirect to={{ pathname: '../emailvarify' }} />) )
+                                     )) : (<Redirect to={{ pathname: '../application' }} />) )
                                      :( <div className="ShapeImage">
                                        
                                      <div className="loginSection">

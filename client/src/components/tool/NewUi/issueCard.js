@@ -88,7 +88,6 @@ class issueCard extends Component {
             localStorage.setItem("issueId", JSON.stringify(e.target.id));
 
             this.setState({ showModalExplain: true });
-            // window.scrollBy(0,150);
             this.props.saveReplyEmailOption(e.target.id, this.props.userid)
         }
         else {
@@ -180,7 +179,6 @@ class issueCard extends Component {
                     axios.all(promises).then(results => {
                         results.forEach((response, index) => {
                             if (response.status === 200) {
-
                                 allProjects[index]["profilepic"] = response.data.data.profilepic;
                                 allProjects[index]["username"] = response.data.data.username;
                                 allProjects[index]["twitterhandle"] = response.data.data.twitterhandle
@@ -200,7 +198,6 @@ class issueCard extends Component {
                         console.log("error : ", err)
                     })
                 }
-
             }
         })
             .catch(err => {

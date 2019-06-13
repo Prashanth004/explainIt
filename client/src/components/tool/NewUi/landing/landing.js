@@ -21,11 +21,9 @@ class landingPage extends Component {
         <RightSection />
 
       </div>
-    </div>) : ((<Redirect to={{ pathname: './application' }} />)))) :
-      (
-        <div className="loadinContainerDiv">
+    </div>) :((<Redirect to={{ pathname: './application' }} />)))) :
+      (<div className="loadinContainerDiv">
           <div className="loader"></div>
-
         </div>
       )
   }
@@ -36,10 +34,12 @@ const mapStateToProps = function (state) {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     authAction: state.auth.authAction,
+    doneVarification : state.email.doneVarification,
+    isVarified:state.email.isVarified,
   }
 }
 
-export default connect(mapStateToProps, { stillAuthenicated })(landingPage);
+export default connect(mapStateToProps, {stillAuthenicated })(landingPage);
 
 
 

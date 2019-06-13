@@ -63,7 +63,9 @@ export default function(state = initialState, action){
         case ACTIVATED_PROFILE:
             return{
                 ...state,
-                profileActivated:true
+                // profileActivated:true,
+                doneVarification:true,
+                isVarified:true
             }
         case RE_SEND_OTP:
             return{
@@ -88,9 +90,11 @@ export default function(state = initialState, action){
         case VARIFY_ACTIVATED :
         return{
             ...state,
-            doneVarification:true,
-            isVarified:action.isvarified
+            isVarified:action.isvarified,
+            doneVarification:true
         }
+           
+          
         case VARIFY_ACTIVATED_FAILED:
         return{
             ...state,

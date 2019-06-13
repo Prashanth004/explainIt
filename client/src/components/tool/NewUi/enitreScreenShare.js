@@ -782,7 +782,6 @@ class ScreenRecorder extends Component {
         var shareScreenLink = config.react_url + '/connect/' + peerId;
         this.setState({
             shareScreenLink: shareScreenLink,
-
         })
         this.props.basicInfoCall(this.props.twitterUserId)
         this.callEndBeforeRecieve = setTimeout(() => {
@@ -802,7 +801,6 @@ class ScreenRecorder extends Component {
         }, 25000)
         var socket = this.state.socket;
         if ((!this.props.busyStatus && this.props.onlineStatus)) {
-
             socket.emit(config.LINK_TO_CALL, {
                 'link': shareScreenLink,
                 'fromEmail': this.props.email,
@@ -933,44 +931,35 @@ class ScreenRecorder extends Component {
                 this.sendLink()
             }
         }
+        else{
+            if(this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
+                if (!this.props.sendinitiated) {
+                    this.sendLink()
+                }
+            }
+
+        }
         const audioWarning = (this.props.isSceenSharing && this.props.currentTimeLeft < 0.166) ? (<audio style={{ display: "none" }} autoPlay loop src={require('../../audio/time_out.wav')}></audio>) : (null)
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate
         var linkElement = null;
         var buttons = null;
-
-        var savingMsg = (<div>
+        var videoTagWithAudio = (<div>
             <div>
                 {videoAudio}
                 <p>Link To access your recording.</p>
                 {linkToAccess}
-
             </div>
-            {/* <audio autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio> */}
-
-
         </div>)
-        // (this.state.saveinitiated &&
-        // !this.props.largeFileSize &&
-        // !this.props.failedToSave && !this.props.isSaved && 
-        // !this.state.problemInsavingCall) ? (
-        //     <div>
-        //         <audio style={{ display: "none" }} autoPlay src={require('../../audio/brute-force.mp3')}></audio>
-        //         <span>Saving the session..</span></div>) : (
-        //     (this.props.isSaved) ? (<span>
-        //         Call is successfully saved.
-        // <span
-        //             style={{ textDecoration: "underline", color: "darkblue" }} onClick={this.openSavedCall}>Click here to access call</span>
-        //     </span>) : (
-        //             this.state.problemInsavingCall ? (<span>Problem in saving the share screen event due to network issues.</span>) :
-        //                 (this.props.failedToSave) ? (<span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>) :
-        //                     (this.props.largeFileSize ? (<span>The Video is too Long to save</span>) : (null)))
-        // )
+
+        var savingMsg = !this.state.manualClose && !this.state.timerEnded? 
+        ((this.props.linkToAccess !== null)?(videoTagWithAudio):null):(videoTagWithAudio)
+      
         var MessageDisconnected = null;
         var shareTimeElements = null;
         var postShareElements = null;
         const closeBtn = (!this.props.isSceenSharing) ?
-            ((((this.props.isSharingCompleted)) || this.state.doneCalling || this.state.answerFrmPeer) ? (null) : (<Button style={{ margin: "5px" }} close onClick={closeFunction} />)) :
+            (((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (<Button style={{ margin: "5px" }} close onClick={closeFunction} />)) :
             (null)
         var noInternet = null
         if (this.state.noInternet)

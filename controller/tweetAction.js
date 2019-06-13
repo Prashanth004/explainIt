@@ -9,9 +9,8 @@ const client = new Twitter({
   });
 
   exports.getid = function (req, res) {
-  
      var params = {
-        "screen_name":req.params.twitterhandler
+        "screen_name":req.body.twitterhandle
      }
       client.get('users/show.json', params, function(error,body ,response){
 
@@ -30,20 +29,20 @@ const client = new Twitter({
                 profilePic : newProfilePic,
                 name: body.name
             })
-            if(req.user!== undefined){
-            database.db.manyOrNone('select * from usertwitter where userid = $1 and twitterhandle = $2',[req.user.id,req.params.twitterhandler])
+            if(req.body.id!== undefined || req.body.id!== null ){
+            database.db.manyOrNone('select * from usertwitter where userid = $1 and twitterhandle = $2',[req.body.id,req.body.twitterhandle])
             .then(data=>{
                 if(data.length=== 0){
                     database.db.oneOrNone('insert into usertwitter (twitterhandle, userid)'+
                     'values(${twitterhandle}, ${userid})',
                     {
-                        twitterhandle:req.params.twitterhandler,
-                        userid:req.user.id
+                        twitterhandle:req.body.twitterhandle,
+                        userid:req.body.id
                     })
                     .then(data=>{
                     })
                     .catch(error=>{
-                        console.log(error)
+                        console.log("error : ",error )
                     })
                 }
                 else{
@@ -52,6 +51,8 @@ const client = new Twitter({
             .catch(err=>{
                 console.log("error in checking if present : ", err)
             })
+        }
+        else{
         }
         }
      });
@@ -92,7 +93,6 @@ const client = new Twitter({
           });
         }
         else{
-            console.log("error : ",error1)
             res.status(500).send({
                 success:0,
                 msg:"tweetAction failed"

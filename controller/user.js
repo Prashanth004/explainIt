@@ -65,8 +65,8 @@ exports.onBoardUser = function (req,res){
             database.db.oneOrNone('select * from users where twitterhandle = $1', req.body.twitterhandler)
             .then(function (data) {
                 if (!data) {
-                    database.db.none('insert into users(username,twitterhandle, password, profilepic,date, payment, id,activation)' +
-                        'values(${name},${twitterhandle},${password},${profilepic},${date},${payment},${id},${activation})',
+                    database.db.none('insert into users(username,twitterhandle, password, profilepic,date, payment, id,online,activation)' +
+                        'values(${name},${twitterhandle},${password},${profilepic},${date},${payment},${id},${online},${activation})',
                         {
                             id:body.id_str,
                             twitterhandle:req.body.twitterhandler,
@@ -75,9 +75,23 @@ exports.onBoardUser = function (req,res){
                             name: body.name,
                             payment:0,
                             activation:0,
+                            online:1,
                             date:datetime
                         }
                     ).then(data=>{
+                        database.db.oneOrNone('insert into activities (fromuser,touser,activity,subject,link,unread)'+
+                                'values (${fromuser},${touser},${activity}, ${subject}, ${link},${unread})',
+                                {
+                                    fromuser:config.FROM_USER_ADMIN_ID,
+                                    touser:body.id_str,
+                                    activity:config.MESSAGE_ACTIVITY,
+                                    subject : config.WELCOME_SUBJECT,
+                                    link: config.LINK_RECORDING,
+                                    unread:1
+                                })
+                    }).then(data=>{
+                    }).catch(error=>{
+                        console.log("failed in adding activity : ",error)
                     })
                     .catch(error=>{
                     })
@@ -269,6 +283,11 @@ exports.getUserByEmail = function (req, res) {
                     success: 1,
                     data: data
                 })
+            }else{
+                res.status(200).send({
+                    success: 0,
+                    data: data
+                })
             }
         }).catch(err => {
             console.log("error : ", err)
@@ -281,24 +300,35 @@ exports.getUserByEmail = function (req, res) {
         })
 }
 exports.getEmailStatus = (req, res) => {
-    database.db.oneOrNone('select * from users where id=$1', [req.user.id])
+    database.db.oneOrNone('select * from users where id = $1', req.user.id)
+    // res.status(200).send({
+    //     success: 1,
+    //     data: data
+    // })
         .then(data => {
             if (data) {
                 if (data.email!==null) {
-
                     res.status(200).send({
                         success: 1,
                         data: data
                     })
 
                 }
+                else{
+                    res.status(200).send({
+                        success: 0
+                    })
+                }
             }
-            else
+            else{
                 res.status(200).send({
                     success: 0
                 })
+            }
+               
         })
         .catch(error => {
+            console.log("error : ",error)
             res.status(500).send({
                 success: 0,
                 error: error
@@ -439,7 +469,9 @@ exports.sendotp = (req, res) => {
                 text: 'Hello,\n\n' + 'This is you one time password for authentication: \n\n \b' + req.body.otp
             };
             transporter.sendMail(mailOptions, function (err) {
-                if (err) { return res.status(500).send({ msg: err.message }); }
+                if (err) { 
+                    console.log("error : ",err)
+                    return res.status(500).send({ msg: err.message }); }
                 res.status(201).send({ success: 1, msg: 'A verification email has been sent to ' + req.body.email + '.' });
             });
         })

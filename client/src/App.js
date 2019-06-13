@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import landing from './components/tool/NewUi/landingPgae'
 import ScreenShareFloater from './components/tool/NewUi/NewFloater/screenShareControl'
-import emailvarify from './components/tool/NewUi/emailvarify'
+// import emailvarify from './components/tool/NewUi/emailvarify'
 import Login from './components/tool/NewUi/Login';
 import adminDash from './components/tool/NewUi/adminPages/adminroot'
 import NoMatch from './components/tool/NewUi/NoMatch'
@@ -43,7 +43,7 @@ class App extends Component {
             <Route exact path ='/floater' component={floater}/>
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
-            <Route exaxt path ='/emailvarify' component={emailvarify}/>
+            {/* <Route exaxt path ='/emailvarify' component={emailvarify}/> */}
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />
             <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>

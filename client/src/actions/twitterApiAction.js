@@ -10,14 +10,19 @@ import {GET_PROFILE_ID,
 import config from '../config/config'
 
 
-export const getRecpientId = (twitterHandle) =>(dispatch)=>{
+export const getRecpientId = (twitterHandle,userid) =>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
+    var data = {
+        id:userid,
+        twitterhandle:twitterHandle
+    }
     axios({
-        method:'get',
-        url:config.base_dir+'/api/tweetactions/getid/'+twitterHandle,
+        method:'post',
+        url:config.base_dir+'/api/tweetactions/getid',
         headers: {
             "Authorization": token,
-        }
+        },
+        data:data
     }).then(res=>{
         if(res.data.success===1){
             dispatch({

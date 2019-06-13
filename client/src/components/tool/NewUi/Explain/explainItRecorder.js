@@ -58,12 +58,12 @@ class FullScreenRecorder extends Component {
         
         postStartCall(config.FULL_SCREEN_RECORD,
             extOrigin,null,extSource,config.RECORD_TIME,null)
-        var timeAlotedNew = config.RECORD_TIME * 60 * 16
+        var timeAlotedNew = config.RECORD_TIME * 60 
          var progressbar = document.querySelector('#pbar');
          var progresDiv = document.querySelector(".progresDiv")
          progresDiv.style.display = "block";
          var width = 0;
-         var id = setInterval(frame,75);
+         var id = setInterval(frame,1000);
          function frame() {
            if (width >= 100) {
              clearInterval(id);

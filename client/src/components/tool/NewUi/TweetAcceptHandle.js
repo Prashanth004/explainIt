@@ -75,7 +75,7 @@ class tweetSearch extends Component {
                     tweetTested: true
                 })
                 this.props.getProfileByTwitterHandle(twitterHandleTemp)
-                this.props.getRecpientId(twitterHandleTemp)
+                this.props.getRecpientId(twitterHandleTemp,this.props.userId)
             }
         }
     
@@ -264,6 +264,7 @@ const mapStateToProps = state => ({
     doneFetching: state.twitterApi.doneFetching,
     twiterHandleArray: state.twitterApi.twitterHandle,
     fetchProfile: state.visitProfile.fetchProfile,
+    userId: state.auth.id,
     noOfMinutes: state.call.noOfMinutes,
     userName: state.visitProfile.userName,
     onlineStatus: state.visitProfile.onlineStatus,

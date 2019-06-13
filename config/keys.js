@@ -57,7 +57,14 @@ module.exports = {
     
     FULL_SCREEN_RECORD:"fullScreenRecord",
     FULL_SCREEN_SHARE:"fullScreenShare",
-    END_WHILE_DIALING:'endWhileDialing'
+    END_WHILE_DIALING:'endWhileDialing',
+
+
+    CALL_SUCCESSFULL:"callSuccessful",
+    MESSAGE_ACTIVITY:"messageActivity",
+    FROM_USER_ADMIN_ID:"2591624137",
+    WELCOME_SUBJECT:"Welcome. Demo to explain the application",
+    LINK_RECORDING:"http://localhost:3000/project/4639821",
 
 };
 
