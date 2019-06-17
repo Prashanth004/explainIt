@@ -148,7 +148,7 @@ const saveToDb = (req, res, videopathName)=>{
         'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
         {
             name: req.body.projectName,
-            email: req.user.id,
+            email: req.user.email,
             projectid: req.body.projectid,
             imgurl: imgurl,
             textExplain: req.body.textExplain,
@@ -160,7 +160,7 @@ const saveToDb = (req, res, videopathName)=>{
             database.db.one('select * from projects where projectid = $1', req.body.projectid)
                 .then(data => {
                     res.io.emit(key.SAVED_NEW_PROJECT, {
-                        "userId": req.user.id
+                        "userId": req.user.email
                     })
                     res.status(201).send({
                         success: 1,

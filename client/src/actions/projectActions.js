@@ -169,7 +169,7 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
             allProjects = response.data.data
              var getEmails = new Promise(function(resolve, reject){
                 allProjects.forEach(function(projects, index){
-                promises.push(axios.get(config.base_dir+'/api/users/id/'+projects.email))
+                promises.push(axios.get(config.base_dir+'/api/users/email/'+projects.email))
              })
              axios.all(promises).then(function(results) {
                 results.forEach(function(response, index) {
@@ -323,7 +323,7 @@ export const ClearSavedActions = ()=>(dispatch)=>{
 export const getImagesByemail = (emailOfanswers,projects)=>(dispatch)=>{
     var promises = []
     projects.forEach((project,index)=>{
-        promises.push(axios.get(config.base_dir+'/api/users/id/'+projects[index].email))
+        promises.push(axios.get(config.base_dir+'/api/users/email/'+projects[index].email))
     })
     axios.all(promises).then(results=>{
         results.forEach(function(response, index) {
