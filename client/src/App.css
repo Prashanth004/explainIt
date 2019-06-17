@@ -18,7 +18,7 @@
 }
 @font-face {
   font-family: myFirstFont;
-  src: url(BebasNeue-Regular.otf);
+  src: url('/BebasNeue-Regular.otf');
 }
 p{
   /* color:#333; */
