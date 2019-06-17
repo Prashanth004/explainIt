@@ -87,8 +87,11 @@ border-radius:10.5px;
     margin-left:10px;
     text-align: right;
 }
+/* .dateNew{
+   
+} */
 .iconsright{
-    margin-left:10px;
+    margin-left:60px;
     float:right;
 }
 .explainModal{
@@ -108,10 +111,14 @@ border-radius:10.5px;
 .ProfileNameCard{
     display:none;
     text-align: left;
-    font-size:14px;
+    font-size:18px;
     color:rgba(51, 51, 51, 0.815);
     padding-left:2px;
     /* margin-top:-2px; */
+}
+.explainVideo{
+    border-radius:05px;
+    overflow: hidden; 
 }
 .copyDisplay{
         width:100%;
@@ -131,7 +138,7 @@ border-radius:10.5px;
     padding-top:15px;
     padding-left:10px;
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 80% 15% 5%;
   border-bottom-style:none;
   border-bottom-color: rgb(232,232,232);
   border-bottom-width:0.5px;

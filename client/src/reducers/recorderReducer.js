@@ -1,8 +1,11 @@
-import {SAVE_RECORDER} from '../actions/types'
+import {SAVE_RECORDER,RESET_RECORDER,UPDATE_CURRENT_TIME_RECORDER,START_RECORDER,PAUSE_RECORDER,RESUME_RECORDER} from '../actions/types'
 
 
 const initialState = {
-    otherPeerRecorder :null
+    otherPeerRecorder :null,
+    pauseState:false,
+    recorder:null,
+    currentTime:null
 }
 
 
@@ -12,6 +15,39 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 otherPeerRecorder:action.payload
+            }
+        case PAUSE_RECORDER:
+            return{
+                ...state,
+                pauseState:true,
+                recorder:action.payload
+            }
+        case RESUME_RECORDER:
+            return{
+                ...state,
+                pauseState:false,
+                recorder:action.payload
+
+            }
+        case UPDATE_CURRENT_TIME_RECORDER:
+            return{
+                ...state,
+                currentTime:action.payload
+            }
+        
+
+        case RESET_RECORDER :
+            return{
+                ...state,
+                otherPeerRecorder :null,
+                pauseState:false,
+                recorder:null,
+                currentTime:null
+            }
+        case START_RECORDER:
+            return{
+                ...state,
+                recorder:action.payload
             }
         default:
             return{

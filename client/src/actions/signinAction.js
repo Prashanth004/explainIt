@@ -110,16 +110,17 @@ export const twitterAuthFailure = (error) => (dispatch) => {
         token: null
     })
 }
-export const stillAuthenicated = () => (dispatch) => {
- var token = JSON.parse(localStorage.getItem('token'))
+
+const userLogin = (dispatch, url)=>{
+    var token = JSON.parse(localStorage.getItem('token'))
     axios({
         method: 'get',
-        url: config.base_dir + '/api/users/',
+        url: config.base_dir + url,
         headers: {
             "Authorization": token,
         }
     }).then(response => {
-        if (response.status === 200 || response.status === 304) {
+        if (response.status === 200 || response.status === 304 ||response.status === 204) {
             dispatch({
                 type: CHECK_TOKEN_VALIDIDTY,
                 userName:response.data.user.username,
@@ -144,7 +145,13 @@ export const stillAuthenicated = () => (dispatch) => {
             payload: false
         })
     })
-   
+}
+export const stillAuthenicated = () => (dispatch) => {
+    userLogin(dispatch ,'/api/users/');
+}
+
+export const explainAuthentication =()=>dispatch=>{
+    userLogin(dispatch ,'/api/users/explain');
 }
 
 export const signout =() => (dispatch)=>{

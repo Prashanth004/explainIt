@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import { getProfileDetails } from '../../../../actions/profileAction';
 import { openParticipated, openCreated } from "../../../../actions/navAction";
-import IssueDisplay from '../DisplayIssues';
+import IssueDisplay from '../diaplyissues/DisplayIssues'
 import './floater.css';
 import config from '../../../../config/config';
 import Navbar from '../Navbar';

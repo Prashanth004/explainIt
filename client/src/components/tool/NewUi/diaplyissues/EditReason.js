@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import {updatProjectReason} from '../../../actions/projectActions'
+import {updatProjectReason} from '../../../../actions/projectActions'
 
 
 class EditTitle extends Component {

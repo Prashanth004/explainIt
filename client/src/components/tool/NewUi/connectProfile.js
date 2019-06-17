@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css';
 import Profile from './Profile';
 import PageNotFount from './NoMatch';
-import DisplatCreated from './DisplayCreated';
+import DisplatCreated from './diaplyissues/DisplayIssues';
 import { FiGrid,FiList } from "react-icons/fi";
 import Navbar from './Navbar'
 import '../../css/NewSignin.css';
@@ -20,7 +20,7 @@ import PropType from 'prop-types';
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
-import IssueDisplay from './DisplayIssues'
+import IssueDisplay from './diaplyissues/DisplayIssues'
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";

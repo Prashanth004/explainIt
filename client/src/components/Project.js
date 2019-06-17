@@ -1,24 +1,18 @@
 import React, { Component } from 'react'
-import Issue from './issueModal'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import './css/toggle.css';
-import { Button } from 'reactstrap';
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import IssueCard from './tool/NewUi/diaplyissues/issueCard'
 import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
-import ExplainPage from './tool/NewUi/Explain/ExplainPage';
+import './css/newlanding.css';
+import Navbar from './tool/NewUi/Navbar';
+import { explainAuthentication } from '../actions/signinAction';
 import { explainIssue } from '../actions/messageAction'
 import { clearAnswers, fetchProjectbyIssue } from '../actions/projectActions'
-import Navbar from './tool/NewUi/Navbar';
-import Swal from 'sweetalert2';
-import { FiX } from "react-icons/fi";
-import TwitterLogin from './tool/NewUi/TwitterLogin'
-import ReactModal from 'react-modal';
 import { saveReplyEmailOption } from '../actions/emailAction'
-
 import { cancelAllMessageAction } from '../actions/messageAction';
 import { restAllToolValue } from "../actions/toolActions";
 import { resetValues } from '../actions/twitterApiAction';
@@ -37,76 +31,13 @@ class Project extends Component {
       newIssueId: null,
       reAtempte: false
     }
-    this.toggleModalCreate = this.toggleModalCreate.bind(this);
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.reStoreDefault = this.reStoreDefault.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
     this.reAtemptToFetch = this.reAtemptToFetch.bind(this)
   }
-  reStoreDefault = () => {
-    if (this.props.isFullScreenRecording) {
-      confirmAlert({
-        title: "Are you sure?",
-        message: "You won't be able to revert this!",
-        buttons: [
-          {
-            label: 'Yes',
-            onClick: () => this.handleCloseModal()
-          },
-          {
-            label: 'No',
-            onClick: () => this.handleCancel()
-          }
-        ]
-      })
-    }
-    else {
-      this.handleCloseModal()
-    }
 
-  }
-  handleCancel() {
-
-  }
-  handleOpenModal(e) {
-    if (this.props.isAauthenticated) {
-      this.props.explainIssue()
-      this.props.setIssueId(this.props.match.params.projectid)
-      localStorage.setItem("issueId", this.props.match.params.projectid)
-      this.setState({ showModalExplain: true });
-      this.props.saveReplyEmailOption(Number(this.state.issueId), this.props.userId)
-    }
-    else {
-      this.setState({ showModalTwitterLogin: true });
-    }
-  }
-  handleCloseModal() {
-    this.setState({ showModalExplain: false });
-    this.setState({ showModalTwitterLogin: false });
-    this.props.cancelAllMessageAction();
-    this.props.restAllToolValue();
-    this.props.resetValues();
-    this.props.resetLandingAction();
-    this.props.resetExplainAction();
-  }
 
   reAtemptToFetch=()=>{}
   componentWillMount() {
-    const self = this
-    var issueId = this.props.match.params.projectid;
-    this.reAtemptToFetch = setTimeout(()=>{
-      if(!self.state.reAtempte && self.props.failedToGet){
-        self.props.fetchProjectbyIssue(issueId);
-      }
-    },25000)
-    var newIssueIdtemp = (localStorage.getItem('newIssueId'))
-    this.setState({ newIssueId : newIssueIdtemp})
-    this.props.clearAnswers(issueId)
-    this.props.fetchProjectbyIssue(issueId);
-    this.setState({
-      issueId: issueId
-    })
+    this.props.explainAuthentication()
     const socket = socketIOClient(config.base_dir);
     this.setState({
       socket: socket
@@ -117,8 +48,19 @@ class Project extends Component {
     clearTimeout(this.reAtemptToFetch)
   }
   componentDidMount() {
+    const self = this
+
+    var issueId = this.props.match.params.projectid;
+    this.reAtemptToFetch = setTimeout(()=>{
+      if(!self.state.reAtempte && self.props.failedToGet){
+        self.props.fetchProjectbyIssue(issueId);
+      }
+    },25000)
+    var newIssueIdtemp = (localStorage.getItem('newIssueId'))
+    this.setState({ newIssueId : newIssueIdtemp})
+    this.props.clearAnswers(issueId)
+    this.props.fetchProjectbyIssue(issueId);
     var socket = this.state.socket
-    var self = this;
     socket.on(config.SAVED_NEW_PROJECT, data => {
       if (data.userId === this.props.userId) {
         self.setState({ showModalExplain: false });
@@ -144,75 +86,33 @@ class Project extends Component {
       window.attachEvent("onmessage", postMessageHandler);
     }
   }
-  toggleModalCreate = () => {
-    if (this.props.isAauthenticated) {
-      this.props.setIssueId(this.state.issueId)
-      localStorage.setItem("issueId", this.state.issueId)
-      // window.open(config.react_url+'/explainIt', "_blank")
-    }
-    else {
-      Swal.fire(
-        'You should login'
-      )
-    }
-  }
   render() {
     const msgStyling = {margin:"auto",marginTop:"250px", width:"50%", textAlign:"center"}
-    const explinDiv = (this.state.showModalExplain) ? (<div >
-      <Button style={{ fontSize: "px", height: "35px", width: "35px" }} close onClick={this.reStoreDefault} />
-      <ExplainPage
-        questionProject={this.props.questionProject}
-        handleCloseModal={this.handleCloseModal} />
-    </div>) : (<button className="buttonDark explainBtn"
-      style={{
-        foat: "right",
-        marginLeft: "80%"
-      }}
-    
-      onClick={this.handleOpenModal}>Explain</button>)
-    return (this.props.isFetchDone ? (
-      (!this.props.failedToGet)?(<div className="mainContainer">
-          <Navbar
+    return(this.props.authAction)?(
+     (this.props.isFetchDone) ? (
+      (!this.props.failedToGet)?(
+      <div>
+      <Navbar
             page="project" />
-          <div className="projectContainer">
-            <Issue />
-
-            {explinDiv}
-            <ReactModal
-              isOpen={this.state.showModalTwitterLogin}
-              contentLabel="Minimal Modal Example"
-              className="ModalA"
-              overlayClassName="OverlayA"
-            >
-              <div>
-
-                <div onclick={this.handleCloseModal} className="closeModalBtn">
-                  <span>
-                    <FiX className="closeIcon" onClick={this.handleCloseModal} />
-                  </span>
-                </div>
-                <TwitterLogin
-                  handleCloseModal={this.handleCloseModal} />
-              </div>
-
-            </ReactModal>
-
-
-          </div>
-        </div>):(
-          (this.props.match.params.projectid === this.state.newIssueId)?(<div style={msgStyling}><h3>
-            <b>
-            Processing your video. Please wait or try after some time
-            </b>
-            </h3></div>):(
-              <div style={msgStyling}>
-                <h3><b>
-                  Invalid Url
-                  </b></h3>
-              </div>
-            )
-        )
-        ) : (null))
+      <div style={{backgroundColor:"rgb(143, 205, 228)",minHeight:"100vh", paddingTop:"20px"}}>
+      <div style={{width:"50%", margin:"auto", borderStyle:"none", borderWidth:"0.5px", borderRadius:"12px",backgroundColor:"white"}}>
+      <IssueCard 
+      socket={this.state.socket}
+      itsHome={(this.props.home === config.HOME)?true:false}
+      issue={this.props.questionProject}
+      explainTool={this.props.explainTool}/>
+      </div>
+      </div>
+      </div>):((this.props.match.params.projectid === this.state.newIssueId)?(<div style={msgStyling}><h3>
+                <b>
+                Processing your video. Please wait or try after some time
+                </b>
+                </h3></div>):(<div style={msgStyling}>
+                    <h3><b>
+                      Invalid Url
+                      </b></h3>
+                  </div>
+                ))):(null)):(null)
   }
 }
 Project.PropType = {
@@ -231,7 +131,9 @@ const mapStateToProps = state => ({
   userId: state.auth.id,
   isFullScreenRecording: state.tools.isFullScreenRecording,
   failedToGet: state.projects.failedToGet,
-  isFetchDone: state.projects.isFetchDone
+  isFetchDone: state.projects.isFetchDone,
+  authAction:state.auth.authAction,
+  isAuthenticated: state.auth.isAuthenticated,
 
 })
 
@@ -244,6 +146,7 @@ export default connect(mapStateToProps, {
   explainIssue,
   restAllToolValue,
   resetValues,
+  explainAuthentication,
   saveReplyEmailOption,
   setIssueId, fetchProjectbyIssue
 })(Project)

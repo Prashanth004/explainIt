@@ -13,19 +13,23 @@
   /* font-weight:  */
 
 
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* font-family: "Neue"; */
   height: '100vh';
+}
+@font-face {
+  font-family: myFirstFont;
+  src: url(BebasNeue-Regular.otf);
 }
 p{
   /* color:#333; */
   font-size: 14px;
   /* font-weight: bold; */
 }
-span{
+ span{
   /* color:#333; */
-  font-size: 14px;
-  /* font-weight: bold; */
-}
+  /* font-size: 18px; */
+  font-weight: 500;
+} 
 .mainContainer{
   min-height:100vh;
 }

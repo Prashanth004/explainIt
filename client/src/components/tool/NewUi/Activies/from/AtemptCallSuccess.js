@@ -1,7 +1,8 @@
 
 
 import React from 'react';
-import config from '../../../../../config/config'
+import config from '../../../../../config/config';
+import ImageContainer from '../imageContainer'
 
 export default (props) => {
         const {activity, userData} = props
@@ -9,19 +10,19 @@ export default (props) => {
         var timetaken = activity.duration;
         return (
             <div className="activityContentWithDate">
-                <div className="date">
+                {/* <div className="date">
                     <span>{activity.date.slice(8, 10)} {config.monthPicker[date]}</span>
                     <br />
                     <span className="year">{activity.date.slice(0, 4)}</span>
-                </div>
+                </div> */}
                 <div className="activityContent">
-
-                    <div>
+                <span className="dateNew Notify">{activity.date.slice(8, 10)}  {config.monthPicker[date]}, {activity.date.slice(0, 4)}</span>
+                    {/* <div>
                         <img className="activityImage" src={userData.profilePic} alt="Profilepic"></img>
-                    </div>
+                    </div> */}
                     <div style={{ textAlign: "left" }}>
-                        <p>You were in call with <b>@{userData.userName}</b> for the topic <b>{activity.subject}</b> for <b>{Math.floor(timetaken)} minutes and
-             {Math.floor((timetaken - Math.floor(timetaken)) * 60)} seconds</b>.<a href={activity.link}>Click here acess the recording</a> </p>
+                        <p>Call with <ImageContainer name={userData.userName} imgsrc={userData.profilePic}/> for the topic <a href={activity.link}><b>{activity.subject}</b></a> for <b>{Math.floor(timetaken)}:
+             {Math.floor((timetaken - Math.floor(timetaken)) * 60)}</b></p>
 
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import { cancelAllMessageAction } from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
-import { creatAnsProject } from '../../../actions/projectActions';
+
 import { saveExtensionDetails } from "../../../actions/extensionAction";
 
 
@@ -27,28 +27,9 @@ class ExplainPage extends Component {
             twitterHandle:twitterHandle
         })
     }
-    componentDidMount() {
-        var self = this
-        function postMessageHandler(event) {
-            if (event.data === 'rtcmulticonnection-extension-loaded') {
-                self.setState({
-                    source: event.source,
-                    origin: event.origin,
-                    gotmessage: true
-                })
-                self.props.saveExtensionDetails(event.source, event.origin)
-            }
-        }
 
-        if (window.addEventListener) {
-            window.addEventListener("message", postMessageHandler, false);
-        } else {
-            window.attachEvent("onmessage", postMessageHandler);
-        }
-    }
     closeFunction(){
-        this.props.cancelAllMessageAction();
-        this.props.restAllToolValue();
+       
         this.props.handleCloseModal();
     }
 
@@ -75,7 +56,7 @@ class ExplainPage extends Component {
 }
 
 ExplainPage.PropType = {
-    creatAnsProject: PropType.func.isRequired,
+  
     saveExtensionDetails: PropType.func.isRequired,
     twitterAuthFailure:PropType.func.isRequired,
     signInWithTwitter:PropType.func.isRequired
@@ -83,22 +64,17 @@ ExplainPage.PropType = {
 
 };
 const mapStateToProps = state => ({
-    error: state.issues.error,
-    issueId: state.issues.currentIssueId,
-    success: state.issues.successCreation,
-    showCanvas: state.canvasActions.showCanvas,
-    isAuthenticated: state.auth.isAuthenticated,
-    cancelAllMessageAction:PropType.func.isRequired,
-    restAllToolValue:PropType.func.isRequired
+   
 
+   
+    isAuthenticated: state.auth.isAuthenticated,
+  
+   
 })
 
 export default connect(mapStateToProps, { 
-    saveExtensionDetails, 
-    cancelAllMessageAction,
-    restAllToolValue,
+   
     twitterAuthFailure,
-    signInWithTwitter,
-    creatAnsProject })(ExplainPage)
+    signInWithTwitter})(ExplainPage)
 
 

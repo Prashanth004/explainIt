@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import '../../css/newlanding.css';
-import { getDetailsOfExplained } from '../../../actions/issueActions';
-import config from '../../../config/config'
+import '../../../css/newlanding.css';
+import { getDetailsOfExplained } from '../../../../actions/issueActions';
+import config from '../../../../config/config'
  class DisplayExplained extends Component {
     constructor(props){
         super(props)
@@ -44,7 +44,8 @@ import config from '../../../config/config'
            <div id={this.props.issueid} onClick={this.props.toggleAllPeopleList}className="likes">
                        {images}
                     <div id={this.props.issueid} className="numberOfPeople">
-                             {countElement}                      
+                      <span> {countElement} </span>
+                                                 
                     </div>
             </div>
            <div className="">

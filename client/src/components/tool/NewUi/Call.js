@@ -141,8 +141,7 @@ class Call extends Component {
                     <div className="timerDiv">
                         <Countdown
                             date={Date.now() + this.props.timeAloted * 60 * 1000}
-                            renderer={this.props.renderer}
-                            />
+                            renderer={this.props.renderer}/>
 
                     </div>
                     <div>

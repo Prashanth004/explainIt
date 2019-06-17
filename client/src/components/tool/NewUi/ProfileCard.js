@@ -5,8 +5,9 @@ import Toggle from 'react-toggle';
 import '../../css/toggle.css';
 import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
-// import './Floater/floater.css';
-import { FiLink2 } from "react-icons/fi";
+import { IoIosBrowsers } from "react-icons/io";
+import { FiVideo ,FiMail,FiLink2} from "react-icons/fi";
+
 import {resetCallAction} from '../../../actions/callAction'
 import {resetIssueActions,resetProjectActions} from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
@@ -17,7 +18,7 @@ import config from '../../../config/config'
 import { setIssueIdToNull } from '../../../actions/issueActions'
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
-import { FiMail } from "react-icons/fi";
+
 import { cancelAllMessageAction } from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction'
@@ -96,7 +97,7 @@ class ProfileCard extends Component {
 
                         <div className="gridLay">
                             <div className="pImageContainer">
-                                <span className="hint--top" aria-label="double tap for deatils">
+                                <span className="hint--top" aria-label="double tap for details">
                                     <img alt="profile pic" src={this.props.profilePic}
                                         onDoubleClick={this.props.openDtailsTab}
                                         className="labelProfilePic"></img>
@@ -104,21 +105,20 @@ class ProfileCard extends Component {
                             </div>
                             <div className="screenShareBtnLabel">
                                 <span className="hint--top" aria-label="Share screen!">
-                                    <img alt="screen share" onClick={this.startSharingScreen} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                                <IoIosBrowsers  style={{fontSize:"35px"}} onClick={this.startSharingScreen}  />
                                 </span>
                             </div>
                             <div className="RecordBtnLabel">
                                 <span className="hint--top" aria-label="Record screen!">
-                                    <img alt="record screen" onClick={this.startRecordScreen} height="100%" width="100%" src={require('../../images/download.jpg')} />
+                                <FiVideo  style={{fontSize:"35px"}} onClick={this.startRecordScreen}  />
                                 </span>
                             </div>
                             <div className="drago">
                                 <div >
                                     {notifyBadge}
-                                    <span>
+                                    <span className="hint--top" aria-label="Activities!">
                                   
-                                        <FiMail onClick={this.props.toggleInbox} className="dragoMail" />
-                                        {/* <FiMail onClick={this.props.showInbox} className="dragoMail" /> */}
+                                        <FiMail  style={{fontSize:"35px"}} onClick={this.props.toggleInbox} />
 
                                     </span>
                                 </div>

@@ -79,7 +79,7 @@ exports.updateProjectprivate = function (req, res) {
 exports.saveProject = function (req, res) {
     var videopathName = null;
     var commands = null;
- 
+    console.log(req.user)
 if (!req.files) {
         return res.status(451).send({
             success: 0,
@@ -148,7 +148,7 @@ const saveToDb = (req, res, videopathName)=>{
         'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
         {
             name: req.body.projectName,
-            email: req.user.email,
+            email: req.user.id,
             projectid: req.body.projectid,
             imgurl: imgurl,
             textExplain: req.body.textExplain,

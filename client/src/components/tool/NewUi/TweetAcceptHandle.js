@@ -39,6 +39,8 @@ class tweetSearch extends Component {
         this.changeImputNumber = this.changeImputNumber.bind(this)
     }
     componentWillMount() {
+        if(this.props.explainBy === config.SHARE_SCREEN_EXPALIN)
+            this.setState({twitterHandle:this.props.sharehandle})
         this.props.resetValues();
         this.props.getTwitterHandles();
         this.setState({
@@ -149,7 +151,7 @@ class tweetSearch extends Component {
     render() {
         var validatinginfo = null;
         var mainContainer = (<div className="startShare">
-            <span style={{ margin: "10px" }}>Initiate screen share with</span>
+            <span style={{ margin: "10px", fontSize:"15px" }}>Initiate screen share with</span>
 {/* 
             <input
                 onChange={this.updateTwitterHandleBox}
@@ -270,6 +272,8 @@ const mapStateToProps = state => ({
     onlineStatus: state.visitProfile.onlineStatus,
     busyStatus:state.visitProfile.busyStatus,
     isPresentInExplain: state.visitProfile.isPresent,
+    explainBy: state.explain.explainBy,
+    sharehandle:state.explain.sharehandle
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle,

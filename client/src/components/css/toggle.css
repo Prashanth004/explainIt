@@ -11,7 +11,7 @@
     bottom: auto; 
     background-color:#ffffff;
     border-radius:5px;
-    padding:15px;
+    /* padding:15px; */
     text-align: center;
     transform  : 'translate(-50%, -50%)'
 }

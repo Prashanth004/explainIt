@@ -7,9 +7,9 @@ import {cancelSuccess} from '../../../../actions/issueActions'
 import TwitterLogin from 'react-twitter-auth';
 import ExplainOptions from './explainOptions'
 import { connect } from 'react-redux';
+import { explainAuthentication } from '../../../../actions/signinAction';
 import {resetIssueActions} from '../../../../actions/projectActions'
-
-import {resetLandingAction } from '../../../../actions/landingAction'
+// import {resetLandingAction } from '../../../../actions/landingAction'
 import config from '../../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../../actions/signinAction';
 import {resetExplainAction} from '../../../../actions/explainAction'
@@ -28,7 +28,7 @@ class ExplainPage extends Component {
     }
 
     componentWillMount(){
-
+        this.props.explainAuthentication();
         this.props.resetExplainAction();
         var source = this.props.extSource
         var origin = this.props.extOrigin
@@ -39,7 +39,7 @@ class ExplainPage extends Component {
         const twitterHandle = (window.location.href).split("/")[3]
         this.setState({twitterHandle:twitterHandle})
         this.props.cancelAllMessageAction();
-        this.props.resetLandingAction();
+        // this.props.resetLandingAction();
         this.props.restAllToolValue();
         this.props.resetValues();
         this.props.cancelSuccess();
@@ -47,22 +47,21 @@ class ExplainPage extends Component {
 
     }
     componentWillUnmount(){
+       
         this.props.resetExplainAction();
     }
   
     reStoreDefault(){
         this.props.handleCloseModal();
     }
- 
-    saveVideoData(data,isPublic,text, action) {
-        var issueId = null
-        var textExplain = text
-        var imgData = "null"
+    saveVideoData(videoData, audioData, isPublic, text, action) {
+        var issueId = JSON.parse(localStorage.getItem("issueId"));
+        var imgData = "null";
         var items = {}
         var isquestion = "false"
-        issueId = JSON.parse(localStorage.getItem("issueId"));
-        this.props.creatAnsProject(textExplain, imgData, data,null, items, isquestion, issueId,isPublic,action)
+        this.props.creatAnsProject(text, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
     }
+
     render() {
         var widthDiv = null;
         if (this.props.showCanvas) {
@@ -71,15 +70,17 @@ class ExplainPage extends Component {
         else {
             widthDiv = "95%";
         }
-        return (this.props.isAuthenticated)?
-        (<div className="explainItBackgroung"><ExplainOptions
+       
+        return (this.props.authAction)?((this.props.isAuthenticated)?
+        (<div className="explainItBackgroung">
+            <ExplainOptions
+             socket={this.props.socket}
             widthDiv={widthDiv}
             questionProject={this.props.questionProject}
-            handleCloseModal={this.props.handleCloseModal}
             reStoreDefault={this.reStoreDefault}
             savefile={this.saveVideoData} />
-            </div>):(
-                <div>
+            </div>):
+            (<div>
                 <Button close onClick={this.reStoreDefault} />
                 <div className="requestLogin">
                 <h3>You need to Login</h3>
@@ -88,7 +89,7 @@ class ExplainPage extends Component {
         requestTokenUrl={config.base_dir+"/api/twitter/visit/auth/twitter/reverse/"+this.state.twitterHandle} />
         </div>
         </div>
-            )
+            )):(null)
         
     }
 }
@@ -99,7 +100,7 @@ ExplainPage.PropType = {
     twitterAuthFailure:PropType.func.isRequired,
     signInWithTwitter:PropType.func.isRequired,
     resetExplainAction:PropType.func.isRequired,
-    resetLandingAction:PropType.func.isRequired
+    // resetLandingAction:PropType.func.isRequired
 
 
 };
@@ -115,6 +116,8 @@ const mapStateToProps = state => ({
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
     extSourceId: state.extension.sourceId,
+    authAction: state.auth.authAction,
+
 
 })
 
@@ -122,7 +125,8 @@ export default connect(mapStateToProps, {
     saveExtensionDetails, 
     cancelAllMessageAction,
     restAllToolValue,
-    resetLandingAction,
+    explainAuthentication,
+    // resetLandingAction,
     resetExplainAction,
     resetValues,
     twitterAuthFailure,

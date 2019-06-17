@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import EmailVarify from './emailvarify'
 import { MdCallEnd, MdCall } from "react-icons/md";
 import Activity from './Activies/indexActivity'
-import DisplatCreated from './DisplayCreated';
+import DisplatCreated from './diaplyissues/DisplayCreated';
 import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
 import Profile from './Profile'
@@ -34,7 +34,7 @@ import Swal from 'sweetalert2'
 import config from '../../../config/config';
 import { resetCallAction, getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
-import IssueDisplay from './DisplayIssues'
+import IssueDisplay from './diaplyissues/DisplayIssues'
 import Content from './Content';
 import {varifyEmail} from '../../../actions/emailAction'
 
@@ -100,19 +100,12 @@ class NewHome extends Component {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
     }
     saveVideoData(videoData, audioData, isPublic, text, action) {
-        var issueId = null
-        var textExplain = text
-        var imgData = "null"
+        var condition = this.props.issueId == null || this.props.issueId === undefined
+        var issueId = (condition)?null:this.props.issueId;
+        var imgData = "null";
         var items = {}
-        var isquestion = " "
-        if (this.props.issueId == null || this.props.issueId === undefined) {
-            isquestion = "true"
-        }
-        else {
-            isquestion = "false"
-            issueId = this.props.issueId
-        }
-        this.props.creatAnsProject(textExplain, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
+        const isquestion = (condition)?"true":"false"
+        this.props.creatAnsProject(text, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
     }
     reloadPage() {
         window.location.reload();
@@ -465,8 +458,8 @@ class NewHome extends Component {
     }
 
     render() {
-        var issuepercentage = "65%";
-        var percentage = "35%";
+        var issuepercentage = "59%";
+        var percentage = "45%";
         var displayLinkDiv = null;
         var profileCardElement = null;
         if (this.state.reducedWidth) {
@@ -474,7 +467,7 @@ class NewHome extends Component {
         }
         if (this.props.screenAction === SCREEN_RECORD ||
             this.props.screenAction === SCREEN_SHARE) {
-            percentage = "85%";
+            percentage = "10%";
         }
         else {
             if (this.props.screenAction === FULL_SCREEN_SHARE ||
@@ -515,7 +508,6 @@ class NewHome extends Component {
                 shareRecord = (<FullScreenShare
                     toggleInbox={this.toggleInbox}
                     socket={this.state.socket}
-                    onRef={ref => (this.child = ref)}
                     closeImidiate={this.handleConfirm}
                     reStoreDefault={this.reStoreDefault}
                     savefile={this.saveVideoData}

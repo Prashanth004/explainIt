@@ -26,7 +26,7 @@
 .startShare{
   /* text-align: left; */
   margin-top:20px;
-  padding:15px;
+  /* padding:15px; */
   padding-top:15px;
   font-size:14px;
   /* background-color: blue; */
@@ -234,7 +234,8 @@ margin-top:10px;
 }
 .fullHome{
   min-height:100vh;
-  background-color: rgb(230,236,240);
+  background-color: rgb(143, 205, 228);
+  /* background-color :rgb(245, 243, 243); */
 
 }
 .displayNumber{
@@ -338,6 +339,9 @@ margin-top:10px;
   .questionImg{
     height: 225px;
     width:100%;
+    /* border-radius:0px; */
+    margin-top:5px;
+    margin-left:30px;
     border-top-style:none;
     border-top-color:rgba(100, 99, 99, 0.356);
     border-top-width:0.5px  }
@@ -352,9 +356,9 @@ margin-top:10px;
   .cardWithDate{
     width:100%;
     margin-top:0px;
-    
-  display: grid;
-  grid-template-columns: 0% 100%
+    margin:auto;
+  /* display: grid;
+  grid-template-columns: 0% 100% */
    
   }
   .date{
@@ -389,11 +393,12 @@ color:rgba(51, 51, 51, 0.609);
     text-align: left;
   }
   .twitterHolder{
-   
+   /* background-color: #98a0a3; */
+   /* width:70%; */
     padding-right:5%;
     text-align:right;
-    display: grid;
-    grid-template-columns: 50% 50%
+    /* display: grid;
+    grid-template-columns: 50% 50% */
   }
   a:link {
     color: rgb(10, 2, 85);
@@ -481,22 +486,19 @@ color:rgba(51, 51, 51, 0.609);
     color:blue;
   }
   .issueCard{
-      width:100%;
-      /* margin:auto; */
-      box-shadow: 0px 0px 0px 0px rgba(235, 235, 235, 0.911);
-
-      background-color :white;
-      /* margin-top:20px; */
-      border-radius:2px;
-      border-bottom-style:solid;
-      border-bottom-width:0.5px;
-      border-bottom-color: rgba(8, 8, 32, 0.137);
-         box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
-
+   
+    padding-bottom:5px;
+    width:100%;
+    background-color: white;
+    /* padding-top:30px; */
+    border-radius:2px;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    border-bottom-color: rgba(8, 8, 32, 0.137);
   }
   .issueCard:hover{
     
-    background-color:  rgb(245,248,250)
+    background-color:  rgb(250, 250, 250)
   }
  
   .modalBody{
@@ -545,11 +547,13 @@ color:rgba(51, 51, 51, 0.609);
     text-align: left;
 width:99%;
 margin:auto;
+/* margin-top:; */
 min-height: 10px;
 color:rgba(51, 51, 51, 0.863);
 /* background-color: blue; */
-padding:00px 0px 10px 57px;
-font-size:13px;
+padding:00px 0px 10px 65px;
+font-size:12px;
+font-weight:530;
 /* background-color :white; */
 border-style: none;
 border-top-style:none;
@@ -566,27 +570,32 @@ border-top-width:0.5px;
    text-align:center;
   }
   .orginCard{
-    border-bottom-style:solid;
+    border-bottom-style:none;
     border-color:rgb(232,232,232);
     border-width: 1px;
   }
   .explainAnswer{
-    width:99%;
+    width:85%;
     margin:auto;
-    /* background-color :white; */
+    margin-left:9%;
+    padding:10px 5px 10px 5px;
+   
+    /* background-color :blue; */
     display:grid;
     grid-template-columns: 50% 35% 15%;
-    padding:5px;
+    /* padding:5px; */
 
   }
   .explainItBtn{
-    width:105px;
-   color:white;
-    float:right;
+    width:80px;
+    height:23px;
+    padding-right:12px ;
+    padding-left:12px;
+    font-weight:600;
     font-size:13px;
-    align-self: right;
-    align-content: right;
-    border-color:rgba(51, 51, 51, 0.664);
+    /* color:white; */
+  
+    /* border-color:rgba(51, 51, 51, 0.664); */
   }
 
   .emptyIssues{
@@ -595,8 +604,8 @@ border-top-width:0.5px;
   }
   .imagePeopleDiv{
     display: inline-block;
-    height:27px;
-    width:27px;
+    height:30px;
+    width:30px;
     margin:2px;
 
   }
@@ -636,10 +645,11 @@ border-top-width:0.5px;
   }
   .likes{
     width:75%;
+      /* padding-top:7px; */
+    padding-bottom:7px;
     display: inline-block;
-    /* background-color:red; */
     display:grid;
-    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%
+    grid-template-columns: 13% 13% 13% 13% 13% 13% 13%
   }
  
   .toolContainer{
@@ -713,11 +723,22 @@ border-top-width:0.5px;
       .labelContainer{
         width:50%;
     }
+    .dateNew{
+      color:rgba(206, 201, 201, 0.867);
+   align-self: left;
+   margin-right:80%;
+      position: relative;
+      top:12px;
+      /* right:5px; */
+      /* background-color: #0075a2; */
+    
+}
       .cardWithDate{
        
         margin-top:0px;
-        display: grid;
-        grid-template-columns: 20% 80%
+        margin:auto;
+        /* display: grid;
+        grid-template-columns: 10% 90% */
       }
     
     }
@@ -727,7 +748,7 @@ border-top-width:0.5px;
         width:50%;
       }
       .issueContainer{
-        width:66%;
+        width:55%;
         /* border-style: solid; */
         /* border-radius: 8px; */
         /* background-color: white; */
@@ -737,9 +758,10 @@ border-top-width:0.5px;
       }
       
       .questionImg{
-        height: 376px;
-        width:100%;
-        margin:auto;
+        height: 327px;
+        width:86%;
+        /* margin:auto; */
+        margin-left:9%;
       }
       .ProfileDiv{
         width:60%;
@@ -780,10 +802,12 @@ border-top-width:0.5px;
        
       }
       .cardWithDate{
-        margin-left:-2%;
-        display: grid;
-  grid-template-columns: 12% 88%;
-        margin-top:15px;
+        margin:auto;
+        /* margin-left:-2%; */
+        /* display: grid;
+  grid-template-columns: 12% 88%; */
+        margin-top:-2px;
+       
       }
     
     }

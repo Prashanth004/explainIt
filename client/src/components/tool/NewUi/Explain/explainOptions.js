@@ -1,50 +1,80 @@
 import React from 'react'
 import config from '../../../../config/config'
-import Screenrecorder from './explainItRecorder'
+// import Screenrecorder from './explainItRecorder'
 import { connect } from 'react-redux';
-import { explainByRecord, explainByRefer } from '../../../../actions/explainAction';
-import Refer from './refer'
-import '../../../css/explainit.css'
+import FullScreenShare from '../enitreScreenShare';
+import FullScreenRecord from '../FullScreenRecord';
+import { IoIosBrowsers } from "react-icons/io";
+import { explainByShare, explainByRecord, explainByRefer } from '../../../../actions/explainAction';
+import Refer from './refer';
+import '../../../css/explainit.css';
+import { FiUsers, FiVideo } from "react-icons/fi";
+// import { FaRegClone } from "react-icons/fa";
 
 
 const explainOption = (props) => {
-   
+
+    const { questionProject, myTwitterHandle } = props;
+    const condition = questionProject.twitterhandle !== myTwitterHandle
+    const screeShare = (condition) ? (<span className="hint--top" aria-label="Get connnected, share screen and explain!">
+        <IoIosBrowsers style={{ fontSize: "28px" }} onClick={() => props.explainByShare(questionProject.twitterhandle)} />
+    </span>) : (null);
+    const referDiv = (condition)?(  <span className="hint--top" aria-label="Refer to other!">
+    <FiUsers style={{ fontSize: "25px" }} onClick={() => props.explainByRefer()} />
+</span>):(null);
     return (props.explainBy === config.null) ? (
         <div>
+            {/* FiCopy */}
+            {/* MdContentCopy */}
+            {/* IoIosBrowsers */}
+            {/* FaClone */}
+            {/* FaRegClone */}
             <div className="optionBtnPlacement">
-            <div className="RecordBtnLabel" style={{textAlign:"center",margin:"auto",backgroundColor:"transparent"}}>
-                                <span className="hint--top" aria-label="Record screen and explain!">
-                                    <img alt="record screen"  onClick={()=>props.explainByRecord()} height="100%" width="100%" src={require('../../../images/record.png')} />
-                                </span>
-                            </div>
-              
-                <div className="RecordBtnLabel" style={{margin:"auto",backgroundColor:"transparent"}}>
-                                <span className="hint--top" aria-label="Refer to other!">
-                                    <img alt="record screen"  onClick={()=>props.explainByRefer()} height="100%" width="100%" src={require('../../../images/refer.png')} />
-                                </span>
-                            </div>
+                <div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
+                    {screeShare}
+                </div>
+                <div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
+                    <span className="hint--top" aria-label="Record screen and explain!">
+                        <FiVideo style={{ fontSize: "28px" }} onClick={() => props.explainByRecord()} />
+                    </span>
+                </div>
+
+                <div className="RecordBtnLabel" style={{ margin: "auto", backgroundColor: "transparent" }}>
+                {referDiv}
+                  
+                </div>
                 {/* <button onClick={()=>props.explainByRefer()}>Refer to explain</button> */}
             </div>
         </div>
-    ) : (props.explainBy === config.RECORD_SCREEEN_EXPLAIN &&
-         props.explainBy !== config.REFER_EXPLAIN ? (
-        <div className="explainMain">
-            <div className="recorderConatainerPage" style={{ width: props.widthDiv }}>
-                <Screenrecorder
-                    handleCloseModal={props.handleCloseModal}
-                    reStoreDefault={props.reStoreDefault}
-                    savefile={props.savefile} />
+    ) : (props.explainBy === config.SHARE_SCREEN_EXPALIN ?
+        (<FullScreenShare
+            socket={props.socket}
+            closeImidiate={props.reStoreDefault}
+            reStoreDefault={props.reStoreDefault}
+            savefile={props.savefile}
+        />) : (props.explainBy === config.RECORD_SCREEEN_EXPLAIN ? (
+            <div className="explainMain">
+                <div className="recorderConatainerPage" style={{ width: props.widthDiv }}>
+                    <FullScreenRecord
+                        socket={props.socket}
+                        closeImidiate={props.reStoreDefault}
+                        reStoreDefault={props.reStoreDefault}
+                        savefile={props.savefile}
+                    />
+                </div>
             </div>
-        </div>
-    ) : (props.explainBy !== config.RECORD_SCREEEN_EXPLAIN &&
-         props.explainBy === config.REFER_EXPLAIN)?(<Refer questionProject={props.questionProject} />):(null))
+        ) : (
+            <Refer questionProject={props.questionProject} />)))
 }
 
 const mapStateToProps = function (state) {
     return {
-        explainBy: state.explain.explainBy
+        explainBy: state.explain.explainBy,
+        myTwitterHandle: state.auth.twitterHandle
     }
 }
 
-export default connect(mapStateToProps, { explainByRecord, explainByRefer })(explainOption);
+export default connect(mapStateToProps, {
+    explainByShare, explainByRecord, explainByRefer
+})(explainOption);
 

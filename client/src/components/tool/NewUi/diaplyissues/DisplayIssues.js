@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import config from '../../../config/config'
-import { deleteProjects, checkPublicValue } from '../../../actions/projectActions';
+import config from '../../../../config/config'
+import { deleteProjects, checkPublicValue } from '../../../../actions/projectActions';
 
-import '../../css/toggle.css'
+import '../../../css/toggle.css'
 import IssueCard from './issueCard'
 import { confirmAlert } from 'react-confirm-alert'; // Import4
 
@@ -15,17 +15,11 @@ class DisplayIssue extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            displayCopyEle: false,
-            projectId: null,
             deleteItemId: null,
             issueArray: null,
-            dropdownOpen: false,
-            itsHome: false
         }
-        this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
         this.deleteProjects = this.deleteProjects.bind(this);
         this.handleConfirm = this.handleConfirm.bind(this);
-        this.toggle = this.toggle.bind(this);
         this.handlePublicPrives = this.handlePublicPrives.bind(this)
     }
     componentWillMount() {
@@ -33,14 +27,6 @@ class DisplayIssue extends Component {
             issueArray: this.props.myissues
 
         })
-        if (this.props.home === config.HOME)
-            this.setState({
-                itsHome: true
-            })
-        else
-            this.setState({
-                itsHome: false
-            })
     }
  
     deleteProjects(e) {
@@ -106,20 +92,8 @@ class DisplayIssue extends Component {
     handlePublicPrives(e) {
         this.props.checkPublicValue(e.target.id)
     }
-    toggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
-    toggleDisplayLink(e) {
-        var element = document.querySelector('#clipboard_' + e.currentTarget.id)
-        if (element.style.display === 'none') {
-            element.style.display = 'block'
-        }
-        else {
-            element.style.display = 'none'
-        }
-    }
+  
+
 
     render() {
         var issueItems = null;
@@ -139,14 +113,10 @@ class DisplayIssue extends Component {
                             <IssueCard 
                             key={index+1000}
                             socket={this.props.socket}
-                            itsHome={this.state.itsHome}
-                            displayCopyEle={this.state.displayCopyEle}
+                            itsHome={(this.props.home === config.HOME)?true:false}
                             deleteProjects={this.deleteProjects}
                             tweetWindow={this.tweetWindow}
                             handlePublicPrives={this.handlePublicPrives}
-                            toggle={this.toggle}
-                            toggleDisplayLink={this.toggleDisplayLink}
-                            projectId={this.state.projectId}
                             issue={issue}
                             explainTool={this.props.explainTool}/>
                         ))
@@ -165,17 +135,14 @@ class DisplayIssue extends Component {
                     issueItems =this.props.participatedIssues.map((issue, index) => (
                         <IssueCard 
                         key={index+1000}
-                        itsHome={this.state.itsHome}
+                        itsHome={(this.props.home === config.HOME)?true:false}
                         socket={this.props.socket}
-                        displayCopyEle={this.state.displayCopyEle}
                         deleteProjects={this.deleteProjects}
                         tweetWindow={this.tweetWindow}
                         handlePublicPrives={this.handlePublicPrives}
                         toggle={this.toggle}
-                        toggleDisplayLink={this.toggleDisplayLink}
-                        projectId={this.state.projectId}
                         issue={issue}
-                        explainTool={this.props.explainTool}/>
+                     />
                     ))
         }
         

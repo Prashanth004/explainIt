@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../../css/explainStories.css'
+import '../../../css/explainStories.css'
 import { Button } from 'reactstrap'
 export default class componentName extends Component {
     constructor(props) {
@@ -50,7 +50,7 @@ export default class componentName extends Component {
         )
         return (
             <div className="storyContainer">
-                <Button close onClick={this.props.toggleAllPeopleList} />
+                <Button close onClick={this.props.closeStoried} />
                 <div>
                    
                     <div className="imagesOfExplainedDiv">

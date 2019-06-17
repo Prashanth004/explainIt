@@ -4,10 +4,9 @@ import { Button } from 'reactstrap'
 import bigInt from "big-integer";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
+import PostSharing from './screenShare/postScreenSgare'
 import { openCreated } from '../../../actions/navAction'
-import CopyToClipboard from '../CopytoClipboard';
 import { updateCurrentTime, setpeerId, answeredCall, updateRemainingTime, basicInfoCall, disableCallAction, callFailedUpdate, muteAudio, unMuteAudio } from '../../../actions/callAction'
-import { stillAuthenicated } from '../../../actions/signinAction';
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
 import { startSecodScreenShare, endSecondScreenShare } from '../../../actions/secondShareAction'
@@ -19,7 +18,7 @@ import browser from 'browser-detect';
 import { postEndCall, displayScreenSharebutton, refreshExtension } from '../../../actions/extensionAction'
 import Call from './Call';
 import { FiX, FiVideo } from "react-icons/fi";
-import { MdReplay } from "react-icons/md";
+
 import {
     fullStartedSharing,
     fullStopedSharing,
@@ -265,11 +264,16 @@ class ScreenRecorder extends Component {
         }
     }
     play_clicked() {
-       this.AudioPlyr.play()
+        var AudioPlyr = document.querySelector('#AudioPlyr')
+        if(AudioPlyr)
+        AudioPlyr.play();
     }
     pause_clicked(){
-        this.AudioPlyr.pause()
+        var AudioPlyr = document.querySelector('#AudioPlyr')
+        if(AudioPlyr)
+        AudioPlyr.pause();
     }
+    
     onUnload(event) { // the method that will be used for both add and remove event
      if(this.props.isSceenSharing){
         this.endCall()
@@ -305,6 +309,7 @@ class ScreenRecorder extends Component {
                 self.muteAudio()
                 return
             }
+          
             if(event.data.type === config.UNMUTE_TO_WEB){
                 self.unMuteAudio()
                 return
@@ -441,8 +446,6 @@ class ScreenRecorder extends Component {
 
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin)
 
-
-        this.props.stillAuthenicated();
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
@@ -602,7 +605,6 @@ class ScreenRecorder extends Component {
                 });
             }
         }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
-        // self.saveBlobtimeOut()
         if (call) {
             call.on('stream', function (remoteStream) {
                 fullStartedSharing(twitterUserId)
@@ -896,11 +898,18 @@ class ScreenRecorder extends Component {
     }
     sendLink() {
         const self = this;
-        const { failedToSave, twitterUserId, initiateSend, largeFileSize, linkToAccess, callTopic } = this.props
+        const { failedToSave,explainBy, twitterUserId, initiateSend, largeFileSize, linkToAccess, callTopic } = this.props
 
         initiateSend();
+        var issueId = JSON.parse(localStorage.getItem("issueId"));
         const socket = this.state.socket;
-        const sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
+        var sharableLinkSaved = null;
+        if(explainBy===config.null){
+            sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
+        }
+        else{
+            sharableLinkSaved = (config.react_url+"/project/"+issueId);
+        }
         const saveStatus = (failedToSave || largeFileSize) ? ("false") : ("true");
         socket.emit(config.SEND_SHARABLE_LINK, {
             'otherPeerId': self.props.peerId,
@@ -916,14 +925,10 @@ class ScreenRecorder extends Component {
     }
 
     render() {
-        const videoAudio = (<div>
-            <video ref={a => this.VideoPlyr = a}  onPlay={this.play_clicked} onPause={this.pause_clicked}className="videoPlayer2" src={this.state.downloadUrlVideo} controls={true}></video>
-            <audio ref={a => this.AudioPlyr = a} style={{ display: "none" }} className="videoPlayer2" src={this.state.downloadUrlAudio}></audio>
-        </div>)
-
-        const linkToAccess = this.props.linkToAccess !== null ? (<div>
-            <CopyToClipboard sharablelink={this.props.linkToAccess} />
-        </div>) : (null)
+        
+            var shareTimeElements = null;
+            var postShareElements = null;
+           
 
 
         if (this.props.linkToAccess !== null && this.props.isSharingCompleted ) {
@@ -932,7 +937,7 @@ class ScreenRecorder extends Component {
             }
         }
         else{
-            if(this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
+            if(this.props.linkToAccess !== null && this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
                 if (!this.props.sendinitiated) {
                     this.sendLink()
                 }
@@ -943,98 +948,12 @@ class ScreenRecorder extends Component {
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate
         var linkElement = null;
-        var buttons = null;
-        var videoTagWithAudio = (<div>
-            <div>
-                {videoAudio}
-                <p>Link To access your recording.</p>
-                {linkToAccess}
-            </div>
-        </div>)
-
-        var savingMsg = !this.state.manualClose && !this.state.timerEnded? 
-        ((this.props.linkToAccess !== null)?(videoTagWithAudio):null):(videoTagWithAudio)
+        const closeBtn = (this.props.isSceenSharing ||  this.props.explainBy !== config.null) ?
+        (null):(((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
+       
+            <Button style={{margin:"8px", fontSize: "28px"}} close onClick={closeFunction} />))
+   
       
-        var MessageDisconnected = null;
-        var shareTimeElements = null;
-        var postShareElements = null;
-        const closeBtn = (!this.props.isSceenSharing) ?
-            (((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (<Button style={{ margin: "5px" }} close onClick={closeFunction} />)) :
-            (null)
-        var noInternet = null
-        if (this.state.noInternet)
-            noInternet = "No Intenet conecticvity"
-        else noInternet = null;
-        if (this.state.timerEnded) {
-            if (!this.state.saveinitiated && this.state.peerAudioBlob !== null && this.state.blob !== null) { this.savefilePrivate() }
-            MessageDisconnected = (
-                <div>
-                    <p><b>Call ended as the time alloted ended</b></p>
-                    {savingMsg}
-                </div>)
-        }
-        else if (this.state.showDisconectMessage && !this.state.closedHere && this.state.manualClose) {
-            if (!this.state.saveinitiated && this.state.peerAudioBlob !== null && this.state.blob !== null) { this.savefilePrivate() }
-            MessageDisconnected = (<div>
-                <p><b>Call ended from other peer</b></p>
-                {savingMsg}
-
-            </div>)
-        }
-        else if (!this.state.manualClose && !this.state.timerEnded && !this.state.retry && (this.state.retryLimit < 1)) {
-            buttons = (!this.state.saveinitiated) ?
-                (<div><span className="hint--bottom" aria-label="Retry">
-                    <MdReplay className="icons" onClick={this.retryCall} />
-                </span>
-                    <span className="hint--bottom" aria-label="Record call and send">
-                        <FiVideo className="icons" onClick={this.recordCall} />
-                    </span>
-                    <span className="hint--bottom" aria-label="End Call Session">
-                        <FiX className="icons" onClick={this.savefilePrivate} />
-                    </span>
-                </div>) : (null)
-            MessageDisconnected = (
-                <div>
-                    <p><b>Call disconnected due to network issues</b></p>
-                    {buttons}
-                    {savingMsg}
-                </div>
-            )
-        }
-        else if (this.state.retry && !this.state.retryTimeOut && !this.state.noInternet)
-            MessageDisconnected = (
-                <div>
-                    <p><b>Reconnecting..</b></p>
-
-                </div>
-            )
-        else if (this.state.retry && (this.state.retryTimeOut || this.state.noInternet)) {
-            buttons = (!this.state.saveinitiated) ? (
-                <div>
-                    <span className="hint--bottom" aria-label="Record call and send">
-                        <FiVideo className="icons" onClick={this.recordCall} />
-                    </span>
-                    <span className="hint--bottom" aria-label="End Call Session">
-                        <FiX className="icons" onClick={this.savefilePrivate} />
-                    </span>
-                </div>) : (null)
-            MessageDisconnected = (
-                <div>
-                    <p><b>Retry failed</b><br />{noInternet}</p>
-                    <p>You can reord the screen and send it</p>
-                    {buttons}
-                    {savingMsg}
-                </div>
-            )
-        }
-        else {
-            if (!this.state.saveinitiated && this.state.peerAudioBlob !== null && this.state.blob !== null) { this.savefilePrivate() }
-            MessageDisconnected = (<div>
-                <p><b>Call ended</b></p>
-                {savingMsg}
-
-            </div>)
-        }
 
         if (this.props.isSceenSharing) {
 
@@ -1088,10 +1007,27 @@ class ScreenRecorder extends Component {
                 </div>)
 
         if (this.props.isSharingCompleted && this.state.blob !== null && !this.state.clickedOnLink) {
-            postShareElements = (<div className="DisconMessage">
-                {MessageDisconnected}
-
-            </div>)
+            postShareElements=(<PostSharing 
+                retryCall={this.retryCall}
+           peerAudioBlob={this.state.peerAudioBlob}
+           saveinitiated={this.state.saveinitiated}
+           downloadUrlVideo={this.state.downloadUrlVideo}
+           downloadUrlAudio ={this.state.downloadUrlAudio}
+           retry ={this.state.retr}
+           retryTimeOut={this.state.retryTimeOut}
+           manualClose={this.state.manualClose}
+           retryLimit={this.state.retryLimit}
+           timerEnded={this.state.timerEnded}
+           noInternet={this.state.noInternet}
+           blob={this.state.blob}
+           play_clicked={this.play_clicked}
+           pause_clicked ={this.pause_clicked}
+           recordCall={this.recordCall}
+           showDisconectMessage={this.state.showDisconectMessage}
+           isSaved={this.props.isSaved}
+           explainBy={this.props.explainBy}
+           savefilePrivate={this.savefilePrivate}
+           linkToAccess={this.props.linkToAccess}/>)
         }
         if (
             !this.props.isSceenSharing &&
@@ -1297,6 +1233,7 @@ const mapStateToProps = state => ({
     currentTimeLeft: state.call.currentTimeLeft,
     noOfIncreaseInTime: state.call.noOfIncreaseInTime,
     sharablelink: state.issues.sharablelink,
+    issueId: state.issues.currentIssueId,
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
     extSourceId: state.extension.sourceId,
@@ -1318,7 +1255,8 @@ const mapStateToProps = state => ({
     otherPeerRecorder: state.recorder.otherPeerRecorder,
     onlineStatus: state.visitProfile.onlineStatus,
     busyStatus: state.visitProfile.busyStatus,
-    linkToAccess: state.projects.linkToAccess
+    linkToAccess: state.projects.linkToAccess,
+    explainBy: state.explain.explainBy
 
 })
 
@@ -1327,7 +1265,6 @@ export default connect(mapStateToProps, {
     refreshExtension,
     postEndCall,
     muteAudio, unMuteAudio,
-
     disableCallAction,
     displayFullScrenRecord,
     displayScreenSharebutton,
@@ -1347,7 +1284,7 @@ export default connect(mapStateToProps, {
     answeredCall,
     basicInfoCall,
     updateCurrentTime,
-    stillAuthenicated,
+   
     endSecondScreenShare,
     fromShareToRecord,
     callFailedUpdate,

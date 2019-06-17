@@ -1,28 +1,47 @@
 .activityContent{
-    padding:10px;
+  
+    padding :2% 10% 0% 10%;
+    /* padding-right:10%; */
     background-color: #ffff;
     border-radius:1px;
     border-style:solid;
     border-width:0.5px;
     border-color:rgba(92, 90, 90, 0.137);
-    display:grid;
+    /* display:grid; */
     /* box-shadow: 0px 0px 5px 2px rgba(82, 81, 81, 0.02);  */
     /* box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068); */
 
-    grid-template-columns: 10% 90%;
+    /* grid-template-columns: 10% 90%; */
+}
+.Notify{
+   top:-10px;
+   font-size:12px;
+   /* margin-bottom:-10px; */
+   margin-right:90%;
+ 
+  
+}
+.profIconImg{
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    margin-top:"-5px";
 }
 .activityImage{
     width:35px;
     height:35px;
     border-radius:50%
 }
+p{
+    font-size:15px;
+}
 .activityContentWithDate{
     width:90%;
     margin:auto;
-    margin-top:-3px;
+    margin-top:-5px;
     display:grid;
    
-    grid-template-columns: 0% 80%
+    /* grid-template-columns: 0% 80% */
 }
 .activityContent:hover{
    
@@ -31,7 +50,7 @@ background-color:  rgb(245,248,250)
 
 @media (min-width: 700px) {
     .activityContentWithDate{
-        width:70%;
-        grid-template-columns: 10% 85%
+         width:50%;
+         /* grid-template-columns: 10% 85%  */
     }
 }

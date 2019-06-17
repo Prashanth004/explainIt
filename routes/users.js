@@ -49,6 +49,14 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         res.status(401).send({ user: null})
 	}
 });
+router.get('/explain', passport.authenticate('jwt', { session: false }), (req, res) => {
+	if (req.user) {
+    
+		res.status(200).send({ user: req.user })
+	} else {
+        res.status(401).send({ user: null})
+	}
+});
 router.get('/logout', (req, res) => {
     req.logout();
     res.send({ success: 1, msg: "logout successful" })

@@ -4,6 +4,7 @@ import config from '../../../../../config/config';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import ImageContainer from '../imageContainer'
 import './activity.css';
 import { changeReadStatus } from '../../../../../actions/messageAction'
 
@@ -40,20 +41,17 @@ class RecievedMessage extends Component {
         var date = this.props.activity.date.slice(5, 7)
         return (
             <div className="activityContentWithDate">
-                <div className="date">
+                {/* <div className="date">
                     <span>{this.props.activity.date.slice(8, 10)} {config.monthPicker[date]}</span>
                     <br />
                     <span className="year">{this.props.activity.date.slice(0, 4)}</span>
-                </div>
+                </div> */}
                 <div className="activityContent">
 
-                    <div>
-                        <img className="activityImage" src={this.state.profilePic} alt="Profilepic"></img>
-                    </div>
-                    <div style={{ textAlign: "left" }}>
-                        <p><b>@{this.state.userName}</b> sent a recorded message to you  on the topic <b>{this.props.activity.subject}</b></p>
-                        <span><a href={this.props.activity.link}>Click here acess the recordeing</a></span>
+                <span className="dateNew Notify">{this.props.activity.date.slice(8, 10)}  {config.monthPicker[date]}, {this.props.activity.date.slice(0, 4)}</span>
 
+                    <div style={{ textAlign: "left" }}>
+                        <p><ImageContainer name={this.state.userName} imgsrc={this.state.profilePic}/>  sent a recorded message to you  on the topic <a href={this.props.activity.link}><b>{this.props.activity.subject}</b></a> </p>
                     </div>
 
                 </div>

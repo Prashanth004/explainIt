@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import Toggle from 'react-toggle';
 import { FiLink2, FiEdit } from "react-icons/fi";
-import '../../css/issueDetails.css';
-import '../../css/toggle.css'
+import '../../../css/issueDetails.css';
+import '../../../css/toggle.css'
 import { FiTrash } from "react-icons/fi";
 import { GoChevronDown } from "react-icons/go";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import { openEditModal } from '../../../actions/projectActions'
+import config from '../../../../config/config'
+import { openEditModal } from '../../../../actions/projectActions'
 
 
 class displayTopBtns extends Component {
@@ -24,6 +25,7 @@ class displayTopBtns extends Component {
         this.changeToggle = this.changeToggle.bind(this);
         this.onOptClick = this.onOptClick.bind(this);
         this.openEditModal = this.openEditModal.bind(this);
+        this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
     }
     componentDidMount() {
         if (Number(this.props.issue.public)) {
@@ -50,7 +52,15 @@ class displayTopBtns extends Component {
             this.setState({ optionVisibe: "hidden" })
         }
     }
-
+    toggleDisplayLink(e) {
+        var element = document.querySelector('#clipboard_' + e.currentTarget.id)
+        if (element.style.display === 'none') {
+            element.style.display = 'block'
+        }
+        else {
+            element.style.display = 'none'
+        }
+    }
 
     openEditModal = (e) => {
 
@@ -79,6 +89,11 @@ class displayTopBtns extends Component {
     }
 
     render() {
+        var date = this.props.issue.date.slice(5, 7);
+        // <span style={datStyleYear}>{props.date.slice(8, 10)} {config.monthPicker[date]}</span>
+        //             <br />
+        //             <span style={datStyleDay}>{props.date.slice(0, 4)}</span>
+
         var profilePic = null;
         const defaultToggle = (Number(this.props.issue.public) === 1) ? true : false
 
@@ -124,6 +139,7 @@ class displayTopBtns extends Component {
         if (this.props.questionProject !== undefined) {
             profilePic = this.props.questionProject.profilepic
             var profileName = this.props.questionProject.username
+            // var profiletwitterHandle = this.props.questionProject.twitterhandle
 
         }
         else {
@@ -134,12 +150,14 @@ class displayTopBtns extends Component {
         const deleteDiv = (
             <div style={{ fontSize: "13px", color: "#333" }}>
                 <div className="iconsright">
+                    <span>
                     <GoChevronDown onClick={this.onOptClick} />
+                    </span>
                 </div>
                 <div className="dropDownForOption"
                     onMouseLeave={this.onOptClick} id={this.props.issue.issueid} style={{ visibility: this.state.optionVisibe }}>
                     {createdMenuItems}
-                    <div className="menuItem" id={this.props.issue.issueid} onClick={this.props.toggleDisplayLink}  >
+                    <div className="menuItem" id={this.props.issue.issueid} onClick={this.toggleDisplayLink}  >
 
                         <div >
                             <span>
@@ -158,24 +176,28 @@ class displayTopBtns extends Component {
 
         return (
             <div>
+                <span className="dateNew">{this.props.issue.date.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.date.slice(0, 4)}</span>
+                <br/>
+                <br/>
+               
+ 
                 <div id={this.props.issue.issueid} className="topButtons">
                     <div className="profileCardDiv">
                         <img alt="button" src={profilePic}
                             style={{
-                                width: "35px",
-                                height: "35px",
+                                width: "45px",
+                                height: "45px",
                                 borderRadius: "50%",
                                 marginTop: "-8px",
                                 marginLeft: "5px"
                             }} />
 
-                        <span
-                            className="ProfileNameCard">
-                            {profileName}</span>
+                        <span className="ProfileNameCard">
+                                <b>{profileName}</b></span>
+                                {/* <span>{profiletwitterHandle}</span> */}
                     </div>
                     <div id={this.props.issue.issueid} className="twitterHolder">
-                        <div id={this.props.issue.issueid} className="icons">
-                        </div>
+                        
                         {deleteDiv}
                      </div>
                 </div >

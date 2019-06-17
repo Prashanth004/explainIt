@@ -1,29 +1,29 @@
 import React, { Component } from 'react'
 import DisplayIssueTopBtns from './DisplayIssueTpBtns'
 import ImagesOfExplainers from './DisplayExplained';
-import CopyToClipboard from '../CopytoClipboard'
-import config from '../../../config/config';
+import CopyToClipboard from '../../CopytoClipboard'
+import config from '../../../../config/config';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import { Button } from 'reactstrap'
-import '../../css/toggle.css';
-import { resetExplainAction } from '../../../actions/explainAction'
-import { saveReplyEmailOption } from '../../../actions/emailAction'
+import '../../../css/toggle.css';
+import { resetExplainAction } from '../../../../actions/explainAction'
+import { saveReplyEmailOption } from '../../../../actions/emailAction'
 import axios from 'axios';
-import { explainIssue } from '../../../actions/messageAction'
+import { explainIssue } from '../../../../actions/messageAction'
 import EditReason from './EditReason'
 import ReactModal from 'react-modal';
-import ExplainPage from './Explain/ExplainPage';
-import { setIssueId } from '../../../actions/issueActions';
+import ExplainPage from '../Explain/ExplainPage';
+import { setIssueId } from '../../../../actions/issueActions';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import ExplainedStories from './explainedStories';
-import TwitterLogin from './TwitterLogin'
+import TwitterLogin from '../TwitterLogin'
 import { FiX } from "react-icons/fi";
-import { openEditModal, closeEditModal } from '../../../actions/projectActions'
-import { cancelAllMessageAction } from '../../../actions/messageAction';
-import { restAllToolValue } from "../../../actions/toolActions";
-import { resetValues } from '../../../actions/twitterApiAction'
-import { resetLandingAction } from '../../../actions/landingAction'
+import { openEditModal, closeEditModal } from '../../../../actions/projectActions'
+import { cancelAllMessageAction } from '../../../../actions/messageAction';
+import { restAllToolValue } from "../../../../actions/toolActions";
+import { resetValues } from '../../../../actions/twitterApiAction'
+import { resetLandingAction } from '../../../../actions/landingAction'
 class issueCard extends Component {
     constructor(props) {
         super(props)
@@ -173,7 +173,7 @@ class issueCard extends Component {
 
                 if (allProjects.length !== 0) {
                     allProjects.forEach((projects, index) => {
-                        promises.push(axios.get(config.base_dir + '/api/users/email/' + allProjects[index].email))
+                        promises.push(axios.get(config.base_dir + '/api/users/id/' + allProjects[index].email))
                     })
 
                     axios.all(promises).then(results => {
@@ -212,7 +212,7 @@ class issueCard extends Component {
                 changepublicStatus={this.changepublicStatus}
                 issue={this.props.issue}
                 questionProject={this.state.questionProject[0]}
-                toggleDisplayLink={this.props.toggleDisplayLink}
+            
                 handlePublicPrives={this.props.handlePublicPrives}
                 tweetWindow={this.props.tweetWindow}
                 deleteProjects={this.props.deleteProjects}
@@ -222,7 +222,9 @@ class issueCard extends Component {
                 <Button style={{ fontSize: "px", height: "35px", width: "35px" }} close onClick={this.reStoreDefault} />
                 <div className="ExplainItDivBottom">
                     <ExplainPage
+                       socket={this.state.socket}
                         handleCloseModal={this.reStoreDefault}
+                        // issue={this.props.issue.issueid}
                         questionProject={this.state.questionProject[0]} />
                 </div>
 
@@ -232,7 +234,7 @@ class issueCard extends Component {
         const twitterBird = (this.state.publicStatus !== "private") ? (
             <span id={this.props.issue.issueid} className="hint--top" aria-label="Tweet it">
 
-                <img alt="tweet" id={this.props.issue.issueid} width="100%" height="100%" onClick={this.props.tweetWindow} src={require('../../images/twitter.png')} />
+                <img alt="tweet" id={this.props.issue.issueid} width="100%" height="100%" onClick={this.props.tweetWindow} src={require('../../../images/twitter.png')} />
             </span >
         ) : (null)
         const bottomImages = (<ImagesOfExplainers
@@ -247,8 +249,8 @@ class issueCard extends Component {
                 {twitterBird}
             </div>
 
-        ) : (null)
-
+        ) : (null);
+       
         const bottomDiv = (!this.state.showModalExplain) ? (<div id={this.props.issue.issueid} className="explainAnswer">
 
             {bottomImages}
@@ -259,25 +261,20 @@ class issueCard extends Component {
             </div>
 
             <div className="explainIt">
-                <button id={this.props.issue.issueid} className="buttonLight explainItBtn" style={{ color: "white" }} onClick={this.handleOpenModal}>Explain it</button>
+                <button id={this.props.issue.issueid} className="buttonLight explainItBtn"  style={{color:"white"}} onClick={this.handleOpenModal}>Explain it</button>
             </div>
         </div>) : (null)
 
-        var date = this.props.issue.date.slice(5, 7)
+     
         return (<div className="cardWithDate">
-            <div className="dateOfCard">
-                <div className="date">
-                    <span>{this.props.issue.date.slice(8, 10)} {config.monthPicker[date]}</span>
-                    <br />
-                    <span className="year">{this.props.issue.date.slice(0, 4)}</span>
-                </div>
-            </div>
+           
             <div key={this.props.issue.issueid} className="issueCard">
                 <div className="orginCard">
                     {displayTopButtons}
                     <div className="copyDisplay" id={"clipboard_" + this.props.issue.issueid} style={{ display: "none" }}>
                         <CopyToClipboard sharablelink={config.react_url + '/project/' + this.props.issue.issueid} />
                     </div>
+                   
                     <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
                         className="questionText">
                         <span id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</span>
@@ -337,12 +334,13 @@ class issueCard extends Component {
                     className="ModalA stories"
                     overlayClassName="OverlayA">
                     <div >
-                        <div onclick={this.toggleAllPeopleList} className="closeModalBtn">
+                        {/* <div onclick={this.toggleAllPeopleList} className="closeModalBtn">
                             <span>
                                 <FiX className="closeIcon" onClick={this.toggleAllPeopleList} />
                             </span>
-                        </div>
+                        </div> */}
                         <ExplainedStories
+                        closeStoried ={this.toggleAllPeopleList}
                             DetailsOfPeople={this.state.DetailsOfPeople}
                         />
                     </div>

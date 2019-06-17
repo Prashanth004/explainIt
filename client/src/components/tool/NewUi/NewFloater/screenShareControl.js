@@ -7,9 +7,10 @@ import config from '../../../../config/config';
 import { updateCurrentTime } from '../../../../actions/callAction'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import ScreenRecorder from './screenRecordControl';
+import RecordFloater from './screenRecordControl';
 import { setTime,changeStateToMute,changeStateToUnmute, setDiplayOfFloater } from '../../../../actions/floaterAction';
 import { HideScreenSharebutton } from '../../../../actions/extensionAction'
+import {pauseRecording,resumeRecording} from '../../../../actions/recoderAction'
 
 
 class ShareFloater extends Component {
@@ -20,13 +21,23 @@ class ShareFloater extends Component {
             callTabid: null,
             postedMessage: false,
             action: null,
-            displayAddTimer:true
+            displayAddTimer:true,
+            timer:config.RECORD_TIME
         }
         this.shareMyscreen = this.shareMyscreen.bind(this);
         this.endCallFloater = this.endCallFloater.bind(this);
         this.renderer = this.renderer.bind(this);
         this.addExtraMinute = this.addExtraMinute.bind(this);
         this.muteAudio = this.muteAudio.bind(this);
+        this.updateTime = this.updateTime.bind(this);
+    }
+
+    updateTime(){
+        var currentTime = JSON.parse(localStorage.getItem('curTime'));
+        if(currentTime!=null)
+            var time = (currentTime.minutes + (currentTime.seconds / 60));
+            console.log("localStorage setiing calue floater : ", time)
+            this.setState({timer:time})
     }
 
     componentWillMount() {
@@ -34,31 +45,40 @@ class ShareFloater extends Component {
         var otherpersonProfilePic = null;
         var action = null;
         var muteOption = null;
+        var pauseState =null;
 
         try {
             presentTime = JSON.parse(localStorage.getItem("timer"));
             otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
             action = JSON.parse(localStorage.getItem("action"));
             muteOption = JSON.parse(localStorage.getItem('muteState'))
+            pauseState = JSON.parse(localStorage.getItem('pauseState'))
         }
         catch (e) {
             console.log("error : ", e)
         }
+        if(pauseState === config.PAUSED_RECORDER)
+            this.props.pauseRecording(null);
+        else
+            this.props.resumeRecording(null)
         if(muteOption === config.UN_MUTED)
             this.props.changeStateToUnmute()
         else
             this.props.changeStateToMute()
-        this.props.setTime(presentTime)
+        
         if (action === config.FULL_SCREEN_SHARE) {
             this.setState({
                 action: config.FULL_SCREEN_SHARE,
                 otherPersonPic: otherpersonProfilePic,
             })
+            this.props.setTime(presentTime)
         }
         else if (action === config.FULL_SCREEN_RECORD) {
             this.setState({
                 action: config.FULL_SCREEN_RECORD,
             })
+            this.updateTime();
+
         }
         else if (action === config.RECIEVER_SCREEN_SHARE) {
             this.setState({
@@ -66,6 +86,7 @@ class ShareFloater extends Component {
                 otherPersonPic: otherpersonProfilePic,
                 displayAddTimer:false
             })
+            this.props.setTime(presentTime)
         }
         var displayOption = JSON.parse(localStorage.getItem('shareDisplay'));
         this.props.setDiplayOfFloater(displayOption)
@@ -147,7 +168,7 @@ class ShareFloater extends Component {
     }
     componentDidMount() {
         var self = this;
-        var presentTime = 3;
+        var presentTime = config.RECORD_TIME;
         var updateTime = null;
         var otherpersonProfilePic = null
         function postMessageHandler(event) {
@@ -163,18 +184,31 @@ class ShareFloater extends Component {
                 if (event.data.data.action === config.FULL_SCREEN_SHARE) {
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay', JSON.stringify("none"));
+                    self.props.setTime(event.data.data.timer);
                 }
                 else if (event.data.data.action === config.RECIEVER_SCREEN_SHARE) {
                     self.setState({ displayAddTimer:false})
                     localStorage.setItem('shareDisplay', JSON.stringify("block"));
                     self.props.setDiplayOfFloater("block");
+                    self.props.setTime(event.data.data.timer);
+                }
+                else{
+                    self.props.resumeRecording(null)
+                    self.updateTime();
                 }
 
-                self.props.setTime(event.data.data.timer)
+                
             }
             if(event.data.action === config.UNMUTE_TO_FLOATER){
                 self.props.changeStateToUnmute()
             }
+            if(event.data.action === config.PAUSE_TO_FLOATER)
+                self.props.pauseRecording();
+            if(event.data.action === config.RESUME_TO_FLOATER){
+                self.updateTime();
+                self.props.resumeRecording();
+            }
+               
             if(event.data.action === config.MUTE_TO_FLOATER){
                 self.props.changeStateToMute()
             }
@@ -191,7 +225,7 @@ class ShareFloater extends Component {
                 updateTime = presentTime;
                 self.props.setTime(updateTime);
                 localStorage.setItem('shareDisplay', JSON.stringify("none"));
-                // this.props.setTime
+                
             }
             if (event.data.action === config.ADD_EXTRA_MIUTE_TO_FLOATER_RECIEVER) {
                 presentTime = JSON.parse(localStorage.getItem("timer"));
@@ -201,7 +235,6 @@ class ShareFloater extends Component {
             if (event.data.action === config.ADD_EXTRA_TIME_TO_FLOATER) {
                 presentTime = JSON.parse(localStorage.getItem("timer"));
                 updateTime = presentTime;
-
                 self.props.setTime(updateTime)
 
             }
@@ -281,7 +314,10 @@ class ShareFloater extends Component {
 
                 </div>
             </div>
-        ) : (<ScreenRecorder callTabid={this.state.callTabid}
+        ) : (<RecordFloater 
+            timer={this.state.timer}
+            updateTime={this.updateTime}
+            callTabid={this.state.callTabid}
             timeAloted={this.props.floaterTime} />)
     }
 }
@@ -297,6 +333,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     updateCurrentTime, setTime, setDiplayOfFloater,
+    pauseRecording,resumeRecording,
     changeStateToMute,changeStateToUnmute, HideScreenSharebutton
 })(ShareFloater)
 

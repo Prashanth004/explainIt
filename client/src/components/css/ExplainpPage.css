@@ -3,17 +3,19 @@
    margin:auto;
      /* margin-top:25px; */
      /* margin-top:55px; */
-    background-color:#ddd;
+    /* background-color:#ddd; */
     border-radius:8px;
     border-style:none;
     border-width:0.5px;
     border-color:#FFFF;
-    padding:15px;
+    /* padding:15px; */
 
 }
 .explainItBackgroung{
-    min-height:150px;
-    background-color: #ddd;
+    /* min-height:150px; */
+    /* background-color: #ddd; */
+    width:86%;
+    margin-left:9%;
     
 }
 

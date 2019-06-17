@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import '../../css/Displaycreated.css';
-import config from '../../../config/config'
+import '../../../css/Displaycreated.css';
+import config from '../../../../config/config'
 import IssueCard from './issueCardNew';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import { deleteProjects, checkPublicValue } from '../../../actions/projectActions';
+import { deleteProjects, checkPublicValue } from '../../../../actions/projectActions';
 import { confirmAlert } from 'react-confirm-alert';
 
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import Toggle from 'react-toggle';
-import '../../css/issueDetails.css';
-import config from '../../../config/config'
+import '../../../css/issueDetails.css';
+import config from '../../../../config/config'
 import ImagesOfExplainers from './DisplayExplained'
 import { GoChevronDown } from "react-icons/go";
 import { FiLink2} from "react-icons/fi";
@@ -62,7 +62,7 @@ export default class componentName extends Component {
           allProjects.forEach(function (projects, index) {
             axios({
               method: 'get',
-              url: config.base_dir + '/api/users/email/' + projects.email,
+              url: config.base_dir + '/api/users/id/' + projects.email,
             }).then(response => {
               if (response.status === 200) {
                 const newTestJson = JSON.parse(JSON.stringify(allProjects));

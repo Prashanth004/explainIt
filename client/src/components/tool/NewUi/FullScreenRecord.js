@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
+import {pauseRecording,resetRecorder,resumeRecording,startRecorder} from '../../../actions/recoderAction'
 import config from '../../../config/config'
-
+import { updateCurrentTime} from '../../../actions/callAction'
 import CopyToClipboard from '../CopytoClipboard';
 import { setStream } from '../../../actions/streamActions'
 import {postEndCall, saveSourceId } from "../../../actions/extensionAction";
@@ -27,7 +28,6 @@ class FullScreenRecorder extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            recorder: null,
             downloadUrl: null,
             audioStream: null,
             screenStream: null,
@@ -41,7 +41,9 @@ class FullScreenRecorder extends Component {
             subjectOfMessage: null,
             sendBtnClicked: false,
             savedfuncCalled: false,
-            permissonDenied:false
+            permissonDenied:false,
+            currentTime:{},
+            recordTime:null
 
         }
         this.downloadExtension = this.downloadExtension.bind(this);
@@ -60,9 +62,15 @@ class FullScreenRecorder extends Component {
         this.sendMessageLocal = this.sendMessageLocal.bind(this);
         this.sendButtonClick = this.sendButtonClick.bind(this);
         this.onUnload = this.onUnload.bind(this);
+        this.pauseRecorder = this.pauseRecorder.bind(this);
+        this.resumeRecorder = this.resumeRecorder.bind(this);
+        this.updateTime = this.updateTime.bind(this);
+        this.timebar = this.timebar.bind(this)
     }
+    timebar =()=>{}
     startBar() {
-        const {extSource,extOrigin,postStartCall} = this.props
+        const self = this;
+        const {extSource,extOrigin,postStartCall,recorder,pauseState} = this.props
         postStartCall(config.FULL_SCREEN_RECORD,
             extOrigin,null,extSource,config.RECORD_TIME,null);
         var timeAlotedNew =config.RECORD_TIME * 60 
@@ -70,16 +78,32 @@ class FullScreenRecorder extends Component {
         var progresDiv = document.querySelector(".progresDiv")
         progresDiv.style.display = "block";
         var width = 0;
-        var id = setInterval(frame, 1000);
+        this.timebar = setInterval(frame, 1000);
+        
         function frame() {
-            if (width >= 100) {
-                clearInterval(id);
+            console.log(pauseState);
+            console.log("recorder : ",self.props.recorder)
+            if (width >= 100 || !self.props.isFullScreenRecording) {
+                clearInterval(self.timebar);
             } else {
-                width = width + (100 / timeAlotedNew);
-                progressbar.style.width = width + '%';
+                if(self.props.pauseState){
+            
+                    console.log("paused")
+                // width = width + (100 / timeAlotedNew);
+                // progressbar.style.width = width + '%';
+                }else{
+                    console.log("recording")
+                    width = width + (100 / timeAlotedNew);
+                    progressbar.style.width = width + '%';
+                }
+
+                // else
+                // width = width
+                
             }
         }
     }
+
 
     startRecoding() {
         var self = this;
@@ -129,12 +153,13 @@ class FullScreenRecorder extends Component {
                     type: 'video'
                 });
                 self.props.setStream(audioStream, screenStream, finalStream)
-
+                // console.log("sdjhsifh")
                 recorder1.startRecording();
+                console.log("recorder1 : ",recorder1)
+                self.props.startRecorder(recorder1);
                 self.props.fullStartedRecording();
-
+                // self.props.postStartCall(recorder1);
                 self.setState({
-                    recorder: recorder1,
                     audioStream: audioStream,
                     screenStream: screenStream,
                     finalStream: finalStream,
@@ -169,6 +194,16 @@ class FullScreenRecorder extends Component {
                     self.recordScreenStop()
                 }
             }
+            if(event.data.type === config.PAUSE_TO_WEB){
+                console.log("pause recorder web page")
+                self.pauseRecorder()
+                return
+            }
+            if(event.data.type === config.RESUME_TO_WEB){
+                console.log("resume recorder web page")
+                self.resumeRecorder()
+                return
+            }
             if(event.data.type === config.PERMISSION_DENIED){
                 self.setState({permissonDenied:true})
             }
@@ -196,8 +231,28 @@ class FullScreenRecorder extends Component {
 
 
     renderer = ({ hours, minutes, seconds, completed }) => {
+        var currentTime = null;
         localStorage.setItem("timer",(minutes + (seconds / 60)))
-        if (completed) {
+        var curTime = {
+            'hours':hours,
+            'minutes':minutes,
+            'seconds':seconds}
+        // const {currentTime} = this.state;
+        if(this.props.pauseState){
+            if((minutes + (seconds / 60)) ===0.1)
+                this.updateTime()
+            currentTime = JSON.parse(localStorage.getItem('curTime'));
+            return <span>{currentTime.hours}:{currentTime.minutes}:{currentTime.seconds}</span>;
+        }
+        else{
+            // this.setState({currentTime:curTime})
+            if (curTime.minutes !== config.RECORD_TIME)
+            localStorage.setItem('curTime',JSON.stringify(curTime))
+            // this.props.updateRecorderTime(curTime) 
+        
+        // if (curTime !== 3)
+        // this.props.updateCurrentTime(minutes + (seconds / 60))
+        if (completed ) {
             var source = this.props.extSource
             var origin = this.props.extOrigin
             const END_RECORD_TIME_END = {
@@ -211,10 +266,10 @@ class FullScreenRecorder extends Component {
             }
             this.recordScreenStop()
             return (<Dummy></Dummy>)
-
         } else {
             return <span>{hours}:{minutes}:{seconds}</span>;
         }
+    }
     };
     discardChanges() {
         // this.props.clearCanvas();
@@ -280,15 +335,15 @@ class FullScreenRecorder extends Component {
     }
     recordScreenStop() {
         var self = this;
-        var recorder1 = this.state.recorder;
+        var {recorder} = this.props;
         var audioStream1 = this.props.audioStream;
         var screenStream1 = this.props.screenStream;
         var audioStream = this.state.audioStream;
         var screenStream = this.state.screenStream;
         var finalSTream = this.state.finalStream;
-        if (recorder1) {
-            recorder1.stopRecording(function () {
-                var blob = recorder1.getBlob();
+        if (recorder) {
+            recorder.stopRecording(function () {
+                var blob = recorder.getBlob();
                 self.setState({
                     downloadUrl: URL.createObjectURL(blob),
                     blob: blob
@@ -314,9 +369,17 @@ class FullScreenRecorder extends Component {
     }
   
     componentWillMount() {
-
-        const self = this
+        clearInterval(this.timebar)
+        this.setState({recordTime:config.RECORD_TIME})
+        const self = this;
+        this.props.resetRecorder()
         const {extSource,extOrigin} = this.props;
+        var curTime = {
+            'hours':0,
+            'minutes':config.RECORD_TIME,
+            'seconds':0}
+        localStorage.setItem('curTime',JSON.stringify(curTime));
+        localStorage.setItem('pauseState', JSON.stringify(config.RESUMED_RECORDER))
         localStorage.setItem('action',JSON.stringify(config.FULL_SCREEN_RECORD))
         const refreshFloater = {
             type:config.REFRESH_EXPLAIN_FLOATER,
@@ -355,6 +418,8 @@ class FullScreenRecorder extends Component {
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
+        clearInterval(this.timebar);
+        this.props.resetRecorder()
         window.removeEventListener("beforeunload", this.onUnload)
         this.props.fullStopedRecording()
         var audioStream = this.state.audioStream;
@@ -371,29 +436,64 @@ class FullScreenRecorder extends Component {
         })
     }
 
+    pauseRecorder(){
+        const {recorder,pauseRecording} = this.props;
+            console.log("recorder : ",recorder)
+            if(this.props.recorder.state === "recording"){
+                this.props.recorder.pauseRecording();
+                console.log("recorder : ",recorder)
+                pauseRecording(recorder);
+            }
+
+           
+      
+    }
+    updateTime(){
+        var currentTime = JSON.parse(localStorage.getItem('curTime'));
+            var time = (currentTime.minutes + (currentTime.seconds / 60));
+            console.log("time setting : ", time)
+            this.setState({recordTime:time})
+    }
+    resumeRecorder(){
+        const {recorder,resumeRecording} = this.props;
+            this.updateTime()
+            console.log("recorder : ",recorder);
+            if(this.props.recorder.state === "paused"){
+                recorder.resumeRecording();
+                console.log("recorder : ",recorder);
+                resumeRecording(recorder);
+            }
+          
+    }
+    playrecorer(){
+
+    }
+
     render() {
         var videoplayer = " ";
         var convey = "Start";
+        const {pauseState} = this.props
         var recordingElements = null;
         var recordingEle = null;
         var postShareElements = null;
         const closeFunction = (this.props.isFullScreenRecording) ? this.props.reStoreDefault :
             this.props.closeImidiate
-        const closeBtn = (!this.props.isFullScreenRecording ?
+        const closeBtn = ((!this.props.isFullScreenRecording && this.props.explainBy === config.null)?
             (<Button style={{margin:"5px"}} close onClick={closeFunction} />) : (null))
         if (this.props.isFullScreenRecording) {
 
             var timer = (<Countdown
-                date={Date.now() + config.RECORD_TIME * 60 * 1000}
+                date={Date.now() + this.state.recordTime * 60 * 1000}
                 renderer={this.renderer}
             />)
             recordingEle = (<div >
-                <p>Recording screen</p>
+                <p>{!pauseState?"Recoding screen":"Paused recording"}</p>
+                {/* <button onClick={this.pauseRecorder} className={pauseState?"buttonLight":"buttonDark"}>{pauseState?"Resume":"Pausee"}</button> */}
             </div>)
         }
         else {
             recordingEle = (!this.state.permissonDenied?(<div >
-                <p>Record the screen and share</p>
+                <span>Record the screen and share</span>
             </div>):(<div>
                 <p>Permission enied to record the screen</p>
                 <button className="buttonLight" onClick={closeFunction}>Close</button>
@@ -402,6 +502,7 @@ class FullScreenRecorder extends Component {
         var showCanv = (this.state.showCanvas) ? (
             <div className="canvToolDivCall">
                 <Form onRef={ref => (this.child = ref)} />
+
                 <p>recording screen..</p>
             </div>
         ) : (<div className="recorderInfo">
@@ -468,10 +569,12 @@ class FullScreenRecorder extends Component {
         }
         else if (this.props.isSaved && this.state.saveBtnClicked) {
             // elseif {
+             var   cpyTpclipBrd = ( this.props.explainBy!==config.null)?(null):
+             (<CopyToClipboard sharablelink={this.props.sharablelink} />)
             postShareElements = (<div className="postRecord">
-                <p>Your recording has been saved successfully.
-               You can access it with the link below and share the same</p>
-                <CopyToClipboard sharablelink={this.props.sharablelink} />
+                <span>Your recording has been saved successfully.
+               You can access it with the link below and share the same</span>
+               {cpyTpclipBrd}
             </div>)
 
         }
@@ -519,7 +622,8 @@ FullScreenRecorder.PropType = {
     showCanvas: PropType.func.isRequired,
     hideCanvas: PropType.func.isRequired,
     sendMessage: PropType.func.isRequired,
-    postStartCall:PropType.func.isRequired
+    postStartCall:PropType.func.isRequired,
+    
 
 }
 const mapStateToProps = state => ({
@@ -536,8 +640,13 @@ const mapStateToProps = state => ({
     sendSuccess: state.message.sendSuccess,
     twitterUserId: state.twitterApi.twitterId,
     twitterName: state.twitterApi.name,
+    currentTimeLeft: state.call.currentTimeLeft,
+    pauseState:state.recorder.pauseState,
+    recorder:state.recorder.recorder,
     timeAloted: state.call.noOfMinutes,
+    explainBy: state.explain.explainBy,
+    currentTime:state.recorder.currentTime
 })
 
-export default connect(mapStateToProps, {postStartCall,postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
+export default connect(mapStateToProps, {postStartCall,resetRecorder,pauseRecording,resumeRecording,startRecorder,updateCurrentTime,postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
 

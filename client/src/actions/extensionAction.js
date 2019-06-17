@@ -10,6 +10,32 @@ export const saveExtensionDetails = (source,origin)=>(dispatch)=>{
     })
 }
 
+export const pauseRecorderFromFloater = (callTabid)=>(dispatch)=>{
+    console.log("pause recording")
+    localStorage.setItem('pauseState', config.PAUSED_RECORDER);
+    const  pauseRecorder ={
+        'type':config.PAUSE_FROM_FLOATER,
+        'data': {
+            'tabId': callTabid
+        }
+    }
+    window.parent.postMessage(pauseRecorder, "*");
+   
+   
+}
+export const resumeRecorderFromFloater = (callTabid)=>(dispatch)=>{
+    console.log("resume recording")
+    localStorage.setItem('pauseState', config.RESUMED_RECORDER);
+    const  pauseRecorder ={
+        type:config.RESUME_FROM_FLOATER,
+        'data': {
+            'tabId': callTabid
+        }
+    }
+    window.parent.postMessage(pauseRecorder, "*");
+  
+}
+
 
 
 export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
@@ -78,6 +104,12 @@ export const refreshExtension = (action,source,origin)=>dispatch=>{
 }
 
 export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,otherPersonProfileId)=>(dispatch)=>{
+    var curTime = {
+        'hours':0,
+        'minutes':config.RECORD_TIME,
+        'seconds':0}
+    localStorage.setItem('curTime',JSON.stringify(curTime));
+    localStorage.setItem('pauseState', JSON.stringify(config.RESUMED_RECORDER))
     localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
     const token = JSON.parse(localStorage.getItem('token'));
     localStorage.setItem('action',JSON.stringify(action))
@@ -97,13 +129,14 @@ export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,
         }
     }
     else if(action === config.FULL_SCREEN_RECORD){
-        localStorage.setItem('timer',JSON.stringify(timeAloted));
+       
         callStart = {
             type:config.START_CALL,
             data:{
-                timer:timeAloted,
+                timer:curTime,
                 action:action,
                 token:token,
+                pauseState:config.RESUMED_RECORDER
             }
         }
 
@@ -122,10 +155,10 @@ export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,
         }
     }
    
-    if (extSource !== null) {
-        extSource.postMessage(callStart, origin);
+    if (extSource === null || extSource === undefined) {
+        window.postMessage(callStart, "*")
     }
     else{
-        window.postMessage(callStart, "*")
+        extSource.postMessage(callStart, origin);
     }
 }
