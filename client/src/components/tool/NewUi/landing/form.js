@@ -9,11 +9,11 @@ const landinForm = (props) => {
     const clickFunction = ()=>{
         if(props.twitterHandleValue.includes("@"))
         {
-            props.clickAction(props.twitterHandleValue.replace("@",""))
+            props.clickAction(props.twitterHandleValue.replace("@",""),"")
             props.getProfileByTwitterHandle(props.twitterHandleValue.replace("@",""))
         }
         else{
-            props.clickAction(props.twitterHandleValue)
+            props.clickAction(props.twitterHandleValue,"")
             props.getProfileByTwitterHandle(props.twitterHandleValue)
         }
        

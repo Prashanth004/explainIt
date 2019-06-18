@@ -140,6 +140,7 @@ const userLogin = (dispatch, url)=>{
         }
     })
     .catch(err=>{
+        console.log("error : ",err)
         dispatch({
             type: AUTH_FAIL,
             payload: false

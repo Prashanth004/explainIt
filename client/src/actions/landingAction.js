@@ -3,7 +3,8 @@ import axios from 'axios'
 import config from '../config/config'
 
 
-export const clickAction =(twitterHandle)=>(dispatch)=>{
+export const clickAction =(twitterHandle, isreferr)=>(dispatch)=>{
+    if(isreferr!== "referr"){
     dispatch({
         type:CLICKED_SUBMIT_START,
     })
@@ -33,6 +34,37 @@ export const clickAction =(twitterHandle)=>(dispatch)=>{
             type:CLICKED_SUBMIT,
         })
     })
+}
+
+
+   else{
+   
+    axios({
+        method:'post',
+        url:config.base_dir+'/api/tweetactions/getid',
+       
+        data:data
+    }).then(res=>{
+        if(res.data.success===1){
+            dispatch({
+                type:CLICKED_SUBMIT,
+                payload:res.data,
+                twitterHandle :twitterHandle
+            })
+        }
+        else{
+            dispatch({
+                type:INVALID_TWITTER_HANDLE,
+                payload:false
+            })
+        }
+     
+    }).catch(err=>{
+        dispatch({
+            type:CLICKED_SUBMIT,
+        })
+    })
+}
     
     
 }

@@ -89,7 +89,7 @@ class displayTopBtns extends Component {
     }
 
     render() {
-        var date = this.props.issue.date.slice(5, 7);
+        var date = this.props.issue.time.slice(5, 7);
         // <span style={datStyleYear}>{props.date.slice(8, 10)} {config.monthPicker[date]}</span>
         //             <br />
         //             <span style={datStyleDay}>{props.date.slice(0, 4)}</span>
@@ -176,7 +176,7 @@ class displayTopBtns extends Component {
 
         return (
             <div>
-                <span className="dateNew">{this.props.issue.date.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.date.slice(0, 4)}</span>
+                <span className="dateNew">{this.props.issue.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.time.slice(0, 4)}</span>
                 <br/>
                 <br/>
                

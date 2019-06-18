@@ -16,10 +16,10 @@
   /* font-family: "Neue"; */
   height: '100vh';
 }
-@font-face {
+/* @font-face {
   font-family: myFirstFont;
   src: url('/BebasNeue-Regular.otf');
-}
+} */
 p{
   /* color:#333; */
   font-size: 14px;
@@ -56,7 +56,7 @@ div{
 body{
 
  overflow: auto;
-font-family: "Frutiger Neue W02 Book ,Arial,Helvetica,sans-serif"
+/* font-family: "Frutiger Neue W02 Book ,Arial,Helvetica,sans-serif" */
   
 }
 a{

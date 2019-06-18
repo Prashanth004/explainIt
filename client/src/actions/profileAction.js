@@ -83,11 +83,11 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                 var allProjects = response2.data.data.reverse()
                 if (profilePrivacy === config.SELF)
                     myProjects = (allProjects).filter(project => (
-                        project.email === response1.data.data.email
+                        project.userid === response1.data.data.id
                     ))
                 else if (profilePrivacy === config.VISIT_PROF) {
                     myProjects = (allProjects).filter(project => (
-                        project.email === response1.data.data.email &&
+                        project.userid === response1.data.data.id &&
                         project.public === "1"
                     ))
                 }

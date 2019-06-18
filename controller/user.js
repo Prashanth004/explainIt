@@ -52,21 +52,14 @@ exports.onBoardUser = function (req,res){
          }  
          else{
             var newProfilePic = body.profile_image_url_https.replace("_normal","");
-            var currentdate = new Date();
-            var datetime = "Last Sync: " + currentdate.getDate() + "/"
-                + (currentdate.getMonth() + 1) + "/"
-                + currentdate.getFullYear() + " @ "
-                + currentdate.getHours() + ":"
-                + currentdate.getMinutes() + ":"
-                + currentdate.getSeconds();
             res.status(200).send({
                 success:1
             })
             database.db.oneOrNone('select * from users where twitterhandle = $1', req.body.twitterhandler)
             .then(function (data) {
                 if (!data) {
-                    database.db.none('insert into users(username,twitterhandle, password, profilepic,date, payment, id,online,activation)' +
-                        'values(${name},${twitterhandle},${password},${profilepic},${date},${payment},${id},${online},${activation})',
+                    database.db.none('insert into users(username,twitterhandle, password, profilepic, payment, id,online,activation)' +
+                        'values(${name},${twitterhandle},${password},${profilepic},${payment},${id},${online},${activation})',
                         {
                             id:body.id_str,
                             twitterhandle:req.body.twitterhandler,
@@ -75,8 +68,7 @@ exports.onBoardUser = function (req,res){
                             name: body.name,
                             payment:0,
                             activation:0,
-                            online:1,
-                            date:datetime
+                            online:1
                         }
                     ).then(data=>{
                         database.db.oneOrNone('insert into activities (fromuser,touser,activity,subject,link,unread)'+

@@ -63,7 +63,7 @@ class DashboardEle extends Component {
                     <p>{user.email}</p>
                 </div>
                 <div>
-                    <span>{user.date.slice(11, 20)}</span>
+                    <span>{user.time.slice(0, 10)}</span>
                 </div>
                 <div>
                     <span>{this.state.status}</span>

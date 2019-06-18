@@ -79,7 +79,7 @@ exports.updateProjectprivate = function (req, res) {
 exports.saveProject = function (req, res) {
     var videopathName = null;
     var commands = null;
-    console.log(req.user)
+    // console.log(req.user)
 if (!req.files) {
         return res.status(451).send({
             success: 0,
@@ -131,46 +131,82 @@ if (!req.files) {
     }
     else{
             videopathName =   videopathName = config.domain + '/public/audio/' + req.files[0].filename 
-            saveToDb(req,res, videopathName )
+            saveToDb(req,res,videopathName )
     }
     }
 }
 }
 
+const saveToDbWithReferral =(req,res,videopathName, referralid)=>{
 
-const saveToDb = (req, res, videopathName)=>{
     var rand2 = rn(options)
     // const issueID = (req.body.isquestion == "true" || req.body.issueID == null) ?
     //     (rand2) : (req.body.issueID);
     var imgurl = config.domain + '/images/default.png';
     var rand = rn(options)
-    database.db.oneOrNone('insert into projects(name,email, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public)' +
-        'values(${name},${email}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public})',
-        {
-            name: req.body.projectName,
-            email: req.user.email,
-            projectid: req.body.projectid,
-            imgurl: imgurl,
-            textExplain: req.body.textExplain,
-            isquestion: req.body.isquestion,
-            issueid: req.body.issueID,
-            videofilepath: videopathName,
-            public: Number(req.body.public)
-        }).then((response) => {
-            database.db.one('select * from projects where projectid = $1', req.body.projectid)
-                .then(data => {
-                    res.io.emit(key.SAVED_NEW_PROJECT, {
-                        "userId": req.user.email
-                    })
-                    res.status(201).send({
-                        success: 1,
-                        data: data
-                    })
+
+    database.db.oneOrNone('insert into projects(name,userid, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public,referralid)' +
+    'values(${name},${userid}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public},${referralid})',
+    {
+        name: req.body.projectName,
+        userid: req.user.id,
+        projectid: req.body.projectid,
+        imgurl: imgurl,
+        textExplain: req.body.textExplain,
+        isquestion: req.body.isquestion,
+        issueid: req.body.issueID,
+        videofilepath: videopathName,
+        public: Number(req.body.public),
+        referralid:referralid
+    }).then((response) => {
+        database.db.one('select * from projects where projectid = $1', req.body.projectid)
+            .then(data => {
+                res.io.emit(key.SAVED_NEW_PROJECT, {
+                    "userId": req.user.id
                 })
-        }).catch((err) => {
-            console.log("error : ", err)
-            res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
-        })
+                res.status(201).send({
+                    success: 1,
+                    data: data
+                })
+            })
+    }).catch((err) => {
+        console.log("error : ", err)
+        res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
+    })
+}
+
+const saveToDb = (req, res, videopathName)=>{
+   console.log("req.user.data : ",(req.user.twitterhandle));
+if(req.body.isquestion === "false")  {
+    database.db.manyOrNone('select * from referral where UPPER(referreetwitter) = $1 and issue = $2',[(req.user.twitterhandle).toUpperCase(), req.body.issueID])
+    .then(referralData=>{
+        if(referralData.length!==0){
+            saveToDbWithReferral(req,res,videopathName, referralData[0].id);
+        }
+        else{
+            saveToDbWithReferral(req,res,videopathName, null);
+        }
+    })
+    .catch(err=>{
+        console.log("error : ",err)
+        saveToDbWithReferral(req,res,videopathName, null);
+    })
+}   
+else{
+    saveToDbWithReferral(req,res,videopathName, null);
+}
+           
+
+        
+        
+
+
+
+
+
+
+
+
 }
 
 exports.storeItems = function (req, res) {
@@ -231,9 +267,17 @@ exports.retrieveItems = function (req, res) {
         )
 
 }
-
+exports.getProjectByUser = (req,res)=>{
+    database.db.manyOrNone('select * from projects where userid = $1 ORDER BY time ASC',req.user.id)
+    .then(data => {
+        res.status(200).send({ success: 1, data: data })
+    })
+    .catch(error => {
+        res.status(500).send({ success: 0, msg: error })
+    })
+}
 exports.getAllProject = function (req, res) {
-    database.db.manyOrNone('select * from projects ORDER BY date ASC')
+    database.db.manyOrNone('select * from projects ORDER BY time ASC')
         .then(data => {
             res.status(200).send({ success: 1, data: data })
         })
@@ -245,7 +289,7 @@ exports.getAllProject = function (req, res) {
 }
 exports.getIssueById = function (req, res) {
 
-    database.db.one('select * from projects where issueid = $1', req.params.id)
+    database.db.one('select * from projects where issueid = $1 and isquestion =$2', [req.params.id,"true"])
         .then(projects => {
 
             res.status(200).send({
@@ -280,7 +324,7 @@ exports.getProjectById = function (req, res) {
 
 
 exports.getAllProjectByIssue = function (req, res) {
-    database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY date ASC', req.params.issueid)
+    database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY time ASC', req.params.issueid)
         .then(projects => {
             if(projects.length !== 0)
             {

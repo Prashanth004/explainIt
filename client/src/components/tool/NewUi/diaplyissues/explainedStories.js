@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import '../../../css/explainStories.css'
 import { Button } from 'reactstrap'
+import ReferComp from './referComponent'
 export default class componentName extends Component {
     constructor(props) {
         super(props)
         this.state = ({
-            selected: null
+            selected: null,
+            referral:null
         })
 
         this.changeVideoSrc = this.changeVideoSrc.bind(this)
@@ -24,16 +26,18 @@ export default class componentName extends Component {
         const clickedProject = (this.props.DetailsOfPeople).filter(projects =>
             projects.projectid === e.target.id)
         this.setState({
-            selected: clickedProject[0].projectid
+            selected: clickedProject[0].projectid,
+            referral : clickedProject[0].referralid
         })
         this.video.src = clickedProject[0].videofilepath
 
     }
     render() {
+        const referralDiv =(this.state.referral!== null)?(<ReferComp referralid ={this.state.referral}/>):(null)
         const imagesOfExplained = (this.props.DetailsOfPeople).map((people, index) =>
             <div key={people.projectid}
                 className="explainedprofileImgDiv"
-            >
+            >     <span className="hint--top" aria-label={"@"+people.twitterhandle}>
                 <img 
                 alt="profile pic"
                 id={people.projectid}
@@ -46,13 +50,14 @@ export default class componentName extends Component {
                     }}
                     src={people.profilepic}
                     className="explainedprofileImg" />
+                    </span>
             </div>
         )
         return (
             <div className="storyContainer">
-                <Button close onClick={this.props.closeStoried} />
+              
                 <div>
-                   
+                <Button close onClick={this.props.closeStoried} />
                     <div className="imagesOfExplainedDiv">
                         {imagesOfExplained}
                     </div>
@@ -66,6 +71,10 @@ export default class componentName extends Component {
                         src={this.props.DetailsOfPeople[0].videofilepath}
                         ref={a => this.video = a}
                         width="100%" height="100%" />
+                    
+                </div>
+                <div className="referral">
+                    {referralDiv}
                 </div>
             </div>
         )

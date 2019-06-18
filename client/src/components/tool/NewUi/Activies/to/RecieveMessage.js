@@ -38,7 +38,7 @@ class RecievedMessage extends Component {
         })
     }
     render() {
-        var date = this.props.activity.date.slice(5, 7)
+        var date = this.props.activity.time.slice(5, 7)
         return (
             <div className="activityContentWithDate">
                 {/* <div className="date">
@@ -48,7 +48,7 @@ class RecievedMessage extends Component {
                 </div> */}
                 <div className="activityContent">
 
-                <span className="dateNew Notify">{this.props.activity.date.slice(8, 10)}  {config.monthPicker[date]}, {this.props.activity.date.slice(0, 4)}</span>
+                <span className="dateNew Notify">{this.props.activity.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.activity.time.slice(0, 4)}</span>
 
                     <div style={{ textAlign: "left" }}>
                         <p><ImageContainer name={this.state.userName} imgsrc={this.state.profilePic}/>  sent a recorded message to you  on the topic <a href={this.props.activity.link}><b>{this.props.activity.subject}</b></a> </p>

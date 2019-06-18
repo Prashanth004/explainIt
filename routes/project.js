@@ -27,6 +27,7 @@ router.put('/edittext',passport.authenticate('jwt', { session: false }),project.
 router.post('/file', passport.authenticate('jwt', { session: false }), project.saveProject)
 router.delete('/:issueid', passport.authenticate('jwt', { session: false }),project.deleteItems )
 router.get('/',project.getAllProject)
+router.get('/userid',project.getProjectByUser)
 router.get('/project/:id', passport.authenticate('jwt', { session: false }),project.getProjectById)
 
 router.get('/:id', passport.authenticate('jwt', { session: false }),project.getIssueById)

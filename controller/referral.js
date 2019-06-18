@@ -24,3 +24,38 @@ exports.createReferral = (req,res)=>{
         })
     })
 }
+
+exports.getReferralById = (req,res)=>{
+    database.db.oneOrNone('select * from referral where id =$1',req.params.referralid)
+    .then(projects => {
+        res.status(200).send({
+            success: 1,
+            data: projects
+        })
+    })
+    .catch(error => {
+        console.log("error : ", error)
+        res.status(500).send({
+            sucess: 0,
+            msg: error
+        })
+    })
+}
+
+
+exports.gatAllReferral = (req,res) =>{
+    database.db.manyOrNone('select * from referral where problemowner =$1 or referrer =$1',String(req.user.id))
+    .then(data=>{
+        res.status(200).send({
+            success:1,
+            data:data
+        })
+    })
+    .catch(error=>{
+        res.state(500).send({
+            success:0,
+            error:error
+        })
+    })
+}
+

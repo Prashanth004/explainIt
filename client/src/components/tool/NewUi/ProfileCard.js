@@ -11,7 +11,8 @@ import { FiVideo ,FiMail,FiLink2} from "react-icons/fi";
 import {resetCallAction} from '../../../actions/callAction'
 import {resetIssueActions,resetProjectActions} from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
-import {getAllActivities} from '../../../actions/callAction'
+import {getAllActivities} from '../../../actions/callAction';
+import {getAllReferral} from '../../../actions/referral'
 import NotificationBadge from 'react-notification-badge';
 import { Effect } from 'react-notification-badge';
 import config from '../../../config/config'
@@ -33,11 +34,13 @@ class ProfileCard extends Component {
         this.startAction = this.startAction.bind(this)
     }
     componentWillMount() {
-        if (this.props.userId === this.props.profileId)
-            this.props.getProfileDetails(this.props.userId, config.SELF)
+        const {userId,profileId,getProfileDetails,getAllActivities,getAllReferral}= this.props
+        if (userId === profileId)
+            getProfileDetails(userId, config.SELF)
         else
-            this.props.getProfileDetails(this.props.userId, config.VISIT_PROF)
-        this.props.getAllActivities()
+            this.props.getProfileDetails(userId, config.VISIT_PROF)
+        getAllActivities();
+        getAllReferral()
     }
     startAction(){
         this.props.cancelAllMessageAction();
@@ -217,6 +220,8 @@ export default connect(mapStateToProps, {
     resetValues, restAllToolValue,
     changeOnlinestatus,
     getAllActivities,
+    getAllReferral,
+   
     resetProjectActions,
     resetIssueActions,
  getProfileDetails

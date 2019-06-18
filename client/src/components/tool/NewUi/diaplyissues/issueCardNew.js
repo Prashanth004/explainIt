@@ -62,7 +62,7 @@ export default class componentName extends Component {
           allProjects.forEach(function (projects, index) {
             axios({
               method: 'get',
-              url: config.base_dir + '/api/users/email/' + projects.email,
+              url: config.base_dir + '/api/users/id/' + projects.userid,
             }).then(response => {
               if (response.status === 200) {
                 const newTestJson = JSON.parse(JSON.stringify(allProjects));

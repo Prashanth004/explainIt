@@ -171,13 +171,7 @@ passport.use(new TwitterTokenStrategy({
     includeEmail: true
 },
     function (token, tokenSecret, profile, done) {
-        var currentdate = new Date();
-        var datetime = "Last Sync: " + currentdate.getDate() + "/"
-            + (currentdate.getMonth() + 1) + "/"
-            + currentdate.getFullYear() + " @ "
-            + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":"
-            + currentdate.getSeconds();
+        
             var newProfilePic = profile._json.profile_image_url.replace("_normal","")
         database.db.oneOrNone('select * from users where id = $1', profile.id)
             .then((currentUser) => {
@@ -185,13 +179,12 @@ passport.use(new TwitterTokenStrategy({
                     // already have this user
                     done(null, currentUser);
                 } else {
-                    database.db.none('insert into users(username, password, profilepic,date, payment, id,activation,online,twitterhandle)' +
-                        'values(${name}, ${password}, ${profilepic},${date},${payment},${id},${activation},${online},${twitterhandle})',
+                    database.db.none('insert into users(username, password, profilepic, payment, id,activation,online,twitterhandle)' +
+                        'values(${name}, ${password}, ${profilepic},${payment},${id},${activation},${online},${twitterhandle})',
                         {
                             name: profile.displayName,
                             password: profile.id,
                             profilepic: newProfilePic,
-                            date: datetime,
                             payment: 0,
                             id: profile.id,
                             activation:0,

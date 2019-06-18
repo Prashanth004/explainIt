@@ -173,7 +173,8 @@ class issueCard extends Component {
 
                 if (allProjects.length !== 0) {
                     allProjects.forEach((projects, index) => {
-                        promises.push(axios.get(config.base_dir + '/api/users/email/' + allProjects[index].email))
+                        console.log(allProjects[index].userid)
+                        promises.push(axios.get(config.base_dir + '/api/users/id/' + allProjects[index].userid))
                     })
 
                     axios.all(promises).then(results => {

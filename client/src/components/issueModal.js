@@ -3,7 +3,7 @@ import './css/newlanding.css'
 import './css/issueDetails.css'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import {getImagesByemail} from '../actions/projectActions'
+import {getImagesById} from '../actions/projectActions'
 
 class issueDetails extends Component {
     constructor(props) {
@@ -127,10 +127,10 @@ class issueDetails extends Component {
 issueDetails.PropType = {
     questionProject: PropType.object,
     answerProject: PropType.array,
-    getImagesByemail:PropType.func
+    getImagesById:PropType.func
 }
 const mapStateToProps = state => ({
     questionProject: state.projects.questProject,
     answerProject: state.projects.answerProject
 })
-export default connect(mapStateToProps,{getImagesByemail})(issueDetails)
+export default connect(mapStateToProps,{getImagesById})(issueDetails)

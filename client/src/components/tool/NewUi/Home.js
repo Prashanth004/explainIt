@@ -220,7 +220,8 @@ class NewHome extends Component {
     componentWillMount() {
         this.props.varifyEmail()
         this.props.stillAuthenicated()
-        this.props.getTotalUnread()
+        this.props.getTotalUnread();
+
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket
@@ -707,7 +708,7 @@ NewHome.PropType = {
     resetValues: PropType.func.isRequired,
     creatAnsProject: PropType.func.isRequired,
     openInbox: PropType.func.isRequired,
-    getAllMessages: PropType.func.isRequired,
+   
     resetCallAction: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
     getAllActivities: PropType.func.isRequired,
@@ -753,7 +754,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     answerCall,
     openCreated,
-    getAllMessages,
+ 
     resetCallAction,
     getAllActivities,
     cancelAllMessageAction,
