@@ -88,7 +88,8 @@ class ScreenRecorder extends Component {
             triedCallingUpdated: false,
             permissonDenied: false,
             onGoingCallEnded: false,
-            downloadUrlAudio: null
+            downloadUrlAudio: null,
+            retryTimeOut:false
 
         }
         this.renderer = this.renderer.bind(this);
@@ -705,11 +706,11 @@ class ScreenRecorder extends Component {
                 })
             }
         }, 13000)
-        if (!navigator.onLine) {
-            self.setState({
-                noInternet: true
-            })
-        }
+        // if (!navigator.onLine) {
+        //     self.setState({
+        //         noInternet: true
+        //     })
+        // }
 
     }
 
@@ -936,7 +937,7 @@ class ScreenRecorder extends Component {
             }
         }
         else{
-            if(this.props.linkToAccess !== null && this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
+            if(this.props.linkToAccess === null && this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
                 if (!this.props.sendinitiated) {
                     this.sendLink()
                 }
@@ -1008,11 +1009,12 @@ class ScreenRecorder extends Component {
         if (this.props.isSharingCompleted && this.state.blob !== null && !this.state.clickedOnLink) {
             postShareElements=(<PostSharing 
                 retryCall={this.retryCall}
+               
            peerAudioBlob={this.state.peerAudioBlob}
            saveinitiated={this.state.saveinitiated}
            downloadUrlVideo={this.state.downloadUrlVideo}
            downloadUrlAudio ={this.state.downloadUrlAudio}
-           retry ={this.state.retr}
+           retry ={this.state.retry}
            retryTimeOut={this.state.retryTimeOut}
            manualClose={this.state.manualClose}
            retryLimit={this.state.retryLimit}

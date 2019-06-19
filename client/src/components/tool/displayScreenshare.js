@@ -107,14 +107,13 @@ class DisplayShare extends Component {
         }
     }
 
-    onUnload(event) { // the method that will be used for both add and remove event
+    onUnload(event) { 
         if(this.state.recorder!==null){
             const { extSource, extOrigin,postEndCall } = this.props;
             postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
             this.closeConnection();
             event.returnValue = " "
         }
-        // else{}
        }
     componentDidMount() {
         var self = this;
@@ -311,7 +310,6 @@ class DisplayShare extends Component {
                 connected: true
             })
         });
-        // var startConnection = new Promise((resolve, reject) => {
             
         var conn = peer.connect(peerIdFrmPeer);
         this.setState({conn : conn})
@@ -328,9 +326,7 @@ class DisplayShare extends Component {
                     }
                 }
                 if (data.data === "addtimer") {
-                    // timeAloted:JSON.stringify(self.props.timeAloted)
                     presentTime = JSON.parse(data.timeAloted);
-                    // var updateTime = presentTime + 1;
                     self.props.setTime(presentTime)
                     setTimeout(()=>{
                         self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
@@ -360,7 +356,6 @@ class DisplayShare extends Component {
 
         });
         const { postStartCall } = self.props
-        // const { recorder } = self.state
         peer.on('call', function (call) {
 
             navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audiostream) {
@@ -384,7 +379,6 @@ class DisplayShare extends Component {
                         });
                     }
                 },config.VIDEO_RECORDING_SAVE_LIMIT * 1000)
-                // self.saveBlobtimeOut()
                 postStartCall(config.RECIEVER_SCREEN_SHARE,
                     self.props.extOrigin,
                     self.state.picture,

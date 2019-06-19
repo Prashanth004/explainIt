@@ -52,7 +52,6 @@ class tweetSearch extends Component {
     testHandle() {
         var twitterHandleTemp = (this.state.twitterHandle.includes('@'))?
         (this.state.twitterHandle.replace("@","")):(this.state.twitterHandle)
-        // if () {
             if(!window.navigator.onLine){
                 this.setState({
                     noInternet: true
@@ -92,7 +91,6 @@ class tweetSearch extends Component {
             emptyUserName:false,
             noInternet:false
         })
-        // this.props.resetValues();
     }
     sendRecordding() {
 
@@ -151,23 +149,13 @@ class tweetSearch extends Component {
     render() {
         var validatinginfo = null;
         var mainContainer = (<div className="startShare">
-            <p style={{ margin: "10px", fontSize:"15px", fontWeight:"500" }}>Initiate screen share with
-
-                <TweetSuggest
+            <p style={{ margin: "10px", fontSize:"15px", fontWeight:"500" }}>Initiate screen share with  <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="@username"
                 classOfInput="handleInput"
                 tweetTextvalue={this.state.twitterHandle}
                 classOfMenu="screeShareMenu"
-            />
-
-
-
-
-
-
-         for 
-            <InputNumber
+            /> for  <InputNumber
                 empty={this.state.emptyNumber}
                 emptyUserName={this.state.emptyUserName}
                 limitOfChar={this.state.maxTimeForVideo}

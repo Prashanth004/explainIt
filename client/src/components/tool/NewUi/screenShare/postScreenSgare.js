@@ -5,8 +5,10 @@ import { FiX, FiVideo } from "react-icons/fi";
 import config from '../../../../config/config'
 
 export default (props) => {
+    const recrdsend=!props.saveinitiated?(<p>You can reord the screen and send it</p>):(null);
+    console.log(props.retry,!props.retryTimeOut,!props.noInternet)
     var buttons = null;
-    var noInternet = (props.noInternet)?("No Intenet conecticvity"):("No Intenet conecticvity")
+    var noInternet = (props.noInternet)?("No Intenet conecticvity"):(null)
     const videoAudio = (<div>
         <video id="videoPlyr"  onPlay={props.play_clicked} onPause={props.pause_clicked}className="videoPlayer2" src={props.downloadUrlVideo} controls={true}></video>
         <audio id="AudioPlyr" style={{ display: "none" }} className="videoPlayer2" src={props.downloadUrlAudio}></audio>
@@ -39,7 +41,7 @@ const savingProcessDiv = (!props.isSaved)?(
     ((!props.manualClose && !props.timerEnded)?
         ((props.linkToAccess !== null)?
             (videoTagWithAudio):
-        (null)):(videoTagWithAudio)):(savingProcessDiv)
+        (props.saveinitiated?(<p>The recording of the call could not be save due to network issue.</p>):null)):(videoTagWithAudio)):(savingProcessDiv)
   
     var MessageDisconnected = null;
 
@@ -59,6 +61,7 @@ const savingProcessDiv = (!props.isSaved)?(
 
         </div>)
     }
+   
     else if (!props.manualClose && !props.timerEnded && !props.retry && (props.retryLimit < 1)) {
         buttons = (!props.saveinitiated) ?
             (<div><span className="hint--bottom" aria-label="Retry">
@@ -99,7 +102,7 @@ const savingProcessDiv = (!props.isSaved)?(
         MessageDisconnected = (
             <div>
                 <p><b>Retry failed</b><br />{noInternet}</p>
-                <p>You can reord the screen and send it</p>
+                {recrdsend}
                 {buttons}
                 {savingMsg}
             </div>

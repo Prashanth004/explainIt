@@ -29,7 +29,6 @@ export default class componentName extends Component {
     const {email} = this.props;
     this.setState({startedValidating:true});
     var re  = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
-    // function testInfo(phoneInput) {  
       var OK = re.exec(email);  
        if(!email.includes("@") || !email.includes(".") )
     this.setState({
@@ -62,22 +61,22 @@ export default class componentName extends Component {
                           doneValidating:true,
                           validEmail:true
                         })
-                // axios.get("http://apilayer.net/api/check?access_key="+config.EXMAIL_VALIDATE_TOKEN+"&email="+email+"&smtp=1&format=1")
-                // .then((response)=>{
-                //   console.log("response : ",response)
-                //   if(!response.data.smtp_check){
-                //     this.setState({
-                //       invalidEmail:true,
-                //       doneValidating:true
-                //     })
-                //   }
-                //   else{
-                //     this.setState({
-                //       doneValidating:true,
-                //       validEmail:true
-                //     })
-                //   }
-                // })
+                axios.get("http://apilayer.net/api/check?access_key="+config.EXMAIL_VALIDATE_TOKEN+"&email="+email+"&smtp=1&format=1")
+                .then((response)=>{
+                  console.log("response : ",response)
+                  if(!response.data.smtp_check){
+                    this.setState({
+                      invalidEmail:true,
+                      doneValidating:true
+                    })
+                  }
+                  else{
+                    this.setState({
+                      doneValidating:true,
+                      validEmail:true
+                    })
+                  }
+                })
             }
           }
         })

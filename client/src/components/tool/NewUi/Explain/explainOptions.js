@@ -1,6 +1,5 @@
 import React from 'react'
 import config from '../../../../config/config'
-// import Screenrecorder from './explainItRecorder'
 import { connect } from 'react-redux';
 import FullScreenShare from '../enitreScreenShare';
 import FullScreenRecord from '../FullScreenRecord';
@@ -9,7 +8,6 @@ import { explainByShare, explainByRecord, explainByRefer } from '../../../../act
 import Refer from './refer';
 import '../../../css/explainit.css';
 import { FiUsers, FiVideo } from "react-icons/fi";
-// import { FaRegClone } from "react-icons/fa";
 
 
 const explainOption = (props) => {
@@ -24,11 +22,7 @@ const explainOption = (props) => {
 </span>):(null);
     return (props.explainBy === config.null) ? (
         <div>
-            {/* FiCopy */}
-            {/* MdContentCopy */}
-            {/* IoIosBrowsers */}
-            {/* FaClone */}
-            {/* FaRegClone */}
+          
             <div className="optionBtnPlacement">
                 <div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
                     {screeShare}
