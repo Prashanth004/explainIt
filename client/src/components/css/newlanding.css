@@ -1,17 +1,6 @@
-/* ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: white;
-   
-    border-bottom-color: rgb(192, 190, 190);
-    height:50px;
-   
-  } */
+
   .profileCardDiv{
     display:inline-block;
-    /* background-color: #0075a2; */
     text-align: left;
     display:grid;
     grid-template-columns: 50% 50%
@@ -24,12 +13,9 @@
     padding: 40px 0pax 40px 0px;
 }
 .startShare{
-  /* text-align: left; */
   margin-top:20px;
-  /* padding:15px; */
   padding-top:15px;
   font-size:14px;
-  /* background-color: blue; */
 }
 .handleInput{
   width:100px;
@@ -58,8 +44,6 @@
   }
   .navBar{
     background-color:white;
-    /* color:#efefe9;   */
-     /* box-shadow: 0px 0px 5px 1px rgba(85, 85, 85, 0.329); */
      min-height:70px;
      border-bottom-style:solid;
      border-bottom-color:rgb(224, 215, 215);;
@@ -86,8 +70,7 @@
   width:100%;
   height:100%;
   border-radius:50%;
-  /* background-color: #ffff; */
-  /* box-shadow: 0px 0px 7px 1px rgb(136, 135, 135); */
+
 }
 .twitterBtnDiv{
   width:100%;
@@ -98,36 +81,13 @@
 
 }
 .profileImagesDiv{
-  /* margin:0px 10px 0px 10px; */
   height:37px;
   width:37px;
   border-radius:50%;
-  /* background-color: #ffff; */
-  /* box-shadow: 0px 0px 8px 1px rgba(12, 12, 12, 0.849); */
+
 
 }
-  /* li {
-    margin:10px 10px 0px 10px;
-   float:right;
-  }
 
- 
-  .navLeft{
-float:left;
-  } */
-  /* .navButton1{
-     
-    
-padding-top:-10px;
-      margin:10px;
-    
-  } */
- /* .navButton2{
-  
-padding-top:-10px;
-    margin:10px;
-  
-}  */
 a{
   color:rgb(12, 12, 53);
   text-decoration: underline;
@@ -154,10 +114,7 @@ text-align: center;
   height:225px;
   margin:auto;
   margin-top:40px;
-  /* background-color:#16c5d8; */
-  /* background-color:#c4d7e4; */
   background-color: #ffff;
-  /* background-color: #3333; */
   border-style:solid;
   border-width:0.5px;
   border-color:#b9b8b8; 
@@ -170,9 +127,6 @@ text-align: center;
 }
 
 .inviteMagic{
-
- 
-  /* background-color:white; */
   border-style:none;
   border-width:0.5px;
   border-radius:8px;
@@ -190,17 +144,13 @@ text-align: center;
   text-align: right;
   padding:8px;
   margin-top:0px;
-
   height:50%;
-  /* background-color: #e7ebff; */
-  /* background-color: #aecdce;; */
-  /* background-color: rgb(66, 173, 187); */
   background-color: #dddd;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
 .labelContainer{
-   
+  
   padding-top:24px;
   height: 90px;
   padding:5px;
@@ -210,12 +160,9 @@ text-align: center;
   width:80%;
   margin:auto;
   margin-top:30px;
-  /* height:55px; */
   position:relative;
   background-color:rgb(249, 249, 250);
-  /* border-style:solid; */
-  /* border-width:0.5px;
-  border-color:rgba(0, 0, 0, 0.404); */
+
 }
 .ProfileDiv{
   width:95%;
@@ -235,7 +182,6 @@ margin-top:10px;
 .fullHome{
   min-height:100vh;
   background-color: rgb(143, 205, 228);
-  /* background-color :rgb(245, 243, 243); */
 
 }
 .displayNumber{
@@ -255,8 +201,7 @@ margin-top:10px;
   position: relative;
   font-weight: bold;
   color:rgb(11, 11, 92);
-  /* top:px; */
-  /* color:black; */
+
   font-size:15px;
 }
 .profileImage{
@@ -272,7 +217,6 @@ margin-top:10px;
   box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
 }
 .profileImageElement{
- /* background-color: #ffff; */
   height:96px;
   width:96px;
   border-radius:50%;
@@ -284,7 +228,6 @@ margin-top:10px;
 
 }
 .profileImageElement{
- /* background-color: #ffff; */
   height:126px;
   width:126px;
  
@@ -320,11 +263,6 @@ margin-top:10px;
       margin:auto;
       text-align: center;
       display:grid;
-      /* grid-template-columns: 30% 40% 30%;
-      grid-column-gap: 5px; */
-
-
-      
   }
   .year{
     font-size:18px
@@ -333,47 +271,40 @@ margin-top:10px;
     margin-right:15px;
     padding-top:10px;
     padding-right:25px;
-    /* background-color: red; */
-    /* text-align: right; */
+
   }
   .questionImg{
     height: 225px;
     width:100%;
-    /* border-radius:0px; */
     margin-top:5px;
     margin-left:30px;
     border-top-style:none;
     border-top-color:rgba(100, 99, 99, 0.356);
     border-top-width:0.5px  }
   .twitter{
-    /* float:right; */
+  
     height:27px;
     position: relative;
     right:95px;
-    /* background-color: #0075a2; */
     width:27px
   }
   .cardWithDate{
     width:100%;
     margin-top:0px;
     margin:auto;
-  /* display: grid;
-  grid-template-columns: 0% 100% */
-   
+ 
   }
   .date{
     font-size:11px;
-    /* margin-top:20px; */
    color:rgb(87, 85, 85);
     width:100px;
     margin-right:10px;
-    /* margin-left:-25px; */
   }
   .gridView{
-    width:18px;
-    height:18px;
-margin:10px;
-color:rgba(51, 51, 51, 0.609);
+    width: 22px;
+    height:22px;
+  margin:10px;
+  color:black;
 
   }
   .textEditArea{
@@ -383,22 +314,17 @@ color:rgba(51, 51, 51, 0.609);
     
   }
  .listView{
-  width:18px;
-  height:18px;
+  width: 22px;
+  height:22px;
 margin:10px;
-color:rgba(51, 51, 51, 0.609);
+color:black;
  }
   .twitterContainer{
-    /* background-color: #0075a2; */
     text-align: left;
   }
   .twitterHolder{
-   /* background-color: #98a0a3; */
-   /* width:70%; */
     padding-right:5%;
     text-align:right;
-    /* display: grid;
-    grid-template-columns: 50% 50% */
   }
   a:link {
     color: rgb(10, 2, 85);
@@ -406,25 +332,20 @@ color:rgba(51, 51, 51, 0.609);
   }
   .issueContainerMore{
     border-style: none;
-    /* border-radius: 8px; */
-    /* padding:5px; */
+  
     width:95%;
     margin:auto;
-    /* background-color: rgb(239,239,233); */
-    /* background-color: white; */
+   
     margin-top:20px;
     border-color:rgb(221, 220, 220);
     border-width:0.5px;
   }
   .issueContainer{
     border-style: none;
-    /* border-radius: 8px; */
-    /* padding:5px; */
+ 
     width:95%;
     margin:auto;
-    /* background-color: rgb(239,239,233); */
-    /* background-color: white; */
-    margin-top:20px;
+       margin-top:20px;
     border-color:rgb(221, 220, 220);
     border-width:0.5px;
   }
@@ -467,7 +388,6 @@ color:rgba(51, 51, 51, 0.609);
     border-style:none
 }
   
-  /* visited link */
   a{
     color:blue;
   }
@@ -475,22 +395,18 @@ color:rgba(51, 51, 51, 0.609);
     color: rgb(68, 68, 68);
   }
   
-  /* mouse over link */
   a:hover {
     color: rgb(68, 68, 68);
      text-decoration: none;
   }
   
-  /* selected link */
   a:active {
     color:blue;
   }
   .issueCard{
-   
     padding-bottom:5px;
     width:100%;
     background-color: white;
-    /* padding-top:30px; */
     border-radius:2px;
     border-bottom-style:solid;
     border-bottom-width:1px;
@@ -500,23 +416,16 @@ color:rgba(51, 51, 51, 0.609);
     
     background-color:  rgb(250, 250, 250)
   }
-  /* @font-face {
-    font-family: myFirstFont;
-    src: url('/BebasNeue-Regular.otf');
-  } */
+ 
  
   .modalBody{
-    /* background-color: #111; */
     background-color :white;
     padding:0px;
     width:100%;
-    /* margin:auto; */
     align-self: left;
     position:absolute;
     border-radius:6.5px;
-
-    /* padding:0px; */
-  }
+ }
   .modalClose{
     height:55px;
     width:55px;
@@ -526,14 +435,10 @@ color:rgba(51, 51, 51, 0.609);
 
   }
   .modalBodyTool{
-    /* background-color: #111; */
-    padding:0px;
-    /* width:130%; */
+   padding:0px;
     margin:auto;
     align-self: center;
     position:absolute;
-
-    /* paddincontainerHomecontainerHomeg:0px; */
   }
 
   .userName{
@@ -551,14 +456,11 @@ color:rgba(51, 51, 51, 0.609);
     text-align: left;
 width:99%;
 margin:auto;
-/* margin-top:; */
 min-height: 10px;
 color:rgba(51, 51, 51, 0.863);
-/* background-color: blue; */
 padding:00px 0px 10px 65px;
 font-size:12px;
 font-weight:530;
-/* background-color :white; */
 border-style: none;
 border-top-style:none;
 border-top-color:rgb(146, 146, 146);
@@ -584,10 +486,8 @@ border-top-width:0.5px;
     margin-left:9%;
     padding:10px 5px 10px 5px;
    
-    /* background-color :blue; */
     display:grid;
     grid-template-columns: 50% 35% 15%;
-    /* padding:5px; */
 
   }
   .explainItBtn{
@@ -597,9 +497,6 @@ border-top-width:0.5px;
     padding-left:12px;
     font-weight:600;
     font-size:13px;
-    /* color:white; */
-  
-    /* border-color:rgba(51, 51, 51, 0.664); */
   }
 
   .emptyIssues{
@@ -615,7 +512,6 @@ border-top-width:0.5px;
   }
   .displayPeople{
     display: inline-block;
-    /* background-color: blue; */
   }
   .peopleImage{
     border-radius: 50%;
@@ -625,7 +521,6 @@ border-top-width:0.5px;
   }
   .listOfAllPeople{
     margin-top:10px;
-    /* padding:px;10px; */
     width:60%;
 
   }
@@ -649,7 +544,6 @@ border-top-width:0.5px;
   }
   .likes{
     width:75%;
-      /* padding-top:7px; */
     padding-bottom:7px;
     display: inline-block;
     display:grid;
@@ -733,16 +627,13 @@ border-top-width:0.5px;
    margin-right:80%;
       position: relative;
       top:12px;
-      /* right:5px; */
-      /* background-color: #0075a2; */
-    
+   
 }
       .cardWithDate{
        
         margin-top:0px;
         margin:auto;
-        /* display: grid;
-        grid-template-columns: 10% 90% */
+       
       }
     
     }
@@ -753,9 +644,7 @@ border-top-width:0.5px;
       }
       .issueContainer{
         width:55%;
-        /* border-style: solid; */
-        /* border-radius: 8px; */
-        /* background-color: white; */
+
       }
       .containerHome{
         width:85%;
@@ -764,7 +653,6 @@ border-top-width:0.5px;
       .questionImg{
         height: 327px;
         width:86%;
-        /* margin:auto; */
         margin-left:9%;
       }
       .ProfileDiv{
@@ -807,9 +695,7 @@ border-top-width:0.5px;
       }
       .cardWithDate{
         margin:auto;
-        /* margin-left:-2%; */
-        /* display: grid;
-  grid-template-columns: 12% 88%; */
+      
         margin-top:-2px;
        
       }

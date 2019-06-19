@@ -72,7 +72,8 @@ class DisplayShare extends Component {
         this.renderer2 = this.renderer2.bind(this);
         this.muteAudio = this.muteAudio.bind(this);
         this.unMuteAudio = this.unMuteAudio.bind(this);
-        this.saveBlobtimeOut = this.saveBlobtimeOut.bind(this)
+        this.saveBlobtimeOut = this.saveBlobtimeOut.bind(this);
+        this.onUnload = this.onUnload.bind(this);
     }
     downloadExtension() {
         window.open(config.EXTENSION_URL)
@@ -106,9 +107,19 @@ class DisplayShare extends Component {
         }
     }
 
+    onUnload(event) { // the method that will be used for both add and remove event
+        if(this.state.recorder!==null){
+            const { extSource, extOrigin,postEndCall } = this.props;
+            postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
+            this.closeConnection();
+            event.returnValue = " "
+        }
+        // else{}
+       }
     componentDidMount() {
         var self = this;
         const {extSource, extOrigin} = this.props;
+        window.addEventListener("beforeunload", this.onUnload);
         this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE,extSource,extOrigin)
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
@@ -233,6 +244,8 @@ class DisplayShare extends Component {
             }
         })
         socket.on(config.END_CALL, data => {
+            localStorage.setItem('infoDisplay', JSON.stringify(config.SCREEN_SHARE_ENDED_INFO))
+
             if (data.peerId === peerIdFrmPeer && data.timerEnded) {
                 self.closeConnection()
                 self.setState({

@@ -4,13 +4,15 @@ import config from '../config/config'
 
 
 export const clickAction =(twitterHandle, isreferr)=>(dispatch)=>{
-    if(isreferr!== "referr"){
+    
     dispatch({
         type:CLICKED_SUBMIT_START,
     })
     var data={
         twitterhandler : twitterHandle
     }
+    if(isreferr!== "referr"){
+   
     axios({
         method: 'POST',
         url: config.base_dir + '/api/users/onboard',
@@ -23,7 +25,6 @@ export const clickAction =(twitterHandle, isreferr)=>(dispatch)=>{
                 })
             }
             else{
-                console.log("dispacthinf invaid message")
                 dispatch({
                     type:INVALID_TWITTER_HANDLE,
                 })
@@ -38,12 +39,17 @@ export const clickAction =(twitterHandle, isreferr)=>(dispatch)=>{
 
 
    else{
-   
+    var token = JSON.parse(localStorage.getItem('token'))
+    var data2={
+        twitterhandle : twitterHandle
+    }
     axios({
         method:'post',
         url:config.base_dir+'/api/tweetactions/getid',
-       
-        data:data
+        headers: {
+            "Authorization": token,
+        },
+        data:data2
     }).then(res=>{
         if(res.data.success===1){
             dispatch({

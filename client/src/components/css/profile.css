@@ -23,7 +23,8 @@ padding:10px;
     text-align: justify
 }
 .edit{
-    float:right;
+    float:left;
+    margin-right:50%;
 }
 
 

@@ -6,6 +6,7 @@
   color:White;
   margin-top:-10px;
   padding:14px;
+  min-height: 55px;
   text-align: center;
   background-color: rgb(51, 39, 58);
 }

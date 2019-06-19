@@ -9,7 +9,6 @@ import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
 import Profile from './Profile'
 import { getProfileDetails } from '../../../actions/profileAction';
-import { getAllMessages } from '../../../actions/messageAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import { getTotalUnread } from '../../../actions/messageAction'
 import FullScreenShare from './enitreScreenShare'
@@ -17,8 +16,8 @@ import FullScreenRecord from './FullScreenRecord'
 import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { creatAnsProject } from '../../../actions/projectActions'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css' 
 import { Button, Modal, ModalBody } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
@@ -237,7 +236,6 @@ class NewHome extends Component {
         })
     }
     toggleInbox() {
-
         this.setState({
             showProjects: true,
             openExplain: false,
@@ -264,7 +262,6 @@ class NewHome extends Component {
             showDetails: false,
             displayDetails: false,
         })
-
         this.setState({
             showProjects: true,
             openExplain: false
@@ -362,12 +359,6 @@ class NewHome extends Component {
             'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
-
-        // this.setState({callAnswered:true})
-        // var self = this
-        // setTimeout(()=>{
-        //     self.setState({callAnswered:false})
-        // },5000)
     }
     rejectCall() {
         var socket = this.state.socket
@@ -376,11 +367,6 @@ class NewHome extends Component {
             'message': config.REPLY_TO_SHARE_REQ
         })
         this.props.answerCall();
-        // this.setState({callAnswered:true})
-        // var self = this
-        // setTimeout(()=>{
-        //     self.setState({callAnswered:false})
-        // },5000)
     }
 
 
@@ -436,7 +422,6 @@ class NewHome extends Component {
     }
     explainTool = (e) => {
         if (this.props.isAauthenticated) {
-            // alert(e.target.id)
             this.props.setIssueId(e.target.id)
             localStorage.setItem("issueId", e.target.id)
             window.open(config.react_url + '/explainIt', "_blank")
@@ -526,6 +511,7 @@ class NewHome extends Component {
         const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated) ? (
             null
         ) : (<Profile
+            openDtailsTab={this.openDtailsTab}
             isHome={this.state.isHome} />))
 
         ) : (null)
@@ -584,8 +570,8 @@ class NewHome extends Component {
                     </div>
                     <DisplatCreated socket={this.state.socket} home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
                 </div>)
-                feedDiv = (<div><div style={{ float: "right" }} >
-                            <span className="hint--top" aria-label="List View">
+                feedDiv = (<div><div style={{ marginRight:"-80px",float: "right" }} >
+                            <span  className="hint--top" aria-label="List View">
                                 <FiList onClick={this.changeViewToList} className="listView" />
                             </span>
                             <span className="hint--top" aria-label="Grid View">
@@ -594,11 +580,9 @@ class NewHome extends Component {
                         </div>
                         {participatedDiv}
                     </div>)
-                // </Animated>)
 
             }
             else if (this.props.inbox) {
-                // explainDiv = null
                 feedDiv = (<Activity userId={this.props.userId} />)
             }
             else {
@@ -613,8 +597,6 @@ class NewHome extends Component {
                 this.props.isSceenSharing ||
                 this.props.callAction ||
                 this.props.isFullScreenRecording ||
-                // this.props.screenAction === FULL_SCREEN_SHARE ||
-                // this.props.screenAction === FULL_SCREEN_RECORD ||
                 this.props.participated ||
                 this.props.inbox ||
                 this.props.created) {
@@ -660,8 +642,7 @@ class NewHome extends Component {
         else {
             profileCardElement = (<Content />)
         }
-        // doneVarification : state.email.doneVarification,
-        // isVarified:state.email.isVarified,
+       
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified)?(<EmailVarify /> ):(
             <div className="fullHome">
@@ -671,7 +652,7 @@ class NewHome extends Component {
                     {callNotificationDiv}
                     <div>
                         {profileCardElement}
-                        {/* {explainItBt/n} */}
+                       
                     </div>
                     {activityDiv}
                     <div>

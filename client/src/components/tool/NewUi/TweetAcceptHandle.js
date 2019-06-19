@@ -151,20 +151,14 @@ class tweetSearch extends Component {
     render() {
         var validatinginfo = null;
         var mainContainer = (<div className="startShare">
-            <span style={{ margin: "10px", fontSize:"15px" }}>Initiate screen share with</span>
-{/* 
-            <input
-                onChange={this.updateTwitterHandleBox}
-                className="handleInput"
-                placeholder="Username"
-                value={this.state.twitterHandle} /> */}
+            <p style={{ margin: "10px", fontSize:"15px", fontWeight:"500" }}>Initiate screen share with
+
                 <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="@username"
                 classOfInput="handleInput"
                 tweetTextvalue={this.state.twitterHandle}
                 classOfMenu="screeShareMenu"
-                
             />
 
 
@@ -172,7 +166,7 @@ class tweetSearch extends Component {
 
 
 
-            <span > for </span>
+         for 
             <InputNumber
                 empty={this.state.emptyNumber}
                 emptyUserName={this.state.emptyUserName}
@@ -182,7 +176,9 @@ class tweetSearch extends Component {
                 textValue={this.props.noOfMinutes}
                 negNumber={this.state.negNumber}
                 noText={this.state.noText} />
+                </p>
             <br />
+
 
             <button onClick={this.testHandle} style={{ marginTop: "15px" }} className="buttonLight" >Next</button>
         </div>)

@@ -70,7 +70,7 @@ class Fromref extends Component {
         <span className="dateNew Notify">{referralAct.time.slice(8, 10)}  {config.monthPicker[date]}, {referralAct.time.slice(0, 4)}</span>
 
 <div style={{ textAlign: "left" }}>
-    <p> <ImageContainer name={referrerOwnerTwitterhandle} imgsrc={referrerOwnerProfilePic}/> refered <a href={config.react_url+'/@'+referralAct.referreetwitter.toLowerCase()}>@{referralAct.referreetwitter.toLowerCase()}</a>  to solve your issue with topic <a href={config.react_url+'/project/'+referralAct.issue}><b>{topicName}</b></a></p>
+    <p> <ImageContainer name={referrerOwnerTwitterhandle} imgsrc={referrerOwnerProfilePic}/> referred <a href={config.react_url+'/@'+referralAct.referreetwitter.toLowerCase()}>@{referralAct.referreetwitter.toLowerCase()}</a>  to solve your issue with topic <a href={config.react_url+'/project/'+referralAct.issue}><b>{topicName}</b></a></p>
 </div>
      
       </div>

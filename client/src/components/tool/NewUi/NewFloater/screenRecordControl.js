@@ -18,7 +18,6 @@ class RecordFloater extends Component {
         this.pauseRecorder =this.pauseRecorder.bind(this);
         this.renderer = this.renderer.bind(this);
         this.endCallFloater = this.endCallFloater.bind(this);
-        // this.updateTime = this.updateTime.bind(this);
         
     }
 componentWillMount(){
@@ -33,7 +32,6 @@ endCallFloater(){
            
         }
     };
-    console.log("posting messages from floater")
   window.parent.postMessage(msg, "*");
   
   }
@@ -55,7 +53,6 @@ endCallFloater(){
   }
 }
 pauseRecorder(){
-    console.log("pasuse action clicked")
     const {resumeRecording,pauseState,pauseRecorderFromFloater,resumeRecorderFromFloater,pauseRecording} =this.props;
     const {callTabid} =this.state
     if(!pauseState){
@@ -65,8 +62,6 @@ pauseRecorder(){
       
     }
     else{
-        // recorder.resumeRecording();
-        console.log("resuming")
         resumeRecording(null);
         resumeRecorderFromFloater(callTabid)
         localStorage.setItem('pauseState', JSON.stringify(config.RESUMED_RECORDER))

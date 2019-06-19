@@ -144,10 +144,19 @@ const conf = {
     RESUMED_RECORDER:"resumedRecorder",
     PAUSE_TO_WEB:"pauseToWeb",
     PAUSE_TO_FLOATER:"pauseToFloater",
-   
+    //floater info
+
+    ADDED_EXTRA_MINTUE_INFO:"Added extra minute", //one done another one to go
+    YOU_SHARED_SCREEN_INFO:"You shared screen",  //done
+    PEER_SHARE_SCREEN_INFO:"Peer Shared screen", //done
+    RECORDING_ENDED_INFO:"Recording Ended info", 
+    SCREEN_SHARE_ENDED_INFO:"Screen Share ended",//done
+    PAUSED_RECORDER_INFO:"Paused Recorder",//done
+    RESUMED_RECORDER_INFO:"Resumes Rcorder"//done
 
 
-    
+
+
 
 }
 export default conf

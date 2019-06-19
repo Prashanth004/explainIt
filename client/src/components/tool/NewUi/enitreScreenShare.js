@@ -4,6 +4,7 @@ import { Button } from 'reactstrap'
 import bigInt from "big-integer";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
+import { explainByRecord } from '../../../actions/explainAction';
 import PostSharing from './screenShare/postScreenSgare'
 import { openCreated } from '../../../actions/navAction'
 import { updateCurrentTime, setpeerId, answeredCall, updateRemainingTime, basicInfoCall, disableCallAction, callFailedUpdate, muteAudio, unMuteAudio } from '../../../actions/callAction'
@@ -480,7 +481,6 @@ class ScreenRecorder extends Component {
             self.generateLink()
         });
         peer.on('call', function (call) {
-
             call.answer()
             self.props.updateRemainingTime(self.props.currentTimeLeft)
             call.on('stream', function (stream) {
@@ -490,7 +490,6 @@ class ScreenRecorder extends Component {
                 })
                 var audio = document.querySelector('#secondShareVideo');
                 audio.srcObject = stream
-
                 self.props.startSecodScreenShare(stream)
                 const { extSource, extOrigin } = self.props
                 self.props.displayScreenSharebutton(extSource, extOrigin)
@@ -517,7 +516,7 @@ class ScreenRecorder extends Component {
                 })
                 conn.on('data', (data) => {
                     if (data.type === config.MESSSAGE_FOR_CONNECTION_WITH_ID) {
-                        if (config.CALL_LOGS)
+                      
                             if (!this.state.onGoingCallEnded) {
                                 self.setState({ destkey: data.clientId });
 
@@ -608,7 +607,7 @@ class ScreenRecorder extends Component {
         if (call) {
             call.on('stream', function (remoteStream) {
                 fullStartedSharing(twitterUserId)
-                if (config.CALL_LOGS)
+               
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
                 audio.play()
@@ -951,7 +950,7 @@ class ScreenRecorder extends Component {
         const closeBtn = (this.props.isSceenSharing ||  this.props.explainBy !== config.null) ?
         (null):(((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
        
-            <Button style={{margin:"8px", fontSize: "28px"}} close onClick={closeFunction} />))
+            <Button style={{margin:"8px"}} close onClick={closeFunction} />))
    
       
 
@@ -1059,7 +1058,7 @@ class ScreenRecorder extends Component {
                         <br />
                         <br />
                         <span className="hint--bottom" aria-label="Record call and send">
-                            <FiVideo className="icons" onClick={this.recordCallAfterShare} />
+                        <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
                         </span>                <span className="hint--bottom" aria-label="Cancel">
                             <FiX className="icons" onClick={this.props.closeImidiate} />
                         </span>
@@ -1076,7 +1075,7 @@ class ScreenRecorder extends Component {
                         <br />
                         <br />
                         <span className="hint--bottom" aria-label="Record call and send">
-                            <FiVideo className="icons" onClick={this.recordCallAfterShare} />
+                            <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
                         </span>                <span className="hint--bottom" aria-label="Cancel">
                             <FiX className="icons" onClick={this.props.closeImidiate} />
                         </span>
@@ -1141,7 +1140,7 @@ class ScreenRecorder extends Component {
                 <span>You can record the screen and send</span>
                 <br />
                 <span className="hint--bottom" aria-label="Record call and send">
-                    <FiVideo className="icons" onClick={this.recordCallAfterShare} />
+                <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
                 </span>                <span className="hint--bottom" aria-label="Cancel">
                     <FiX className="icons" onClick={this.props.closeImidiate} />
                 </span>
@@ -1157,7 +1156,7 @@ class ScreenRecorder extends Component {
                 <p>message : {this.state.messageFrmPeer}</p>
                 <p>Do You wish to record the screen and send?</p>
                 <span className="hint--bottom" aria-label="Record call and send">
-                    <FiVideo className="icons" onClick={this.recordCallAfterShare} />
+                <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
                 </span>
                 <span className="hint--bottom" aria-label="Cancel">
                     <FiX className="icons" onClick={this.props.closeImidiate} />
@@ -1174,7 +1173,7 @@ class ScreenRecorder extends Component {
                 <p>Client did not click to get connected</p>
                 <p>You can record the call and send</p>
                 <span className="hint--bottom" aria-label="Record call and send">
-                    <FiVideo className="icons" onClick={this.recordCall} />
+                <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
                 </span>                <span className="hint--bottom" aria-label="Cancel">
                     <FiX className="icons" onClick={this.props.closeImidiate} />
                 </span>
@@ -1263,6 +1262,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     resetValues,
     refreshExtension,
+    explainByRecord,
     postEndCall,
     muteAudio, unMuteAudio,
     disableCallAction,

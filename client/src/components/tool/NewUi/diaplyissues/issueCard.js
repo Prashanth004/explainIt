@@ -173,7 +173,6 @@ class issueCard extends Component {
 
                 if (allProjects.length !== 0) {
                     allProjects.forEach((projects, index) => {
-                        console.log(allProjects[index].userid)
                         promises.push(axios.get(config.base_dir + '/api/users/id/' + allProjects[index].userid))
                     })
 
@@ -278,7 +277,7 @@ class issueCard extends Component {
                    
                     <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
                         className="questionText">
-                        <span id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</span>
+                        <p id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
                     </div>
                     <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
                         <video id={this.props.issue.issueid}

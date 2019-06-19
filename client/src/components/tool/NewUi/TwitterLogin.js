@@ -3,14 +3,8 @@ import TwitterLogin from 'react-twitter-auth';
 import { connect } from 'react-redux';
 import config from '../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
-import { cancelAllMessageAction } from '../../../actions/messageAction'
-import { restAllToolValue } from "../../../actions/toolActions";
 import '../../css/ExplainpPage.css'
 import PropType from 'prop-types';
-
-import { saveExtensionDetails } from "../../../actions/extensionAction";
-
-
 import '../../css/ExplainpPage.css'
 class ExplainPage extends Component {
     constructor(props) {
@@ -38,11 +32,11 @@ class ExplainPage extends Component {
         if(this.props.isAuthenticated){
             this.closeFunction()
         }
-        // var widthDiv = null;
+     
       
         return(
                 <div>
-                {/* <Button close onClick={this.closeFunction} /> */}
+              
                 <div className="requestLogin">
                 <h3>You need to login to <b>Explain</b></h3><br/>
                 <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/visit/auth/twitter"}

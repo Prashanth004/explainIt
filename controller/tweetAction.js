@@ -9,12 +9,14 @@ const client = new Twitter({
   });
 
   exports.getid = function (req, res) {
+    //   console.log("req.body.twitterhandle : ",req.body.twitterhandle)
      var params = {
         "screen_name":req.body.twitterhandle
      }
       client.get('users/show.json', params, function(error,body ,response){
 
          if(error!==null){
+             console.log("error : ",error)
             res.status(200).send({
                 success:0,
                

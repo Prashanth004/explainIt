@@ -11,7 +11,7 @@ export const saveExtensionDetails = (source,origin)=>(dispatch)=>{
 }
 
 export const pauseRecorderFromFloater = (callTabid)=>(dispatch)=>{
-    console.log("pause recording")
+    localStorage.setItem('infoDisplay', JSON.stringify(config.PAUSED_RECORDER_INFO))
     localStorage.setItem('pauseState', config.PAUSED_RECORDER);
     const  pauseRecorder ={
         'type':config.PAUSE_FROM_FLOATER,
@@ -24,7 +24,7 @@ export const pauseRecorderFromFloater = (callTabid)=>(dispatch)=>{
    
 }
 export const resumeRecorderFromFloater = (callTabid)=>(dispatch)=>{
-    console.log("resume recording")
+    localStorage.setItem('infoDisplay', JSON.stringify(config.RESUMED_RECORDER_INFO))
     localStorage.setItem('pauseState', config.RESUMED_RECORDER);
     const  pauseRecorder ={
         type:config.RESUME_FROM_FLOATER,
@@ -39,6 +39,7 @@ export const resumeRecorderFromFloater = (callTabid)=>(dispatch)=>{
 
 
 export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
+    localStorage.setItem('infoDisplay', JSON.stringify(config.ADDED_EXTRA_MINTUE_INFO))
     const addTimer = {
         
         type:config.ADD_EXTRA_MIUTE_TO_EXTENSION_RECIEVER,
@@ -51,7 +52,7 @@ export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
 }
 
 export const displayScreenSharebutton = (source,origin)=>(dispatch)=>{
-    
+    localStorage.setItem('infoDisplay', JSON.stringify(config.PEER_SHARE_SCREEN_INFO))
     const displayIcon = {
         type:config.DISPLAY_SHARE_ICON_TO_EXTENSION,
         data:{}
@@ -62,6 +63,7 @@ export const displayScreenSharebutton = (source,origin)=>(dispatch)=>{
         window.postMessage(displayIcon, '*');
 }
 export const HideScreenSharebutton = ()=>(dispatch)=>{
+    localStorage.setItem('infoDisplay', JSON.stringify(config.YOU_SHARED_SCREEN_INFO))
     const hideIcon = {
         type:config.HIDE_SHARE_ICON_TO_EXTENSION,
         data:{}
@@ -76,6 +78,7 @@ export const saveSourceId = (sourceId)=>(dispatch)=>{
 
 }
 export const postEndCall = (action,source,origin)=>dispatch=>{
+    localStorage.setItem('infoDisplay', JSON.stringify(config.SCREEN_SHARE_ENDED_INFO))
     const callEnd = {
         type: action,
         data: {}

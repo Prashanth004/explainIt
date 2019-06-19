@@ -35,6 +35,7 @@ const landinForm = (props) => {
             <br />
             <span className="twiCom">twitter.com/</span>
             <input 
+            style={{backgroundColor:"rgb(250, 250, 250)"}} 
             onChange={(e)=>props.changeTwiiterHandle(e.target.value)}type="text"  className="twiHandleInput"></input>
             <button onClick={()=>clickFunction(props.twitterHandleValue)}className="buttonLight">Tweet</button>
             <br />

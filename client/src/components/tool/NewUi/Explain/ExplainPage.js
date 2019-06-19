@@ -9,7 +9,6 @@ import ExplainOptions from './explainOptions'
 import { connect } from 'react-redux';
 import { explainAuthentication } from '../../../../actions/signinAction';
 import {resetIssueActions} from '../../../../actions/projectActions'
-// import {resetLandingAction } from '../../../../actions/landingAction'
 import config from '../../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../../actions/signinAction';
 import {resetExplainAction} from '../../../../actions/explainAction'
@@ -39,7 +38,6 @@ class ExplainPage extends Component {
         const twitterHandle = (window.location.href).split("/")[3]
         this.setState({twitterHandle:twitterHandle})
         this.props.cancelAllMessageAction();
-        // this.props.resetLandingAction();
         this.props.restAllToolValue();
         this.props.resetValues();
         this.props.cancelSuccess();
@@ -100,7 +98,6 @@ ExplainPage.PropType = {
     twitterAuthFailure:PropType.func.isRequired,
     signInWithTwitter:PropType.func.isRequired,
     resetExplainAction:PropType.func.isRequired,
-    // resetLandingAction:PropType.func.isRequired
 
 
 };
@@ -126,7 +123,6 @@ export default connect(mapStateToProps, {
     cancelAllMessageAction,
     restAllToolValue,
     explainAuthentication,
-    // resetLandingAction,
     resetExplainAction,
     resetValues,
     twitterAuthFailure,

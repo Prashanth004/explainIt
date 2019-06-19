@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../../css/profile.css';
 import { connect } from 'react-redux';
+import { Button } from 'reactstrap'
 import PropType from 'prop-types';
 import ProfileForm from './ProfileForm';
 import { openEditProfile, closeEditProfile } from '../../../actions/profileAction'
@@ -21,9 +22,12 @@ class Profile extends Component {
         this.props.closeEditProfile()
     }
     render() {
-        const editOption = (this.props.isHome) ? (<span>
-            <FiEdit onClick={this.openEdit} className="edit" />
-        </span>) : (null)
+        const editOption = (this.props.isHome) ? (
+        <div>
+             <Button style={{margin:"-8px"}} close onClick={this.props.openDtailsTab} />
+            <span  className="hint--top edit" aria-label="Edit!">
+        <FiEdit onClick={this.openEdit} className="edit" />
+    </span></div>) : (null)
         const bio = (this.props.bio !== null) ? (
             (this.props.bio.length > 0) ? (
                 <p>
@@ -89,13 +93,9 @@ class Profile extends Component {
                         <div className="socialIcon"
                             style={{ visibility: ((this.props.angelLink !== null) ? ((this.props.angelLink.length !== 0) ? "vissible" : "hidden") : "hidded") }}>
                             <span>
-                                <a href={this.props.angelLink} target="_blank">
-                                    <img
-
-                                        src={require('../../images/angellist.svg')}
-                                        width="17px" height="17px"
-                                    >
-                                    </img>
+                                <a href={this.props.angelLink} rel="noopener noreferrer" target="_blank">
+                                    <img  alt="ang"src={require('../../images/angellist.svg')}
+                                        width="17px" height="17px"></img>
                                 </a>
                             </span>
 
@@ -110,6 +110,7 @@ class Profile extends Component {
             <div>
                 <div className="profileConatiner">
                     {editOption}
+                   
 
                     {profileConatiner}
                 </div>

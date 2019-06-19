@@ -71,7 +71,7 @@ class Fromref extends Component {
         {/* <p>Call with  for the topic <a href={activity.link}><b>{activity.subject}</b></a> for <b>{Math.floor(timetaken)}:
              {Math.floor((timetaken - Math.floor(timetaken)) * 60)}</b></p> */}
 <div style={{ textAlign: "left" }}>
-<p>You refered <a href={config.react_url+'/@'+referralAct.referreetwitter.toLowerCase()}>@{referralAct.referreetwitter.toLowerCase()}</a> to solve issue with topic <a href={config.react_url+'/project/'+referralAct.issue}><b>{topicName}</b></a> for <ImageContainer name={problemOwnerTwitterhandle} imgsrc={problemOwnerProfilePic}/> </p>
+<p>You referred <a href={config.react_url+'/@'+referralAct.referreetwitter.toLowerCase()}>@{referralAct.referreetwitter.toLowerCase()}</a> to solve issue with topic <a href={config.react_url+'/project/'+referralAct.issue}><b>{topicName}</b></a> for <ImageContainer name={problemOwnerTwitterhandle} imgsrc={problemOwnerProfilePic}/> </p>
      </div>
        
         

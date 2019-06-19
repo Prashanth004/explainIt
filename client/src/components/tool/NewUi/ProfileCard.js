@@ -7,7 +7,6 @@ import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
 import { IoIosBrowsers } from "react-icons/io";
 import { FiVideo ,FiMail,FiLink2} from "react-icons/fi";
-
 import {resetCallAction} from '../../../actions/callAction'
 import {resetIssueActions,resetProjectActions} from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
@@ -19,7 +18,6 @@ import config from '../../../config/config'
 import { setIssueIdToNull } from '../../../actions/issueActions'
 import { getProfileDetails } from '../../../actions/profileAction';
 import '../../css/newlanding.css'
-
 import { cancelAllMessageAction } from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction'
@@ -118,8 +116,9 @@ class ProfileCard extends Component {
                             </div>
                             <div className="drago">
                                 <div >
+                                <span className="hint--top" aria-label="Activities!">
                                     {notifyBadge}
-                                    <span className="hint--top" aria-label="Activities!">
+                                   
                                   
                                         <FiMail  style={{fontSize:"35px"}} onClick={this.props.toggleInbox} />
 

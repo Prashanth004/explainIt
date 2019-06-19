@@ -36,7 +36,6 @@ class ShareFloater extends Component {
         var currentTime = JSON.parse(localStorage.getItem('curTime'));
         if(currentTime!=null)
             var time = (currentTime.minutes + (currentTime.seconds / 60));
-            console.log("localStorage setiing calue floater : ", time)
             this.setState({timer:time})
     }
 
@@ -110,7 +109,7 @@ class ShareFloater extends Component {
         window.parent.postMessage(msg, "*");
     }
     addExtraMinute() {
-      
+        localStorage.setItem('infoDisplay', JSON.stringify(config.ADDED_EXTRA_MINTUE_INFO))
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         var updateTime = presentTime;
         this.props.setTime(updateTime);

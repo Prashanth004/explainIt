@@ -192,8 +192,8 @@ class displayTopBtns extends Component {
                                 marginLeft: "5px"
                             }} />
 
-                        <span className="ProfileNameCard">
-                                <b>{profileName}</b></span>
+                        <h5 className="ProfileNameCard">
+                                <b>{profileName}</b></h5>
                                 {/* <span>{profiletwitterHandle}</span> */}
                     </div>
                     <div id={this.props.issue.issueid} className="twitterHolder">
