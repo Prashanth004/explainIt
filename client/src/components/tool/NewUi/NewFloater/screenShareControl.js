@@ -69,6 +69,7 @@ class ShareFloater extends Component {
             this.setState({
                 action: config.FULL_SCREEN_SHARE,
                 otherPersonPic: otherpersonProfilePic,
+                displayAddTimer:true
             })
             this.props.setTime(presentTime)
         }
@@ -181,6 +182,7 @@ class ShareFloater extends Component {
                 })
              
                 if (event.data.data.action === config.FULL_SCREEN_SHARE) {
+                    self.setState({ displayAddTimer:true})
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay', JSON.stringify("none"));
                     self.props.setTime(event.data.data.timer);

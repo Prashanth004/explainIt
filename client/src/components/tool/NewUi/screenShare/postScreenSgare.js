@@ -85,7 +85,7 @@ const savingProcessDiv = (!props.isSaved)?(
     else if (props.retry && !props.retryTimeOut && !props.noInternet)
         MessageDisconnected = (
             <div>
-                <p><b>Reconnecting..</b></p>
+                <p><b>Trying to Reconnect...</b></p>
 
             </div>
         )

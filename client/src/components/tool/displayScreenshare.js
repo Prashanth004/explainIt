@@ -108,7 +108,7 @@ class DisplayShare extends Component {
     }
 
     onUnload(event) { 
-        if(this.state.recorder!==null){
+        if(!this.state.callEnded){
             const { extSource, extOrigin,postEndCall } = this.props;
             postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
             this.closeConnection();
