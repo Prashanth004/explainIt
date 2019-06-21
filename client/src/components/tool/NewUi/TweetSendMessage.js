@@ -26,12 +26,14 @@ class tweetSearch extends Component {
         this.changeTweetStateNeg = this.changeTweetStateNeg.bind(this)
     }
     componentWillMount() {
+        if(this.props.visitedTiwtterHandle!==null)
+            this.setState({ twitterHandle: this.props.visitedTiwtterHandle });
         this.props.resetValues();
         this.props.getTwitterHandles();
 
     }
     testHandle() {
-
+      
         var twitterHandleTemp = (this.state.twitterHandle.includes('@'))?
         (this.state.twitterHandle.replace("@","")):(this.state.twitterHandle)
         if (!this.props.limitExce &&
@@ -88,13 +90,13 @@ class tweetSearch extends Component {
             <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="Enter @username"
-                classOfInput={this.state.twitterHandle}
+                classOfInput="handleInput"
                 tweetTextvalue={this.state.twitterHandle}
-                classOfMenu = "menu"
+                classOfMenu = "screeShareMenu"
                 array={this.props.twiterHandleArray}
             />
 
-            <button className="buttonDark" onClick={this.testHandle}>Send</button>
+            <button className="buttonLight" onClick={this.testHandle}>Send</button>
         </div>)
         if (this.state.tweetTested && !this.state.doneTweeting) {
             if (this.props.doneFetching && this.props.fetchProfile) {
@@ -166,6 +168,7 @@ const mapStateToProps = state => ({
     twiterHandleArray: state.twitterApi.twitterHandles,
     fetchProfile: state.visitProfile.fetchProfile,
     isPresentInExplain: state.visitProfile.isPresent,
+    visitedTiwtterHandle:state.visitProfile.visitedTiwtterHandle,
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle,

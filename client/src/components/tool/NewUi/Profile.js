@@ -108,7 +108,7 @@ class Profile extends Component {
             )
         return (
             <div>
-                <div className="profileConatiner">
+                <div className="profileConatinerMain">
                     {editOption}
                    
 

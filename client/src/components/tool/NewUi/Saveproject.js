@@ -84,8 +84,8 @@ class SaveProjects extends Component {
     }
     render() {
         return (
-        <div>
-            <p>Topic for the screen share.</p>
+        <div className="ActivityBelow">
+            <p style={{fontWeight:"500"}}>Topic for the screen share.</p>
             <InputBox
                     limitExce={this.state.limitExce}
                     empty={this.state.empty}

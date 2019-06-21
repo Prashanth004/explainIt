@@ -15,6 +15,12 @@
     text-align: center;
     transform  : 'translate(-50%, -50%)'
 }
+.iconsCard{
+  font-size: 35px;
+  font-weight: normal;
+  
+
+}
 .stories{
   left:12%;
   right:15%

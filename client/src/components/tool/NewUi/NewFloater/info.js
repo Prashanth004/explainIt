@@ -25,7 +25,7 @@ export default class componentName extends Component {
   render() {
     return (
       <div  className="infoConatiner">
-        <p>{this.state.diplayinfo}</p>
+        <p style={{color:"white",  fontWeight:"500"}}>{this.state.diplayinfo}</p>
       </div>
     )
   }

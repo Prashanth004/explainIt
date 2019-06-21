@@ -60,7 +60,7 @@ class Search2 extends Component {
                         className:this.props.classOfInput,
                         placeholder:this.props.placeholder
                         }}
-                        wrapperProps={{ borderRadius:"5%",margin:"10px", padding:"5px" }}
+                        // wrapperProps={{ borderRadius:"5%",margin:"10px", padding:"5px" }}
                         wrapperStyle={{ position: 'relative', display: 'inline-block' }}
                     items={this.props.twiterHandleArray}
                     getItemValue={item => item.twitterhandle}
@@ -75,13 +75,13 @@ class Search2 extends Component {
                     )}
                     renderItem={
                        (item, isHighlighted) => (
-                        // (item.length>0)?(
+                        (item)?(
                         <div
                             className={`item ${isHighlighted ? 'item-highlighted' : ''}`}
                             key={item.id} >
                             <span>@{item.twitterhandle}</span>
                         </div >
-                        // ):(null)
+                        ):(<div style={{borderStyle:"none",height:"0px",width:"0px"}}></div>)
                     )}
                 />
                

@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import TweetSendMessage from './TweetSendMessage';
 import { sendEmail } from '../../../actions/emailAction'
-
-import { getTwitterHandles } from '../../../actions/twitterApiAction'
+import { getTwitterHandles } from '../../../actions/twitterApiAction';
+import { FaArrowLeft } from "react-icons/fa";
 
 
 class SaveProjects extends Component {
@@ -26,11 +26,11 @@ class SaveProjects extends Component {
             successSent: false
         }
         this.changeInputValue = this.changeInputValue.bind(this);
-        this.savefilePu = this.savefilePu.bind(this);
         this.savefilePri = this.savefilePri.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.markTweetStarted = this.markTweetStarted.bind(this);
         this.chooseSave = this.chooseSave.bind(this);
+        this.calcelChooseaction = this.calcelChooseaction.bind(this);
     }
 
     markTweetStarted() {
@@ -38,13 +38,11 @@ class SaveProjects extends Component {
             tweetStarted: true
         })
     }
-    componentWillMount(){   
-        // alert("mounting")
+    componentWillMount() {
+      
         this.props.getTwitterHandles();
     }
-    componentWillUnmount(){
-        // alert("umonu nthing")
-    }
+
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {
             this.setState({
@@ -60,34 +58,7 @@ class SaveProjects extends Component {
             limitOfChar: config.PROJECT_TEXT_LIMIT
         })
     }
-    savefilePu() {
 
-        if (this.state.textValue !== null) {
-            if ((this.state.textValue).length > 0) {
-                if ((this.state.textValue).length < 201) {
-
-                    alert(this.props.replying)
-                    if (this.props.replying) {
-                        this.props.sendEmail(this.props.issueId, this.props.userid)
-                    }
-                }
-                else {
-                    this.setState({
-                        limitExce: true
-                    })
-                }
-            }
-            else {
-                this.setState({
-                    empty: true
-                })
-            }
-        } else {
-            this.setState({
-                empty: true
-            })
-        }
-    }
     sendMessage() {
 
         this.props.sendButtonClick()
@@ -118,7 +89,7 @@ class SaveProjects extends Component {
                         if (this.props.replying) {
                             this.props.sendEmail(this.props.issueId, this.props.userid)
                         }
-                       
+
                     }
                     else {
                         this.setState({
@@ -140,6 +111,10 @@ class SaveProjects extends Component {
             }
         }
 
+    }
+    calcelChooseaction() {
+        this.props.cancelSaveBtn()
+        this.setState({ sendMessageClicked: false })
     }
     chooseSave() {
         if (this.props.fromShareToRecord)
@@ -173,12 +148,11 @@ class SaveProjects extends Component {
             <span className="hint--top" aria-label="Send Recording">
                 <FiSend className="icons" onClick={this.chooseSave} />
             </span>) : null
-        const saveOption = (this.props.twitterUserId === null) ? (
-            <span className="hint--top" aria-label="Save Recording">
-                <FiSave className="icons" onClick={this.props.saveClicked} />
-            </span>
-        ) : (null)
-        const subjectInoutBox = ((this.props.showInputBox) ? (<InputBox
+        const saveOption = (this.props.twitterUserId !== null ||  this.props.visitedTiwtterHandle!==null)  ? (null) : (<span className="hint--top" aria-label="Save Recording">
+        <FiSave className="icons" onClick={this.props.saveClicked} />
+    </span>)
+        const subjectInoutBox = ((this.props.showInputBox) ? (
+        <InputBox
             limitExce={this.state.limitExce}
             empty={this.state.empty}
             limitOfChar={this.state.limitOfChar}
@@ -193,45 +167,55 @@ class SaveProjects extends Component {
             successSent={this.state.successSent}
             sendRecording={this.savefilePri}
         />)
-        // const tweetSendMessage2 =()
+       
 
         return (!this.props.isSaveClicked && !this.state.sendMessageClicked) ?
-            (<div>
-                <br />
-
+            (<div className="ActivityBelow">
                 {shareOption}
                 {saveOption}
                 <span className="hint--top" aria-label="Discard">
                     <FiX className="icons" onClick={this.props.closeImidiate} />
                 </span>
-            </div>) :
-            ((this.state.sendMessageClicked && !this.state.privatePublic) ? (
-                // this.state.enteredSubjest?(
-                <div>
+            </div>) :((this.state.sendMessageClicked && !this.state.privatePublic)? 
+                (<div>
+                    <span style={{
+                        float: "left",
+                        fontSize: "15px",
+                        marginTop:"-29px"
+                    }}>
+                        <FaArrowLeft onClick={this.calcelChooseaction} />
+                    </span>
                     {subjectInoutBox}
                     {tweetSendMessage}
-                    {/* <TweetSendMessage
-             /> */}
                 </div>
+                ) : ((this.state.privatePublic) ? (!this.props.failedToSave ? ((this.props.fromShareToRecord || this.state.sendMessageClicked) ? 
+                    (<div><p>Sending the recording..</p></div>) :
+                (<div><p>Saving the recording..</p></div>)) : (
+                    <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
+                )) : (
+                    <div>
+                        <span style={{
+                            float: "left",
+                            fontSize: "15px",
+                            marginTop:"-29px"
+                        }}>
+                            <FaArrowLeft onClick={this.calcelChooseaction} />
+                        </span>
+                        <div style={{
+                            width: "70%",
+                            margin: "auto"
+                        }}>
+                            <InputBox
+                                limitExce={this.state.limitExce}
+                                empty={this.state.empty}
+                                limitOfChar={this.state.limitOfChar}
+                                changeInputValue={this.changeInputValue}
+                                textValue={this.state.textValue}
+                            />
 
-            ) :((this.state.privatePublic) ? (!this.props.failedToSave?((this.props.fromShareToRecord || this.state.sendMessageClicked)?(<div><p>Sending the recording..</p></div>):
-            (<div><p>Saving the recording..</p></div>)):(
-                <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
-            )) : (
-                    <div style={{
-                        width: "70%",
-                        margin: "auto"
-                    }}>
-                        <InputBox
-                            limitExce={this.state.limitExce}
-                            empty={this.state.empty}
-                            limitOfChar={this.state.limitOfChar}
-                            changeInputValue={this.changeInputValue}
-                            textValue={this.state.textValue}
-                        />
-                        {/* <h8>Your privacy is important to use</h8> */}
-                        <button className="buttonDark" onClick={this.savefilePri}
-                            style={{ marginTop: "30px" }}>Save</button>
+                            <button className="buttonDark" onClick={this.savefilePri}
+                                style={{ marginTop: "30px" }}>Save</button>
+                        </div>
                     </div>))
             )
     }
@@ -251,13 +235,13 @@ const mapStateToProps = state => ({
     userid: state.email.userid,
     replying: state.email.replying,
     topicOfTheCall: state.call.topicOfTheCall,
-    failedToSave:state.issues.failedToSave,
-
+    failedToSave: state.issues.failedToSave,
+    visitedTiwtterHandle:state.visitProfile.visitedTiwtterHandle,
 
 })
 
 export default connect(mapStateToProps, {
-    sendEmail,getTwitterHandles
+    sendEmail, getTwitterHandles
 })(SaveProjects)
 
 

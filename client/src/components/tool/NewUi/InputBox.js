@@ -10,7 +10,7 @@ export default (props) => {
       ):(null))
   return (
     <div>
-      <textarea type="textArea" row='4'
+      <textarea type="textArea" row='1'
       onChange={props.changeInputValue}
       value={props.textValue}
       className="inputBox"

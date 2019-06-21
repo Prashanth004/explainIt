@@ -2,21 +2,23 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
 import {pauseRecording,resetRecorder,resumeRecording,startRecorder} from '../../../actions/recoderAction'
-import config from '../../../config/config'
+import config from '../../../config/config';
+import BusyAction from './container/BusyAction';
 import { updateCurrentTime} from '../../../actions/callAction'
 import CopyToClipboard from '../CopytoClipboard';
 import { setStream } from '../../../actions/streamActions'
 import {postEndCall, saveSourceId } from "../../../actions/extensionAction";
-
+import {registerRecordToBrowser,registerEndToBrowser} from './container/miscFunction'
 import Dummy from './dummy';
 import {postStartCall} from '../../../actions/extensionAction'
-import SaveElement from './saveRecoding'
+import SaveElement from './saveRecording'
 import Form from '../Form'
 import { showCanvas, hideCanvas } from '../../../actions/canvasAction'
 import { Button } from 'reactstrap';
 import TimerBar from './TimerBar'
 import browser from 'browser-detect';
 import { sendMessage } from '../../../actions/messageAction';
+import DownloadExt from './container/DownloadExt'
 import {
     fullStartedRecording,
     fullStopedRecording, discardAfterRecord
@@ -43,7 +45,8 @@ class FullScreenRecorder extends Component {
             savedfuncCalled: false,
             permissonDenied:false,
             currentTime:{},
-            recordTime:null
+            recordTime:null,
+            currentAtionStatus:null
 
         }
         this.downloadExtension = this.downloadExtension.bind(this);
@@ -52,7 +55,7 @@ class FullScreenRecorder extends Component {
         this.savefilePublic = this.savefilePublic.bind(this);
         this.renderer = this.renderer.bind(this);
         this.startBar = this.startBar.bind(this);
-        this.startRecoding = this.startRecoding.bind(this);
+        this.startRecording = this.startRecording.bind(this);
         this.toggle = this.toggle.bind(this);
         this.saveClicked = this.saveClicked.bind(this);
         this.discardChanges = this.discardChanges.bind(this);
@@ -65,7 +68,8 @@ class FullScreenRecorder extends Component {
         this.pauseRecorder = this.pauseRecorder.bind(this);
         this.resumeRecorder = this.resumeRecorder.bind(this);
         this.updateTime = this.updateTime.bind(this);
-        this.timebar = this.timebar.bind(this)
+        this.timebar = this.timebar.bind(this);
+        this.cancelSaveBtn = this.cancelSaveBtn.bind(this);
     }
     timebar =()=>{}
     startBar() {
@@ -98,9 +102,10 @@ class FullScreenRecorder extends Component {
     }
 
 
-    startRecoding() {
+    startRecording() {
         var self = this;
         var constraints = null;
+        registerRecordToBrowser();
         var sourceId = this.props.extSourceId;
         const result = browser();
         if (result.name === "chrome") {
@@ -195,7 +200,7 @@ class FullScreenRecorder extends Component {
             }
              else if(event.data.sourceId !== undefined) {
                 self.props.saveSourceId(event.data.sourceId)
-                self.startRecoding()
+                self.startRecording()
             }
           
         }
@@ -282,14 +287,16 @@ class FullScreenRecorder extends Component {
             if (result.name === "chrome") 
             this.receiveMessage()
             else
-            this.startRecoding()
+            this.startRecording()
 
         }
     }
+    cancelSaveBtn(){
+        this.setState({saveBtnClicked: false,
+            sendBtnClicked: false})
+    }
     saveClicked() {
-        this.setState({
-            saveBtnClicked: true
-        })
+        this.setState({saveBtnClicked: true})
     }
 
     savefilePublic(textData) {
@@ -314,7 +321,7 @@ class FullScreenRecorder extends Component {
     }
     recordScreenStop() {
         localStorage.setItem('infoDisplay', JSON.stringify(config.RECORDING_ENDED_INFO))
-
+        registerEndToBrowser()
         var self = this;
         var {recorder} = this.props;
         var audioStream1 = this.props.audioStream;
@@ -350,8 +357,9 @@ class FullScreenRecorder extends Component {
     }
   
     componentWillMount() {
-        clearInterval(this.timebar)
-        this.setState({recordTime:config.RECORD_TIME})
+        clearInterval(this.timebar);
+        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'))
+        this.setState({recordTime:config.RECORD_TIME,currentAtionStatus:currentAtionStatus})
         const self = this;
         this.props.resetRecorder()
         const {extSource,extOrigin} = this.props;
@@ -411,6 +419,7 @@ class FullScreenRecorder extends Component {
         }
 
     }
+
     sendButtonClick() {
         this.setState({
             sendBtnClicked: true
@@ -464,7 +473,7 @@ class FullScreenRecorder extends Component {
                 renderer={this.renderer}
             />)
             recordingEle = (<div >
-                <p>{!pauseState?"Recoding screen":"Paused recording"}</p>
+                <p>{!pauseState?"Recording screen":"Paused recording"}</p>
                 {/* <button onClick={this.pauseRecorder} className={pauseState?"buttonLight":"buttonDark"}>{pauseState?"Resume":"Pausee"}</button> */}
             </div>)
         }
@@ -501,11 +510,9 @@ class FullScreenRecorder extends Component {
                     <div className="timerDiv">
                     </div>
                     <div>
-
                     </div>
                     <div>
                     </div>
-
                 </div>
                 {showCanv}
 
@@ -541,6 +548,7 @@ class FullScreenRecorder extends Component {
                     discard={this.discardChanges}
                     closeImidiate={this.props.closeImidiate}
                     savefilePublic={this.savefilePublic}
+                    cancelSaveBtn={this.cancelSaveBtn}
                     savefilePrivate={this.savefilePrivate} />
             </div>)
         }
@@ -573,18 +581,20 @@ class FullScreenRecorder extends Component {
         }
 
         return (this.state.isInstalled) ? (
-            <div className="recordMainScreen" >
-                {closeBtn}
 
+            (this.state.currentAtionStatus === null)?
+            (<div className="recordMainScreen" >
+                {closeBtn}
+                <div style={{paddingTop:"10px"}}>
                 {recordingElements}
+                </div>
                 {postShareElements}
-            </div>
-        ) : (<div >
-            {/* <Navbar /> */}
-            <div className="messageToDownload">
-                <h3>Please down the chrome extension to continue</h3>
-                <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-            </div>
+            </div>):  (<div className="LinkDisplay">
+                {closeBtn}
+                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                </div>)
+        ) : (<div>
+            <DownloadExt />
         </div>
             )
     }

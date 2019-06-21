@@ -1,4 +1,4 @@
-import {GET_PROFILE_BY_TWITTER_HANDLE,GOT_NULL_BY_TWITTWRHANDLE} from '../actions/types'
+import {GET_PROFILE_BY_TWITTER_HANDLE,SET_VISIT_PROFILE_DETAILS,GOT_NULL_BY_TWITTWRHANDLE} from '../actions/types'
 
 const initalState = {
     fetchProfile:false,
@@ -8,7 +8,8 @@ const initalState = {
     id:null,
     isPresent:false,
     onlineStatus:0,
-    busyStatus:0
+    busyStatus:0,
+    visitedTiwtterHandle:null,
 }
 
 
@@ -25,6 +26,11 @@ export default function(state = initalState, action){
                 profilePic:action.profilePic,
                 id:action.id,
                 email:action.email
+            }
+        case SET_VISIT_PROFILE_DETAILS:
+            return{
+                ...state,
+                visitedTiwtterHandle:action.payload
             }
         case GOT_NULL_BY_TWITTWRHANDLE:
             return{

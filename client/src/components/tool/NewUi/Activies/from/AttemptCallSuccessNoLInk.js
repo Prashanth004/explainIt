@@ -20,7 +20,7 @@ export default (props) => {
 
                     <div style={{ textAlign: "left" }}>
                         <p>You were in all with <ImageContainer name={userData.userName} imgsrc={userData.profilePic}/> for the topic <b>{activity.subject}</b> for <b>{Math.floor(timetaken)}:{Math.floor((timetaken - Math.floor(timetaken)) * 60)}</b></p>
-
+                        <p style={{fontSize:"45px",fontWeight:"normal"}}>The recording not saved due to network issues</p>
                     </div>
                 </div>
             </div>

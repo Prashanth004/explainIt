@@ -255,6 +255,12 @@ class ShareFloater extends Component {
         }
     };
     render() {
+   
+    
+     var  floateGridStyle={
+        display:"grid",
+        gridTemplateColumns:"19% 21% 23% 26% 12%"     }
+   
       const displatAddTime = (this.state.displayAddTimer)?"block":"none"
         const mutBtn = (this.props.muteState === config.UN_MUTED) ?
             (<div className="callPage-recieverImageDiv muteButton">
@@ -271,7 +277,7 @@ class ShareFloater extends Component {
         const { action } = this.state;
         return (action === config.FULL_SCREEN_SHARE || action === config.RECIEVER_SCREEN_SHARE) ? (
             <div className="floaterContainerTans">
-                <div className="callImageDivAnwserMain Share">
+                <div className="callImageDivAnwserMain" style={floateGridStyle} >
 
                     <div className="callPage-recieverImageDivFloat">
                         <span>
@@ -287,13 +293,14 @@ class ShareFloater extends Component {
                         </span>
                     </div>
                    
-                    <div>
-                        <div style={{ display: this.props.floaterDisplay }} className="callPage-recieverImageDiv endCall Shareicon">
-                            <span className="hint--bottom" aria-label="Share my screen">
-                                <MdFilterNone onClick={this.shareMyscreen} className="endButton" />
-                            </span>
-                        </div>
-                    </div>
+                   <div>
+                   <div style={{ display: this.props.floaterDisplay }} className="callPage-recieverImageDiv endCall Shareicon">
+            <span className="hint--bottom" aria-label="Share my screen">
+                <MdFilterNone onClick={this.shareMyscreen} className="endButton" />
+            </span>
+        </div>
+        </div>
+                  
                     <div>
                         <div  style={{ display: displatAddTime }}>
                         <button className="addMin" onClick={this.addExtraMinute}>Add 1 min</button>
@@ -310,9 +317,6 @@ class ShareFloater extends Component {
                                 {mutBtn}
                         </div>
                     </div>
-
-                   
-
                 </div>
             </div>
         ) : (<RecordFloater 

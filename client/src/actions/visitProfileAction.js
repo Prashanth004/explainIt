@@ -1,5 +1,5 @@
 import config from '../config/config'
-import {GET_PROFILE_BY_TWITTER_HANDLE ,GOT_NULL_BY_TWITTWRHANDLE } from './types'
+import {GET_PROFILE_BY_TWITTER_HANDLE ,GOT_NULL_BY_TWITTWRHANDLE,SET_VISIT_PROFILE_DETAILS } from './types'
 import axios from 'axios'
 
 export const getProfileByTwitterHandle = (TwitterHandle) => (dispatch)=>{
@@ -30,15 +30,18 @@ export const getProfileByTwitterHandle = (TwitterHandle) => (dispatch)=>{
                 type:GOT_NULL_BY_TWITTWRHANDLE,
                 payload:false
             })
-        }
-     
-        }
-        else{
-        }
+        }}
+    
 
     })
     .catch(err=>{
         console.log("error : ",err)
     })
 
+}
+export const setVisitProfile = (twitterhandle)=>(dispatch)=>{
+    dispatch({
+        type:SET_VISIT_PROFILE_DETAILS,
+        payload:twitterhandle
+    })
 }

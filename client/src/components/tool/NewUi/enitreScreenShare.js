@@ -4,6 +4,9 @@ import { Button } from 'reactstrap'
 import bigInt from "big-integer";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
+import DownloadExt from './container/DownloadExt'
+import BusyAction from './container/BusyAction';
+import {registerCallToBrowser,registerEndToBrowser} from './container/miscFunction';
 import { explainByRecord } from '../../../actions/explainAction';
 import PostSharing from './screenShare/postScreenSgare'
 import { openCreated } from '../../../actions/navAction'
@@ -89,7 +92,8 @@ class ScreenRecorder extends Component {
             permissonDenied: false,
             onGoingCallEnded: false,
             downloadUrlAudio: null,
-            retryTimeOut:false
+            retryTimeOut:false,
+            currentAtionStatus:null
 
         }
         this.renderer = this.renderer.bind(this);
@@ -123,6 +127,7 @@ class ScreenRecorder extends Component {
         this.play_clicked = this.play_clicked.bind(this);
         this.pause_clicked =  this.pause_clicked.bind(this);
         this.onUnload = this.onUnload.bind(this);
+        this.postMessageHandler = this.postMessageHandler.bind(this);
     }
 
     muteAudio() {
@@ -218,7 +223,8 @@ class ScreenRecorder extends Component {
         socket.emit(config.END_CALL, {
             'peerId': this.state.peerId,
             'timer-ended': false
-        })
+        });
+        registerEndToBrowser();
         if (peer !== null) {
             peer.destroy();
             this.setState({
@@ -286,7 +292,30 @@ class ScreenRecorder extends Component {
      }
       
     }
-
+    postMessageHandler(event) {
+        var self = this;
+      
+        if (event.data.sourceId !== undefined) {
+            if (config.CALL_LOGS)
+                console.log("recieved source id : ", event.data.sourceId)
+            self.props.saveSourceId(event.data.sourceId)
+            self.startScreenShareSend()
+            return
+        }
+        if (event.data.type === config.PERMISSION_DENIED) {
+            self.setState({ permissonDenied: true })
+            return
+        }
+        if(event.data.type === config.MUTE_TO_WEB){
+            self.muteAudio()
+            return
+        }
+      
+        if(event.data.type === config.UNMUTE_TO_WEB){
+            self.unMuteAudio()
+            return
+        }
+    }
 
     componentDidMount() {
         // const videoPlayer = this.VideoPlyr;
@@ -295,32 +324,11 @@ class ScreenRecorder extends Component {
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
-        function postMessageHandler(event) {
-            if (event.data.sourceId !== undefined) {
-                if (config.CALL_LOGS)
-                    console.log("recieved source id : ", event.data.sourceId)
-                self.props.saveSourceId(event.data.sourceId)
-                self.startScreenShareSend()
-                return
-            }
-            if (event.data.type === config.PERMISSION_DENIED) {
-                self.setState({ permissonDenied: true })
-                return
-            }
-            if(event.data.type === config.MUTE_TO_WEB){
-                self.muteAudio()
-                return
-            }
-          
-            if(event.data.type === config.UNMUTE_TO_WEB){
-                self.unMuteAudio()
-                return
-            }
-        }
+
         if (window.addEventListener) {
-            window.addEventListener("message", postMessageHandler, false);
+            window.addEventListener("message", this.postMessageHandler, false);
         } else {
-            window.attachEvent("onmessage", postMessageHandler);
+            window.attachEvent("onmessage", this.postMessageHandler);
         }
 
         socket.on(config.CALL_ACK_MESSAGE, data => {
@@ -435,8 +443,9 @@ class ScreenRecorder extends Component {
         })
     }
     componentWillUnmount() {
-        window.removeEventListener("beforeunload", this.onUnload)
-        this.props.fullStopedSharing()
+        window.removeEventListener("beforeunload", this.onUnload);
+        window.removeEventListener("message",this.postMessageHandler);
+        // this.props.fullStopedSharing()
         clearTimeout(this.saveBlobtimeOut);
         clearTimeout(this.callEndBeforeRecieve);
     }
@@ -444,11 +453,12 @@ class ScreenRecorder extends Component {
 
 
     componentWillMount() {
-        const { extSource, extOrigin } = this.props
-
-        this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin)
-
+        const { extSource, extOrigin } = this.props;
+        this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         const result = browser();
+        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+        console.log("currentAtionStatus : ",localStorage.getItem('currentAction'));
+        console.log("config.null : ", null)
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
                 var img;
@@ -463,17 +473,14 @@ class ScreenRecorder extends Component {
                 };
             }
         }
-
-
-        this.setState({
-            socket: this.props.socket
-        });
         var self = this;
         var peer = new window.Peer()
-
         this.setState({
-            peer: peer
+            peer: peer,
+            socket: this.props.socket,
+            currentAtionStatus : currentAtionStatus
         });
+     
         peer.on('open', (id) => {
             self.props.setpeerId(id)
             self.setState({
@@ -513,7 +520,6 @@ class ScreenRecorder extends Component {
                     data: "sendID",
                     timer: this.props.timeAloted,
                     profilePic: this.props.twirecieverPrfilePic
-
                 })
                 conn.on('data', (data) => {
                     if (data.type === config.MESSSAGE_FOR_CONNECTION_WITH_ID) {
@@ -582,7 +588,7 @@ class ScreenRecorder extends Component {
 
     peerCall() {
         const { twitterUserId, fullStartedSharing } = this.props
-        const self = this
+        const self = this;
         const { socket, peer, destkey, finalStream } = this.state
         if (config.CALL_LOGS)
         var call = peer.call(destkey, finalStream);
@@ -590,6 +596,7 @@ class ScreenRecorder extends Component {
             type: 'video'
         });
         recorder1.startRecording();
+        registerCallToBrowser();
         this.setState({ recorder: recorder1 });
         self.saveBlobtimeOut = setTimeout(() => {
             const { recorder } = self.state;
@@ -626,9 +633,7 @@ class ScreenRecorder extends Component {
                 })
             })
         }
-
-    }
-
+}
 
     discard = () => {
         setTimeout(() => {
@@ -950,12 +955,8 @@ class ScreenRecorder extends Component {
         var linkElement = null;
         const closeBtn = (this.props.isSceenSharing ||  this.props.explainBy !== config.null) ?
         (null):(((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
-       
             <Button style={{margin:"8px"}} close onClick={closeFunction} />))
-   
-      
-
-        if (this.props.isSceenSharing) {
+           if (this.props.isSceenSharing) {
 
             var recieverProfPic = (this.props.twirecieverPrfilePic === null) ?
                 (this.state.recieverProfilePic) :
@@ -1183,7 +1184,12 @@ class ScreenRecorder extends Component {
             </div>)
 
         return (this.state.isInstalled) ? (
-            <div>
+
+
+            (this.state.currentAtionStatus === null)?
+
+
+            (<div>
                 {closeBtn}
                 {audioWarning}
                 <div className="LinkDisplay">
@@ -1192,15 +1198,11 @@ class ScreenRecorder extends Component {
                     {postShareElements}
                     <audio id="video" ref={a => this.videoTag = a} srcobject=" " ></audio>
                 </div>
-            </div>
-
-        ) : (<div >
-            <div className="messageToDownload">
-                <h3>Please download the chrome extension to continue</h3>
-                <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-            </div>
-        </div>
-            )
+            </div>):
+            (<div className="LinkDisplay">
+                {closeBtn}
+                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                </div>)) : (<div ><DownloadExt /></div>)
     }
 }
 ScreenRecorder.PropType = {

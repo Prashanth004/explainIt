@@ -4,14 +4,20 @@ import Profile from './Profile';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './diaplyissues/DisplayIssues';
 import { FiGrid,FiList } from "react-icons/fi";
-import Navbar from './Navbar'
+import Navbar from './Navbar';
+import FullScreenShare from './enitreScreenShare';
+import FullScreenRecord from './FullScreenRecord';
 import '../../css/NewSignin.css';
+import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
+import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
+import { creatAnsProject } from '../../../actions/projectActions'
+import { resetCallAction} from '../../../actions/callAction'
+
 import socketIOClient from "socket.io-client";
 import TwitterLogin from 'react-twitter-auth';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import { connect } from 'react-redux';
-import { SCREEN_SHARE, SCREEN_RECORD } from '../../../actions/types';
 import {  setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
@@ -24,7 +30,7 @@ import IssueDisplay from './diaplyissues/DisplayIssues'
 import { saveExtensionDetails, saveSourceId } from "../../../actions/extensionAction";
 import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
-import {getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
+import {getProfileByTwitterHandle,setVisitProfile} from "../../../actions/visitProfileAction";
 import {getRecpientId} from '../../../actions/twitterApiAction'
 import {openInbox, openParticipated,openCreated } from "../../../actions/navAction";
 import ProfileNotOnExplain from './ProfileNotOnTwitter/ProfileNotOnExplain'
@@ -44,6 +50,7 @@ class NewHome extends Component {
             isVisitProfile:true,
             typeOfView:"list",
             socket: null,
+            displayDetails:false
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -59,6 +66,9 @@ class NewHome extends Component {
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.toggleInbox = this.toggleInbox.bind(this);
+        this.saveVideoData = this.saveVideoData.bind(this);
+        this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
+        this.recordFullScreen =  this.recordFullScreen.bind(this)
     }
     
     reloadPage() {
@@ -123,13 +133,14 @@ class NewHome extends Component {
         }
     }
     componentWillMount() {
-        this.props.stillAuthenicated()
+        this.props.stillAuthenicated();
         const socket = socketIOClient(config.base_dir);
         this.setState({socket: socket })       
         if(this.props.match.params.encrTwitterHandle===null){
             alert("empty")
         }
-        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","");
+        this.props.setVisitProfile(twiHand);
         this.props.getProfileByTwitterHandle(twiHand)
         localStorage.setItem("peerId",JSON.stringify(twiHand))
     }
@@ -191,14 +202,14 @@ class NewHome extends Component {
     toggleInbox(){
         this.setState({
             showProjects: true,
-            openExplain: false
+            openExplain: false,
+            displayDetails:false
         })
         this.props.openCreated()
     }
     openDtailsTab() {
         this.setState({
             showDetails: !this.state.showDetails,
-           
         })
     }
     reStoreDefault = () => {
@@ -222,12 +233,51 @@ class NewHome extends Component {
             this.handleConfirm()
         }
     }
+    shareFullScreenShare() {
+        this.setState({ showDetails: false, })
+        if (!this.state.displayDetails) {
+            this.setState({
+                displayDetails: true
+            })
+            localStorage.setItem('issueId', null)
+            this.props.displayFullScreShare()
+        }
+        else {
+            this.setState({
+                displayDetails: false
+            })
+        }
+    }
+    recordFullScreen() {
+        this.setState({ showDetails: false })
+        if (!this.state.displayDetails) {
+            this.setState({
+                displayDetails: true
+            })
+            this.props.displayFullScrenRecord()
+        }
+        else {
+            this.setState({
+                displayDetails: false
+            })
+        }
+    }
+    saveVideoData(videoData, audioData, isPublic, text, action) {
+        var condition = this.props.issueId == null || this.props.issueId === undefined
+        var issueId = (condition)?null:this.props.issueId;
+        var imgData = "null";
+        var items = {}
+        const isquestion = (condition)?"true":"false"
+        this.props.creatAnsProject(text, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
+    }
 
     handleConfirm(){
+        this.props.resetCallAction();
         this.props.restAllToolValue();
         this.props.cancelSuccess();
         this.setState({
-            openExplain: false
+            openExplain: false,
+            displayDetails: false
         })
     }
     explainTool = (e) => {
@@ -244,15 +294,43 @@ class NewHome extends Component {
     }
 
     render() {
-       
-        var issuepercentage="55%";
-        if(this.state.reducedWidth){
-            issuepercentage="90%"
-        }
-        if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle){
-          
-             this.props.history.push("/");
-         }
+        if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
+            this.props.history.push("/");
+        var issuepercentage="30%";
+        var shareRecord = null;
+        if(this.state.reducedWidth)
+            issuepercentage="90%";
+
+            if (!this.props.inbox && !this.props.created && !this.props.participated) {
+                if (this.props.screenAction === FULL_SCREEN_RECORD) {
+                    shareRecord = (<FullScreenRecord
+                        socket={this.state.socket}
+                        closeImidiate={this.handleConfirm}
+                        reStoreDefault={this.reStoreDefault}
+                        savefile={this.saveVideoData}
+                    />)
+                }
+                else if (this.props.screenAction === FULL_SCREEN_SHARE) {
+                    shareRecord = (<FullScreenShare
+                        toggleInbox={this.toggleInbox}
+                        socket={this.state.socket}
+                        closeImidiate={this.handleConfirm}
+                        reStoreDefault={this.reStoreDefault}
+                        savefile={this.saveVideoData}
+                    />)
+                }
+                else {
+                    shareRecord = (null)
+                }
+            }
+            
+        const activityDiv = (this.state.displayDetails) ? (
+            <div style={{ width: issuepercentage, margin:"auto",marginTop: "-25px"}}>
+                {shareRecord}
+            </div>
+        ) : (null)
+
+
          const details = (this.state.showDetails) ?((this.props.inbox || this.props.created || this.props.participated)?(
             null
         ):( <Profile isHome ={this.state.isHome}/>)):(null)
@@ -326,6 +404,9 @@ class NewHome extends Component {
             }
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE || 
+                this.props.isSceenSharing ||
+                this.props.callAction ||
+                this.props.isFullScreenRecording ||
                 this.props.participated ||
                 this.props.created) {
                 var profileCardElement = null
@@ -339,9 +420,11 @@ class NewHome extends Component {
                     openDtailsTab={this.openDtailsTab}
                     isHome={this.state.isHome}
                     toggleInbox={this.toggleInbox}
-                        userId={this.props.userId}
-                        toggleCreatedIssue={this.toggleCreatedIssue}
-                        toggleParticipatedIssue={this.toggleParticipatedIssue} />
+                    shareFullScreenShare={this.shareFullScreenShare}
+                    recordFullScreen={this.recordFullScreen}
+                    userId={this.props.userId}
+                    toggleCreatedIssue={this.toggleCreatedIssue}
+                    toggleParticipatedIssue={this.toggleParticipatedIssue} />
                     </div>
                 )
                 }
@@ -366,6 +449,9 @@ class NewHome extends Component {
 
                     <div>
                         {feedDiv}
+                    </div>
+                    <div>
+                        {activityDiv}
                     </div>
                     <div>
                         {details}
@@ -429,8 +515,14 @@ const mapStateToProps = state => ({
     authAction:state.auth.authAction,
     doneGettingId : state.twitterApi.doneFetching,
     twitterId : state.twitterApi.twitterId,
-    profilePresentOnTwitter:state.twitterApi.profilePresent
+    profilePresentOnTwitter:state.twitterApi.profilePresent,
+    isSceenSharing: state.tools.isFullScreenSharing,
+    isFullScreenRecording: state.tools.isFullScreenRecording,
+    callAction: state.call.callAction,
+
+
+
 
 })
 
-export default connect(mapStateToProps, {openInbox,twitterAuthFailure,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)
+export default connect(mapStateToProps, {openInbox,resetCallAction,creatAnsProject,setVisitProfile,twitterAuthFailure,displayFullScrenRecord, displayFullScreShare,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)

@@ -2,14 +2,12 @@
     width:100%
 }
 .recordMainScreen{
-    background-color: #ffff;
+    background-color: #eee;
     padding:10px;
-    margin-top:5px;
     border-radius:5px;
     border-style:solid;
-    border-radius:3px;
-    border-width:0.5px;
-    border-color:rgba(51, 51, 51, 0.171);
+    border-width:1px;
+    border-color:rgba(119, 119, 119, 0.623);
     font-size:14px;
     box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
 
@@ -33,8 +31,9 @@
     border-color:rgb(87, 87, 87)
 }
 .showVideoElement{
+    margin-top:15px;
     width:100%;
-    height: 350px;
+    /* height: 30px; */
 }
 .videoPlayer2{
 width: 100%;

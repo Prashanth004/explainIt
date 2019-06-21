@@ -23,24 +23,27 @@
   border-style:none;
   border-bottom-style: solid;
   border-bottom-color: rgba(0, 0, 0, 0.486);
+  background-color:#eee;
+  color:rgb(112, 112, 112);
+  font-weight: 500;
 
 }
 .handleInput:focus{
   outline:none;
 }
   .sharableLinkSection{
-    width:90%;
+    width:50%;
     margin:auto;
     padding:15px;
     background-color: white;
     margin-top:10px;
     text-align: center;
+    background-color: #eee;
+    box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
     border-radius:5px;
     border-style:solid;
-    border-width:0.5px;
-    border-color:rgba(51, 51, 51, 0.164);
-    box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
-
+    border-width:1px;
+    border-color:rgba(119, 119, 119, 0.623);
   }
   .navBar{
     background-color:white;
@@ -125,6 +128,12 @@ text-align: center;
 .Profilecard:hover{
   box-shadow: 0px 0px 0px 0px rgba(143, 143, 143, 0.527);
 }
+.topSymbolMain{
+  width:100%;
+  height:10px;
+  margin-top:-16px;
+  text-align: right;
+}
 
 .inviteMagic{
   border-style:none;
@@ -149,19 +158,21 @@ text-align: center;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
-.labelContainer{
-  
-  padding-top:24px;
-  height: 90px;
+.labelContainerMain{
   padding:5px;
-  border-style:none;
+  padding-top:34px;
+  height: 120px;
+  
+  border-style:solid;
+  border-color:rgba(119, 119, 119, 0.623);
+  border-width:1px;
   padding-bottom:5px;
   border-radius:6px;
   width:80%;
   margin:auto;
   margin-top:30px;
   position:relative;
-  background-color:rgb(249, 249, 250);
+  background-color:#eee;
 
 }
 .ProfileDiv{
@@ -180,7 +191,7 @@ margin-top:10px;
 
 }
 .fullHome{
-  min-height:100vh;
+  min-height:99.7vh;
   background-color: rgb(143, 205, 228);
 
 }
@@ -403,10 +414,14 @@ color:black;
   a:active {
     color:blue;
   }
+  .ActivityBelow{
+    width:80%;
+    margin:auto;
+  }
   .issueCard{
     padding-bottom:5px;
     width:100%;
-    background-color: white;
+    background-color:  rgb(252, 252, 252);;
     border-radius:2px;
     border-bottom-style:solid;
     border-bottom-width:1px;
@@ -414,7 +429,7 @@ color:black;
   }
   .issueCard:hover{
     
-    background-color:  rgb(250, 250, 250)
+    background-color:  rgb(246, 246, 246)
   }
  
  
@@ -617,8 +632,9 @@ border-top-width:0.5px;
         font-size: 13px;
        
       }
-      .labelContainer{
+      .labelContainerMain{
         width:50%;
+        /* background-color: orange; */
     }
     .dateNew{
       color:rgba(206, 201, 201, 0.867);
@@ -638,7 +654,7 @@ border-top-width:0.5px;
     }
 
     @media (min-width: 1000px) {
-      .sharableLinkSection{
+      .sharabledSection{
         width:50%;
       }
       .issueContainer{

@@ -20,14 +20,14 @@
   .screeShareMenu{
     position: absolute;
      /* left:-35%; */
-     box-sizing: border-box;
+     /* box-sizing: border-box; */
      width: 130%;
    
      /* margin-right:50%; */
-     border: 1px solid #3333;
+     border-style: 1px solid #3333;
      overflow:auto;
       /* max-height:300px; */
-      padding:3px;
+      /* padding:3px; */
       background-color: white;
       z-index: 1000;
       border-radius:5px;

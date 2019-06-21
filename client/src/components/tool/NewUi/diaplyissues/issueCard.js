@@ -277,7 +277,7 @@ class issueCard extends Component {
                    
                     <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
                         className="questionText">
-                        <p id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
+                        <p style={{fontSize:"13px"}} id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
                     </div>
                     <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
                         <video id={this.props.issue.issueid}

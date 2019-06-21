@@ -457,7 +457,7 @@ exports.sendotp = (req, res) => {
             var mailOptions = {
                 from: '"Bookmane Labs" <' + config.ADMIN_EMAIL + '>',
                 to: req.body.email,
-                subject: 'OTP for varification',
+                subject: 'OTP for verification',
                 text: 'Hello,\n\n' + 'This is you one time password for authentication: \n\n \b' + req.body.otp
             };
             transporter.sendMail(mailOptions, function (err) {

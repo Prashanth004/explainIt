@@ -21,13 +21,13 @@
     padding-right:3px;
     padding-left:1.5px;
     right:25px;
-    display:grid;
-    grid-template-columns: 50% 50%; 
+    /* display:grid;
+    grid-template-columns: 50% 50%;  */
   }
   .Share{
       height:50px;
-    display:grid;
-  grid-template-columns: 21% 21% 25% 21% 12%; 
+    /* display:grid;
+  grid-template-columns: 21% 21% 25% 21% 12%;  */
   }
   .record{
     grid-template-columns: 42% 16% 42%; 

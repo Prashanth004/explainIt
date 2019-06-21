@@ -18,53 +18,44 @@ class Call extends Component {
         }
         this.toggleCanvas = this.toggleCanvas.bind(this);
         this.increaseTime = this.increaseTime.bind(this);
+        this.postMessageHandler = this.postMessageHandler.bind(this)
     }
-    componentDidMount(){
+    postMessageHandler(event) {
         var self=this
         var socket = this.props.socket
-        function postMessageHandler(event) {
-
            
-            if(event.data.type===config.END_CALL_FROM_EXTENSION){
-                self.props.endCall();
-                socket.emit(config.END_CALL, {
-                    'peerId': self.props.peerId,
-                    'timerEnded': true,
-                })
-                return
-            }
-            if(event.data.type ===  config.ADD_EXTRA_MINUTE_TO_WEB_SITE){
-
-                self.increaseTime()
-                return
-            }
-
-            if(event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION){
-                self.props.shareMyScreen();
-                return
-            }
+        if(event.data.type===config.END_CALL_FROM_EXTENSION){
+            self.props.endCall();
+            socket.emit(config.END_CALL, {
+                'peerId': self.props.peerId,
+                'timerEnded': true,
+            })
+            return
         }
+        if(event.data.type ===  config.ADD_EXTRA_MINUTE_TO_WEB_SITE){
+            console.log("addding extra min")
+            self.increaseTime()
+            return
+        }
+
+        if(event.data.type === config.SHARE_MYSCREEN_FROM_EXTENSION){
+            self.props.shareMyScreen();
+            return
+        }
+    }
+    componentDidMount(){
+       
+
         if (window.addEventListener) {
-            window.addEventListener("message", postMessageHandler, false);
+            window.addEventListener("message", this.postMessageHandler, false);
         } else {
-            window.attachEvent("onmessage", postMessageHandler);
+            window.attachEvent("onmessage", this.postMessageHandler);
         }
     }
     componentWillUnmount(){
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
-        const endCall = {
-            type:config.END_CALL_PEER_FROM_EXTNESION,
-            data:{timer:this.props.timeAloted,
-            profilePic:this.props.otherPersonPic}
-        }
-        if (this.props.extSource !== null) {
-            source.postMessage(endCall, origin);
-        }
-        else{
-            window.postMessage(endCall, "*")
-        }
+        window.removeEventListener("message",this.postMessageHandler)
     }
+  
     componentWillMount(){
         localStorage.setItem('action',JSON.stringify(config.FULL_SCREEN_SHARE))
         localStorage.setItem('timer',JSON.stringify(this.props.timeAloted))

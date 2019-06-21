@@ -611,7 +611,7 @@ class NewHome extends Component {
                 ) {
                     displayLinkDiv = (<div className="sharableLinkSection">
                         <Button close onClick={this.toggleDisplayLink} />
-                        <p>Your shareable Link</p>
+                        <p style={{fontWeight:"500"}}>Your shareable Profile Link</p>
                         <CopyToClipboard sharablelink={sharabeLink} />
                     </div>)
                 }
@@ -720,7 +720,7 @@ const mapStateToProps = state => ({
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
     inbox: state.nav.openInbox,
-    isSceenSharing: state.tools.isFullScreenSharing,
+        isSceenSharing: state.tools.isFullScreenSharing,
     isFullScreenRecording: state.tools.isFullScreenRecording,
     showCanvas: state.canvasActions.showCanvas,
     issueId: state.issues.currentIssueId,

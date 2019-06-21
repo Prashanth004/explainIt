@@ -19,6 +19,7 @@ export default (props) => {
 
                 <div style={{ textAlign: "left" }}>
                     <p> You tried calling <ImageContainer name={userData.userName} imgsrc={userData.profilePic}/>  for the topic <b>{activity.subject}</b></p>
+                  
 
                 </div>
             </div>

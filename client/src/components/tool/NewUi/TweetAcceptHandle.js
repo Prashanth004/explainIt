@@ -12,7 +12,6 @@ import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import ProfileNotOnExplain from "./ProfileNotOnTwitter/ProfileNotOnExplain"
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
 
-
 class tweetSearch extends Component {
     constructor(props) {
         super(props)
@@ -22,15 +21,14 @@ class tweetSearch extends Component {
             isVisitProfile: false,
             limitExce: false,
             emptyNumber: false,
-            emptyUserName:false,
+            emptyUserName: false,
             negNumber: false,
             noText: false,
             maxTimeForVideo: null,
             tweetAction: false,
             timeInputDone: false,
-            noInternet:false
-
-
+            noInternet: false,
+            selfShare: false
         }
         this.testHandle = this.testHandle.bind(this);
         this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this);
@@ -39,57 +37,50 @@ class tweetSearch extends Component {
         this.changeImputNumber = this.changeImputNumber.bind(this)
     }
     componentWillMount() {
-        if(this.props.explainBy === config.SHARE_SCREEN_EXPALIN)
-            this.setState({twitterHandle:this.props.sharehandle})
-        this.props.resetValues();
-        this.props.getTwitterHandles();
-        this.setState({
-            maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT
-        })
-
+        const { resetValues, getTwitterHandles } = this.props
+        if(this.props.visitedTiwtterHandle!==null)
+            this.setState({ twitterHandle: this.props.visitedTiwtterHandle });
+        
+        if (this.props.explainBy === config.SHARE_SCREEN_EXPALIN)
+            this.setState({ twitterHandle: this.props.sharehandle });
+        
+        resetValues();
+        getTwitterHandles();
+        this.setState({ maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT })
     }
 
     testHandle() {
-        var twitterHandleTemp = (this.state.twitterHandle.includes('@'))?
-        (this.state.twitterHandle.replace("@","")):(this.state.twitterHandle)
-            if(!window.navigator.onLine){
-                this.setState({
-                    noInternet: true
-                }) 
-            }
-         
-
-            
-        if((twitterHandleTemp.length) === 0){
-            this.setState({
-                emptyUserName: true
-            })
-
-        }
-        else{
+        const { OwnerTwitterHandle, getProfileByTwitterHandle, getRecpientId } = this.props;
+        const { twitterHandle } = this.state;
+        const twitterHandleTemp = (twitterHandle.includes('@')) ?
+            (twitterHandle.replace("@", "")) : (twitterHandle)
+        console.log("twitterHandleTemp : ",twitterHandleTemp);
+        console.log("OwnerTwitterHandle :",OwnerTwitterHandle)
+        if (twitterHandleTemp === OwnerTwitterHandle)
+            this.setState({ selfShare: true })
+        if (!window.navigator.onLine)
+            this.setState({ noInternet: true })
+        if ((twitterHandleTemp.length) === 0)
+            this.setState({ emptyUserName: true })
+        else
             if (!this.props.limitExce &&
                 !this.props.negNumber &&
                 !this.state.noText
                 && !this.state.negNumber
                 && !this.state.emptyNumber) {
-                this.setState({
-                    tweetTested: true
-                })
-                this.props.getProfileByTwitterHandle(twitterHandleTemp)
-                this.props.getRecpientId(twitterHandleTemp,this.props.userId)
+                this.setState({ tweetTested: true })
+                getProfileByTwitterHandle(twitterHandleTemp)
+                getRecpientId(twitterHandleTemp, this.props.userId)
             }
-        }
-    
     }
-    updateTwitterHandleBox(e,value) {
 
-      
-   
+    updateTwitterHandleBox(e, value) {
         this.setState({
-            twitterHandle:value,
+            twitterHandle: value,
+            selfShare: false,
             tweetTested: false,
-            emptyUserName:false,
-            noInternet:false
+            emptyUserName: false,
+            noInternet: false
         })
     }
     sendRecordding() {
@@ -147,48 +138,65 @@ class tweetSearch extends Component {
 
     }
     render() {
+        const { twitterHandle, noText, tweetTested, doneTweeting, noInternet, selfShare,
+            isVisitProfile, negNumber, emptyNumber, emptyUserName, limitExce, maxTimeForVideo } = this.state;
+        const { noOfMinutes, doneFetching, twitterHandleValid,
+            fetchProfile, isPresentInExplain } = this.props;
         var validatinginfo = null;
         var mainContainer = (<div className="startShare">
-            <p style={{ margin: "10px", fontSize:"15px", fontWeight:"500" }}>Initiate screen share with  <TweetSuggest
+            <p style={{ margin: "10px", fontSize: "15px", fontWeight: "500" }}>Initiate screen share with  <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="@username"
                 classOfInput="handleInput"
-                tweetTextvalue={this.state.twitterHandle}
+                tweetTextvalue={twitterHandle}
                 classOfMenu="screeShareMenu"
             /> for  <InputNumber
-                empty={this.state.emptyNumber}
-                emptyUserName={this.state.emptyUserName}
-                limitOfChar={this.state.maxTimeForVideo}
-                limitExce={this.state.limitExce}
-                changeInputValue={this.changeImputNumber}
-                textValue={this.props.noOfMinutes}
-                negNumber={this.state.negNumber}
-                noText={this.state.noText} />
-                </p>
+                    empty={emptyNumber}
+                    emptyUserName={emptyUserName}
+                    limitOfChar={maxTimeForVideo}
+                    limitExce={limitExce}
+                    changeInputValue={this.changeImputNumber}
+                    textValue={noOfMinutes}
+                    negNumber={negNumber}
+                    noText={noText} />
+            </p>
             <br />
-
-
-            <button onClick={this.testHandle} style={{ marginTop: "15px" }} className="buttonLight" >Next</button>
+            <button onClick={this.testHandle} style={{ marginTop: "5px" }} className="buttonLight" >Next</button>
         </div>)
-        if (this.state.tweetTested && !this.state.doneTweeting) {
-            if (this.props.doneFetching && this.props.fetchProfile) {
-                if (!this.props.twitterHandleValid) {
-                    if(this.state.noInternet){
+        if (tweetTested && !doneTweeting) {
+            if (doneFetching && fetchProfile) {
+                if (!twitterHandleValid) {
+                    if (noInternet)
                         validatinginfo = (<div>
                             <p className="info">Please check the internet connectivity</p>
-                        </div>
-                        )
-                    }
-                    else{
+                        </div>)
+                   
+                    else {
                         validatinginfo = (<div>
                             <p className="info">Incorrect twitter handle<br />
                                 Please check and try again</p>
                         </div>
                         )
                     }
-                   
+
                 }
-                else if (!this.props.isPresentInExplain) {
+                else if (selfShare){
+                    validatinginfo = (<div>
+                         <span style={{
+                            float: "left",
+                            fontSize: "15px"
+                        }}>
+                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                        </span>
+                        <div className="TwiValidInfo">
+                        <p style={{fontWeight:"500"}}>It is not a good idea to share screen with yourself</p>
+                        <p className="info">You have entered your twitter hanlde</p>
+                        </div>
+                    </div>);
+                     mainContainer = (null)
+                }
+               
+                else if (!isPresentInExplain) {
                     validatinginfo = (<div>
                         <span style={{
                             float: "left",
@@ -196,16 +204,17 @@ class tweetSearch extends Component {
                         }}>
                             <FaArrowLeft onClick={this.changeTweetStateNeg} />
                         </span>
+                        <div  className="TwiValidInfo" >
                         <ProfileNotOnExplain
-                            isVisitProfile={this.state.isVisitProfile}
-                            twitterhandle={this.state.twitterHandle}
-                            source = {config.SCREEN_SHARE_PAGE} />
+                            isVisitProfile={isVisitProfile}
+                            twitterhandle={twitterHandle}
+                            source={config.SCREEN_SHARE_PAGE} />
 
                         <span style={{ fontSize: "14px" }}>
                             You can manually share the link now to get connected
                         </span>
                         <CopyToClipboard sharablelink={this.props.shareScreenLink} />
-
+                        </div>
                     </div>
                     )
                     mainContainer = (null)
@@ -214,14 +223,17 @@ class tweetSearch extends Component {
 
                 else {
 
-                    validatinginfo = (<div>
+                    validatinginfo = (<div  >
                         <span style={{
                             float: "left",
                             fontSize: "15px"
                         }}>
                             <FaArrowLeft onClick={this.changeTweetStateNeg} />
                         </span>
+                        <div className="TwiValidInfo">
                         <AcceptTopic tweetTheMessage={this.tweetTheMessage} />
+                        </div>
+                       
                     </div>)
                     mainContainer = (null)
                 }
@@ -253,18 +265,18 @@ const mapStateToProps = state => ({
     userId: state.auth.id,
     noOfMinutes: state.call.noOfMinutes,
     userName: state.visitProfile.userName,
+    visitedTiwtterHandle:state.visitProfile.visitedTiwtterHandle,
     onlineStatus: state.visitProfile.onlineStatus,
-    busyStatus:state.visitProfile.busyStatus,
+    busyStatus: state.visitProfile.busyStatus,
     isPresentInExplain: state.visitProfile.isPresent,
     explainBy: state.explain.explainBy,
-    sharehandle:state.explain.sharehandle
+    sharehandle: state.explain.sharehandle,
+    OwnerTwitterHandle: state.auth.twitterHandle,
+    
 })
 export default connect(mapStateToProps, {
-    getProfileByTwitterHandle,
-    getTwitterHandles,
-    setNoOfMinutes,
-    updateCurrentTime,
-    getRecpientId,
-    resetValues
+    getProfileByTwitterHandle, getTwitterHandles,
+    setNoOfMinutes, updateCurrentTime,
+    getRecpientId, resetValues
 })(tweetSearch)
 

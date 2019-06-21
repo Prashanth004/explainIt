@@ -1,9 +1,20 @@
 .inputBox{
-    width:100%;
+    width:80%;
+    height: 60px;
     margin:auto;
     border-radius:3.5px;
     padding:5px;
     font-size:12px;
+    font-weight:500;
+    border-style: solid;
+    border-width:1px;
+    border-color:rgb(192, 191, 191);
+    color:rgb(112, 112, 112);
+    background-color: rgb(245, 245, 245);
+}
+.inputBox:focus{
+    outline: 0px;
+    border-color:rgba(0, 0, 0, 0.5);
 }
 .inputNumberDiv{
     display:inline-block;
@@ -16,6 +27,7 @@
 
 .inputNumber{
     /* border-radius:5px; */
+    
     text-align: center;
     padding:px;
     width:30px;
@@ -23,7 +35,13 @@
     margin:0px;
     border-style:none;
     border-bottom-style: solid;
-    border-width:0.5px;
+    border-width:1px;
     border-color:rgb(114, 113, 113);
+    color:rgb(112, 112, 112);
+    background-color: #eee;
 
+}
+.inputNumber:focus{
+    outline: 0px;
+    border-color:rgba(0, 0, 0, 0.5);
 }
