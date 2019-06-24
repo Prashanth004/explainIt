@@ -109,8 +109,9 @@ class Project extends Component {
                 </b>
                 </h3></div>):(<div style={msgStyling}>
                     <h3><b>
-                      Invalid Url
+                     Project not found !
                       </b></h3>
+                      <p>It could either have got deleted or some prolem occured with saving the recorded content.</p>
                   </div>
                 ))):(null)):(null)
   }
