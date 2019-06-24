@@ -211,6 +211,7 @@ class ScreenRecorder extends Component {
         });
     }
     endCall() {
+        registerEndToBrowser();
         const { extSource, extOrigin } = this.props
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
         var self = this
@@ -224,7 +225,6 @@ class ScreenRecorder extends Component {
             'peerId': this.state.peerId,
             'timer-ended': false
         });
-        registerEndToBrowser();
         if (peer !== null) {
             peer.destroy();
             this.setState({
@@ -283,6 +283,7 @@ class ScreenRecorder extends Component {
     }
     
     onUnload(event) { // the method that will be used for both add and remove event
+        registerEndToBrowser();
      if(this.props.isSceenSharing){
         this.endCall()
         event.returnValue = "Hellooww"
@@ -443,6 +444,7 @@ class ScreenRecorder extends Component {
         })
     }
     componentWillUnmount() {
+        registerEndToBrowser();
         window.removeEventListener("beforeunload", this.onUnload);
         window.removeEventListener("message",this.postMessageHandler);
         // this.props.fullStopedSharing()
@@ -835,6 +837,7 @@ class ScreenRecorder extends Component {
             extSource, postEndCall } = this.props
         const { stopedSharing, recorder, call, closedHere, timerEnded } = this.state
         const self = this;
+        registerEndToBrowser();
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
         if (!stopedSharing) {
             this.setState({ stopedSharing: true })

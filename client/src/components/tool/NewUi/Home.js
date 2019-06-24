@@ -460,19 +460,13 @@ class NewHome extends Component {
                 this.props.screenAction === FULL_SCREEN_RECORD) {
 
                 if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
-                    percentage = "100%";
-
-                }
+                    percentage = "100%";}
                 else {
-                    percentage = "30%";
-                }
-
+                    percentage = "30%";}
             }
             else {
                 if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
-
                     percentage = "100%";
-
                 }
                 else {
                     percentage = "30%";

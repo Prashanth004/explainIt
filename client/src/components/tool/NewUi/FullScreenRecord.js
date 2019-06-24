@@ -175,6 +175,7 @@ class FullScreenRecorder extends Component {
         })
     }
     onUnload(event) {
+        registerEndToBrowser();
         if(this.props.isFullScreenRecording){
             const { extSource, extOrigin,postEndCall } = this.props;
             postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
@@ -406,6 +407,7 @@ class FullScreenRecorder extends Component {
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
+        registerEndToBrowser();
         clearInterval(this.timebar);
         this.props.resetRecorder()
         window.removeEventListener("beforeunload", this.onUnload)
