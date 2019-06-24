@@ -80,6 +80,25 @@ export const changeReadStatus = (messageId)=>(dispatch)=>{
         })
     })
 }
+
+export const saveRecordedMessage = (link,callTopic,fromId,subject,)=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'));
+    var postData = {
+        link: link,
+        callTopic,
+        activity:config.SAVE_RECORD,
+        subject:subject,
+        fromUser: fromId,
+        touser:null
+      };
+      let axiosConfig = {
+        headers: {
+            "Authorization":token,
+        }
+      };
+      axios.post(config.base_dir+'/api/message', postData, axiosConfig).then(response=>{});
+}
+
 export const sendMessage = (link,callTopic, fromId, ToId, subject)=>(dispatch)=>{
   
     var token = JSON.parse(localStorage.getItem('token'))

@@ -17,7 +17,7 @@ import { showCanvas, hideCanvas } from '../../../actions/canvasAction'
 import { Button } from 'reactstrap';
 import TimerBar from './TimerBar'
 import browser from 'browser-detect';
-import { sendMessage } from '../../../actions/messageAction';
+import { sendMessage, saveRecordedMessage} from '../../../actions/messageAction';
 import DownloadExt from './container/DownloadExt'
 import {
     fullStartedRecording,
@@ -46,13 +46,13 @@ class FullScreenRecorder extends Component {
             permissonDenied:false,
             currentTime:{},
             recordTime:null,
-            currentAtionStatus:null
+            currentAtionStatus:null,
+            saveActivity:false
 
         }
         this.downloadExtension = this.downloadExtension.bind(this);
         this.recordScreenStop = this.recordScreenStop.bind(this);
         this.savefilePrivate = this.savefilePrivate.bind(this);
-        this.savefilePublic = this.savefilePublic.bind(this);
         this.renderer = this.renderer.bind(this);
         this.startBar = this.startBar.bind(this);
         this.startRecording = this.startRecording.bind(this);
@@ -70,6 +70,7 @@ class FullScreenRecorder extends Component {
         this.updateTime = this.updateTime.bind(this);
         this.timebar = this.timebar.bind(this);
         this.cancelSaveBtn = this.cancelSaveBtn.bind(this);
+        this.saveActivityJustRecord = this.saveActivityJustRecord.bind(this)
     }
     timebar =()=>{}
     startBar() {
@@ -101,7 +102,11 @@ class FullScreenRecorder extends Component {
         }
     }
 
-
+    saveActivityJustRecord(){
+        //call the action to save activity
+        var subject = this.state.subjectOfMessage
+        this.props.saveRecordedMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId,  subject);
+    }
     startRecording() {
         var self = this;
         var constraints = null;
@@ -299,15 +304,10 @@ class FullScreenRecorder extends Component {
         this.setState({saveBtnClicked: true})
     }
 
-    savefilePublic(textData) {
-        this.props.savefile(this.state.blob,null, 1, textData,config.SERVER_RECORDING)
-
-    }
+ 
     savefilePrivate(textData) {
         var blob = this.state.blob
-        this.setState({
-            subjectOfMessage: textData
-        })
+        this.setState({subjectOfMessage: textData });
         this.props.savefile(blob,null, 0, textData,config.SERVER_RECORDING)
     }
 
@@ -400,10 +400,9 @@ class FullScreenRecorder extends Component {
     }
     }
     sendMessageLocal() {
-        this.setState({
-            savedfuncCalled: true
-        })
+        this.setState({savedfuncCalled: true})
         var subject = this.state.subjectOfMessage
+        
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
@@ -421,9 +420,7 @@ class FullScreenRecorder extends Component {
     }
 
     sendButtonClick() {
-        this.setState({
-            sendBtnClicked: true
-        })
+        this.setState({ sendBtnClicked: true })
     }
 
     pauseRecorder(){
@@ -465,7 +462,8 @@ class FullScreenRecorder extends Component {
         const closeFunction = (this.props.isFullScreenRecording) ? this.props.reStoreDefault :
             this.props.closeImidiate
         const closeBtn = ((!this.props.isFullScreenRecording && this.props.explainBy === config.null )?
-            (<Button style={{margin:"0px"}} close onClick={closeFunction} />) : (null))
+        ((this.props.isFullRecordCompleted && !this.state.sendBtnClicked && !this.state.saveBtnClicked)?
+        (null):(<Button style={{margin:"0px"}} close onClick={closeFunction} />)) : (null))
         if (this.props.isFullScreenRecording) {
 
             var timer = (<Countdown
@@ -515,11 +513,9 @@ class FullScreenRecorder extends Component {
                     </div>
                 </div>
                 {showCanv}
-
                 <div className="recorderfooter">
                     <TimerBar />
                     {timer}
-
                     <div className="btDiv">
                         <button className="buttonLight" ref={a => this.convey = a} onClick={this.toggle}>{convey}</button>
                     </div>
@@ -553,6 +549,10 @@ class FullScreenRecorder extends Component {
             </div>)
         }
         else if (this.props.isSaved && this.state.saveBtnClicked) {
+            // if(!this.state.saveActivity.)  
+                this.saveActivityJustRecord() 
+            // call action to save it into activity
+            // postShareElements = (<div className="postRecord">
              var   cpyTpclipBrd = ( this.props.explainBy!==config.null)?(null):
              (<CopyToClipboard sharablelink={this.props.sharablelink} />)
             postShareElements = (<div className="postRecord">
@@ -609,6 +609,7 @@ FullScreenRecorder.PropType = {
     hideCanvas: PropType.func.isRequired,
     sendMessage: PropType.func.isRequired,
     postStartCall:PropType.func.isRequired,
+    saveRecordedMessage:PropType.func.isRequired
     
 
 }
@@ -634,5 +635,5 @@ const mapStateToProps = state => ({
     currentTime:state.recorder.currentTime
 })
 
-export default connect(mapStateToProps, {postStartCall,resetRecorder,pauseRecording,resumeRecording,startRecorder,updateCurrentTime,postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
+export default connect(mapStateToProps, {postStartCall,saveRecordedMessage,resetRecorder,pauseRecording,resumeRecording,startRecorder,updateCurrentTime,postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
 

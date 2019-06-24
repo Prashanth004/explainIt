@@ -65,6 +65,7 @@ module.exports = {
     FROM_USER_ADMIN_ID:"2591624137",
     WELCOME_SUBJECT:"Welcome. Demo to explain the application",
     LINK_RECORDING:"http://localhost:3000/project/4639821",
+    SAVE_RECORD:"saveRecording"
 
 };
 

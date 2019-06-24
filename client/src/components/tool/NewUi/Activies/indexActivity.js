@@ -30,7 +30,7 @@ class activityRoot extends Component {
     this.setState({allActivities : allacti})
   }
   render() {
-    const { userId, activities } = this.props;
+    const { userId } = this.props;
     const {allActivities} = this.state;
     const activitiesEle = (allActivities).map((activity, index) =>
       (activity.activity)?

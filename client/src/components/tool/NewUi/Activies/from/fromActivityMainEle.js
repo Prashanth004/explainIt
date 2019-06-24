@@ -7,7 +7,7 @@ import '../activity.css';
 import CallSuccess  from '../to/CallSuccess';
 import CallFail from './CallFailed';
 import Message from './Message';
-
+import RecordActivity from './recordedAct'
 import {addNewUser} from '../../../../../actions/storeUserAction'
 import { changeReadStatus } from '../../../../../actions/messageAction'
 
@@ -53,6 +53,7 @@ class ActivityMain extends Component {
   
     }
   render() {
+      console.log()
     const activitiesElements =(this.props.activity.activity===config.CALL_FAILED)?
     (<CallFail
         userData = {this.state}
@@ -61,9 +62,11 @@ class ActivityMain extends Component {
         (<CallSuccess
              userData = {this.state}
              activity={this.props.activity} />):(
-                <Message 
+                 (this.props.activity.activity!==config.SAVE_RECORD)?(<Message 
                     userData = {this.state}
-                    activity={this.props.activity}/>))
+                    activity={this.props.activity}/>)
+                    :(<RecordActivity 
+                    activity={this.props.activity}/>)))
     
 
 

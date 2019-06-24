@@ -268,8 +268,7 @@ class ShareFloater extends Component {
                 <MdVolumeOff style={{marginTop:"3px"}} onClick={this.muteAudio} className="endButton" />
             </span>
         </div>) :
-            (
-                <div className="callPage-recieverImageDiv muteButton unmuteButton">
+            (<div className="callPage-recieverImageDiv muteButton unmuteButton">
                 <span className="hint--left" aria-label="Un Mute">
                     <MdVolumeUp  style={{marginTop:"3px"}}  onClick={this.muteAudio} className="endButton" />
                 </span>

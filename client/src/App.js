@@ -12,7 +12,8 @@ import NoMatch from './components/tool/NewUi/NoMatch'
 import Home from './components/tool/NewUi/Home'
 import video from './components/tool/NewUi/videoDisplay'
 import Explainit from './components/tool/NewUi/Explain/ExplainPage'
-import google from './components/testGoogle'
+import google from './components/testGoogle';
+import Toggle from './components/tool/NewUi/NewFloater/closeFloater'
 import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
 import visitProfile from './components/tool/NewUi/connectProfile'
@@ -43,6 +44,7 @@ class App extends Component {
             <Route exact path ='/floater' component={floater}/>
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
+            <Route exact path = '/closefloater' component = {Toggle}/>
             {/* <Route exaxt path ='/emailvarify' component={emailvarify}/> */}
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />

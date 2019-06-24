@@ -12,7 +12,6 @@ import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } fr
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import { creatAnsProject } from '../../../actions/projectActions'
 import { resetCallAction} from '../../../actions/callAction'
-
 import socketIOClient from "socket.io-client";
 import TwitterLogin from 'react-twitter-auth';
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -107,7 +106,6 @@ class NewHome extends Component {
         })
 
         if(!this.props.isPresentInExplain){
-            // alert("dnvnvnfkn")
             const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
             this.props.getRecpientId(twiHand)
         }
@@ -137,7 +135,7 @@ class NewHome extends Component {
         const socket = socketIOClient(config.base_dir);
         this.setState({socket: socket })       
         if(this.props.match.params.encrTwitterHandle===null){
-            alert("empty")
+            // alert("empty")
         }
         const twiHand = this.props.match.params.encrTwitterHandle.replace("@","");
         this.props.setVisitProfile(twiHand);
@@ -333,7 +331,9 @@ class NewHome extends Component {
 
          const details = (this.state.showDetails) ?((this.props.inbox || this.props.created || this.props.participated)?(
             null
-        ):( <Profile isHome ={this.state.isHome}/>)):(null)
+        ):(  <div style={{ marginTop: "-25px"}}>
+             <Profile isHome ={this.state.isHome}/>
+             </div>)):(null)
         var issuesCreated = this.props.myissues;
 
         var self = this

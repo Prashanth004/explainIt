@@ -5,9 +5,7 @@ import Toggle from 'react-toggle';
 import '../../css/toggle.css';
 import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
-import { IoIosBrowsers,IoMdVideocam,IoMdMail,IoIosVideocam,IoIosMail } from "react-icons/io";
-import { FiVideo,FiCopy, FiMail, FiLink2 } from "react-icons/fi";
-import { FaVideo,FaEnvelope } from "react-icons/fa";
+import { FiVideo, FiMail, FiLink2 } from "react-icons/fi";
 import { resetCallAction } from '../../../actions/callAction'
 import { resetIssueActions, resetProjectActions } from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
@@ -114,20 +112,10 @@ class ProfileCard extends Component {
                                 </span>
                             </div>
                             <div className="screenShareBtnLabel">
-                                <span className="hint--top" aria-label="Share screen!">
-                                     {/* FiCopy */}
-            {/* MdContentCopy */}
-            {/* IoIosBrowsers */}
-            {/* FaClone */}
-            {/* FaRegClone */}
-                                {/* <img alt="screen share" onClick={this.startSharingScreen} height="100%" width="100%" src={require('../../images/logo5.png')} /> */}
-                                <IconContext.Provider value={{ color: "#333", className: "iconsCard" }}>
-                                        <div>
-                                        <FiCopy style={{fontSize:"32px",marginTop:"1px"}} onClick={this.startSharingScreen} />
-
-                                        </div>
-                                        </IconContext.Provider>
+                            <span className="hint--top" aria-label="Share screen!">
+                                    <img alt="screen share" onClick={this.startSharingScreen} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                                 </span>
+                                
                             </div>
                             <div className="RecordBtnLabel">
                             <span className="hint--top" aria-label="Record screen!">

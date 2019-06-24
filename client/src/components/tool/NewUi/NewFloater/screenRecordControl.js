@@ -1,4 +1,4 @@
-import { MdCallEnd } from "react-icons/md";
+import { MdStop } from "react-icons/md";
 import Countdown from 'react-countdown-now';
 import './record.css';
 import config from '../../../../config/config'
@@ -85,7 +85,7 @@ pauseRecorder(){
         <div className="floaterContainerTans">
                  <div className="callImageDivAnwserMain Share record">
  
-                     <div className="callPage-recieverImageDiv">
+                     {/* <div className="callPage-recieverImageDiv">
                          <span>
                              <MdCallEnd
                                  className="img__overlayFloat"
@@ -94,8 +94,14 @@ pauseRecorder(){
                                      padding: "10px"
                                  }} />
                          </span>
+                     </div> */}
+                       <div  className="callPage-recieverImageDiv endCall recordIcon">
+                       <span className="hint--right" aria-label="Stop recording">
+  <MdStop  onClick={this.endCallFloater} className="endButton" />
+  </span>
+ 
                      </div>
-                     <div  className="callPage-recieverImageDiv endCall Shareicon">
+                     <div  className="callPage-recieverImageDiv endCall recordIcon">
                    {pausePlay}
  
                      </div>

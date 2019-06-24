@@ -138,19 +138,34 @@ class tweetSearch extends Component {
 
     }
     render() {
-        const { twitterHandle, noText, tweetTested, doneTweeting, noInternet, selfShare,
-            isVisitProfile, negNumber, emptyNumber, emptyUserName, limitExce, maxTimeForVideo } = this.state;
+        const {emptyUserName, empty,noText,negNumber,limitExce}  = this.state;
+       
+        const { twitterHandle, tweetTested,limitOfChar, doneTweeting, noInternet, selfShare,
+            isVisitProfile, emptyNumber,   maxTimeForVideo } = this.state;
         const { noOfMinutes, doneFetching, twitterHandleValid,
             fetchProfile, isPresentInExplain } = this.props;
+        const spanElement= ((limitExce)?(
+            <span className="spanElement" >Can not be more than {limitOfChar}</span>
+            ):(negNumber)?(
+            <span className="spanElement" >Can not be negetive number or zero</span>
+            ):noText?(
+            <span className="spanElement" >Only numbers</span>
+    
+            ):((empty)?(
+            
+            <span className="spanElement">Cant be empty</span>
+            ):(emptyUserName?(
+            <span className="spanElement">User name cant be empty</span>
+            ):(null))))
         var validatinginfo = null;
         var mainContainer = (<div className="startShare">
-            <p style={{ margin: "10px", fontSize: "15px", fontWeight: "500" }}>Initiate screen share with  <TweetSuggest
+            <p style={{ fontSize: "13px", fontWeight: "500" }}>Screen share with  <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
                 placeholder="@username"
                 classOfInput="handleInput"
                 tweetTextvalue={twitterHandle}
                 classOfMenu="screeShareMenu"
-            /> for  <InputNumber
+            /> for<InputNumber
                     empty={emptyNumber}
                     emptyUserName={emptyUserName}
                     limitOfChar={maxTimeForVideo}
@@ -160,7 +175,8 @@ class tweetSearch extends Component {
                     negNumber={negNumber}
                     noText={noText} />
             </p>
-            <br />
+            {spanElement}
+            <br/>
             <button onClick={this.testHandle} style={{ marginTop: "5px" }} className="buttonLight" >Next</button>
         </div>)
         if (tweetTested && !doneTweeting) {

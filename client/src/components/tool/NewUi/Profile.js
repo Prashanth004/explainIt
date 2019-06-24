@@ -3,7 +3,7 @@ import '../../css/profile.css';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap'
 import PropType from 'prop-types';
-import ProfileForm from './ProfileForm';
+import ProfileForm from './Profile/';
 import { openEditProfile, closeEditProfile } from '../../../actions/profileAction'
 import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
 class Profile extends Component {
@@ -15,6 +15,11 @@ class Profile extends Component {
         this.openEdit = this.openEdit.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
     }
+    componentWillMount(){
+        if((this.props.bio === null||(this.props.bio).length===0) && this.props.isHome)
+            this.props.openEditProfile()
+        
+    }
     openEdit() {
         this.props.openEditProfile()
     }
@@ -22,12 +27,14 @@ class Profile extends Component {
         this.props.closeEditProfile()
     }
     render() {
+        const editbtn = (!this.props.openEdirProfile)?(  <span  className="hint--top edit" aria-label="Edit!">
+        <FiEdit onClick={this.openEdit} className="edit" />
+    </span>):(null)
         const editOption = (this.props.isHome) ? (
         <div>
              <Button style={{margin:"-8px"}} close onClick={this.props.openDtailsTab} />
-            <span  className="hint--top edit" aria-label="Edit!">
-        <FiEdit onClick={this.openEdit} className="edit" />
-    </span></div>) : (null)
+             {editbtn}
+          </div>) : (null)
         const bio = (this.props.bio !== null) ? (
             (this.props.bio.length > 0) ? (
                 <p>
