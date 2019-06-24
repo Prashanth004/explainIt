@@ -157,6 +157,7 @@ class ScreenRecorder extends Component {
         var constraints = null;
         var sourceId = this.props.extSourceId;
         const result = browser();
+      
         if (result.name === "chrome") {
             constraints = {
                 video: {
@@ -203,6 +204,7 @@ class ScreenRecorder extends Component {
                     audioStream: audioStream,
                     screenStream: screenStream,
                     finalStream: finalStream,
+                    saveinitiated: false,
                     retry: false
                 })
             }).catch(err => {

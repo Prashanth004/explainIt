@@ -113,7 +113,7 @@ class ProfileCard extends Component {
                             </div>
                             <div className="screenShareBtnLabel">
                             <span className="hint--top" aria-label="Share screen!">
-                                    <img alt="screen share" onClick={this.startSharingScreen} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                                    <img alt="screen share" onClick={this.startSharingScreen} style={{marginTop:"2px"}} height="100%" width="100%" src={require('../../images/screensharing.png')} />
                                 </span>
                                 
                             </div>
