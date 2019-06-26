@@ -85,13 +85,15 @@ class SaveProjects extends Component {
     render() {
         return (
         <div className="ActivityBelow">
-            <p style={{fontWeight:"500"}}>Topic for the screen share.</p>
             <InputBox
+                
                     limitExce={this.state.limitExce}
                     empty={this.state.empty}
                     limitOfChar={this.state.limitOfChar}
                     changeInputValue={this.changeInputValue}
                     textValue={this.state.textValue}
+                    submit = {this.SaveTopic}
+                    placeHolder="Topic for screen share"
                 />
                 <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>Send Request</button>
             </div>

@@ -77,7 +77,8 @@ var messageRouter = require('./routes/message')
 var tweetRouter = require('./routes/tweetAction')
 var adminRouter = require('./routes/admin')
 var activityRouter = require('./routes/activity')
-var referralRouter = require('./routes/referral')
+var referralRouter = require('./routes/referral');
+var contactRouter =  require('./routes/contact');
 // app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -107,7 +108,8 @@ app.use('/api/issues',issueRouter);
 app.use('/api/message',messageRouter);
 app.use('/api/tweetactions', tweetRouter);
 app.use('/api/activity',activityRouter);
-app.use('/api/referral',referralRouter)
+app.use('/api/referral',referralRouter);
+app.use('/api/contact',contactRouter)
 app.use("/public", express.static(__dirname + "/public"));
 app.use(logger('dev'));
 //peerjs for screen sharing

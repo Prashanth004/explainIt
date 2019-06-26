@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import config from '../../../../config/config'
+import config from '../../../../config/config';
+import './record.css'
 
 export default class componentName extends Component {
   constructor(props){
@@ -24,8 +25,8 @@ export default class componentName extends Component {
   }
   render() {
     return (
-      <div  className="infoConatiner">
-        <p style={{color:"white",  fontWeight:"500"}}>{this.state.diplayinfo}</p>
+      <div  className="infoConatinerFloat">
+        <p style={{ fontWeight:"500"}}>{this.state.diplayinfo}</p>
       </div>
     )
   }

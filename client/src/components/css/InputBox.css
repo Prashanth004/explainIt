@@ -1,20 +1,21 @@
 .inputBox{
-    width:80%;
-    height: 60px;
-    margin:auto;
+   
     border-radius:3.5px;
-    padding:5px;
-    font-size:12px;
+  padding:10px;
+    font-size:13px;
     font-weight:500;
     border-style: solid;
     border-width:1px;
-    border-color:rgb(192, 191, 191);
+    border-color:#dde2e2;
     color:rgb(112, 112, 112);
-    background-color: rgb(245, 245, 245);
+    background-color:white;
 }
+::placeholder {
+    color:rgb(179, 174, 174);
+  }
 .inputBox:focus{
     outline: 0px;
-    border-color:rgba(0, 0, 0, 0.5);
+    border-color:rgba(0, 0, 0, 0.356);
 }
 .inputNumberDiv{
     display:inline-block;
@@ -35,10 +36,10 @@
     margin:0px;
     border-style:none;
     border-bottom-style: solid;
-    border-width:1px;
-    border-color:rgb(114, 113, 113);
+    border-width:0.5px;
+    border-color:#dde2e2;
     color:rgb(112, 112, 112);
-    background-color: #eee;
+    background-color: white;
 
 }
 .inputNumber:focus{

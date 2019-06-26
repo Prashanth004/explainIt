@@ -86,15 +86,15 @@ class tweetSearch extends Component {
         }
         var validatinginfo = null;
         var mainContainer = (<div>
-            <p>Enter the twitter handle to send a recording</p>
-            <TweetSuggest
+            <p>Enter the  <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
-                placeholder="Enter @username"
+                placeholder="@username"
                 classOfInput="handleInput"
                 tweetTextvalue={this.state.twitterHandle}
                 classOfMenu = "screeShareMenu"
                 array={this.props.twiterHandleArray}
-            />
+            /> to send a recording</p>
+           
 
             <button className="buttonLight" onClick={this.testHandle}>Send</button>
         </div>)

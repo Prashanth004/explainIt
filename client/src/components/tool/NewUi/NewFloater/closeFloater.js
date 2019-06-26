@@ -24,7 +24,7 @@ export default class componentName extends Component {
   render() {
     const toggleSymbol = (this.state.isClosed)?( <GoTriangleLeft onClick={this.toggle} />):( <GoTriangleRight onClick={this.toggle} />)
     return (
-        <div className="infoConatiner" style={{minHeight:"0px", float:"left", padding:"0px",paddingTop:"2px",paddingLeft:"2px"}}>
+        <div className="infoConatiner" >
           <span>
               {toggleSymbol}
               </span>

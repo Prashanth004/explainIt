@@ -56,16 +56,15 @@ border-radius:10.5px;
     /* padding-left:10px; */
     width:155px;
     text-align: left;
-    position:relative;
-    left:-105px;
-    top:20px;
+    position:absolute;
+    left:-125px;
+    /*top:20px; */
     background-color: white;
     border-radius:5px;
     /* padding:0 10px 0 10px; */
-    border-width:0.5px;
+    /* overflow:hidden; */
     border-style:none;
     z-index:1000000;
-    border-color:rgb(90, 90, 90);
     box-shadow: 0px 0px 10px 2px rgba(85, 85, 85, 0.192);
 
 }
@@ -90,10 +89,7 @@ border-radius:10.5px;
 /* .dateNew{
    
 } */
-.iconsright{
-    margin-left:60px;
-    float:right;
-}
+
 .explainModal{
    margin-top:10px;
    margin-bottom:10px;
@@ -108,40 +104,110 @@ border-radius:10.5px;
     text-align: center;
     display:"none";
 }
-.ProfileNameCard{
-    display:none;
-    text-align: left;
-    font-size:18px;
-    color:rgba(51, 51, 51, 0.815);
-    padding-left:2px;
-    /* margin-top:-2px; */
+.cardProfilePicDiv{
+    /* background-color:yellow; */
+    margin-top:8px;
+    width:35px;
+    height:35px
 }
+.cardProfileName{
+/* background-color:orange; */
+text-align:left;
+padding:10px;
+padding-left:5px;
+}
+.cardProfilePic{
+    /* background-color:yellow; */
+    width:100%;
+    height:100%;
+    border-radius: 50%;
+}
+.cardDate{
+    height:35px;
+    padding:10px 10px 10px 10px;
+    text-align: left;
+   
+    /* background-color: purple; */
+}
+.cardDateSpan{
+    color:rgb(209, 204, 204);
+}
+.cardtwitterHolder{
+    /* background-color: aqua; */
+    padding:10px;
+}
+.questionImg{
+    padding:0px 4px 0px 10px
+}
+.cardDropdown{
+    position: relative;
+  display: inline-block;
+
+}
+.explainAnswerDiv{
+    display:grid;
+    grid-template-columns: 9% 85% 6%
+}
+.explainAnswer{
+    width:100%;
+    /* background-color: blue; */
+    margin:auto;
+    /* margin-left:9%; */
+    padding:10px 0px 10px 10px;
+   
+    display:grid;
+    grid-template-columns: 50% 35% 15%;
+
+  }
+
 .explainVideo{
     border-radius:05px;
     overflow: hidden; 
 }
+.profileCardDiv{
+    display:grid;
+    grid-template-columns:14% 40% 50%
+}
+/* .cardIconsRight{
+  text-align: right;
+} */
 .copyDisplay{
         width:100%;
-        /* margin:auto; */
-        /* background-color: red; */
         text-align: center;
 }
+.cardMiddleSection{
+    display: grid;
+    grid-template-columns: 9% 85% 6%;
+}
+.cardExplainText{
+    text-align: left;
+  margin:auto;
+  padding:0px 5px 2px 10px;
+font-size:12px;
+font-weight:530; 
+  }
+
 
 
 
 .topButtons{
-
     width:100%;
-    height:55px;
+    /* height:95px; */
   
     padding:7px 7px 0px 0px;
     padding-top:15px;
     padding-left:10px;
-  display: grid;
-  grid-template-columns: 80% 15% 5%;
+ 
   border-bottom-style:none;
   border-bottom-color: rgb(232,232,232);
   border-bottom-width:0.5px;
+  /* background-color:brown; */
+}
+.seconBandTop{
+    padding:10px 10px 0px 10px;
+ display: grid;
+  grid-template-columns: 90% 10%;
+  /* background-color: violet; */
 }
 .imagePeopleModal{
     /* background-color: #222222; */
@@ -170,6 +236,7 @@ border-radius:10.5px;
 
 
   @media (min-width: 700px) {
+      
    
 }
 
@@ -178,13 +245,21 @@ border-radius:10.5px;
         display:block;
     }
     .dropDownForOption{
-        /* padding-left:10px; */
-       
-        left:30px;
+        left:0px;
+      }
+    .profileCardDiv{
+        display:grid;
+        grid-template-columns:8% 42% 50%
     }
+
     .profileNameDiv{
         display:block;
         text-align: center;
+    }
+    .cardProfilePicDiv{
+        /* background-color:yellow; */
+        width:45px;
+        height:45px
     }
 
   }

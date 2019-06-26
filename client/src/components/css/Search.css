@@ -24,7 +24,7 @@
      width: 130%;
    
      /* margin-right:50%; */
-     border-style: 1px solid #3333;
+     border-style: 0.5px solid #dde2e2;
      overflow:auto;
       /* max-height:300px; */
       /* padding:3px; */
@@ -40,11 +40,11 @@
     box-sizing: border-box;
     width: 100%;
     /* margin-right:50%; */
-    border: 1px solid #3333;
+    border: 0.5px solid #dde2e2;
     overflow:auto;
      max-height:150px;
      padding:3px;
-     background-color: white;
+     background-color: #ddd;
      z-index: 1000;
      border-radius:5px;
 
@@ -58,7 +58,7 @@
       margin-left:-60%;
       padding:3px;
       font-size:12px;
-      border-color:rgb(153, 153, 153);
+      border-color: #dde2e2;
   }
   .inputTweet{
     margin:2px;
@@ -75,7 +75,7 @@
   }
   
   .item-header {
-    background-color: #eeeeee;
+    background-color: #ddd;
     color: #454545;
     font-weight: bold;
   }

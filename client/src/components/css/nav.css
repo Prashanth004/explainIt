@@ -45,12 +45,12 @@
     color:#454545;
     background-color: white;
     border-style:solid;
-    border-bottom-color:rgba(129, 128, 128, 0.253);
+    border-bottom-color:#dde2e2;
     border-width:0px;
     border-bottom-width: 0.5px;
     font-size:15px;
     padding :20px 0 0 0 ;
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
+    /* box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2); */
 
   
 

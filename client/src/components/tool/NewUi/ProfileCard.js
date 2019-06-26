@@ -68,6 +68,7 @@ class ProfileCard extends Component {
         window.open("https://twitter.com/" + this.props.twitterHandle, '_blank')
     }
     render() {
+        const sustomAttr = {fontWeight:"normal"}
         const defaultToggle = (this.props.onlinestatus) ? true : false;
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
             : ('Online - people can send you share request')
@@ -113,13 +114,13 @@ class ProfileCard extends Component {
                             </div>
                             <div className="screenShareBtnLabel">
                             <span className="hint--top" aria-label="Share screen!">
-                                    <img alt="screen share" onClick={this.startSharingScreen} style={{marginTop:"2px"}} height="100%" width="100%" src={require('../../images/screensharing.png')} />
+                                    <img alt="screen share" onClick={this.startSharingScreen} style={{marginTop:"4px"}} height="28px" width="28px" src={require('../../images/scsh2.png')} />
                                 </span>
                                 
                             </div>
                             <div className="RecordBtnLabel">
                             <span className="hint--top" aria-label="Record screen!">
-                            <IconContext.Provider value={{ color: "#333", className: "iconsCard" }}>
+                            <IconContext.Provider value={{ color: "#333", size:"33px" }}>
                                         <div>
                                         <FiVideo  style={{marginTop:"1.5px"}} onClick={this.startRecordScreen} />
                                         </div>
@@ -132,9 +133,9 @@ class ProfileCard extends Component {
                                 <div >
                                     <span className="hint--top" aria-label="Activities!">
                                         {notifyBadge}
-                                        <IconContext.Provider value={{ color: "#333", className: "iconsCard" }}>
+                                        <IconContext.Provider value={{ color: "#333", size:"33px",}}>
                                         <div>
-                                        <FiMail style={{ fontSize:"35px", marginTop:"-1px", marginLeft:"-3px"}} onClick={this.props.toggleInbox} />
+                                        <FiMail style={{ marginTop:"-1px", marginLeft:"-3px"}} onClick={this.props.toggleInbox} />
                                         </div>
                                         </IconContext.Provider>
                                         
@@ -189,7 +190,6 @@ export default connect(mapStateToProps, {
     changeOnlinestatus,
     getAllActivities,
     getAllReferral,
-
     resetProjectActions,
     resetIssueActions,
     getProfileDetails

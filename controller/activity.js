@@ -16,7 +16,9 @@ exports.addActivity = (req,res)=>{
 }).then(data=>{
     
     res.io.emit(config.NEW_MESSAGE, {
+        "fromuser":req.user.id,
         "touser": req.body.touser
+       
     })
     res.status(201).send({
         success:1,

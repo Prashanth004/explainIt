@@ -155,7 +155,15 @@ const conf = {
     PAUSED_RECORDER_INFO:"Paused Recorder",//done
     RESUMED_RECORDER_INFO:"Resumes Rcorder",//done
 
-    SAVE_RECORD:"saveRecording"
+    SAVE_RECORD:"saveRecording",
+    
+    DECREASE_MINUTE_TO_WEB_SITE:"decreaseMinuteToWebSite",
+    DECREASE_MIUTE_FROM_FLOATER:"decreaseMinuteFromWebsite",
+    DECREASE_MINUTE_TO_FLOATER:"decreaseMinuteToFloater",
+    DECREASE_MINUTE_TO_EXTENSION_RECIEVER : "decreaseMinuteToExtension",
+    DECREASE_MIUTE_TO_EXTENSION : "decreaseMinuteToExtension",
+    DECREASE_MINUTE_TO_FLOATER_RECIEVE:"decreaseMinuteToFloaterReciever",
+    TIME_TWO_MIUTE_ERROR : "timeTwoMinuteError"
 
 
 

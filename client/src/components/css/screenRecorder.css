@@ -2,14 +2,14 @@
     width:100%
 }
 .recordMainScreen{
-    background-color: #eee;
+    background-color: white;
     padding:10px;
     border-radius:5px;
     border-style:solid;
-    border-width:1px;
-    border-color:rgba(119, 119, 119, 0.623);
+    border-width:0.5px;
+    border-color:#dde2e2;
     font-size:14px;
-    box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068);
+    /* box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068); */
 
 }
 .explainItRec{

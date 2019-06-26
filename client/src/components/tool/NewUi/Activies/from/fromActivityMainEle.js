@@ -53,7 +53,7 @@ class ActivityMain extends Component {
   
     }
   render() {
-      console.log()
+    //   console.log()
     const activitiesElements =(this.props.activity.activity===config.CALL_FAILED)?
     (<CallFail
         userData = {this.state}

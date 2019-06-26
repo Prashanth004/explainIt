@@ -1,0 +1,45 @@
+cprashanth004 --- 
+
+
+background:  #fafbfb;
+button #34a9ad;
+border #bebebe81;
+inside background white;
+
+
+
+
+Call doesnt happen in secure connection.
+call not connected .. timeout to give a message to connect again
+responsive design
+refer in self explain it
+search for prople projects and tags
+activity instead of projects in url
+date on activity page card should be aligned right
+profile link small letter starting
+maximum time for a call is 20 mins -- error message
+the time can not be zero in minutes
+text box cant be empty below'
+tweet and send exmail 
+flotaer closing and opening to be done as discussed with close button with and when closed it will be logo 
+reatime inbox feeed
+text box in recording 
+filling the blanks in recording
+
+
+
+Ui of the floater 
+
+
+
+
+
+did I add value
+arcitchture of the application.
+
+
+
+landing page
+activity
+screen share
+screenRecord

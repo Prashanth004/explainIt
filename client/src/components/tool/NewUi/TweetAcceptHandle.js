@@ -6,11 +6,12 @@ import AcceptTopic from './Saveproject';
 import TweetSuggest from './TweetSug';
 import config from '../../../config/config';
 import { setNoOfMinutes, updateCurrentTime } from '../../../actions/callAction'
-import { FaArrowLeft } from "react-icons/fa";
+import { FiArrowLeft } from "react-icons/fi";
 import CopyToClipboard from '../CopytoClipboard';
 import { getProfileByTwitterHandle } from "../../../actions/visitProfileAction";
 import ProfileNotOnExplain from "./ProfileNotOnTwitter/ProfileNotOnExplain"
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../actions/twitterApiAction'
+// import { type } from 'os';
 
 class tweetSearch extends Component {
     constructor(props) {
@@ -28,7 +29,9 @@ class tweetSearch extends Component {
             tweetAction: false,
             timeInputDone: false,
             noInternet: false,
-            selfShare: false
+            selfShare: false,
+            numberValue:3
+            
         }
         this.testHandle = this.testHandle.bind(this);
         this.updateTwitterHandleBox = this.updateTwitterHandleBox.bind(this);
@@ -54,8 +57,7 @@ class tweetSearch extends Component {
         const { twitterHandle } = this.state;
         const twitterHandleTemp = (twitterHandle.includes('@')) ?
             (twitterHandle.replace("@", "")) : (twitterHandle)
-        console.log("twitterHandleTemp : ",twitterHandleTemp);
-        console.log("OwnerTwitterHandle :",OwnerTwitterHandle)
+        
         if (twitterHandleTemp === OwnerTwitterHandle)
             this.setState({ selfShare: true })
         if (!window.navigator.onLine)
@@ -94,8 +96,10 @@ class tweetSearch extends Component {
     }
     changeImputNumber(e) {
         var noOfMinutestemp = e.target.value;
+        console.log("noOfMinutestemp : ",noOfMinutestemp.length)
 
-        if (noOfMinutestemp.length !== 0 && Number(noOfMinutestemp) !== 0 && !Number(noOfMinutestemp)) {
+        if ( !Number.isInteger(Number(noOfMinutestemp))) {
+            console.log('a',Number.isInteger(Number(noOfMinutestemp)))
             this.setState({
                 noText: true
             })
@@ -120,9 +124,10 @@ class tweetSearch extends Component {
                 limitExce: false,
                 negNumber: false,
                 noText: false,
-                emptyNumber: false
+                emptyNumber: false,
             })
         }
+        this.setState({numberValue:noOfMinutestemp})
         this.props.setNoOfMinutes(Number(e.target.value))
         this.props.updateCurrentTime(Number(e.target.value))
 
@@ -140,17 +145,18 @@ class tweetSearch extends Component {
     render() {
         const {emptyUserName, empty,noText,negNumber,limitExce}  = this.state;
        
-        const { twitterHandle, tweetTested,limitOfChar, doneTweeting, noInternet, selfShare,
-            isVisitProfile, emptyNumber,   maxTimeForVideo } = this.state;
-        const { noOfMinutes, doneFetching, twitterHandleValid,
+        const { twitterHandle, tweetTested, doneTweeting, noInternet, selfShare,
+            isVisitProfile, numberValue,emptyNumber,   maxTimeForVideo } = this.state;
+        const {  doneFetching, twitterHandleValid,
             fetchProfile, isPresentInExplain } = this.props;
         const spanElement= ((limitExce)?(
-            <span className="spanElement" >Can not be more than {limitOfChar}</span>
+            <span className="spanElement" >Maximum duration for the call is {maxTimeForVideo} minutes</span>
             ):(negNumber)?(
-            <span className="spanElement" >Can not be negetive number or zero</span>
+            <span className="spanElement" >Duration of the call can not be negetive number or zero</span>
             ):noText?(
-            <span className="spanElement" >Only numbers</span>
-    
+            <span className="spanElement" >Duration of the call to be number of minutes only</span>
+            ):emptyNumber?(
+                <span className="spanElement" >Duration of the call to be number of minutes only</span>
             ):((empty)?(
             
             <span className="spanElement">Cant be empty</span>
@@ -171,7 +177,7 @@ class tweetSearch extends Component {
                     limitOfChar={maxTimeForVideo}
                     limitExce={limitExce}
                     changeInputValue={this.changeImputNumber}
-                    textValue={noOfMinutes}
+                    textValue={numberValue}
                     negNumber={negNumber}
                     noText={noText} />
             </p>
@@ -200,9 +206,10 @@ class tweetSearch extends Component {
                     validatinginfo = (<div>
                          <span style={{
                             float: "left",
-                            fontSize: "15px"
+                            fontSize: "15px",
+                            marginTop:"-35px"
                         }}>
-                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                            <FiArrowLeft  onClick={this.changeTweetStateNeg} />
                         </span>
                         <div className="TwiValidInfo">
                         <p style={{fontWeight:"500"}}>It is not a good idea to share screen with yourself</p>
@@ -216,9 +223,10 @@ class tweetSearch extends Component {
                     validatinginfo = (<div>
                         <span style={{
                             float: "left",
-                            fontSize: "15px"
+                            fontSize: "15px",
+                            marginTop:"-35px"
                         }}>
-                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                            <FiArrowLeft onClick={this.changeTweetStateNeg} />
                         </span>
                         <div  className="TwiValidInfo" >
                         <ProfileNotOnExplain
@@ -242,9 +250,10 @@ class tweetSearch extends Component {
                     validatinginfo = (<div  >
                         <span style={{
                             float: "left",
-                            fontSize: "15px"
+                            fontSize: "15px",
+                            marginTop:"-35px"
                         }}>
-                            <FaArrowLeft onClick={this.changeTweetStateNeg} />
+                            <FiArrowLeft onClick={this.changeTweetStateNeg} />
                         </span>
                         <div className="TwiValidInfo">
                         <AcceptTopic tweetTheMessage={this.tweetTheMessage} />

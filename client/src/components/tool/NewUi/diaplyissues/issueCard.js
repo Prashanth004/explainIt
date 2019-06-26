@@ -251,19 +251,21 @@ class issueCard extends Component {
 
         ) : (null);
        
-        const bottomDiv = (!this.state.showModalExplain) ? (<div id={this.props.issue.issueid} className="explainAnswer">
-
-            {bottomImages}
-
-
-            <div className="twitterContainer">
-                {tweetOption}
+        const bottomDiv = (!this.state.showModalExplain) ?
+        (<div className="explainAnswerDiv">
+            <div></div>
+            <div id={this.props.issue.issueid} className="explainAnswer">
+                {bottomImages}
+                <div className="twitterContainer">
+                    {tweetOption}
+                </div>
+                <div className="explainIt">
+                    <button id={this.props.issue.issueid} className="buttonLight explainItBtn"  style={{color:"white"}} onClick={this.handleOpenModal}>Explain it</button>
+                </div>
             </div>
-
-            <div className="explainIt">
-                <button id={this.props.issue.issueid} className="buttonLight explainItBtn"  style={{color:"white"}} onClick={this.handleOpenModal}>Explain it</button>
-            </div>
-        </div>) : (null)
+            <div></div>
+        </div>
+       ) : (null)
 
      
         return (<div className="cardWithDate">
@@ -271,25 +273,30 @@ class issueCard extends Component {
             <div key={this.props.issue.issueid} className="issueCard">
                 <div className="orginCard">
                     {displayTopButtons}
-                    <div className="copyDisplay" id={"clipboard_" + this.props.issue.issueid} style={{ display: "none" }}>
-                        <CopyToClipboard sharablelink={config.react_url + '/project/' + this.props.issue.issueid} />
+                    <div className="cardMiddleSection">
+                        <div></div>
+                        <div >
+                            <div className="copyDisplay" id={"clipboard_" + this.props.issue.issueid} style={{ display: "none" }}>
+                                <CopyToClipboard sharablelink={config.react_url + '/project/' + this.props.issue.issueid} />
+                            </div>
+                        
+                            <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
+                                className="cardExplainText">
+                                <p  style={{fontSize:"12px",fontColor:"#333"}}id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
+                            </div>
+                            <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
+                                <video id={this.props.issue.issueid}
+                                    autoPlay={true}
+                                    muted
+                                    className="explainVideo"
+                                    ref={vid => this.videoExplain = vid}
+                                    width="100%" height="100%" src={this.props.issue.videofilepath} ></video>
+                            </div>
+                        </div>
                     </div>
-                   
-                    <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
-                        className="questionText">
-                        <p style={{fontSize:"13px"}} id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
-                    </div>
-                    <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
-                        <video id={this.props.issue.issueid}
-                            autoPlay={true}
-                            muted
-                            className="explainVideo"
-                            ref={vid => this.videoExplain = vid}
-                            width="100%" height="100%" src={this.props.issue.videofilepath} ></video>
-                    </div>
-
+                    {bottomDiv}
                 </div>
-                {bottomDiv}
+              
 
                 <ReactModal
                     isOpen={this.state.showModalTwitterLogin}

@@ -175,7 +175,8 @@ exports.saveMessage = function (req, res) {
     unread:unreadDefault
 }).then(data=>{
     res.io.emit(config.NEW_MESSAGE, {
-                    "touser": req.body.touser
+                    "touser": req.body.touser,
+                    "fromuser":req.user.id,
                 })
                 res.status(201).send({
                     success: 1,

@@ -93,7 +93,8 @@ class ScreenRecorder extends Component {
             onGoingCallEnded: false,
             downloadUrlAudio: null,
             retryTimeOut:false,
-            currentAtionStatus:null
+            currentAtionStatus:null,
+            connectionFailed:false
 
         }
         this.renderer = this.renderer.bind(this);
@@ -128,6 +129,7 @@ class ScreenRecorder extends Component {
         this.pause_clicked =  this.pause_clicked.bind(this);
         this.onUnload = this.onUnload.bind(this);
         this.postMessageHandler = this.postMessageHandler.bind(this);
+        this.callConnectionDelayed = this.callConnectionDelayed.bind(this);
     }
 
     muteAudio() {
@@ -381,13 +383,18 @@ class ScreenRecorder extends Component {
         })
         socket.on(config.ACCEPT_SHARE_REQUEST, data => {
             if (data.toUserId === this.props.userId) {
-                this.props.answeredCall()
-                self.setState({
-                    clickedOnLink: true
-                })
+                this.props.answeredCall();
+                self.setState({clickedOnLink: true});
+                self.callConnectionDelayed = setTimeout(()=>{
+                    if(!this.state.permissonDenied && !this.props.isSceenSharing && !this.state.onGoingCallEnded){
+                        this.setState({ connectionFailed : true});
+                        console.log("connection failed")
+                    }
+                },25000);
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+            console.log(" close network issue : ");
             if (data.otherPeerId === self.state.destkey) {
                 self.stopShare();
                 const { extSource, extOrigin } = this.props
@@ -401,6 +408,7 @@ class ScreenRecorder extends Component {
         socket.on(config.END_CALL, data => {
 
             if (data.clientId === self.state.destkey) {
+                console.log(" socket endCall : ");
                 const { extSource, extOrigin } = this.props
                 postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
                 if (peer !== null) {
@@ -448,10 +456,11 @@ class ScreenRecorder extends Component {
     componentWillUnmount() {
         registerEndToBrowser();
         window.removeEventListener("beforeunload", this.onUnload);
-        window.removeEventListener("message",this.postMessageHandler);
+        // window.removeEventListener("message",this.postMessageHandler);
         // this.props.fullStopedSharing()
         clearTimeout(this.saveBlobtimeOut);
         clearTimeout(this.callEndBeforeRecieve);
+        clearTimeout(this.callConnectionDelayed);
     }
 
 
@@ -461,8 +470,6 @@ class ScreenRecorder extends Component {
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         const result = browser();
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
-        console.log("currentAtionStatus : ",localStorage.getItem('currentAction'));
-        console.log("config.null : ", null)
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
                 var img;
@@ -513,7 +520,6 @@ class ScreenRecorder extends Component {
         })
         peer.on('connection', (conn) => {
             if (config.CALL_LOGS)
-                console.log("connected : ", conn)
             this.setState({ conn: conn })
             conn.on('open', () => {
                 this.setState({ clickedOnLink: true })
@@ -588,7 +594,8 @@ class ScreenRecorder extends Component {
         // })
     }
     saveBlobtimeOut = () => { }
-    callEndBeforeRecieve = () => { }
+    callEndBeforeRecieve = () => { };
+    callConnectionDelayed = ()=>{};
 
     peerCall() {
         const { twitterUserId, fullStartedSharing } = this.props
@@ -960,7 +967,7 @@ class ScreenRecorder extends Component {
         var linkElement = null;
         const closeBtn = (this.props.isSceenSharing ||  this.props.explainBy !== config.null) ?
         (null):(((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
-            <Button style={{margin:"8px"}} close onClick={closeFunction} />))
+            <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>))
            if (this.props.isSceenSharing) {
 
             var recieverProfPic = (this.props.twirecieverPrfilePic === null) ?
@@ -1114,6 +1121,7 @@ class ScreenRecorder extends Component {
             else if (this.state.clickedOnLink)
                 linkElement = ((!this.state.permissonDenied) ? (
                     (!this.state.onGoingCallEnded) ? (
+                        (!this.state.connectionFailed)?(
                         <div>
                             <audio autoPlay style={{ display: "none" }} src={require('../../audio/brute-force.mp3')}></audio>
 
@@ -1125,7 +1133,12 @@ class ScreenRecorder extends Component {
                                     action="waiting" callerImageUrl={this.props.profilePic}
                                     recieverImageUrl={this.props.twirecieverPrfilePic} />
                             </div>
-                        </div>
+                        </div>):(<div>
+                            <div className="callerImageDiv">
+                            <p><b>Connection Failed due to network issues</b></p>
+                            <button className="buttonLight" onClick={this.props.closeImidiate}>Close</button>
+                            </div>
+                        </div>)
                     ) : (<div>
                         <p><b>Share Request Ended.</b></p>
                         <button className="buttonLight" onClick={this.props.closeImidiate}>Close</button>
@@ -1195,9 +1208,10 @@ class ScreenRecorder extends Component {
 
 
             (<div>
-                {closeBtn}
+              
                 {audioWarning}
                 <div className="LinkDisplay">
+                {closeBtn}
                     {linkElement}
                     {shareTimeElements}
                     {postShareElements}

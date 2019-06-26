@@ -99,40 +99,40 @@ class displayTopBtns extends Component {
 
         const createdMenuItems = (this.props.participated || !this.props.itsHome) ? (null) : (
             <div>
-            <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
+                <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
 
-                <div >
-                    <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
+                    <div >
+                        <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
+                    </div>
+                    <div>
+                        <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
+                    </div>
                 </div>
-                <div>
-                    <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
+                <div id={this.props.issue.projectid} className="menuItem">
+
+                    <div>
+                        <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal} className="menuIcon" /></span>
+                    </div>
+                    <div>
+                        <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} >Edit</span>
+                    </div>
                 </div>
             </div>
-            <div id={this.props.issue.projectid} className="menuItem">
-
-                <div>
-                    <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal} className="menuIcon" /></span>
-                </div>
-                <div>
-                    <span className="textInDropDown" id={this.props.issue.projectid} onClick={this.openEditModal} >Edit</span>
-                </div>
-            </div>
-        </div>
         )
-        const publicPrivate = (this.props.participated || !this.props.itsHome)?(
-          null
-        ):(  <div >
+        const publicPrivate = (this.props.participated || !this.props.itsHome) ? (
+            null
+        ) : (<div >
             <div className="privateOpt">
-            <label id={this.props.issue.projectid}>
-                <span className="hint--top" aria-label={this.state.toolTipValue}>
-                    <Toggle
-                        id={this.props.issue.projectid}
-                        defaultChecked={defaultToggle}
-                        className='custom-classname'
-                        icons={false}
-                        onChange={this.changeToggle} />
-                </span>
-            </label>
+                <label id={this.props.issue.projectid}>
+                    <span className="hint--top" aria-label={this.state.toolTipValue}>
+                        <Toggle
+                            id={this.props.issue.projectid}
+                            defaultChecked={defaultToggle}
+                            className='custom-classname'
+                            icons={false}
+                            onChange={this.changeToggle} />
+                    </span>
+                </label>
             </div>
 
         </div>)
@@ -145,13 +145,13 @@ class displayTopBtns extends Component {
         else {
             profilePic = null
         }
-    
+
 
         const deleteDiv = (
-            <div style={{ fontSize: "13px", color: "#333" }}>
-                <div className="iconsright">
+            <div className="cardDropdown" >
+                <div >
                     <span>
-                    <GoChevronDown onClick={this.onOptClick} />
+                        <GoChevronDown onClick={this.onOptClick} />
                     </span>
                 </div>
                 <div className="dropDownForOption"
@@ -168,38 +168,33 @@ class displayTopBtns extends Component {
                             <span className="textInDropDown">Sharable link</span>
                         </div>
                     </div>
-                   {publicPrivate}
+                    {publicPrivate}
 
                 </div>
             </div>
-        ) 
+        )
 
         return (
             <div>
-                <span className="dateNew">{this.props.issue.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.time.slice(0, 4)}</span>
-                <br/>
-                <br/>
-               
- 
                 <div id={this.props.issue.issueid} className="topButtons">
-                    <div className="profileCardDiv">
-                        <img alt="button" src={profilePic}
-                            style={{
-                                width: "45px",
-                                height: "45px",
-                                borderRadius: "50%",
-                                marginTop: "-8px",
-                                marginLeft: "5px"
-                            }} />
-
-                        <h5 className="ProfileNameCard">
-                                <b>{profileName}</b></h5>
-                                {/* <span>{profiletwitterHandle}</span> */}
+                    <div className="cardDate">
+                    <span className="cardDateSpan" >{this.props.issue.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.time.slice(0, 4)}</span>
                     </div>
-                    <div id={this.props.issue.issueid} className="twitterHolder">
-                        
-                        {deleteDiv}
-                     </div>
+                    <div className="seconBandTop">
+                        <div className="profileCardDiv">
+                            <div className="cardProfilePicDiv">
+                                <img alt="button" src={profilePic}className="cardProfilePic"/>
+                            </div>
+                            <div className="cardProfileName">
+                                <h5 ><b>{profileName}</b></h5>
+                            </div>
+                            <div></div>
+                        </div>
+                        <div id={this.props.issue.issueid} className="cardtwitterHolder">
+
+                            {deleteDiv}
+                        </div>
+                    </div>
                 </div >
             </div>
         )

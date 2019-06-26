@@ -6,7 +6,7 @@ import Countdown from 'react-countdown-now';
 import config from '../../../config/config'
 import PropType from 'prop-types';
 import {postStartCall} from '../../../actions/extensionAction'
-import {increaseTimer} from '../../../actions/callAction'
+import {increaseTimer,deacreaseTimer} from '../../../actions/callAction'
 import { showCanvas, hideCanvas } from '../../../actions/canvasAction';
 
 class Call extends Component {
@@ -18,7 +18,8 @@ class Call extends Component {
         }
         this.toggleCanvas = this.toggleCanvas.bind(this);
         this.increaseTime = this.increaseTime.bind(this);
-        this.postMessageHandler = this.postMessageHandler.bind(this)
+        this.postMessageHandler = this.postMessageHandler.bind(this);
+        this.deacreaseTimer = this.deacreaseTimer.bind(this);
     }
     postMessageHandler(event) {
         var self=this
@@ -33,8 +34,11 @@ class Call extends Component {
             return
         }
         if(event.data.type ===  config.ADD_EXTRA_MINUTE_TO_WEB_SITE){
-            console.log("addding extra min")
             self.increaseTime()
+            return
+        }
+        if(event.data.type === config.DECREASE_MINUTE_TO_WEB_SITE){
+            self.deacreaseTimer()
             return
         }
 
@@ -64,6 +68,35 @@ class Call extends Component {
             extOrigin,otherPersonPic,extSource,
             timeAloted,otherPersonProfileId)
         this.setState({ socket:socket })
+    }
+    deacreaseTimer(){
+        const self = this;
+        this.props.deacreaseTimer();
+        this.props.conn.send({
+            data: "reduceTimer",
+            timeAloted:JSON.stringify(self.props.timeAloted)
+        })
+        var source = this.props.extSource
+        var origin = this.props.extOrigin
+        this.setState({
+            socket:this.props.socket
+        })
+
+        const addMinute = {
+            'type':config.DECREASE_MIUTE_TO_EXTENSION,
+            'data':{
+                'currentTime':this.props.timeAloted,
+              
+            }
+        }
+        if (this.props.extSource !== null) {
+            source.postMessage(addMinute, origin);
+            return
+        }
+        else{
+            window.postMessage(addMinute, '*');
+            return
+        }
     }
     increaseTime(){
         const self = this;
@@ -161,7 +194,7 @@ const mapStateToProps = state => ({
     extOrigin: state.extension.origin,
 })
 
-export default connect(mapStateToProps, {postStartCall, showCanvas,increaseTimer, hideCanvas })(Call)
+export default connect(mapStateToProps, {postStartCall,deacreaseTimer,showCanvas,increaseTimer, hideCanvas })(Call)
 
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaArrowLeft } from "react-icons/fa";
+import { FiArrowLeft } from "react-icons/fi";
 
 export default (props) => {
     const {angelListError,gitHibError,linkInerror,SecTrans,linkedInValue,changeAngelList,
@@ -19,13 +19,13 @@ export default (props) => {
 
     ) : (null)
   return (<div className="profileFormContainer">
-        <span style={{
-                            marginTop:"-25px",
-                            marginLeft:"-12px",
+         <span style={{
                             float: "left",
-                            fontSize: "15px"
+                            fontSize: "15px",
+                            marginTop:"-55px",
+                            marginLeft:"-25px"
                         }}>
-                            <FaArrowLeft onClick={SecTrans} />
+                            <FiArrowLeft  onClick={SecTrans} />
                         </span>
       <div><span><b>LinkedIn :</b></span>
                 <br/>

@@ -1,5 +1,6 @@
 import {CALL_DETAILS_ACCEPT,
     SAVE_RECIEVER_DATA,
+    DECREASE_CALL_BY_MINUTE,
     SET_NUMBER_MINUTES,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,
@@ -136,6 +137,13 @@ export default function(state= initialState, action){
             buttonClassName:btnclass,
             noOfIncreaseInTime:state.noOfIncreaseInTime+1
         }
+        case DECREASE_CALL_BY_MINUTE:
+                return{
+                    ...state,
+                    noOfMinutes:state.currentTimeLeft-1,
+                    buttonClassName:btnclass,
+                    noOfIncreaseInTime:state.noOfIncreaseInTime-1
+                }
         case UPATE_CURRENT_TIME_TO_DISPLAY:
         return{
             ...state,

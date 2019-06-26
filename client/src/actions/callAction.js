@@ -13,6 +13,7 @@ import {CALL_DETAILS_ACCEPT,
     DISABLE_CALL_ACTION,
     MUTE_AUDIO,
     UNMUTE_AUDIO,
+    DECREASE_CALL_BY_MINUTE,
     UPATE_CURRENT_TIME_TO_DISPLAY,
     SAVE_TOPIC_OF_THE_CALL,
     SET_NUMBER_MINUTES } from './types'
@@ -90,8 +91,12 @@ export const increaseTimer = ()=>(dispatch)=>{
         type:INCREASE_CALL_BY_MINUTE
     })
 }
+export const deacreaseTimer = ()=>(dispatch)=>{
+    dispatch({
+        type:DECREASE_CALL_BY_MINUTE
+    })
+}
 export const durationInMinutes = (intialTime, numberOfIncrease, currentTime)=>{
-   
     const tInitialTime=(typeof(intialTime)==="string")?(Number(intialTime)):intialTime
     const tNumberOfIncrease=(typeof(numberOfIncrease)==="string")?(Number(numberOfIncrease)):numberOfIncrease
     const tCurrentTime=(typeof(currentTime)==="string")?(Number(currentTime)):currentTime

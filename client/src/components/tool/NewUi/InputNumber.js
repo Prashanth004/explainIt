@@ -8,7 +8,7 @@ export default (props) => {
         <input className="inputNumber"
        onChange={props.changeInputValue} 
        value={props.textValue}
-       type="text" pattern="[0-9]"></input>
+       type="text"></input>
         <span> minutes</span>
         <br/>
 

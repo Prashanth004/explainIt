@@ -7,7 +7,7 @@ import PropType from 'prop-types';
 import TweetSendMessage from './TweetSendMessage';
 import { sendEmail } from '../../../actions/emailAction'
 import { getTwitterHandles } from '../../../actions/twitterApiAction';
-import { FaArrowLeft } from "react-icons/fa";
+import { FiArrowLeft } from "react-icons/fi";
 
 
 class SaveProjects extends Component {
@@ -146,10 +146,10 @@ class SaveProjects extends Component {
         const shareOption = (!this.props.explainIssue) ? (
 
             <span className="hint--top" aria-label="Send Recording">
-                <FiSend className="icons" onClick={this.chooseSave} />
+                <FiSend className="icon screenRecordIcons"  onClick={this.chooseSave} />
             </span>) : null
         const saveOption = (this.props.twitterUserId !== null ||  this.props.visitedTiwtterHandle!==null)  ? (null) : (<span className="hint--top" aria-label="Save Recording">
-        <FiSave className="icons" onClick={this.props.saveClicked} />
+        <FiSave className="icon screenRecordIcons" onClick={this.props.saveClicked} />
     </span>)
         const subjectInoutBox = ((this.props.showInputBox) ? (
         <InputBox
@@ -158,6 +158,8 @@ class SaveProjects extends Component {
             limitOfChar={this.state.limitOfChar}
             changeInputValue={this.changeInputValue}
             textValue={this.state.textValue}
+            submit = {()=>{}}
+            placeHolder="Topic for the recording"
         />) : (null))
 
         const tweetSendMessage = (this.props.fromShareToRecord
@@ -174,18 +176,19 @@ class SaveProjects extends Component {
                 {shareOption}
                 {saveOption}
                 <span className="hint--top" aria-label="Discard">
-                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                    <FiX  className="icon screenRecordIcons"  onClick={this.props.closeImidiate} />
                 </span>
             </div>) :((this.state.sendMessageClicked && !this.state.privatePublic)? 
                 (<div>
                     <span style={{
                         float: "left",
                         fontSize: "15px",
-                        marginTop:"-29px"
+                        marginTop:"-64px"
                     }}>
-                        <FaArrowLeft onClick={this.calcelChooseaction} />
+                        <FiArrowLeft className="icon" onClick={this.calcelChooseaction} />
                     </span>
                     {subjectInoutBox}
+                    <br/>
                     {tweetSendMessage}
                 </div>
                 ) : ((this.state.privatePublic) ? (!this.props.failedToSave ? ((this.props.fromShareToRecord || this.state.sendMessageClicked) ? 
@@ -197,9 +200,9 @@ class SaveProjects extends Component {
                         <span style={{
                             float: "left",
                             fontSize: "15px",
-                            marginTop:"-29px"
+                            marginTop:"-64px"
                         }}>
-                            <FaArrowLeft onClick={this.calcelChooseaction} />
+                            <FiArrowLeft className="icon"onClick={this.calcelChooseaction} />
                         </span>
                         <div style={{
                             width: "70%",
@@ -211,10 +214,12 @@ class SaveProjects extends Component {
                                 limitOfChar={this.state.limitOfChar}
                                 changeInputValue={this.changeInputValue}
                                 textValue={this.state.textValue}
+                                submit = {this.savefilePri}
+                                placeHolder="Topic for the recording"
                             />
 
-                            <button className="buttonDark" onClick={this.savefilePri}
-                                style={{ marginTop: "30px" }}>Save</button>
+                            <button className="buttonLight" onClick={this.savefilePri}
+                                style={{ marginTop: "10px" }}>Save</button>
                         </div>
                     </div>))
             )

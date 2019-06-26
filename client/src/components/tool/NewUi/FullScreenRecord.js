@@ -465,7 +465,8 @@ class FullScreenRecorder extends Component {
             this.props.closeImidiate
         const closeBtn = ((!this.props.isFullScreenRecording && this.props.explainBy === config.null )?
         ((this.props.isFullRecordCompleted && !this.state.sendBtnClicked && !this.state.saveBtnClicked)?
-        (null):(<Button style={{margin:"0px"}} close onClick={closeFunction} />)) : (null))
+        (null):(
+            <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>)) : (null))
         if (this.props.isFullScreenRecording) {
 
             var timer = (<Countdown

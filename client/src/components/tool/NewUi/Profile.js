@@ -31,7 +31,7 @@ class Profile extends Component {
         <FiEdit onClick={this.openEdit} className="edit" />
     </span>):(null)
         const editOption = (this.props.isHome) ? (
-        <div>
+        <div className="topBtnsActivity">
              <Button style={{margin:"-8px"}} close onClick={this.props.openDtailsTab} />
              {editbtn}
           </div>) : (null)

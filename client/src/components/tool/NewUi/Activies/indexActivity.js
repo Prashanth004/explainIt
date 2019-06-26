@@ -25,7 +25,7 @@ class activityRoot extends Component {
       return dateB-dateA ;
     });
 
-   console.log("all acti sorted : ",allacti)
+  //  console.log("all acti sorted : ",allacti)
     // assign it to all activities
     this.setState({allActivities : allacti})
   }

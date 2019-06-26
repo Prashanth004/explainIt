@@ -94,14 +94,15 @@ class Project extends Component {
       <div>
       <Navbar
             page="project" />
-      <div style={{backgroundColor:"rgb(143, 205, 228)",minHeight:"100vh", paddingTop:"20px"}}>
-      <div style={{width:"50%", margin:"auto", borderStyle:"none", borderWidth:"0.5px", borderRadius:"12px",backgroundColor:"white"}}>
+     <div className="projectPageMainDiv">
+      <div className="projectContainer">
       <IssueCard 
       socket={this.state.socket}
       itsHome={(this.props.home === config.HOME)?true:false}
       issue={this.props.questionProject}
       explainTool={this.props.explainTool}/>
       </div>
+     
       </div>
       </div>):((this.props.match.params.projectid === this.state.newIssueId)?(<div style={msgStyling}><h3>
                 <b>
@@ -114,6 +115,7 @@ class Project extends Component {
                       <p>It could either have got deleted or some prolem occured with saving the recorded content.</p>
                   </div>
                 ))):(null)):(null)
+                
   }
 }
 Project.PropType = {

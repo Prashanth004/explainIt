@@ -63,7 +63,8 @@ class NewHome extends Component {
             reducedWidth: false,
             callerId: null,
             endedCallFromOtherPeer: false,
-            newCall:true
+            newCall:true,
+            reducedLittleWidth:false
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -97,7 +98,10 @@ class NewHome extends Component {
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
+        this.setState({reducedLittleWidth : window.innerWidth <= 1000});
     }
+
+    
     saveVideoData(videoData, audioData, isPublic, text, action) {
         var condition = this.props.issueId == null || this.props.issueId === undefined
         var issueId = (condition)?null:this.props.issueId;
@@ -169,13 +173,16 @@ class NewHome extends Component {
         })
 
         socket.on(config.SAVED_NEW_PROJECT, data => {
+           
             if (data.userId === this.props.userId) {
-
+               
                 this.props.getProfileDetails(this.props.userId, config.SELF)
             }
         })
+    
         socket.on(config.NEW_MESSAGE, data => {
-            if (data.touser === (this.props.userId)) {
+
+            if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
                 this.props.getTotalUnread();
                 this.props.getAllActivities()
             }
@@ -448,6 +455,14 @@ class NewHome extends Component {
         var percentage = "45%";
         var displayLinkDiv = null;
         var profileCardElement = null;
+        var listGrid= (window.innerWidth>=1000 )?(<div style={{ marginRight:"-80px",float: "right" }} >
+        <span  className="hint--top" aria-label="List View">
+            <FiList onClick={this.changeViewToList} className="listView" />
+        </span>
+        <span className="hint--top" aria-label="Grid View">
+            <FiGrid onClick={this.changeViewToGrid} className="gridView" />
+        </span>
+    </div>):(null)
         if (this.state.reducedWidth) {
             issuepercentage = "100%"
         }
@@ -460,7 +475,12 @@ class NewHome extends Component {
                 this.props.screenAction === FULL_SCREEN_RECORD) {
 
                 if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
-                    percentage = "100%";}
+                    percentage = "76%";
+                    listGrid=null}
+                else if(this.state.reducedLittleWidth){
+                    percentage = "42%";
+                    listGrid=null
+                }
                 else {
                     percentage = "30%";}
             }
@@ -564,14 +584,8 @@ class NewHome extends Component {
                     </div>
                     <DisplatCreated socket={this.state.socket} home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
                 </div>)
-                feedDiv = (<div><div style={{ marginRight:"-80px",float: "right" }} >
-                            <span  className="hint--top" aria-label="List View">
-                                <FiList onClick={this.changeViewToList} className="listView" />
-                            </span>
-                            <span className="hint--top" aria-label="Grid View">
-                                <FiGrid onClick={this.changeViewToGrid} className="gridView" />
-                            </span>
-                        </div>
+                feedDiv = (<div>
+                   {listGrid}
                         {participatedDiv}
                     </div>)
 
@@ -604,7 +618,10 @@ class NewHome extends Component {
                     !this.props.participated
                 ) {
                     displayLinkDiv = (<div className="sharableLinkSection">
+                        <div className="topBtnsActivity">
                         <Button close onClick={this.toggleDisplayLink} />
+                        </div>
+                        <br/>
                         <p style={{fontWeight:"500"}}>Your shareable Profile Link</p>
                         <CopyToClipboard sharablelink={sharabeLink} />
                     </div>)
@@ -615,7 +632,8 @@ class NewHome extends Component {
 
 
                 profileCardElement = (
-                    <div className="ProfileDiv"><ProfileCard
+                    <div className="ProfileDiv">
+                        <ProfileCard
                         isHome={this.state.isHome}
                         toggleInbox={this.toggleInbox}
                         sharabeLink={sharabeLink}

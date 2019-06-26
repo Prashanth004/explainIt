@@ -1,8 +1,16 @@
+
+.projectPageMainDiv{
+    background-color:  #f9fafa;
+    /* min-height:98vh; */
+}
 .projectContainer{
     
-    width:50%;
+    width:100%;
     margin:auto;
-    margin-top:40px;
+    padding-top:20px;
+    border-style:"none";
+    border-radius:"12px";
+    background-color:"white";
 }
 
 .explainItBtn{
@@ -12,3 +20,10 @@
     align-self: right;
     align-content: right;
   }
+/* .style={{width:"50%", margin:"auto", borderStyle:"none", borderWidth:"0.5px", borderRadius:"12px",backgroundColor:"white"} */
+
+@media (min-width: 1000px) {
+    .projectContainer{
+        width:50%;
+    }
+}

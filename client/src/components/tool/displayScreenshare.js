@@ -12,7 +12,7 @@ import { answerCall, muteAudio, unMuteAudio } from '../../actions/callAction'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
-import { postStartCall, addExtraTimerfromReciever, postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
+import { postStartCall, addExtraTimerfromReciever, decreaseTimerfromReciever,postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
 import { stillAuthenicated } from '../../actions/signinAction';
 import { getProfileByTwitterHandle } from "../../actions/visitProfileAction";
 import {setTime} from '../../actions/floaterAction';
@@ -332,7 +332,14 @@ class DisplayShare extends Component {
                         self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
 
                     },500)
-                    
+                }
+                if (data.data === "reduceTimer") {
+                    presentTime = JSON.parse(data.timeAloted);
+                    self.props.setTime(presentTime)
+                    setTimeout(()=>{
+                        self.props.decreaseTimerfromReciever(self.props.extSource, self.props.extOrigin);
+
+                    },500)
                 }
             })
 
@@ -605,14 +612,10 @@ class DisplayShare extends Component {
 
         var selfCloseTimer = (this.state.selfClose) ? (<div>
 
-            {/* <p>This tab will close automatically  </p>
-            <Countdown
-                date={Date.now() + this.state.selfCloseTime * 60 * 1000}
-                renderer={this.renderer}
-            /> */}
+          
         </div>) : (null)
         var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<p>Preparing a link to access the call..</p>) :
-            (!this.state.failedToSaveMessage ?
+            ((!this.state.failedToSaveMessage && (this.state.sharablelink!==null|| this.state.sharablelink!==undefined))?
                 (<div className="sharableLinkDiv">
                     <span>Link to access you saved call : </span>
                     <CopyToClipboard sharablelink={this.state.sharablelink} />
@@ -764,7 +767,7 @@ const mapStateToProps = state => ({
     floaterTime:state.floater.floaterTime
 })
 
-export default connect(mapStateToProps, { postEndCall,setTime, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall,setTime,decreaseTimerfromReciever,muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 
 

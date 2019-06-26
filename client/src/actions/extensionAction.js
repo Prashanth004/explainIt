@@ -50,6 +50,18 @@ export const addExtraTimerfromReciever = (source,origin)=>dispatch=>{
     else
         window.postMessage(addTimer, '*');
 }
+export const decreaseTimerfromReciever = (source,origin)=>dispatch=>{
+    localStorage.setItem('infoDisplay', JSON.stringify(config.ADDED_EXTRA_MINTUE_INFO))
+    const addTimer = {
+        
+        type:config.DECREASE_MINUTE_TO_EXTENSION_RECIEVER,
+        data:{}
+    }
+    if (source !== null)
+        source.postMessage(addTimer, origin);
+    else
+        window.postMessage(addTimer, '*');
+}
 
 export const displayScreenSharebutton = (source,origin)=>(dispatch)=>{
     localStorage.setItem('infoDisplay', JSON.stringify(config.PEER_SHARE_SCREEN_INFO))

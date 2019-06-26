@@ -1,27 +1,50 @@
-.floaterContainerTans{
-    background-color:rgba(255, 255, 255, 0);
+.floaterContainerTansFloat{
+  height:52px;
+    /* background-color:#34a9ad; */
+    padding-top:0px;
+    width:100%;
+    margin:auto;
+    border-radius:25px;
+    display:grid;
+    grid-template-columns: 8% 92%;
+    border-style:solid;
+    border-width:1px;
+    border-color:#34a9ad;
 }
-.infoConatiner{
+.closeCross{
+  margin:5px;
+  margin-top:10px;
+  color:black;
+}
+.infoConatinerFloat{
   width:100%;
-  color:White;
-  margin-top:-10px;
-  padding:14px;
-  min-height: 55px;
+  height:42px;
+  color:black;
+  font-size:28px;
+  /* margin-top:-10px; */
+  padding:5px;
+  /* min-height: 55px; */
   text-align: center;
+  border-style:none;
+  border-width:1px;
+  border-radius:25px;
   /* border-bottom-left-radius:  */
-  background-color: rgb(51, 39, 58);
+  /* border-color:#34a9ad; */
+  /* background-color: #f9fafa; */
+  /* background-color: red; */
+  background-color:#ceeff0;
 }
  
-.callImageDivAnwserMain{
-    width:100%;
-    border-style:none;
-    background-color: rgb(51, 39, 58);
+.callImageDivAnwserMainFloat{
+  height:42px;
+  width:95%;
+  margin:auto;
+  border-radius:25px;
+
+    background-color: white;
     /* border-radius: 21px; */
-    padding:5px;
-    margin-top:-5px;
-    padding-right:3px;
-    padding-left:1.5px;
-    right:25px;
+   /* margin:auto; */
+   /* margin-top:40px; */
     /* display:grid;
     grid-template-columns: 50% 50%;  */
   }
@@ -31,7 +54,9 @@
   grid-template-columns: 21% 21% 25% 21% 12%;  */
   }
   .record{
-    grid-template-columns: 42% 16% 42%; 
+    display:grid;
+    grid-template-columns: 33.33% 33.33% 33.33%; 
+    text-align: center;
   }
   .callPage-recieverImageFloat{
 margin-top:-66px;
@@ -47,7 +72,6 @@ border-radius:50%;
     width:38px;
     border-radius:50%;
     margin:auto;
-    /* margin-top:-25px; */
     text-align: center;
     box-shadow: 0px 0px 7px 1px rgba(105, 105, 105, 0.349)
 
@@ -67,15 +91,90 @@ border-radius:50%;
   margin-right:25px;
 }
 
-.endButton{
-  width:42px;
-  height:42px;
-margin-top:-4px;
-margin-left:-4px;
-  font-size: 34px;
+.endButtonFloat{
+
+  font-size: 25px;
+  margin:5px;
+  color:#34a9ad;
   
 }
-.muteButton{
+.logocontainerFloater{
+  width:51px;
+  height:51px;
+  border-radius:50%;
+  background-color:white;
+  border-style:solid;
+  border-width:0.5px;
+  border-color:#34a9ad;
+
+
+}
+.logoFloater{
+  width:25px;
+  height:25px;
+  margin:auto;
+  margin-top:12px;
+  /* border-r
+  adius:50% */
+}
+.logoImg{
+  width:100%;
+  height:100%;
+  /* border-radius:50% */
+}
+.stop{
+  font-size: 30px;
+  margin-top:2px;
+}
+.addTimer{
+  margin-top:-0.5px;
+  height:98%;
+  background-color:#ceeff0;
+  padding:1px;
+}
+.tmeBtns{
+  font-size:18px;
+  font-weight:bold;
+  color:black;
+}
+.add{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.sub{
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.timeDiv{
+  padding:0.5px;
+  font-size: 13px;
+  width:100%;
+  height:30px;
+  margin-top:5px;
+  border-radius:5px;
+  border-style:solid;
+  border-width:0.5px;
+  border-color:#34a9ad;
+  display:grid;
+  grid-template-columns: 20% 60% 20%
+}
+.muteIcons{
+  font-size:18px;
+  margin-top:10px;
+  margin-left:2px;
+  color:#34a9ad;
+}
+.muteopt{
+  /* background-color: rgb(218, 197, 139); */
+}
+.muteBtnFloat{
+  height:41.5px;
+ 
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-top:-3.8px;
+}
+/* .muteButton{
   margin-top:-8px;
   width:35px;
   height:49px;
@@ -84,7 +183,7 @@ margin-left:-4px;
   border-bottom-left-radius: 0;
 
 background-color:  rgb(233, 112, 13)
-}
+} */
 .unmuteButton{
 
   background-color: rgb(4, 119, 62)
@@ -99,7 +198,7 @@ background-color:  rgb(233, 112, 13)
   border-width:0.5px;
   border-color:white;
   color:white;
-  background-color:  #34a9ad;
+  background-color:  #a0f5f8;
   font-size:12px;
   border-radius:5px;
   padding:0px;
@@ -137,8 +236,8 @@ background-color:  rgb(233, 112, 13)
     top: 0;
     transition: opacity 0.3s;
     z-index: 1;
-    background-color: rgb(184, 33, 6);
-    background: linear-gradient(65deg, rgb(233, 112, 13),rgb(248, 21, 5));
+    background-color: rgb(175, 80, 73);
+    /* background: linear-gradient(65deg, rgb(233, 112, 13),rgb(248, 21, 5)); */
     color: #fafafa;
     font-size: 14px;
 }
@@ -147,4 +246,11 @@ background-color:  rgb(233, 112, 13)
 }
 .imgShare:hover{
     opacity:1;
+}
+
+
+@media (min-width: 700px) {
+  .floaterContainerTansFloat{
+    width:220px;
+  }
 }
