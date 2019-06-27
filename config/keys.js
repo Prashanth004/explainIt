@@ -66,7 +66,7 @@ module.exports = {
     WELCOME_SUBJECT:"Welcome. Demo to explain the application",
     LINK_RECORDING:"https://explain.bookmane.in/project/7314612",
     SAVE_RECORD:"saveRecording",
-    GOOGLE_ANALYTICS_ID : "UA-142864750-1"
+    
 
 };
 

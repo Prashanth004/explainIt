@@ -163,7 +163,8 @@ const conf = {
     DECREASE_MINUTE_TO_EXTENSION_RECIEVER : "decreaseMinuteToExtension",
     DECREASE_MIUTE_TO_EXTENSION : "decreaseMinuteToExtension",
     DECREASE_MINUTE_TO_FLOATER_RECIEVE:"decreaseMinuteToFloaterReciever",
-    TIME_TWO_MIUTE_ERROR : "timeTwoMinuteError"
+    TIME_TWO_MIUTE_ERROR : "timeTwoMinuteError",
+    GOOGLE_ANALYTICS_ID : "UA-142864750-1"
 
 
 
