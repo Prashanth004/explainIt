@@ -7,6 +7,8 @@ import IssueCard from './tool/NewUi/diaplyissues/issueCard'
 import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
+import {initGA,loadPageView} from './tool/NewUi/container/ReactGa';
+
 import './css/newlanding.css';
 import Navbar from './tool/NewUi/Navbar';
 import { explainAuthentication } from '../actions/signinAction';
@@ -48,6 +50,8 @@ class Project extends Component {
     clearTimeout(this.reAtemptToFetch)
   }
   componentDidMount() {
+    initGA();
+    loadPageView();
     const self = this
 
     var issueId = this.props.match.params.projectid;

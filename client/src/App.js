@@ -7,7 +7,6 @@ import ReactGA from 'react-ga';
 import landing from './components/tool/NewUi/landingPgae'
 import config from './config/config';
 import ScreenShareFloater from './components/tool/NewUi/NewFloater/screenShareControl'
-// import emailvarify from './components/tool/NewUi/emailvarify'
 import Login from './components/tool/NewUi/Login';
 import adminDash from './components/tool/NewUi/adminPages/adminroot'
 import NoMatch from './components/tool/NewUi/NoMatch'
@@ -26,9 +25,13 @@ import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
 class App extends Component {
-  initializeReactGA() {
+  componentWillMount() {
+
     ReactGA.initialize(config.GOOGLE_ANALYTICS_ID);
-    ReactGA.pageview('/homepage');
+    ReactGA.pageview(window.location.pathname + window.location.search);
+ 
+
+
 }
   render() {
     return (

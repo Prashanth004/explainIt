@@ -7,6 +7,7 @@ import Activity from './Activies/indexActivity'
 import DisplatCreated from './diaplyissues/DisplayCreated';
 import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
+import {initGA,loadPageView} from './container/ReactGa';
 import Profile from './Profile'
 import { getProfileDetails } from '../../../actions/profileAction';
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
@@ -130,7 +131,8 @@ class NewHome extends Component {
     }
 
     componentDidMount() {
-
+        initGA();
+        loadPageView();
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
         var self = this
