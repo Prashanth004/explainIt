@@ -518,11 +518,13 @@ class ScreenRecorder extends Component {
 
             })
         })
+        
         peer.on('connection', (conn) => {
             if (config.CALL_LOGS)
                 console.log("got the connection set")
             this.setState({ conn: conn })
             conn.on('open', () => {
+                console.log("connection opneed : ")
                 this.setState({ clickedOnLink: true })
                 const result = browser();
                 if (config.CALL_LOGS)
@@ -531,6 +533,13 @@ class ScreenRecorder extends Component {
                     data: "sendID",
                     timer: this.props.timeAloted,
                     profilePic: this.props.twirecieverPrfilePic
+                })
+                conn.on('error',(err)=>{
+                    console.log("conn errr : ----");
+                    console.log("error : ",err)
+                })
+                conn.on('close',()=>{
+                    console.log("closed conn")
                 })
                 conn.on('data', (data) => {
                     if (data.type === config.MESSSAGE_FOR_CONNECTION_WITH_ID) {
@@ -557,6 +566,11 @@ class ScreenRecorder extends Component {
 
             });
         });
+        peer.on('error',function(error){
+            console.log("perr error : -----")
+            console.log("error : ",error);
+            console.log("errorType : ",error.type)
+        })
 
         peer.on('disconnected', function () {
             if (!self.state.initiatedCloseCall) {
