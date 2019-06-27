@@ -484,8 +484,17 @@ class ScreenRecorder extends Component {
                 };
             }
         }
+         // || (window.location.protocol === 'https:' ? 443 : 80),
         var self = this;
-        var peer = new window.Peer()
+        var peer = new window.Peer({
+            host: window.location.hostname,
+            port:  (window.location.protocol === 'https:' ? 443 : 80),
+            path: '/peerjs',
+            debug:2
+        })
+
+
+
         this.setState({
             peer: peer,
             socket: this.props.socket,

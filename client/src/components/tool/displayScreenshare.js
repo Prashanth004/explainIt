@@ -299,7 +299,14 @@ class DisplayShare extends Component {
             socket: socket
         });
         this.props.answerCall()
-        var peer = new window.Peer()
+     
+            var peer = new window.Peer({
+                host: window.location.hostname,
+                port:  (window.location.protocol === 'https:' ? 443 : 80),
+                path: '/peerjs',
+                debug:2
+            })
+
         var self = this
         this.setState({
             peer: peer
