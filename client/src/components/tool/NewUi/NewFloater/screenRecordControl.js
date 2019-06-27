@@ -85,7 +85,7 @@ class RecordFloater extends Component {
         return (<div>
             <div className="floaterContainerTansFloat">
             <div className="closeCross">
-                    <FiX onClick={this.props.toggle} />
+                <span><FiX onClick={this.props.toggle} /></span>
                 </div>
                 <div className="callImageDivAnwserMainFloat record">
 

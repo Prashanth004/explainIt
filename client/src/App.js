@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route} from 'react-router-dom'
 import { Provider } from 'react-redux'
-import store from './store'
+import store from './store';
+import ReactGA from 'react-ga';
 import landing from './components/tool/NewUi/landingPgae'
+import config from './config/config';
 import ScreenShareFloater from './components/tool/NewUi/NewFloater/screenShareControl'
 // import emailvarify from './components/tool/NewUi/emailvarify'
 import Login from './components/tool/NewUi/Login';
@@ -24,6 +26,10 @@ import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
 class App extends Component {
+  initializeReactGA() {
+    ReactGA.initialize(config.GOOGLE_ANALYTICS_ID);
+    ReactGA.pageview('/homepage');
+}
   render() {
     return (
       <Provider store={store}>

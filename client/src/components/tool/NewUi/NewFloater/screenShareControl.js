@@ -328,7 +328,7 @@ class ShareFloater extends Component {
         return (!this.state.isClosed) ? ((action === config.FULL_SCREEN_SHARE || action === config.RECIEVER_SCREEN_SHARE) ? (
             <div className="floaterContainerTansFloat">
                 <div className="closeCross">
-                    <FiX onClick={this.toggle} />
+                <span><FiX onClick={this.props.toggle} /></span>
                 </div>
                 <div className="callImageDivAnwserMainFloat" style={floateGridStyle} >
 
