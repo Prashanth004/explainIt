@@ -490,6 +490,7 @@ class ScreenRecorder extends Component {
             host: window.location.hostname,
             port:  (window.location.protocol === 'https:' ? 443 : 80),
             path: '/peerjs',
+            secure : true,
             debug:2
         })
 
