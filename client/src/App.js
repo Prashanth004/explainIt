@@ -26,12 +26,8 @@ import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
 class App extends Component {
   componentWillMount() {
-
     ReactGA.initialize(config.GOOGLE_ANALYTICS_ID);
     ReactGA.pageview(window.location.pathname + window.location.search);
- 
-
-
 }
   render() {
     return (

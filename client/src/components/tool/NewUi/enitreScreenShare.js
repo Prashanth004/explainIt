@@ -520,12 +520,13 @@ class ScreenRecorder extends Component {
         })
         peer.on('connection', (conn) => {
             if (config.CALL_LOGS)
+                console.log("got the connection set")
             this.setState({ conn: conn })
             conn.on('open', () => {
                 this.setState({ clickedOnLink: true })
                 const result = browser();
                 if (config.CALL_LOGS)
-                    console.log("sending acknowledge message ", conn)
+                    console.log("requesting fot peerid on just made webRtc connection", conn)
                 conn.send({
                     data: "sendID",
                     timer: this.props.timeAloted,
@@ -533,7 +534,8 @@ class ScreenRecorder extends Component {
                 })
                 conn.on('data', (data) => {
                     if (data.type === config.MESSSAGE_FOR_CONNECTION_WITH_ID) {
-                      
+                        if (config.CALL_LOGS)
+                            console.log("got the peerid over connection. noe get stream abd make call")
                             if (!this.state.onGoingCallEnded) {
                                 self.setState({ destkey: data.clientId });
 
@@ -601,8 +603,10 @@ class ScreenRecorder extends Component {
         const { twitterUserId, fullStartedSharing } = this.props
         const self = this;
         const { socket, peer, destkey, finalStream } = this.state
-        if (config.CALL_LOGS)
+        
         var call = peer.call(destkey, finalStream);
+        if (config.CALL_LOGS)
+        console.log("Made peer call with other peer is and streams")
         var recorder1 = RecordRTC(finalStream, {
             type: 'video'
         });
