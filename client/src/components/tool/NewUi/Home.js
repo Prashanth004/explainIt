@@ -20,6 +20,7 @@ import { creatAnsProject } from '../../../actions/projectActions'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css' 
 import { Button, Modal, ModalBody } from 'reactstrap';
+// import { Spinner } from 'reactstrap';
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';

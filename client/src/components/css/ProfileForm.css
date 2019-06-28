@@ -12,13 +12,15 @@
     color:rgb(12, 44, 131);
 }
 .inputboxes{
-    border-radius:2px;
+    /* border-radius:2px; */
     width:100%;
+    resize: none; 
     margin:auto;
-    border-width:1px;
-    border-radius:3px;
+    border-style:none;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
     border-color:rgba(167, 167, 167, 0.5);
-    background-color: rgb(245, 245, 245);
+    background-color: white;
     color:rgb(112, 112, 112);
     font-size:12px;
     padding:2.5px;

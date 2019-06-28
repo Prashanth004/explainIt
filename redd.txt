@@ -7,6 +7,107 @@ border #bebebe81;
 inside background white;
 
 
+BOOKCHAMEO 
+ttyl
+lg tiktok
+cameo
+demio
+twitter
+gumroad
+basecamp
+tock
+
+
+
+
+CREATE TABLE public.contacts
+(
+  id integer NOT NULL DEFAULT serial,
+  profileid text,
+  contactid text,
+  "time" timestamp with time zone,
+  custinfo text,
+  CONSTRAINT contacts_pkey PRIMARY KEY (id),
+  CONSTRAINT contacts_contactid_fkey FOREIGN KEY (contactid)
+      REFERENCES public.users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT contacts_profileid_fkey FOREIGN KEY (profileid)
+      REFERENCES public.users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT "contactPair" UNIQUE (profileid, contactid)
+)
+WITH (
+  OIDS=FALSE
+);
+
+pointer for close
+disaple + and - for thr reciever side
+
+
+
+
+/** just copy and paste this entire code in your stylesheet **/
+@import url('https://fonts.googleapis.com/css?family=Roboto:100');
+body {
+  background: #333;
+}
+
+/** page **/
+.cssloader {
+  padding-top: calc(45vh - 25px);
+}
+
+/** loader **/
+.sh1 {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 50px 50px 0 0;
+  border-color: #354952 transparent transparent transparent;
+  margin: 0 auto;
+  animation: shk1 1s ease-in-out infinite normal;
+}
+
+.sh2 {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 50px 50px;
+  border-color: transparent  transparent #df1a54 transparent ;
+  margin: -50px auto 0;
+  animation: shk2 1s ease-in-out infinite alternate;
+}
+
+/** animation starts here **/
+@keyframes shk1 {
+  0% {
+    transform: rotate(-360deg);
+  }  
+  
+  100% {
+  }
+}
+
+@keyframes shk2 {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+  }
+}
+
+.lt {
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  margin: 30px auto;
+  text-align: center;
+  font-weight: 100;
+  letter-spacing: 10px;
+}
+
+
+
+
 
 
 Call doesnt happen in secure connection.
@@ -25,6 +126,8 @@ flotaer closing and opening to be done as discussed with close button with and w
 reatime inbox feeed
 text box in recording 
 filling the blanks in recording
+
+https://explain.bookmane.in/project/8059175
 
 
 

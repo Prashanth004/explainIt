@@ -76,10 +76,10 @@ class RecordFloater extends Component {
 
         const pausePlay = (pauseState) ?
             (<span className="hint--right" aria-label="Resume recording">
-                <FiPlay onClick={() => this.pauseRecorder(null)} className="endButtonFloat" />
+                <FiPlay onClick={() => this.pauseRecorder(null)} className="endButtonFloat1 recordIcon" />
             </span>) :
             (<span className="hint--right" aria-label="Pause recording">
-                <FiPause onClick={() => this.pauseRecorder(null)} className="endButtonFloat"/>
+                <FiPause onClick={() => this.pauseRecorder(null)} className="endButtonFloat1 recordIcon"/>
             </span>);
 
         return (<div>
@@ -101,7 +101,7 @@ class RecordFloater extends Component {
                      </div> */}
                     <div>
                         <span className="hint--right" aria-label="Stop recording">
-                            <MdStop onClick={this.endCallFloater} className="endButtonFloat stop" />
+                            <MdStop onClick={this.endCallFloater} className="endButtonFloat1 stop recordIcon" />
                         </span>
 
                     </div>
@@ -109,8 +109,9 @@ class RecordFloater extends Component {
                         {pausePlay}
 
                     </div>
-                    <div>
+                    <div  style={{marginTop:"6px",color:"#34a9ad"}}>
                         <Countdown
+                        
                             date={Date.now() + this.props.timer * 60 * 1000}
                             renderer={this.renderer}
                         />

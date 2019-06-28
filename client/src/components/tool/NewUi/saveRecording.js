@@ -146,10 +146,10 @@ class SaveProjects extends Component {
         const shareOption = (!this.props.explainIssue) ? (
 
             <span className="hint--top" aria-label="Send Recording">
-                <FiSend className="icon screenRecordIcons"  onClick={this.chooseSave} />
+                <FiSend className="icon"  onClick={this.chooseSave} />
             </span>) : null
         const saveOption = (this.props.twitterUserId !== null ||  this.props.visitedTiwtterHandle!==null)  ? (null) : (<span className="hint--top" aria-label="Save Recording">
-        <FiSave className="icon screenRecordIcons" onClick={this.props.saveClicked} />
+        <FiSave className="icon" onClick={this.props.saveClicked} />
     </span>)
         const subjectInoutBox = ((this.props.showInputBox) ? (
         <InputBox
@@ -172,11 +172,11 @@ class SaveProjects extends Component {
        
 
         return (!this.props.isSaveClicked && !this.state.sendMessageClicked) ?
-            (<div className="ActivityBelow">
+            (<div className="ActivityBelow rcrdAct">
                 {shareOption}
                 {saveOption}
                 <span className="hint--top" aria-label="Discard">
-                    <FiX  className="icon screenRecordIcons"  onClick={this.props.closeImidiate} />
+                    <FiX  className="icon"  onClick={this.props.closeImidiate} />
                 </span>
             </div>) :((this.state.sendMessageClicked && !this.state.privatePublic)? 
                 (<div>

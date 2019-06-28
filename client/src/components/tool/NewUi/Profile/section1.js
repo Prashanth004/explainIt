@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import TextArea from '../container/textArea';
 
 export default (props) => {
     const {bioValue,changeBio, closeEditProfile,goodAtValue,changeGoodAt,SecTrans,worksValue,
@@ -9,29 +10,31 @@ export default (props) => {
         <span className="errorSpan">Can not be more than 150 characters</span>
         <br/></div>) : (null);
   return (<div className="profileFormContainer">
-                    <span><b>Who am I</b></span>
-                    <span className="support">   (200 characters)</span>
+                    <span>Who am I?</span>
+                    {/* <span className="support">   (200 characters)</span> */}
                     <br/>
-                    <span className="support">(optional)</span>
-                    <textarea
-                        value={bioValue}
-                        rows="6" onChange={changeBio} className="inputboxes" />
+                    {/* <span className="support">(optional)</span> */}
+                    <TextArea
+                        textvalue={bioValue}
+                        changeFunction={changeBio} 
+                        inputClass="inputboxes" />
                     {bioErrorDiv}
-                       <span><b>What am I good at</b></span>
-                    <span className="support">   (150 characters)</span>
+                       <span>What am I good at?</span>
+                    {/* <span className="support">   (150 characters)</span> */}
                     <br/>
-                    <span className="support">(optional)</span>
-                    <textarea
-                        value={goodAtValue}
-                        rows="3" onChange={changeGoodAt} className="inputboxes" />
+                    {/* <span className="support">(optional)</span> */}
+                    <TextArea
+                        textvalue={goodAtValue}
+                        changeFunction={changeGoodAt}
+                        inputClass="inputboxes" />
                     {goodAtErrorDiv}
 
-                    <span><b>My works</b></span>
+                    <span>My works</span>
                     <br/>
-                    <span  className="support">(optional)</span>
-                    <textarea
-                        value={worksValue}
-                        rows="3" onChange={changeWorks} className="inputboxes" />
+                    {/* <span  className="support">(optional)</span> */}
+                    <TextArea
+                        textvalue={worksValue}
+                        changeFunction={changeWorks} inputClass="inputboxes" />
                    <button  className="buttonLight" onClick={SecTrans}>Next </button>
                    <button className="buttonLight" onClick={closeEditProfile}>Cancel</button>
                 </div>)

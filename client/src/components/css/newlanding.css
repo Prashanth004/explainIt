@@ -88,7 +88,7 @@
   width:37px;
   border-radius:50%;
 
-
+/* background-color: red; */
 }
 
 a{
@@ -393,7 +393,7 @@ color:black;
     background-color: rgba(167, 75, 75, 0.774);
   }
   .callNotification{
-    width:65%;
+    width:20%;
     margin:auto;
     margin-top:10px;
     background-color: white;
@@ -432,13 +432,14 @@ color:black;
     padding-top:5px;
   
   }
-  .iconsActivity{
-    margin-top:10px;
+  .rcrdAct{
+    margin-top:20px;
     padding-top:10px;
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: #bebebe81;
   }
+
   .issueCard{
     padding-bottom:5px;
     width:100%;
@@ -618,7 +619,7 @@ color:black;
         width:75%;
       }
       .callNotification{
-        width:35%;
+        width:55%;
         margin:auto;
       }
       .containerHome{

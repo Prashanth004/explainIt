@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import {clickAction,changeTwiiterHandle} from '../../../../actions/landingAction';
 import {getProfileByTwitterHandle} from '../../../../actions/visitProfileAction';
 import TweetToRefer from './tweetToRefer';
-import '../../../css/explainit.css'
+import '../../../css/explainit.css';
+import TwitterInput from '../container/twitterInput'
 
  
 const landinForm = (props) => {
@@ -34,10 +35,12 @@ const landinForm = (props) => {
             <h6>Enter your twitter handle</h6>
             <br />
             <span className="twiCom">twitter.com/</span>
-            <input 
-            style={{backgroundColor:"rgb(250, 250, 250)"}} 
-            onChange={(e)=>props.changeTwiiterHandle(e.target.value)}type="text"  className="twiHandleInput"></input>
-            <button onClick={()=>clickFunction(props.twitterHandleValue)}className="buttonLight">Tweet</button>
+            <TwitterInput
+            changeValue = {props.changeTwiiterHandle}
+            inputStyle="twiHandleInput"
+            submitFunction={clickFunction}
+             />
+            <button onClick={()=>clickFunction()}className="buttonLight">Tweet</button>
             <br />
             {inValidMessage}
             <br />

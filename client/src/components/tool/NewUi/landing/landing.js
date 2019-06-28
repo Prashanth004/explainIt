@@ -7,6 +7,8 @@ import React, { Component } from 'react';
 import {initGA,loadPageView} from '../container/ReactGa';
 import { Redirect } from 'react-router-dom';
 import { stillAuthenicated } from '../../../../actions/signinAction';
+// import Loading from '../container/loadingAmin'
+import '../container/loading.css'
 
 
 class landingPage extends Component {
@@ -24,13 +26,12 @@ class landingPage extends Component {
       </div>
       <div>
         <RightSection />
-
+       
       </div>
     </div>) :((<Redirect to={{ pathname: './application' }} />)))) :
-      (<div className="loadinContainerDiv">
-          <div className="loader"></div>
-        </div>
-      )
+      ( <div style={{paddingTop:"150px"}}>
+        <div class="fluct"></div>
+      </div>)
   }
 }
 

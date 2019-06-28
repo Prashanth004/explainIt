@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 // import '../../../css/call.css';
 import './record.css'
 import { MdCallEnd } from "react-icons/md";
-import Countdown from 'react-countdown-now';
-import { MdFilterNone, MdVolumeOff, MdVolumeUp } from "react-icons/md";
+import ScareenShare from './ScreenShareBtn'
+import {MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { FiX } from "react-icons/fi"
 import config from '../../../../config/config';
 import { updateCurrentTime } from '../../../../actions/callAction'
@@ -12,7 +12,8 @@ import PropType from 'prop-types';
 import RecordFloater from './screenRecordControl';
 import { setTime, changeStateToMute, changeStateToUnmute, setDiplayOfFloater } from '../../../../actions/floaterAction';
 import { HideScreenSharebutton } from '../../../../actions/extensionAction'
-import { pauseRecording, resumeRecording } from '../../../../actions/recoderAction'
+import { pauseRecording, resumeRecording } from '../../../../actions/recoderAction';
+import Timer from './timer'
 
 
 class ShareFloater extends Component {
@@ -59,7 +60,7 @@ class ShareFloater extends Component {
             pauseState = JSON.parse(localStorage.getItem('pauseState'))
         }
         catch (e) {
-            console.log("error : ", e)
+            // console.log("error : ", e)
         }
         if (pauseState === config.PAUSED_RECORDER)
             this.props.pauseRecording(null);
@@ -305,14 +306,15 @@ class ShareFloater extends Component {
     };
     render() {
 
-
-        var floateGridStyle = {
+        const floateGridStyle = (this.props.floaterDisplay==='block')?{
             display: "grid",
-            gridTemplateColumns: "19% 21% 10% 38% 12%"
+            gridTemplateColumns: "19% 24% 44% 12%"
+        }:{
+            display: "grid",
+            gridTemplateColumns: "19% 69% 12%"
         }
 
-        //   const displatAddTime = (this.state.displayAddTimer)?"block":"none"; 
-        //   const mytBtnClor=(this.props.muteState === config.UN_MUTED)?({backgroundColor: "rgb(255, 231, 166)"}):({backgroundColor: "rgb(224, 252, 180)"})
+
         const mutBtn = (this.props.muteState === config.UN_MUTED) ?
             (<div className="muteopt">
                 <span className="hint--left" aria-label="Mute">
@@ -328,7 +330,7 @@ class ShareFloater extends Component {
         return (!this.state.isClosed) ? ((action === config.FULL_SCREEN_SHARE || action === config.RECIEVER_SCREEN_SHARE) ? (
             <div className="floaterContainerTansFloat">
                 <div className="closeCross">
-                <span><FiX onClick={this.props.toggle} /></span>
+                <span><FiX onClick={this.toggle} /></span>
                 </div>
                 <div className="callImageDivAnwserMainFloat" style={floateGridStyle} >
 
@@ -345,32 +347,18 @@ class ShareFloater extends Component {
                             <img alt="reciever profile pic" className="callPage-recieverImageFloat" src={this.state.otherPersonPic}></img>
                         </span>
                     </div>
-
-                    <div>
-                        {/*   */}
-                        <div style={{ display: this.props.floaterDisplay }} >
-                            <span className="hint--bottom" aria-label="Share my screen">
-                                <MdFilterNone onClick={this.shareMyscreen} className="endButtonFloat" />
-                            </span>
-                        </div>
-                    </div>
-
-                    <div>
-                        {/* <div  style={{ display: displatAddTime }}>
-                        <button className="addMin" onClick={this.addExtraMinute}>1 min</button>
-                        </div> */}
-                    </div>
+                    <ScareenShare
+                    shareMyscreen={this.shareMyscreen}
+                    floaterDisplay = {this.props.floaterDisplay} />
+                   
+                    <Timer 
+                    ReducedMinute = {this.ReducedMinute}
+                    displayAddTimer = {this.state.displayAddTimer}
+                    floaterTime = {this.props.floaterTime}
+                    addExtraMinute = {this.addExtraMinute}
+                    renderer ={this.renderer}/>
                     {/* fontSize="13px" style={{ color: "white", marginTop:"10px" }} */}
-                    <div className="timeDiv">
-                        <div className="addTimer add"><span className="tmeBtns" onClick={this.addExtraMinute}>+</span></div>
-                        <div>
-                            <Countdown
-                                date={Date.now() + this.props.floaterTime * 60 * 1000}
-                                renderer={this.renderer}
-                            />
-                        </div>
-                        <div className="addTimer sub"><span className="tmeBtns" onClick={this.ReducedMinute}>-</span></div>
-                    </div>
+                   
                     <div>
                         <div className="muteBtnFloat" >
                             {mutBtn}

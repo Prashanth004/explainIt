@@ -300,13 +300,13 @@ class DisplayShare extends Component {
         });
         this.props.answerCall()
      
-            var peer = new window.Peer({
-                host: window.location.hostname,
-                port:  (window.location.protocol === 'https:' ? 443 : 80),
-                path: '/peerjs',
-                secure:true,
-                debug:2
-            })
+        var peer = new window.Peer({
+            host: config.peerHost,
+            port:  config.peerPort,
+            path: config.peerPath,
+            secure : config.peerSecure,
+            debug:config.peerDebug
+        })
 
         var self = this
         this.setState({

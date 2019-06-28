@@ -1,0 +1,322 @@
+ /*  begin cubes css */
+  
+ .cubes {
+    width: 40px;
+    height: 40px;
+    margin: 100px auto;
+   }
+   
+   .cubes .sk-cube {
+    width: 33%;
+    height: 33%;
+    background-color: #34a9ad;
+    float: left;
+    animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+   }
+   
+   .cubes .sk-cube1 {
+    animation-delay: 0.2s;
+   }
+   
+   .cubes .sk-cube2 {
+    animation-delay: 0.3s;
+   }
+   
+   .cubes .sk-cube3 {
+    animation-delay: 0.4s;
+   }
+   
+   .cubes .sk-cube4 {
+    animation-delay: 0.1s;
+   }
+   
+   .cubes .sk-cube5 {
+    animation-delay: 0.2s;
+   }
+   
+   .cubes .sk-cube6 {
+    animation-delay: 0.3s;
+   }
+   
+   .cubes .sk-cube7 {
+    animation-delay: 0s;
+   }
+   
+   .cubes .sk-cube8 {
+    animation-delay: 0.1s;
+   }
+   
+   .cubes .sk-cube9 {
+    animation-delay: 0.2s;
+   }
+   
+   @keyframes sk-cubeGridScaleDelay {
+    0%,
+    70%,
+    100% {
+     transform: scale3D(1, 1, 1);
+    }
+    35% {
+     transform: scale3D(0, 0, 1);
+    }
+   }
+ 
+   /*  begin folding css */
+   
+   .folding {
+    margin: 20px auto;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    transform: rotateZ(45deg);
+   }
+   
+   .folding .sk-cube {
+    float: left;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    transform: scale(1.1);
+   }
+   
+   .folding .sk-cube:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #34a9ad;
+    animation: sk-foldCubeAngle 2.4s infinite linear both;
+    transform-origin: 100% 100%;
+   }
+   
+   .folding .sk-cube2 {
+    transform: scale(1.1) rotateZ(90deg);
+   }
+   
+   .folding .sk-cube3 {
+    transform: scale(1.1) rotateZ(180deg);
+   }
+   
+   .folding .sk-cube4 {
+    transform: scale(1.1) rotateZ(270deg);
+   }
+   
+   .folding .sk-cube2:before {
+    animation-delay: 0.3s;
+   }
+   
+   .folding .sk-cube3:before {
+    animation-delay: 0.6s;
+   }
+   
+   .folding .sk-cube4:before {
+    animation-delay: 0.9s;
+   }
+   
+   @keyframes sk-foldCubeAngle {
+    0%,
+    10% {
+     transform: perspective(140px) rotateX(-180deg);
+     opacity: 0;
+    }
+    25%,
+    75% {
+     transform: perspective(140px) rotateX(0deg);
+     opacity: 1;
+    }
+    90%,
+    100% {
+     transform: perspective(140px) rotateY(180deg);
+     opacity: 0;
+    }
+   }
+ 
+   /*  begin bounce css */
+   
+   .bounce {
+    margin: 100px auto 0;
+    width: 70px;
+    text-align: center;
+   }
+   
+   .bounce>div {
+    width: 18px;
+    height: 18px;
+    background-color: #34a9ad;
+    border-radius: 100%;
+    display: inline-block;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+   }
+   
+   .bounce .bounce1 {
+    animation-delay: -0.32s;
+   }
+   
+   .bounce .bounce2 {
+    animation-delay: -0.16s;
+   }
+   
+   @keyframes sk-bouncedelay {
+    0%,
+    80%,
+    100% {
+     transform: scale(0);
+    }
+    40% {
+     transform: scale(1.0);
+    }
+   }
+ 
+   /*  begin dots css */
+   
+   .dots {
+    margin: 100px auto;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    text-align: center;
+    animation: sk-rotate 2.0s infinite linear;
+   }
+   
+   .dot1,
+   .dot2 {
+    width: 60%;
+    height: 60%;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    background-color: #34a9ad;
+    border-radius: 100%;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+   }
+   
+   .dot2 {
+    top: auto;
+    bottom: 0;
+    animation-delay: -1.0s;
+   }
+   
+   @keyframes sk-rotate {
+    100% {
+     transform: rotate(360deg);
+    }
+   }
+   
+   @keyframes sk-bounce {
+    0%,
+    100% {
+     transform: scale(0.0);
+    }
+    50% {
+     transform: scale(1.0);
+    }
+   }
+ 
+   /*  begin fluct css */
+   
+   .fluct {
+    width: 70px;
+    
+    height: 70px;
+    background-color: #34a9ad;
+    border-radius:5px;
+    border-style:solid;
+    border-width: 1px;
+    border-color:rgba(51, 51, 51, 0.486);
+    margin: 100px auto;
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+   }
+   
+   @keyframes sk-rotateplane {
+    0% {
+     transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+     transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    }
+    100% {
+     transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
+   }
+ 
+   /*  begin double css */
+   
+   .double {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: 100px auto;
+   }
+   
+   .double-bounce1,
+   .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #34a9ad;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+   }
+   
+   .double-bounce2 {
+    animation-delay: -1.0s;
+   }
+   
+   @keyframes sk-bounce {
+    0%,
+    100% {
+     transform: scale(0.0);
+    }
+    50% {
+     transform: scale(1.0);
+    }
+   }
+   /*  begin rect css */
+   
+   .rect {
+    margin: 100px auto;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+   }
+   
+   .rect>div {
+    background-color: #34a9ad;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+   }
+   
+   .rect .rect2 {
+    animation-delay: -1.1s;
+   }
+   
+   .rect .rect3 {
+    animation-delay: -1.0s;
+   }
+   
+   .rect .rect4 {
+    animation-delay: -0.9s;
+   }
+   
+   .rect .rect5 {
+    animation-delay: -0.8s;
+   }
+   
+   @keyframes sk-stretchdelay {
+    0%,
+    40%,
+    100% {
+     transform: scaleY(0.4);
+    }
+    20% {
+     transform: scaleY(1.0);
+    }
+   }

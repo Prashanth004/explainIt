@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../../../css/ProfileForm.css'
+import '../../../css/ProfileForm.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import Section1 from './section1';
@@ -176,7 +176,7 @@ class ProfileForm extends Component {
             changeBio = {this.changeBio}
             goodAtValue = {this.state.goodAtValue}
             changeGoodAt = {this.changeGoodAt}
-            worksValue = {this.worksValue}
+            worksValue = {this.state.worksValue}
             changeWorks=  {this.changeWorks}
             bioValueError={this.state.bioValueError}
             closeEditProfile={this.props.closeEditProfile}

@@ -33,12 +33,17 @@
   .imageLogout{
       width: 20px;
       height:20px;
-      float:right;
+      /* float:right; */
       margin-top:5px;
       
 
   }
-
+.profileLogout{
+/* margin-left:250px; */
+width:50px;
+margin-right:-1250px;
+ /* height: 100px; */
+}
   .navBar{
     width:100%;
   
@@ -86,7 +91,7 @@ margin-top:-100px;
   .navItem{
     display:grid;
     padding:5px;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 80% 20% ;
     text-align:center;
   }
   a:hover {

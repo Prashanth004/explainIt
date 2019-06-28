@@ -487,14 +487,12 @@ class ScreenRecorder extends Component {
          // || (window.location.protocol === 'https:' ? 443 : 80),
         var self = this;
         var peer = new window.Peer({
-            host: window.location.hostname,
-            port:  (window.location.protocol === 'https:' ? 443 : 80),
-            path: '/peerjs',
-            secure : true,
-            debug:2
+            host: config.peerHost,
+            port:  config.peerPort,
+            path: config.peerPath,
+            secure : config.peerSecure,
+            debug:config.peerDebug
         })
-
-
 
         this.setState({
             peer: peer,
@@ -577,9 +575,11 @@ class ScreenRecorder extends Component {
             });
         });
         peer.on('error',function(error){
-            console.log("perr error : -----")
-            console.log("error : ",error);
-            console.log("errorType : ",error.type)
+            if(config.CALL_LOGS){
+                console.log("perr error : -----")
+                console.log("error : ",error);
+                console.log("errorType : ",error.type)
+            }
         })
 
         peer.on('disconnected', function () {
@@ -1100,10 +1100,10 @@ class ScreenRecorder extends Component {
                         <span>You can record the screen and send</span>
                         <br />
                         <br />
-                        <span className="hint--bottom" aria-label="Record call and send">
-                        <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
-                        </span>                <span className="hint--bottom" aria-label="Cancel">
-                            <FiX className="icons" onClick={this.props.closeImidiate} />
+                        <span className="hint--top" aria-label="Record call and send">
+                        <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                        </span>                <span className="hint--top" aria-label="Cancel">
+                            <FiX className="icon" onClick={this.props.closeImidiate} />
                         </span>
                     </div>)
                 }
@@ -1117,10 +1117,10 @@ class ScreenRecorder extends Component {
                         <span>You can record the screen and send</span>
                         <br />
                         <br />
-                        <span className="hint--bottom" aria-label="Record call and send">
-                            <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
-                        </span>                <span className="hint--bottom" aria-label="Cancel">
-                            <FiX className="icons" onClick={this.props.closeImidiate} />
+                        <span className="hint--top" aria-label="Record call and send">
+                            <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                        </span>                <span className="hint--top" aria-label="Cancel">
+                            <FiX  className="icon" onClick={this.props.closeImidiate} />
                         </span>
                     </div>)
                 }
@@ -1188,10 +1188,10 @@ class ScreenRecorder extends Component {
                 <span><b>{this.props.twitterName}</b> is not available to accept request.</span>
                 <span>You can record the screen and send</span>
                 <br />
-                <span className="hint--bottom" aria-label="Record call and send">
-                <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
-                </span>                <span className="hint--bottom" aria-label="Cancel">
-                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                <span className="hint--top" aria-label="Record call and send">
+                <FiVideo  className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                </span>                <span className="hint--top" aria-label="Cancel">
+                    <FiX  className="icon" onClick={this.props.closeImidiate} />
                 </span>
 
             </div>)
@@ -1204,11 +1204,11 @@ class ScreenRecorder extends Component {
                 <p><b>{this.props.twitterName} has responded with a message</b></p>
                 <p>message : {this.state.messageFrmPeer}</p>
                 <p>Do You wish to record the screen and send?</p>
-                <span className="hint--bottom" aria-label="Record call and send">
-                <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                <span className="hint--top" aria-label="Record call and send">
+                <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
                 </span>
-                <span className="hint--bottom" aria-label="Cancel">
-                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                <span className="hint--top" aria-label="Cancel">
+                    <FiX className="icon" onClick={this.props.closeImidiate} />
                 </span>
             </div>)
         }
@@ -1221,10 +1221,10 @@ class ScreenRecorder extends Component {
                 <p><b>Link expired</b></p>
                 <p>Client did not click to get connected</p>
                 <p>You can record the call and send</p>
-                <span className="hint--bottom" aria-label="Record call and send">
-                <FiVideo className="icons" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
-                </span>                <span className="hint--bottom" aria-label="Cancel">
-                    <FiX className="icons" onClick={this.props.closeImidiate} />
+                <span className="hint--top" aria-label="Record call and send">
+                <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                </span>                <span className="hint--top" aria-label="Cancel">
+                    <FiX className="icon" onClick={this.props.closeImidiate} />
                 </span>
 
             </div>)

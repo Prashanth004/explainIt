@@ -10,29 +10,36 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpenEdit: false
+            isOpenEdit: false,
+            openBasicFill:false
         }
         this.openEdit = this.openEdit.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
+        this.closeProfileSection = this.closeProfileSection.bind(this);
     }
     componentWillMount(){
         if((this.props.bio === null||(this.props.bio).length===0) && this.props.isHome)
-            this.props.openEditProfile()
+            this.setState({openBasicFill:true})
         
     }
     openEdit() {
         this.props.openEditProfile()
     }
+    closeProfileSection(){
+        if((this.props.bio === null||(this.props.bio).length===0) && this.props.isHome)
+            this.setState({openBasicFill:true})
+        this.props.openDtailsTab()
+    }
     closeEdit() {
         this.props.closeEditProfile()
     }
     render() {
-        const editbtn = (!this.props.openEdirProfile)?(  <span  className="hint--top edit" aria-label="Edit!">
+        const editbtn = (this.props.openEdirProfile || this.props.bio.length === 0)?(null):(  <span  className="hint--top edit" aria-label="Edit!">
         <FiEdit onClick={this.openEdit} className="edit" />
-    </span>):(null)
+    </span>)
         const editOption = (this.props.isHome) ? (
         <div className="topBtnsActivity">
-             <Button style={{margin:"-8px"}} close onClick={this.props.openDtailsTab} />
+             <Button style={{margin:"-8px"}} close onClick={this.closeProfileSection} />
              {editbtn}
           </div>) : (null)
         const bio = (this.props.bio !== null) ? (
@@ -62,8 +69,13 @@ class Profile extends Component {
             ) : (null)
         ) : (null)
         const profileConatiner = (!this.props.openEdirProfile) ?
-            (
-                <div>
+            ((this.props.bio.length === 0)?
+                (<div style={{width:"80%", margin:"auto"}}>
+                <p style={{fontWeight:"550"}}>Hi <a href={'https://twitter.com/' + this.props.twitterHandle}  rel="noopener noreferrer" target="_blank">{this.props.userName}</a>. Help people to know who you are. Write a short note about yourself.</p>
+                
+                <button className="buttonLight" onClick={this.openEdit}>Okay</button>
+            </div>):
+                (<div>
                     <div className="bio">
                         <p><b>{this.props.userName}</b></p>
                         {bio}
@@ -108,9 +120,8 @@ class Profile extends Component {
 
                         </div>
                     </div>
-                </div>
-            ) : (
-                <ProfileForm
+                </div>)) : 
+                (<ProfileForm
                     closeEdit={this.closeEdit} />
             )
         return (

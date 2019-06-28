@@ -64,14 +64,14 @@ const savingProcessDiv = (!props.isSaved)?(
    
     else if (!props.manualClose && !props.timerEnded && !props.retry && (props.retryLimit < 1)) {
         buttons = (!props.saveinitiated) ?
-            (<div><span className="hint--bottom" aria-label="Retry">
-                <MdReplay className="icons" onClick={props.retryCall} />
+            (<div><span className="hint--top" aria-label="Retry">
+                <MdReplay className="icon" onClick={props.retryCall} />
             </span>
-                <span className="hint--bottom" aria-label="Record call and send">
-                    <FiVideo className="icons" onClick={props.recordCall} />
+                <span className="hint--top" aria-label="Record call and send">
+                    <FiVideo className="icon" onClick={props.recordCall} />
                 </span>
-                <span className="hint--bottom" aria-label="End Call Session">
-                    <FiX className="icons" onClick={props.savefilePrivate} />
+                <span className="hint--top" aria-label="End Call Session">
+                    <FiX className="icon" onClick={props.savefilePrivate} />
                 </span>
             </div>) : (null)
         MessageDisconnected = (
@@ -92,11 +92,11 @@ const savingProcessDiv = (!props.isSaved)?(
     else if (props.retry && (props.retryTimeOut || props.noInternet)) {
         buttons = (!props.saveinitiated) ? (
             <div>
-                <span className="hint--bottom" aria-label="Record call and send">
-                    <FiVideo className="icons" onClick={props.recordCall} />
+                <span className="hint--top" aria-label="Record call and send">
+                    <FiVideo className="icon" onClick={props.recordCall} />
                 </span>
-                <span className="hint--bottom" aria-label="End Call Session">
-                    <FiX className="icons" onClick={props.savefilePrivate} />
+                <span className="hint--top" aria-label="End Call Session">
+                    <FiX className="icon" onClick={props.savefilePrivate} />
                 </span>
             </div>) : (null)
         MessageDisconnected = (

@@ -13,9 +13,14 @@ const conf = {
     dataTime : date+"__"+time,
     token:token,
     googleClientId:"308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com",
-    peerHost:'127.0.0.1',
+
+
+    peerHost:window.location.hostname,
     peerPort : 9000,
+    // peerPort :(window.location.protocol === 'https:' ? 443 : 80),
     peerPath : '/peerjs',
+    peerSecure:false,
+    peerDebug:2,
     gitHubClientId:"5c7162c1bd8449fa8b00",
     EXMAIL_VALIDATE_TOKEN:"8d31cc402c99ec4e3d5545ae6a549c0f",
     gitHubClientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947",

@@ -4,6 +4,10 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FiMail } from "react-icons/fi";
 import '../../css/nav.css';
+import '../../css/issueDetails.css';
+import { FiLogOut } from "react-icons/fi";
+// import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
 import { confirmAlert } from 'react-confirm-alert'; 
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
@@ -16,7 +20,8 @@ class Navigationbar extends React.Component {
     this.state = {
       isOpen: false,
       isViewPage: false,
-      isProjectPage: false
+      isProjectPage: false,
+      optionVisibe :"hidden"
     };
     this.googleResponse = this.googleResponse.bind(this);
     this.handleGit = this.handleGit.bind(this);
@@ -27,22 +32,16 @@ class Navigationbar extends React.Component {
     this.logout = this.logout.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.toggleDropDown = this.toggleDropDown.bind(this);
   }
-  showLogoutSuccess() {
-    // Swal.fire({
-    //   type: 'success',
-    //   title: 'Logout successful',
-    //   timer: 1500,
-    //   showConfirmButton: false,
-    // })
-  }
+
   logout = () => {
-    
+    const message =this.props.isSceenSharing ? "The call will get disconnected":"The ongoing screen recording will end"
     if ((this.props.isSceenSharing  || this.props.isFullScreenRecording)) {
 
         confirmAlert({
             title: "Are you sure?",
-            message: "The call will get disconnected",
+            message: message,
             buttons: [
                 {
                     label: 'Yes',
@@ -109,6 +108,13 @@ handleConfirm() {
     const tokenBlob = new Blob([JSON.stringify({ access_token: response.accessToken }, null, 2)], { type: 'application/json' });
     this.props.signInWithGoogle(tokenBlob)
   }
+  toggleDropDown() {
+    if (this.state.optionVisibe === "hidden")
+    this.setState({ optionVisibe: "visible" })
+else {
+    this.setState({ optionVisibe: "hidden" })
+}
+  }
   openVisitHome() {
 
     window.open(config.react_url + "/" + this.props.twitterHandle, '_self')
@@ -125,6 +131,7 @@ handleConfirm() {
     var partiStyle = null;
     var inboxStyle = null;
     var profileImage = null;
+    var centreNav = null;
     var explainLogo = (
       <div className="logoContainer" onClick={this.openHome}>
         <span>
@@ -151,29 +158,35 @@ handleConfirm() {
 
       }
     }
-    var centreNav = null;
+ 
 
-
+    var options=null;
     if ((this.props.Created || this.props.Participated)
       && this.state.isViewPage
       && !this.props.isAuthenticated) {
-      profileImage = (null)
+      profileImage = (null);
+      options=(null)
     
     }
     else {
-      profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (<div className="dropdown">
-        <div className="profileImagesDiv">
-          <img alt="profilr pic" className="profileImages" src={this.props.profilePic}></img>
-        </div>
-        <div className="dropdown-content">
-          <button onClick={this.logout} className="navButton1"> Logout</button>
-          <div className="imageLogout">
-            <span>
-              <img alt="logout"onClick={this.logout} height="100%" width="100%" src={require('../../images/logout.png')} />
-            </span>
-          </div>
-        </div>
-      </div>) : (null)
+      profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (
+                    <div className="cardDropdown" >
+                    <div className="profileImagesDiv">
+                        <span>
+                           <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
+                         </span>
+                      </div>
+                    <div className="dropDownForOption"
+                        onMouseLeave={this.toggleDropDown}  style={{ visibility: this.state.optionVisibe,width:"120px",height:"40px", marginLeft:"-50px",marginTop:"3px" }}>
+                        <div className="menuItem" >
+                          <div ><span onClick={this.logout}><FiLogOut /></span></div>
+                          <div>
+                            <span onClick={this.logout} className> Logout</span>
+                          </div>
+                        </div>
+                    </div>
+                </div>):(null)
+
     }
 
 
@@ -220,20 +233,6 @@ handleConfirm() {
         </div>)
       }
       else {
-
-        // centreNav = (
-        //   <div className="navgation">
-        //     <div>
-
-        //     </div>
-        //     <div className="  " onClick={this.openVisitHome}>
-        //       <span>
-        //         <img alt="visit home" src={require('../../images/logo.png')}
-        //           width="100%"
-        //           height="100%"></img>
-        //       </span>
-        //     </div>
-        //   </div>)
       }
 
     }
@@ -251,15 +250,10 @@ handleConfirm() {
 
       </div>
       <div className="navItem">
-        <div>
-
-        </div>
         <div></div>
-        <div >
-        </div>
         <div>
-          {profileImage}
-        </div>
+        {profileImage}
+        </div>   
 
       </div>
     </div>)

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiArrowLeft } from "react-icons/fi";
 
+
 export default (props) => {
     const {angelListError,gitHibError,linkInerror,SecTrans,linkedInValue,changeAngelList,
         uploadData, closeEditProfile,gitHubValue,angelListValue,changeLinkedIn,changeGithub}= props
