@@ -441,6 +441,9 @@ exports.resend = (req, res) => {
                 });
 
             }
+            else{
+                res.status(500).send({ success: 1, msg: 'A verification email has not been sent to ' + req.body.email + '.' })
+            }
         })
 
 }
@@ -523,11 +526,18 @@ exports.getUserByTwitteHandle = function (req, res) {
 
 }
 exports.getUserById = function (req, res) {
+    console.log("req.params.id : ",req.params.id)
     database.db.oneOrNone('select * from users where id = $1', req.params.id)
         .then(data => {
             if (data) {
                 res.status(200).send({
                     success: 1,
+                    data: data
+                })
+            }
+            else{
+                res.status(200).send({
+                    success: 0,
                     data: data
                 })
             }

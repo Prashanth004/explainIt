@@ -249,7 +249,7 @@ class NewHome extends Component {
         this.props.varifyEmail()
         this.props.stillAuthenicated()
         this.props.getTotalUnread();
-
+        // io.connect(sURL, {transports:['websocket'], upgrade: false}, {'force new connection': true})
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket

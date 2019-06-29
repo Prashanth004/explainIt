@@ -25,31 +25,38 @@ class ActivityMain extends Component {
             this.props.changeReadStatus(activity.id)
 
         var token = JSON.parse(localStorage.getItem('token'))
-        var newData = userData.filter(user=>user.key === activity.touser);
-        if(newData.length ===0){
-            axios({
-                method: 'get',
-                url: config.base_dir + "/api/users/id/" + activity.touser,
-                headers: {
-                    "Authorization": token,
-                }
-            }).then(res => {
-                if (res.status === 200 || res.status === 304) {
-    
-                    this.setState({
-                        userName: res.data.data.twitterhandle,
-                        profilePic: res.data.data.profilepic
-                    })
-                    this.props.addNewUser(res.data.data,userData)
-                }
-            })
+        if(activity.touser!==null){
+            var newData = userData.filter(user=>user.key === activity.touser);
+            if(newData.length ===0){
+                axios({
+                    method: 'get',
+                    url: config.base_dir + "/api/users/id/" + activity.touser,
+                    headers: {
+                        "Authorization": token,
+                    }
+                }).then(res => {
+                    if (res.status === 200 || res.status === 304) {
+        
+                        this.setState({
+                            userName: res.data.data.twitterhandle,
+                            profilePic: res.data.data.profilepic
+                        })
+                        this.props.addNewUser(res.data.data,userData)
+                    }
+                })
+            }
+            else{
+                this.setState({
+                    userName:newData[0].data.twitterhandle,
+                    profilePic: newData[0].data.profilepic
+                })
+            }
+
         }
         else{
-            this.setState({
-                userName:newData[0].data.twitterhandle,
-                profilePic: newData[0].data.profilepic
-            })
+            console.log("activity.activity : ",activity)
         }
+
   
     }
   render() {

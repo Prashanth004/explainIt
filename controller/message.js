@@ -124,6 +124,12 @@ exports.replyaction = (req, res) => {
                                             subject + "'</p><br/> <a href='" + link + "'>click here</a>"
                                         userController.sendEmail(creatorEmail, MailSubject, htmlContent)
                                     }
+                                    else{
+                                        res.status(500).send({
+                                            success: 0,
+                                            msg: config.FAILED_TO_GET_REPLIER_DETAILS
+                                        })
+                                    }
                                 })
                                 .catch(error => {
                                     console.log("error : ", error)
@@ -134,6 +140,12 @@ exports.replyaction = (req, res) => {
                                     })
                                 })
                         }
+                        else{
+                            res.status(500).send({
+                                success: 0,
+                                msg: config.FAILED_TO_GET_CREATOR_DETAILS
+                            })
+                        }
                     })
                     .catch(error => {
                         console.log("error : ", error)
@@ -143,6 +155,13 @@ exports.replyaction = (req, res) => {
                             msg: config.FAILED_TO_GET_CREATOR_DETAILS
                         })
                     })
+            }
+            else{
+                res.status(500).send({
+                    success: 0,
+                   
+                    msg: config.FAILED_TO_GET_ISSUE_DETAILS
+                })
             }
         })
         .catch(error => {
@@ -241,6 +260,12 @@ exports.getMessage = function (req, res) {
             if (data) {
                 res.status(200).send({
                     success: 1,
+                    data: data
+                })
+            }
+            else{
+                res.status(200).send({
+                    success: 0,
                     data: data
                 })
             }
