@@ -130,7 +130,7 @@ class ProfileCard extends Component {
                         <span className="hint--top" aria-label="Record screen!">
                             <IconContext.Provider value={{ color: "#333", size: "29px" }}>
                                 <div>
-                                    <FiVideo style={{ marginTop: "1.5px" }} onClick={this.startRecordScreen} />
+                                    <FiVideo style={{ marginTop: "1.5px" }} onClick={this.startSharingScreen} />
                                 </div>
                             </IconContext.Provider>
 
