@@ -130,7 +130,6 @@ class tweetSearch extends Component {
         this.setState({numberValue:noOfMinutestemp})
         this.props.setNoOfMinutes(Number(e.target.value))
         this.props.updateCurrentTime(Number(e.target.value))
-
     }
 
 

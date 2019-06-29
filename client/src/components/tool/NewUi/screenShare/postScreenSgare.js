@@ -5,7 +5,7 @@ import { FiX, FiVideo } from "react-icons/fi";
 import config from '../../../../config/config'
 
 export default (props) => {
-    const recrdsend=!props.saveinitiated?(<p>You can reord the screen and send it</p>):(null);
+    const recrdsend=!props.saveinitiated?(<p>You can record the screen and send it</p>):(null);
     console.log(props.retry,!props.retryTimeOut,!props.noInternet)
     var buttons = null;
     var noInternet = (props.noInternet)?("No Intenet conecticvity"):(null)

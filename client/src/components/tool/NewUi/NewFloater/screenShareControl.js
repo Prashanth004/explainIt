@@ -36,15 +36,23 @@ class ShareFloater extends Component {
         this.muteAudio = this.muteAudio.bind(this);
         this.updateTime = this.updateTime.bind(this);
         this.toggle = this.toggle.bind(this);
+        this.updateRecordertime = this.updateRecordertime.bind(this);
     }
+    updateRecordertime=()=>{ }
 
+ 
     updateTime() {
-        var currentTime = JSON.parse(localStorage.getItem('curTime'));
+        this.updateRecordertime = setTimeout(()=>{
+            var currentTime = JSON.parse(localStorage.getItem('curTime'));
         if (currentTime != null)
             var time = (currentTime.minutes + (currentTime.seconds / 60));
         this.setState({ timer: time })
+        },1000)
+        
     }
-
+    componentWillUnmount(){
+        clearTimeout(this.updateRecordertime);
+    }
     componentWillMount() {
         var presentTime = null;
         var otherpersonProfilePic = null;
