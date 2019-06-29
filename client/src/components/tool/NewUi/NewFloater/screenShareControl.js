@@ -46,8 +46,9 @@ class ShareFloater extends Component {
             var currentTime = JSON.parse(localStorage.getItem('curTime'));
         if (currentTime != null)
             var time = (currentTime.minutes + (currentTime.seconds / 60));
+	console.log("time  : ",time);
         this.setState({ timer: time })
-        },1000)
+        },1500)
         
     }
     componentWillUnmount(){
@@ -207,7 +208,10 @@ class ShareFloater extends Component {
         window.parent.postMessage(msg, "*");
     }
     toggle() {
-        this.setState({ isClosed: !this.state.isClosed })
+        this.setState({ isClosed: !this.state.isClosed });
+        var presentTime = JSON.parse(localStorage.getItem("timer"));
+       
+        this.props.setTime(presentTime)
         var msg = {
             'type': config.TOGGLE_FLOATER,
         };
@@ -221,15 +225,16 @@ class ShareFloater extends Component {
         function postMessageHandler(event) {
             if (event.data.action === config.START_CALL) {
                 self.props.changeStateToUnmute()
-                otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
+                
                 self.setState({
-                    otherPersonPic: otherpersonProfilePic,
+                    
                     callTabid: event.data.data.tabid,
                     action: event.data.data.action
                 })
-
+		console.log("event : ", event.data.data.action)
                 if (event.data.data.action === config.FULL_SCREEN_SHARE) {
-                    self.setState({ displayAddTimer: true })
+		    otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
+                    self.setState({ displayAddTimer: true,otherPersonPic: otherpersonProfilePic, })
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay', JSON.stringify("none"));
                     self.props.setTime(event.data.data.timer);
