@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import Navbar from './Navbar';
+import BusyAction from './container/BusyAction';
+
 import EmailVarify from './emailvarify'
 import { MdCallEnd, MdCall } from "react-icons/md";
 import Activity from './Activies/indexActivity'
@@ -66,7 +68,8 @@ class NewHome extends Component {
             callerId: null,
             endedCallFromOtherPeer: false,
             newCall:true,
-            reducedLittleWidth:false
+            reducedLittleWidth:false,
+            currentAtionStatus:null,
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -89,6 +92,7 @@ class NewHome extends Component {
         this.toggleInbox = this.toggleInbox.bind(this);
         this.saveVideoData = this.saveVideoData.bind(this);
         this.showInbox = this.showInbox.bind(this);
+        this.reloadPage = this.reloadPage.bind(this);
     
     }
     toggleDisplayLink() {
@@ -112,8 +116,15 @@ class NewHome extends Component {
         const isquestion = (condition)?"true":"false"
         this.props.creatAnsProject(text, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
     }
-    reloadPage() {
-        window.location.reload();
+    reloadPage(event) {
+        if (event.key === 'token') {
+            window.location.reload();
+        }
+        if(event.key === 'currentAction'){
+            const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+            this.setState({currentAtionStatus:currentAtionStatus})
+        }
+       
     }
     openDtailsTab() {
         this.setState({
@@ -131,9 +142,15 @@ class NewHome extends Component {
         })
     }
 
+  
+    componentWillUnmount(){
+        window.removeEventListener('storage',this.reloadPage)
+        window.removeEventListener("resize", this.resize());
+    }
     componentDidMount() {
         initGA();
         loadPageView();
+        window.addEventListener('storage',this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
         var self = this
@@ -227,6 +244,8 @@ class NewHome extends Component {
         });
     }
     componentWillMount() {
+        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+        this.setState({currentAtionStatus:currentAtionStatus})
         this.props.varifyEmail()
         this.props.stillAuthenicated()
         this.props.getTotalUnread();
@@ -500,21 +519,27 @@ class NewHome extends Component {
         var shareRecord = null
         if (!this.props.inbox && !this.props.created && !this.props.participated) {
             if (this.props.screenAction === FULL_SCREEN_RECORD) {
-                shareRecord = (<FullScreenRecord
+                shareRecord =  (this.state.currentAtionStatus === null)?(<FullScreenRecord
                     socket={this.state.socket}
                     closeImidiate={this.handleConfirm}
                     reStoreDefault={this.reStoreDefault}
                     savefile={this.saveVideoData}
-                />)
+                />):(<div className="LinkDisplay">
+               <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
+                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                </div>)
             }
             else if (this.props.screenAction === FULL_SCREEN_SHARE) {
-                shareRecord = (<FullScreenShare
+                shareRecord = (this.state.currentAtionStatus === null)?(<FullScreenShare
                     toggleInbox={this.toggleInbox}
                     socket={this.state.socket}
                     closeImidiate={this.handleConfirm}
                     reStoreDefault={this.reStoreDefault}
                     savefile={this.saveVideoData}
-                />)
+                />):(<div className="LinkDisplay">
+                <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
+                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                </div>)
             }
             else {
                 shareRecord = (<Inboxfeed />)
@@ -541,11 +566,7 @@ class NewHome extends Component {
             var issuesCreated = (this.props.myissues)
         var feedDiv = null;
 
-        window.addEventListener('storage', function (event) {
-            if (event.key === 'token') {
-                self.reloadPage()
-            }
-        })
+        
 
         const callNotificationDiv = (this.props.incommingCall && !this.state.endedCallFromOtherPeer) ? (
             <div className="callNotification">

@@ -6,7 +6,7 @@ export default (props) => {
   const {floaterDisplay,shareMyscreen}= props
   return  (floaterDisplay==='block')?(<div>
     <div>
-        <span className="hint--bottom" aria-label="Share my screen">
+        <span className="hint--right" aria-label="Share my screen">
             <MdFilterNone onClick={shareMyscreen} className="endButtonFloat1" />
         </span>
     </div>

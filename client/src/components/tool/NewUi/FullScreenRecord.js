@@ -3,7 +3,6 @@ import Countdown from 'react-countdown-now';
 import RecordRTC from 'recordrtc';
 import {pauseRecording,resetRecorder,resumeRecording,startRecorder} from '../../../actions/recoderAction'
 import config from '../../../config/config';
-import BusyAction from './container/BusyAction';
 import { updateCurrentTime} from '../../../actions/callAction'
 import CopyToClipboard from '../CopytoClipboard';
 import { setStream } from '../../../actions/streamActions'
@@ -359,8 +358,8 @@ class FullScreenRecorder extends Component {
   
     componentWillMount() {
         clearInterval(this.timebar);
-        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'))
-        this.setState({recordTime:config.RECORD_TIME,currentAtionStatus:currentAtionStatus})
+      
+        this.setState({recordTime:config.RECORD_TIME})
         const self = this;
         this.props.resetRecorder()
         const {extSource,extOrigin} = this.props;
@@ -407,7 +406,7 @@ class FullScreenRecorder extends Component {
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic,this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
-        registerEndToBrowser();
+        // registerEndToBrowser();
         clearInterval(this.timebar);
         this.props.resetRecorder()
         window.removeEventListener("beforeunload", this.onUnload)
@@ -584,18 +583,13 @@ class FullScreenRecorder extends Component {
         }
 
         return (this.state.isInstalled) ? (
-
-            (this.state.currentAtionStatus === null)?
-            (<div className="recordMainScreen" >
+(<div className="recordMainScreen" >
                 {closeBtn}
                 <div style={{paddingTop:"10px"}}>
                 {recordingElements}
                 </div>
                 {postShareElements}
-            </div>):  (<div className="LinkDisplay">
-                {closeBtn}
-                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
-                </div>)
+            </div>)
         ) : (<div>
             <DownloadExt />
         </div>

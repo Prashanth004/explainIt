@@ -124,6 +124,7 @@ class ScreenRecorder extends Component {
         this.muteAudio = this.muteAudio.bind(this);
         this.unMuteAudio = this.unMuteAudio.bind(this);
         this.saveBlobtimeOut = this.saveBlobtimeOut.bind(this);
+        this.CloseCallIfNotDone = this.CloseCallIfNotDone.bind(this);
         this.callEndBeforeRecieve = this.callEndBeforeRecieve.bind(this);
         this.play_clicked = this.play_clicked.bind(this);
         this.pause_clicked =  this.pause_clicked.bind(this);
@@ -210,6 +211,7 @@ class ScreenRecorder extends Component {
                     retry: false
                 })
             }).catch(err => {
+                if (config.CALL_LOGS)
                 console.log("error ouucres : ", err)
             })
         });
@@ -388,12 +390,14 @@ class ScreenRecorder extends Component {
                 self.callConnectionDelayed = setTimeout(()=>{
                     if(!this.state.permissonDenied && !this.props.isSceenSharing && !this.state.onGoingCallEnded){
                         this.setState({ connectionFailed : true});
+                        if (config.CALL_LOGS)
                         console.log("connection failed")
                     }
                 },25000);
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+            if (config.CALL_LOGS)
             console.log(" close network issue : ");
             if (data.otherPeerId === self.state.destkey) {
                 self.stopShare();
@@ -408,6 +412,8 @@ class ScreenRecorder extends Component {
         socket.on(config.END_CALL, data => {
 
             if (data.clientId === self.state.destkey) {
+                this.setState({manualClose:true})
+                if (config.CALL_LOGS)
                 console.log(" socket endCall : ");
                 const { extSource, extOrigin } = this.props
                 postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
@@ -454,11 +460,12 @@ class ScreenRecorder extends Component {
         })
     }
     componentWillUnmount() {
-        registerEndToBrowser();
+        // registerEndToBrowser();
         window.removeEventListener("beforeunload", this.onUnload);
         // window.removeEventListener("message",this.postMessageHandler);
         // this.props.fullStopedSharing()
         clearTimeout(this.saveBlobtimeOut);
+        clearTimeout(this.CloseCallIfNotDone);
         clearTimeout(this.callEndBeforeRecieve);
         clearTimeout(this.callConnectionDelayed);
     }
@@ -532,7 +539,6 @@ class ScreenRecorder extends Component {
                 console.log("got the connection set")
             this.setState({ conn: conn })
             conn.on('open', () => {
-                console.log("connection opneed : ")
                 this.setState({ clickedOnLink: true })
                 const result = browser();
                 if (config.CALL_LOGS)
@@ -543,11 +549,15 @@ class ScreenRecorder extends Component {
                     profilePic: this.props.twirecieverPrfilePic
                 })
                 conn.on('error',(err)=>{
+                    if (config.CALL_LOGS){
                     console.log("conn errr : ----");
                     console.log("error : ",err)
+                    }
                 })
                 conn.on('close',()=>{
+                    if (config.CALL_LOGS){
                     console.log("closed conn")
+                    }
                 })
                 conn.on('data', (data) => {
                     if (data.type === config.MESSSAGE_FOR_CONNECTION_WITH_ID) {
@@ -620,6 +630,7 @@ class ScreenRecorder extends Component {
         // })
     }
     saveBlobtimeOut = () => { }
+    CloseCallIfNotDone=()=>{};
     callEndBeforeRecieve = () => { };
     callConnectionDelayed = ()=>{};
 
@@ -660,16 +671,21 @@ class ScreenRecorder extends Component {
                 audio.play()
                 self.setState({ connected: true })
             }, function (err) {
+                if (config.CALL_LOGS)
                 console.log('Failed to get local stream', err);
             });
             call.on('close', function () {
-                if (!self.state.initiatedCloseCall) {
-                    self.stopShare()
-                    self.setState({ initiatedCloseCall: true })
-                }
-                socket.emit(config.CLOSE_NETWORK_ISSUE, {
-                    'otherPeerId': self.state.peerId
-                })
+                self.CloseCallIfNotDone = setTimeout(()=>{
+                    if (!self.state.initiatedCloseCall) {
+                        self.stopShare()
+                        self.setState({ initiatedCloseCall: true })
+                    }
+                    socket.emit(config.CLOSE_NETWORK_ISSUE, {
+                        'otherPeerId': self.state.peerId
+                    })
+                },2500)
+              
+               
             })
         }
 }
@@ -885,8 +901,7 @@ class ScreenRecorder extends Component {
             if (!closedHere && !timerEnded)
                 this.setState({ showDisconectMessage: true })
 
-            if (isSceenSharing)
-                fullStopedSharing(twitterUserId);
+            
             disableCallAction()
 
             var audioStream = this.props.audioStream;
@@ -916,6 +931,8 @@ class ScreenRecorder extends Component {
                     })
                     saveVideoBlob(blob)
                 });
+                if (isSceenSharing)
+                fullStopedSharing(twitterUserId);
             endSecondScreenShare()
             this.setState({
                 isAudioRecDone: true,
