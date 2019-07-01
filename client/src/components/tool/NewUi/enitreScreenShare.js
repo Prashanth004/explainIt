@@ -238,7 +238,7 @@ class ScreenRecorder extends Component {
                 peer: null
             })
         }
-        // self.stopShare()
+        self.stopShare()
         self.setState({
             initiatedCloseCall: true
         })
@@ -361,6 +361,7 @@ class ScreenRecorder extends Component {
         socket.on(config.UPDATE_RECORDER_BLOB, data => {
             if (data.clientId === self.state.destkey) {
                 if (!this.state.saveinitiated)
+                console.log("got the audio blob from user")
                     this.setState({
                         peerAudioBlob: data.recorderBlob
                     })
@@ -793,13 +794,15 @@ class ScreenRecorder extends Component {
     }
 
     savefilePrivate() {
+        console.log("save file initiated : ")
         var videoBlob = this.state.blob;
         this.setState({ saveinitiated: true })
         if (this.state.peerAudioBlob === null)
             this.setState({ problemInsavingCall: true });
         else {
             var audioBlob = new Blob([this.state.peerAudioBlob], { type: 'audio/wav' })
-            this.setState({ downloadUrlAudio: URL.createObjectURL(audioBlob) })
+            this.setState({ downloadUrlAudio: URL.createObjectURL(audioBlob) });
+            console.log("saing the file..")
             this.props.savefile(videoBlob, audioBlob, 0, this.props.callTopic, config.SERVER_SHARING)
             var peer = this.state.peer;
             if (peer !== null) {

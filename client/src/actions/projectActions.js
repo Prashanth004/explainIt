@@ -267,11 +267,10 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
             "Authorization":token,
         },
         data: fd,
+       
         onUploadProgress: (progressEvent) => {
-            // const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-            // if (totalLength !== null) {
-            //     this.updateProgressBarValue(Math.round( (progressEvent.loaded * 100) / totalLength ));
-            // }
+            var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+               console.log("Progress:-"+percentCompleted);
         }
     }).then(response => {
         if(response.status===201)

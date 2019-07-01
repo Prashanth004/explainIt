@@ -18,8 +18,8 @@ var os = require('os');
 var app = express();
 
 const passport = require('passport');
-require('./config/passport')(passport);
-require('./config/passport-setup.js')
+// require('./config/passport')(passport);
+// require('./config/passport-setup.js')
 
 var options = {
     promiseLib: promise

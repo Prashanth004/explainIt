@@ -205,6 +205,7 @@ io.on("connection", socket => {
       io.emit(key.RETRYCALL, data)
     })
   socket.on("disconnect", () => {
+    console.log("disconnected")
   });
 });
 
