@@ -208,14 +208,19 @@ class NewHome extends Component {
             }
         })
         socket.on('connect_failed', function () {
+            console.log("connection failed : ")
         })
         socket.on('error', function (err) {
+            console.log("socket error : ",err)
         });
         socket.on('connect_timeout', function (err) {
+            console.log("socket onnection_timeout : ",err)
         });
         socket.on("disconnect", () => {
+            console.log("socket disconnected")
         })
         socket.io.on("connect_error", () => {
+            console.log("connection_error")
         })
 
 
@@ -250,7 +255,10 @@ class NewHome extends Component {
         this.props.stillAuthenicated()
         this.props.getTotalUnread();
         // io.connect(sURL, {transports:['websocket'], upgrade: false}, {'force new connection': true})
-        const socket = socketIOClient(config.base_dir);
+        const socket = socketIOClient(config.base_dir,{transports: ['websocket']},{origins:"*"});
+        socket.on('reconnect_attempt', () => {
+            socket.io.opts.transports = ['polling', 'websocket'];
+          });
         this.setState({
             socket: socket
         })

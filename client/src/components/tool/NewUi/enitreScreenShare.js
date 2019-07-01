@@ -290,13 +290,18 @@ class ScreenRecorder extends Component {
     
     onUnload(event) { // the method that will be used for both add and remove event
         registerEndToBrowser();
+        window.source.close();
+     
      if(this.props.isSceenSharing){
         this.endCall()
-        event.returnValue = "Hellooww"
+        event.returnValue = "Hellooww";
+
      }
      else{
         //  event.preventDefault();
      }
+     var socket =this.state.socket;
+     socket.disconnect();
       
     }
     postMessageHandler(event) {
@@ -389,11 +394,12 @@ class ScreenRecorder extends Component {
                 self.setState({clickedOnLink: true});
                 self.callConnectionDelayed = setTimeout(()=>{
                     if(!this.state.permissonDenied && !this.props.isSceenSharing && !this.state.onGoingCallEnded){
+                        registerEndToBrowser();
                         this.setState({ connectionFailed : true});
                         if (config.CALL_LOGS)
                         console.log("connection failed")
                     }
-                },25000);
+                },32000);
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
@@ -593,6 +599,7 @@ class ScreenRecorder extends Component {
         })
 
         peer.on('disconnected', function () {
+            console.log("peer disconnected")
             if (!self.state.initiatedCloseCall) {
                 self.stopShare()
                 self.setState({
