@@ -516,13 +516,21 @@ class ScreenRecorder extends Component {
             }
         }
          // || (window.location.protocol === 'https:' ? 443 : 80),
+        //  stun.stunprotocol.org
+
         var self = this;
         var peer = new window.Peer({
             host: config.peerHost,
             port:  config.peerPort,
             path: config.peerPath,
             secure : config.peerSecure,
-            debug:config.peerDebug
+            debug:config.peerDebug,
+            iceServers: [{
+                url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                credential: 'webrtc',
+                username: 'webrtc'
+            }] 
+            
         })
 
         this.setState({
