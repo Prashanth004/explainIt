@@ -26,14 +26,15 @@ import { FiX, FiVideo } from "react-icons/fi";
 import {
     fullStartedSharing,
     fullStopedSharing,
-    saveVideoBlob
+    saveVideoBlob,
+    turnnotbusy
 } from '../../../actions/toolActions'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { displayFullScrenRecord } from '../../../actions/toolActions';
-import { durationInMinutes, callSuccessedUpate, initiateSend } from '../../../actions/callAction'
+import {  callSuccessedUpate, initiateSend } from '../../../actions/callAction'
 import { sendTweet } from '../../../actions/twitterApiAction';
 import LinkDisplay from './TweetAcceptHandle'
 
@@ -336,6 +337,8 @@ class ScreenRecorder extends Component {
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
+        const {permissonDenied,onGoingCallEnded,recorder} =  this.state;
+        const {isSceenSharing} = this.props
 
         if (window.addEventListener) {
             window.addEventListener("message", this.postMessageHandler, false);
@@ -394,10 +397,10 @@ class ScreenRecorder extends Component {
                 this.props.answeredCall();
                 self.setState({clickedOnLink: true});
                 self.callConnectionDelayed = setTimeout(()=>{
-                    console.log(!self.state.permissonDenied ,!self.props.isSceenSharing ,!self.state.onGoingCallEnded)
-                    if(!self.state.permissonDenied && self.state.recorder===null && !self.props.isSceenSharing && !self.state.onGoingCallEnded){
+                    console.log(!permissonDenied ,!isSceenSharing ,!onGoingCallEnded)
+                    if(!permissonDenied && recorder===null && !isSceenSharing && !onGoingCallEnded){
                         registerEndToBrowser();
-                        self.props.fullStopedSharing(self.props.twitterUserId);
+                        self.props.turnnotbusy(self.props.twitterUserId);
                         self.setState({ connectionFailed : true});
                         if (config.CALL_LOGS)
                         console.log("connection failed")
@@ -663,6 +666,7 @@ class ScreenRecorder extends Component {
         recorder1.startRecording();
         registerCallToBrowser();
         this.setState({ recorder: recorder1 });
+        clearTimeout(this.callConnectionDelayed);
         self.saveBlobtimeOut = setTimeout(() => {
             const { recorder } = self.state;
             if (recorder !== null) {
@@ -1375,7 +1379,7 @@ export default connect(mapStateToProps, {
     answeredCall,
     basicInfoCall,
     updateCurrentTime,
-   
+    turnnotbusy,
     endSecondScreenShare,
     fromShareToRecord,
     callFailedUpdate,

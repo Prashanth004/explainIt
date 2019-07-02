@@ -138,6 +138,27 @@ export const fullStopedSharing = (recieverUserId) =>(dispatch)=>{
         console.log("error : ",error)
     })
 }
+export const turnnotbusy = (recieverUserId)=>(dispatch)=>{
+    const postData = {
+        action : config.FULL_SCREEN_SHARE,
+        recieverCallId:recieverUserId
+    }
+    axios({
+        method:'put',
+        url:config.base_dir+'/api/users/turnnotbusy',
+        headers:{
+            "Authorization":token,
+        },
+        data:postData
+    })
+    .then(response=>{
+        if(response.status === 200 || response.status === 202 || response.status === 204){
+        }
+    })
+    .catch(error=>{
+        console.log("error : ",error)
+    })
+}
 
 export const stopedRcording = () =>(dispatch)=>{
     dispatch({
