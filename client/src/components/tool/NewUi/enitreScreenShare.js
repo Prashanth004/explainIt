@@ -95,7 +95,8 @@ class ScreenRecorder extends Component {
             downloadUrlAudio: null,
             retryTimeOut:false,
             currentAtionStatus:null,
-            connectionFailed:false
+            connectionFailed:false,
+            startTimer:false
 
         }
         this.renderer = this.renderer.bind(this);
@@ -132,6 +133,7 @@ class ScreenRecorder extends Component {
         this.onUnload = this.onUnload.bind(this);
         this.postMessageHandler = this.postMessageHandler.bind(this);
         this.callConnectionDelayed = this.callConnectionDelayed.bind(this);
+        this.startConnectionTimer = this.startConnectionTimer.bind(this);
     }
 
     muteAudio() {
@@ -337,8 +339,7 @@ class ScreenRecorder extends Component {
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
-        const {permissonDenied,onGoingCallEnded,recorder} =  this.state;
-        const {isSceenSharing} = this.props
+        
 
         if (window.addEventListener) {
             window.addEventListener("message", this.postMessageHandler, false);
@@ -394,18 +395,9 @@ class ScreenRecorder extends Component {
         })
         socket.on(config.ACCEPT_SHARE_REQUEST, data => {
             if (data.toUserId === this.props.userId) {
-                this.props.answeredCall();
+                self.props.answeredCall();
+                console.log("accepting sceen share request")
                 self.setState({clickedOnLink: true});
-                self.callConnectionDelayed = setTimeout(()=>{
-                    console.log(!permissonDenied ,!isSceenSharing ,!onGoingCallEnded)
-                    if(!permissonDenied && recorder===null && !isSceenSharing && !onGoingCallEnded){
-                        registerEndToBrowser();
-                        self.props.turnnotbusy(self.props.twitterUserId);
-                        self.setState({ connectionFailed : true});
-                        if (config.CALL_LOGS)
-                        console.log("connection failed")
-                    }
-                },36000);
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
@@ -470,6 +462,26 @@ class ScreenRecorder extends Component {
                 })
             }
         })
+    }
+    startConnectionTimer(){
+        const {permissonDenied,onGoingCallEnded,recorder} =  this.state;
+        const {isSceenSharing} = this.props
+        this.setState({startTimer:true});
+        this.callConnectionDelayed = setTimeout(()=>{
+            console.log(!permissonDenied ,!isSceenSharing ,!onGoingCallEnded);
+            console.log("this.state.permissonDenied : ",this.state.permissonDenied);
+            console.log("this.state.recorder : ",this.state.recorder)
+            console.log("this.props.isSceenSharing : ",this.props.isSceenSharing);
+            console.log("this.state.onGoingCallEnded : ",this.state.onGoingCallEnded)
+            if(!this.state.permissonDenied && this.state.recorder===null && !this.props.isSceenSharing && !this.state.onGoingCallEnded){
+                registerEndToBrowser();
+                this.props.turnnotbusy(this.props.twitterUserId);
+                this.setState({ connectionFailed : true});
+                if (config.CALL_LOGS)
+                    console.log("connection failed")
+            }
+        },36000);
+
     }
     componentWillUnmount() {
         // registerEndToBrowser();
@@ -653,6 +665,7 @@ class ScreenRecorder extends Component {
     callConnectionDelayed = ()=>{};
 
     peerCall() {
+        clearTimeout(this.callConnectionDelayed);
         const { twitterUserId, fullStartedSharing } = this.props
         const self = this;
         const { socket, peer, destkey, finalStream } = this.state
@@ -665,8 +678,9 @@ class ScreenRecorder extends Component {
         });
         recorder1.startRecording();
         registerCallToBrowser();
-        this.setState({ recorder: recorder1 });
-        clearTimeout(this.callConnectionDelayed);
+        self.setState({ recorder: recorder1 });
+       
+        
         self.saveBlobtimeOut = setTimeout(() => {
             const { recorder } = self.state;
             if (recorder !== null) {
@@ -1190,7 +1204,9 @@ class ScreenRecorder extends Component {
                 }
 
             }
-            else if (this.state.clickedOnLink)
+            else if (this.state.clickedOnLink){
+                if(!this.state.startTimer)
+                    this.startConnectionTimer()
                 linkElement = ((!this.state.permissonDenied) ? (
                     (!this.state.onGoingCallEnded) ? (
                         (!this.state.connectionFailed)?(
@@ -1219,6 +1235,7 @@ class ScreenRecorder extends Component {
 
                 ) : (<div><p><b>The screen could not be done as the permission denied</b></p>
                     <button className="buttonLight" onClick={this.props.closeImidiate}>Close</button></div>))
+            }
         }
 
         else if (!this.props.isSceenSharing &&
