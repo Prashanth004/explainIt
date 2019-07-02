@@ -44,6 +44,7 @@ width:50px;
 margin-right:-1250px;
  /* height: 100px; */
 }
+
   .navBar{
     width:100%;
   
@@ -89,6 +90,7 @@ margin-top:-100px;
     margin-left:35px;
   }
   .navItem{
+    /* background-color: aqua; */
     display:grid;
     padding:5px;
     grid-template-columns: 80% 20% ;
@@ -127,6 +129,9 @@ margin-top:-100px;
   .logoCentre{
     font-size: 17px;
     margin-left:-22px;
+  }
+  .drpLogout{
+    left:0px;
   }
  
   .navBar{

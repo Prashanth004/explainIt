@@ -231,16 +231,16 @@ class ShareFloater extends Component {
                     callTabid: event.data.data.tabid,
                     action: event.data.data.action
                 })
-		console.log("event : ", event.data.data.action)
                 if (event.data.data.action === config.FULL_SCREEN_SHARE) {
-		    otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
-                    self.setState({ displayAddTimer: true,otherPersonPic: otherpersonProfilePic, })
+		            otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
+                    self.setState({ displayAddTimer: true,otherPersonPic: otherpersonProfilePic })
                     self.props.setDiplayOfFloater("none");
                     localStorage.setItem('shareDisplay', JSON.stringify("none"));
                     self.props.setTime(event.data.data.timer);
                 }
                 else if (event.data.data.action === config.RECIEVER_SCREEN_SHARE) {
-                    self.setState({ displayAddTimer: false })
+                    otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
+                    self.setState({ displayAddTimer: false,otherPersonPic: otherpersonProfilePic, })
                     localStorage.setItem('shareDisplay', JSON.stringify("block"));
                     self.props.setDiplayOfFloater("block");
                     self.props.setTime(event.data.data.timer);
@@ -249,8 +249,6 @@ class ShareFloater extends Component {
                     self.props.resumeRecording(null)
                     self.updateTime();
                 }
-
-
             }
             if (event.data.action === config.UNMUTE_TO_FLOATER) {
                 self.props.changeStateToUnmute()

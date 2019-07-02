@@ -103,12 +103,12 @@ export default (state=initialState, action)=>{
         case FULL_START_SHARING:
             return{
                 ...state,
-                isFullScreenSharing: action.payload,
+                isFullScreenSharing: true,
             }
         case FULL_STOP_SHARING:
             return{
                 ...state,
-                isFullScreenSharing: action.payload,
+                isFullScreenSharing: false,
                 isFullSharingCompleted:true
             }
             case FULL_START_RECORD:

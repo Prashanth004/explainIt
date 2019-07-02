@@ -96,12 +96,7 @@ export const deacreaseTimer = ()=>(dispatch)=>{
         type:DECREASE_CALL_BY_MINUTE
     })
 }
-export const durationInMinutes = (intialTime, numberOfIncrease, currentTime)=>{
-    const tInitialTime=(typeof(intialTime)==="string")?(Number(intialTime)):intialTime
-    const tNumberOfIncrease=(typeof(numberOfIncrease)==="string")?(Number(numberOfIncrease)):numberOfIncrease
-    const tCurrentTime=(typeof(currentTime)==="string")?(Number(currentTime)):currentTime
-    return tInitialTime+tNumberOfIncrease-tCurrentTime
-}
+
 export const setNoOfMinutes =(numberMinutes)=>(dispatch)=>{
 dispatch({
     type:SET_NUMBER_MINUTES,

@@ -112,6 +112,7 @@ export const fullStartedSharing = (recieverUserId) =>(dispatch)=>{
         console.log("error : ",error)
     })
 }
+
 export const fullStopedSharing = (recieverUserId) =>(dispatch)=>{
     dispatch({
         type:FULL_STOP_SHARING,
@@ -137,6 +138,7 @@ export const fullStopedSharing = (recieverUserId) =>(dispatch)=>{
         console.log("error : ",error)
     })
 }
+
 export const stopedRcording = () =>(dispatch)=>{
     dispatch({
         type:STOP_RECORDING,

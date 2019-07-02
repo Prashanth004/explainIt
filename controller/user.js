@@ -526,7 +526,7 @@ exports.getUserByTwitteHandle = function (req, res) {
 
 }
 exports.getUserById = function (req, res) {
-    console.log("req.params.id : ",req.params.id)
+    // console.log("req.params.id : ",req.params.id)
     database.db.oneOrNone('select * from users where id = $1', req.params.id)
         .then(data => {
             if (data) {

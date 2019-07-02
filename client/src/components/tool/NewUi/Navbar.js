@@ -176,7 +176,7 @@ else {
                            <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
                          </span>
                       </div>
-                    <div className="dropDownForOption"
+                    <div className="dropDownForOption drpLogout"
                         onMouseLeave={this.toggleDropDown}  style={{ visibility: this.state.optionVisibe,width:"120px",height:"40px", marginLeft:"-50px",marginTop:"3px" }}>
                         <div className="menuItem" >
                           <div ><span onClick={this.logout}><FiLogOut /></span></div>

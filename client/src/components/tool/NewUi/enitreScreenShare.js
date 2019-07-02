@@ -394,13 +394,15 @@ class ScreenRecorder extends Component {
                 this.props.answeredCall();
                 self.setState({clickedOnLink: true});
                 self.callConnectionDelayed = setTimeout(()=>{
-                    if(!this.state.permissonDenied && !this.props.isSceenSharing && !this.state.onGoingCallEnded){
+                    console.log(!self.state.permissonDenied ,!self.props.isSceenSharing ,!self.state.onGoingCallEnded)
+                    if(!self.state.permissonDenied && self.state.recorder===null && !self.props.isSceenSharing && !self.state.onGoingCallEnded){
                         registerEndToBrowser();
-                        this.setState({ connectionFailed : true});
+                        self.props.fullStopedSharing(self.props.twitterUserId);
+                        self.setState({ connectionFailed : true});
                         if (config.CALL_LOGS)
                         console.log("connection failed")
                     }
-                },32000);
+                },36000);
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
@@ -593,6 +595,12 @@ class ScreenRecorder extends Component {
         });
         peer.on('error',function(error){
             if(config.CALL_LOGS){
+                if (!self.state.initiatedCloseCall) {
+                    self.stopShare()
+                    self.setState({
+                        initiatedCloseCall: true
+                    })
+                }
                 console.log("perr error : -----")
                 console.log("error : ",error);
                 console.log("errorType : ",error.type)
@@ -606,7 +614,6 @@ class ScreenRecorder extends Component {
                 self.setState({
                     initiatedCloseCall: true
                 })
-
             }
         });
     }
@@ -968,6 +975,7 @@ class ScreenRecorder extends Component {
         this.props.toggleInbox()
         this.props.openCreated()
     }
+    
     sendLink() {
         const self = this;
         const { failedToSave,explainBy, twitterUserId, initiateSend, largeFileSize, linkToAccess, callTopic } = this.props
@@ -975,6 +983,7 @@ class ScreenRecorder extends Component {
         initiateSend();
         var issueId = JSON.parse(localStorage.getItem("issueId"));
         const socket = this.state.socket;
+        const {initialTime,noOfIncreaseInTime,currentTimeLeft} = this.props;
         var sharableLinkSaved = null;
         if(explainBy===config.null){
             sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
@@ -988,7 +997,11 @@ class ScreenRecorder extends Component {
             'successMessage': saveStatus,
             'sharableLink': sharableLinkSaved
         })
-        var duration = durationInMinutes(this.props.initialTime, this.props.noOfIncreaseInTime, this.props.currentTimeLeft);
+        const tInitialTime=(typeof(intialTime)==="string")?(Number(initialTime)):initialTime
+        const tNumberOfIncrease=(typeof(numberOfIncrease)==="string")?(Number(noOfIncreaseInTime)):noOfIncreaseInTime
+        const tCurrentTime=(typeof(currentTime)==="string")?(Number(currentTimeLeft)):currentTimeLeft;
+        var duration =  tInitialTime+tNumberOfIncrease-tCurrentTime
+        console.log("duration in screen share place : ",duration)
         callSuccessedUpate(twitterUserId, callTopic, duration, sharableLinkSaved)
     }
     downloadExtension() {

@@ -1,9 +1,14 @@
 import React from 'react';
 import './landing2.css';
-import Form from './Form'
+import Form from './Form';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { stillAuthenicated } from '../../../../actions/signinAction';
 
-export default () => {
-    return (
+const mobLanding = (props) => {
+props.stillAuthenicated();
+    return (props.authAction) ? ((!props.isAuthenticated ? (
+        
         <div className="landingMainContainMain">
             <div className="topBlock">
                 {/* <div>
@@ -25,7 +30,7 @@ export default () => {
                     </h1>
                     
                     <br />
-                    <Form />
+                    {/* <Form /> */}
                 </div>
 
             
@@ -140,5 +145,29 @@ export default () => {
         </div>
 
 
-    )
+    
+    ) :((<Redirect to={{ pathname: './application' }} />)))) :
+    ( <div style={{paddingTop:"150px"}}>
+      <div class="fluct"></div>
+    </div>)
+
+
+
+    // return ()
 }
+
+const mapStateToProps = function (state) {
+    return {
+      isAuthenticated: state.auth.isAuthenticated,
+      authAction: state.auth.authAction,
+      doneVarification : state.email.doneVarification,
+      isVarified:state.email.isVarified,
+    }
+  }
+  
+  export default connect(mapStateToProps, {stillAuthenicated })(mobLanding);
+  
+  
+  
+  
+  

@@ -154,7 +154,7 @@ class displayTopBtns extends Component {
                         <GoChevronDown onClick={this.onOptClick} />
                     </span>
                 </div>
-                <div className="dropDownForOption"
+                <div className="dropDownForOption drpOpt"
                     onMouseLeave={this.onOptClick} id={this.props.issue.issueid} style={{ visibility: this.state.optionVisibe }}>
                     {createdMenuItems}
                     <div className="menuItem" id={this.props.issue.issueid} onClick={this.toggleDisplayLink}  >

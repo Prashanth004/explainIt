@@ -52,12 +52,21 @@ border-radius:10.5px;
     margin: "15px";
     margin-top: "-10px",
 }
+.drpLogout{
+    position: absolute;;
+    left:-40px;
+    /* color:red; */
+  }
+  .drpOpt{
+    position: absolute;;
+    left:-125px;
+  }
 .dropDownForOption{
     /* padding-left:10px; */
     width:155px;
     text-align: left;
     position:absolute;
-    left:-125px;
+    /* left:-125px; */
     /*top:20px; */
     background-color: white;
     border-radius:5px;
@@ -244,7 +253,13 @@ font-weight:530;
     .ProfileNameCard{
         display:block;
     }
+    .drpLogout{
+        left:0px;
+      }
     .dropDownForOption{
+        left:0px;
+      }
+      .drpOpt{
         left:0px;
       }
     .profileCardDiv{

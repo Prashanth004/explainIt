@@ -29,6 +29,8 @@
 .roadMapDiv{
     display: grid;
     text-align: center;
+    width:80%;
+    margin:auto;
     /* margin-top: */
     /* grid-template-columns: 28% 28% 28%; */
     /* grid-column-gap: 40px; */

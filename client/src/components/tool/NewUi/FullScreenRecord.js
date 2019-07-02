@@ -519,7 +519,7 @@ class FullScreenRecorder extends Component {
             </div>)
         }
 
-        else if (this.props.isSaved) {
+        else if (this.props.isSaved && this.props.isFullRecordCompleted) {
             postShareElements = (<div>
                 <p>Sending the message. Please wait..</p>
             </div>)

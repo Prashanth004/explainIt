@@ -110,16 +110,15 @@ class DisplayShare extends Component {
     onUnload(event) { 
         if(!this.state.callEnded){
             const { extSource, extOrigin,postEndCall } = this.props;
-            postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
+            postEndCall(config.END_CALL_RECIEVER_PEER_FROM_WEB, extSource, extOrigin);
             this.closeConnection();
             event.returnValue = " "
         }
        }
     componentDidMount() {
         var self = this;
-        const {extSource, extOrigin} = this.props;
+      
         window.addEventListener("beforeunload", this.onUnload);
-        this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE,extSource,extOrigin)
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
@@ -273,6 +272,8 @@ class DisplayShare extends Component {
     componentWillMount() {
         localStorage.setItem('action', JSON.stringify(config.RECIEVER_SCREEN_SHARE))
         localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
+        const {extSource, extOrigin} = this.props;
+        this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE,extSource,extOrigin)
         var self = this
         setTimeout(() => {
             if (self.state.connected) {
@@ -280,7 +281,7 @@ class DisplayShare extends Component {
             }
             else {
             }
-        }, 30000);
+        }, 36000);
         const socket = socketIOClient(config.base_dir);
         this.setState({
             socket: socket,
@@ -379,7 +380,7 @@ class DisplayShare extends Component {
                     type: 'audio'
                 });
                 recorder1.startRecording();
-                self.setState({ recorder: recorder1 });
+                self.setState({ recorder: recorder1, connectionFailed: false  });
                 self.saveBlobtimeOut = setTimeout(()=>{
                     const { recorder } = self.state;
                     if(recorder!== null){
