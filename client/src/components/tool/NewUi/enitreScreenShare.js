@@ -526,14 +526,35 @@ class ScreenRecorder extends Component {
             secure : config.peerSecure,
             debug:config.peerDebug,
             iceServers: [
+                { 'urls': ['stun:stun.l.google.com:19302'] },
+
                 {
-                    'urls': 'stun:stun.l.google.com:19302'
-                  },
-                  {
-                    'urls': 'turn:numb.viagenie.ca',
-                    'credential': 'prash@08119',
-                    'username': ' cprashanth004@gmail.com'
-                    },
+                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
+                    'credential': 'bookmane',
+                    'username':'bookmane',
+                   
+
+                }, {
+                    'urls': 'turn:39.59.5.116:3478?transport=udp',
+                    'credential': 'bookmane',
+                    'username':'bookmane',
+
+                },
+                {
+                    'urls': 'turn:139.59.5.116:5349?transport=udp',
+                    'credential': 'bookmane',
+                    'username':'bookmane',
+                   
+
+                },
+
+                {
+                    'urls': 'turn:139.59.5.116:5349?transport=tcp',
+                    'credential': 'bookmane',
+                    'username':'bookmane',
+                   
+                }]
+               
                    
                         //   {
                         //     "urls": 
@@ -542,6 +563,11 @@ class ScreenRecorder extends Component {
                         //     "credential": "YzYNCouZM1mhqhmseWk6"
                         //     },
                   
+                        // {
+                        //     "urls": "turn:numb.viagenie.ca",
+                        //     "username": "some@email.com",
+                        //     "credential": "somepassword"
+                        //   }
 
                     // {
                     //     "url": "stun:global.stun:3478?transport=udp"
@@ -558,29 +584,8 @@ class ScreenRecorder extends Component {
 
 
 
-
-
-                    {
-                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
-                    'credential': 'bookmane',
-                    'username': 'bookmane'
-                    }, {
-                    'urls': 'turn:139.59.5.116:3478?transport=udp',
-                    'credential': 'bookmane',
-                    'username': 'bookmane'
-                    },
-                    {
-                        'urls': 'turn:139.59.5.116:5349?transport=udp',
-                        'credential': 'bookmane',
-                        'username': 'bookmane'
-                        },
-                        
-                        {
-                            'urls': 'turn:139.59.5.116:5349?transport=tcp',
-                            'credential': 'bookmane',
-                            'username': 'bookmane'
-                            },
-                    ] 
+           
+                    
             
         })
 

@@ -1,0 +1,151 @@
+{
+    url: 'turn:numb.viagenie.ca',
+    credential: 'muazkh',
+    username: 'webrtc@live.com'
+},
+{
+    url: 'turn:192.158.29.39:3478?transport=udp',
+    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+    username: '28224511:1379330808'
+},
+{
+    url: 'turn:192.158.29.39:3478?transport=tcp',
+    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+    username: '28224511:1379330808'
+},
+{
+    url: 'turn:turn.bistri.com:80',
+    credential: 'homeo',
+    username: 'homeo'
+ },
+ {
+    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+    credential: 'webrtc',
+    username: 'webrtc'
+},
+
+
+
+
+Request URL: https://clients6.google.com/hangouts/v1/media_sessions/query?key=AIzaSyAfFJCeph-euFSwtmqFZi0kaKk-cZ5wufM&alt=protojson
+Request Method: POST
+Status Code: 200 
+Remote Address: 216.58.197.46:443
+Referrer Policy: origin
+access-control-allow-credentials: true
+access-control-allow-origin: https://hangouts.google.com
+access-control-expose-headers: Cache-Control,Content-Encoding,Content-Length,Content-Type,Date,ETag,Expires,Pragma,Server,Vary,X-Google-GFE-Backend-Request-Cost
+alt-svc: quic=":443"; ma=2592000; v="46,44,43,39"
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+content-encoding: gzip
+content-length: 1154
+content-type: application/json; charset=UTF-8
+date: Tue, 02 Jul 2019 14:07:12 GMT
+etag: "1ChHwY2cGjEUaAvKlgrNmsFv96I/SCHE-tpYmhKB7h19LFs-Vypva48"
+expires: Mon, 01 Jan 1990 00:00:00 GMT
+pragma: no-cache
+server: GSE
+status: 200
+vary: Origin, X-Origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+Provisional headers are shown
+Accept-Language: en
+Authorization: SAPISIDHASH 1562076429_626d787459fadd03eea69a53dd5c97bb2f6d9c83
+Content-Type: application/json+protobuf
+Origin: https://hangouts.google.com
+Referer: https://hangouts.google.com/
+sec-ch-ua: Google Chrome 75
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-site
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+X-Goog-AuthUser: 1
+key: AIzaSyAfFJCeph-euFSwtmqFZi0kaKk-cZ5wufM
+
+
+
+
+
+Request URL: https://clients6.google.com/hangouts/v1/media_sessions/query?key=AIzaSyAfFJCeph-euFSwtmqFZi0kaKk-cZ5wufM&alt=protojson
+Request Method: POST
+Status Code: 200 
+Remote Address: 216.58.197.46:443
+Referrer Policy: origin
+access-control-allow-credentials: true
+access-control-allow-origin: https://hangouts.google.com
+access-control-expose-headers: Cache-Control,Content-Encoding,Content-Length,Content-Type,Date,ETag,Expires,Pragma,Server,Vary,X-Google-GFE-Backend-Request-Cost
+alt-svc: quic=":443"; ma=2592000; v="46,44,43,39"
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+content-encoding: gzip
+content-length: 1170
+content-type: application/json; charset=UTF-8
+date: Tue, 02 Jul 2019 14:07:33 GMT
+etag: "1ChHwY2cGjEUaAvKlgrNmsFv96I/uzsJDl527Njc-dJDPua11Fj6InU"
+expires: Mon, 01 Jan 1990 00:00:00 GMT
+pragma: no-cache
+server: GSE
+status: 200
+vary: Origin, X-Origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+Provisional headers are shown
+Accept-Language: en
+Authorization: SAPISIDHASH 1562076450_9ff4a8b9759a534d805a74967c055891a7ef6418
+Content-Type: application/json+protobuf
+Origin: https://hangouts.google.com
+Referer: https://hangouts.google.com/
+sec-ch-ua: Google Chrome 75
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-site
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+X-Goog-AuthUser: 1
+
+
+
+
+
+
+
+
+
+
+
+
+{
+    url: 'turn:192.158.29.39:3478?transport=udp',
+    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+    username: '28224511:1379330808'
+},
+{
+    url: 'turn:192.158.29.39:3478?transport=tcp',
+    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+    username: '28224511:1379330808'
+},
+{
+    url: 'turn:turn.bistri.com:80',
+    credential: 'homeo',
+    username: 'homeo'
+ },
+ {
+    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+    credential: 'webrtc',
+    username: 'webrtc'
+}
+
+
+https://packages.debian.org/jessie/amd64/coturn/download
+
+(772) 214-1668
+
+
+
+turn:139.59.5.116:3478?transport=tcp
+
+turn:139.59.5.116:3478?transport=udp
+turn:139.59.5.116:5349?transport=tcp
+
+turn:139.59.5.116:5349?transport=udp

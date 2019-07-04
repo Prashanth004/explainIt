@@ -12,10 +12,10 @@ import { answerCall, muteAudio, unMuteAudio } from '../../actions/callAction'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
-import { postStartCall, addExtraTimerfromReciever, decreaseTimerfromReciever,postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
+import { postStartCall, addExtraTimerfromReciever, decreaseTimerfromReciever, postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
 import { stillAuthenicated } from '../../actions/signinAction';
 import { getProfileByTwitterHandle } from "../../actions/visitProfileAction";
-import {setTime} from '../../actions/floaterAction';
+import { setTime } from '../../actions/floaterAction';
 
 
 
@@ -61,7 +61,7 @@ class DisplayShare extends Component {
             selfCloseTime: 1,
             connectionFailed: false,
             timeAloted: 3,
-            blob : null
+            blob: null
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -83,41 +83,43 @@ class DisplayShare extends Component {
         window.close();
     }
 
-    
-    muteAudio(){
+
+    muteAudio() {
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime)
         this.props.muteAudio()
-        const {stream} = this.state;
-        if(stream !==null){
-        var audioTracks = stream.getAudioTracks();
-        if (audioTracks[0]) {
-                audioTracks[0].enabled = false; }
+        const { stream } = this.state;
+        if (stream !== null) {
+            var audioTracks = stream.getAudioTracks();
+            if (audioTracks[0]) {
+                audioTracks[0].enabled = false;
+            }
         }
     }
-    unMuteAudio(){
+    unMuteAudio() {
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime)
-        const {stream} = this.state;
-        if(stream !==null){
-        var audioTracks = stream.getAudioTracks();
-        if (audioTracks[0]) {
-                audioTracks[0].enabled = true;}
+        const { stream } = this.state;
+        if (stream !== null) {
+            var audioTracks = stream.getAudioTracks();
+            if (audioTracks[0]) {
+                audioTracks[0].enabled = true;
+            }
             this.props.unMuteAudio();
         }
     }
 
-    onUnload(event) { 
-        if(!this.state.callEnded){
-            const { extSource, extOrigin,postEndCall } = this.props;
+    onUnload(event) {
+        if (!this.state.callEnded) {
+            const { extSource, extOrigin, postEndCall } = this.props;
             postEndCall(config.END_CALL_RECIEVER_PEER_FROM_WEB, extSource, extOrigin);
             this.closeConnection();
             event.returnValue = " "
         }
-       }
+    }
     componentDidMount() {
         var self = this;
-      
+
         window.addEventListener("beforeunload", this.onUnload);
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
@@ -154,11 +156,11 @@ class DisplayShare extends Component {
                 self.endCall()
                 return
             }
-            if(event.data.type === config.MUTE_TO_WEB){
+            if (event.data.type === config.MUTE_TO_WEB) {
                 self.muteAudio()
                 return
             }
-            if(event.data.type === config.UNMUTE_TO_WEB){
+            if (event.data.type === config.UNMUTE_TO_WEB) {
                 self.unMuteAudio()
                 return
             }
@@ -185,22 +187,22 @@ class DisplayShare extends Component {
                 })
             }
         }, 4000)
-        socket.on('connect_failed', function() {
+        socket.on('connect_failed', function () {
         })
         socket.on('error', function (err) {
         });
         socket.on('connect_timeout', function (err) {
         });
-        socket.on("disconnect",()=>{
+        socket.on("disconnect", () => {
         })
-        socket.io.on("connect_error",()=>{
+        socket.io.on("connect_error", () => {
         })
-        
+
         socket.on(config.SEND_SHARABLE_LINK, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
-                if (data.successMessage === "true"){
-                    if(data.sharableLink!==null)
-                    localStorage.setItem('newIssueId',(data.sharableLink).split('/')[4]);
+                if (data.successMessage === "true") {
+                    if (data.sharableLink !== null)
+                        localStorage.setItem('newIssueId', (data.sharableLink).split('/')[4]);
                     self.setState({
                         sharablelink: data.sharableLink,
                         gotSharableLink: true
@@ -214,7 +216,7 @@ class DisplayShare extends Component {
             }
         })
 
-          socket.on(config.CLOSE_NETWORK_ISSUE, data => {
+        socket.on(config.CLOSE_NETWORK_ISSUE, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
                 self.closeConnection()
             }
@@ -263,17 +265,17 @@ class DisplayShare extends Component {
 
         })
     }
-  
-        componentWillUnmount() {
-            clearTimeout(this.saveBlobtimeOut);
-        }
-    
+
+    componentWillUnmount() {
+        clearTimeout(this.saveBlobtimeOut);
+    }
+
 
     componentWillMount() {
         localStorage.setItem('action', JSON.stringify(config.RECIEVER_SCREEN_SHARE))
-        localStorage.setItem('muteState',JSON.stringify(config.UN_MUTED))
-        const {extSource, extOrigin} = this.props;
-        this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE,extSource,extOrigin)
+        localStorage.setItem('muteState', JSON.stringify(config.UN_MUTED))
+        const { extSource, extOrigin } = this.props;
+        this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE, extSource, extOrigin)
         var self = this
         setTimeout(() => {
             if (self.state.connected) {
@@ -293,20 +295,51 @@ class DisplayShare extends Component {
         this.props.stillAuthenicated();
     }
 
-    saveBlobtimeOut = ()=>{}
+    saveBlobtimeOut = () => { }
 
     peerConnections(socket, peerIdFrmPeer) {
         this.setState({
             socket: socket
         });
         this.props.answerCall()
-     
+
         var peer = new window.Peer({
             host: config.peerHost,
-            port:  config.peerPort,
+            port: config.peerPort,
             path: config.peerPath,
-            secure : config.peerSecure,
-            debug:config.peerDebug
+            secure: config.peerSecure,
+            debug: config.peerDebug,
+            iceServers: [
+                { 'urls': ['stun:stun.l.google.com:19302'] },
+                {
+                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
+                    'credential': 'bookmane',
+                    'username':'bookmane'
+                   
+
+                }, {
+                    'urls': 'turn:39.59.5.116:3478?transport=udp',
+                    'credential': 'bookmane',
+                    'username':'bookmane'
+                  
+
+                },
+                {
+                    'urls': 'turn:139.59.5.116:5349?transport=udp',
+                    'credential': 'bookmane',
+                    'username':'bookmane'
+                    
+
+                },
+
+                {
+                    'urls': 'turn:139.59.5.116:5349?transport=tcp',
+                    'credential': 'bookmane',
+                    'username':'bookmane'
+                   
+                }
+            ]
+
         })
 
         var self = this
@@ -319,36 +352,36 @@ class DisplayShare extends Component {
                 connected: true
             })
         });
-            
+
         var conn = peer.connect(peerIdFrmPeer);
-        this.setState({conn : conn})
+        this.setState({ conn: conn })
         conn.on('open', function () {
             conn.on('data', data => {
                 var presentTime = null
-                if(data.type === config.PEER_SHARE_SCREEN_REQUEST){
+                if (data.type === config.PEER_SHARE_SCREEN_REQUEST) {
                     if (data.otherPeerId === self.state.peerIdFrmPeer) {
                         presentTime = JSON.parse(localStorage.getItem("timer"));
                         self.props.setTime(presentTime);
                         const { extSource, extOrigin } = self.props
                         self.props.displayScreenSharebutton(extSource, extOrigin)
-                        self.setState({myscreenSharing: false })
+                        self.setState({ myscreenSharing: false })
                     }
                 }
                 if (data.data === "addtimer") {
                     presentTime = JSON.parse(data.timeAloted);
                     self.props.setTime(presentTime)
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         self.props.addExtraTimerfromReciever(self.props.extSource, self.props.extOrigin);
 
-                    },500)
+                    }, 500)
                 }
                 if (data.data === "reduceTimer") {
                     presentTime = JSON.parse(data.timeAloted);
                     self.props.setTime(presentTime)
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         self.props.decreaseTimerfromReciever(self.props.extSource, self.props.extOrigin);
 
-                    },500)
+                    }, 500)
                 }
             })
 
@@ -356,16 +389,16 @@ class DisplayShare extends Component {
             conn.on('data', data => {
                 if (data.data === "sendID") {
                     if (config.CALL_LOGS) {
-                     
+
                     }
 
                     conn.send({
-                        type:config.MESSSAGE_FOR_CONNECTION_WITH_ID,
+                        type: config.MESSSAGE_FOR_CONNECTION_WITH_ID,
                         clientId: self.state.clientPeerid,
                     });
                     localStorage.setItem('profilePic', JSON.stringify(data.profilePic));
                     self.props.setTime(data.timer)
-                  
+
                 }
             })
 
@@ -380,21 +413,21 @@ class DisplayShare extends Component {
                     type: 'audio'
                 });
                 recorder1.startRecording();
-                self.setState({ recorder: recorder1, connectionFailed: false  });
-                self.saveBlobtimeOut = setTimeout(()=>{
+                self.setState({ recorder: recorder1, connectionFailed: false });
+                self.saveBlobtimeOut = setTimeout(() => {
                     const { recorder } = self.state;
-                    if(recorder!== null){
+                    if (recorder !== null) {
                         recorder.stopRecording(function () {
                             var blob = recorder.getBlob();
                             self.setState({
                                 downloadUrlVideo: URL.createObjectURL(blob),
                                 blob: blob,
-                                recorder:null
+                                recorder: null
                             })
-                           
+
                         });
                     }
-                },config.VIDEO_RECORDING_SAVE_LIMIT * 1000)
+                }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000)
                 postStartCall(config.RECIEVER_SCREEN_SHARE,
                     self.props.extOrigin,
                     self.state.picture,
@@ -402,29 +435,29 @@ class DisplayShare extends Component {
                     self.props.floaterTime,
                     null
                 )
-               
+
 
                 if (config.CALL_LOGS)
-                call.on('stream', function (stream) {
-                    socket.emit(config.CALL_ACK_MESSAGE, {
-                        'clientId': self.state.clientPeerid,
-                        'recieverProfilePic': self.props.myProfilePicture,
-                        'recieverProfileName': self.props.myProfileName,
-                        'recieverUserId': self.props.myProfileUserId
-                    })
-                    self.setState({
-                        connected: false,
-                        videoStream: stream
-                    })
-                    var divi = document.querySelector('.screenShareDiv')
-                    divi.style.display = "block"
-                    var video = document.querySelector('#video');
-                    video.srcObject = stream
+                    call.on('stream', function (stream) {
+                        socket.emit(config.CALL_ACK_MESSAGE, {
+                            'clientId': self.state.clientPeerid,
+                            'recieverProfilePic': self.props.myProfilePicture,
+                            'recieverProfileName': self.props.myProfileName,
+                            'recieverUserId': self.props.myProfileUserId
+                        })
+                        self.setState({
+                            connected: false,
+                            videoStream: stream
+                        })
+                        var divi = document.querySelector('.screenShareDiv')
+                        divi.style.display = "block"
+                        var video = document.querySelector('#video');
+                        video.srcObject = stream
 
-                    setTimeout(() => {
-                        video.play()
-                    }, 1000)
-                });
+                        setTimeout(() => {
+                            video.play()
+                        }, 1000)
+                    });
 
                 call.on('close', function () {
                     if (!self.state.callEnded) {
@@ -493,13 +526,13 @@ class DisplayShare extends Component {
         this.props.setTime(presentTime)
         if (this.state.initiatedScreenShare) {
             conn.send({
-                'type' : config.PEER_SHARE_SCREEN_REQUEST,
+                'type': config.PEER_SHARE_SCREEN_REQUEST,
                 'otherPeerId': self.state.clientPeerid
             })
             this.setState({
                 myscreenSharing: true
             })
-          
+
         }
         else {
             const result = browser();
@@ -537,7 +570,7 @@ class DisplayShare extends Component {
         }
         if (this.props.extSource !== null) {
             if (config.CALL_LOGS)
-            source.postMessage(GET_SOURCE_ID, origin);
+                source.postMessage(GET_SOURCE_ID, origin);
         }
         else {
             window.postMessage(GET_SOURCE_ID, '*');
@@ -596,10 +629,10 @@ class DisplayShare extends Component {
                     'clientId': clientPeerid,
                     'recorderBlob': blob,
                 });
-                self.setState({recorder : null, blob:blob})
+                self.setState({ recorder: null, blob: blob })
             });
 
-        }else{
+        } else {
             socket.emit(config.UPDATE_RECORDER_BLOB, {
                 'clientId': clientPeerid,
                 'recorderBlob': self.state.blob,
@@ -621,10 +654,10 @@ class DisplayShare extends Component {
 
         var selfCloseTimer = (this.state.selfClose) ? (<div>
 
-          
+
         </div>) : (null)
         var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<p>Preparing a link to access the call..</p>) :
-            ((!this.state.failedToSaveMessage && (this.state.sharablelink!==null|| this.state.sharablelink!==undefined))?
+            ((!this.state.failedToSaveMessage && (this.state.sharablelink !== null || this.state.sharablelink !== undefined)) ?
                 (<div className="sharableLinkDiv">
                     <span>Link to access you saved call : </span>
                     <CopyToClipboard sharablelink={this.state.sharablelink} />
@@ -682,7 +715,7 @@ class DisplayShare extends Component {
                             {sharableLinkMessage}
                             {selfCloseTimer}
                         </div>))))
-       
+
         if (!this.state.callEnded) {
             ShareElement = (
                 <div className="shareVideoDisplay">
@@ -757,10 +790,10 @@ DisplayShare.PropType = {
     saveSourceId: PropType.isRequired,
     saveExtensionDetails: PropType.func.isRequired,
     postStartCall: PropType.func.isRequired,
-    setTime:PropType.func.isRequired,
-    
+    setTime: PropType.func.isRequired,
 
-    
+
+
 }
 
 const mapStateToProps = state => ({
@@ -770,13 +803,13 @@ const mapStateToProps = state => ({
     peerProfilePic: state.visitProfile.profilePic,
     isLoggedIn: state.auth.isAuthenticated,
     extSource: state.extension.source,
-    isMuted:state.call.isMuted,
+    isMuted: state.call.isMuted,
     extSourceId: state.extension.sourceId,
     extOrigin: state.extension.origin,
-    floaterTime:state.floater.floaterTime
+    floaterTime: state.floater.floaterTime
 })
 
-export default connect(mapStateToProps, { postEndCall,setTime,decreaseTimerfromReciever,muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 
 
