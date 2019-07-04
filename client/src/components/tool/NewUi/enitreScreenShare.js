@@ -525,11 +525,62 @@ class ScreenRecorder extends Component {
             path: config.peerPath,
             secure : config.peerSecure,
             debug:config.peerDebug,
-            iceServers: [{
-                url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                credential: 'webrtc',
-                username: 'webrtc'
-            }] 
+            iceServers: [
+                {
+                    'urls': 'stun:stun.l.google.com:19302'
+                  },
+                  {
+                    'urls': 'turn:numb.viagenie.ca',
+                    'credential': 'prash@08119',
+                    'username': ' cprashanth004@gmail.com'
+                    },
+                   
+                        //   {
+                        //     "urls": 
+                        //     "turn:13.250.13.83:3478?transport=udp",
+                        //     "username": "YzYNCouZM1mhqhmseWk6",
+                        //     "credential": "YzYNCouZM1mhqhmseWk6"
+                        //     },
+                  
+
+                    // {
+                    //     "url": "stun:global.stun:3478?transport=udp"
+                    //   },
+                    //   {
+                    //     "credential": "5SR2x8mZK1lTFJW3NVgLGw6UM9C0dja4jI/Hdw3xr+w=",
+                    //     "url": "turn:global.turn:3478?transport=udp",
+                    //     "username": "f84381fd47ab9a0990d1d63a1de6955f05d931ce2ceb4eefdfdff926dc04882f"
+                    //   }
+
+                  
+
+
+
+
+
+
+
+                    {
+                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
+                    'credential': 'bookmane',
+                    'username': 'bookmane'
+                    }, {
+                    'urls': 'turn:139.59.5.116:3478?transport=udp',
+                    'credential': 'bookmane',
+                    'username': 'bookmane'
+                    },
+                    {
+                        'urls': 'turn:139.59.5.116:5349?transport=udp',
+                        'credential': 'bookmane',
+                        'username': 'bookmane'
+                        },
+                        
+                        {
+                            'urls': 'turn:139.59.5.116:5349?transport=tcp',
+                            'credential': 'bookmane',
+                            'username': 'bookmane'
+                            },
+                    ] 
             
         })
 
