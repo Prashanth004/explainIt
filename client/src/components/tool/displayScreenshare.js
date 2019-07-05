@@ -303,7 +303,7 @@ class DisplayShare extends Component {
             socket: socket
         });
         this.props.answerCall()
-        var peer = new Peer({
+        var peer = new window.Peer({
             host: config.peerHost,
             port:  config.peerPort,
             path: config.peerPath,

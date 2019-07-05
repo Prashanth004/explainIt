@@ -587,7 +587,7 @@ validateTurn(iceServers){
         this.validateTurn(iceServers);
         
         var self = this;
-        var peer = new Peer({
+        var peer = new window.Peer({
             host: config.peerHost,
             port: config.peerPort,
             path: config.peerPath,
