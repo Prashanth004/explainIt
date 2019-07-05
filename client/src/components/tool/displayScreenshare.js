@@ -308,7 +308,43 @@ class DisplayShare extends Component {
             port:  config.peerPort,
             path: config.peerPath,
             secure : config.peerSecure,
-            debug:config.peerDebug
+            debug:config.peerDebug,
+            config:{
+                'iceServers':  [{ 'urls': 'stun:stun.l.google.com:19302' },
+                        {
+                            "urls": "stun:global.stun:3478?transport=udp"
+                        },
+            
+                        {
+                            'urls': 'turn:139.59.5.116:3478?transport=udp',
+                            'credential': 'bookmane',
+                            'username': 'bookmane'
+            
+            
+                        },
+                        {
+                            'urls': 'turn:139.59.5.116:3478?transport=tcp',
+                            'credential': 'bookmane',
+                            'username': 'bookmane'
+                        },
+                        {
+                            'urls': 'turn:139.59.5.116:5349?transport=udp',
+                            'credential': 'bookmane',
+                            'username': 'bookmane'
+                        },
+                        {
+                            'urls': 'turn:139.59.5.116:5349?transport=tcp',
+                            'credential': 'bookmane',
+                            'username': 'bookmane'
+                        },
+                      {
+                    "urls": [
+                    "turn:13.250.13.83:3478?transport=udp"
+                    ],
+                    "username": "YzYNCouZM1mhqhmseWk6",
+                    "credential": "YzYNCouZM1mhqhmseWk6"
+                    }]
+            }
           
         })
 
