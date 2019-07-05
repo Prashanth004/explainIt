@@ -15,6 +15,7 @@
     "npm": "^6.9.0",
     "otp-client": "^1.0.1",
     "otplib": "^11.0.0",
+    "peerjs": "^1.0.0",
     "pretty-ms": "^4.0.0",
     "progressbar.js": "^1.0.1",
     "querystring": "^0.2.0",

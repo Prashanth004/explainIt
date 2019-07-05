@@ -281,7 +281,7 @@
     window.Socket = require('./socket');
     window.MediaConnection = require('./mediaconnection');
     window.DataConnection = require('./dataconnection');
-    window.Peer = require('./peer');
+    // window.Peer = require('./peer');
     window.RTCPeerConnection = require('./adapter').RTCPeerConnection;
     window.RTCSessionDescription = require('./adapter').RTCSessionDescription;
     window.RTCIceCandidate = require('./adapter').RTCIceCandidate;

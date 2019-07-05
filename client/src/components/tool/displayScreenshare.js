@@ -4,6 +4,7 @@ import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
+import Peer from 'peerjs';
 import Countdown from 'react-countdown-now';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
@@ -302,45 +303,59 @@ class DisplayShare extends Component {
             socket: socket
         });
         this.props.answerCall()
-
-        var peer = new window.Peer({
+        var peer = new Peer({
             host: config.peerHost,
-            port: config.peerPort,
+            port:  config.peerPort,
             path: config.peerPath,
-            secure: config.peerSecure,
-            debug: config.peerDebug,
-            iceServers: [
-                { 'urls': ['stun:stun.l.google.com:19302'] },
-                {
-                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
-                    'credential': 'bookmane',
-                    'username':'bookmane'
-                   
-
-                }, {
-                    'urls': 'turn:39.59.5.116:3478?transport=udp',
-                    'credential': 'bookmane',
-                    'username':'bookmane'
-                  
-
-                },
-                {
-                    'urls': 'turn:139.59.5.116:5349?transport=udp',
-                    'credential': 'bookmane',
-                    'username':'bookmane'
-                    
-
-                },
-
-                {
-                    'urls': 'turn:139.59.5.116:5349?transport=tcp',
-                    'credential': 'bookmane',
-                    'username':'bookmane'
-                   
-                }
-            ]
-
+            secure : config.peerSecure,
+            debug:config.peerDebug,
+          
         })
+
+        // iceServers: [
+        //     { 'urls': 'stun:stun.l.google.com:19302' },
+        //     {
+        //         "urls": "stun:global.stun:3478?transport=udp"
+        //     },
+
+        //     {
+        //         'urls': 'turn:139.59.5.116:3478?transport=udp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+
+
+        //     },
+        //     {
+        //         'urls': 'turn:139.59.5.116:3478?transport=tcp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+        //     },
+        //     {
+        //         'urls': 'turn:139.59.5.116:5349?transport=udp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+        //     },
+        //     {
+        //         'urls': 'turn:139.59.5.116:5349?transport=tcp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+        //     },
+        //   {
+        // "urls": [
+        // "turn:13.250.13.83:3478?transport=udp"
+        // ],
+        // "username": "YzYNCouZM1mhqhmseWk6",
+        // "credential": "YzYNCouZM1mhqhmseWk6"
+        // }]
+
+
+        // {
+        //     "urls": [
+        //     "turn:13.250.13.83:3478?transport=udp"
+        //     ],
+        //     "username": "YzYNCouZM1mhqhmseWk6",
+        //     "credential": "YzYNCouZM1mhqhmseWk6"
+        //     },
 
         var self = this
         this.setState({

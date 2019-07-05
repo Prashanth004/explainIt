@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
 import bigInt from "big-integer";
+import Peer from 'peerjs';
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
 import DownloadExt from './container/DownloadExt'
 import BusyAction from './container/BusyAction';
-import {registerCallToBrowser,registerEndToBrowser} from './container/miscFunction';
+import { registerCallToBrowser, registerEndToBrowser } from './container/miscFunction';
 import { explainByRecord } from '../../../actions/explainAction';
 import PostSharing from './screenShare/postScreenSgare'
 import { openCreated } from '../../../actions/navAction'
@@ -34,7 +35,7 @@ import PropType from 'prop-types';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { displayFullScrenRecord } from '../../../actions/toolActions';
-import {  callSuccessedUpate, initiateSend } from '../../../actions/callAction'
+import { callSuccessedUpate, initiateSend } from '../../../actions/callAction'
 import { sendTweet } from '../../../actions/twitterApiAction';
 import LinkDisplay from './TweetAcceptHandle'
 
@@ -93,10 +94,10 @@ class ScreenRecorder extends Component {
             permissonDenied: false,
             onGoingCallEnded: false,
             downloadUrlAudio: null,
-            retryTimeOut:false,
-            currentAtionStatus:null,
-            connectionFailed:false,
-            startTimer:false
+            retryTimeOut: false,
+            currentAtionStatus: null,
+            connectionFailed: false,
+            startTimer: false
 
         }
         this.renderer = this.renderer.bind(this);
@@ -129,7 +130,7 @@ class ScreenRecorder extends Component {
         this.CloseCallIfNotDone = this.CloseCallIfNotDone.bind(this);
         this.callEndBeforeRecieve = this.callEndBeforeRecieve.bind(this);
         this.play_clicked = this.play_clicked.bind(this);
-        this.pause_clicked =  this.pause_clicked.bind(this);
+        this.pause_clicked = this.pause_clicked.bind(this);
         this.onUnload = this.onUnload.bind(this);
         this.postMessageHandler = this.postMessageHandler.bind(this);
         this.callConnectionDelayed = this.callConnectionDelayed.bind(this);
@@ -138,23 +139,23 @@ class ScreenRecorder extends Component {
 
     muteAudio() {
         const { audioStream } = this.state;
-        if(audioStream !==null){
+        if (audioStream !== null) {
             var audioTracks = audioStream.getAudioTracks();
             if (audioTracks[0]) {
                 audioTracks[0].enabled = false;
             }
             this.props.muteAudio()
         }
-       
+
     }
     unMuteAudio() {
         const { audioStream } = this.state;
-        if(audioStream !==null){
-        var audioTracks = audioStream.getAudioTracks();
-        if (audioTracks[0]) {
-            audioTracks[0].enabled = true;
-        }
-        this.props.unMuteAudio()
+        if (audioStream !== null) {
+            var audioTracks = audioStream.getAudioTracks();
+            if (audioTracks[0]) {
+                audioTracks[0].enabled = true;
+            }
+            this.props.unMuteAudio()
         }
     }
 
@@ -163,7 +164,7 @@ class ScreenRecorder extends Component {
         var constraints = null;
         var sourceId = this.props.extSourceId;
         const result = browser();
-      
+
         if (result.name === "chrome") {
             constraints = {
                 video: {
@@ -215,7 +216,7 @@ class ScreenRecorder extends Component {
                 })
             }).catch(err => {
                 if (config.CALL_LOGS)
-                console.log("error ouucres : ", err)
+                    console.log("error ouucres : ", err)
             })
         });
     }
@@ -282,34 +283,34 @@ class ScreenRecorder extends Component {
     }
     play_clicked() {
         var AudioPlyr = document.querySelector('#AudioPlyr')
-        if(AudioPlyr)
-        AudioPlyr.play();
+        if (AudioPlyr)
+            AudioPlyr.play();
     }
-    pause_clicked(){
+    pause_clicked() {
         var AudioPlyr = document.querySelector('#AudioPlyr')
-        if(AudioPlyr)
-        AudioPlyr.pause();
+        if (AudioPlyr)
+            AudioPlyr.pause();
     }
-    
+
     onUnload(event) { // the method that will be used for both add and remove event
         registerEndToBrowser();
         window.source.close();
-     
-     if(this.props.isSceenSharing){
-        this.endCall()
-        event.returnValue = "Hellooww";
 
-     }
-     else{
-        //  event.preventDefault();
-     }
-     var socket =this.state.socket;
-     socket.disconnect();
-      
+        if (this.props.isSceenSharing) {
+            this.endCall()
+            event.returnValue = "Hellooww";
+
+        }
+        else {
+            //  event.preventDefault();
+        }
+        var socket = this.state.socket;
+        socket.disconnect();
+
     }
     postMessageHandler(event) {
         var self = this;
-      
+
         if (event.data.sourceId !== undefined) {
             if (config.CALL_LOGS)
                 console.log("recieved source id : ", event.data.sourceId)
@@ -321,12 +322,12 @@ class ScreenRecorder extends Component {
             self.setState({ permissonDenied: true })
             return
         }
-        if(event.data.type === config.MUTE_TO_WEB){
+        if (event.data.type === config.MUTE_TO_WEB) {
             self.muteAudio()
             return
         }
-      
-        if(event.data.type === config.UNMUTE_TO_WEB){
+
+        if (event.data.type === config.UNMUTE_TO_WEB) {
             self.unMuteAudio()
             return
         }
@@ -339,7 +340,7 @@ class ScreenRecorder extends Component {
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
-        
+
 
         if (window.addEventListener) {
             window.addEventListener("message", this.postMessageHandler, false);
@@ -365,10 +366,10 @@ class ScreenRecorder extends Component {
         socket.on(config.UPDATE_RECORDER_BLOB, data => {
             if (data.clientId === self.state.destkey) {
                 if (!this.state.saveinitiated)
-                console.log("got the audio blob from user")
-                    this.setState({
-                        peerAudioBlob: data.recorderBlob
-                    })
+                    console.log("got the audio blob from user")
+                this.setState({
+                    peerAudioBlob: data.recorderBlob
+                })
             }
         })
 
@@ -397,12 +398,12 @@ class ScreenRecorder extends Component {
             if (data.toUserId === this.props.userId) {
                 self.props.answeredCall();
                 console.log("accepting sceen share request")
-                self.setState({clickedOnLink: true});
+                self.setState({ clickedOnLink: true });
             }
         })
         socket.on(config.CLOSE_NETWORK_ISSUE, data => {
             if (config.CALL_LOGS)
-            console.log(" close network issue : ");
+                console.log(" close network issue : ");
             if (data.otherPeerId === self.state.destkey) {
                 self.stopShare();
                 const { extSource, extOrigin } = this.props
@@ -416,9 +417,9 @@ class ScreenRecorder extends Component {
         socket.on(config.END_CALL, data => {
 
             if (data.clientId === self.state.destkey) {
-                this.setState({manualClose:true})
+                this.setState({ manualClose: true })
                 if (config.CALL_LOGS)
-                console.log(" socket endCall : ");
+                    console.log(" socket endCall : ");
                 const { extSource, extOrigin } = this.props
                 postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
                 if (peer !== null) {
@@ -463,24 +464,24 @@ class ScreenRecorder extends Component {
             }
         })
     }
-    startConnectionTimer(){
-        const {permissonDenied,onGoingCallEnded,recorder} =  this.state;
-        const {isSceenSharing} = this.props
-        this.setState({startTimer:true});
-        this.callConnectionDelayed = setTimeout(()=>{
-            console.log(!permissonDenied ,!isSceenSharing ,!onGoingCallEnded);
-            console.log("this.state.permissonDenied : ",this.state.permissonDenied);
-            console.log("this.state.recorder : ",this.state.recorder)
-            console.log("this.props.isSceenSharing : ",this.props.isSceenSharing);
-            console.log("this.state.onGoingCallEnded : ",this.state.onGoingCallEnded)
-            if(!this.state.permissonDenied && this.state.recorder===null && !this.props.isSceenSharing && !this.state.onGoingCallEnded){
+    startConnectionTimer() {
+        const { permissonDenied, onGoingCallEnded, recorder } = this.state;
+        const { isSceenSharing } = this.props
+        this.setState({ startTimer: true });
+        this.callConnectionDelayed = setTimeout(() => {
+            console.log(!permissonDenied, !isSceenSharing, !onGoingCallEnded);
+            console.log("this.state.permissonDenied : ", this.state.permissonDenied);
+            console.log("this.state.recorder : ", this.state.recorder)
+            console.log("this.props.isSceenSharing : ", this.props.isSceenSharing);
+            console.log("this.state.onGoingCallEnded : ", this.state.onGoingCallEnded)
+            if (!this.state.permissonDenied && this.state.recorder === null && !this.props.isSceenSharing && !this.state.onGoingCallEnded) {
                 registerEndToBrowser();
                 this.props.turnnotbusy(this.props.twitterUserId);
-                this.setState({ connectionFailed : true});
+                this.setState({ connectionFailed: true });
                 if (config.CALL_LOGS)
                     console.log("connection failed")
             }
-        },36000);
+        }, 36000);
 
     }
     componentWillUnmount() {
@@ -494,8 +495,42 @@ class ScreenRecorder extends Component {
         clearTimeout(this.callConnectionDelayed);
     }
 
-
-
+validateTurn(iceServers){
+    var hasTurn = false;
+    iceServers = JSON.parse(JSON.stringify(iceServers));
+    iceServers.filter((server)=>{
+      if (server && (server.urls || server.url)) {
+        var urls = server.urls || server.url;
+        if (server.url && !server.urls) {
+          //utils.deprecated('RTCIceServer.url', 'RTCIceServer.urls');
+          console.log("url outdated use urls")
+        }
+        var isString = typeof urls === 'string';
+        if (isString) {
+          urls = [urls];
+        }
+        urls = urls.filter((url)=>{
+          var validTurn = url.indexOf('turn:') === 0 &&
+              url.indexOf('transport=udp') !== -1 &&
+              url.indexOf('turn:[') === -1 
+            
+  
+          if (validTurn) {
+              console.log("turn present and valid")
+        //    hasTurn = true;
+            return true;
+          }
+        //   return url.indexOf('stun:') === 0 && edgeVersion >= 14393 &&
+        //       url.indexOf('?transport=udp') === -1;
+        });
+  
+        delete server.url;
+        server.urls = isString ? urls[0] : urls;
+        return !!urls.length;
+      }
+    })
+}
+    
     componentWillMount() {
         const { extSource, extOrigin } = this.props;
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
@@ -515,86 +550,171 @@ class ScreenRecorder extends Component {
                 };
             }
         }
-         // || (window.location.protocol === 'https:' ? 443 : 80),
+        // || (window.location.protocol === 'https:' ? 443 : 80),
         //  stun.stunprotocol.org
+        var iceServers =[
+            { 'urls': 'stun:stun.l.google.com:19302' },
 
+            {
+                'urls': 'turn:139.59.5.116:3478?transport=udp',
+                'credential': 'bookmane',
+                'username': 'bookmane'
+
+
+            },
+            {
+                'urls': 'turn:139.59.5.116:3478?transport=tcp',
+                'credential': 'bookmane',
+                'username': 'bookmane'
+            },
+            {
+                'urls': 'turn:139.59.5.116:5349?transport=udp',
+                'credential': 'bookmane',
+                'username': 'bookmane'
+            },
+            {
+                'urls': 'turn:139.59.5.116:5349?transport=tcp',
+                'credential': 'bookmane',
+                'username': 'bookmane'
+            },
+          {
+        "urls": [
+        "turn:13.250.13.83:3478?transport=udp"
+        ],
+        "username": "YzYNCouZM1mhqhmseWk6",
+        "credential": "YzYNCouZM1mhqhmseWk6"
+        }];
+        this.validateTurn(iceServers);
+        
         var self = this;
-        var peer = new window.Peer({
+        var peer = new Peer({
             host: config.peerHost,
-            port:  config.peerPort,
+            port: config.peerPort,
             path: config.peerPath,
-            secure : config.peerSecure,
-            debug:config.peerDebug,
-            iceServers: [
-                { 'urls': ['stun:stun.l.google.com:19302'] },
-
-                {
-                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
-                    'credential': 'bookmane',
-                    'username':'bookmane',
-                   
-
-                }, {
-                    'urls': 'turn:39.59.5.116:3478?transport=udp',
-                    'credential': 'bookmane',
-                    'username':'bookmane',
-
-                },
-                {
-                    'urls': 'turn:139.59.5.116:5349?transport=udp',
-                    'credential': 'bookmane',
-                    'username':'bookmane',
-                   
-
-                },
-
-                {
-                    'urls': 'turn:139.59.5.116:5349?transport=tcp',
-                    'credential': 'bookmane',
-                    'username':'bookmane',
-                   
-                }]
-               
-                   
-                        //   {
-                        //     "urls": 
-                        //     "turn:13.250.13.83:3478?transport=udp",
-                        //     "username": "YzYNCouZM1mhqhmseWk6",
-                        //     "credential": "YzYNCouZM1mhqhmseWk6"
-                        //     },
-                  
-                        // {
-                        //     "urls": "turn:numb.viagenie.ca",
-                        //     "username": "some@email.com",
-                        //     "credential": "somepassword"
-                        //   }
-
-                    // {
-                    //     "url": "stun:global.stun:3478?transport=udp"
-                    //   },
-                    //   {
-                    //     "credential": "5SR2x8mZK1lTFJW3NVgLGw6UM9C0dja4jI/Hdw3xr+w=",
-                    //     "url": "turn:global.turn:3478?transport=udp",
-                    //     "username": "f84381fd47ab9a0990d1d63a1de6955f05d931ce2ceb4eefdfdff926dc04882f"
-                    //   }
-
-                  
+            secure: config.peerSecure,
+            debug: config.peerDebug,
 
 
-
-
-
-           
-                    
-            
         })
+        // iceServers: [
+        //     { 'urls': 'stun:stun.l.google.com:19302' },
+
+        //     {
+        //         'urls': 'turn:139.59.5.116:3478?transport=udp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+
+
+        //     },
+        //     {
+        //         'urls': 'turn:139.59.5.116:3478?transport=tcp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+        //     },
+        //     {
+        //         'urls': 'turn:139.59.5.116:5349?transport=udp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+        //     },
+        //     {
+        //         'urls': 'turn:139.59.5.116:5349?transport=tcp',
+        //         'credential': 'bookmane',
+        //         'username': 'bookmane'
+        //     },
+        //   {
+        // "urls": [
+        // "turn:13.250.13.83:3478?transport=udp"
+        // ],
+        // "username": "YzYNCouZM1mhqhmseWk6",
+        // "credential": "YzYNCouZM1mhqhmseWk6"
+        // }]
+
+        //  {
+        //     'urls': 'turn:39.59.5.116:3478?transport=udp',
+        //     'credential': 'bookmane',
+        //     'username':'bookmane'
+
+
+        // }]
+        // {
+        //     'url': 'turn:139.59.5.116:5349?transport=udp',
+        //     'credential': 'bookmane',
+        //     'username':'bookmane'
+
+
+        // },
+
+        // {
+        //     'url': 'turn:139.59.5.116:5349?transport=tcp',
+        //     'credential': 'bookmane',
+        //     'username':'bookmane'
+
+        // }
+
+
+        // {
+        //     "urls": [
+        //     "turn:13.250.13.83:3478?transport=udp"
+        //     ],
+        //     "username": "YzYNCouZM1mhqhmseWk6",
+        //     "credential": "YzYNCouZM1mhqhmseWk6"
+        //     },
+
+        //{                    'urls': 'turn:139.59.5.116:3478?transport=tcp',
+        //                   'credential': 'bookmane',
+        //                 'username':'bookmane',
+
+
+        //           }, {
+        //             'urls': 'turn:39.59.5.116:3478?transport=udp',
+        //           'credential': 'bookmane',
+        //         'username':'bookmane',
+
+        //   },
+        // {
+        //        'urls': 'turn:139.59.5.116:5349?transport=udp',
+        //        'credential': 'bookmane',
+        //        'username':'bookmane',
+
+
+        //     },
+
+        //      {
+        //        {
+        //          "url": "stun:global.stun:3478?transport=udp"
+        //        },
+
+
+        //   {
+        //     "urls": 
+        //     "turn:13.250.13.83:3478?transport=udp",
+        //     "username": "YzYNCouZM1mhqhmseWk6",
+        //     "credential": "YzYNCouZM1mhqhmseWk6"
+        //     },
+
+        // {
+        //     "urls": "turn:numb.viagenie.ca",
+        //     "username": "some@email.com",
+        //     "credential": "somepassword"
+        //   }
+
+        // {
+        //     "url": "stun:global.stun:3478?transport=udp"
+        //   },
+        //   {
+        //     "credential": "5SR2x8mZK1lTFJW3NVgLGw6UM9C0dja4jI/Hdw3xr+w=",
+        //     "url": "turn:global.turn:3478?transport=udp",
+        //     "username": "f84381fd47ab9a0990d1d63a1de6955f05d931ce2ceb4eefdfdff926dc04882f"
+        //   }
+
+
 
         this.setState({
             peer: peer,
             socket: this.props.socket,
-            currentAtionStatus : currentAtionStatus
+            currentAtionStatus: currentAtionStatus
         });
-     
+
         peer.on('open', (id) => {
             self.props.setpeerId(id)
             self.setState({
@@ -621,7 +741,7 @@ class ScreenRecorder extends Component {
 
             })
         })
-        
+
         peer.on('connection', (conn) => {
             if (config.CALL_LOGS)
                 console.log("got the connection set")
@@ -636,29 +756,29 @@ class ScreenRecorder extends Component {
                     timer: this.props.timeAloted,
                     profilePic: this.props.twirecieverPrfilePic
                 })
-                conn.on('error',(err)=>{
-                    if (config.CALL_LOGS){
-                    console.log("conn errr : ----");
-                    console.log("error : ",err)
+                conn.on('error', (err) => {
+                    if (config.CALL_LOGS) {
+                        console.log("conn errr : ----");
+                        console.log("error : ", err)
                     }
                 })
-                conn.on('close',()=>{
-                    if (config.CALL_LOGS){
-                    console.log("closed conn")
+                conn.on('close', () => {
+                    if (config.CALL_LOGS) {
+                        console.log("closed conn")
                     }
                 })
                 conn.on('data', (data) => {
                     if (data.type === config.MESSSAGE_FOR_CONNECTION_WITH_ID) {
                         if (config.CALL_LOGS)
                             console.log("got the peerid over connection. noe get stream abd make call")
-                            if (!this.state.onGoingCallEnded) {
-                                self.setState({ destkey: data.clientId });
+                        if (!this.state.onGoingCallEnded) {
+                            self.setState({ destkey: data.clientId });
 
-                                if (result.name === "chrome")
-                                    self.receiveMessage()
-                                else if (result.name === "firefox")
-                                    self.startScreenShareSend()
-                            }
+                            if (result.name === "chrome")
+                                self.receiveMessage()
+                            else if (result.name === "firefox")
+                                self.startScreenShareSend()
+                        }
                     }
                     if (data.type === config.PEER_SHARE_SCREEN_REQUEST) {
                         if (data.otherPeerId === self.state.destkey) {
@@ -672,8 +792,8 @@ class ScreenRecorder extends Component {
 
             });
         });
-        peer.on('error',function(error){
-            if(config.CALL_LOGS){
+        peer.on('error', function (error) {
+            if (config.CALL_LOGS) {
                 if (!self.state.initiatedCloseCall) {
                     self.stopShare()
                     self.setState({
@@ -681,8 +801,8 @@ class ScreenRecorder extends Component {
                     })
                 }
                 console.log("perr error : -----")
-                console.log("error : ",error);
-                console.log("errorType : ",error.type)
+                console.log("error : ", error);
+                console.log("errorType : ", error.type)
             }
         })
 
@@ -724,27 +844,27 @@ class ScreenRecorder extends Component {
         // })
     }
     saveBlobtimeOut = () => { }
-    CloseCallIfNotDone=()=>{};
+    CloseCallIfNotDone = () => { };
     callEndBeforeRecieve = () => { };
-    callConnectionDelayed = ()=>{};
+    callConnectionDelayed = () => { };
 
     peerCall() {
         clearTimeout(this.callConnectionDelayed);
         const { twitterUserId, fullStartedSharing } = this.props
         const self = this;
         const { socket, peer, destkey, finalStream } = this.state
-        
+
         var call = peer.call(destkey, finalStream);
         if (config.CALL_LOGS)
-        console.log("Made peer call with other peer is and streams")
+            console.log("Made peer call with other peer is and streams")
         var recorder1 = RecordRTC(finalStream, {
             type: 'video'
         });
         recorder1.startRecording();
         registerCallToBrowser();
         self.setState({ recorder: recorder1 });
-       
-        
+
+
         self.saveBlobtimeOut = setTimeout(() => {
             const { recorder } = self.state;
             if (recorder !== null) {
@@ -762,17 +882,17 @@ class ScreenRecorder extends Component {
         if (call) {
             call.on('stream', function (remoteStream) {
                 fullStartedSharing(twitterUserId)
-               
+
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
                 audio.play()
                 self.setState({ connected: true })
             }, function (err) {
                 if (config.CALL_LOGS)
-                console.log('Failed to get local stream', err);
+                    console.log('Failed to get local stream', err);
             });
             call.on('close', function () {
-                self.CloseCallIfNotDone = setTimeout(()=>{
+                self.CloseCallIfNotDone = setTimeout(() => {
                     if (!self.state.initiatedCloseCall) {
                         self.stopShare()
                         self.setState({ initiatedCloseCall: true })
@@ -780,12 +900,12 @@ class ScreenRecorder extends Component {
                     socket.emit(config.CLOSE_NETWORK_ISSUE, {
                         'otherPeerId': self.state.peerId
                     })
-                },2500)
-              
-               
+                }, 2500)
+
+
             })
         }
-}
+    }
 
     discard = () => {
         setTimeout(() => {
@@ -1000,7 +1120,7 @@ class ScreenRecorder extends Component {
             if (!closedHere && !timerEnded)
                 this.setState({ showDisconectMessage: true })
 
-            
+
             disableCallAction()
 
             var audioStream = this.props.audioStream;
@@ -1030,7 +1150,7 @@ class ScreenRecorder extends Component {
                     })
                     saveVideoBlob(blob)
                 });
-                if (isSceenSharing)
+            if (isSceenSharing)
                 fullStopedSharing(twitterUserId);
             endSecondScreenShare()
             this.setState({
@@ -1057,21 +1177,21 @@ class ScreenRecorder extends Component {
         this.props.toggleInbox()
         this.props.openCreated()
     }
-    
+
     sendLink() {
         const self = this;
-        const { failedToSave,explainBy, twitterUserId, initiateSend, largeFileSize, linkToAccess, callTopic } = this.props
+        const { failedToSave, explainBy, twitterUserId, initiateSend, largeFileSize, linkToAccess, callTopic } = this.props
 
         initiateSend();
         var issueId = JSON.parse(localStorage.getItem("issueId"));
         const socket = this.state.socket;
-        const {initialTime,noOfIncreaseInTime,currentTimeLeft} = this.props;
+        const { initialTime, noOfIncreaseInTime, currentTimeLeft } = this.props;
         var sharableLinkSaved = null;
-        if(explainBy===config.null){
+        if (explainBy === config.null) {
             sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
         }
-        else{
-            sharableLinkSaved = (config.react_url+"/project/"+issueId);
+        else {
+            sharableLinkSaved = (config.react_url + "/project/" + issueId);
         }
         const saveStatus = (failedToSave || largeFileSize) ? ("false") : ("true");
         socket.emit(config.SEND_SHARABLE_LINK, {
@@ -1079,11 +1199,11 @@ class ScreenRecorder extends Component {
             'successMessage': saveStatus,
             'sharableLink': sharableLinkSaved
         })
-        const tInitialTime=(typeof(intialTime)==="string")?(Number(initialTime)):initialTime
-        const tNumberOfIncrease=(typeof(numberOfIncrease)==="string")?(Number(noOfIncreaseInTime)):noOfIncreaseInTime
-        const tCurrentTime=(typeof(currentTime)==="string")?(Number(currentTimeLeft)):currentTimeLeft;
-        var duration =  tInitialTime+tNumberOfIncrease-tCurrentTime
-        console.log("duration in screen share place : ",duration)
+        const tInitialTime = (typeof (intialTime) === "string") ? (Number(initialTime)) : initialTime
+        const tNumberOfIncrease = (typeof (numberOfIncrease) === "string") ? (Number(noOfIncreaseInTime)) : noOfIncreaseInTime
+        const tCurrentTime = (typeof (currentTime) === "string") ? (Number(currentTimeLeft)) : currentTimeLeft;
+        var duration = tInitialTime + tNumberOfIncrease - tCurrentTime
+        console.log("duration in screen share place : ", duration)
         callSuccessedUpate(twitterUserId, callTopic, duration, sharableLinkSaved)
     }
     downloadExtension() {
@@ -1092,19 +1212,19 @@ class ScreenRecorder extends Component {
     }
 
     render() {
-        
-            var shareTimeElements = null;
-            var postShareElements = null;
-           
+
+        var shareTimeElements = null;
+        var postShareElements = null;
 
 
-        if (this.props.linkToAccess !== null && this.props.isSharingCompleted ) {
+
+        if (this.props.linkToAccess !== null && this.props.isSharingCompleted) {
             if (!this.props.sendinitiated) {
                 this.sendLink()
             }
         }
-        else{
-            if(this.props.linkToAccess === null && this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
+        else {
+            if (this.props.linkToAccess === null && this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
                 if (!this.props.sendinitiated) {
                     this.sendLink()
                 }
@@ -1115,10 +1235,10 @@ class ScreenRecorder extends Component {
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate
         var linkElement = null;
-        const closeBtn = (this.props.isSceenSharing ||  this.props.explainBy !== config.null) ?
-        (null):(((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
-            <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>))
-           if (this.props.isSceenSharing) {
+        const closeBtn = (this.props.isSceenSharing || this.props.explainBy !== config.null) ?
+            (null) : (((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
+                <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>))
+        if (this.props.isSceenSharing) {
 
             var recieverProfPic = (this.props.twirecieverPrfilePic === null) ?
                 (this.state.recieverProfilePic) :
@@ -1170,28 +1290,28 @@ class ScreenRecorder extends Component {
                 </div>)
 
         if (this.props.isSharingCompleted && this.state.blob !== null && !this.state.clickedOnLink) {
-            postShareElements=(<PostSharing 
+            postShareElements = (<PostSharing
                 retryCall={this.retryCall}
-               
-           peerAudioBlob={this.state.peerAudioBlob}
-           saveinitiated={this.state.saveinitiated}
-           downloadUrlVideo={this.state.downloadUrlVideo}
-           downloadUrlAudio ={this.state.downloadUrlAudio}
-           retry ={this.state.retry}
-           retryTimeOut={this.state.retryTimeOut}
-           manualClose={this.state.manualClose}
-           retryLimit={this.state.retryLimit}
-           timerEnded={this.state.timerEnded}
-           noInternet={this.state.noInternet}
-           blob={this.state.blob}
-           play_clicked={this.play_clicked}
-           pause_clicked ={this.pause_clicked}
-           recordCall={this.recordCall}
-           showDisconectMessage={this.state.showDisconectMessage}
-           isSaved={this.props.isSaved}
-           explainBy={this.props.explainBy}
-           savefilePrivate={this.savefilePrivate}
-           linkToAccess={this.props.linkToAccess}/>)
+
+                peerAudioBlob={this.state.peerAudioBlob}
+                saveinitiated={this.state.saveinitiated}
+                downloadUrlVideo={this.state.downloadUrlVideo}
+                downloadUrlAudio={this.state.downloadUrlAudio}
+                retry={this.state.retry}
+                retryTimeOut={this.state.retryTimeOut}
+                manualClose={this.state.manualClose}
+                retryLimit={this.state.retryLimit}
+                timerEnded={this.state.timerEnded}
+                noInternet={this.state.noInternet}
+                blob={this.state.blob}
+                play_clicked={this.play_clicked}
+                pause_clicked={this.pause_clicked}
+                recordCall={this.recordCall}
+                showDisconectMessage={this.state.showDisconectMessage}
+                isSaved={this.props.isSaved}
+                explainBy={this.props.explainBy}
+                savefilePrivate={this.savefilePrivate}
+                linkToAccess={this.props.linkToAccess} />)
         }
         if (
             !this.props.isSceenSharing &&
@@ -1223,7 +1343,7 @@ class ScreenRecorder extends Component {
                         <br />
                         <br />
                         <span className="hint--top" aria-label="Record call and send">
-                        <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                            <FiVideo className="icon" onClick={(this.props.explainBy === config.null) ? this.recordCallAfterShare : this.props.explainByRecord} />
                         </span>                <span className="hint--top" aria-label="Cancel">
                             <FiX className="icon" onClick={this.props.closeImidiate} />
                         </span>
@@ -1240,9 +1360,9 @@ class ScreenRecorder extends Component {
                         <br />
                         <br />
                         <span className="hint--top" aria-label="Record call and send">
-                            <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                            <FiVideo className="icon" onClick={(this.props.explainBy === config.null) ? this.recordCallAfterShare : this.props.explainByRecord} />
                         </span>                <span className="hint--top" aria-label="Cancel">
-                            <FiX  className="icon" onClick={this.props.closeImidiate} />
+                            <FiX className="icon" onClick={this.props.closeImidiate} />
                         </span>
                     </div>)
                 }
@@ -1268,29 +1388,29 @@ class ScreenRecorder extends Component {
                 }
 
             }
-            else if (this.state.clickedOnLink){
-                if(!this.state.startTimer)
+            else if (this.state.clickedOnLink) {
+                if (!this.state.startTimer)
                     this.startConnectionTimer()
                 linkElement = ((!this.state.permissonDenied) ? (
                     (!this.state.onGoingCallEnded) ? (
-                        (!this.state.connectionFailed)?(
-                        <div>
-                            <audio autoPlay style={{ display: "none" }} src={require('../../audio/brute-force.mp3')}></audio>
+                        (!this.state.connectionFailed) ? (
+                            <div>
+                                <audio autoPlay style={{ display: "none" }} src={require('../../audio/brute-force.mp3')}></audio>
 
-                            <div className="waitMsg">
-                                <p><b>{this.props.twitterName} has accepted the request</b></p>
-                            </div>
-                            <div className="callerImageDiv">
-                                <CallImage
-                                    action="waiting" callerImageUrl={this.props.profilePic}
-                                    recieverImageUrl={this.props.twirecieverPrfilePic} />
-                            </div>
-                        </div>):(<div>
-                            <div className="callerImageDiv">
-                            <p><b>Connection Failed due to network issues</b></p>
-                            <button className="buttonLight" onClick={this.props.closeImidiate}>Close</button>
-                            </div>
-                        </div>)
+                                <div className="waitMsg">
+                                    <p><b>{this.props.twitterName} has accepted the request</b></p>
+                                </div>
+                                <div className="callerImageDiv">
+                                    <CallImage
+                                        action="waiting" callerImageUrl={this.props.profilePic}
+                                        recieverImageUrl={this.props.twirecieverPrfilePic} />
+                                </div>
+                            </div>) : (<div>
+                                <div className="callerImageDiv">
+                                    <p><b>Connection Failed due to network issues</b></p>
+                                    <button className="buttonLight" onClick={this.props.closeImidiate}>Close</button>
+                                </div>
+                            </div>)
                     ) : (<div>
                         <p><b>Share Request Ended.</b></p>
                         <button className="buttonLight" onClick={this.props.closeImidiate}>Close</button>
@@ -1314,9 +1434,9 @@ class ScreenRecorder extends Component {
                 <span>You can record the screen and send</span>
                 <br />
                 <span className="hint--top" aria-label="Record call and send">
-                <FiVideo  className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                    <FiVideo className="icon" onClick={(this.props.explainBy === config.null) ? this.recordCallAfterShare : this.props.explainByRecord} />
                 </span>                <span className="hint--top" aria-label="Cancel">
-                    <FiX  className="icon" onClick={this.props.closeImidiate} />
+                    <FiX className="icon" onClick={this.props.closeImidiate} />
                 </span>
 
             </div>)
@@ -1330,7 +1450,7 @@ class ScreenRecorder extends Component {
                 <p>message : {this.state.messageFrmPeer}</p>
                 <p>Do You wish to record the screen and send?</p>
                 <span className="hint--top" aria-label="Record call and send">
-                <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                    <FiVideo className="icon" onClick={(this.props.explainBy === config.null) ? this.recordCallAfterShare : this.props.explainByRecord} />
                 </span>
                 <span className="hint--top" aria-label="Cancel">
                     <FiX className="icon" onClick={this.props.closeImidiate} />
@@ -1347,7 +1467,7 @@ class ScreenRecorder extends Component {
                 <p>Client did not click to get connected</p>
                 <p>You can record the call and send</p>
                 <span className="hint--top" aria-label="Record call and send">
-                <FiVideo className="icon" onClick={(this.props.explainBy===config.null)?this.recordCallAfterShare:this.props.explainByRecord} />
+                    <FiVideo className="icon" onClick={(this.props.explainBy === config.null) ? this.recordCallAfterShare : this.props.explainByRecord} />
                 </span>                <span className="hint--top" aria-label="Cancel">
                     <FiX className="icon" onClick={this.props.closeImidiate} />
                 </span>
@@ -1357,23 +1477,23 @@ class ScreenRecorder extends Component {
         return (this.state.isInstalled) ? (
 
 
-            (this.state.currentAtionStatus === null)?
+            (this.state.currentAtionStatus === null) ?
 
 
-            (<div>
-              
-                {audioWarning}
-                <div className="LinkDisplay">
-                {closeBtn}
-                    {linkElement}
-                    {shareTimeElements}
-                    {postShareElements}
-                    <audio id="video" ref={a => this.videoTag = a} srcobject=" " ></audio>
-                </div>
-            </div>):
-            (<div className="LinkDisplay">
-                {closeBtn}
-                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                (<div>
+
+                    {audioWarning}
+                    <div className="LinkDisplay">
+                        {closeBtn}
+                        {linkElement}
+                        {shareTimeElements}
+                        {postShareElements}
+                        <audio id="video" ref={a => this.videoTag = a} srcobject=" " ></audio>
+                    </div>
+                </div>) :
+                (<div className="LinkDisplay">
+                    {closeBtn}
+                    <BusyAction currentAtionStatus={this.state.currentAtionStatus} />
                 </div>)) : (<div ><DownloadExt /></div>)
     }
 }
