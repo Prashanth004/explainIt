@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
 import bigInt from "big-integer";
-import Peer from 'peerjs';
+// import Peer from 'peerjs';
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
 import DownloadExt from './container/DownloadExt'
@@ -592,9 +592,7 @@ validateTurn(iceServers){
             port: config.peerPort,
             path: config.peerPath,
             secure: config.peerSecure,
-            debug: config.peerDebug,
-
-
+            debug: config.peerDebug
         })
         // iceServers: [
         //     { 'urls': 'stun:stun.l.google.com:19302' },
