@@ -1,3 +1,4 @@
+
 module.exports = {
     google: {
         clientID: '308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com',
@@ -16,15 +17,15 @@ module.exports = {
         key:"918027681781"
     },
     MESSAGE_ACTIVITY:"messageActivity",
-    domain:"http://localhost:9000",
-    frontEndDomain:"http://localhost:3000",
+    domain:"https://explain.bookmane.in",
+    frontEndDomain:"https://explain.bookmane.in",
     ADMIN_EMAIL:"bookmanelabs@gmail.com",
     EMAIL_SERVICE:'gmail',
     EMAIL_PASSWORD:"bookmane321$",
-    DATABAE_NAME:'toolArchi',
+    DATABAE_NAME:'explain_first',
     USER_NAME:'postgres',
-    PASSWORD:'postgres',
-    PORT:'9000',
+    PASSWORD:'bookmane321$',
+    PORT:'6060',
     SEND_SHARABLE_LINK:"sendSharableLink",
     LINK_TO_CALL: "linkTocall",
     REJECT_REPLY:"rejectRepply",
@@ -49,7 +50,7 @@ module.exports = {
     FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails",
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",
     UPDATE_RECORDER_BLOB:"updateRecorderBlob",
-    DEV_ENV:true,
+    DEV_ENV:false,
     SERVER_RECORDING:"serverRecording",
     SERVER_SHARING : "serverSharing",
     MAX_UPLOAD_LIMIT:125,

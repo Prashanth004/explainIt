@@ -31,23 +31,26 @@ const client = new Twitter({
                 profilePic : newProfilePic,
                 name: body.name
             })
+
             if(req.body.id!== undefined || req.body.id!== null ){
             database.db.manyOrNone('select * from usertwitter where userid = $1 and twitterhandle = $2',[req.body.id,req.body.twitterhandle])
             .then(data=>{
+		 
                 if(data.length=== 0){
-                    database.db.oneOrNone('insert into usertwitter (twitterhandle, userid)'+
-                    'values(${twitterhandle}, ${userid})',
+                    database.db.oneOrNone('insert into usertwitter (twitterhandle, userid)'+'values(${twitterhandle}, ${userid})',
                     {
                         twitterhandle:req.body.twitterhandle,
                         userid:req.body.id
                     })
                     .then(data=>{
+			
                     })
                     .catch(error=>{
                         console.log("error : ",error )
                     })
                 }
                 else{
+			
                 }
             })
             .catch(err=>{
