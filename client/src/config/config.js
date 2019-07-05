@@ -8,18 +8,18 @@ var token = JSON.parse(localStorage.getItem("token"))
 
 
 const conf = {
-    base_dir:"https://explain.bookmane.in",
-    react_url:"https://explain.bookmane.in",
+    base_dir:"http://localhost:9000",
+    react_url:"http://localhost:3000",
     dataTime : date+"__"+time,
     token:token,
     googleClientId:"308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com",
 
 
     peerHost:window.location.hostname,
-    //peerPort : 9000,
-    peerPort :443,
+    peerPort : 9000,
+    // peerPort :443,
     peerPath : '/peerjs',
-    peerSecure:true,
+    peerSecure:false,
     peerDebug:3,
     gitHubClientId:"5c7162c1bd8449fa8b00",
     EXMAIL_VALIDATE_TOKEN:"8d31cc402c99ec4e3d5545ae6a549c0f",
