@@ -1,4 +1,3 @@
-
 module.exports = {
     google: {
         clientID: '308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com',
@@ -22,9 +21,9 @@ module.exports = {
     ADMIN_EMAIL:"bookmanelabs@gmail.com",
     EMAIL_SERVICE:'gmail',
     EMAIL_PASSWORD:"bookmane321$",
-    DATABAE_NAME:'explain_first',
+    DATABAE_NAME:'toolArchi',
     USER_NAME:'postgres',
-    PASSWORD:'bookmane321$',
+    PASSWORD:'postgres',
     PORT:'9000',
     SEND_SHARABLE_LINK:"sendSharableLink",
     LINK_TO_CALL: "linkTocall",
@@ -50,7 +49,7 @@ module.exports = {
     FAILED_TO_GET_REPLIER_DETAILS:"failedToGetReplierDetails",
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",
     UPDATE_RECORDER_BLOB:"updateRecorderBlob",
-    DEV_ENV:false,
+    DEV_ENV:true,
     SERVER_RECORDING:"serverRecording",
     SERVER_SHARING : "serverSharing",
     MAX_UPLOAD_LIMIT:125,

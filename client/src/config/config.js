@@ -17,7 +17,7 @@ const conf = {
 
     peerHost:window.location.hostname,
     peerPort : 9000,
-    // peerPort :443,
+    // peerPort :(window.location.protocol === 'https:' ? 443 : 80),
     peerPath : '/peerjs',
     peerSecure:false,
     peerDebug:3,

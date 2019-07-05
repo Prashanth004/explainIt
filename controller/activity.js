@@ -25,7 +25,7 @@ exports.addActivity = (req,res)=>{
         data:data
     })
 }).catch(error=>{
-    console.log("error n saving activity: ",error)
+    console.log("error : ",error)
     res.status(500).send({
         success:0,
         error:error
