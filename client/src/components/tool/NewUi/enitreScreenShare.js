@@ -1150,6 +1150,7 @@ validateTurn(iceServers){
         registerEndToBrowser();
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
         if (!stopedSharing || this.state.retryLimit> 0) {
+            console.log("sdfkn")
             this.setState({ stopedSharing: true })
 
             if (call != null)
