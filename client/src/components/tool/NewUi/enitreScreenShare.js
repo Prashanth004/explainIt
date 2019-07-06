@@ -170,10 +170,10 @@ class ScreenRecorder extends Component {
                 video: {
                     mandatory: {
                         chromeMediaSource: 'desktop',
-                        maxWidth: 2020,
-                        maxHeight: 600,
-                        maxFrameRate: 100,
-                        minAspectRatio: 1.75,
+                        maxWidth: 1280,
+                        maxHeight: 720,
+                        maxFrameRate: 10,
+                        minAspectRatio: 1,
                         chromeMediaSourceId: sourceId
                     }
                 }
@@ -221,6 +221,7 @@ class ScreenRecorder extends Component {
         });
     }
     endCall() {
+        //one
         registerEndToBrowser();
         const { extSource, extOrigin } = this.props
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
@@ -417,6 +418,7 @@ class ScreenRecorder extends Component {
         socket.on(config.END_CALL, data => {
 
             if (data.clientId === self.state.destkey) {
+                console.log("end call from the other end")
                 this.setState({ manualClose: true })
                 if (config.CALL_LOGS)
                     console.log(" socket endCall : ");
@@ -1006,13 +1008,13 @@ validateTurn(iceServers){
             retry: true,
             retryLimit: this.state.retryLimit + 1,
             initiatedCloseCall: false
-
         })
         socket.emit(config.RETRYCALL, {
             "peerId": self.state.peerId
         })
         setTimeout(() => {
             if (self.state.retry && !self.state.clickedOnLink) {
+                console.log("retry time out ")
                 self.setState({
                     retryTimeOut: true
                 })
@@ -1139,6 +1141,7 @@ validateTurn(iceServers){
     }
 
     stopShare() {
+        console.log("stop share screen")
         const { twitterUserId, endSecondScreenShare, saveVideoBlob,
             fullStopedSharing, isSceenSharing, extOrigin, disableCallAction,
             extSource, postEndCall } = this.props
@@ -1146,7 +1149,7 @@ validateTurn(iceServers){
         const self = this;
         registerEndToBrowser();
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
-        if (!stopedSharing) {
+        if (!stopedSharing || this.state.retryLimit> 0) {
             this.setState({ stopedSharing: true })
 
             if (call != null)
@@ -1286,14 +1289,9 @@ validateTurn(iceServers){
                 this.props.twitterUserId
             ) : (this.state.recieverProfileId)
 
-            // const MuteButton = (this.props.isMuted) ? (
-            //     <button className="buttonLight" onClick={this.unMuteAudio}>Unmute </button>
-
-            // ) : (<button className="buttonDark" onClick={this.muteAudio}>Mute </button>
-            //     )
+          
             shareTimeElements = (
                 <div>
-                    {/* {MuteButton} */}
                     <Call
                         conn={this.state.conn}
                         shareMyScreen={this.shareMyScreen}

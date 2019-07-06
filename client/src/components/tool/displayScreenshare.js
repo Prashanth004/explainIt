@@ -555,6 +555,7 @@ class DisplayShare extends Component {
         window.open(config.react_url + '/login')
     }
     endCall() {
+        console.log("endcall Called")
         var call = this.state.call;
         this.setState({
             closedHere: true,

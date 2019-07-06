@@ -26,6 +26,7 @@ class Call extends Component {
         var socket = this.props.socket
            
         if(event.data.type===config.END_CALL_FROM_EXTENSION){
+            console.log(" end call from extension recieved")
             self.props.endCall();
             socket.emit(config.END_CALL, {
                 'peerId': self.props.peerId,
