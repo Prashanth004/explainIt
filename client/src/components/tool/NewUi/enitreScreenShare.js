@@ -35,7 +35,7 @@ import PropType from 'prop-types';
 import { restAllToolValue } from "../../../actions/toolActions";
 import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { displayFullScrenRecord } from '../../../actions/toolActions';
-import { callSuccessedUpate, initiateSend } from '../../../actions/callAction'
+import { callSuccessedUpate, initiateSend,retryCall } from '../../../actions/callAction'
 import { sendTweet } from '../../../actions/twitterApiAction';
 import LinkDisplay from './TweetAcceptHandle'
 
@@ -222,6 +222,7 @@ class ScreenRecorder extends Component {
     }
     endCall() {
         //one
+        console.log("end call called and is excecuted well")
         registerEndToBrowser();
         const { extSource, extOrigin } = this.props
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
@@ -232,6 +233,7 @@ class ScreenRecorder extends Component {
             closedHere: true,
             manualClose: true
         })
+        console.log("closed here is set to true")
         socket.emit(config.END_CALL, {
             'peerId': this.state.peerId,
             'timer-ended': false
@@ -535,6 +537,7 @@ validateTurn(iceServers){
     
     componentWillMount() {
         const { extSource, extOrigin } = this.props;
+        console.log("exceciting compWIllMount")
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         const result = browser();
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
@@ -866,7 +869,8 @@ validateTurn(iceServers){
         })
         socket.emit(config.RETRYCALL, {
             "peerId": self.state.peerId
-        })
+        });
+        this.props.retryCall()
         setTimeout(() => {
             if (self.state.retry && !self.state.clickedOnLink) {
                 console.log("retry time out ")
@@ -1449,6 +1453,7 @@ export default connect(mapStateToProps, {
     refreshExtension,
     explainByRecord,
     postEndCall,
+    retryCall,
     muteAudio, unMuteAudio,
     disableCallAction,
     displayFullScrenRecord,

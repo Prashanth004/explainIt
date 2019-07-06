@@ -7,6 +7,7 @@ import {CALL_DETAILS_ACCEPT,
     INITIATE_SEND,
     ANSWERED_CALL,
     RESET_CALL_ACTIONS,
+    RETRY_UPDATE_NO_OF_MINUTES,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     BASIC_INFO_OF_CALL,
@@ -97,6 +98,11 @@ export const deacreaseTimer = ()=>(dispatch)=>{
     })
 }
 
+export const retryCall = ()=>(dispatch)=>{
+    dispatch({
+        type:RETRY_UPDATE_NO_OF_MINUTES
+    })
+}
 export const setNoOfMinutes =(numberMinutes)=>(dispatch)=>{
 dispatch({
     type:SET_NUMBER_MINUTES,

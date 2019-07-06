@@ -9,6 +9,7 @@ import {CALL_DETAILS_ACCEPT,
     INITIATE_SEND,
     MUTE_AUDIO,
     UNMUTE_AUDIO,
+    RETRY_UPDATE_NO_OF_MINUTES,
     GET_ALL_ACTIVITES,
     GET_ALL_ACTIVITES_FAILED,
     INCREASE_CALL_BY_MINUTE,
@@ -74,6 +75,11 @@ export default function(state= initialState, action){
             ...state,
             sendinitiated:true
         }
+        case RETRY_UPDATE_NO_OF_MINUTES:
+            return{
+                ...state,
+                noOfMinutes:state.currentTimeLeft
+            }
         case RESET_CALL_ACTIONS:
         return{
             ...state,
