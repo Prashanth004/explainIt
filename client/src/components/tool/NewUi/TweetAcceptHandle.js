@@ -211,8 +211,8 @@ class tweetSearch extends Component {
                             <FiArrowLeft  onClick={this.changeTweetStateNeg} />
                         </span>
                         <div className="TwiValidInfo">
-                        <p style={{fontWeight:"500"}}>It is not a good idea to share screen with yourself</p>
-                        <p className="info">You have entered your twitter hanlde</p>
+                        <p style={{fontWeight:"500"}}>You have entered your own twitter handle</p>
+                        {/* <p className="info">You have entered your twitter hanlde</p> */}
                         </div>
                     </div>);
                      mainContainer = (null)

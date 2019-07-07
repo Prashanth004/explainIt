@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import config from '../../../config/config'
 import InputBox from './InputBox';
-import { FiSave, FiX, FiSend } from "react-icons/fi";
+import { FiX, FiSend } from "react-icons/fi";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import TweetSendMessage from './TweetSendMessage';
@@ -148,9 +148,9 @@ class SaveProjects extends Component {
             <span className="hint--top" aria-label="Send Recording">
                 <FiSend className="icon"  onClick={this.chooseSave} />
             </span>) : null
-        const saveOption = (this.props.twitterUserId !== null ||  this.props.visitedTiwtterHandle!==null)  ? (null) : (<span className="hint--top" aria-label="Save Recording">
-        <FiSave className="icon" onClick={this.props.saveClicked} />
-    </span>)
+    //     const saveOption = (this.props.twitterUserId !== null ||  this.props.visitedTiwtterHandle!==null)  ? (null) : (<span className="hint--top" aria-label="Save Recording">
+    //     <FiSave className="icon" onClick={this.props.saveClicked} />
+    // </span>)
         const subjectInoutBox = ((this.props.showInputBox) ? (
         <InputBox
             limitExce={this.state.limitExce}
@@ -174,7 +174,7 @@ class SaveProjects extends Component {
         return (!this.props.isSaveClicked && !this.state.sendMessageClicked) ?
             (<div className="ActivityBelow rcrdAct">
                 {shareOption}
-                {saveOption}
+              
                 <span className="hint--top" aria-label="Discard">
                     <FiX  className="icon"  onClick={this.props.closeImidiate} />
                 </span>

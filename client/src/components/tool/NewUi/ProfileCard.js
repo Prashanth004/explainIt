@@ -68,7 +68,7 @@ class ProfileCard extends Component {
         window.open("https://twitter.com/" + this.props.twitterHandle, '_blank')
     }
     render() {
-        const sustomAttr = { fontWeight: "normal" }
+        // const sustomAttr = { fontWeight: "normal" }
         const defaultToggle = (this.props.onlinestatus) ? true : false;
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
             : ('Online - people can send you share request')

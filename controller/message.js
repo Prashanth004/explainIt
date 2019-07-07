@@ -101,6 +101,8 @@ exports.replyaction = (req, res) => {
     var creatorEmail = "";
     var creatorUserName = "";
     var replierUserNamer = "";
+    var replierTwitterhandle = "";
+        
     var MailSubject = "Notification for reply to your Recording"
     var issueId = req.body.issueid;
     //fetching project details
@@ -120,7 +122,8 @@ exports.replyaction = (req, res) => {
                                 .then(data3 => {
                                     if (data3) {
                                         replierUserNamer = data3.username
-                                        var htmlContent = "<p>hi " + creatorUserName + ",</p><br/><p> " + replierUserNamer + " has replied to your recording with subject '" +
+                                        replierTwitterhandle = data3.twitterhande
+                                        var htmlContent = "<p>hi " + creatorUserName + ",</p><br/><p> @" + replierTwitterhandle + " has replied to your recording with subject '" +
                                             subject + "'</p><br/> <a href='" + link + "'>click here</a>"
                                         userController.sendEmail(creatorEmail, MailSubject, htmlContent)
                                     }
@@ -228,7 +231,7 @@ exports.saveMessage = function (req, res) {
                                 if (fromData) {
 
                                     var subject = "Message notification";
-                                    var htmlContent = "<p>You have got a new recorded message from " + fromData.username + ".</p><br/><p><a href='" + config.frontEndDomain + "'>click here</a> to view</p>"
+                                    var htmlContent = "<p>You have got a new recorded message from @" + fromData.twitterhandle + ".</p><br/><p><a href='" + config.frontEndDomain + "'>click here</a> to view</p>"
                                     userController.sendEmail(toData.email, subject, htmlContent)
                                 }
 
