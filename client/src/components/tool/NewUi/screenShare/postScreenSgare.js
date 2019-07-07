@@ -46,6 +46,7 @@ const savingProcessDiv = (!props.isSaved)?(
     var MessageDisconnected = null;
 
     if (props.timerEnded) {
+        console.log("checking saving action")
         if (!props.saveinitiated && props.peerAudioBlob !== null && props.blob !== null) { props.savefilePrivate() }
         MessageDisconnected = (
             <div>
@@ -54,6 +55,7 @@ const savingProcessDiv = (!props.isSaved)?(
             </div>)
     }
     else if (props.showDisconectMessage && !props.closedHere && props.manualClose) {
+        console.log("checking saving action")
         if (!props.saveinitiated && props.peerAudioBlob !== null && props.blob !== null) { props.savefilePrivate() }
         MessageDisconnected = (<div>
             <p><b>Call ended from other peer</b></p>
@@ -71,6 +73,7 @@ const savingProcessDiv = (!props.isSaved)?(
                     <FiVideo className="icon" onClick={props.recordCall} />
                 </span>
                 <span className="hint--top" aria-label="End Call Session">
+
                     <FiX className="icon" onClick={props.savefilePrivate} />
                 </span>
             </div>) : (null)
@@ -109,6 +112,7 @@ const savingProcessDiv = (!props.isSaved)?(
         )
     }
     else {
+        console.log("checking saving action")
         if (!props.saveinitiated && props.peerAudioBlob !== null && props.blob !== null) { props.savefilePrivate() }
         MessageDisconnected = (<div>
             <p><b>Call ended</b></p>

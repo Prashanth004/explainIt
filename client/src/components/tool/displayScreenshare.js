@@ -4,7 +4,7 @@ import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
-import Peer from 'peerjs';
+// import Peer from 'peerjs';
 import Countdown from 'react-countdown-now';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
@@ -111,7 +111,7 @@ class DisplayShare extends Component {
     }
 
     onUnload(event) {
-        if (!this.state.callEnded) {
+        if (!this.state.callEnded ) {
             const { extSource, extOrigin, postEndCall } = this.props;
             postEndCall(config.END_CALL_RECIEVER_PEER_FROM_WEB, extSource, extOrigin);
             this.closeConnection();

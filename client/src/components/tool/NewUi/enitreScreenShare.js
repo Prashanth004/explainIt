@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
 import bigInt from "big-integer";
-import Peer from 'peerjs';
+// import Peer from 'peerjs';
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
 import DownloadExt from './container/DownloadExt'
@@ -245,7 +245,12 @@ class ScreenRecorder extends Component {
                 peer: null
             })
         }
-        self.stopShare()
+        if (!self.state.initiatedCloseCall) {
+            self.stopShare()
+            self.setState({
+                initiatedCloseCall: true
+            })
+        }
         self.setState({
             initiatedCloseCall: true
         })
@@ -297,9 +302,11 @@ class ScreenRecorder extends Component {
 
     onUnload(event) { // the method that will be used for both add and remove event
         registerEndToBrowser();
-        window.source.close();
+        this.props.turnnotbusy(this.props.twitterUserId);
+        // window.source.close();
 
         if (this.props.isSceenSharing) {
+            console.log("dskmflskfkln")
             this.endCall()
             event.returnValue = "Hellooww";
 
@@ -339,7 +346,7 @@ class ScreenRecorder extends Component {
     componentDidMount() {
         // const videoPlayer = this.VideoPlyr;
         // videoPlayer.addEventListener("playing", this.play_clicked, false);
-        window.addEventListener("beforeunload", this.onUnload)
+        window.addEventListener("beforeunload", this.onUnload);
         var socket = this.props.socket;
         var self = this
         var peer = this.state.peer;
@@ -1046,6 +1053,7 @@ validateTurn(iceServers){
                         blob: blob,
                         recorder: null
                     })
+                    console.log("saving the blobs")
                     saveVideoBlob(blob)
                 });
             if (isSceenSharing)
