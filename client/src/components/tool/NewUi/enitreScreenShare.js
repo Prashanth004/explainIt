@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
 import bigInt from "big-integer";
-// import Peer from 'peerjs';
+import Peer from 'peerjs';
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
 import DownloadExt from './container/DownloadExt'
@@ -559,7 +559,7 @@ validateTurn(iceServers){
 
         
         var self = this;
-        var peer = new window.Peer({
+        var peer = new Peer({
             host: config.peerHost,
             port:  config.peerPort,
             path: config.peerPath,

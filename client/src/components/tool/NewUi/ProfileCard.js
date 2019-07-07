@@ -113,7 +113,7 @@ class ProfileCard extends Component {
                         </span>
                     </div>
                     <div className="screenShareBtnLabel">
-                        <span className="hint--top" aria-label="Share screen!">
+                        <span className="hint--top" aria-label="Share Screen">
                             <IconContext.Provider value={{ color: "#333", size: "25px" }}>
                                 <div>
                                     < FiCopy style={{ marginTop: "1.5px" }} onClick={this.startSharingScreen} />
@@ -127,7 +127,7 @@ class ProfileCard extends Component {
 
                     </div>
                     <div className="RecordBtnLabel">
-                        <span className="hint--top" aria-label="Record screen!">
+                        <span className="hint--top" aria-label="Record Screen">
                             <IconContext.Provider value={{ color: "#333", size: "29px" }}>
                                 <div>
                                     <FiVideo style={{ marginTop: "1.5px" }} onClick={this.startRecordScreen} />

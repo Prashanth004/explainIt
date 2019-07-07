@@ -1,0 +1,18 @@
+.nextButton{
+    border:solid;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    border-color:#2b8b8f;
+    background-color: white;
+    border-width:1px;
+    color:#2b8b8f;
+
+}
+.nextButton:hover{
+    border-color:white;
+    background-color:#2b8b8f;
+
+    color:white;
+
+}

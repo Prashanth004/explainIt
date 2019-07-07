@@ -120,7 +120,7 @@ exports.replyaction = (req, res) => {
                                 .then(data3 => {
                                     if (data3) {
                                         replierUserNamer = data3.username
-                                        var htmlContent = "<p>hi " + creatorUserName + "</p><br/><p> " + replierUserNamer + " has replied to your recording with subject '" +
+                                        var htmlContent = "<p>hi " + creatorUserName + ",</p><br/><p> " + replierUserNamer + " has replied to your recording with subject '" +
                                             subject + "'</p><br/> <a href='" + link + "'>click here</a>"
                                         userController.sendEmail(creatorEmail, MailSubject, htmlContent)
                                     }

@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { FiMail } from "react-icons/fi";
 import '../../css/nav.css';
 import '../../css/issueDetails.css';
-import { FiLogOut } from "react-icons/fi";
+import { FiPower } from "react-icons/fi";
 // import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-import { confirmAlert } from 'react-confirm-alert'; 
+import { confirmAlert } from 'react-confirm-alert';
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
 import { openHome, openInbox, openCreated, openParticipated } from '../../../actions/navAction'
@@ -21,7 +21,7 @@ class Navigationbar extends React.Component {
       isOpen: false,
       isViewPage: false,
       isProjectPage: false,
-      optionVisibe :"hidden"
+      optionVisibe: "hidden"
     };
     this.googleResponse = this.googleResponse.bind(this);
     this.handleGit = this.handleGit.bind(this);
@@ -36,34 +36,34 @@ class Navigationbar extends React.Component {
   }
 
   logout = () => {
-    const message =this.props.isSceenSharing ? "The call will get disconnected":"The ongoing screen recording will end"
-    if ((this.props.isSceenSharing  || this.props.isFullScreenRecording)) {
+    const message = this.props.isSceenSharing ? "The call will get disconnected" : "The ongoing screen recording will end"
+    if ((this.props.isSceenSharing || this.props.isFullScreenRecording)) {
 
-        confirmAlert({
-            title: "Are you sure?",
-            message: message,
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => this.handleConfirm()
-                },
-                {
-                    label: 'No',
-                    onClick: () => this.handleCancel()
-                }
-            ]
-        })
+      confirmAlert({
+        title: "Are you sure?",
+        message: message,
+        buttons: [
+          {
+            label: 'Yes',
+            onClick: () => this.handleConfirm()
+          },
+          {
+            label: 'No',
+            onClick: () => this.handleCancel()
+          }
+        ]
+      })
     }
     else {
-        this.handleConfirm()
+      this.handleConfirm()
     }
-}
-handleCancel=()=>{
+  }
+  handleCancel = () => {
 
-}
-handleConfirm() {
-  this.props.signout()
-}
+  }
+  handleConfirm() {
+    this.props.signout()
+  }
   componentWillMount() {
     this.props.stillAuthenicated()
     if (this.props.page !== undefined && this.props.page === "profile")
@@ -89,13 +89,13 @@ handleConfirm() {
   }
   openHome() {
     if (!(window.location.pathname).includes('application'))
-      window.open(config.react_url+'/application', '_self')         
+      window.open(config.react_url + '/application', '_self')
     else {
-      if(this.props.isSceenSharing || this.props.isFullScreenRecording)
-        window.open(config.react_url+'/application', '_blank')
+      if (this.props.isSceenSharing || this.props.isFullScreenRecording)
+        window.open(config.react_url + '/application', '_blank')
       else
-      this.props.openHome()
-     
+        this.props.openHome()
+
     }
 
   }
@@ -110,10 +110,10 @@ handleConfirm() {
   }
   toggleDropDown() {
     if (this.state.optionVisibe === "hidden")
-    this.setState({ optionVisibe: "visible" })
-else {
-    this.setState({ optionVisibe: "hidden" })
-}
+      this.setState({ optionVisibe: "visible" })
+    else {
+      this.setState({ optionVisibe: "hidden" })
+    }
   }
   openVisitHome() {
 
@@ -135,7 +135,7 @@ else {
     var explainLogo = (
       <div className="logoContainer" onClick={this.openHome}>
         <span>
-          <img alt="open home"src={require('../../images/logo.png')}
+          <img alt="open home" src={require('../../images/logo.png')}
             width="100%"
             height="100%"></img>
         </span>
@@ -152,40 +152,40 @@ else {
 
       }
     }
-    else if(this.props.inbox){
+    else if (this.props.inbox) {
       inboxStyle = {
         color: "#d3a5cd",
 
       }
     }
- 
 
-    var options=null;
+
+    var options = null;
     if ((this.props.Created || this.props.Participated)
       && this.state.isViewPage
       && !this.props.isAuthenticated) {
       profileImage = (null);
-      options=(null)
-    
+      options = (null)
+
     }
     else {
       profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (
-                    <div className="cardDropdown" >
-                    <div className="profileImagesDiv">
-                        <span>
-                           <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
-                         </span>
-                      </div>
-                    <div className="dropDownForOption drpLogout"
-                        onMouseLeave={this.toggleDropDown}  style={{ visibility: this.state.optionVisibe,width:"120px",height:"40px", marginLeft:"-50px",marginTop:"3px" }}>
-                        <div className="menuItem" >
-                          <div ><span onClick={this.logout}><FiLogOut /></span></div>
-                          <div>
-                            <span onClick={this.logout} className> Logout</span>
-                          </div>
-                        </div>
-                    </div>
-                </div>):(null)
+        <div className="cardDropdown" >
+          <div className="profileImagesDiv">
+            <span>
+              <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
+            </span>
+          </div>
+          <div className="dropDownForOption drpLogout"
+            onMouseLeave={this.toggleDropDown} style={{ visibility: this.state.optionVisibe, width: "120px", height: "40px", marginLeft: "-50px", marginTop: "3px" }}>
+            <div className="menuItem" >
+              <div ><span onClick={this.logout}><FiPower /></span></div>
+              <div>
+                <span onClick={this.logout} className> Logout</span>
+              </div>
+            </div>
+          </div>
+        </div>) : (null)
 
     }
 
@@ -195,14 +195,17 @@ else {
 
       centreNav = (<div className="navgation">
         <div onClick={this.openCreated} className="normalNav">
-          <button  style={createdStyle} className="noButtons"><span>Created</span></button>
+          <button style={createdStyle} className="noButtons"><span>Created</span></button>
         </div>
-        <div className="logoCentre Create">
-          <div className="logoContainerCreate" >
-            <span>
-              <FiMail onClick={this.props.openInbox} style={inboxStyle} className="dragoMail" />
-            </span>
-          </div>                  </div>
+        <div className="logoCentre">
+        <div className="pImageContainer">
+              <span>
+                <img alt="profile pic" src={this.props.profilePic}
+                  onClick={this.props.openInbox}
+                  className="labelProfilePicNav"></img>
+              </span>
+
+            </div>                </div>
         <div className="normalNav">
           <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
         </div>
@@ -210,23 +213,23 @@ else {
     }
 
     else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated)) {
-      
+
       if ((this.props.Created || this.props.Participated)) {
         centreNav = (<div className="navgation">
           <div onClick={this.openCreated} className="normalNav">
             <button onClick={this.openCreated} style={createdStyle} className="noButtons"><span>Created</span></button>
           </div>
           <div className="logoCentre">
-          
+
             <div className="pImageContainer">
-                    <span>
-                        <img alt="profile pic"src={this.props.otherprofilePic} 
-                            onClick={this.props.openInbox}
-                            className="labelProfilePicNav"></img>
-                    </span>
-                        
-                    </div>
+              <span>
+                <img alt="profile pic" src={this.props.otherprofilePic}
+                  onClick={this.props.openInbox}
+                  className="labelProfilePicNav"></img>
+              </span>
+
             </div>
+          </div>
           <div className="normalNav">
             <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
           </div>
@@ -237,7 +240,7 @@ else {
 
     }
     else {
-     
+
       // centreNav = (<SearchBar />)
     }
     const content = (<div className="navBar">
@@ -252,8 +255,8 @@ else {
       <div className="navItem">
         <div></div>
         <div>
-        {profileImage}
-        </div>   
+          {profileImage}
+        </div>
 
       </div>
     </div>)
@@ -298,7 +301,7 @@ const mapStateToProps = state => ({
 
 
 })
-export default connect(mapStateToProps, { openHome, openInbox,  openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+export default connect(mapStateToProps, { openHome, openInbox, openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
 
 
 

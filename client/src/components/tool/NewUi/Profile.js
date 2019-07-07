@@ -28,13 +28,14 @@ class Profile extends Component {
     closeProfileSection(){
         if((this.props.bio === null||(this.props.bio).length===0) && this.props.isHome)
             this.setState({openBasicFill:true})
-        this.props.openDtailsTab()
+        this.props.openDtailsTab();
+        this.props.closeEditProfile();
     }
     closeEdit() {
         this.props.closeEditProfile()
     }
     render() {
-        const editbtn = (this.props.openEdirProfile || this.props.bio.length === 0)?(null):(  <span  className="hint--top edit" aria-label="Edit!">
+        const editbtn = (this.props.openEdirProfile || this.props.bio.length === 0)?(null):(<span  className="hint--top edit" aria-label="Edit!">
         <FiEdit onClick={this.openEdit} className="edit" />
     </span>)
         const editOption = (this.props.isHome) ? (
@@ -125,7 +126,7 @@ class Profile extends Component {
                     closeEdit={this.closeEdit} />
             )
         return (
-            <div>
+            <div  style={{textAlign:"centre"}}>
                 <div className="profileConatinerMain">
                     {editOption}
                    

@@ -68,13 +68,13 @@ class ProfileForm extends Component {
             })
         }
        else if(this.state.goodAtValue!==null)
-        if (this.state.goodAtValue.length > 150) {
+        if (this.state.goodAtValue.length > 100) {
             this.setState({
                 goodAtValueError: true
             })
         }
        else if(this.state.bioValue!==null)
-        if (this.state.bioValue.length > 200) {
+        if (this.state.bioValue.length > 100) {
             this.setState({
                 bioValueError: true
             })
@@ -167,7 +167,7 @@ class ProfileForm extends Component {
 
     render() {
         return (this.state.saveClicked) ? (
-            <div style={{ marginTop: "40px" }}>
+            <div style={{ marginTop: "40px", textAlign:"centre", alignSelf:"centre"}}>
                 <h5>Updating.</h5>
             </div>
         ) :(!this.state.nextSetion)?(<Section1 

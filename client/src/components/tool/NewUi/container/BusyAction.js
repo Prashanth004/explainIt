@@ -3,12 +3,14 @@ import config from '../../../../config/config';
 import Boldpara from './boldp'
 
 export default (props) => {
-  const busyStatus = (props.currentAtionStatus === config.FULL_SCREEN_SHARE)?('sharing you screen'):('recording your screen');
-  return (
-    <div style={{padding:"20px"}}>
+  // const  = (props.currentAtionStatus === config.FULL_SCREEN_SHARE)?('Screen share in progress'):('Screen record in progress');
+  const busyStatus =  (props.action === "record")?(
+    props.currentAtionStatus === config.FULL_SCREEN_SHARE?("Screen share in progress. Record can't happen"):
+    ("Record already in progress")
+  ):(props.currentAtionStatus === config.FULL_SCREEN_SHARE?("Screen share aready in progress"):
+  ("Screen record in progress. You can not share your screen till it is ended"))
 
-      <Boldpara content={"You are currently "+busyStatus}/>
-      <Boldpara content={"End the previous process to get started"}/>
-    </div>
-  )
+  return (<div style={{padding:"20px"}}>
+ <Boldpara content={busyStatus}/>
+  </div>)
 }

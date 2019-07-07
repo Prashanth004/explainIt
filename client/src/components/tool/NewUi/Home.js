@@ -534,7 +534,7 @@ class NewHome extends Component {
                     savefile={this.saveVideoData}
                 />):(<div className="LinkDisplay">
                <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
-                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                <BusyAction  action="record"currentAtionStatus = {this.state.currentAtionStatus}/>
                 </div>)
             }
             else if (this.props.screenAction === FULL_SCREEN_SHARE) {
@@ -546,7 +546,7 @@ class NewHome extends Component {
                     savefile={this.saveVideoData}
                 />):(<div className="LinkDisplay">
                 <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
-                <BusyAction  currentAtionStatus = {this.state.currentAtionStatus}/>
+                <BusyAction  action="share"currentAtionStatus = {this.state.currentAtionStatus}/>
                 </div>)
             }
             else {

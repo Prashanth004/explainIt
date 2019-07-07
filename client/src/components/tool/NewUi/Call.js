@@ -138,10 +138,14 @@ class Call extends Component {
 
     }
     render() {
-        const messageOfScreenShare = (!this.props.myscreenSharing) ? (null) :
-            (<h4><b>Your screen is being shared</b></h4>)
+        const {otherPersonName,topicOfTheCall,myscreenSharing} = this.props;
+        const messageOfScreenShare = (!myscreenSharing) ? (null) :
+            (
+            <div><h4><b>Your screen is being shared to {otherPersonName}  </b></h4>
+            <h5>Topic : {topicOfTheCall}</h5>
+            </div>)
 
-        const shouldDisplay = (!this.props.myscreenSharing) ? ("block") : ("none")
+        const shouldDisplay = (!myscreenSharing) ? ("block") : ("none")
 
         var showCanv = (this.state.showCanvas) ? (
             <div className="canvToolDivCall">
@@ -193,6 +197,7 @@ const mapStateToProps = state => ({
     timeAloted: state.call.noOfMinutes,
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
+    topicOfTheCall : state.call.topicOfTheCall
 })
 
 export default connect(mapStateToProps, {postStartCall,deacreaseTimer,showCanvas,increaseTimer, hideCanvas })(Call)

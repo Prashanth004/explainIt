@@ -4,7 +4,7 @@ import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
-// import Peer from 'peerjs';
+import Peer from 'peerjs';
 import Countdown from 'react-countdown-now';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
@@ -303,7 +303,7 @@ class DisplayShare extends Component {
             socket: socket
         });
         this.props.answerCall()
-        var peer = new window.Peer({
+        var peer = new Peer({
             host: config.peerHost,
             port:  config.peerPort,
             path: config.peerPath,
