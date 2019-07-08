@@ -464,7 +464,11 @@ color:black;
     /* background-color:  rgb(246, 246, 246) */
   }
  
- 
+ .HowTWorksDiv{
+   position:fixed;
+   bottom:20px;
+   left:20px;
+ }
   .modalBody{
     background-color :white;
     padding:0px;

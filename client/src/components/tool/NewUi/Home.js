@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import '../../css/newlanding.css'
+import '../../css/NewSignin.css'
 import Navbar from './Navbar';
 import BusyAction from './container/BusyAction';
-
+import ExplinerVideoModal from './container/explainerModal'
 import EmailVarify from './emailvarify'
 import { MdCallEnd, MdCall } from "react-icons/md";
 import Activity from './Activies/indexActivity'
@@ -70,6 +71,7 @@ class NewHome extends Component {
             newCall:true,
             reducedLittleWidth:false,
             currentAtionStatus:null,
+            showExplainerVideo:false
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -93,6 +95,7 @@ class NewHome extends Component {
         this.saveVideoData = this.saveVideoData.bind(this);
         this.showInbox = this.showInbox.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
+        this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
     
     }
     toggleDisplayLink() {
@@ -322,6 +325,11 @@ class NewHome extends Component {
             })
         }
     }
+    toggleExplainerVideo(){
+    this.setState({
+        showExplainerVideo:!this.state.showExplainerVideo
+    })
+}
     showInbox() {
         this.setState({
             showDetails: false,
@@ -705,7 +713,13 @@ class NewHome extends Component {
                     <div>
                         {details}
                     </div>
+                    <div className="HowTWorksDiv">
+                        <button className="buttonDark"onClick={this.toggleExplainerVideo}>How it works</button>
+                    </div>
                 </div>
+                <Modal  size='lg' centered ={true} isOpen={this.state.showExplainerVideo} toggle={this.toggleExplainerVideo} external={externalCloseBtn}>
+                        <ExplinerVideoModal />
+                </Modal>
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
                     <ModalBody className="modalBody">
                         {deatilsModal}

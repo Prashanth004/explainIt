@@ -3,7 +3,7 @@ import TwitterLogin from 'react-twitter-auth';
 import { connect } from 'react-redux';
 import config from '../../../config/config'
 import { twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
-import '../../css/ExplainpPage.css'
+
 import PropType from 'prop-types';
 import '../../css/ExplainpPage.css'
 class ExplainPage extends Component {

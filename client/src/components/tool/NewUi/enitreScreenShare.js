@@ -645,6 +645,7 @@ validateTurn(iceServers){
         })
 
         peer.on('connection', (conn) => {
+            console.log("PEEERJS : peerjs connection established")
             if (config.CALL_LOGS)
                 console.log("got the connection set")
             this.setState({ conn: conn })

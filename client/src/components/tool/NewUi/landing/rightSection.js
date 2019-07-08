@@ -1,6 +1,7 @@
 import React from 'react'
 import LogoContainer from './logoContainer'
 import './landing.css'
+import Signin from './signin'
 import Form from './form'
 export default () => {
   return (
@@ -12,6 +13,8 @@ export default () => {
 </h6>
             <br/>
             <Form />
+            <br />
+           <Signin />
          </div>
 
         </div>
