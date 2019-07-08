@@ -8,8 +8,8 @@ module.exports = {
         clientSecret:"2dc2241f50794c71ded61545fd3d34cfc4338947"
     },
     twitter:{
-        key :"Auz3a4BeVAVKRcO1ZVvRvbJDa",
-        secret : "FDBIlsYilBeoAi2vZyZubM0qFEPtJeaPoPVQ6ki2g2M9xqTTiA"
+        key :"13FbniOUPv6B1QNBpV8mxtYwh",
+        secret : "Yju3DJjiWkAr6WoxiqD2UkVQOxnCZVTGcekZBxU0Xg64rCCDc5"
     },
     secret:"thebookmaneisawesomeiguess",
     decryptKey:{

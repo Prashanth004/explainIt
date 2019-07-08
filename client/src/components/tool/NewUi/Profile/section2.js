@@ -8,6 +8,13 @@ import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
 export default (props) => {
     const {angelListError,gitHibError,linkInerror,SecTrans,linkedInValue,changeAngelList,
         uploadData, gitHubValue,angelListValue,changeLinkedIn,changeGithub}= props
+        // this.state.gitHubValue.includes('github.com')
+        // ('https://www.linkedin.com/'+this.state.linkedInValue)
+        // ('https://angel.co/'+this.state.angelListValue);
+        const gitHubValueDis = gitHubValue!==null?((!gitHubValue.includes('github.com'))?(gitHubValue):(gitHubValue.split('com')[1].split('/')[1])):(null)
+        const linkedInValueDis = linkedInValue!==null?((!linkedInValue.includes('www.linkedin.com'))?(linkedInValue):(linkedInValue.split('com')[1].split('/')[1]+'/'+linkedInValue.split('com')[1].split('/')[2])):(null)
+        const angelListValueDis = angelListValue!==null?((!angelListValue.includes('angel.co'))?(angelListValue):(angelListValue.split('co')[1].split('/')[1])):(null)
+
     const angelerrorDiv = (angelListError) ? (<div>
         <span className="errorSpan">invalid angel list URL</span>
         <br/></div>) : (null)
@@ -36,7 +43,7 @@ export default (props) => {
                 {/* <span  className="support">(optional)</span> */}
                 <input
                 type="text" 
-                    value={linkedInValue}
+                    value={linkedInValueDis}
                     onChange={changeLinkedIn} className="inputboxes" />
                 {linkedinerrorDiv}
                 <br/>
@@ -46,7 +53,7 @@ export default (props) => {
                 
                 {/* <span  className="support">(optional)</span> */}
                 <input
-                    value={gitHubValue}
+                    value={gitHubValueDis}
                     type="text" onChange={changeGithub} className="inputboxes" />
                 {githuerrorDiv}
                 <br/>
@@ -57,7 +64,7 @@ export default (props) => {
                
                 {/* <span  className="support">(optional)</span> */}
                 <input
-                    value={angelListValue}
+                    value={angelListValueDis}
                     type="text" onChange={changeAngelList} className="inputboxes" />
                 {angelerrorDiv}
                

@@ -21,10 +21,10 @@ var options = {
     , integer: true
 }
 const client = new Twitter({
-    consumer_key: 'Auz3a4BeVAVKRcO1ZVvRvbJDa',
-    consumer_secret: 'FDBIlsYilBeoAi2vZyZubM0qFEPtJeaPoPVQ6ki2g2M9xqTTiA',
-    access_token_key: '1090895508699176960-dwE2I31URS2FFnctXJmcWzL75Des6o',
-    access_token_secret: 'LCEHpUBTU4yxMY5YYJxPKI8A6eVqoIJehImLYByU9HhB1'
+    consumer_key: '13FbniOUPv6B1QNBpV8mxtYwh',
+    consumer_secret: 'Yju3DJjiWkAr6WoxiqD2UkVQOxnCZVTGcekZBxU0Xg64rCCDc5',
+    access_token_key: '1090895508699176960-QqF7yJ4coLzo0nMnVXim5ZU47d0Tds',
+    access_token_secret: 'CBIi0ipduhdLRJNUQRUZsT0wCLKuMGpwzkb7nR8PKx3Qc'
   });
 
 
@@ -45,6 +45,7 @@ exports.onBoardUser = function (req,res){
      }
       client.get('users/show.json', params, function(error,body ,response){
          if(error!==null){
+             console.log("error is happening here")
              console.log("error : ",error)
             res.status(200).send({
                 success:0
@@ -147,13 +148,16 @@ const UpdateBusy =(res,queryObj)=>{
 }
 
 exports.turnBusy = (req,res)=>{
+    console.log("###################")
+    console.log("req.user.id : ", req.user.id);
+    console.log("req.body.recieverCallId : ",req.body.recieverCallId);
     var query1 = {
         'sql':'update users SET busy = $1 WHERE id = $2',
         'data': [1, req.user.id]
     }
     var query2 ={}
     if(req.body.action === config.FULL_SCREEN_RECORD){
-        UpdateBusy(res,query1)
+        UpdateBusy(res,query1);
     }
     else if(req.body.action === config.FULL_SCREEN_SHARE){
         query2 = {
@@ -162,8 +166,10 @@ exports.turnBusy = (req,res)=>{
         }
         database.db.oneOrNone(query1.sql,query1.data)
         .then(data=>{
+            console.log("change one to busy")
             database.db.oneOrNone(query2.sql,query2.data)
             .then(data=>{
+                console.log("change another one to busy")
                 res.status(202).send({
                     success:1
                 })

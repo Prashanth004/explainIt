@@ -312,7 +312,11 @@ class ShareFloater extends Component {
         if (completed) {
             return (null)
         } else {
-            return <span>{hours}:{minutes}:{seconds}</span>;
+            var minutesF = hours*60+minutes
+            minutesF = (minutes<10)?('0'+minutes):minutes;
+ 
+            const secondsF = (seconds<10)?('0'+seconds):seconds;
+             return <span>{minutesF}:{secondsF}</span>;
         }
     };
     render() {

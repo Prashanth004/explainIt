@@ -6,6 +6,7 @@ import '../css/shareScreen.css';
 import '../css/call.css';
 // import Peer from 'peerjs';
 import Countdown from 'react-countdown-now';
+import { registerCallToBrowser, registerEndToBrowser } from './NewUi/container/miscFunction';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
 import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
@@ -420,6 +421,7 @@ class DisplayShare extends Component {
                     type: 'audio'
                 });
                 recorder1.startRecording();
+                registerCallToBrowser();
                 self.setState({ recorder: recorder1, connectionFailed: false });
                 self.saveBlobtimeOut = setTimeout(() => {
                     const { recorder } = self.state;
@@ -565,7 +567,11 @@ class DisplayShare extends Component {
         if (completed) {
             return (null)
         } else {
-            return <span>{hours}:{minutes}:{seconds}</span>;
+            var minutesF = hours*60+minutes
+            minutesF = (minutes<10)?('0'+minutes):minutes;
+ 
+            const secondsF = (seconds<10)?('0'+seconds):seconds;
+             return <span>{minutesF}:{secondsF}</span>;
         }
     };
 
@@ -625,6 +631,7 @@ class DisplayShare extends Component {
         });
     }
     closeConnection() {
+        registerEndToBrowser();
         const self = this;
         const { socket, recorder, clientPeerid, closedHere, stream, secondVideoStream } = this.state;
         const { extSource, extOrigin, postEndCall } = this.props;

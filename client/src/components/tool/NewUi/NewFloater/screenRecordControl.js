@@ -44,7 +44,11 @@ class RecordFloater extends Component {
             if ((minutes + (seconds / 60)) === 0.1)
                 this.props.updateTime();
             var currentTime = JSON.parse(localStorage.getItem('curTime'));
-            return <span>{currentTime.hours}:{currentTime.minutes}:{currentTime.seconds}</span>;
+            // return <span>{currentTime.hours}:{currentTime.minutes}:{currentTime.seconds}</span>;
+            var minutesF = currentTime.hours*60+currentTime.minutes
+            minutesF = (currentTime.minutes<10)?('0'+currentTime.minutes):currentTime.minutes;
+            const secondsF = (currentTime.seconds<10)?('0'+currentTime.seconds):currentTime.seconds;
+             return <span>{minutesF}:{secondsF}</span>;
         }
 
         if (completed) {

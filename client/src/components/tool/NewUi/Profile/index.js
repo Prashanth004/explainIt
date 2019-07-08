@@ -121,26 +121,23 @@ class ProfileForm extends Component {
     }
     uploadData() {
         if(this.state.linkedInValue.length!==0){
-            if (!this.state.linkedInValue.includes('www.linkedin.com')) {
-                this.setState({
-                    linkInerror: true
-                })
-            }
+            const linkedInValue = (this.state.linkedInValue.includes('www.linkedin.com'))?
+            (this.state.linkedInValue):('https://www.linkedin.com/'+this.state.linkedInValue);
+            this.setState({linkedInValue:linkedInValue})
+           
         }
         if(this.state.gitHubValue.length!==0){
-        if (!this.state.gitHubValue.includes('github.com')) {
-                this.setState({
-                    gitHibError: true
-                })
-            }
+            const gitHubValue = (this.state.gitHubValue.includes('github.com'))?
+            (this.state.gitHubValue):('https://github.com/'+this.state.gitHubValue);
+            this.setState({gitHubValue:gitHubValue})
         }
+   
         if(this.state.angelListValue.length!==0){
-        if (!this.state.angelListValue.includes('angel.co')) {
-                this.setState({
-                    angelListError: true
-                })
-            }
+            const angelListValue = (this.state.angelListValue.includes('angel.co'))?
+            (this.state.angelListValue):('https://angel.co/'+this.state.angelListValue);
+            this.setState({angelListValue:angelListValue})
         }
+        
      
         setTimeout(()=>{
             if(!this.state.angelListError &&

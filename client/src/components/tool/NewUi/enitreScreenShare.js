@@ -798,10 +798,11 @@ validateTurn(iceServers){
                     if (!self.state.initiatedCloseCall) {
                         self.stopShare()
                         self.setState({ initiatedCloseCall: true })
-                    }
+                    
                     socket.emit(config.CLOSE_NETWORK_ISSUE, {
                         'otherPeerId': self.state.peerId
                     })
+                }
                 }, 2500)
 
 
@@ -838,7 +839,11 @@ validateTurn(iceServers){
             return (<Dummy></Dummy>)
         } else {
             // Render a countdown
-            return <span>{hours}:{minutes}:{seconds}</span>;
+           var minutesF = hours*60+minutes
+           minutesF = (minutes<10)?('0'+minutes):minutes;
+
+           const secondsF = (seconds<10)?('0'+seconds):seconds;
+            return <span>{minutesF}:{secondsF}</span>;
         }
     };
 

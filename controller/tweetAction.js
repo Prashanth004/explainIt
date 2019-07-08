@@ -2,10 +2,10 @@ var Twitter = require('twitter');
 var id = null
 var database = require('../app')
 const client = new Twitter({
-    consumer_key: 'Auz3a4BeVAVKRcO1ZVvRvbJDa',
-    consumer_secret: 'FDBIlsYilBeoAi2vZyZubM0qFEPtJeaPoPVQ6ki2g2M9xqTTiA',
-    access_token_key: '1090895508699176960-dwE2I31URS2FFnctXJmcWzL75Des6o',
-    access_token_secret: 'LCEHpUBTU4yxMY5YYJxPKI8A6eVqoIJehImLYByU9HhB1'
+    consumer_key: '13FbniOUPv6B1QNBpV8mxtYwh',
+    consumer_secret: 'Yju3DJjiWkAr6WoxiqD2UkVQOxnCZVTGcekZBxU0Xg64rCCDc5',
+    access_token_key: '1090895508699176960-QqF7yJ4coLzo0nMnVXim5ZU47d0Tds',
+    access_token_secret: 'CBIi0ipduhdLRJNUQRUZsT0wCLKuMGpwzkb7nR8PKx3Qc'
   });
 
   exports.getid = function (req, res) {

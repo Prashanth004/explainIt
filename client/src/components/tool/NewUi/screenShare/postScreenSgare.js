@@ -6,7 +6,14 @@ import config from '../../../../config/config'
 
 export default (props) => {
     const recrdsend=!props.saveinitiated?(<p>You can record the screen and send it</p>):(null);
-    console.log(props.retry,!props.retryTimeOut,!props.noInternet)
+    // console.log(props.retry,!props.retryTimeOut,!props.noInternet)
+
+
+
+    //  const MessageDisconnected = (props.timerEnded)?(<div>
+    //     <p><b>Call ended as the time alloted ended</b></p>
+    //     {savingMsg}
+    // </div>):(null)
     var buttons = null;
     var noInternet = (props.noInternet)?("No Intenet conecticvity"):(null)
     const videoAudio = (<div>

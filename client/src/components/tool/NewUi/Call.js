@@ -169,6 +169,7 @@ class Call extends Component {
                 <div className="statusBarCall">
                     <div className="timerDiv">
                         <Countdown
+                        zeroPadTime={2}
                             date={Date.now() + this.props.timeAloted * 60 * 1000}
                             renderer={this.props.renderer}/>
 
