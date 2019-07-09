@@ -465,9 +465,10 @@ color:black;
   }
  
  .HowTWorksDiv{
-   position:fixed;
+   /* position:fixed;
    bottom:20px;
-   left:20px;
+   left:20px; */
+   margin-top:50px;
  }
   .modalBody{
     background-color :white;

@@ -532,10 +532,14 @@ class NewHome extends Component {
                 }
             }
         }
+        var howtWorksBtn = (<div className="HowTWorksDiv">
+        <button className="buttonDark" onClick={this.toggleExplainerVideo}>How it works</button>
+    </div>)
 
         var shareRecord = null
         if (!this.props.inbox && !this.props.created && !this.props.participated) {
             if (this.props.screenAction === FULL_SCREEN_RECORD) {
+                howtWorksBtn = null
                 shareRecord =  (this.state.currentAtionStatus === null)?(<FullScreenRecord
                     socket={this.state.socket}
                     closeImidiate={this.handleConfirm}
@@ -547,6 +551,7 @@ class NewHome extends Component {
                 </div>)
             }
             else if (this.props.screenAction === FULL_SCREEN_SHARE) {
+                howtWorksBtn = null
                 shareRecord = (this.state.currentAtionStatus === null)?(<FullScreenShare
                     toggleInbox={this.toggleInbox}
                     socket={this.state.socket}
@@ -583,7 +588,7 @@ class NewHome extends Component {
             var issuesCreated = (this.props.myissues)
         var feedDiv = null;
 
-        
+       
 
         const callNotificationDiv = (this.props.incommingCall && !this.state.endedCallFromOtherPeer) ? (
             <div className="callNotification">
@@ -649,7 +654,9 @@ class NewHome extends Component {
                 this.props.participated ||
                 this.props.inbox ||
                 this.props.created) {
-                profileCardElement = null
+                profileCardElement = null;
+                howtWorksBtn = null
+
             }
             else if (this.props.userId !== null) {
                 if (this.state.displayLink &&
@@ -658,6 +665,7 @@ class NewHome extends Component {
                     !this.props.created &&
                     !this.props.participated
                 ) {
+                    howtWorksBtn=null;
                     displayLinkDiv = (<div className="sharableLinkSection">
                         <div className="topBtnsActivity">
                         <Button close onClick={this.toggleDisplayLink} />
@@ -714,9 +722,8 @@ class NewHome extends Component {
                     <div>
                         {details}
                     </div>
-                    <div className="HowTWorksDiv">
-                        <button className="buttonDark"onClick={this.toggleExplainerVideo}>How it works</button>
-                    </div>
+                    {howtWorksBtn}
+                    
                 </div>
                 <Modal  size='lg' centered ={true} isOpen={this.state.showExplainerVideo} toggle={this.toggleExplainerVideo} external={externalCloseBtn}>
                         <ExplinerVideoModal />
