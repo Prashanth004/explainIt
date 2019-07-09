@@ -93,7 +93,8 @@ export const signInWithTwitter = (response) => (dispatch) => {
                 email:body.user.email,
                 id:body.user.id,
                 twitterHandle:body.user.twitterhandle,
-                payload: true
+                payload: true,
+                activeStatus : Number(body.user.activation)
             })
 
         })
@@ -128,7 +129,8 @@ const userLogin = (dispatch, url)=>{
                 email:response.data.user.email,
                 id:response.data.user.id,
                 twitterHandle: response.data.user.twitterhandle,
-                payload: true
+                payload: true,
+                activeStatus:response.data.user.activation
             })
         }
         else if (response.status === 401) {

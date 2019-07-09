@@ -129,7 +129,7 @@ class Navigationbar extends React.Component {
   render() {
     var createdStyle = null;
     var partiStyle = null;
-    var inboxStyle = null;
+    // var inboxStyle = null;
     var profileImage = null;
     var centreNav = null;
     var explainLogo = (
@@ -153,19 +153,14 @@ class Navigationbar extends React.Component {
       }
     }
     else if (this.props.inbox) {
-      inboxStyle = {
-        color: "#d3a5cd",
-
-      }
+      var inboxColor = "#d3a5cd"
     }
 
 
-    var options = null;
     if ((this.props.Created || this.props.Participated)
       && this.state.isViewPage
       && !this.props.isAuthenticated) {
       profileImage = (null);
-      options = (null)
 
     }
     else {
@@ -200,9 +195,8 @@ class Navigationbar extends React.Component {
         <div className="logoCentre">
         <div className="pImageContainer">
               <span>
-                <img alt="profile pic" src={this.props.profilePic}
-                  onClick={this.props.openInbox}
-                  className="labelProfilePicNav"></img>
+                <FiMail style={{marginTop:"10px",marginLeft:"8px", fontSize:"30px", color:inboxColor}} onClick={this.props.openInbox}
+                />
               </span>
 
             </div>                </div>

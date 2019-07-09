@@ -17,7 +17,8 @@ const initialState = {
     email:null,
     id:null,
     twitterHandle:null,
-    logoutSuccess:false
+    logoutSuccess:false,
+    activeStatus:0
 
 }
 
@@ -47,7 +48,8 @@ export default function(state = initialState, action){
                 userName:action.userName,
                 email:action.email,
                 id:action.id,
-                twitterHandle:action.twitterHandle
+                twitterHandle:action.twitterHandle,
+                activeStatus:action.activeStatus
             }
         case SIGN_IN_WITH_TWITTER :
            
@@ -62,7 +64,8 @@ export default function(state = initialState, action){
                 userName:action.userName,
                 email:action.email,
                 id:action.id,
-                twitterHandle:action.twitterHandle
+                twitterHandle:action.twitterHandle,
+                activeStatus:action.activeStatus
  }
         case AUTH_FAIL_TWITTER:
             return{

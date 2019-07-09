@@ -1,8 +1,11 @@
 .landingContainer{
     min-height: 95vh;
     background-color: white;
-    display:grid;
-    grid-template-columns: 50% 50%;
+    text-align: center;
+    width:100%;
+    margin:auto;
+    /* display:grid; */
+    /* grid-template-columns: 50% 50%; */
   padding: 0px 10% 0px 10%;
 }
 .leftSection{
@@ -34,7 +37,24 @@
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
   }
+
+  .HomeHowitworksButton{
+      height: 25px;
+      /* border-radius:12px; */
+  }
   
+  .homeTwitterButton{
+    background-color:white;
+    color: #34a4a8;
+    border-color:#34a4a8;
+    border-width:0.5px;
+    border-style:solid;
+    height:35px;
+    font-size:16px;
+    border-radius:25px;
+    padding-left:20px;
+    padding-right:20px;
+}
   
 @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -42,20 +62,27 @@
   }
   
 .onboardSection{
-
-    margin-top:100px;
-    position: fixed; 
-    width:35%;
+   
+    /* position: fixed;  */
+    width:100%;
+    margin:auto;
+    margin-top:130px;
+   
     text-align:center;
     padding:20px;
     /* border-style:solid; */
 }
 .onboardMessage{
     margin:auto;
-    margin-top:50px;
+    /* margin-top:50px; */
     width:85%;
    
 }
+.modalClose{
+    height:55px;
+    width:55px;
+    color:white;
+  }
 .twiCom{
     font-size: 17px;
     font-weight:600
@@ -66,4 +93,15 @@
     border-bottom-width:0.8px;
     border-bottom-color:rgba(0, 0, 0, 0.452);
     width:120px;
+}
+
+
+@media (min-width: 700px) {
+    .onboardSection{
+        width:75%;
+        /* margin:auto */
+    }
+    .landingContainer{
+        width:60%;
+    }
 }

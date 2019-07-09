@@ -4,7 +4,7 @@ import config from '../../../../../config/config';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import '../activity.css';
-import CallSuccess  from '../to/CallSuccess';
+import CallSuccess  from './CallSuccess';
 import CallFail from './CallFailed';
 import Message from './Message';
 import RecordActivity from './recordedAct'
@@ -60,7 +60,7 @@ class ActivityMain extends Component {
   
     }
   render() {
-    //   console.log()
+      console.log("asfdmnskdj")
     const activitiesElements =(this.props.activity.activity===config.CALL_FAILED)?
     (<CallFail
         userData = {this.state}

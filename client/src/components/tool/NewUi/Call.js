@@ -49,7 +49,17 @@ class Call extends Component {
         }
     }
     componentDidMount(){
+        // addtimerReciever
+        this.props.conn.on('data',(data)=>{
+            if(data.type ==='addtimerReciever')
+                this.increaseTime()
+            if(data.type === 'reduceTimerReciever')
+                this.deacreaseTimer()
+            
+        })
+
        
+        
 
         if (window.addEventListener) {
             window.addEventListener("message", this.postMessageHandler, false);

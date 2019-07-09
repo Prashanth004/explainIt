@@ -3,7 +3,8 @@ import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
 import BusyAction from './container/BusyAction';
-import ExplinerVideoModal from './container/explainerModal'
+import ExplinerVideoModal from './container/explainerModal';
+import ExtCloseBtn from './container/modalExtButton'
 import EmailVarify from './emailvarify'
 import { MdCallEnd, MdCall } from "react-icons/md";
 import Activity from './Activies/indexActivity'
@@ -574,8 +575,8 @@ class NewHome extends Component {
 
         ) : (null)
 
-        const externalCloseBtn = <button className="close modalClose" style={{ position: 'absolute', top: '25px', height: '45px', width: '45', right: '25px', color: 'white' }} onClick={this.toggle}>&times;</button>;
-        var self = this
+        const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo}/>;
+        // var self = this
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         var deatilsModal = null
         if (this.props.myissues !== null)

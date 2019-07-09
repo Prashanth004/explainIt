@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import '../activity.css';
+import { FiMessageSquare } from "react-icons/fi";
 import { changeReadStatus } from '../../../../../actions/messageAction';
 import ImageContainer from '../imageContainer'
 
@@ -47,11 +48,14 @@ class RecievedMessage extends Component {
                     <span className="year">{this.props.activity.date.slice(0, 4)}</span>
                 </div> */}
                 <div className="activityContent">
+                <div className="callIconDiv"> <FiMessageSquare   className="callIcon msg" /></div>
+                <div>
                 <span className="dateNew Notify">{this.props.activity.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.activity.time.slice(0, 4)}</span>
 
                     <div style={{ textAlign: "left" }}>
                         <p><ImageContainer name={this.state.userName} imgsrc={this.state.profilePic}/> sent a recorded message to you  on the topic <a href={this.props.activity.link}><b>{this.props.activity.subject}</b></a></p>
                      
+                    </div>
                     </div>
 
                 </div>

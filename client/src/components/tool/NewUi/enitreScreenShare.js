@@ -37,7 +37,7 @@ import { cancelAllMessageAction } from '../../../actions/messageAction';
 import { displayFullScrenRecord } from '../../../actions/toolActions';
 import { callSuccessedUpate, initiateSend,retryCall } from '../../../actions/callAction'
 import { sendTweet } from '../../../actions/twitterApiAction';
-import LinkDisplay from './TweetAcceptHandle'
+import LinkDisplay from './screenShare/PreShare/preScreenShare'
 
 class ScreenRecorder extends Component {
     constructor(props) {

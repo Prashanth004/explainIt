@@ -1,6 +1,6 @@
 
 import './landing.css'
-import LeftSection from './leftSection.js'
+// import LeftSection from './leftSection.js'
 import RightSection from './rightSection.js'
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
@@ -20,17 +20,16 @@ class landingPage extends Component {
     loadPageView();
   }
   render() {
-    return (this.props.authAction) ? ((!this.props.isAuthenticated ? (<div className="landingContainer">
-      <div className="leftSection">
+    return (this.props.authAction) ? (((!this.props.isAuthenticated ||  !this.props.activeStatus)? (<div className="landingContainer">
+      {/* <div className="leftSection">
         <LeftSection />
-      </div>
+      </div> */}
       <div>
         <RightSection />
-       
       </div>
     </div>) :((<Redirect to={{ pathname: './application' }} />)))) :
       ( <div style={{paddingTop:"150px"}}>
-        <div class="fluct"></div>
+        <div className="fluct"></div>
       </div>)
   }
 }
@@ -40,8 +39,10 @@ const mapStateToProps = function (state) {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     authAction: state.auth.authAction,
+    activeStatus:state.auth.activeStatus,
     doneVarification : state.email.doneVarification,
     isVarified:state.email.isVarified,
+
   }
 }
 

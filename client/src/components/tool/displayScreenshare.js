@@ -76,6 +76,8 @@ class DisplayShare extends Component {
         this.unMuteAudio = this.unMuteAudio.bind(this);
         this.saveBlobtimeOut = this.saveBlobtimeOut.bind(this);
         this.onUnload = this.onUnload.bind(this);
+        this.increaseTime = this.increaseTime.bind(this);
+        this.deacreaseTimer = this.deacreaseTimer.bind(this);
     }
     downloadExtension() {
         window.open(config.EXTENSION_URL)
@@ -83,6 +85,12 @@ class DisplayShare extends Component {
     }
     closeWindow() {
         window.close();
+    }
+    increaseTime(){
+       this.state.conn.send({ type: "addtimerReciever" })
+    }
+    deacreaseTimer(){
+        this.state.conn.send({ type: "reduceTimerReciever" })
     }
 
 
@@ -113,9 +121,11 @@ class DisplayShare extends Component {
 
     onUnload(event) {
         if (!this.state.callEnded ) {
+            registerEndToBrowser();
+            this.endCall();
             const { extSource, extOrigin, postEndCall } = this.props;
             postEndCall(config.END_CALL_RECIEVER_PEER_FROM_WEB, extSource, extOrigin);
-            this.closeConnection();
+            // this.closeConnection();
             event.returnValue = " "
         }
     }
@@ -156,6 +166,14 @@ class DisplayShare extends Component {
             }
             if (event.data.type === config.END_CALL_RECIEVER_TO_WEB) {
                 self.endCall()
+                return
+            }
+            if(event.data.type ===  config.ADD_EXTRA_MINUTE_TO_WEB_SITE){
+                self.increaseTime()
+                return
+            }
+            if(event.data.type === config.DECREASE_MINUTE_TO_WEB_SITE){
+                self.deacreaseTimer()
                 return
             }
             if (event.data.type === config.MUTE_TO_WEB) {

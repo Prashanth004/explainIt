@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import LandingWEb from './landing/landing';
-import LandingMob from './landing2/landing'
+// import LandingMob from './landing2/landing'
 
 export default class componentName extends Component {
     constructor(props){
@@ -15,10 +15,11 @@ export default class componentName extends Component {
         this.setState({reducedWidth: window.innerWidth <= 700});
       }
   render() {
-    return ((!this.state.reducedWidth) ? (
-                <LandingWEb />) : (
-                    <LandingMob />
-                )       
-    )
+      return(<LandingWEb />)
+    // return ((!this.state.reducedWidth) ? (
+    //             <LandingWEb />) : (
+    //                 <LandingMob />
+    //             )       
+    // )
   }
 }

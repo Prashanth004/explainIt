@@ -72,6 +72,7 @@ passport.use(new GoogleTokenStrategy({
                             })
 
                         }).catch(function (err) {
+                            console.log("the error is here")
                             console.log("error : ",err)
                             // done(err, false)
 

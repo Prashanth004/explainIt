@@ -166,7 +166,7 @@ class tweetSearch extends Component {
         var mainContainer = (<div className="startShare">
             <p style={{ fontSize: "13px", fontWeight: "500" }}>Screen share with  <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
-                placeholder="@username"
+                placeholder="@Twitter handle"
                 classOfInput="handleInput"
                 tweetTextvalue={twitterHandle}
                 classOfMenu="screeShareMenu"

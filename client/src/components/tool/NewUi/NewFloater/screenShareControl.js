@@ -333,12 +333,12 @@ class ShareFloater extends Component {
         const mutBtn = (this.props.muteState === config.UN_MUTED) ?
             (<div className="muteopt">
                 <span className="hint--left" aria-label="Mute">
-                    <MdVolumeOff className="muteIcons" onClick={this.muteAudio} />
+                    <MdVolumeUp className="muteIcons" onClick={this.muteAudio} />
                 </span>
             </div>) :
             (<div>
                 <span className="hint--left" aria-label="Un Mute">
-                    <MdVolumeUp className="muteIcons" onClick={this.muteAudio} />
+                    <MdVolumeOff className="muteIcons" onClick={this.muteAudio} />
                 </span>
             </div>)
         const { action } = this.state;
