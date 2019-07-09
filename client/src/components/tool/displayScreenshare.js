@@ -804,13 +804,10 @@ class DisplayShare extends Component {
                 </div>
             </div>
         ) : (null))
-        return (<div>
+        return (<div style={{height:"98vh"}}>
             {precallActivity}
             <div className="screenShareDiv">
                 {ShareElement}
-                <div className="callImageDiv">
-
-                </div>
             </div>
         </div>)
 

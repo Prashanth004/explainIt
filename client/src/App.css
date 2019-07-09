@@ -14,7 +14,7 @@
 
 
   /* font-family: "Neue"; */
-  height: '100vh';
+  min-height: '97vh';
 }
 @font-face {
   font-family: myFirstFont;
