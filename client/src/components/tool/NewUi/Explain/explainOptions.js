@@ -31,7 +31,7 @@ const explainOption = (props) => {
                
                 <div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
                     <span className="hint--top" aria-label="Record screen and explain!">
-                        <FiVideo style={{ fontSize: "28px" }} onClick={() => props.explainByRecord()} />
+                        <FiVideo style={{ fontSize: "28px" }} onClick={() => props.explainByRecord(questionProject.twitterhandle)} />
                     </span>
                 </div>
 

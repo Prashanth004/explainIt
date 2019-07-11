@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FiMail } from "react-icons/fi";
 import '../../css/nav.css';
+import {toggleHowWorksModal} from '../../../actions/modalAction'
 import '../../css/issueDetails.css';
 import { FiPower } from "react-icons/fi";
 // import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -172,13 +173,20 @@ class Navigationbar extends React.Component {
             </span>
           </div>
           <div className="dropDownForOption drpLogout"
-            onMouseLeave={this.toggleDropDown} style={{ visibility: this.state.optionVisibe, width: "120px", height: "40px", marginLeft: "-50px", marginTop: "3px" }}>
-            <div className="menuItem" >
+            onMouseLeave={this.toggleDropDown} style={{ visibility: this.state.optionVisibe, width: "120px", minHeight: "40px", marginLeft: "-50px", marginTop: "3px" }}>
+            <div className="menuItem menuTwoParts" >
               <div ><span onClick={this.logout}><FiPower /></span></div>
               <div>
                 <span onClick={this.logout} className> Logout</span>
               </div>
             </div>
+            <div className="menuItem" >
+              <div ><span onClick={this.props.toggleHowWorksModal}></span></div>
+              <div>
+                <span onClick={this.props.toggleHowWorksModal} className> How it works</span>
+              </div>
+            </div>
+           
           </div>
         </div>) : (null)
 
@@ -272,7 +280,8 @@ Navigationbar.PropType = {
   openHome: PropType.func.isRequired,
   openCreated: PropType.func.isRequired,
   openParticipated: PropType.func.isRequired,
-  openInbox: PropType.func.isRequired
+  openInbox: PropType.func.isRequired,
+  toggleHowWorksModal:PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
@@ -295,7 +304,7 @@ const mapStateToProps = state => ({
 
 
 })
-export default connect(mapStateToProps, { openHome, openInbox, openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+export default connect(mapStateToProps, { openHome,toggleHowWorksModal, openInbox, openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
 
 
 

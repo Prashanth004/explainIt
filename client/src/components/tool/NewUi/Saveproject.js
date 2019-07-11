@@ -86,16 +86,15 @@ class SaveProjects extends Component {
         return (
         <div className="ActivityBelow">
             <InputBox
-                
                     limitExce={this.state.limitExce}
                     empty={this.state.empty}
                     limitOfChar={this.state.limitOfChar}
                     changeInputValue={this.changeInputValue}
                     textValue={this.state.textValue}
                     submit = {this.SaveTopic}
-                    placeHolder="Topic for screen share"
+                    placeHolder={(this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN) ?"Description" : "Topic for screen share"}
                 />
-                <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>Send Request</button>
+                <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>{this.props.action ===config.FULL_SCREEN_RECORD?"Start Recording":"Send Request"}</button>
             </div>
              
          )
@@ -109,6 +108,7 @@ SaveProjects.PropType = {
 };
 const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
+    explainBy: state.explain.explainBy,
 })
 
 export default connect(mapStateToProps, {saveTopicOfTheCall})(SaveProjects)

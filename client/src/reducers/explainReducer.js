@@ -12,7 +12,8 @@ export default function(state = initialState, action){
         case EXPLIN_BY_RECORD:
             return{
                 ...state,
-                explainBy:config.RECORD_SCREEEN_EXPLAIN 
+                explainBy:config.RECORD_SCREEEN_EXPLAIN ,
+                sharehandle:action.payload
             }
         case EXPLAIN_BY_REFER:
             return{

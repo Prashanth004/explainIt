@@ -1,14 +1,15 @@
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import InputNumber from '../../InputNumber';
-import AcceptTopic from '../../Saveproject';
-import TweetSuggest from '../../TweetSug';
-import config from '../../../../../config/config';
-import { setNoOfMinutes, updateCurrentTime } from '../../../../../actions/callAction'
+import InputNumber from '../InputNumber';
+import AcceptTopic from '../Saveproject';
+import TweetSuggest from '../TweetSug';
+import config from '../../../../config/config';
+import { setNoOfMinutes, updateCurrentTime } from '../../../../actions/callAction'
 import { NoInternet, InValidHandle, SelfShareInfo, NotPresentOnExplain } from './noInternet'
-import { getProfileByTwitterHandle } from "../../../../../actions/visitProfileAction";
-import { getRecpientId, getTwitterHandles, resetValues } from '../../../../../actions/twitterApiAction'
+import { getProfileByTwitterHandle } from "../../../../actions/visitProfileAction";
+import { getRecpientId, getTwitterHandles, resetValues } from '../../../../actions/twitterApiAction'
 // import { type } from 'os';
 
 class tweetSearch extends Component {
@@ -28,7 +29,8 @@ class tweetSearch extends Component {
             timeInputDone: false,
             noInternet: false,
             selfShare: false,
-            numberValue: 3
+            numberValue: 3,
+            doneTweeting:false
 
         }
         this.testHandle = this.testHandle.bind(this);
@@ -42,12 +44,14 @@ class tweetSearch extends Component {
         if (this.props.visitedTiwtterHandle !== null)
             this.setState({ twitterHandle: this.props.visitedTiwtterHandle });
 
-        if (this.props.explainBy === config.SHARE_SCREEN_EXPALIN)
+        if (this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN)
             this.setState({ twitterHandle: this.props.sharehandle });
+        if(this.props.fromShareToRecord)
+        this.setState({twitterHandle : this.props.twitterHandle})
 
         resetValues();
         getTwitterHandles();
-        this.setState({ maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT })
+        this.setState({ maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT,doneTweeting:false })
     }
 
     testHandle() {
@@ -126,8 +130,8 @@ class tweetSearch extends Component {
             })
         }
         this.setState({ numberValue: noOfMinutestemp })
-        this.props.setNoOfMinutes(Number(e.target.value))
-        this.props.updateCurrentTime(Number(e.target.value))
+        // this.props.setNoOfMinutes(Number(e.target.value))
+        // this.props.updateCurrentTime(Number(e.target.value))
     }
 
     updateInfo() {
@@ -135,20 +139,19 @@ class tweetSearch extends Component {
             tweetTested: false,
             doneTweeting: true
         })
-        this.props.makeCallAction()
+        this.props.toggle(this.state.numberValue)
     }
     render() {
-
-
-        const { emptyUserName, empty, noText, negNumber, limitExce } = this.state;
+    
+        const { emptyUserName, empty, noText, negNumber, limitExce} = this.state;
 
         const { twitterHandle, tweetTested, doneTweeting, noInternet, selfShare,
             isVisitProfile, numberValue, emptyNumber, maxTimeForVideo } = this.state;
         const { doneFetching,
             fetchProfile, isPresentInExplain, twitterHandleValid } = this.props;
+            console.log(this.state.doneTweeting,fetchProfile)
 
-
-        if (doneFetching && !doneTweeting && fetchProfile && !noInternet && !selfShare && !!isPresentInExplain)
+        if (doneFetching && tweetTested && !doneTweeting && fetchProfile && !noInternet && !selfShare && !!isPresentInExplain)
             this.updateInfo()
         const spanElement = ((limitExce) ? (
             <span className="spanElement" >Maximum duration for the call is {maxTimeForVideo} minutes</span>
@@ -171,7 +174,8 @@ class tweetSearch extends Component {
         const validatinginfo = (tweetTested && !doneTweeting) ? (
 
             (doneFetching && fetchProfile) ?
-                (noInternet ? (<NoInternet />) : ((!twitterHandleValid ? (<InValidHandle />) :
+                (noInternet ? (<NoInternet   changeTweetStateNeg={this.changeTweetStateNeg} />) : 
+                ((!twitterHandleValid ? (<InValidHandle   changeTweetStateNeg={this.changeTweetStateNeg}/>) :
                     (selfShare ? (<SelfShareInfo changeTweetStateNeg={this.changeTweetStateNeg} />) :
                         (!isPresentInExplain ? (<NotPresentOnExplain
                             changeTweetStateNeg={this.changeTweetStateNeg}
@@ -183,13 +187,7 @@ class tweetSearch extends Component {
         // && !noInternet && !selfShare && isPresentInExplain
         const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain || selfShare ||noInternet )) ?(null):(<div>
             <div className="startShare">
-                <p style={{ fontSize: "13px", fontWeight: "500" }}>Screen share with  <TweetSuggest
-                    onChange={this.updateTwitterHandleBox}
-                    placeholder="@Twitter handle"
-                    classOfInput="handleInput"
-                    tweetTextvalue={twitterHandle}
-                    classOfMenu="screeShareMenu"
-                /> for<InputNumber
+                <p style={{ fontSize: "13px", fontWeight: "500" }}>Record for <InputNumber
                         empty={emptyNumber}
                         emptyUserName={emptyUserName}
                         limitOfChar={maxTimeForVideo}
@@ -197,13 +195,30 @@ class tweetSearch extends Component {
                         changeInputValue={this.changeImputNumber}
                         textValue={numberValue}
                         negNumber={negNumber}
-                        noText={noText} />
+                        noText={noText} />, send to <TweetSuggest
+                        onChange={this.updateTwitterHandleBox}
+                        placeholder="@Twitter handle"
+                        classOfInput="handleInput"
+                        tweetTextvalue={twitterHandle}
+                        classOfMenu="screeShareMenu"
+                    />
+
+{/* empty={emptyNumber}
+//                     emptyUserName={emptyUserName}
+//                     limitOfChar={maxTimeForVideo}
+//                     limitExce={limitExce}
+//                     changeInputValue={this.changeImputNumber}
+//                     textValue={numberValue}
+//                     negNumber={negNumber}
+//                     noText={noText} / */}
+
+
                 </p>
                 {spanElement}
                
-                <div className="TwiValidInfo">
+                <div>
                     <AcceptTopic 
-                    action={config.FULL_SCREEN_SHARE}
+                    action={config.FULL_SCREEN_RECORD}
                     tweetTheMessage={this.testHandle} />
                 </div>
             </div>
@@ -224,6 +239,8 @@ tweetSearch.PropType = {
 const mapStateToProps = state => ({
     twitterHandleValid: state.twitterApi.profilePresent,
     doneFetching: state.twitterApi.doneFetching,
+    twitterHandle: state.twitterApi.twitterHandle,
+    fromShareToRecord: state.message.fromShareToRecord,
     twiterHandleArray: state.twitterApi.twitterHandle,
     fetchProfile: state.visitProfile.fetchProfile,
     userId: state.auth.id,
@@ -243,4 +260,7 @@ export default connect(mapStateToProps, {
     setNoOfMinutes, updateCurrentTime,
     getRecpientId, resetValues
 })(tweetSearch)
+
+
+
 

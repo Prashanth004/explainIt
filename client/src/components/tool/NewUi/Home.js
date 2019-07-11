@@ -3,6 +3,7 @@ import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
 import BusyAction from './container/BusyAction';
+import {toggleHowWorksModal} from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
 import EmailVarify from './emailvarify'
@@ -711,6 +712,7 @@ class NewHome extends Component {
 
                 <div className="containerHome">
                     {callNotificationDiv}
+                    
                     <div>
                         {profileCardElement}
                        
@@ -722,10 +724,10 @@ class NewHome extends Component {
                     <div>
                         {details}
                     </div>
-                    {howtWorksBtn}
+                    {/* {howtWorksBtn} */}
                     
                 </div>
-                <Modal  size='lg' centered ={true} isOpen={this.state.showExplainerVideo} toggle={this.toggleExplainerVideo} external={externalCloseBtn}>
+                <Modal  size='lg' centered ={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
                 </Modal>
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
@@ -755,7 +757,7 @@ NewHome.PropType = {
     resetValues: PropType.func.isRequired,
     creatAnsProject: PropType.func.isRequired,
     openInbox: PropType.func.isRequired,
-   
+    toggleHowWorksModal:PropType.func.isRequired,
     resetCallAction: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
     getAllActivities: PropType.func.isRequired,
@@ -792,6 +794,7 @@ const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     callAction: state.call.callAction,
+    openHowItWorksModal:state.modal.openHowItWorksModal
     
 
 
@@ -801,7 +804,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     answerCall,
     openCreated,
- 
+    toggleHowWorksModal,
     resetCallAction,
     getAllActivities,
     cancelAllMessageAction,

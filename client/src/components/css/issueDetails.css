@@ -35,9 +35,12 @@ border-radius:10.5px;
     /* display: inline-block; */
     border-bottom-width:0.5px;
     text-align: left;
+  
+    /* height:30px; */
+}
+.menuTwoParts{
     display:grid;
     grid-template-columns: 20% 80%
-    /* height:30px; */
 }
 .privateOpt{
     padding-left:30%;

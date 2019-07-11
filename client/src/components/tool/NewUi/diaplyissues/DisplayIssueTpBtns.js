@@ -99,7 +99,7 @@ class displayTopBtns extends Component {
 
         const createdMenuItems = (this.props.participated || !this.props.itsHome) ? (null) : (
             <div>
-                <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem">
+                <div id={this.props.issue.issueid} onClick={this.props.deleteProjects} className="menuItem menuTwoParts">
 
                     <div >
                         <span>  <FiTrash id={this.props.issue.issueid} className="menuIcon" /></span>
@@ -108,7 +108,7 @@ class displayTopBtns extends Component {
                         <span className="textInDropDown" id={this.props.issue.issueid}>Delete</span>
                     </div>
                 </div>
-                <div id={this.props.issue.projectid} className="menuItem">
+                <div id={this.props.issue.projectid} className="menuItem menuTwoParts">
 
                     <div>
                         <span>  <FiEdit id={this.props.issue.projectid} onClick={this.openEditModal} className="menuIcon" /></span>

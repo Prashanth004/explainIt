@@ -21,7 +21,8 @@ import explainReducer from './explainReducer';
 import referralReducer from './referral';
 import recorderReducer from './recorderReducer';
 import floaterReducer from './floaterReducer';
-import userStoreReducer from './storeUserReducer'
+import userStoreReducer from './storeUserReducer';
+import modalReducer from './modalReducer';
  
 export default combineReducers({
     email:emailReducer,
@@ -46,5 +47,6 @@ export default combineReducers({
     secondScreenShare :secondScreenShareReducer,
     recorder : recorderReducer,
     floater:floaterReducer,
-    userStore:userStoreReducer
+    userStore:userStoreReducer,
+    modal:modalReducer,
 })

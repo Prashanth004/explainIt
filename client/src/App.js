@@ -6,6 +6,7 @@ import store from './store';
 import ReactGA from 'react-ga';
 import landing from './components/tool/NewUi/landingPgae'
 import config from './config/config';
+import InternetSpeed from './components/tool/NewUi/container/testInternet'
 import ScreenShareFloater from './components/tool/NewUi/NewFloater/screenShareControl'
 import Login from './components/tool/NewUi/Login';
 import adminDash from './components/tool/NewUi/adminPages/adminroot'
@@ -50,6 +51,7 @@ class App extends Component {
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
             <Route exact path = '/closefloater' component = {Toggle}/>
+            <Route exact path = '/testspeed' component={InternetSpeed}/>
             {/* <Route exaxt path ='/emailvarify' component={emailvarify}/> */}
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />

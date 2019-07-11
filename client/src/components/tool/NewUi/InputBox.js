@@ -1,22 +1,6 @@
-// import React from 'react'
-// import '../../css/InputBox.css'
 
-
-// export default (props) => {
-//    
-//   return (
-//     <div>
-//       <input type="text"
-//       onChange={props.changeInputValue}
-//       value={props.textValue}
-//       className="inputBox"
-//        placeholder={props.placeHolder}>
-//       </input>
-//       {spanElement}
-//     </div>
-//   )
-// }
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import TextArea from './container/textArea'
 
 export default class componentName extends Component {
   constructor(props){
@@ -35,16 +19,7 @@ export default class componentName extends Component {
       }
     
   }
-  componentDidMount(){
-    var input = this.inputBox;
-    // Execute a function when the user releases a key on the keyboard
-    input.addEventListener("keyup", this.enterPress);
-  }
-  componentWillUnmount(){
-    var input = this.inputBox;
-    input.removeEventListener("keyup", this.enterPress);
-    
-  }
+
   render() {
     const {changeInputValue,empty,limitExce,limitOfChar,textValue,placeHolder} = this.props
     const spanElement= (empty)?(
@@ -55,14 +30,21 @@ export default class componentName extends Component {
   
     return (
       <div>
-         <div>
-         <input type="text"
-         ref={a => this.inputBox = a} 
+         <div style={{width:"60%", margin:"auto"}}>
+         <TextArea
+                        textvalue={textValue}
+                        changeFunction={changeInputValue} 
+                        inputClass="inputboxes fullView"
+                        enterPress={this.enterPress}
+                        textAlign="right"
+                        placeholder={placeHolder} />
+         {/* <input type="text"
+        
           onChange={changeInputValue}
           value={textValue}
           className="inputBox"
           placeholder={placeHolder}>
-          </input>
+          </input> */}
           <br/>
           {spanElement}
         </div>
