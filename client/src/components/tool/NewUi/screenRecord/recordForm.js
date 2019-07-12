@@ -30,7 +30,8 @@ class tweetSearch extends Component {
             noInternet: false,
             selfShare: false,
             numberValue: 3,
-            doneTweeting:false
+            doneTweeting:false,
+            
 
         }
         this.testHandle = this.testHandle.bind(this);
@@ -38,6 +39,7 @@ class tweetSearch extends Component {
         this.changeTweetStateNeg = this.changeTweetStateNeg.bind(this);
         this.changeImputNumber = this.changeImputNumber.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
+        this.selfSave = this.selfSave.bind(this);
     }
     componentWillMount() {
         const { resetValues, getTwitterHandles } = this.props
@@ -134,6 +136,10 @@ class tweetSearch extends Component {
         // this.props.updateCurrentTime(Number(e.target.value))
     }
 
+    selfSave(){
+        this.props.toggle(this.state.numberValue);
+        this.props.saveforSelf();
+    }
     updateInfo() {
         this.setState({
             tweetTested: false,
@@ -219,7 +225,9 @@ class tweetSearch extends Component {
                 <div>
                     <AcceptTopic 
                     action={config.FULL_SCREEN_RECORD}
+                    selfSave = {this.selfSave}
                     tweetTheMessage={this.testHandle} />
+                   
                 </div>
             </div>
            

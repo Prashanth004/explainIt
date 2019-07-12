@@ -14,6 +14,7 @@ import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
 import {initGA,loadPageView} from './container/ReactGa';
 import Profile from './Profile'
+import DisplayContacts from './contactlist/contactsDisplay'
 import { getProfileDetails } from '../../../actions/profileAction';
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import { getTotalUnread } from '../../../actions/messageAction'
@@ -26,6 +27,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css' 
 import { Button, Modal, ModalBody } from 'reactstrap';
 // import { Spinner } from 'reactstrap';
+import {getAllContacts} from '../../../actions/contactAction'
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
@@ -155,6 +157,7 @@ class NewHome extends Component {
     componentDidMount() {
         initGA();
         loadPageView();
+        this.props.getAllContacts();
         window.addEventListener('storage',this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
@@ -724,10 +727,11 @@ class NewHome extends Component {
                     <div>
                         {details}
                     </div>
-                    {/* {howtWorksBtn} */}
+                    {howtWorksBtn}
+                    <DisplayContacts />
                     
                 </div>
-                <Modal  size='lg' centered ={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
+                <Modal  size='lg' centered ={true} isOpen={this.props.modalReducer} toggle={this.props} external={externalCloseBtn}>
                         <ExplinerVideoModal />
                 </Modal>
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
@@ -794,7 +798,7 @@ const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     callAction: state.call.callAction,
-    openHowItWorksModal:state.modal.openHowItWorksModal
+    modalReducer:state.modal.modalReducer
     
 
 
@@ -824,5 +828,5 @@ export default connect(mapStateToProps, {
     creatAnsProject,
     cancelSuccess,
     clearAnswers, stillAuthenicated,
-    resetValues
+    resetValues,getAllContacts
 })(NewHome)

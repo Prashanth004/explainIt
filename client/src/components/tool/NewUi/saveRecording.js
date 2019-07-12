@@ -35,7 +35,7 @@ class SaveProjects extends Component {
     }
 
     render() {
-        const shareOption = (!this.props.explainIssue) ? (
+        const shareOption = (!this.props.explainIssue && !this.props.selfSave) ? (
             <span className="hint--top" aria-label="Send Recording">
                 <FiSend className="icon"  onClick={this.savefilePri} />
             </span>) :(<span className="hint--top" aria-label="Save Recording">
@@ -76,6 +76,7 @@ const mapStateToProps = state => ({
     fromShareToRecord: state.message.fromShareToRecord,
     explainIssue: state.message.explainIssue,
     failedToSave: state.issues.failedToSave,
+    topicOfTheCall:state.call.topicOfTheCall
 
 })
 

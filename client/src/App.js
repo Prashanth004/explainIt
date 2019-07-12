@@ -47,7 +47,7 @@ class App extends Component {
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact path = '/admindash' component={adminDash} />
             <Route exact path = '/video' component={video} />
-            <Route exact path ='/floater' component={floater}/>
+            {/* <Route exact path ='/floater' component={floater}/> */}
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
             <Route exact path = '/closefloater' component = {Toggle}/>

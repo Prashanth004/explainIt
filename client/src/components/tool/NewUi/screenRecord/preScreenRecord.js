@@ -5,13 +5,14 @@ import RecordFormInput from './recordForm';
 
 
 export default (props) => {
-    const {permissonDenied,toggle,closeFunction,recordTime,isFullScreenRecording,renderer} = props;
+    const {permissonDenied,toggle,closeFunction,saveforSelf,recordTime,isFullScreenRecording,renderer} = props;
     const timer = (isFullScreenRecording) ? ((<Countdown
         date={Date.now() + recordTime * 60 * 1000}
         renderer={renderer}
     />)) : (null)
 
     const recordingEle = (!permissonDenied) ? (<RecordFormInput
+        saveforSelf={saveforSelf}
         toggle = {toggle}/>) : (<div>
         <p>Permission enied to record the screen</p>
         <button className="buttonLight" onClick={closeFunction}>Close</button>

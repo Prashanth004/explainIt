@@ -5,6 +5,7 @@ import PageNotFount from './NoMatch';
 import DisplatCreated from './diaplyissues/DisplayIssues';
 import { FiGrid,FiList } from "react-icons/fi";
 import Navbar from './Navbar';
+import AddtoContact from './contactlist/addToContact'
 import FullScreenShare from './enitreScreenShare';
 import FullScreenRecord from './FullScreenRecord';
 import '../../css/NewSignin.css';
@@ -294,6 +295,7 @@ class NewHome extends Component {
     render() {
         if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
             this.props.history.push("/");
+        
         var issuepercentage="30%";
         var shareRecord = null;
         if(this.state.reducedWidth)
@@ -456,6 +458,9 @@ class NewHome extends Component {
                     <div>
                         {details}
                     </div>
+                    <div>
+                        <AddtoContact contactid = {this.props.userId} />
+                    </div>
                 </div>
            
 
@@ -500,6 +505,7 @@ const mapStateToProps = state => ({
     screenAction: state.tools.screenAction,
     newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
+    profileid : state.auth.id,
     profilePic: state.auth.profilePic,
     userName: state.auth.userName,
     myissues: state.profile.myIssues,

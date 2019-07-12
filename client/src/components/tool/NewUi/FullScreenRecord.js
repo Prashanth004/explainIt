@@ -45,7 +45,8 @@ class FullScreenRecorder extends Component {
             currentTime: {},
             recordTime: 3,
             currentAtionStatus: null,
-            saveActivity: false
+            saveActivity: false,
+            selfSave:false
 
         }
         this.downloadExtension = this.downloadExtension.bind(this);
@@ -68,6 +69,7 @@ class FullScreenRecorder extends Component {
         this.updateTime = this.updateTime.bind(this);
         this.timebar = this.timebar.bind(this);
         this.cancelSaveBtn = this.cancelSaveBtn.bind(this);
+        this.saveforSelf = this.saveforSelf.bind(this);
         this.saveActivityJustRecord = this.saveActivityJustRecord.bind(this)
     }
     timebar = () => { }
@@ -308,6 +310,9 @@ class FullScreenRecorder extends Component {
             sendBtnClicked: false
         })
     }
+    saveforSelf(){
+        this.setState({selfSave : true})
+    }
     saveClicked() {
         this.setState({ saveBtnClicked: true })
     }
@@ -470,6 +475,7 @@ class FullScreenRecorder extends Component {
                     <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>)) : (null))
         const recordingElements = (!this.props.isFullRecordCompleted)?(
             <PreScreenRecord 
+            saveforSelf={this.saveforSelf}
             renderer ={this.renderer}
             recordTime ={this.state.recordTime}
             toggle ={this.toggle}
@@ -486,6 +492,7 @@ class FullScreenRecorder extends Component {
             postShareElements = (<div className="postRecord">
                 {videoplayer}
                 <SaveElement
+                    selfSave = {this.state.selfSave}
                     hideVideotag={this.hideVideotag}
                     shareOrRec={config.RECORDING}
                     isSaveClicked={this.state.saveBtnClicked}

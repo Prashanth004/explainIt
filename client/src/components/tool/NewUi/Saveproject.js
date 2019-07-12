@@ -21,6 +21,7 @@ class SaveProjects extends Component {
         }
         this.changeInputValue = this.changeInputValue.bind(this);
         this.SaveTopic = this.SaveTopic.bind(this);
+        this.SaveTopicSave = this.SaveTopicSave.bind(this);
     }
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {
@@ -62,6 +63,30 @@ class SaveProjects extends Component {
             })
         }
     }
+    SaveTopicSave() {
+        if (this.state.textValue !== null) {
+            if ((this.state.textValue).length > 0) {
+                if ((this.state.textValue).length < 201) {
+                    this.props.saveTopicOfTheCall(this.state.textValue)
+                    this.props.selfSave()
+                }
+                else {
+                    this.setState({
+                        limitExce: true
+                    })
+                }
+            }
+            else {
+                this.setState({
+                    empty: true
+                })
+            }
+        } else {
+            this.setState({
+                empty: true
+            })
+        }
+    }
 
     changeInputValue(e) {
         var textValuetemp = this.state.textValue
@@ -82,7 +107,11 @@ class SaveProjects extends Component {
         })
 
     }
+
     render() {
+        const recordDelf = (this.props.action === config.FULL_SCREEN_RECORD)?(<span style={{color:"rgba(141, 140, 140, 0.867)",fontSize:"12px"}} onClick={this.SaveTopicSave}>record and save</span>)
+        :(null)
+
         return (
         <div className="ActivityBelow">
             <InputBox
@@ -95,6 +124,8 @@ class SaveProjects extends Component {
                     placeHolder={(this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN) ?"Description" : "Topic for screen share"}
                 />
                 <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>{this.props.action ===config.FULL_SCREEN_RECORD?"Start Recording":"Send Request"}</button>
+                <br/>
+                {recordDelf}
             </div>
              
          )

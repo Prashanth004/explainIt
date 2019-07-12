@@ -1,6 +1,8 @@
 var database = require('../app');
 exports.saveContact = function(req,res){
-   
+   console.log("reaching herer")
+   console.log("req.user.id",req.user.id);
+   console.log("req.body.contactid",req.body.contactid);
     if(req.user.id === req.body.contactid){
         res.status(450).send({
             success:0,
@@ -8,6 +10,7 @@ exports.saveContact = function(req,res){
         });
         return
     }
+    // darabase.db.oneOrNone('select')
     database.db.oneOrNone('insert into contacts(profileid,contactid,custinfo)' +
     'values(${profileid},${contactid},${custinfo})',
     {
@@ -43,13 +46,21 @@ exports.getAllContact = function(req,res){
 }
 
 exports.getContactById = function(req,res){
+    console.log(" i ma reaching the right place")
     database.db.oneOrNone('select * from contacts where profileid = $1 and contactid =$2',[req.user.id,req.params.id])
     .then(function(data){
-        console.log(data)
-        res.status(200).send({
-            success:1,
-            data:data
-        })
+        console.log("contacts : ",data)
+        if(data!==null)
+            res.status(200).send({
+                success:1,
+                data:data
+            })
+        else{
+            res.send(200).send({
+                success:0,
+                data:null
+            })
+        }
     })
     .catch(function(error){
         console.log("error : ",error)

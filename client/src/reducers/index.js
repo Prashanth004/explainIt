@@ -23,6 +23,7 @@ import recorderReducer from './recorderReducer';
 import floaterReducer from './floaterReducer';
 import userStoreReducer from './storeUserReducer';
 import modalReducer from './modalReducer';
+import contactReducers from './contactReducer'
  
 export default combineReducers({
     email:emailReducer,
@@ -49,4 +50,5 @@ export default combineReducers({
     floater:floaterReducer,
     userStore:userStoreReducer,
     modal:modalReducer,
+    contact:contactReducers
 })
