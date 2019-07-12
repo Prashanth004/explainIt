@@ -537,7 +537,7 @@ class NewHome extends Component {
             }
         }
         var howtWorksBtn = (<div className="HowTWorksDiv">
-        <button className="buttonDark" onClick={this.toggleExplainerVideo}>How it works</button>
+        <button className="buttonDark" onClick={this.props.toggleHowWorksModal}>How it works</button>
     </div>)
 
         var shareRecord = null
@@ -731,7 +731,7 @@ class NewHome extends Component {
                     <DisplayContacts />
                     
                 </div>
-                <Modal  size='lg' centered ={true} isOpen={this.props.modalReducer} toggle={this.props} external={externalCloseBtn}>
+                <Modal  size='lg' centered ={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
                 </Modal>
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
@@ -798,7 +798,7 @@ const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     callAction: state.call.callAction,
-    modalReducer:state.modal.modalReducer
+    openHowItWorksModal:state.modal.openHowItWorksModal
     
 
 
