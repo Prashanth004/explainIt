@@ -121,7 +121,7 @@ class SaveProjects extends Component {
                     changeInputValue={this.changeInputValue}
                     textValue={this.state.textValue}
                     submit = {this.SaveTopic}
-                    placeHolder={(this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN) ?"Description" : "Topic for screen share"}
+                    placeHolder={(this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN) ?"Description" : (this.props.action === config.FULL_SCREEN_RECORD)?"Topic for the recording":"Topic for screen share"}
                 />
                 <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>{this.props.action ===config.FULL_SCREEN_RECORD?"Start Recording":"Send Request"}</button>
                 <br/>
