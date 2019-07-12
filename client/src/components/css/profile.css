@@ -15,6 +15,23 @@ padding:10px;
     padding:5px;
     display:inline-block;
 }
+.gridLay{
+    display:grid;
+    padding-top:5px;
+    grid-template-columns:32% 6% 16% 6% 18% 15%; 
+}
+.labelProfilePic{
+    margin-top:-8px;
+    width:70px;
+    height:70px;
+  
+    border-radius:50%;
+}
+.pImageContainer{
+    padding-left:25px;
+    margin-top:-7px;
+    text-align: left;
+}
 
 .bio{
     width:80%;

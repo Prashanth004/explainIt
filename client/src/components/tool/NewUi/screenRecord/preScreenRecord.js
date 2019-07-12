@@ -14,7 +14,7 @@ export default (props) => {
     const recordingEle = (!permissonDenied) ? (<RecordFormInput
         saveforSelf={saveforSelf}
         toggle = {toggle}/>) : (<div>
-        <p>Permission enied to record the screen</p>
+        <p>Permission denied to record the screen</p>
         <button className="buttonLight" onClick={closeFunction}>Close</button>
     </div>)
     return(!isFullScreenRecording)?(

@@ -1,4 +1,4 @@
-.floatcontainer{
+/* .floatcontainer{
     display:grid;
     grid-template-columns:25% 25% 25% 25%;
     /* padding:5px; */
@@ -35,11 +35,7 @@
     padding-top:5px;
     grid-template-columns:60% 40%; 
 }
-.gridLay{
-    display:grid;
-    padding-top:5px;
-    grid-template-columns:35% 16% 16% 16% 16%; 
-}
+
 .topSymbolMain{
     width:100%;
     height:10px;
@@ -170,4 +166,4 @@ cursor:move;
            
         }
 
-    }
+    } */

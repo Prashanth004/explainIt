@@ -318,17 +318,17 @@ class NewHome extends Component {
             showDetails: false,
             displayLink: false
         })
-        if (!this.state.displayDetails) {
+        // if (!this.state.displayDetails) {
             this.setState({
                 displayDetails: true
             })
             this.props.displayFullScrenRecord()
-        }
-        else {
-            this.setState({
-                displayDetails: false
-            })
-        }
+        // }
+        // else {
+        //     this.setState({
+        //         displayDetails: false
+        //     })
+        // }
     }
     toggleExplainerVideo(){
     this.setState({
@@ -340,17 +340,17 @@ class NewHome extends Component {
             showDetails: false,
             displayLink: false
         })
-        if (!this.state.displayDetails) {
+        // if (!this.state.displayDetails) {
             this.setState({
                 displayDetails: true
             })
             this.props.displayInox()
-        }
-        else {
-            this.setState({
-                displayDetails: false
-            })
-        }
+        // }
+        // else {
+        //     this.setState({
+        //         displayDetails: false
+        //     })
+        // }
     }
 
     shareFullScreenShare() {
@@ -358,18 +358,18 @@ class NewHome extends Component {
             showDetails: false,
             displayLink: false
         })
-        if (!this.state.displayDetails) {
+        // if (!this.state.displayDetails) {
             this.setState({
                 displayDetails: true
             })
             localStorage.setItem('issueId', null)
             this.props.displayFullScreShare()
-        }
-        else {
-            this.setState({
-                displayDetails: false
-            })
-        }
+        // }
+        // else {
+        //     this.setState({
+        //         displayDetails: false
+        //     })
+        // }
     }
 
 
@@ -537,7 +537,7 @@ class NewHome extends Component {
             }
         }
         var howtWorksBtn = (<div className="HowTWorksDiv">
-        <button className="buttonDark" onClick={this.toggleExplainerVideo}>How it works</button>
+        <button className="buttonDark" onClick={this.props.toggleHowWorksModal}>How it works</button>
     </div>)
 
         var shareRecord = null
@@ -568,14 +568,11 @@ class NewHome extends Component {
                 </div>)
             }
             else {
-                shareRecord = (<Inboxfeed />)
+                // shareRecord = (<Inboxfeed />)
             }
         }
-        const activityDiv = (this.state.displayDetails) ? (
-            <div style={{ width: percentage, margin: "auto" }}>
-                {shareRecord}
-            </div>
-        ) : (null)
+        const activityDiv = (<div style={{ width: percentage, margin: "auto" }}>
+                {shareRecord}</div>) 
         const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated) ? (
             null
         ) : (<Profile
@@ -731,7 +728,7 @@ class NewHome extends Component {
                     <DisplayContacts />
                     
                 </div>
-                <Modal  size='lg' centered ={true} isOpen={this.props.modalReducer} toggle={this.props} external={externalCloseBtn}>
+                <Modal  size='lg' centered ={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
                 </Modal>
                 <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
@@ -798,7 +795,7 @@ const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     callAction: state.call.callAction,
-    modalReducer:state.modal.modalReducer
+    openHowItWorksModal:state.modal.openHowItWorksModal
     
 
 
