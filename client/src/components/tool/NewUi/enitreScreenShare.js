@@ -876,14 +876,16 @@ validateTurn(iceServers){
     }
     retryCall() {
         const { extSource, extOrigin } = this.props;
+        this.setState({myscreenSharing: true});
         console.log("exceciting compWIllMount")
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         var socket = this.state.socket;
         var self = this
+       
         this.setState({
             retry: true,
             retryLimit: this.state.retryLimit + 1,
-            initiatedCloseCall: false
+            initiatedCloseCall: false,
         })
         socket.emit(config.RETRYCALL, {
             "peerId": self.state.peerId

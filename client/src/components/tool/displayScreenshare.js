@@ -240,13 +240,11 @@ class DisplayShare extends Component {
 
         socket.on(config.RETRYCALL, data => {
             const { extSource, extOrigin } = this.props;
+            this.setState({ myscreenSharing: false})
             this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE, extSource, extOrigin)
-
             if (data.peerId === self.state.peerIdFrmPeer) {
                 self.peerConnections(socket, data.peerId)
-                self.setState({
-                    callEnded: false
-                })
+                self.setState({callEnded: false })
             }
         })
         socket.on(config.COMFIRM_TOKEN_VALIDITY, data => {
