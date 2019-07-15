@@ -17,7 +17,8 @@ export default function(state = initialState, action){
         case SECOND_SHARE_END:
         return{
             ...state,
-            secondScreenShareStoped:true
+            secondScreenShareStoped:true,
+            secondScreenShareStarted :false,
         }
         default:
         return{

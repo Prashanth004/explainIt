@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import config from '../../config/config'
 import '../css/screenRecorder.css'
@@ -809,6 +810,5 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, { postEndCall, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
-
 
 

@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
@@ -1505,3 +1506,4 @@ export default connect(mapStateToProps, {
     callFailedUpdate,
     updateRemainingTime
 })(ScreenRecorder)
+

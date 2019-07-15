@@ -22,9 +22,6 @@ import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction';
 import { IconContext } from "react-icons";
 
-
-
-
 class ProfileCard extends Component {
     constructor(props) {
         super(props)

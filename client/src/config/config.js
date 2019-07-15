@@ -17,7 +17,7 @@ const conf = {
     explainerVideo : "https://explain.bookmane.in/public/audio/2019_7_8__15_43_44video.mkv",
     peerHost:window.location.hostname,
     peerPort : 9000,
-    // peerPort :(window.location.protocol === 'https:' ? 443 : 80),
+    // peerPort :443,
     peerPath : '/peerjs',
     peerSecure:false,
     peerDebug:3,

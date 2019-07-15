@@ -51,3 +51,4 @@ class copyToClipboard extends Component {
 }
 
 export default copyToClipboard
+
