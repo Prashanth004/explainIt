@@ -460,7 +460,7 @@ class DisplayShare extends Component {
                 )
 
 
-                if (config.CALL_LOGS)
+                // if (config.CALL_LOGS)
                     call.on('stream', function (stream) {
                         socket.emit(config.CALL_ACK_MESSAGE, {
                             'clientId': self.state.clientPeerid,

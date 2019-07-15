@@ -1077,7 +1077,7 @@ validateTurn(iceServers){
                 });
             if (isSceenSharing)
                 fullStopedSharing(twitterUserId);
-            endSecondScreenShare()
+                endSecondScreenShare();
             this.setState({
                 isAudioRecDone: true,
                 clickedOnLink: false,
