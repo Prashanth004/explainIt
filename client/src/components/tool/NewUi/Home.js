@@ -499,7 +499,7 @@ class NewHome extends Component {
     render() {
         var issuepercentage = "59%";
         var percentage = "45%";
-        var displayLinkDiv = null;
+        // var displayLinkDiv = null;
         var profileCardElement = null;
         var listGrid= (window.innerWidth>=1000 )?(<div style={{ marginRight:"-80px",float: "right" }} >
         <span  className="hint--top" aria-label="List View">
@@ -681,17 +681,17 @@ class NewHome extends Component {
                     !this.props.participated
                 ) {
                     howtWorksBtn=null;
-                    displayLinkDiv = (<div className="sharableLinkSection">
-                        <div className="topBtnsActivity">
-                        <Button close onClick={this.toggleDisplayLink} />
-                        </div>
-                        <br/>
-                        <p style={{fontWeight:"500"}}>Your shareable Profile Link</p>
-                        <CopyToClipboard sharablelink={sharabeLink} />
-                    </div>)
+                    // displayLinkDiv = (<div className="sharableLinkSection">
+                    //     <div className="topBtnsActivity">
+                    //     <Button close onClick={this.toggleDisplayLink} />
+                    //     </div>
+                    //     <br/>
+                    //     <p style={{fontWeight:"500"}}>Your shareable Profile Link</p>
+                    //     <CopyToClipboard sharablelink={sharabeLink} />
+                    // </div>)
                 }
                 else {
-                    displayLinkDiv = null
+                    // displayLinkDiv = null
                 }
 
 
