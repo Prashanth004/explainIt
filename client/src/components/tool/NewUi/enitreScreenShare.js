@@ -782,6 +782,7 @@ validateTurn(iceServers){
                 var peerAudioRecorder = RecordRTC(remoteStream, {
                     type: 'audio'
                 });
+                console.log("i am getting executed here")
                 peerAudioRecorder.startRecording();
                 console.log("peerAudioRecorder : ",peerAudioRecorder)
                 self.setState({peerAudioRecorder :peerAudioRecorder })

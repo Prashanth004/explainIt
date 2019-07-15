@@ -545,9 +545,10 @@ class DisplayShare extends Component {
     shareScreen() {
         const { conn } = this.state;
         var self = this;
+        // 
         var presentTime = JSON.parse(localStorage.getItem("timer"));
         this.props.setTime(presentTime);
-        if (this.state.initiatedScreenShare && this.state.myScreenStream!==null) {
+        if (this.state.initiatedScreenShare && this.state.myScreenStream!==null ) {
             conn.send({
                 'type': config.PEER_SHARE_SCREEN_REQUEST,
                 'otherPeerId': self.state.clientPeerid
@@ -639,7 +640,7 @@ class DisplayShare extends Component {
             }
         }
         navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
-            this.setState({myScreenStream:screenStream})
+            self.setState({myScreenStream:screenStream})
             peer.call(self.state.peerIdFrmPeer, screenStream);
             self.setState({ secondVideoStream: screenStream });
         });
