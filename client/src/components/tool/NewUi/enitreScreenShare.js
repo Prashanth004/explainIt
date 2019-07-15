@@ -875,6 +875,9 @@ validateTurn(iceServers){
         })
     }
     retryCall() {
+        const { extSource, extOrigin } = this.props;
+        console.log("exceciting compWIllMount")
+        this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         var socket = this.state.socket;
         var self = this
         this.setState({
