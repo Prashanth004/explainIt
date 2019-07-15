@@ -32,7 +32,7 @@ class copyToClipboard extends Component {
       <input   ref={(textarea) => this.textArea = textarea} className="myInputClip" type="text"
       onChange={this.changeCopyDiv}
        value={this.props.sharablelink}/>
-                <span className="hint--bottom" aria-label={this.state.copyStatus}>
+                <span className="hint--top" aria-label={this.state.copyStatus}>
                     {/* <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
                     Copy Link
                     </button> */}

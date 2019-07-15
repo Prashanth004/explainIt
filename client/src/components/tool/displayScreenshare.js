@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import config from '../../config/config'
-import RecordRTC from 'recordrtc'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
-// import Peer from 'peerjs';
 import Countdown from 'react-countdown-now';
 import { registerCallToBrowser, registerEndToBrowser } from './NewUi/container/miscFunction';
 import browser from 'browser-detect';
@@ -19,15 +17,11 @@ import { stillAuthenicated } from '../../actions/signinAction';
 import { getProfileByTwitterHandle } from "../../actions/visitProfileAction";
 import { setTime } from '../../actions/floaterAction';
 
-
-
-
 class DisplayShare extends Component {
     constructor(props) {
         super(props)
         this.state = {
             peer: null,
-            recorder: null,
             host: config.peerHost,
             port: config.peerPort,
             path: config.peerPath,
@@ -63,7 +57,8 @@ class DisplayShare extends Component {
             selfCloseTime: 1,
             connectionFailed: false,
             timeAloted: 3,
-            blob: null
+            blob: null,
+            myScreenStream:null
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -435,25 +430,25 @@ class DisplayShare extends Component {
 
             navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audiostream) {
                 call.answer(audiostream)
-                var recorder1 = RecordRTC(audiostream, {
-                    type: 'audio'
-                });
-                recorder1.startRecording();
+                // var recorder1 = RecordRTC(audiostream, {
+                //     type: 'audio'
+                // });
+                // recorder1.startRecording();
                 registerCallToBrowser();
-                self.setState({ recorder: recorder1, connectionFailed: false });
+                self.setState({  connectionFailed: false });
                 self.saveBlobtimeOut = setTimeout(() => {
-                    const { recorder } = self.state;
-                    if (recorder !== null) {
-                        recorder.stopRecording(function () {
-                            var blob = recorder.getBlob();
-                            self.setState({
-                                downloadUrlVideo: URL.createObjectURL(blob),
-                                blob: blob,
-                                recorder: null
-                            })
+                    // const { recorder } = self.state;
+                    // if (recorder !== null) {
+                    //     recorder.stopRecording(function () {
+                    //         var blob = recorder.getBlob();
+                    //         self.setState({
+                    //             downloadUrlVideo: URL.createObjectURL(blob),
+                    //             blob: blob,
+                    //             recorder: null
+                    //         })
 
-                        });
-                    }
+                    //     });
+                    // }
                 }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000)
                 postStartCall(config.RECIEVER_SCREEN_SHARE,
                     self.props.extOrigin,
@@ -528,7 +523,7 @@ class DisplayShare extends Component {
     }
 
     openLogin() {
-        window.open(config.react_url + '/login')
+        window.open(config.react_url + '/signin/'+this.props.mytwitterHandle)
     }
     endCall() {
         console.log("endcall Called")
@@ -551,8 +546,8 @@ class DisplayShare extends Component {
         const { conn } = this.state;
         var self = this;
         var presentTime = JSON.parse(localStorage.getItem("timer"));
-        this.props.setTime(presentTime)
-        if (this.state.initiatedScreenShare) {
+        this.props.setTime(presentTime);
+        if (this.state.initiatedScreenShare && this.state.myScreenStream!==null) {
             conn.send({
                 'type': config.PEER_SHARE_SCREEN_REQUEST,
                 'otherPeerId': self.state.clientPeerid
@@ -644,33 +639,17 @@ class DisplayShare extends Component {
             }
         }
         navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
+            this.setState({myScreenStream:screenStream})
             peer.call(self.state.peerIdFrmPeer, screenStream);
             self.setState({ secondVideoStream: screenStream });
         });
     }
     closeConnection() {
         registerEndToBrowser();
-        const self = this;
-        const { socket, recorder, clientPeerid, closedHere, stream, secondVideoStream } = this.state;
+        const {closedHere, stream, secondVideoStream } = this.state;
         const { extSource, extOrigin, postEndCall } = this.props;
         const action = config.END_CALL_RECIEVER_PEER_FROM_WEB
         postEndCall(action, extSource, extOrigin)
-        if (recorder != null) {
-            recorder.stopRecording(function () {
-                var blob = recorder.getBlob();
-                socket.emit(config.UPDATE_RECORDER_BLOB, {
-                    'clientId': clientPeerid,
-                    'recorderBlob': blob,
-                });
-                self.setState({ recorder: null, blob: blob })
-            });
-
-        } else {
-            socket.emit(config.UPDATE_RECORDER_BLOB, {
-                'clientId': clientPeerid,
-                'recorderBlob': self.state.blob,
-            });
-        }
 
         if (secondVideoStream !== null)
             secondVideoStream.stop();
@@ -698,22 +677,10 @@ class DisplayShare extends Component {
                     <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
                 </div>))
         var ShareElement = null;
-        // var ProfileHover = null;
         const shouldDisplay = (!this.state.myscreenSharing) ? ("block") : ("none")
         const messageOfScreenShare = (!this.state.myscreenSharing) ? (null) :
             (<h4><b>Your screen is being shared</b></h4>)
-        // const DownloadExt = (this.state.isInstalled) ? (
-        //     null) : (<div className="messageToDownload">
-        //         <h3>Please download the chrome extension to continue</h3>
-        //         <button className="buttonDark" onClick={this.downloadExtension}>Download Extension</button>
-        //     </div>)
-        // if (this.state.callerProfileId !== null) {
-        //     ProfileHover = (<ProfileCard
-        //         userId={this.state.callerProfileId} />)
-        // }
-        // else {
-        //     ProfileHover = null
-        // }
+
 
         var displayLoginMessage = (!!this.props.isLoggedIn) ? (<div><p></p></div>) :
             (<div><p><b>Login in to explain to be able initiate screen shares</b></p>
@@ -830,6 +797,7 @@ const mapStateToProps = state => ({
     myProfilePicture: state.auth.profilePic,
     myProfileName: state.auth.userName,
     myProfileUserId: state.auth.id,
+    mytwitterHandle:state.auth.twitterHandle,
     peerProfilePic: state.visitProfile.profilePic,
     isLoggedIn: state.auth.isAuthenticated,
     extSource: state.extension.source,

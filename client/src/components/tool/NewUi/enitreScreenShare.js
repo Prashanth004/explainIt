@@ -97,7 +97,8 @@ class ScreenRecorder extends Component {
             retryTimeOut: false,
             currentAtionStatus: null,
             connectionFailed: false,
-            startTimer: false
+            startTimer: false,
+            peerAudioRecorder:null
 
         }
         this.renderer = this.renderer.bind(this);
@@ -373,15 +374,7 @@ class ScreenRecorder extends Component {
                 })
             }
         })
-        socket.on(config.UPDATE_RECORDER_BLOB, data => {
-            if (data.clientId === self.state.destkey) {
-                if (!this.state.saveinitiated)
-                    console.log("got the audio blob from user")
-                this.setState({
-                    peerAudioBlob: data.recorderBlob
-                })
-            }
-        })
+
 
         socket.on(config.LINK_TO_CALL_ACK, data => {
             if (data.fromUserId === this.props.userId) {
@@ -625,13 +618,14 @@ validateTurn(iceServers){
             self.generateLink()
         });
         peer.on('call', function (call) {
-            call.answer()
+            call.answer();
             self.props.updateRemainingTime(self.props.currentTimeLeft)
             call.on('stream', function (stream) {
                 self.setState({
                     videoStream: stream,
                     myscreenSharing: false
                 })
+              
                 var audio = document.querySelector('#secondShareVideo');
                 audio.srcObject = stream
                 self.props.startSecodScreenShare(stream)
@@ -784,7 +778,13 @@ validateTurn(iceServers){
         }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
         if (call) {
             call.on('stream', function (remoteStream) {
-                fullStartedSharing(twitterUserId)
+                fullStartedSharing(twitterUserId);
+                var peerAudioRecorder = RecordRTC(remoteStream, {
+                    type: 'audio'
+                });
+                peerAudioRecorder.startRecording();
+                console.log("peerAudioRecorder : ",peerAudioRecorder)
+                self.setState({peerAudioRecorder :peerAudioRecorder })
 
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
@@ -867,7 +867,7 @@ validateTurn(iceServers){
 
     generateLink() {
         var peerId = this.state.peerId;
-        var shareScreenLink = config.react_url + '/connect/' + peerId;
+        var shareScreenLink = config.react_url + '/share/' + peerId;
         this.setState({
             shareScreenLink: shareScreenLink
         })
@@ -912,23 +912,23 @@ validateTurn(iceServers){
     }
 
     savefilePrivate() {
-        console.log("save file initiated : ")
-        var videoBlob = this.state.blob;
+        console.log("saving private files")
+        const {blob,peerAudioBlob} =  this.state;
+        const {callTopic} = this.props;
         this.setState({ saveinitiated: true })
-        if (this.state.peerAudioBlob === null)
-            this.setState({ problemInsavingCall: true });
-        else {
-            var audioBlob = new Blob([this.state.peerAudioBlob], { type: 'audio/wav' })
-            this.setState({ downloadUrlAudio: URL.createObjectURL(audioBlob) });
-            console.log("saing the file..")
-            this.props.savefile(videoBlob, audioBlob, 0, this.props.callTopic, config.SERVER_SHARING)
+        if(peerAudioBlob!==null){
+            this.setState({ downloadUrlAudio: URL.createObjectURL(peerAudioBlob) });
+            console.log("video blob : ",blob);
+            console.log("peerAudioblob : ",peerAudioBlob)
+            this.props.savefile(blob, peerAudioBlob, 0, callTopic, config.SERVER_SHARING)
             var peer = this.state.peer;
             if (peer !== null) {
                 peer.destroy();
                 this.setState({ peer: null })
             }
         }
-    }
+        }
+    
 
     concatinateBlob(otherAudioArrayBuffer) {
         var blobArray = [];
@@ -969,7 +969,7 @@ validateTurn(iceServers){
     makeCallAction() {
         var self = this;
         var peerId = this.state.peerId;
-        var shareScreenLink = config.react_url + '/connect/' + peerId;
+        var shareScreenLink = config.react_url + '/share/' + peerId;
         this.setState({
             shareScreenLink: shareScreenLink,
         })
@@ -997,7 +997,9 @@ validateTurn(iceServers){
                 'fromUserName': this.props.userName,
                 'fromProfilePic': this.props.profilePic,
                 'fromUserId': this.props.userId,
-                'ToUserId': this.props.twitterUserId
+                'ToUserId': this.props.twitterUserId,
+                'timeAloted' : this.props.timeAloted,
+                'topicOfTheCall' : this.props.topicOfTheCall
             })
         }
         this.setState({
@@ -1016,11 +1018,12 @@ validateTurn(iceServers){
         console.log("stop share screen")
         const { twitterUserId, endSecondScreenShare, saveVideoBlob,
             fullStopedSharing, isSceenSharing, extOrigin, disableCallAction,
-            extSource, postEndCall } = this.props
-        const { stopedSharing, recorder, call, closedHere, timerEnded } = this.state
+            extSource,audioStream, screenStream,postEndCall } = this.props;
+        const { stopedSharing, peerAudioRecorder,recorder, call, closedHere, timerEnded } = this.state
         const self = this;
         registerEndToBrowser();
-        postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
+        postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin);
+        console.log("stopedSharing : ",stopedSharing)
         if (!stopedSharing || this.state.retryLimit> 0) {
             console.log("sdfkn")
             this.setState({ stopedSharing: true })
@@ -1030,27 +1033,33 @@ validateTurn(iceServers){
 
             if (!closedHere && !timerEnded)
                 this.setState({ showDisconectMessage: true })
-
-
-            disableCallAction()
-
-            var audioStream = this.props.audioStream;
-            var screenStream = this.props.screenStream;
+            disableCallAction();
+            // peerAudioRecorder
+           var audioStreamLocal = this.state.audioStream;
+           var screenStreamLocal = this.state.screenStream
             if (audioStream !== null)
                 audioStream.stop();
             if (screenStream != null)
                 screenStream.stop();
-            var audioStreamLocal = this.state.audioStream;
-            var screenStreamLocal = this.state.screenStream;
             if (audioStreamLocal !== null)
-                audioStream.stop();
+                audioStreamLocal.stop();
             if (screenStreamLocal != null)
-                screenStream.stop();
+                screenStreamLocal.stop();
             var audio = document.querySelector('#video');
             if (audio !== null) {
                 audio.src = "";
             }
-
+            if(peerAudioRecorder!==null){
+                console.log("peerAudioRecorder : ",peerAudioRecorder)
+                peerAudioRecorder.stopRecording(()=>{
+                    var blob = peerAudioRecorder.getBlob();
+                    console.log("audo  blob : ",blob)
+                    self.setState({
+                        peerAudioBlob:blob,
+                        peerAudioRecorder:null
+                    })
+                })
+            }
             if (recorder !== null)
                 recorder.stopRecording(function () {
                     var blob = recorder.getBlob();
@@ -1059,7 +1068,6 @@ validateTurn(iceServers){
                         blob: blob,
                         recorder: null
                     })
-                    console.log("saving the blobs")
                     saveVideoBlob(blob)
                 });
             if (isSceenSharing)
@@ -1426,6 +1434,7 @@ const mapStateToProps = state => ({
     peerId: state.call.peerId,
     isMuted: state.call.isMuted,
     timeAloted: state.call.noOfMinutes,
+    topicOfTheCall : state.call.topicOfTheCall,
     isSharingCompleted: state.tools.isFullSharingCompleted,
     failedToSave: state.issues.failedToSave,
     largeFileSize: state.issues.largeFileSize,
@@ -1458,7 +1467,8 @@ const mapStateToProps = state => ({
     onlineStatus: state.visitProfile.onlineStatus,
     busyStatus: state.visitProfile.busyStatus,
     linkToAccess: state.projects.linkToAccess,
-    explainBy: state.explain.explainBy
+    explainBy: state.explain.explainBy,
+    // secondScreenShareStarted:state.secondScreenShare.secondScreenShareStarted
 
 })
 

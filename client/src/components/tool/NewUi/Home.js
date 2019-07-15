@@ -251,7 +251,10 @@ class NewHome extends Component {
                     data.fromEmail,
                     data.fromUserName,
                     data.fromUserId,
-                    data.fromProfilePic
+                    data.fromProfilePic,
+                    data.topicOfTheCall,
+                    data.timeAloted
+
                 )
             }
         });
@@ -575,24 +578,24 @@ class NewHome extends Component {
             <div style={{ width: percentage, margin: "auto" }}>
                 {shareRecord}
             </div>
-        ) : (null)
+        ) : (null);
+        var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated) ? (
             null
         ) : (<Profile
             openDtailsTab={this.openDtailsTab}
+            sharabeLink={sharabeLink}
             isHome={this.state.isHome} />))
 
         ) : (null)
 
         const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo}/>;
         // var self = this
-        var sharabeLink = config.react_url + "/" + this.props.twitterHandle
+        
         var deatilsModal = null
         if (this.props.myissues !== null)
             var issuesCreated = (this.props.myissues)
         var feedDiv = null;
-
-       
 
         const callNotificationDiv = (this.props.incommingCall && !this.state.endedCallFromOtherPeer) ? (
             <div className="callNotification">
@@ -600,8 +603,16 @@ class NewHome extends Component {
                     <div className="callerProfileImage">
                         <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
                     </div>
+                    <br/>
                     <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio>
-                    <p>{this.props.callerName}</p>
+                    <div style={{width:"60%",margin:"auto",textAlign:"left"}}>
+                    <span><b>{this.props.callerName}</b></span>
+                    <br/>
+                    <span style={{fontSize:"12px"}}><b>Topic </b>   : {this.props.topicOfTheCallRecieve}</span>
+                    <br/>
+                    <span style={{fontSize:"12px"}}><b>Duration </b>: {this.props.timeAllotedRecieve}</span>
+                    </div>
+                  <br />
                     <div className="acceptRejectDiv">
                         <span className="hint--top" aria-label="Accept Request">
                             <div onClick={this.answerCall} className="acceptCall">
@@ -698,7 +709,7 @@ class NewHome extends Component {
                         toggleDisplayLink={this.toggleDisplayLink}
                         toggleCreatedIssue={this.toggleCreatedIssue}
                         toggleParticipatedIssue={this.toggleParticipatedIssue} />
-                        {displayLinkDiv}
+                        {/* {displayLinkDiv} */}
 
                     </div>
                 )
@@ -798,7 +809,10 @@ const mapStateToProps = state => ({
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     callAction: state.call.callAction,
-    openHowItWorksModal:state.modal.openHowItWorksModal
+    openHowItWorksModal:state.modal.openHowItWorksModal,
+    timeAllotedRecieve:state.call.timeAllotedRecieve,
+    topicOfTheCallRecieve:state.call.topicOfTheCallRecieve
+
     
 
 

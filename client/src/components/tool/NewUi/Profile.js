@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'reactstrap'
 import PropType from 'prop-types';
 import ProfileForm from './Profile/';
+import CopyToClipboard from '../CopytoClipboard'
 import { openEditProfile, closeEditProfile } from '../../../actions/profileAction'
 import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
 class Profile extends Component {
@@ -20,7 +21,6 @@ class Profile extends Component {
     componentWillMount(){
         if((this.props.bio === null||(this.props.bio).length===0) && this.props.isHome)
             this.setState({openBasicFill:true})
-        
     }
     openEdit() {
         this.props.openEditProfile()
@@ -82,6 +82,10 @@ class Profile extends Component {
                         {bio}
                         {goodAtDiv}
                         {worksDiv}
+                        <div>
+                    <span><b>My sharable Profile Link</b></span>
+                        <CopyToClipboard sharablelink={this.props.sharabeLink} />
+                        </div>
                         {/* <p><b>I charge {this.props.cost}$ a minute</b></p> */}
                     </div>
                     <div >

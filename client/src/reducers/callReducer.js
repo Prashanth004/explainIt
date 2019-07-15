@@ -43,7 +43,9 @@ const initialState={
     callAction:false,
     newCall:true,
     isCallAnswered:false,
-    isMuted:false
+    isMuted:false,
+    topicOfTheCallRecieve:null,
+    timeAllotedRecieve:null
 }
 
 export default function(state= initialState, action){
@@ -168,7 +170,9 @@ export default function(state= initialState, action){
                 userName:action.payload.userName,
                 email:action.payload.email,
                 id: action.payload.id,
-                profilePic:action.payload.profilePic                
+                profilePic:action.payload.profilePic,
+                topicOfTheCallRecieve:action.payload.topicOfTheCall,
+                timeAllotedRecieve:action.payload.timeAlloted
             }
         case ANSWER_CALL:
             return {

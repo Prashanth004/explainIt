@@ -2,6 +2,7 @@ import {SECOND_SHARE_START,SECOND_SHARE_END } from '../actions/types'
 
 const initialState={
     secondScreenShareStarted :false,
+    secondScreenShareStoped : false,
     stream :null
 }
 
@@ -16,7 +17,7 @@ export default function(state = initialState, action){
         case SECOND_SHARE_END:
         return{
             ...state,
-            secondScreenShareStarted:false,
+            secondScreenShareStoped:true
         }
         default:
         return{

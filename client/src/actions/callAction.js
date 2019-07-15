@@ -21,7 +21,7 @@ import {CALL_DETAILS_ACCEPT,
 import axios from 'axios';
 import config from '../config/config'
 
-export const acceptCallDetails = (link, callerEmail, callerUserName, callerId,callerProfilePic)=>(dispatch)=>{
+export const acceptCallDetails = (link, callerEmail, callerUserName, callerId,callerProfilePic,topicOfTheCall,timeAlloted)=>(dispatch)=>{
 dispatch({
     type:CALL_DETAILS_ACCEPT,
     payload:{
@@ -29,7 +29,9 @@ dispatch({
         email:callerEmail,
         userName:callerUserName,
         id:callerId,
-        profilePic:callerProfilePic
+        profilePic:callerProfilePic,
+        topicOfTheCall:topicOfTheCall,
+        timeAlloted:timeAlloted
     }
 })
 }

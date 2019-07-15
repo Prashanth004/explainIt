@@ -22,7 +22,7 @@ import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
 import Info from './components/tool/NewUi/NewFloater/info'
 import inbox from './components/tool/NewUi/Inbox'
-import floater from './components/tool/NewUi/Floater/floater'
+// import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
 class App extends Component {
@@ -36,12 +36,13 @@ class App extends Component {
         <div className="App">
           <BrowserRouter>
           <Switch>
-          <Route path ="/connect/:callerid" component= {DisplayShare}/>
+          <Route path ="/share/:callerid" component= {DisplayShare}/>
+          <Route path ="/share/newuser/:twitterhandle/:callerid" component= {DisplayShare}/>
             <Route exact path ="/application" component={Home}/>
             <Route path="/screenShareFloater" component={ScreenShareFloater}/>
-            <Route exact  path='/signin/:twitterhandle' component={Login} />
-            <Route exact  path='/explainIt' component={Explainit} />
-            <Route exact  path='/google' component={google} />
+            <Route exact path='/signin/:twitterhandle' component={Login} />
+            <Route exact path='/explainIt' component={Explainit} />
+            <Route exact path='/google' component={google} />
             <Route exact path='/git' component = {git} />
             <Route exact path ='/inbox/:userid' component={inbox}/>
             <Route exact path='/project/:projectid' component={Project}/>

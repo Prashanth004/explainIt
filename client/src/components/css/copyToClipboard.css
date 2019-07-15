@@ -5,13 +5,14 @@ padding-top:10px;
 padding-bottom:10px;
 }
 .myInputClip{
-    width:70%;
+    width:85%;
     border-radius:5px;
     border-style:solid;
     border-width:0.5px;
     border-color:rgba(0, 0, 0, 0.301);
     height:30px;
-    padding-left:20px;
+    padding-left:5px;
+    font-size: 12px;
 }
 .cpyNewBtn{
     width:28px;

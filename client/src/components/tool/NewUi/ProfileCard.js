@@ -152,9 +152,9 @@ class ProfileCard extends Component {
                     </div>
                     <div className="topSymbolMain">
                         {onlineOffline}
-                        <span>
+                        {/* <span>
                             {linkSymbol}
-                        </span>
+                        </span> */}
                     </div>
                     <div>
 
