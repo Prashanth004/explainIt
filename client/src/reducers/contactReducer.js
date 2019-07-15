@@ -1,6 +1,7 @@
 import {STARTED_ADD_TO_CONTACT,ADD_TO_CONTACT_FAILED_OWN_CONT,
-    CONTACT_EXIST,CONTACT_DOESNT_EXIST,
-    GOT_ALL_CONTACTS,GOT_ALL_CONTACTS_FAILED,
+    CONTACT_EXIST,CONTACT_DOESNT_EXIST,UPDAT_CONTACT_LIST,
+    ADD_TO_LIST,CONTACT_LIST,
+    GOT_ALL_CONTACTS,GOT_ALL_CONTACTS_FAILED,SWITCH_TO_ADD_TO_CONTACT,SWITCH_TO_CONTACT_LIST,
     SUCCESS_ADDED_CONTACT,FAILED_TO_ADD_CONTACT} from '../actions/types'
 // import { response } from 'express';
 
@@ -15,8 +16,9 @@ const initialState = {
     contactExist:false,
     fetchedContactInfo :false,
     mycontacts:[],
-    failedGettingAllContacts:false
-
+    failedGettingAllContacts:false,
+    searchedContacts : [],
+    contactDisplayAction:CONTACT_LIST
 
 }
 
@@ -30,6 +32,7 @@ export default function(state = initialState, action){
                 successAdded:false,
                 contactid:null,
                 error:null,
+                
             }
         case SUCCESS_ADDED_CONTACT:
             return{
@@ -38,6 +41,17 @@ export default function(state = initialState, action){
                 doneAdding:true,
                 successAdded:true,
                 contactid:action.payload.contactid
+            }
+        case SWITCH_TO_ADD_TO_CONTACT:
+            return{
+                ...state,
+                contactDisplayAction:ADD_TO_LIST
+                
+            }
+        case SWITCH_TO_CONTACT_LIST:
+            return{
+                ...state,
+                contactDisplayAction:CONTACT_LIST
             }
         case CONTACT_EXIST:
             return{
@@ -69,10 +83,16 @@ export default function(state = initialState, action){
                 error:'trying to add own contact',
                 contactid:null
             }
+        case UPDAT_CONTACT_LIST:
+            return{
+                ...state,
+                searchedContacts:action.newContactList
+            }
         case GOT_ALL_CONTACTS:
             return{
                 ...state,
-                mycontacts:action.data
+                mycontacts:action.data,
+                searchedContacts:action.data
             }
         case GOT_ALL_CONTACTS_FAILED:
             return{
