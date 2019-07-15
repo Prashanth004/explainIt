@@ -239,6 +239,8 @@ class DisplayShare extends Component {
         })
 
         socket.on(config.RETRYCALL, data => {
+            const { extSource, extOrigin } = this.props;
+            this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE, extSource, extOrigin)
 
             if (data.peerId === self.state.peerIdFrmPeer) {
                 self.peerConnections(socket, data.peerId)
