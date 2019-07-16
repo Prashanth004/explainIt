@@ -338,7 +338,6 @@ class ScreenRecorder extends Component {
             self.muteAudio()
             return
         }
-
         if (event.data.type === config.UNMUTE_TO_WEB) {
             self.unMuteAudio()
             return

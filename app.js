@@ -137,7 +137,7 @@ app.get('*', (req,res)=>{
 })
 
 io.on("connection", socket => {
- 
+  console.log("new client conneted : ")
  
     socket.on(key.LINK_TO_CALL,(data)=>{
     io.emit(key.LINK_TO_CALL, data); // Emitting a new message. It will be consumed by the client

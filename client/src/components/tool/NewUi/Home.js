@@ -75,7 +75,8 @@ class NewHome extends Component {
             newCall:true,
             reducedLittleWidth:false,
             currentAtionStatus:null,
-            showExplainerVideo:false
+            showExplainerVideo:false,
+            isinformed:false
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -100,6 +101,7 @@ class NewHome extends Component {
         this.showInbox = this.showInbox.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
         this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
+        this.informExtension = this.informExtension.bind(this);
     
     }
     toggleDisplayLink() {
@@ -154,10 +156,20 @@ class NewHome extends Component {
         window.removeEventListener('storage',this.reloadPage)
         window.removeEventListener("resize", this.resize());
     }
+    informExtension(){
+        this.setState({isinformed : true})
+        const userDetails = {
+            'type':config.INFORM_EXTENSION_USERID,
+            'userid' : this.props.userId
+        }
+        window.postMessage(userDetails, "*");
+    }
     componentDidMount() {
         initGA();
         loadPageView();
         this.props.getAllContacts();
+        console.log("this.props.userId : ",this.props.userId);
+     
         window.addEventListener('storage',this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
@@ -171,7 +183,7 @@ class NewHome extends Component {
                     origin: event.origin,
                     gotmessage: true
                 })
-                self.props.saveExtensionDetails(event.source, event.origin)
+                self.props.saveExtensionDetails(event.source, event.origin);
             }
         }
         if (window.addEventListener) {
@@ -184,6 +196,18 @@ class NewHome extends Component {
         socket.on(config.UPDATE_BADGE, data => {
             if (data.userId === this.props.userId) {
                 this.props.getTotalUnread()
+            }
+        })
+        socket.on(config.REJECT_REPLY,data=>{
+            if(this.props.userId === String(data.fromUserId)){
+                // stopFlashingFunc();
+                this.props.answerCall();
+            }
+        })
+        socket.on(config.ACCEPT_SHARE_REQUEST,data=>{
+            if(this.props.userId === String(data.fromUserId)){
+                // stopFlashingFunc();
+                this.props.answerCall();
             }
         })
         socket.on(config.END_WHILE_DIALING, data => {
@@ -233,6 +257,7 @@ class NewHome extends Component {
 
 
         socket.on(config.LINK_TO_CALL, data => {
+            console.log("recieving the call")
             self.setState({endedCallFromOtherPeer:false})
             setTimeout(() => {
                 this.props.missCall();
@@ -409,6 +434,7 @@ class NewHome extends Component {
         var socket = this.state.socket;
 
         socket.emit(config.ACCEPT_SHARE_REQUEST, {
+            'fromUserId':this.props.userId,
             'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
@@ -416,6 +442,7 @@ class NewHome extends Component {
     rejectCall() {
         var socket = this.state.socket
         socket.emit(config.REJECT_REPLY, {
+            'fromUserId':this.props.userId,
             'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
@@ -499,6 +526,7 @@ class NewHome extends Component {
     render() {
         var issuepercentage = "59%";
         var percentage = "45%";
+
         // var displayLinkDiv = null;
         var profileCardElement = null;
         var listGrid= (window.innerWidth>=1000 )?(<div style={{ marginRight:"-80px",float: "right" }} >
@@ -508,7 +536,10 @@ class NewHome extends Component {
         <span className="hint--top" aria-label="Grid View">
             <FiGrid onClick={this.changeViewToGrid} className="gridView" />
         </span>
-    </div>):(null)
+    </div>):(null);
+    if(!this.state.isinformed && this.props.userId!==null){
+        this.informExtension();
+    }
         if (this.state.reducedWidth) {
             issuepercentage = "100%"
         }
@@ -608,7 +639,7 @@ class NewHome extends Component {
                     <div style={{width:"60%",margin:"auto",textAlign:"left"}}>
                     <span><b>{this.props.callerName}</b></span>
                     <br/>
-                    <span style={{fontSize:"12px"}}><b>Topic </b>   : {this.props.topicOfTheCallRecieve}</span>
+                    <span style={{fontSize:"12px"}}><b>Topic </b>: {this.props.topicOfTheCallRecieve}</span>
                     <br/>
                     <span style={{fontSize:"12px"}}><b>Duration </b>: {this.props.timeAllotedRecieve}</span>
                     </div>
