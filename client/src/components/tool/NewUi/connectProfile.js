@@ -295,11 +295,11 @@ class NewHome extends Component {
     render() {
         if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
             this.props.history.push("/");
-        
-        var issuepercentage="30%";
+        var issuepercentage = "59%";
+        var percentage="30%";
         var shareRecord = null;
         if(this.state.reducedWidth)
-            issuepercentage="90%";
+        percentage="90%";
 
             if (!this.props.inbox && !this.props.created && !this.props.participated) {
                 if (this.props.screenAction === FULL_SCREEN_RECORD) {
@@ -325,7 +325,7 @@ class NewHome extends Component {
             }
             
         const activityDiv = (this.state.displayDetails) ? (
-            <div style={{ width: issuepercentage, margin:"auto",marginTop: "-25px"}}>
+            <div style={{ width: percentage, margin:"auto",marginTop: "-25px"}}>
                 {shareRecord}
             </div>
         ) : (null)
@@ -365,14 +365,14 @@ class NewHome extends Component {
                 </div>
                 )
                 feedDiv = (<div>
-                        <div style={{ textAlign: "right" }}>
+                        {/* <div style={{ textAlign: "right" }}>
                             <span className="hint--top" aria-label="List View">
                             <FiList onClick={this.changeViewToList} className="listView"/>
                             </span>
                             <span className="hint--top" aria-label="Grid View">
                             <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
                             </span>
-                        </div>
+                        </div> */}
                        {createdDiv}
                        </div>)
             }
@@ -391,14 +391,14 @@ class NewHome extends Component {
                 </div>)
                 feedDiv = (
                     <div>
-                    <div style={{ textAlign: "right" }}>
+                    {/* <div style={{ textAlign: "right" }}>
                          <span className="hint--top" aria-label="List View">
                          <FiList onClick={this.changeViewToList} className="listView"/>
                          </span>
                          <span className="hint--top" aria-label="Grid View">
                          <FiGrid onClick={this.changeViewToGrid} className="gridView"/>
                          </span>
-                     </div>
+                     </div> */}
                      
                      {participatedDiv}
                      </div>)

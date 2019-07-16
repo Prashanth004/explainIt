@@ -4,7 +4,21 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FiMail } from "react-icons/fi";
 import '../../css/nav.css';
-import {toggleHowWorksModal} from '../../../actions/modalAction'
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap';
+
+import { toggleHowWorksModal } from '../../../actions/modalAction'
 import '../../css/issueDetails.css';
 import { FiPower } from "react-icons/fi";
 // import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -131,6 +145,10 @@ class Navigationbar extends React.Component {
     var createdStyle = null;
     var partiStyle = null;
     // var inboxStyle = null;
+    var navItem1 = null;
+    var navItem2 = null;
+    var navItem3 = null;
+
     var profileImage = null;
     var centreNav = null;
     var explainLogo = (
@@ -166,29 +184,49 @@ class Navigationbar extends React.Component {
     }
     else {
       profileImage = (this.props.authAction) ? (!this.props.isAuthenticated) ? (null) : (
-        <div className="cardDropdown" >
+        <UncontrolledDropdown nav inNavbar>
+        <DropdownToggle nav style={{ marginTop: "50px" }} >
           <div className="profileImagesDiv">
             <span>
               <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
             </span>
           </div>
-          <div className="dropDownForOption drpLogout"
-            onMouseLeave={this.toggleDropDown} style={{ visibility: this.state.optionVisibe, width: "120px", minHeight: "40px", marginLeft: "-50px", marginTop: "3px" }}>
-            <div className="menuItem menuTwoParts" >
-              <div ><span onClick={this.logout}><FiPower /></span></div>
-              <div>
-                <span onClick={this.logout} className> Logout</span>
-              </div>
-            </div>
-            <div className="menuItem" >
-              <div ><span onClick={this.props.toggleHowWorksModal}></span></div>
-              <div>
-                <span onClick={this.props.toggleHowWorksModal} className> How it works</span>
-              </div>
-            </div>
-           
-          </div>
-        </div>) : (null)
+        </DropdownToggle>
+        <DropdownMenu right>
+       
+          <DropdownItem onClick={this.logout}>
+            <span  > Logout</span>
+            <span>     </span>
+            <span ><FiPower /></span>
+          </DropdownItem>
+          <DropdownItem onClick={this.props.toggleHowWorksModal}>
+            <span> How it works</span>
+          </DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>):null
+        // <div className="cardDropdown" >
+        //   <div className="profileImagesDiv">
+        //     <span>
+        //       <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
+        //     </span>
+        //   </div>
+        //   <div className="dropDownForOption drpLogout"
+        //     onMouseLeave={this.toggleDropDown} style={{ visibility: this.state.optionVisibe, width: "120px", minHeight: "40px", marginLeft: "-50px", marginTop: "3px" }}>
+        //     <div className="menuItem menuTwoParts" >
+        //       <div ><span onClick={this.logout}><FiPower /></span></div>
+        //       <div>
+        //         <span onClick={this.logout} className> Logout</span>
+        //       </div>
+        //     </div>
+        //     <div className="menuItem" >
+        //       <div ><span onClick={this.props.toggleHowWorksModal}></span></div>
+        //       <div>
+        //         <span onClick={this.props.toggleHowWorksModal} className> How it works</span>
+        //       </div>
+        //     </div>
+
+        //   </div>
+        // </div>) : (null)
 
     }
 
@@ -196,46 +234,59 @@ class Navigationbar extends React.Component {
 
     if ((this.props.Created || this.props.Participated || this.props.inbox) && !this.state.isViewPage) {
 
-      centreNav = (<div className="navgation">
-        <div onClick={this.openCreated} className="normalNav">
-          <button style={createdStyle} className="noButtons"><span>Created</span></button>
-        </div>
-        <div className="logoCentre">
-        <div className="pImageContainer">
-              <span>
-                <FiMail style={{marginTop:"10px",marginLeft:"8px", fontSize:"30px", color:inboxColor}} onClick={this.props.openInbox}
-                />
-              </span>
+      navItem1 = (<button onClick={this.openCreated} style={createdStyle} className="noButtons navItm"><span>Created</span></button>);
+      navItem2 = (<span><FiMail style={{ marginTop: "10px", marginLeft: "8px", fontSize: "30px", color: inboxColor }} onClick={this.props.openInbox} /></span>)
+      navItem3 = (<button onClick={this.openParticipated} style={partiStyle} className="noButtons navItm"><span>Participated</span></button>)
+      // centreNav = (<div className="navgation">
+      //   <div onClick={this.openCreated} className="normalNav">
+      //     <button style={createdStyle} className="noButtons"><span>Created</span></button>
+      //   </div>
+      //   <div className="logoCentre">
+      //   <div className="pImageContainer">
+      //         <span>
+      //           <FiMail style={{marginTop:"10px",marginLeft:"8px", fontSize:"30px", color:inboxColor}} onClick={this.props.openInbox}
+      //           />
+      //         </span>
 
-            </div>                </div>
-        <div className="normalNav">
-          <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
-        </div>
-      </div>)
+      //       </div>                </div>
+      //   <div className="normalNav">
+      //     <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
+      //   </div>
+      // </div>)
     }
 
     else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated)) {
 
       if ((this.props.Created || this.props.Participated)) {
-        centreNav = (<div className="navgation">
-          <div onClick={this.openCreated} className="normalNav">
-            <button onClick={this.openCreated} style={createdStyle} className="noButtons"><span>Created</span></button>
-          </div>
-          <div className="logoCentre">
+        navItem1 = (<button onClick={this.openCreated} style={createdStyle} className="noButtons navItm"><span>Created</span></button>);
+        navItem2 = (<div className="pImageContainer">
+          <span>
+            <img alt="profile pic" src={this.props.otherprofilePic}
+              onClick={this.props.openInbox}
+              className="labelProfilePicNav"></img>
+          </span>
 
-            <div className="pImageContainer">
-              <span>
-                <img alt="profile pic" src={this.props.otherprofilePic}
-                  onClick={this.props.openInbox}
-                  className="labelProfilePicNav"></img>
-              </span>
-
-            </div>
-          </div>
-          <div className="normalNav">
-            <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
-          </div>
         </div>)
+        navItem3 = (<button onClick={this.openParticipated} style={partiStyle} className="noButtons navItm"><span>Participated</span></button>)
+        // centreNav = (<div className="navgation">
+        //   <div onClick={this.openCreated} className="normalNav">
+        //     <button onClick={this.openCreated} style={createdStyle} className="noButtons"><span>Created</span></button>
+        //   </div>
+        //   <div className="logoCentre">
+
+        //     <div className="pImageContainer">
+        //       <span>
+        //         <img alt="profile pic" src={this.props.otherprofilePic}
+        //           onClick={this.props.openInbox}
+        //           className="labelProfilePicNav"></img>
+        //       </span>
+
+        //     </div>
+        //   </div>
+        //   <div className="normalNav">
+        //     <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
+        //   </div>
+        // </div>)
       }
       else {
       }
@@ -245,23 +296,56 @@ class Navigationbar extends React.Component {
 
       // centreNav = (<SearchBar />)
     }
-    const content = (<div className="navBar">
-      <div className="logo">
-        {explainLogo}
+    // const content = (<div className="navBar">
+    //   <div className="logo">
+    //     {explainLogo}
 
-      </div>
-      <div >
-        {centreNav}
+    //   </div>
+    //   <div >
+    //     {centreNav}
 
-      </div>
-      <div className="navItem">
-        <div></div>
-        <div>
-          {profileImage}
+    //   </div>
+    //   <div className="navItem">
+    //     <div></div>
+    //     <div>
+    //       {profileImage}
+    //     </div>
+
+    //   </div>
+    // </div>)
+    const content = (<Navbar color="white" light expand="md">
+      <NavbarBrand>
+        <div className="logoContainer" onClick={this.openHome}>
+          <span>
+            <img alt="open home" src={require('../../images/logo.png')}
+              width="100%"
+              height="100%"></img>
+          </span>
         </div>
+      </NavbarBrand>
+      <NavbarToggler onClick={this.toggle} />
+      <Collapse isOpen={this.state.isOpen} navbar>
+        <Nav className="ml-auto" navbar>
+          <NavItem className="navItem1">
+            {/* <NavLink  href="/components/">Components</NavLink> */}
+            {navItem1}
+          </NavItem>
+          <NavItem className="navItem1">
+            {navItem2}
+            {/* <NavLink  href="/components/">Components</NavLink> */}
+          </NavItem>
+          <NavItem className="navItem3" >
+            {navItem3}
+            {/* <NavLink href="/components/">Components</NavLink> */}
+          </NavItem>
 
-      </div>
-    </div>)
+          <NavItem>
+          {profileImage}
+            
+          </NavItem>
+        </Nav>
+      </Collapse>
+    </Navbar>)
 
     return (
       <div>
@@ -281,7 +365,7 @@ Navigationbar.PropType = {
   openCreated: PropType.func.isRequired,
   openParticipated: PropType.func.isRequired,
   openInbox: PropType.func.isRequired,
-  toggleHowWorksModal:PropType.func.isRequired
+  toggleHowWorksModal: PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
@@ -304,7 +388,7 @@ const mapStateToProps = state => ({
 
 
 })
-export default connect(mapStateToProps, { openHome,toggleHowWorksModal, openInbox, openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
+export default connect(mapStateToProps, { openHome, toggleHowWorksModal, openInbox, openCreated, openParticipated, stillAuthenicated, signInWithGoogle, twitterAuthFailure, signInWithTwitter, signout })(Navigationbar)
 
 
 

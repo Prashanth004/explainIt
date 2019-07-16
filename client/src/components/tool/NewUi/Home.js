@@ -3,7 +3,7 @@ import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
 import BusyAction from './container/BusyAction';
-import {toggleHowWorksModal} from '../../../actions/modalAction'
+import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
 import EmailVarify from './emailvarify'
@@ -12,7 +12,7 @@ import Activity from './Activies/indexActivity'
 import DisplatCreated from './diaplyissues/DisplayCreated';
 import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
-import {initGA,loadPageView} from './container/ReactGa';
+import { initGA, loadPageView } from './container/ReactGa';
 import Profile from './Profile'
 import DisplayContacts from './contactlist/contactsDisplay'
 import { getProfileDetails } from '../../../actions/profileAction';
@@ -24,10 +24,10 @@ import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { creatAnsProject } from '../../../actions/projectActions'
 import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css' 
+import 'react-confirm-alert/src/react-confirm-alert.css'
 import { Button, Modal, ModalBody } from 'reactstrap';
 // import { Spinner } from 'reactstrap';
-import {getAllContacts} from '../../../actions/contactAction'
+import { getAllContacts } from '../../../actions/contactAction'
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
@@ -44,7 +44,7 @@ import { resetCallAction, getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './diaplyissues/DisplayIssues'
 import Content from './Content';
-import {varifyEmail} from '../../../actions/emailAction'
+import { varifyEmail } from '../../../actions/emailAction'
 
 import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
@@ -72,11 +72,11 @@ class NewHome extends Component {
             reducedWidth: false,
             callerId: null,
             endedCallFromOtherPeer: false,
-            newCall:true,
-            reducedLittleWidth:false,
-            currentAtionStatus:null,
-            showExplainerVideo:false,
-            isinformed:false
+            newCall: true,
+            reducedLittleWidth: false,
+            currentAtionStatus: null,
+            showExplainerVideo: false,
+            isinformed: false
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -102,7 +102,7 @@ class NewHome extends Component {
         this.reloadPage = this.reloadPage.bind(this);
         this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
         this.informExtension = this.informExtension.bind(this);
-    
+
     }
     toggleDisplayLink() {
         this.setState({
@@ -113,27 +113,27 @@ class NewHome extends Component {
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
-        this.setState({reducedLittleWidth : window.innerWidth <= 1000});
+        this.setState({ reducedLittleWidth: window.innerWidth <= 1000 });
     }
 
-    
+
     saveVideoData(videoData, audioData, isPublic, text, action) {
         var condition = this.props.issueId == null || this.props.issueId === undefined
-        var issueId = (condition)?null:this.props.issueId;
+        var issueId = (condition) ? null : this.props.issueId;
         var imgData = "null";
         var items = {}
-        const isquestion = (condition)?"true":"false"
+        const isquestion = (condition) ? "true" : "false"
         this.props.creatAnsProject(text, imgData, videoData, audioData, items, isquestion, issueId, isPublic, action)
     }
     reloadPage(event) {
         if (event.key === 'token') {
             window.location.reload();
         }
-        if(event.key === 'currentAction'){
+        if (event.key === 'currentAction') {
             const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
-            this.setState({currentAtionStatus:currentAtionStatus})
+            this.setState({ currentAtionStatus: currentAtionStatus })
         }
-       
+
     }
     openDtailsTab() {
         this.setState({
@@ -151,16 +151,16 @@ class NewHome extends Component {
         })
     }
 
-  
-    componentWillUnmount(){
-        window.removeEventListener('storage',this.reloadPage)
+
+    componentWillUnmount() {
+        window.removeEventListener('storage', this.reloadPage)
         window.removeEventListener("resize", this.resize());
     }
-    informExtension(){
-        this.setState({isinformed : true})
+    informExtension() {
+        this.setState({ isinformed: true })
         const userDetails = {
-            'type':config.INFORM_EXTENSION_USERID,
-            'userid' : this.props.userId
+            'type': config.INFORM_EXTENSION_USERID,
+            'userid': this.props.userId
         }
         window.postMessage(userDetails, "*");
     }
@@ -168,9 +168,9 @@ class NewHome extends Component {
         initGA();
         loadPageView();
         this.props.getAllContacts();
-        console.log("this.props.userId : ",this.props.userId);
-     
-        window.addEventListener('storage',this.reloadPage)
+        console.log("this.props.userId : ", this.props.userId);
+
+        window.addEventListener('storage', this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
         var self = this
@@ -198,14 +198,14 @@ class NewHome extends Component {
                 this.props.getTotalUnread()
             }
         })
-        socket.on(config.REJECT_REPLY,data=>{
-            if(this.props.userId === String(data.fromUserId)){
+        socket.on(config.REJECT_REPLY, data => {
+            if (this.props.userId === String(data.fromUserId)) {
                 // stopFlashingFunc();
                 this.props.answerCall();
             }
         })
-        socket.on(config.ACCEPT_SHARE_REQUEST,data=>{
-            if(this.props.userId === String(data.fromUserId)){
+        socket.on(config.ACCEPT_SHARE_REQUEST, data => {
+            if (this.props.userId === String(data.fromUserId)) {
                 // stopFlashingFunc();
                 this.props.answerCall();
             }
@@ -225,13 +225,13 @@ class NewHome extends Component {
         })
 
         socket.on(config.SAVED_NEW_PROJECT, data => {
-           
+
             if (data.userId === this.props.userId) {
-               
+
                 this.props.getProfileDetails(this.props.userId, config.SELF)
             }
         })
-    
+
         socket.on(config.NEW_MESSAGE, data => {
 
             if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
@@ -243,10 +243,10 @@ class NewHome extends Component {
             console.log("connection failed : ")
         })
         socket.on('error', function (err) {
-            console.log("socket error : ",err)
+            console.log("socket error : ", err)
         });
         socket.on('connect_timeout', function (err) {
-            console.log("socket onnection_timeout : ",err)
+            console.log("socket onnection_timeout : ", err)
         });
         socket.on("disconnect", () => {
             console.log("socket disconnected")
@@ -258,7 +258,7 @@ class NewHome extends Component {
 
         socket.on(config.LINK_TO_CALL, data => {
             console.log("recieving the call")
-            self.setState({endedCallFromOtherPeer:false})
+            self.setState({ endedCallFromOtherPeer: false })
             setTimeout(() => {
                 this.props.missCall();
             }, 18000)
@@ -286,15 +286,15 @@ class NewHome extends Component {
     }
     componentWillMount() {
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
-        this.setState({currentAtionStatus:currentAtionStatus})
+        this.setState({ currentAtionStatus: currentAtionStatus })
         this.props.varifyEmail()
         this.props.stillAuthenicated()
         this.props.getTotalUnread();
         // io.connect(sURL, {transports:['websocket'], upgrade: false}, {'force new connection': true})
-        const socket = socketIOClient(config.base_dir,{transports: ['websocket']},{origins:"*"});
+        const socket = socketIOClient(config.base_dir, { transports: ['websocket'] }, { origins: "*" });
         socket.on('reconnect_attempt', () => {
             socket.io.opts.transports = ['polling', 'websocket'];
-          });
+        });
         this.setState({
             socket: socket
         })
@@ -358,11 +358,11 @@ class NewHome extends Component {
             })
         }
     }
-    toggleExplainerVideo(){
-    this.setState({
-        showExplainerVideo:!this.state.showExplainerVideo
-    })
-}
+    toggleExplainerVideo() {
+        this.setState({
+            showExplainerVideo: !this.state.showExplainerVideo
+        })
+    }
     showInbox() {
         this.setState({
             showDetails: false,
@@ -434,7 +434,7 @@ class NewHome extends Component {
         var socket = this.state.socket;
 
         socket.emit(config.ACCEPT_SHARE_REQUEST, {
-            'fromUserId':this.props.userId,
+            'fromUserId': this.props.userId,
             'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
@@ -442,7 +442,7 @@ class NewHome extends Component {
     rejectCall() {
         var socket = this.state.socket
         socket.emit(config.REJECT_REPLY, {
-            'fromUserId':this.props.userId,
+            'fromUserId': this.props.userId,
             'toUserId': this.state.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
@@ -529,17 +529,17 @@ class NewHome extends Component {
 
         // var displayLinkDiv = null;
         var profileCardElement = null;
-        var listGrid= (window.innerWidth>=1000 )?(<div style={{ marginRight:"-80px",float: "right" }} >
-        <span  className="hint--top" aria-label="List View">
-            <FiList onClick={this.changeViewToList} className="listView" />
-        </span>
-        <span className="hint--top" aria-label="Grid View">
-            <FiGrid onClick={this.changeViewToGrid} className="gridView" />
-        </span>
-    </div>):(null);
-    if(!this.state.isinformed && this.props.userId!==null){
-        this.informExtension();
-    }
+        var listGrid = (window.innerWidth >= 1000) ? (<div style={{ marginRight: "-80px", float: "right" }} >
+            <span className="hint--top" aria-label="List View">
+                <FiList onClick={this.changeViewToList} className="listView" />
+            </span>
+            <span className="hint--top" aria-label="Grid View">
+                <FiGrid onClick={this.changeViewToGrid} className="gridView" />
+            </span>
+        </div>) : (null);
+        if (!this.state.isinformed && this.props.userId !== null) {
+            this.informExtension();
+        }
         if (this.state.reducedWidth) {
             issuepercentage = "100%"
         }
@@ -553,13 +553,15 @@ class NewHome extends Component {
 
                 if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
                     percentage = "76%";
-                    listGrid=null}
-                else if(this.state.reducedLittleWidth){
+                    listGrid = null
+                }
+                else if (this.state.reducedLittleWidth) {
                     percentage = "42%";
-                    listGrid=null
+                    listGrid = null
                 }
                 else {
-                    percentage = "30%";}
+                    percentage = "30%";
+                }
             }
             else {
                 if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
@@ -571,34 +573,34 @@ class NewHome extends Component {
             }
         }
         var howtWorksBtn = (<div className="HowTWorksDiv">
-        <button className="buttonDark" onClick={this.props.toggleHowWorksModal}>How it works</button>
-    </div>)
+            <button className="buttonDark" onClick={this.props.toggleHowWorksModal}>How it works</button>
+        </div>)
 
         var shareRecord = null
         if (!this.props.inbox && !this.props.created && !this.props.participated) {
             if (this.props.screenAction === FULL_SCREEN_RECORD) {
                 howtWorksBtn = null
-                shareRecord =  (this.state.currentAtionStatus === null)?(<FullScreenRecord
+                shareRecord = (this.state.currentAtionStatus === null) ? (<FullScreenRecord
                     socket={this.state.socket}
                     closeImidiate={this.handleConfirm}
                     reStoreDefault={this.reStoreDefault}
                     savefile={this.saveVideoData}
-                />):(<div className="LinkDisplay">
-               <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
-                <BusyAction  action="record"currentAtionStatus = {this.state.currentAtionStatus}/>
+                />) : (<div className="LinkDisplay">
+                    <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
+                    <BusyAction action="record" currentAtionStatus={this.state.currentAtionStatus} />
                 </div>)
             }
             else if (this.props.screenAction === FULL_SCREEN_SHARE) {
                 howtWorksBtn = null
-                shareRecord = (this.state.currentAtionStatus === null)?(<FullScreenShare
+                shareRecord = (this.state.currentAtionStatus === null) ? (<FullScreenShare
                     toggleInbox={this.toggleInbox}
                     socket={this.state.socket}
                     closeImidiate={this.handleConfirm}
                     reStoreDefault={this.reStoreDefault}
                     savefile={this.saveVideoData}
-                />):(<div className="LinkDisplay">
-                <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
-                <BusyAction  action="share"currentAtionStatus = {this.state.currentAtionStatus}/>
+                />) : (<div className="LinkDisplay">
+                    <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
+                    <BusyAction action="share" currentAtionStatus={this.state.currentAtionStatus} />
                 </div>)
             }
             else {
@@ -620,9 +622,9 @@ class NewHome extends Component {
 
         ) : (null)
 
-        const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo}/>;
+        const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo} />;
         // var self = this
-        
+
         var deatilsModal = null
         if (this.props.myissues !== null)
             var issuesCreated = (this.props.myissues)
@@ -631,19 +633,26 @@ class NewHome extends Component {
         const callNotificationDiv = (this.props.incommingCall && !this.state.endedCallFromOtherPeer) ? (
             <div className="callNotification">
                 <div>
-                    <div className="callerProfileImage">
-                        <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
+                    <div className="CallCard">
+                        <div>
+                            <div className="callerProfileImage">
+                                <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
+                            </div>
+                            <br />
+                            <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio>
+                        </div>
+                        {/* style={{ width: "60%", margin: "auto", textAlign: "left" }} */}
+                        <div style={{padding:"15px",textAlign:"left",paddingTop:"5px"}}>
+                        <p><b>{this.props.callerName} </b>is trying to share screen with you for <b>{this.props.timeAllotedRecieve}</b> minutes on topic <b>{this.props.topicOfTheCallRecieve}</b></p>
+
+                            {/* <span><b>{this.props.callerName}</b></span>
+                            <br />
+                            <span style={{ fontSize: "12px" }}><b>Topic </b>: {this.props.topicOfTheCallRecieve}</span>
+                            <br />
+                            <span style={{ fontSize: "12px" }}><b>Duration </b>: {this.props.timeAllotedRecieve}</span> */}
+                        </div>
                     </div>
-                    <br/>
-                    <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio>
-                    <div style={{width:"60%",margin:"auto",textAlign:"left"}}>
-                    <span><b>{this.props.callerName}</b></span>
-                    <br/>
-                    <span style={{fontSize:"12px"}}><b>Topic </b>: {this.props.topicOfTheCallRecieve}</span>
-                    <br/>
-                    <span style={{fontSize:"12px"}}><b>Duration </b>: {this.props.timeAllotedRecieve}</span>
-                    </div>
-                  <br />
+                   
                     <div className="acceptRejectDiv">
                         <span className="hint--top" aria-label="Accept Request">
                             <div onClick={this.answerCall} className="acceptCall">
@@ -668,7 +677,7 @@ class NewHome extends Component {
                     <div className="issueContainer" style={{ width: issuepercentage }} >
                         <div className="closeBtnHolder">
                         </div>
-                        <IssueDisplay socket={this.state.socket}togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} />
+                        <IssueDisplay socket={this.state.socket} togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} />
                     </div>
                 ) : (<div className="issueContainer" style={{ width: "80%" }} >
 
@@ -677,9 +686,9 @@ class NewHome extends Component {
                     <DisplatCreated socket={this.state.socket} home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
                 </div>)
                 feedDiv = (<div>
-                   {listGrid}
-                        {participatedDiv}
-                    </div>)
+                    {listGrid}
+                    {participatedDiv}
+                </div>)
 
             }
             else if (this.props.inbox) {
@@ -711,7 +720,7 @@ class NewHome extends Component {
                     !this.props.created &&
                     !this.props.participated
                 ) {
-                    howtWorksBtn=null;
+                    howtWorksBtn = null;
                     // displayLinkDiv = (<div className="sharableLinkSection">
                     //     <div className="topBtnsActivity">
                     //     <Button close onClick={this.toggleDisplayLink} />
@@ -729,17 +738,17 @@ class NewHome extends Component {
                 profileCardElement = (
                     <div className="ProfileDiv">
                         <ProfileCard
-                        isHome={this.state.isHome}
-                        toggleInbox={this.toggleInbox}
-                        sharabeLink={sharabeLink}
-                        openDtailsTab={this.openDtailsTab}
-                        userId={this.props.userId}
-                        shareFullScreenShare={this.shareFullScreenShare}
-                        showInbox={this.showInbox}
-                        recordFullScreen={this.recordFullScreen}
-                        toggleDisplayLink={this.toggleDisplayLink}
-                        toggleCreatedIssue={this.toggleCreatedIssue}
-                        toggleParticipatedIssue={this.toggleParticipatedIssue} />
+                            isHome={this.state.isHome}
+                            toggleInbox={this.toggleInbox}
+                            sharabeLink={sharabeLink}
+                            openDtailsTab={this.openDtailsTab}
+                            userId={this.props.userId}
+                            shareFullScreenShare={this.shareFullScreenShare}
+                            showInbox={this.showInbox}
+                            recordFullScreen={this.recordFullScreen}
+                            toggleDisplayLink={this.toggleDisplayLink}
+                            toggleCreatedIssue={this.toggleCreatedIssue}
+                            toggleParticipatedIssue={this.toggleParticipatedIssue} />
                         {/* {displayLinkDiv} */}
 
                     </div>
@@ -749,41 +758,41 @@ class NewHome extends Component {
         else {
             profileCardElement = (<Content />)
         }
-       
-        return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
-            (!this.props.isVarified)?(<EmailVarify /> ):(
-            <div className="fullHome">
-                <Navbar />
 
-                <div className="containerHome">
-                    {callNotificationDiv}
-                    
-                    <div>
-                        {profileCardElement}
-                       
+        return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
+            (!this.props.isVarified) ? (<EmailVarify />) : (
+                <div className="fullHome">
+                    <Navbar />
+
+                    <div className="containerHome">
+                        {callNotificationDiv}
+
+                        <div>
+                            {profileCardElement}
+
+                        </div>
+                        {activityDiv}
+                        <div>
+                            {feedDiv}
+                        </div>
+                        <div>
+                            {details}
+                        </div>
+                        {howtWorksBtn}
+                        <DisplayContacts />
+
                     </div>
-                    {activityDiv}
-                    <div>
-                        {feedDiv}
-                    </div>
-                    <div>
-                        {details}
-                    </div>
-                    {howtWorksBtn}
-                    <DisplayContacts />
-                    
-                </div>
-                <Modal  size='lg' centered ={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
+                    <Modal size='lg' centered={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
-                </Modal>
-                <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
-                    <ModalBody className="modalBody">
-                        {deatilsModal}
-                    </ModalBody>
-                </Modal>
-                {/* {iframe} */}
-            </div>
-        ))) : (null)
+                    </Modal>
+                    <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
+                        <ModalBody className="modalBody">
+                            {deatilsModal}
+                        </ModalBody>
+                    </Modal>
+                    {/* {iframe} */}
+                </div>
+            ))) : (null)
 
 
     }
@@ -803,15 +812,15 @@ NewHome.PropType = {
     resetValues: PropType.func.isRequired,
     creatAnsProject: PropType.func.isRequired,
     openInbox: PropType.func.isRequired,
-    toggleHowWorksModal:PropType.func.isRequired,
+    toggleHowWorksModal: PropType.func.isRequired,
     resetCallAction: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
     getAllActivities: PropType.func.isRequired,
-    varifyEmail:PropType.func.isRequired
+    varifyEmail: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
-    doneVarification : state.email.doneVarification,
-    isVarified:state.email.isVarified,
+    doneVarification: state.email.doneVarification,
+    isVarified: state.email.isVarified,
     issues: state.issues.items,
     screenAction: state.tools.screenAction,
     isSharingCompleted: state.tools.isSharingCompleted,
@@ -834,17 +843,17 @@ const mapStateToProps = state => ({
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
     inbox: state.nav.openInbox,
-        isSceenSharing: state.tools.isFullScreenSharing,
+    isSceenSharing: state.tools.isFullScreenSharing,
     isFullScreenRecording: state.tools.isFullScreenRecording,
     showCanvas: state.canvasActions.showCanvas,
     issueId: state.issues.currentIssueId,
     startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
     callAction: state.call.callAction,
-    openHowItWorksModal:state.modal.openHowItWorksModal,
-    timeAllotedRecieve:state.call.timeAllotedRecieve,
-    topicOfTheCallRecieve:state.call.topicOfTheCallRecieve
+    openHowItWorksModal: state.modal.openHowItWorksModal,
+    timeAllotedRecieve: state.call.timeAllotedRecieve,
+    topicOfTheCallRecieve: state.call.topicOfTheCallRecieve
 
-    
+
 
 
 
@@ -873,5 +882,5 @@ export default connect(mapStateToProps, {
     creatAnsProject,
     cancelSuccess,
     clearAnswers, stillAuthenicated,
-    resetValues,getAllContacts
+    resetValues, getAllContacts
 })(NewHome)
