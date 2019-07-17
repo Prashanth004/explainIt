@@ -779,7 +779,7 @@ class NewHome extends Component {
                             {details}
                         </div>
                         {howtWorksBtn}
-                        <DisplayContacts />
+                        {/* <DisplayContacts /> */}
 
                     </div>
                     <Modal size='lg' centered={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>

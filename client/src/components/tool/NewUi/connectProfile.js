@@ -3,9 +3,9 @@ import '../../css/newlanding.css';
 import Profile from './Profile';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './diaplyissues/DisplayIssues';
-import { FiGrid,FiList } from "react-icons/fi";
+// import { FiGrid,FiList } from "react-icons/fi";
 import Navbar from './Navbar';
-import AddtoContact from './contactlist/addToContact'
+// import AddtoContact from './contactlist/addToContact'
 import FullScreenShare from './enitreScreenShare';
 import FullScreenRecord from './FullScreenRecord';
 import '../../css/NewSignin.css';
@@ -458,9 +458,9 @@ class NewHome extends Component {
                     <div>
                         {details}
                     </div>
-                    <div>
+                    {/* <div>
                         <AddtoContact contactid = {this.props.userId} />
-                    </div>
+                    </div> */}
                 </div>
            
 

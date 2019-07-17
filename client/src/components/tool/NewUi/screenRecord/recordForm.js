@@ -151,13 +151,13 @@ class tweetSearch extends Component {
     
         const { emptyUserName, empty, noText, negNumber, limitExce} = this.state;
 
-        const { twitterHandle, tweetTested, doneTweeting, noInternet, selfShare,
+        const { twitterHandle, tweetTested, doneTweeting, noInternet,
             isVisitProfile, numberValue, emptyNumber, maxTimeForVideo } = this.state;
         const { doneFetching,
             fetchProfile, isPresentInExplain, twitterHandleValid } = this.props;
             console.log(this.state.doneTweeting,fetchProfile)
 
-        if (doneFetching && tweetTested && !doneTweeting && fetchProfile && !noInternet && !selfShare && !!isPresentInExplain)
+        if (doneFetching && tweetTested && !doneTweeting && fetchProfile && !noInternet  && !!isPresentInExplain)
             this.updateInfo()
         const spanElement = ((limitExce) ? (
             <span className="spanElement" >Maximum duration for the call is {maxTimeForVideo} minutes</span>
@@ -182,16 +182,16 @@ class tweetSearch extends Component {
             (doneFetching && fetchProfile) ?
                 (noInternet ? (<NoInternet   changeTweetStateNeg={this.changeTweetStateNeg} />) : 
                 ((!twitterHandleValid ? (<InValidHandle   changeTweetStateNeg={this.changeTweetStateNeg}/>) :
-                    (selfShare ? (<SelfShareInfo changeTweetStateNeg={this.changeTweetStateNeg} />) :
+                   
                         (!isPresentInExplain ? (<NotPresentOnExplain
                             changeTweetStateNeg={this.changeTweetStateNeg}
                             isVisitProfile={isVisitProfile}
                             twitterhandle={twitterHandle}
                             source={config.SCREEN_SHARE_PAGE}
                             sharablelink={this.props.shareScreenLink}
-                        />) : (null)))))) : (<p className="info">checking handle validity</p>)) : (null)
+                        />) : (null))))) : (<p className="info">checking handle validity</p>)) : (null)
         // && !noInternet && !selfShare && isPresentInExplain
-        const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain || selfShare ||noInternet )) ?(null):(<div>
+        const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain      ||noInternet )) ?(null):(<div>
             <div className="startShare">
                 <p style={{ fontSize: "13px", fontWeight: "500" }}>Record for <InputNumber
                         empty={emptyNumber}

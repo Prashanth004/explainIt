@@ -28,7 +28,7 @@ class Fromref extends Component {
                     "Authorization": token,
                 }
             }).then(res => {
-                console.log("res1 : ", res.data.data)
+                // console.log("res1 : ", res.data.data)
                 if (res.status === 200 || res.status === 304) {
                     this.setState({
                         problemOwnerTwitterhandle: res.data.data.twitterhandle,
@@ -51,7 +51,7 @@ class Fromref extends Component {
                 "Authorization": token,
             }
         }).then(res2 => {
-            console.log("res1 : ", res2.data.data)
+            // console.log("res1 : ", res2.data.data)
             if (res2.status === 200 || res2.status === 304) {
                 this.setState({
                     topicName: res2.data.data.textexplain

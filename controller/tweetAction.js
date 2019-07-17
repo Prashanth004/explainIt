@@ -35,11 +35,13 @@ const client = new Twitter({
             database.db.manyOrNone('select * from usertwitter where userid = $1 and twitterhandle = $2',[req.body.id,req.body.twitterhandle])
             .then(data=>{
                 if(data.length=== 0){
-                    database.db.oneOrNone('insert into usertwitter (twitterhandle, userid)'+
-                    'values(${twitterhandle}, ${userid})',
+                    database.db.oneOrNone('insert into usertwitter (twitterhandle, userid,profilepic,twitterid)'+
+                    'values(${twitterhandle}, ${userid},$(profilepic),$(twitterid))',
                     {
                         twitterhandle:req.body.twitterhandle,
-                        userid:req.body.id
+                        userid:req.body.id,
+                        profilepic:newProfilePic,
+                        twitterid:body.id_str
                     })
                     .then(data=>{
                     })
@@ -104,7 +106,25 @@ const client = new Twitter({
 
       });
   }
-
+  exports.getUserDetails = (req,res)=>{
+      console.log("i reaching here");
+      console.log("req.params.twitterid : ",req.params.twitterid)
+      database.db.manyOrNone('select * from usertwitter  where twitterid = $1',req.params.twitterid)
+      .then(data=>{
+          console
+          res.status(200).send({
+              success:1,
+              data:data
+          })
+      })
+      .catch(error=>{
+          console.log("error : ",error)
+        res.status(500).send({
+            success:0,
+            msg:error
+        })
+      })
+  }
   exports.twitterlist = (req, res)=>{
       const user = req.user.id
       database.db.manyOrNone('select * from usertwitter where userid = $1',user)

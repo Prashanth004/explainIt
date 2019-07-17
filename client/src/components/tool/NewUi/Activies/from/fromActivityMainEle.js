@@ -36,12 +36,37 @@ class ActivityMain extends Component {
                     }
                 }).then(res => {
                     if (res.status === 200 || res.status === 304) {
-        
-                        this.setState({
-                            userName: res.data.data.twitterhandle,
-                            profilePic: res.data.data.profilepic
-                        })
-                        this.props.addNewUser(res.data.data,userData)
+                        if(res.data.data !== null){
+                            this.setState({
+                                userName: res.data.data.twitterhandle,
+                                profilePic: res.data.data.profilepic
+                            })
+                            this.props.addNewUser(res.data.data,userData)
+                        }
+                        else{
+                            axios({
+                                method: 'get',
+                                url: config.base_dir + "/api/tweetactions/getuser/" + activity.touser,
+                                headers: {
+                                    "Authorization": token,
+                                }
+                            }).then(res=>{
+                                if(res.status === 200 || res.status === 304){
+                                   
+                                        this.setState({
+                                            userName: res.data.data[0].twitterhandle,
+                                            profilePic: res.data.data[0].profilepic
+                                        })
+                                       
+                                    
+
+                                }
+                            })
+                            .catch(error=>{
+                                console.log("error : ",error)
+                            })
+                          
+                        }
                     }
                 })
             }
@@ -54,13 +79,13 @@ class ActivityMain extends Component {
 
         }
         else{
-            console.log("activity.activity : ",activity)
+            // console.log("activity.activity : ",activity)
         }
 
   
     }
   render() {
-      console.log("asfdmnskdj")
+    //   console.log("asfdmnskdj")
     const activitiesElements =(this.props.activity.activity===config.CALL_FAILED)?
     (<CallFail
         userData = {this.state}

@@ -82,7 +82,8 @@ class DisplayShare extends Component {
 
     }
     closeWindow() {
-        window.close();
+        window.open("about:blank", "_self");
+window.close(); 
     }
     increaseTime(){
        this.state.conn.send({ type: "addtimerReciever" })
@@ -218,8 +219,8 @@ class DisplayShare extends Component {
 
         socket.on(config.SEND_SHARABLE_LINK, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
-                console.log("data.successMessage : ",data.successMessage)
-                console.log("tyepeof(data.successMessage) : ",typeof(data.successMessage))
+                // console.log("data.successMessage : ",data.successMessage)
+                // console.log("tyepeof(data.successMessage) : ",typeof(data.successMessage))
                 if (data.successMessage === "true") {
                     if (data.sharableLink !== null)
                         localStorage.setItem('newIssueId', (data.sharableLink).split('/')[4]);
@@ -528,10 +529,10 @@ class DisplayShare extends Component {
     }
 
     openLogin() {
-        window.open(config.react_url + '/signin/'+this.props.mytwitterHandle)
+        window.open(config.react_url )
     }
     endCall() {
-        console.log("endcall Called")
+        // console.log("endcall Called")
         var call = this.state.call;
         this.setState({
             closedHere: true,

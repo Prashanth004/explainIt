@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 router.post('/getid',  twitteActionsController.getid);
 router.post('/tweet', twitteActionsController.tweetRecoding);
+router.get('/getuser/:twitterid',passport.authenticate('jwt', { session: false }),twitteActionsController.getUserDetails)
 router.get('/twitterhandles', passport.authenticate('jwt', { session: false }),twitteActionsController.twitterlist)
 
 module.exports = router;

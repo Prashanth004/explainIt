@@ -30,8 +30,8 @@ class activityRoot extends Component {
     this.setState({allActivities : allacti})
   }
   render() {
-    console.log((this.state.allActivities));
-    console.log((this.props.userId))
+    // console.log((this.state.allActivities));
+    // console.log((this.props.userId))
     const { userId } = this.props;
     const {allActivities} = this.state;
     const activitiesEle = (allActivities).map((activity, index) =>

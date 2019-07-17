@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import config from '../../../../config/config'
+// import axios from 'axios';
+// import config from '../../../../config/config'
 // import PropType from 'prop-types';
+// import './contacts.css'
+import {addNewUser} from '../../../../actions/storeUserAction'
 
 
 class cntactCard extends Component {
@@ -13,36 +15,21 @@ class cntactCard extends Component {
             profilePic: ' ',
         }
     }
-    componentWillMount(){
-        const {contactId,userData} = this.props;
-        var token = JSON.parse(localStorage.getItem('token'))
-        var newData = userData.filter(user=>user.key === contactId);
-        // if(newData.length ===0){
-        //     axios({
-        //         method: 'get',
-        //         url: config.base_dir + "/api/users/id/" + contactId,
-        //         headers: {
-        //             "Authorization": token,
-        //         }
-        //     }).then(res => {
-        //         if (res.status === 200 || res.status === 304) {
-    
-        //             this.setState({
-        //                 userName: res.data.data.twitterhandle,
-        //                 profilePic: res.data.data.profilepic
-        //             })
-        //             this.props.addNewUser(res.data.data,userData)
-        //         }
-        //     })
-        // }
-    }
+  
   render() {
+    console.log("this.props.contactData : ",this.props.contactData);
+    const {profilepic,twitterhandle,username} = this.props.contactData;
+   
     return (
-      <div>
-          {/* <div style={{width:"50px", height:"50px",borderRadius:"50%"}}>
-              {/* <img src={}></img> */}
-          {/* </div> */}
-       {/* {this.props.contactId}  */}
+      <div className="singleContact">
+          <div className="contactImgContainer">
+              <img src={profilepic} width="100%" height="100%"  className="contactImage" alt="profilePic"></img>
+          </div>
+          <div>
+          <p>{username} </p>
+          <span>@{twitterhandle}</span>
+          </div>
+      
       </div>
     )
   }
@@ -55,7 +42,7 @@ const mapStateToProps = state => ({
     userData : state.userStore.userData
 
 })
-export default connect(mapStateToProps, {})(cntactCard)
+export default connect(mapStateToProps, {addNewUser})(cntactCard)
 
 
 

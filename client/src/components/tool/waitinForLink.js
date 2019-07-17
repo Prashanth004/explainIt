@@ -1,22 +1,17 @@
+
 import React from 'react'
 
 export default () => {
-    var value = (<div><h5>
-        <b>Call ended due to network issues</b>
-    </h5>
-        <p>Please wait.. Caller maight retry to call you </p>
+    var value = (<div><p>Preparing a link to access the call..</p>
     </div>)
     setTimeout(()=>{
-        value =(<div><h5>
-            <b>Call ended due to network issues</b>
-            <p>Caller did not retry</p>
-        </h5>
-           
-        </div>)
-    },15000)
+        value =(<div><p>Could not generate Link right now.</p>
+        <p>Please check your activities section, get the link of the session</p></div>)
+    },10000)
   return (
     <div>
       {value}
     </div>
   )
 }
+

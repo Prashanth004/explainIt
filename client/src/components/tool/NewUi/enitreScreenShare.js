@@ -361,13 +361,13 @@ class ScreenRecorder extends Component {
 
         socket.on(config.CALL_ACK_MESSAGE, data => {
 
-            var userId = Number(data.recieverUserId);
-            userId = bigInt(data.recieverUserId).value;
-            self.setState({
-                recieverProfilePic: data.recieverProfilePic,
-                recieverProfileName: data.recieverProfileName,
-                recieverProfileId: userId
-            })
+            // var userId = Number(data.recieverUserId);
+            // userId = bigInt(data.recieverUserId).value;
+            // self.setState({
+            //     // recieverProfilePic: data.recieverProfilePic,
+            //     // recieverProfileName: data.recieverProfileName,
+            //     recieverProfileId: userId
+            // })
             if (data.clientId === self.state.peerId) {
                 self.setState({
                     CallAck: true,
