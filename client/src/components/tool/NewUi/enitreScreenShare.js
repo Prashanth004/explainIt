@@ -753,13 +753,15 @@ validateTurn(iceServers){
 
         var call = peer.call(destkey, finalStream);
         if (config.CALL_LOGS)
-            console.log("Made peer call with other peer is and streams")
-        var recorder1 = RecordRTC(finalStream, {
-            type: 'video'
-        });
-        recorder1.startRecording();
+            console.log("Made peer call with other peer is and streams");
+                var recorder1 = RecordRTC(finalStream, {
+                    type: 'video'
+                });
+                recorder1.startRecording();
+                self.setState({ recorder: recorder1 });
+        
         registerCallToBrowser();
-        self.setState({ recorder: recorder1 });
+      
 
 
         self.saveBlobtimeOut = setTimeout(() => {
@@ -782,11 +784,10 @@ validateTurn(iceServers){
                 var peerAudioRecorder = RecordRTC(remoteStream, {
                     type: 'audio'
                 });
-                console.log("i am getting executed here")
+                console.log("i am getting executed here");
                 peerAudioRecorder.startRecording();
                 console.log("peerAudioRecorder : ",peerAudioRecorder)
                 self.setState({peerAudioRecorder :peerAudioRecorder })
-
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
                 audio.play()
@@ -897,7 +898,7 @@ validateTurn(iceServers){
                     retryTimeOut: true
                 })
             }
-        }, 13000)
+        }, 20000)
         // if (!navigator.onLine) {
         //     self.setState({
         //         noInternet: true
@@ -1114,12 +1115,13 @@ validateTurn(iceServers){
         const { initialTime, noOfIncreaseInTime, currentTimeLeft } = this.props;
         var sharableLinkSaved = null;
         if (explainBy === config.null) {
-            sharableLinkSaved = (failedToSave || largeFileSize) ? (null) : (linkToAccess);
+            sharableLinkSaved =  (failedToSave || largeFileSize) ? null: (linkToAccess);
         }
         else {
             sharableLinkSaved = (config.react_url + "/project/" + issueId);
         }
-        const saveStatus = (failedToSave || largeFileSize) ? ("false") : ("true");
+        const saveStatus = (failedToSave || largeFileSize || linkToAccess === null) ? ("false") : ("true");
+   
         socket.emit(config.SEND_SHARABLE_LINK, {
             'otherPeerId': self.props.peerId,
             'successMessage': saveStatus,
@@ -1149,14 +1151,7 @@ validateTurn(iceServers){
                 this.sendLink()
             }
         }
-        else {
-            if (this.props.linkToAccess === null && this.props.isSharingCompleted && !this.state.manualClose && !this.state.timerEnded) {
-                if (!this.props.sendinitiated) {
-                    this.sendLink()
-                }
-            }
-
-        }
+      
         const audioWarning = (this.props.isSceenSharing && this.props.currentTimeLeft < 0.166) ? (<audio style={{ display: "none" }} autoPlay loop src={require('../../audio/time_out.wav')}></audio>) : (null)
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate

@@ -4,6 +4,8 @@ import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
+import PreparingLink from './waitinForLink'
+import RetryText from './waitForretry'
 import Countdown from 'react-countdown-now';
 import { registerCallToBrowser, registerEndToBrowser } from './NewUi/container/miscFunction';
 import browser from 'browser-detect';
@@ -216,6 +218,8 @@ class DisplayShare extends Component {
 
         socket.on(config.SEND_SHARABLE_LINK, data => {
             if (data.otherPeerId === self.state.peerIdFrmPeer) {
+                console.log("data.successMessage : ",data.successMessage)
+                console.log("tyepeof(data.successMessage) : ",typeof(data.successMessage))
                 if (data.successMessage === "true") {
                     if (data.sharableLink !== null)
                         localStorage.setItem('newIssueId', (data.sharableLink).split('/')[4]);
@@ -670,7 +674,7 @@ class DisplayShare extends Component {
 
 
         </div>) : (null)
-        var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<p>Preparing a link to access the call..</p>) :
+        var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<PreparingLink />) :
             ((!this.state.failedToSaveMessage && (this.state.sharablelink !== null || this.state.sharablelink !== undefined)) ?
                 (<div className="sharableLinkDiv">
                     <span>Link to access you saved call : </span>
@@ -707,11 +711,7 @@ class DisplayShare extends Component {
                         {sharableLinkMessage}
                         {selfCloseTimer}
                     </div>
-                ) : (!this.state.gotSharableLink ? (<div><h5>
-                    <b>Call ended due to network issues</b>
-                </h5>
-                    <p>Please wait.. Caller will retry to call you </p>
-                </div>) : (
+                ) : (!this.state.gotSharableLink ? (<RetryText />) : (
                         <div><h5>
                             <b>Disconnected .</b></h5>
                             {sharableLinkMessage}
