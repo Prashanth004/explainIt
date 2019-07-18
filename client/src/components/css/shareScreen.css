@@ -19,7 +19,12 @@
 /* .LinkDisplay:hover{
     border-color:#8dc7c9;
 } */
+.endCallNew{
+    position: absolute;
+    bottom:-50px;
+    right:50%;
 
+}
 .arrowDiv{
     width:25px;
     height:25px;

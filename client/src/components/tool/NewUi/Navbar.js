@@ -103,11 +103,13 @@ class Navigationbar extends React.Component {
     this.setState({ state: this.state });
   }
   openHome() {
-    if (!(window.location.pathname).includes('application'))
+    if (!(window.location.pathname).includes('application') && !(window.location.pathname).includes('share'))
       window.open(config.react_url + '/application', '_self')
     else {
       if (this.props.isSceenSharing || this.props.isFullScreenRecording)
-        window.open(config.react_url + '/application', '_blank')
+        window.open(config.react_url + '/application', '_blank');
+      else if((window.location.pathname).includes('share'))
+        window.open(config.react_url + '/application', '_self')
       else
         this.props.openHome()
 

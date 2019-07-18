@@ -7,14 +7,16 @@ import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
 import EmailVarify from './emailvarify'
-import { MdCallEnd, MdCall } from "react-icons/md";
+import CallNotification from './container/CallNotification';
 import Activity from './Activies/indexActivity'
 import DisplatCreated from './diaplyissues/DisplayCreated';
 import { cancelSuccess } from '../../../actions/issueActions'
 import Inboxfeed from './Inboxfeed';
 import { initGA, loadPageView } from './container/ReactGa';
 import Profile from './Profile'
-import DisplayContacts from './contactlist/contactsDisplay'
+import { answerCall, missCall } from '../../../actions/callAction';
+
+// import DisplayContacts from './contactlist/contactsDisplay'
 import { getProfileDetails } from '../../../actions/profileAction';
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import { getTotalUnread } from '../../../actions/messageAction'
@@ -49,7 +51,7 @@ import { varifyEmail } from '../../../actions/emailAction'
 import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
-import { answerCall, missCall } from '../../../actions/callAction';
+
 import { openParticipated, openInbox, openCreated } from "../../../actions/navAction";
 import { cancelAllMessageAction } from '../../../actions/messageAction'
 
@@ -89,8 +91,8 @@ class NewHome extends Component {
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
-        this.answerCall = this.answerCall.bind(this);
-        this.rejectCall = this.rejectCall.bind(this);
+        // this.answerCall = this.answerCall.bind(this);
+        // this.rejectCall = this.rejectCall.bind(this);
         this.openDtailsTab = this.openDtailsTab.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
         this.changeViewToGrid = this.changeViewToGrid.bind(this);
@@ -198,18 +200,18 @@ class NewHome extends Component {
                 this.props.getTotalUnread()
             }
         })
-        socket.on(config.REJECT_REPLY, data => {
-            if (this.props.userId === String(data.fromUserId)) {
-                // stopFlashingFunc();
-                this.props.answerCall();
-            }
-        })
-        socket.on(config.ACCEPT_SHARE_REQUEST, data => {
-            if (this.props.userId === String(data.fromUserId)) {
-                // stopFlashingFunc();
-                this.props.answerCall();
-            }
-        })
+        // socket.on(config.REJECT_REPLY, data => {
+        //     if (this.props.userId === String(data.fromUserId)) {
+        //         // stopFlashingFunc();
+        //         this.props.answerCall();
+        //     }
+        // })
+        // socket.on(config.ACCEPT_SHARE_REQUEST, data => {
+        //     if (this.props.userId === String(data.fromUserId)) {
+        //         // stopFlashingFunc();
+        //         this.props.answerCall();
+        //     }
+        // })
         socket.on(config.END_WHILE_DIALING, data => {
             if (data.ToUserId === this.props.userId) {
                 this.setState({ endedCallFromOtherPeer: true })
@@ -428,26 +430,26 @@ class NewHome extends Component {
             });
         }
     }
-    answerCall() {
-        window.open(this.props.callActionLink);
-        this.props.answerCall();
-        var socket = this.state.socket;
+    // answerCall() {
+    //     window.open(this.props.callActionLink,'_self');
+    //     this.props.answerCall();
+    //     var socket = this.state.socket;
 
-        socket.emit(config.ACCEPT_SHARE_REQUEST, {
-            'fromUserId': this.props.userId,
-            'toUserId': this.state.callerId,
-            'message': config.REPLY_TO_SHARE_REQ
-        })
-    }
-    rejectCall() {
-        var socket = this.state.socket
-        socket.emit(config.REJECT_REPLY, {
-            'fromUserId': this.props.userId,
-            'toUserId': this.state.callerId,
-            'message': config.REPLY_TO_SHARE_REQ
-        })
-        this.props.answerCall();
-    }
+    //     socket.emit(config.ACCEPT_SHARE_REQUEST, {
+    //         'fromUserId': this.props.userId,
+    //         'toUserId': this.state.callerId,
+    //         'message': config.REPLY_TO_SHARE_REQ
+    //     })
+    // }
+    // rejectCall() {
+    //     var socket = this.state.socket
+    //     socket.emit(config.REJECT_REPLY, {
+    //         'fromUserId': this.props.userId,
+    //         'toUserId': this.state.callerId,
+    //         'message': config.REPLY_TO_SHARE_REQ
+    //     })
+    //     this.props.answerCall();
+    // }
 
 
 
@@ -552,7 +554,7 @@ class NewHome extends Component {
                 this.props.screenAction === FULL_SCREEN_RECORD) {
 
                 if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
-                    percentage = "76%";
+                    percentage = "100%";
                     listGrid = null
                 }
                 else if (this.state.reducedLittleWidth) {
@@ -630,44 +632,9 @@ class NewHome extends Component {
             var issuesCreated = (this.props.myissues)
         var feedDiv = null;
 
-        const callNotificationDiv = (this.props.incommingCall && !this.state.endedCallFromOtherPeer) ? (
-            <div className="callNotification">
-                <div>
-                    <div className="CallCard">
-                        <div>
-                            <div className="callerProfileImage">
-                                <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
-                            </div>
-                            <br />
-                            <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio>
-                        </div>
-                        {/* style={{ width: "60%", margin: "auto", textAlign: "left" }} */}
-                        <div style={{padding:"15px",textAlign:"left",paddingTop:"5px"}}>
-                        <p><b>{this.props.callerName} </b>is trying to share screen with you for <b>{this.props.timeAllotedRecieve}</b> minutes on topic <b>{this.props.topicOfTheCallRecieve}</b></p>
-
-                            {/* <span><b>{this.props.callerName}</b></span>
-                            <br />
-                            <span style={{ fontSize: "12px" }}><b>Topic </b>: {this.props.topicOfTheCallRecieve}</span>
-                            <br />
-                            <span style={{ fontSize: "12px" }}><b>Duration </b>: {this.props.timeAllotedRecieve}</span> */}
-                        </div>
-                    </div>
-                   
-                    <div className="acceptRejectDiv">
-                        <span className="hint--top" aria-label="Accept Request">
-                            <div onClick={this.answerCall} className="acceptCall">
-                                <MdCall />
-                            </div>
-                        </span>
-                        <span className="hint--top" aria-label="Ask to send recording">
-                            <div onClick={this.rejectCall} className="acceptCall reject">
-                                <MdCallEnd />
-                            </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        ) : (null)
+        const callNotificationDiv = (<CallNotification
+            endedCallFromOtherPeer={this.state.endedCallFromOtherPeer}
+            socket={this.state.socket} />)
 
         deatilsModal = (<IssueDetils />)
 
@@ -834,11 +801,11 @@ const mapStateToProps = state => ({
     twitterHandle: state.profile.twitterHandle,
     email: state.auth.email,
     userId: state.auth.id,
-    callerName: state.call.userName,
+    // callerName: state.call.userName,
     callerId: state.call.id,
-    callerProfilePic: state.call.profilePic,
-    callActionLink: state.call.link,
-    incommingCall: state.call.incommingCall,
+    // callerProfilePic: state.call.profilePic,
+    // callActionLink: state.call.link,
+    // incommingCall: state.call.incommingCall,
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
@@ -852,11 +819,6 @@ const mapStateToProps = state => ({
     openHowItWorksModal: state.modal.openHowItWorksModal,
     timeAllotedRecieve: state.call.timeAllotedRecieve,
     topicOfTheCallRecieve: state.call.topicOfTheCallRecieve
-
-
-
-
-
 })
 
 export default connect(mapStateToProps, {

@@ -16,7 +16,7 @@
     background-color: #dddd;   
 }
 .screenShareDiv{
-    min-height: 100vh;
+    /* min-height: 100vh; */
     width:100%;
     margin:auto;
     /* background-color:red; */
@@ -26,9 +26,9 @@
     text-align: center;
     display:none;
     /* border-style:solid; */
-    border-radius:5px;
+    /* border-radius:5px;
     border-width:1px;
-    border-color:rgb(87, 87, 87)
+    border-color:rgb(87, 87, 87) */
 }
 .showVideoElement{
     margin-top:15px;

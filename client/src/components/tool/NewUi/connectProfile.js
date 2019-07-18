@@ -293,6 +293,7 @@ class NewHome extends Component {
     }
 
     render() {
+        
         if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
             this.props.history.push("/");
         var issuepercentage = "59%";

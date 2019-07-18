@@ -99,8 +99,9 @@ class ScreenRecorder extends Component {
             currentAtionStatus: null,
             connectionFailed: false,
             startTimer: false,
-            peerAudioRecorder:null
-
+            peerAudioRecorder:null,
+            firefox:false,
+            chrome:true
         }
         this.renderer = this.renderer.bind(this);
         this.stopShare = this.stopShare.bind(this);
@@ -137,7 +138,7 @@ class ScreenRecorder extends Component {
         this.postMessageHandler = this.postMessageHandler.bind(this);
         this.callConnectionDelayed = this.callConnectionDelayed.bind(this);
         this.startConnectionTimer = this.startConnectionTimer.bind(this);
-        this.saveAudioBlobtimeOut = this.saveAudioBlobtimeOutbind(this);
+        this.saveAudioBlobtimeOut = this.saveAudioBlobtimeOut.bind(this);
     }
 
     muteAudio() {
@@ -546,15 +547,20 @@ validateTurn(iceServers){
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
                 var img;
+                this.setState({ chrome:true})
                 img = new Image();
                 img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
-                img.onload = function () {
-                };
-                img.onerror = function () {
-                    self.setState({
-                        isInstalled: false
-                    })
-                };
+                img.onload = function () { };
+                img.onerror = function () {this.setState({  isInstalled: false  }) };
+            }
+            else if(result.name === "firefox"){
+                this.setState({
+                    chrome:false,
+                    firefox:true})
+            }
+            else{
+                console.log("browser : ",result.name);
+                this.setState({ chrome:false});
             }
         }
 
@@ -629,7 +635,8 @@ validateTurn(iceServers){
                 })
               
                 var audio = document.querySelector('#secondShareVideo');
-                audio.srcObject = stream
+                audio.srcObject = stream;
+                window.scrollTo(0,100)
                 self.props.startSecodScreenShare(stream)
                 const { extSource, extOrigin } = self.props
                 self.props.displayScreenSharebutton(extSource, extOrigin)
@@ -759,7 +766,7 @@ validateTurn(iceServers){
         var recorder1 = RecordRTC(finalStream, {
             type: 'video'
         });
-        if(this.state.retryLimit === 0 ){
+        if(self.state.retryLimit === 0 ){
         recorder1.startRecording();
         self.setState({ recorder: recorder1 });
             registerCallToBrowser();
@@ -781,7 +788,7 @@ validateTurn(iceServers){
         if (call) {
             call.on('stream', function (remoteStream) {
                 fullStartedSharing(twitterUserId);
-                if(this.state.retryLimit === 0 ){
+                if(self.state.retryLimit === 0 ){
             
                 var peerAudioRecorder = RecordRTC(remoteStream, {
                     type: 'audio'
@@ -1043,6 +1050,7 @@ validateTurn(iceServers){
         const { stopedSharing, peerAudioRecorder,recorder, call, closedHere, timerEnded } = this.state
         const self = this;
         registerEndToBrowser();
+        window.scrollTo(0,-100)
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin);
         console.log("stopedSharing : ",stopedSharing)
         if (!stopedSharing || this.state.retryLimit> 0) {
@@ -1401,14 +1409,9 @@ validateTurn(iceServers){
 
             </div>)
 
-        return (this.state.isInstalled) ? (
-
-
+        return (this.state.chrome)?((this.state.isInstalled) ? (
             (this.state.currentAtionStatus === null) ?
-
-
-                (<div>
-
+            (<div>
                     {audioWarning}
                     <div className="LinkDisplay">
                         {closeBtn}
@@ -1421,7 +1424,10 @@ validateTurn(iceServers){
                 (<div className="LinkDisplay">
                     {closeBtn}
                     <BusyAction currentAtionStatus={this.state.currentAtionStatus} />
-                </div>)) : (<div ><DownloadExt  downloadExtension={this.downloadExtension}/></div>)
+                </div>)) : (<div ><DownloadExt  downloadExtension={this.downloadExtension}/></div>)):
+                ((this.state.firefox)?(<div> {closeBtn} <p>We don't support Firefox browser for now.</p></div>):(<div>
+                    {closeBtn}  <p>We don't support this browser for now.</p>
+                </div>))
     }
 }
 ScreenRecorder.PropType = {

@@ -4,6 +4,7 @@ import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
+import Navbar from './NewUi/Navbar';
 import PreparingLink from './waitinForLink'
 import RetryText from './waitForretry'
 import Countdown from 'react-countdown-now';
@@ -20,6 +21,11 @@ import { stillAuthenicated } from '../../actions/signinAction';
 import { getProfileByTwitterHandle } from "../../actions/visitProfileAction";
 import { setTime } from '../../actions/floaterAction';
 
+import {
+    fullStartedSharing,
+    fullStopedSharing,
+   
+} from '../../actions/toolActions'
 class DisplayShare extends Component {
     constructor(props) {
         super(props)
@@ -130,7 +136,7 @@ window.close();
     }
     componentDidMount() {
         var self = this;
-
+        self.props.fullStartedSharing()
         window.addEventListener("beforeunload", this.onUnload);
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
@@ -145,6 +151,11 @@ window.close();
                         isInstalled: false
                     })
                 };
+            }
+            else{
+                self.setState({
+                    isInstalled: false
+                })
             }
         }
         var socket = this.state.socket;
@@ -426,6 +437,7 @@ window.close();
 
             navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audiostream) {
                 call.answer(audiostream)
+               
                 // var recorder1 = RecordRTC(audiostream, {
                 //     type: 'audio'
                 // });
@@ -471,6 +483,7 @@ window.close();
                         divi.style.display = "block"
                         var video = document.querySelector('#video');
                         video.srcObject = stream
+                        window.scrollTo( 0,120) ;
 
                         setTimeout(() => {
                             video.play()
@@ -646,7 +659,9 @@ window.close();
         const {closedHere, stream, secondVideoStream } = this.state;
         const { extSource, extOrigin, postEndCall } = this.props;
         const action = config.END_CALL_RECIEVER_PEER_FROM_WEB
-        postEndCall(action, extSource, extOrigin)
+        postEndCall(action, extSource, extOrigin);
+        this.props.fullStopedSharing();
+        window.scrollTo( 0,-100) ;
 
         if (secondVideoStream !== null)
             secondVideoStream.stop();
@@ -660,9 +675,9 @@ window.close();
     }
 
     render() {
-
+        var callEndButton = null;
         var selfCloseTimer = (this.state.selfClose) ? (<div>
-
+       
 
         </div>) : (null)
         var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<PreparingLink />) :
@@ -711,22 +726,27 @@ window.close();
 
         if (!this.state.callEnded) {
             ShareElement = (
-                <div className="shareVideoDisplay">
-                    <div className="videoContainer">
-                        {messageOfScreenShare}
-                        <div className="timerDiv">
-                            <Countdown
-                                date={Date.now() + this.props.floaterTime * 60 * 1000}
-                                renderer={this.renderer2}
-                            />
+                <div>
+                    <div className="shareVideoDisplay">
+                        <div className="videoContainer">
+                            {messageOfScreenShare}
+                            <div className="timerDiv">
+                                <Countdown
+                                    date={Date.now() + this.props.floaterTime * 60 * 1000}
+                                    renderer={this.renderer2}
+                                />
 
+                            </div>
+                            <video className="VideoElementReciever" style={{ display: shouldDisplay }} autoPlay={true} id="video" srcobject={this.state.videoStream} ></video>
+                        
                         </div>
-                        <video className="VideoElementReciever" style={{ display: shouldDisplay }} autoPlay={true} id="video" srcobject={this.state.videoStream} ></video>
                     </div>
-
-
+                   
+                  
                 </div>
             )
+            callEndButton = (!this.state.isInstalled)?(<button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button>):(null)
+           
         }
         else if (this.state.callEnded) {
             ShareElement = (
@@ -737,6 +757,7 @@ window.close();
                     </div>
                 </div>
             )
+            callEndButton = null;
         }
         else {
             ShareElement = (
@@ -747,6 +768,7 @@ window.close();
                     </div>
                 </div>
             )
+            callEndButton=null;
         }
         var precallActivity = (this.state.connected && !this.state.connectionFailed) ? (<div className="initialMessage">
             <h2>Connecting..</h2>
@@ -764,11 +786,15 @@ window.close();
                 </div>
             </div>
         ) : (null))
-        return (<div style={{height:"98vh"}}>
+        return (<div style={{minHeight:"98vh"}}>
+             <Navbar />
             {precallActivity}
             <div className="screenShareDiv">
                 {ShareElement}
+               
             </div>
+            {callEndButton}
+            {/* <button onClick={this.shareScreen}>share screen </button> */}
         </div>)
 
     }
@@ -781,7 +807,8 @@ DisplayShare.PropType = {
     saveExtensionDetails: PropType.func.isRequired,
     postStartCall: PropType.func.isRequired,
     setTime: PropType.func.isRequired,
-
+    fullStopedSharing :PropType.func.isRequired,
+    fullStartedSharing: PropType.func.isRequired,
 
 
 }
@@ -800,6 +827,6 @@ const mapStateToProps = state => ({
     floaterTime: state.floater.floaterTime
 })
 
-export default connect(mapStateToProps, { postEndCall, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 
