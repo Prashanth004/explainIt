@@ -540,6 +540,7 @@ validateTurn(iceServers){
     
     componentWillMount() {
         const { extSource, extOrigin } = this.props;
+        var self = this;
         console.log("exceciting compWIllMount")
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         const result = browser();
@@ -551,22 +552,23 @@ validateTurn(iceServers){
                 img = new Image();
                 img.src = "chrome-extension://" + config.EXTENSION_ID + "/icon.png";
                 img.onload = function () { };
-                img.onerror = function () {this.setState({  isInstalled: false  }) };
+                img.onerror = function () {
+                    self.setState({  isInstalled: false  })
+                 };
             }
             else if(result.name === "firefox"){
-                this.setState({
+                self.setState({
                     chrome:false,
                     firefox:true})
             }
             else{
                 console.log("browser : ",result.name);
-                this.setState({ chrome:false});
+                self.setState({ chrome:false});
             }
         }
 
 
         
-        var self = this;
         var peer = new window.Peer({
             host: config.peerHost,
             port:  config.peerPort,
