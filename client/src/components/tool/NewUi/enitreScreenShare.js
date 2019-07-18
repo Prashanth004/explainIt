@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
-import bigInt from "big-integer";
+// import bigInt from "big-integer";
 // import Peer from 'peerjs';
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
@@ -137,6 +137,7 @@ class ScreenRecorder extends Component {
         this.postMessageHandler = this.postMessageHandler.bind(this);
         this.callConnectionDelayed = this.callConnectionDelayed.bind(this);
         this.startConnectionTimer = this.startConnectionTimer.bind(this);
+        this.saveAudioBlobtimeOut = this.saveAudioBlobtimeOutbind(this);
     }
 
     muteAudio() {
@@ -497,6 +498,7 @@ class ScreenRecorder extends Component {
         clearTimeout(this.CloseCallIfNotDone);
         clearTimeout(this.callEndBeforeRecieve);
         clearTimeout(this.callConnectionDelayed);
+        clearTimeout(this.saveAudioBlobtimeOut)
     }
 
 validateTurn(iceServers){
@@ -744,50 +746,61 @@ validateTurn(iceServers){
     CloseCallIfNotDone = () => { };
     callEndBeforeRecieve = () => { };
     callConnectionDelayed = () => { };
+    saveAudioBlobtimeOut = () => { };
 
     peerCall() {
         clearTimeout(this.callConnectionDelayed);
         const { twitterUserId, fullStartedSharing } = this.props
         const self = this;
         const { socket, peer, destkey, finalStream } = this.state
-
         var call = peer.call(destkey, finalStream);
         if (config.CALL_LOGS)
             console.log("Made peer call with other peer is and streams");
-                var recorder1 = RecordRTC(finalStream, {
-                    type: 'video'
-                });
-                recorder1.startRecording();
-                self.setState({ recorder: recorder1 });
-        
-        registerCallToBrowser();
-      
-
-
-        self.saveBlobtimeOut = setTimeout(() => {
-            const { recorder } = self.state;
-            if (recorder !== null) {
-                recorder.stopRecording(function () {
-                    var blob = recorder.getBlob();
-                    self.setState({
-                        downloadUrlVideo: URL.createObjectURL(blob),
-                        blob: blob,
-                        recorder: null
+        var recorder1 = RecordRTC(finalStream, {
+            type: 'video'
+        });
+        if(this.state.retryLimit === 0 ){
+        recorder1.startRecording();
+        self.setState({ recorder: recorder1 });
+            registerCallToBrowser();
+            self.saveBlobtimeOut = setTimeout(() => {
+                const { recorder } = self.state;
+                if (recorder !== null) {
+                    recorder.stopRecording(function () {
+                        var blob = recorder.getBlob();
+                        self.setState({
+                            downloadUrlVideo: URL.createObjectURL(blob),
+                            blob: blob,
+                            recorder: null
+                        });
+                        saveVideoBlob(blob);
                     });
-                    saveVideoBlob(blob);
-                });
-            }
-        }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+                }
+            }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+        }
         if (call) {
             call.on('stream', function (remoteStream) {
                 fullStartedSharing(twitterUserId);
+                if(this.state.retryLimit === 0 ){
+            
                 var peerAudioRecorder = RecordRTC(remoteStream, {
                     type: 'audio'
                 });
-                console.log("i am getting executed here");
                 peerAudioRecorder.startRecording();
-                console.log("peerAudioRecorder : ",peerAudioRecorder)
-                self.setState({peerAudioRecorder :peerAudioRecorder })
+                self.setState({peerAudioRecorder})
+                self.saveAudioBlobtimeOut = setTimeout(() => {
+                    const { peerAudioRecorder } = self.state;
+                    if (peerAudioRecorder !== null) {
+                        peerAudioRecorder.stopRecording(function () {
+                            var blob = peerAudioRecorder.getBlob();
+                            self.setState({
+                                peerAudioBlob:blob,
+                                peerAudioRecorder:null
+                            })
+                        });
+                    }
+                }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+            }
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
                 audio.play()
@@ -899,11 +912,11 @@ validateTurn(iceServers){
                 })
             }
         }, 20000)
-        // if (!navigator.onLine) {
-        //     self.setState({
-        //         noInternet: true
-        //     })
-        // }
+        if (!navigator.onLine) {
+            self.setState({
+                noInternet: true
+            })
+        }
 
     }
 
@@ -923,6 +936,7 @@ validateTurn(iceServers){
         const {blob,peerAudioBlob} =  this.state;
         const {callTopic} = this.props;
         this.setState({ saveinitiated: true })
+       
         if(peerAudioBlob!==null){
             this.setState({ downloadUrlAudio: URL.createObjectURL(peerAudioBlob) });
             console.log("video blob : ",blob);
@@ -1057,7 +1071,6 @@ validateTurn(iceServers){
                 audio.src = "";
             }
             if(peerAudioRecorder!==null){
-                console.log("peerAudioRecorder : ",peerAudioRecorder)
                 peerAudioRecorder.stopRecording(()=>{
                     var blob = peerAudioRecorder.getBlob();
                     console.log("audo  blob : ",blob)
@@ -1208,7 +1221,6 @@ validateTurn(iceServers){
         if (this.props.isSharingCompleted && this.state.blob !== null && !this.state.clickedOnLink) {
             postShareElements = (<PostSharing
                 retryCall={this.retryCall}
-
                 peerAudioBlob={this.state.peerAudioBlob}
                 saveinitiated={this.state.saveinitiated}
                 downloadUrlVideo={this.state.downloadUrlVideo}
@@ -1235,7 +1247,6 @@ validateTurn(iceServers){
             !this.state.timeOutNoAnswer &&
             !this.state.answerFrmPeer &&
             !this.state.timeOutNoAnswerOnCAll) {
-
 
             if (!this.state.doneTweeting && !this.state.clickedOnLink && !this.state.doneCalling)
                 linkElement = (
@@ -1410,7 +1421,7 @@ validateTurn(iceServers){
                 (<div className="LinkDisplay">
                     {closeBtn}
                     <BusyAction currentAtionStatus={this.state.currentAtionStatus} />
-                </div>)) : (<div ><DownloadExt /></div>)
+                </div>)) : (<div ><DownloadExt  downloadExtension={this.downloadExtension}/></div>)
     }
 }
 ScreenRecorder.PropType = {
