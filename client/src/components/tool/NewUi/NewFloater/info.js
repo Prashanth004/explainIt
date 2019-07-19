@@ -16,12 +16,12 @@ export default class componentName extends Component {
     const self = this;
     function postMessageHandler(event) {
       if (event.data.type === config.UPDATE_INFO) {
-        console.log("printing the info : ",event.data.info)
+        // console.log("printing the info : ",event.data.info)
         self.setState({diplayinfo : event.data.info})
       }
       if (event.data.type === config.INCOMING_CALL_AUDIO_PLAY) {
         clearTimeout(this.audioTimer)
-        console.log("GOT the info to floater")
+        // console.log("GOT the info to floater")
         self.setState({playAudio : true})
         this.audioTimer = setTimeout(()=>{
           if(self.state.playAudio === true){
