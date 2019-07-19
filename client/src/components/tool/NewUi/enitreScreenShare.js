@@ -172,7 +172,7 @@ class ScreenRecorder extends Component {
         this.state.conn.send({
             'type':config.MUTE_UMMUTE,
             'otherPeerId': self.state.peerId,
-            'muteState':config.MUTED
+            'muteState':config.UN_MUTED
         })
     }
 
