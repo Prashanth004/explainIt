@@ -21,7 +21,7 @@ import { fromShareToRecord } from '../../../actions/messageAction'
 import '../../css/shareScreen.css';
 import CallImage from './CallImage'
 import browser from 'browser-detect';
-import { postEndCall, displayScreenSharebutton, refreshExtension } from '../../../actions/extensionAction'
+import { postEndCall, displayScreenSharebutton, refreshExtension,otherPeerShareScreen } from '../../../actions/extensionAction'
 import Call from './Call';
 import { FiX, FiVideo } from "react-icons/fi";
 
@@ -693,7 +693,8 @@ validateTurn(iceServers){
                             self.props.updateRemainingTime(self.props.currentTimeLeft)
                             const { extSource, extOrigin } = self.props
                             self.props.displayScreenSharebutton(extSource, extOrigin);
-                            self.setState({ myscreenSharing: false })
+                            self.setState({ myscreenSharing: false });
+                            self.props.otherPeerShareScreen(extSource, extOrigin)
                         }
                     }
                 });
@@ -1153,12 +1154,12 @@ validateTurn(iceServers){
         const tInitialTime = (typeof (intialTime) === "string") ? (Number(initialTime)) : initialTime
         const tNumberOfIncrease = (typeof (numberOfIncrease) === "string") ? (Number(noOfIncreaseInTime)) : noOfIncreaseInTime
         const tCurrentTime = (typeof (currentTime) === "string") ? (Number(currentTimeLeft)) : currentTimeLeft;
-        var duration = tInitialTime + tNumberOfIncrease - tCurrentTime
-        console.log("duration in screen share place : ", duration)
-        callSuccessedUpate(twitterUserId, callTopic, duration, sharableLinkSaved)
+        var duration = tInitialTime + tNumberOfIncrease - tCurrentTime;
+        console.log("duration in screen share place : ", duration);
+        callSuccessedUpate(twitterUserId, callTopic, duration, sharableLinkSaved);
     }
     downloadExtension() {
-        window.open(config.EXTENSION_URL, "_self")
+        window.open(config.EXTENSION_URL, "_self");
 
     }
 
@@ -1230,6 +1231,8 @@ validateTurn(iceServers){
 
         if (this.props.isSharingCompleted && this.state.blob !== null && !this.state.clickedOnLink) {
             postShareElements = (<PostSharing
+                noOfIncreaseInTime={this.props.noOfIncreaseInTime}
+                initialTime={this.props.initialTime}
                 retryCall={this.retryCall}
                 peerAudioBlob={this.state.peerAudioBlob}
                 saveinitiated={this.state.saveinitiated}
@@ -1488,6 +1491,7 @@ const mapStateToProps = state => ({
     busyStatus: state.visitProfile.busyStatus,
     linkToAccess: state.projects.linkToAccess,
     explainBy: state.explain.explainBy,
+
     // secondScreenShareStarted:state.secondScreenShare.secondScreenShareStarted
 
 })
@@ -1519,6 +1523,7 @@ export default connect(mapStateToProps, {
     basicInfoCall,
     updateCurrentTime,
     turnnotbusy,
+    otherPeerShareScreen,
     endSecondScreenShare,
     fromShareToRecord,
     callFailedUpdate,

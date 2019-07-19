@@ -4,7 +4,10 @@ import Profile from './Profile';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './diaplyissues/DisplayIssues';
 // import { FiGrid,FiList } from "react-icons/fi";
+import { acceptCallDetails } from '../../../actions/callAction';
 import Navbar from './Navbar';
+import { answerCall, missCall } from '../../../actions/callAction';
+import CallNotification from './container/CallNotification';
 // import AddtoContact from './contactlist/addToContact'
 import FullScreenShare from './enitreScreenShare';
 import FullScreenRecord from './FullScreenRecord';
@@ -50,7 +53,8 @@ class NewHome extends Component {
             isVisitProfile:true,
             typeOfView:"list",
             socket: null,
-            displayDetails:false
+            displayDetails:false,
+            endedCallFromOtherPeer: false,
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -95,6 +99,7 @@ class NewHome extends Component {
     }
     componentDidMount() {
         var socket = this.state.socket;
+        var self = this;
         socket.on('connect_failed', function () {
         })
         socket.on('error', function (err) {
@@ -104,7 +109,42 @@ class NewHome extends Component {
         socket.on("disconnect", () => {
         })
         socket.io.on("connect_error", () => {
+        });
+        
+        socket.on(config.LINK_TO_CALL, data => {
+            console.log("recieving the call")
+            self.setState({ endedCallFromOtherPeer: false })
+            setTimeout(() => {
+                self.props.missCall();
+            }, 18000)
+            localStorage.setItem("profilePic", data.fromProfilePic)
+            if (String(data.ToUserId) === this.props.profileid) {
+                socket.emit(config.LINK_TO_CALL_ACK, {
+                    "fromUserId": data.fromUserId,
+                    "toUserId": data.toUserId
+                })
+                // this.setState({
+                //     callerId: data.fromUserId
+                // })
+                this.props.acceptCallDetails(
+                    data.link,
+                    data.fromEmail,
+                    data.fromUserName,
+                    data.fromUserId,
+                    data.fromProfilePic,
+                    data.topicOfTheCall,
+                    data.timeAloted
+
+                )
+            }
+        });
+        socket.on(config.END_WHILE_DIALING, data => {
+            if (data.ToUserId === this.props.profileid) {
+                this.setState({ endedCallFromOtherPeer: true })
+            }
         })
+        
+    
 
         if(!this.props.isPresentInExplain){
             const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
@@ -299,6 +339,9 @@ class NewHome extends Component {
         var issuepercentage = "59%";
         var percentage="30%";
         var shareRecord = null;
+        const callNotificationDiv = (<CallNotification
+            endedCallFromOtherPeer={this.state.endedCallFromOtherPeer}
+            socket={this.state.socket} />)
         if(this.state.reducedWidth)
         percentage="90%";
 
@@ -442,7 +485,9 @@ class NewHome extends Component {
                 <Navbar
                 page="profile"
                 twitterHandle={twiHand} />
+                
                 <div className="containerHome">
+                {callNotificationDiv}
                     <div>
                         {profileCardElement}
                     </div>
@@ -514,6 +559,7 @@ const mapStateToProps = state => ({
     twitterHandle :state.profile.twitterHandle,
     authTwitterHandle:state.auth.twitterHandle,
     email: state.auth.email,
+
     userId: state.visitProfile.id,
     fetchProfile:state.visitProfile.fetchProfile,
     isPresentInExplain:state.visitProfile.isPresent,
@@ -532,4 +578,5 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, {openInbox,resetCallAction,creatAnsProject,setVisitProfile,twitterAuthFailure,displayFullScrenRecord, displayFullScreShare,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)
+// import {  } from '../../../actions/callAction';
+export default connect(mapStateToProps, {openInbox,missCall,acceptCallDetails,resetCallAction,creatAnsProject,setVisitProfile,twitterAuthFailure,displayFullScrenRecord, displayFullScreShare,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)

@@ -10,6 +10,18 @@ export const saveExtensionDetails = (source,origin)=>(dispatch)=>{
     })
 }
 
+export const otherPeerShareScreen = (source,origin) =>(dispatch)=>{
+    const peerScreenShare = {
+        
+        type:config.SCREEN_FROM_OTHER_PEEER_TO_EXTENSION,
+        data:{}
+    }
+    if (source !== null)
+        source.postMessage(peerScreenShare, origin);
+    else
+        window.postMessage(peerScreenShare, '*');
+
+}
 export const pauseRecorderFromFloater = (callTabid)=>(dispatch)=>{
     localStorage.setItem('infoDisplay', JSON.stringify(config.PAUSED_RECORDER_INFO))
     localStorage.setItem('pauseState', config.PAUSED_RECORDER);

@@ -28,8 +28,10 @@ export default (props) => {
 var videoTagWithAudio = (<div>
     <div>
         {videoAudio}
+        
         <p>Link To access your recording.</p>
         {linkToAccess}
+        <p>The call was initiated for {props.initialTime} minutes.You added {props.noOfIncreaseInTime} minutes to the call.</p>
     </div>
 </div>)
 

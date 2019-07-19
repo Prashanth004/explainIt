@@ -32,7 +32,7 @@ class CallNotification extends Component {
 
         socket.emit(config.ACCEPT_SHARE_REQUEST, {
             'fromUserId': this.props.userId,
-            'toUserId': this.state.callerId,
+            'toUserId': this.props.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
     }
@@ -40,7 +40,7 @@ class CallNotification extends Component {
         var socket = this.props.socket
         socket.emit(config.REJECT_REPLY, {
             'fromUserId': this.props.userId,
-            'toUserId': this.state.callerId,
+            'toUserId': this.props.callerId,
             'message': config.REPLY_TO_SHARE_REQ
         })
         this.props.answerCall();
@@ -55,7 +55,7 @@ class CallNotification extends Component {
                                 <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
                             </div>
                             <br />
-                            <audio style={{ display: "none" }} autoPlay loop src={require('../../../audio/simple_beep.mp3')}></audio>
+                            {/* <audio style={{ display: "none" }} autoPlay loop src={require('../../../audio/simple_beep.mp3')}></audio> */}
                         </div>
                         <div style={{ padding: "15px", textAlign: "left", paddingTop: "5px" }}>
                             <p><b>{this.props.callerName} </b>is trying to share screen with you for <b>{this.props.timeAllotedRecieve}</b> minutes on topic <b>{this.props.topicOfTheCallRecieve}</b></p>

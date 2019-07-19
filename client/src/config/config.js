@@ -103,7 +103,7 @@ const conf = {
     RECORD_SCREEEN_EXPLAIN:"recordScreenExpalin",
     REFER_EXPLAIN:"referExplain",
     SHARE_SCREEN_EXPALIN:"shareScreenExplain",
-    ENVIRONMENT:"prod",
+    ENVIRONMENT:"test",
     DEV_ENV:true,
     CALL_LOGS:true,
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",
@@ -134,7 +134,7 @@ const conf = {
     ADD_EXTRA_MIUTE_TO_FLOATER_RECIEVER:"addExtraMinuteToFloaterReceiver",
     ADD_EXTRA_MINUTE_FROM_FLOATER:"addExtraMinuteFromFloater",
     ADD_EXTRA_MINUTE_TO_WEB_SITE:"addExtraMinuteToWebsite",
-   
+    SCREEN_FROM_OTHER_PEEER_TO_EXTENSION:"screebFromOtherPeerToExtension",
     MUTE_FROM_FLOATER:"muteFromFloater",
     MUTE_TO_WEB:"muteToWeb",
     MUTE_TO_FLOATER:"muteToFloater",
@@ -171,7 +171,9 @@ const conf = {
     DECREASE_MINUTE_TO_FLOATER_RECIEVE:"decreaseMinuteToFloaterReciever",
     TIME_TWO_MIUTE_ERROR : "timeTwoMinuteError",
     GOOGLE_ANALYTICS_ID : "UA-142864750-1",
-    INFORM_EXTENSION_USERID:"informExtensionUserId"
+    INFORM_EXTENSION_USERID:"informExtensionUserId",
+    INCOMING_CALL_AUDIO_PLAY:"incomingCallAudioPlay",
+    INCOMING_CALL_AUDIO_STOP:"incomingCallAudioStop"
 
 
 

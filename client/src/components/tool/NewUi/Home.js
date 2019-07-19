@@ -270,9 +270,9 @@ class NewHome extends Component {
                     "fromUserId": data.fromUserId,
                     "toUserId": data.toUserId
                 })
-                this.setState({
-                    callerId: data.fromUserId
-                })
+                // this.setState({
+                //     callerId: data.fromUserId
+                // })
                 this.props.acceptCallDetails(
                     data.link,
                     data.fromEmail,
@@ -437,7 +437,7 @@ class NewHome extends Component {
 
     //     socket.emit(config.ACCEPT_SHARE_REQUEST, {
     //         'fromUserId': this.props.userId,
-    //         'toUserId': this.state.callerId,
+    //         'toUserId': this.props.callerId,
     //         'message': config.REPLY_TO_SHARE_REQ
     //     })
     // }
@@ -445,7 +445,7 @@ class NewHome extends Component {
     //     var socket = this.state.socket
     //     socket.emit(config.REJECT_REPLY, {
     //         'fromUserId': this.props.userId,
-    //         'toUserId': this.state.callerId,
+    //         'toUserId': this.props.callerId,
     //         'message': config.REPLY_TO_SHARE_REQ
     //     })
     //     this.props.answerCall();
