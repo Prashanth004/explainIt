@@ -173,7 +173,9 @@ const conf = {
     GOOGLE_ANALYTICS_ID : "UA-142864750-1",
     INFORM_EXTENSION_USERID:"informExtensionUserId",
     INCOMING_CALL_AUDIO_PLAY:"incomingCallAudioPlay",
-    INCOMING_CALL_AUDIO_STOP:"incomingCallAudioStop"
+    INCOMING_CALL_AUDIO_STOP:"incomingCallAudioStop",
+    OTHER_PEER_MUTE_UNMUTE_FROM_WEB:"otherPeerMuteUnmute",
+    OTHER_PEER_MUTE_UNMUTE_FROM_FLOATER : "otherPersoneMutedUnmutedToFloater"
 
 
 

@@ -11,7 +11,7 @@ import Countdown from 'react-countdown-now';
 import { registerCallToBrowser, registerEndToBrowser } from './NewUi/container/miscFunction';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
-import { saveExtensionDetails, saveSourceId,otherPeerShareScreen } from "../../actions/extensionAction";
+import { saveExtensionDetails, saveSourceId,otherPeerShareScreen,otherPeerMute} from "../../actions/extensionAction";
 import { answerCall, muteAudio, unMuteAudio } from '../../actions/callAction'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -101,8 +101,9 @@ window.close();
 
     muteAudio() {
         var presentTime = JSON.parse(localStorage.getItem("timer"));
-        this.props.setTime(presentTime)
-        this.props.muteAudio()
+        this.props.setTime(presentTime);
+        var self = this;
+        this.props.muteAudio();
         const { stream } = this.state;
         if (stream !== null) {
             var audioTracks = stream.getAudioTracks();
@@ -110,10 +111,17 @@ window.close();
                 audioTracks[0].enabled = false;
             }
         }
+        this.state.conn.send({
+            'type':config.MUTE_UMMUTE,
+            'otherPeerId': self.state.clientPeerid,
+            'muteState':config.MUTED
+        })
+        
     }
     unMuteAudio() {
         var presentTime = JSON.parse(localStorage.getItem("timer"));
-        this.props.setTime(presentTime)
+        this.props.setTime(presentTime);
+        var self = this;
         const { stream } = this.state;
         if (stream !== null) {
             var audioTracks = stream.getAudioTracks();
@@ -122,6 +130,11 @@ window.close();
             }
             this.props.unMuteAudio();
         }
+        this.state.conn.send({
+            'type':config.MUTE_UMMUTE,
+            'otherPeerId': self.state.clientPeerid,
+            'muteState':config.UN_MUTED
+        })
     }
 
     onUnload(event) {
@@ -412,6 +425,12 @@ window.close();
                         self.props.decreaseTimerfromReciever(self.props.extSource, self.props.extOrigin);
 
                     }, 500)
+                }
+                if (data.type === config.MUTE_UMMUTE){
+                    if (data.otherPeerId === self.state.peerIdFrmPeer) {
+                      self.props.otherPeerMute(data.muteState);
+                    }
+                    // otherPeerMute
                 }
             })
 
@@ -829,6 +848,6 @@ const mapStateToProps = state => ({
     floaterTime: state.floater.floaterTime
 })
 
-export default connect(mapStateToProps, { postEndCall,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall,otherPeerMute,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 

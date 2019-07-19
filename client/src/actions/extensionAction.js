@@ -129,7 +129,23 @@ export const refreshExtension = (action,source,origin)=>dispatch=>{
         window.postMessage(refreshFloater, "*")
     }
 }
-
+export const otherPeerMute = (source,origin,muteState)=>dispatch=>{
+    console.log("I am reacting action Page")
+    const muteMsg =(muteState === "muted")?"Peer Muted":"Peer Unmuted";
+    console.log("AP : muteMsg ",muteMsg)
+    const refreshFloater = {
+        type: config.OTHER_PEER_MUTE_UNMUTE_FROM_WEB,
+        data: {
+            muteMsg:muteMsg
+        }
+    }
+    if (source !== null) {
+        source.postMessage(refreshFloater, origin);
+    }
+    else {
+        window.postMessage(refreshFloater, "*")
+    }
+}
 export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,otherPersonProfileId)=>(dispatch)=>{
     var curTime = {
         'hours':0,

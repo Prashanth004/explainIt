@@ -21,7 +21,7 @@ import { fromShareToRecord } from '../../../actions/messageAction'
 import '../../css/shareScreen.css';
 import CallImage from './CallImage'
 import browser from 'browser-detect';
-import { postEndCall, displayScreenSharebutton, refreshExtension,otherPeerShareScreen } from '../../../actions/extensionAction'
+import { postEndCall, displayScreenSharebutton, refreshExtension,otherPeerShareScreen,otherPeerMute } from '../../../actions/extensionAction'
 import Call from './Call';
 import { FiX, FiVideo } from "react-icons/fi";
 
@@ -143,6 +143,7 @@ class ScreenRecorder extends Component {
 
     muteAudio() {
         const { audioStream } = this.state;
+        var self = this;
         if (audioStream !== null) {
             var audioTracks = audioStream.getAudioTracks();
             if (audioTracks[0]) {
@@ -150,10 +151,17 @@ class ScreenRecorder extends Component {
             }
             this.props.muteAudio()
         }
+        this.state.conn.send({
+            'type':config.MUTE_UMMUTE,
+            'otherPeerId': self.state.peerId,
+            'muteState':config.MUTED
+        })
+        
 
     }
     unMuteAudio() {
         const { audioStream } = this.state;
+        var self = this;
         if (audioStream !== null) {
             var audioTracks = audioStream.getAudioTracks();
             if (audioTracks[0]) {
@@ -161,6 +169,11 @@ class ScreenRecorder extends Component {
             }
             this.props.unMuteAudio()
         }
+        this.state.conn.send({
+            'type':config.MUTE_UMMUTE,
+            'otherPeerId': self.state.peerId,
+            'muteState':config.MUTED
+        })
     }
 
     startScreenShareSend() {
@@ -697,6 +710,14 @@ validateTurn(iceServers){
                             self.setState({ myscreenSharing: false });
                             self.props.otherPeerShareScreen(extSource, extOrigin)
                         }
+                    }
+                    if (data.type === config.MUTE_UMMUTE){
+                        console.log("MM got here in Caller side")
+                        if (data.otherPeerId === self.state.destkey) {
+                            console.log("MM posting the mutestate to action page")
+                          self.props.otherPeerMute(data.muteState);
+                        }
+                        // otherPeerMute
                     }
                 });
 
@@ -1502,6 +1523,7 @@ export default connect(mapStateToProps, {
     refreshExtension,
     explainByRecord,
     postEndCall,
+    otherPeerMute,
     retryCall,
     muteAudio, unMuteAudio,
     disableCallAction,
