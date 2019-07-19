@@ -11,7 +11,7 @@ import Countdown from 'react-countdown-now';
 import { registerCallToBrowser, registerEndToBrowser } from './NewUi/container/miscFunction';
 import browser from 'browser-detect';
 import CopyToClipboard from './CopytoClipboard'
-import { saveExtensionDetails, saveSourceId } from "../../actions/extensionAction";
+import { saveExtensionDetails, saveSourceId,otherPeerShareScreen } from "../../actions/extensionAction";
 import { answerCall, muteAudio, unMuteAudio } from '../../actions/callAction'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
@@ -256,7 +256,8 @@ window.close();
 
         socket.on(config.RETRYCALL, data => {
             const { extSource, extOrigin } = this.props;
-            this.setState({ myscreenSharing: false})
+            this.setState({ myscreenSharing: false});
+            self.props.otherPeerShareScreen(extSource, extOrigin);
             this.props.refreshExtension(config.RECIEVER_SCREEN_SHARE, extSource, extOrigin)
             if (data.peerId === self.state.peerIdFrmPeer) {
                 self.peerConnections(socket, data.peerId)
@@ -392,7 +393,8 @@ window.close();
                         self.props.setTime(presentTime);
                         const { extSource, extOrigin } = self.props
                         self.props.displayScreenSharebutton(extSource, extOrigin)
-                        self.setState({ myscreenSharing: false })
+                        self.setState({ myscreenSharing: false });
+                        self.props.otherPeerShareScreen(extSource, extOrigin)
                     }
                 }
                 if (data.data === "addtimer") {
@@ -827,6 +829,6 @@ const mapStateToProps = state => ({
     floaterTime: state.floater.floaterTime
 })
 
-export default connect(mapStateToProps, { postEndCall,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 

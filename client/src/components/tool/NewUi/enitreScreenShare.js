@@ -639,9 +639,10 @@ validateTurn(iceServers){
                 var audio = document.querySelector('#secondShareVideo');
                 audio.srcObject = stream;
                 window.scrollTo(0,100)
-                self.props.startSecodScreenShare(stream)
+                self.props.startSecodScreenShare(stream);
                 const { extSource, extOrigin } = self.props
-                self.props.displayScreenSharebutton(extSource, extOrigin)
+                self.props.displayScreenSharebutton(extSource, extOrigin);
+                self.props.otherPeerShareScreen(extSource, extOrigin)
                 self.setState({
                     myscreenSharing: false
                 })
