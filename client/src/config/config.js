@@ -175,7 +175,8 @@ const conf = {
     INCOMING_CALL_AUDIO_PLAY:"incomingCallAudioPlay",
     INCOMING_CALL_AUDIO_STOP:"incomingCallAudioStop",
     OTHER_PEER_MUTE_UNMUTE_FROM_WEB:"otherPeerMuteUnmute",
-    OTHER_PEER_MUTE_UNMUTE_FROM_FLOATER : "otherPersoneMutedUnmutedToFloater"
+    OTHER_PEER_MUTE_UNMUTE_FROM_FLOATER : "otherPersoneMutedUnmutedToFloater",
+    MUTE_UMMUTE:"MUTE_UMMUTE"
 
 
 

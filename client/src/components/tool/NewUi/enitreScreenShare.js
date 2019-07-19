@@ -715,7 +715,7 @@ validateTurn(iceServers){
                         console.log("MM got here in Caller side")
                         if (data.otherPeerId === self.state.destkey) {
                             console.log("MM posting the mutestate to action page")
-                          self.props.otherPeerMute(data.muteState);
+                          self.props.otherPeerMute(extSource, extOrigin,data.muteState);
                         }
                         // otherPeerMute
                     }

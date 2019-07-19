@@ -428,7 +428,7 @@ window.close();
                 }
                 if (data.type === config.MUTE_UMMUTE){
                     if (data.otherPeerId === self.state.peerIdFrmPeer) {
-                      self.props.otherPeerMute(data.muteState);
+                      self.props.otherPeerMute(self.props.extSource, self.props.extOrigin,data.muteState);
                     }
                     // otherPeerMute
                 }
