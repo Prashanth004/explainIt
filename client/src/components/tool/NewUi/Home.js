@@ -291,6 +291,7 @@ class NewHome extends Component {
         this.setState({ currentAtionStatus: currentAtionStatus })
         this.props.varifyEmail()
         this.props.stillAuthenicated()
+        console.log("mounting")
         this.props.getTotalUnread();
         // io.connect(sURL, {transports:['websocket'], upgrade: false}, {'force new connection': true})
         const socket = socketIOClient(config.base_dir, { transports: ['websocket'] }, { origins: "*" });

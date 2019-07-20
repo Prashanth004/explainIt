@@ -18,11 +18,11 @@ class ActivityMain extends Component {
             profilePic: null
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         const {activity,userData} = this.props
+        console.log(activity.unread)
         if(activity.unread === 1)
             this.props.changeReadStatus(activity.id)
-
         var token = JSON.parse(localStorage.getItem('token'))
         var newData = userData.filter(user=>user.key === activity.fromuser);
         if(newData.length ===0){
@@ -39,7 +39,7 @@ class ActivityMain extends Component {
                         userName: res.data.data.twitterhandle,
                         profilePic: res.data.data.profilepic
                     })
-                    this.props.addNewUser(res.data.data,userData)
+                    this.props.addNewUser(res.data.data)
                 }
                 else{
                     axios({
@@ -55,15 +55,11 @@ class ActivityMain extends Component {
                                     userName: res.data.data[0].twitterhandle,
                                     profilePic: res.data.data[0].profilepic
                                 })
-                                
-                            
-
                         }
                     })
                     .catch(error=>{
                         console.log("error : ",error)
                     })
-                    
                 }
                 
                 }

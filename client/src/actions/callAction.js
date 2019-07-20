@@ -14,12 +14,17 @@ import {CALL_DETAILS_ACCEPT,
     DISABLE_CALL_ACTION,
     MUTE_AUDIO,
     UNMUTE_AUDIO,
+    ADD_USER_TO_STORE,
     DECREASE_CALL_BY_MINUTE,
     UPATE_CURRENT_TIME_TO_DISPLAY,
     SAVE_TOPIC_OF_THE_CALL,
     SET_NUMBER_MINUTES } from './types'
 import axios from 'axios';
-import config from '../config/config'
+// import { connect } from 'react-redux';
+import config from '../config/config';
+import {addNewUser} from './storeUserAction';
+
+
 
 export const acceptCallDetails = (link, callerEmail, callerUserName, callerId,callerProfilePic,topicOfTheCall,timeAlloted)=>(dispatch)=>{
 dispatch({
@@ -121,8 +126,12 @@ export const resetCallAction = ()=>(dispatch)=>{
         type:RESET_CALL_ACTIONS
     })
 }
-export const getAllActivities = ()=>(dispatch)=>{
+export const getAllActivities = (props)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'));
+    var  result1 = [];
+    var result2 = null;
+    var promises = [];
+    // var result3 = null;
     axios({
         method:'get',
         url:config.base_dir+'/api/activity/user',
@@ -135,6 +144,62 @@ export const getAllActivities = ()=>(dispatch)=>{
                 type:GET_ALL_ACTIVITES,
                 payload:response.data.data
             })
+            console.log("Activities :--- ",response.data.data);
+            var i=0;
+            response.data.data.forEach(function(element) {
+                // console.log(element);
+                result1[i] = element.fromuser;
+                result1[i+1] =element.fromuser;
+                i=i+2;
+              });
+              const unique = (value, index, self) => {
+                return self.indexOf(value) === index
+              }
+              result2 = result1.filter(unique)
+            console.log("result2 : ",result2);
+            result2.forEach(function(projects, index){
+                    promises.push(axios.get(config.base_dir+'/api/users/id/'+projects))
+                 })
+                 axios.all(promises).then(function(results) {
+                    results.forEach(function(response, index) {
+                        console.log("getting user Data : ",response)
+                        if(response.status===200 || response.status === 304){
+                            console.log("adding to the stores : ",response.data.data)
+                            const newItem = {
+                                'key': response.data.data.id,
+                                'data': response.data.data
+                            }
+                            dispatch({
+                                type: ADD_USER_TO_STORE,
+                                payload: newItem
+                            })
+                        }
+                    })
+                 })
+            // var getEmails = new Promise(function(resolve, reject){
+            //     allProjects.forEach(function(projects, index){
+            //     promises.push(axios.get(config.base_dir+'/api/users/id/'+projects.userid))
+            //  })
+            //  axios.all(promises).then(function(results) {
+            //     results.forEach(function(response, index) {
+            //         if(response.status===200){
+            //             const newTestJson = JSON.parse(JSON.stringify(allProjects));
+            //                     newTestJson[index]['profilepic']=response.data.data.profilepic;
+            //                     newTestJson[index]['username']=response.data.data.username;
+            //                     newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
+            //                     allProjects =newTestJson
+            //         }
+            //     })
+            //     questProject =  allProjects.find(preojects=> preojects.isquestion ==="true");
+            //     answerProject = allProjects.filter(project => project.isquestion !=="true")
+            //     dispatch({
+            //         type: FETCH_PROJ_BY_ISSUE,
+            //         questProject: questProject,
+            //         answerProject: answerProject
+            //     })
+            //  })
+            // addNewUser()
+
         }
     }).catch(error=>{
         dispatch({
@@ -210,3 +275,5 @@ export const getRecieverData=(profileImage,profileName,userId)=>(dispatch)=>{
         userId:userId
     })
 }
+
+

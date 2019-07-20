@@ -19,15 +19,18 @@ class ActivityMain extends Component {
             profilePic: null
         }
     }
-    componentWillMount() {
-        const {activity,userData} = this.props
+    componentDidMount() {
+        const {activity,userData} = this.props;
+        
+        console.log(activity.unread)
         if(activity.unread === 1)
-            this.props.changeReadStatus(activity.id)
+            // this.props.changeReadStatus(activity.id)
 
         var token = JSON.parse(localStorage.getItem('token'))
         if(activity.touser!==null){
             var newData = userData.filter(user=>user.key === activity.touser);
             if(newData.length ===0){
+                // newDate = localStorage.getItem
                 axios({
                     method: 'get',
                     url: config.base_dir + "/api/users/id/" + activity.touser,
@@ -41,7 +44,7 @@ class ActivityMain extends Component {
                                 userName: res.data.data.twitterhandle,
                                 profilePic: res.data.data.profilepic
                             })
-                            this.props.addNewUser(res.data.data,userData)
+                            this.props.addNewUser(res.data.data);
                         }
                         else{
                             axios({
@@ -52,20 +55,16 @@ class ActivityMain extends Component {
                                 }
                             }).then(res=>{
                                 if(res.status === 200 || res.status === 304){
-                                   
                                         this.setState({
                                             userName: res.data.data[0].twitterhandle,
                                             profilePic: res.data.data[0].profilepic
-                                        })
-                                       
-                                    
-
+                                        });
+                                        this.props.addNewUser(res.data.data[0])
                                 }
                             })
                             .catch(error=>{
                                 console.log("error : ",error)
                             })
-                          
                         }
                     }
                 })

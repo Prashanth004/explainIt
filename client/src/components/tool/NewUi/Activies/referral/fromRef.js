@@ -16,7 +16,7 @@ class Fromref extends Component {
             problemOwnerProfilePic: null
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         const { referralAct, userData } = this.props;
         var token = JSON.parse(localStorage.getItem('token'))
         var newData = userData.filter(user => user.key === referralAct.problemowner);
@@ -34,7 +34,7 @@ class Fromref extends Component {
                         problemOwnerTwitterhandle: res.data.data.twitterhandle,
                         problemOwnerProfilePic: res.data.data.profilepic,
                     })
-                    this.props.addNewUser(res.data.data, userData)
+                    this.props.addNewUser(res.data.data)
                 }
             })
         }
