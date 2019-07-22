@@ -133,7 +133,7 @@ server.on('disconnect', (client) => {
 
 // app.use('/', basic );
 app.use(express.static('client/build'))
-app.get('/signin/*',(req,res)=>{
+app.get('/signin/:twitterhanlde',(req,res)=>{
   console.log("signin Page visited");
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
