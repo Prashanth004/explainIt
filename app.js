@@ -132,7 +132,7 @@ server.on('disconnect', (client) => {
 
 
 // app.use('/', basic );
-app.use(express.static('client/build'))
+// app.use(express.static('client/build'))
 app.get('/signin/:twitterhanlde',(req,res)=>{
   console.log("signin Page visited");
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
@@ -149,7 +149,7 @@ app.get('/signin/:twitterhanlde',(req,res)=>{
 });
 
 })
-app.get('*', (req,res)=>{
+app.get('/', (req,res)=>{
   console.log("home page visited")
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
@@ -164,6 +164,14 @@ app.get('*', (req,res)=>{
   res.send(result);
 });
 })
+
+app.use(express.static('client/build'))
+app.get('*', function(request, response) {
+  const filePath = path.resolve(__dirname, './build', 'index.html');
+  response.sendFile(filePath);
+});
+
+
 
 io.on("connection", socket => {
   console.log("new client conneted : ")
