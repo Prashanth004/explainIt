@@ -145,7 +145,7 @@ app.get('/signin/*',(req,res)=>{
   data = data.replace(/\$TW_TITLE/g,"Explain Activation");
   data = data.replace(/\$TW_DESCRIPTION/g,"We are happy to inform you that application explain is ready to serve you. Click to Siginin");
   result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
-  response.send(result);
+  res.send(result);
 });
 
 })
