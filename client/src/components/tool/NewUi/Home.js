@@ -661,24 +661,10 @@ class NewHome extends Component {
 
             }
             else if (this.props.inbox) {
-                feedDiv = (<div style={{display:"grid", gridTemplateColumns:"50% 50%"}}>
-                    <div>
-                    <ProfileCard
-                            isHome={this.state.isHome}
-                            toggleInbox={this.toggleInbox}
-                            sharabeLink={sharabeLink}
-                            openDtailsTab={this.openDtailsTab}
-                            userId={this.props.userId}
-                            shareFullScreenShare={this.shareFullScreenShare}
-                            showInbox={this.showInbox}
-                            recordFullScreen={this.recordFullScreen}
-                            toggleDisplayLink={this.toggleDisplayLink}
-                            toggleCreatedIssue={this.toggleCreatedIssue}
-                            toggleParticipatedIssue={this.toggleParticipatedIssue} />
-                    </div>
-                    <div>
+                feedDiv = (<div >
+                
                     <Activity userId={this.props.userId} />
-                    </div>
+                   
                   
                    </div>)
             }
