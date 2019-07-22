@@ -161,7 +161,7 @@ app.get('*', (req,res)=>{
   data = data.replace(/\$TW_TITLE/g,"Explain");
   data = data.replace(/\$TW_DESCRIPTION/g," Simplest way to share your screen. Better way to explain your thoughts. Get started now. Click to signup.");
   result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
-  res.sendFile(filepath);
+  res.send(result);
 });
 })
 
