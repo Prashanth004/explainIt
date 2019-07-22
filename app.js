@@ -157,7 +157,7 @@ app.get('/project/:projectid', (req,res)=>{
     if (err) {
       return console.log(err);
     }
-    database.one('select * from projects where issueid = $1', [req.params.id])
+    database.one('select * from projects where issueid = $1', req.params.projectid)
         .then(projects => {
           console.log("projects.videofilepath : ",projects.videofilepath)
             data = data.replace(/\$TW_TYPE/g, 'player');
