@@ -118,7 +118,8 @@ var optionsForPeerjs = {
 } 
 // app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
 const peerserver = ExpressPeerServer(server, optionsForPeerjs);
-$GOT_IT = "https://explain.bookmane.in/signin/*">
+$GOT_IT = "https://explain.bookmane.in/signin/*";
+$CONTENT_FOR_DISPLAY = "we are happy to inform you that application explain is ready to serve you. Signup using this link below."
 
 app.use('/peerjs', peerserver);
 
