@@ -32,7 +32,7 @@ const landinForm = (props) => {
     return (!props.clicked || props.inValidTwitterHandle) ? (
         <div className="formContainerExplain">
             <br />
-            <h6>Enter your twitter handle</h6>
+            <h6>Enter twitter handle</h6>
             <br />
             <span className="twiCom">twitter.com/</span>
             <TwitterInput

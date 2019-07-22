@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
+import {Helmet} from "react-helmet";
 import BusyAction from './container/BusyAction';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
@@ -33,7 +34,7 @@ import { getAllContacts } from '../../../actions/contactAction'
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
-import CopyToClipboard from '../CopytoClipboard'
+// import CopyToClipboard from '../CopytoClipboard'
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
@@ -554,7 +555,7 @@ class NewHome extends Component {
             if (this.props.screenAction === FULL_SCREEN_SHARE ||
                 this.props.screenAction === FULL_SCREEN_RECORD) {
 
-                if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
+                if (this.state.reducedWidth || this.props.showCanvas || this.props.isSecondScreenSharing) {
                     percentage = "100%";
                     listGrid = null
                 }
@@ -567,7 +568,7 @@ class NewHome extends Component {
                 }
             }
             else {
-                if (this.state.reducedWidth || this.props.showCanvas || this.props.startSecodScreenShare) {
+                if (this.state.reducedWidth || this.props.showCanvas || this.props.isSecondScreenSharing) {
                     percentage = "100%";
                 }
                 else {
@@ -611,7 +612,7 @@ class NewHome extends Component {
             }
         }
         const activityDiv = (this.state.displayDetails) ? (
-            <div style={{ width: percentage, margin: "auto" }}>
+            <div style={{ width: percentage, margin: "auto"}}>
                 {shareRecord}
             </div>
         ) : (null);
@@ -660,7 +661,26 @@ class NewHome extends Component {
 
             }
             else if (this.props.inbox) {
-                feedDiv = (<Activity userId={this.props.userId} />)
+                feedDiv = (<div style={{display:"grid", gridTemplateColumns:"50% 50%"}}>
+                    <div>
+                    <ProfileCard
+                            isHome={this.state.isHome}
+                            toggleInbox={this.toggleInbox}
+                            sharabeLink={sharabeLink}
+                            openDtailsTab={this.openDtailsTab}
+                            userId={this.props.userId}
+                            shareFullScreenShare={this.shareFullScreenShare}
+                            showInbox={this.showInbox}
+                            recordFullScreen={this.recordFullScreen}
+                            toggleDisplayLink={this.toggleDisplayLink}
+                            toggleCreatedIssue={this.toggleCreatedIssue}
+                            toggleParticipatedIssue={this.toggleParticipatedIssue} />
+                    </div>
+                    <div>
+                    <Activity userId={this.props.userId} />
+                    </div>
+                  
+                   </div>)
             }
             else {
 
@@ -730,6 +750,14 @@ class NewHome extends Component {
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
+                     <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="twitter:card" content="summary"/>
+                <meta name="twitter:url" content="https://explain.bookmane.in/signin/*"/>
+                <meta name="twitter:title" content="Explain activation"/>
+                <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking."/>
+                <meta name="twitter:image" content="https://explain.bookmane.in/public/images/logoSmall.ico"/>
+            </Helmet>
                     <Navbar />
 
                     <div className="containerHome">
@@ -738,7 +766,7 @@ class NewHome extends Component {
                         <div>
                             {profileCardElement}
 
-                        </div>
+                        </div >
                         {activityDiv}
                         <div>
                             {feedDiv}
@@ -815,7 +843,7 @@ const mapStateToProps = state => ({
     isFullScreenRecording: state.tools.isFullScreenRecording,
     showCanvas: state.canvasActions.showCanvas,
     issueId: state.issues.currentIssueId,
-    startSecodScreenShare: state.secondScreenShare.secondScreenShareStarted,
+    isSecondScreenSharing: state.secondScreenShare.isSecondScreenSharing,
     callAction: state.call.callAction,
     openHowItWorksModal: state.modal.openHowItWorksModal,
     timeAllotedRecieve: state.call.timeAllotedRecieve,

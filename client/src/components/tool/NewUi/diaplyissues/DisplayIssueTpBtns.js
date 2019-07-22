@@ -165,7 +165,7 @@ class displayTopBtns extends Component {
                             </span>
                         </div>
                         <div>
-                            <span className="textInDropDown">Sharable link</span>
+                            <span className="textInDropDown">Shareable link</span>
                         </div>
                     </div>
                     {publicPrivate}

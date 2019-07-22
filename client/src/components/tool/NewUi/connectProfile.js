@@ -6,7 +6,8 @@ import DisplatCreated from './diaplyissues/DisplayIssues';
 // import { FiGrid,FiList } from "react-icons/fi";
 import { acceptCallDetails } from '../../../actions/callAction';
 import Navbar from './Navbar';
-import { answerCall, missCall } from '../../../actions/callAction';
+import HomeProjects from './diaplyissues/displayVisitCards'
+import { missCall } from '../../../actions/callAction';
 import CallNotification from './container/CallNotification';
 // import AddtoContact from './contactlist/addToContact'
 import FullScreenShare from './enitreScreenShare';
@@ -507,6 +508,10 @@ class NewHome extends Component {
                     {/* <div>
                         <AddtoContact contactid = {this.props.userId} />
                     </div> */}
+                     <div className="issueContainer" style={{width:issuepercentage}}>
+      
+                    <HomeProjects socket={this.state.socket} home={config.NOT_HOME}  issueArray={this.props.myissues} />
+                </div>
                 </div>
            
 

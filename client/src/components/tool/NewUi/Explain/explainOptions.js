@@ -6,7 +6,9 @@ import FullScreenRecord from '../FullScreenRecord';
 import { IoIosBrowsers } from "react-icons/io";
 import { explainByShare, explainByRecord, explainByRefer } from '../../../../actions/explainAction';
 import Refer from './refer';
+import BusyAction from '../container/BusyAction';
 import '../../../css/explainit.css';
+import { Button } from 'reactstrap';
 import { FiUsers, FiVideo } from "react-icons/fi";
 
 
@@ -45,12 +47,16 @@ const explainOption = (props) => {
             </div>
         </div>
     ) : (props.explainBy === config.SHARE_SCREEN_EXPALIN ?
-        (<FullScreenShare
+        ((props.currentAtionStatus === null)?(<FullScreenShare
             socket={props.socket}
             closeImidiate={props.reStoreDefault}
             reStoreDefault={props.reStoreDefault}
             savefile={props.savefile}
-        />) : (props.explainBy === config.RECORD_SCREEEN_EXPLAIN ? (
+        />):(<div className="LinkDisplay">
+        <div className="topBtnsActivity"><Button close onClick={props.reStoreDefault} /></div>
+        <BusyAction action="share" currentAtionStatus={props.currentAtionStatus} />
+    </div>)): (props.explainBy === config.RECORD_SCREEEN_EXPLAIN ? (
+        (props.currentAtionStatus === null)?(
             <div className="explainMain">
                 <div className="recorderConatainerPage" style={{ width: props.widthDiv }}>
                     <FullScreenRecord
@@ -60,8 +66,10 @@ const explainOption = (props) => {
                         savefile={props.savefile}
                     />
                 </div>
-            </div>
-        ) : (
+            </div>):(<div className="LinkDisplay">
+        <div className="topBtnsActivity"><Button close onClick={props.reStoreDefault} /></div>
+        <BusyAction action="record" currentAtionStatus={props.currentAtionStatus} />
+    </div>)) : (
                 <Refer questionProject={props.questionProject} />)))
 }
 

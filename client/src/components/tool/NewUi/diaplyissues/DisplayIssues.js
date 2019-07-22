@@ -97,7 +97,7 @@ class DisplayIssue extends Component {
 
     render() {
         var issueItems = null;
-            if(this.props.created){
+            // if(this.props.created){
                 if(this.props.myissues!==null)
                     if(this.props.myissues.length===0)
                         issueItems = (<div className="emptyIssues">
@@ -120,7 +120,7 @@ class DisplayIssue extends Component {
                             issue={issue}
                             explainTool={this.props.explainTool}/>
                         ))
-                    }
+                    // }
             }
             else if(this.props.participated){
                 if(this.props.participatedIssues!==null)
@@ -140,7 +140,7 @@ class DisplayIssue extends Component {
                         deleteProjects={this.deleteProjects}
                         tweetWindow={this.tweetWindow}
                         handlePublicPrives={this.handlePublicPrives}
-                        toggle={this.toggle}
+                        // toggle={this.toggle}
                         issue={issue}
                      />
                     ))

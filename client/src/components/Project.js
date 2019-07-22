@@ -8,7 +8,7 @@ import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
 import {initGA,loadPageView} from './tool/NewUi/container/ReactGa';
-
+import {Helmet} from "react-helmet";
 import './css/newlanding.css';
 import Navbar from './tool/NewUi/Navbar';
 import { explainAuthentication } from '../actions/signinAction';
@@ -96,6 +96,19 @@ class Project extends Component {
      (this.props.isFetchDone) ? (
       (!this.props.failedToGet)?(
       <div>
+           <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="twitter:card" content="player"/>
+                <meta name="twitter:title" content="Explain activation"/>
+                <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking."/>
+                <meta name="twitter:player" content="https://explain.bookmane.in/public/images/logoSmall.ico"/>
+                <meta name="twitter:player:width" content="300px"/>
+
+                <meta name="twitter:player:height" content="220px"/>
+
+               
+                twitter:player:width
+            </Helmet>
       <Navbar
             page="project" />
      <div className="projectPageMainDiv">

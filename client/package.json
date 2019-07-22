@@ -30,6 +30,7 @@
     "react-ga": "^2.6.0",
     "react-github-login": "^1.0.3",
     "react-google-login": "^5.0.0",
+    "react-helmet": "^5.2.1",
     "react-icon": "^1.0.0",
     "react-icons": "^3.5.0",
     "react-iframe": "^1.5.0",

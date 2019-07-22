@@ -20,7 +20,8 @@ class ExplainPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            twitterHandle:null
+            twitterHandle:null,
+            currentAtionStatus:false
         }
         this.saveVideoData = this.saveVideoData.bind(this);
         this.reStoreDefault = this.reStoreDefault.bind(this);
@@ -45,7 +46,8 @@ class ExplainPage extends Component {
 
     }
     componentWillUnmount(){
-       
+        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+        this.setState({ currentAtionStatus: currentAtionStatus })
         this.props.resetExplainAction();
     }
   
