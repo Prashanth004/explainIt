@@ -132,7 +132,8 @@ server.on('disconnect', (client) => {
 
 
 // app.use('/', basic );
-app.use(express.static('client/build'))
+app.use(express.static('client/build'));
+
 app.get('/signin/*',(req,res)=>{
   console.log("signin Page visited");
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
@@ -148,6 +149,33 @@ app.get('/signin/*',(req,res)=>{
   res.send(result);               
 });
 
+});
+app.get('/project/:projectid', (req,res)=>{
+  console.log("home page visited")
+  const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
+  fs.readFile(filepath, 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    database.db.one('select * from projects where issueid = $1', [req.params.id])
+        .then(projects => {
+            data = data.replace(/\$TW_TYPE/g, 'player');
+            data = data.replace(/\$TW_URL/g, key.frontEndDomain);
+            data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
+            data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
+            result = data.replace(/\$TW_VIDEO/g, projects.videofilepath);
+            res.send(result);
+        })
+        .catch(error => {
+            data = data.replace(/\$TW_TYPE/g, 'player');
+            data = data.replace(/\$TW_URL/g, key.frontEndDomain);
+            data = data.replace(/\$TW_TITLE/g,"Explain");
+            data = data.replace(/\$TW_DESCRIPTION/g," Simplest way to share your screen. Better way to explain your thoughts. Get started now. Click to signup.");
+            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
+            res.send(result);
+        })
+ 
+});
 })
 app.get('/', (req,res)=>{
   console.log("home page visited")
@@ -160,14 +188,14 @@ app.get('/', (req,res)=>{
   data = data.replace(/\$TW_URL/g, key.frontEndDomain);
   data = data.replace(/\$TW_TITLE/g,"Explain");
   data = data.replace(/\$TW_DESCRIPTION/g," Simplest way to share your screen. Better way to explain your thoughts. Get started now. Click to signup.");
-  result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
+  result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
   res.send(result);
 });
 })
 
 // app.use(express.static('client/build'))
 app.get('*', function(request, response) {
-  const filePath = path.resolve(__dirname, './build', 'index.html');
+  const filePath = path.resolve(__dirname,'client', './build', 'index.html');
   response.sendFile(filePath);
 });
 
