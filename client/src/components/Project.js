@@ -96,7 +96,7 @@ class Project extends Component {
      (this.props.isFetchDone) ? (
       (!this.props.failedToGet)?(
       <div>
-           <Helmet
+           {/* <Helmet
            meta={[
     {"property": "twitter:card", "content": "player"},
     {"property": "twitter:url", "content": this.props.questionProject.videoPath},
@@ -105,7 +105,7 @@ class Project extends Component {
     {"property": "twitter:player", "content":  this.props.questionProject.videoPath},
     {"property": "twitter:player:width", "content":  "300px"},
     {"property": "twitter:player:width", "content":  "220px"}
-  ]}/>
+  ]}/> */}
              
       <Navbar
             page="project" />

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
 import BusyAction from './container/BusyAction';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
@@ -17,7 +17,6 @@ import { initGA, loadPageView } from './container/ReactGa';
 import Profile from './Profile'
 import { answerCall, missCall } from '../../../actions/callAction';
 
-// import DisplayContacts from './contactlist/contactsDisplay'
 import { getProfileDetails } from '../../../actions/profileAction';
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import { getTotalUnread } from '../../../actions/messageAction'
@@ -736,16 +735,8 @@ class NewHome extends Component {
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
-                    {/* <Helmet
-           meta={[
-    {"name": "twitter:card", "content": "summary"},
-    {"name": "twitter:url", "content": "https://explain.bookmane.in/*"},
-    {"name": "twitter:title", "content": "Explain"},
-    {"name": "twitter:description", "content": "We are happy to inform you that application explain is ready to serve you. Signup by clicking."},
-    {"name": "twitter:image", "content":  "https://explain.bookmane.in/public/images/logo.ico"}
-
-  ]}/> */}
-                    <Helmet>
+                    
+                    {/* <Helmet>
 
                         <meta charset="utf-8" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -761,7 +752,7 @@ class NewHome extends Component {
                         <link rel="manifest" href="%PUBLIC_URL%/manifest.json"></link>
                         <link rel="stylesheet" href="%PUBLIC_URL%/index.css"></link>
                         <title>Explain</title>
-                    </Helmet>
+                    </Helmet> */}
                     <Navbar />
 
                     <div className="containerHome">
