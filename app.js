@@ -38,7 +38,7 @@ var app = express();
 // for data base
 app.use(passport.initialize());
 app.use(passport.session());
-var db = pgp(connectionString);
+var database = pgp(connectionString);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -151,14 +151,15 @@ app.get('/signin/*',(req,res)=>{
 
 });
 app.get('/project/:projectid', (req,res)=>{
-  console.log("home page visited")
+  console.log("Project page visited")
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
     }
-    database.db.one('select * from projects where issueid = $1', [req.params.id])
+    database.one('select * from projects where issueid = $1', [req.params.id])
         .then(projects => {
+          console.log("projects.videofilepath : ",projects.videofilepath)
             data = data.replace(/\$TW_TYPE/g, 'player');
             data = data.replace(/\$TW_URL/g, key.frontEndDomain);
             data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
@@ -291,7 +292,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-exports.db = db;
+exports.db = database;
 
 
 
