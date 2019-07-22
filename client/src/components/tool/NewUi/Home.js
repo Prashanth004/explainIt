@@ -736,23 +736,32 @@ class NewHome extends Component {
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
-                      <Helmet
+                    {/* <Helmet
            meta={[
-    {"property": "twitter:card", "content": "summary"},
-    {"property": "twitter:url", "content": "https://explain.bookmane.in/*"},
-    {"property": "twitter:title", "content": "Explain"},
-    {"property": "twitter:description", "content": "We are happy to inform you that application explain is ready to serve you. Signup by clicking."},
-    {"property": "twitter:image", "content":  "https://explain.bookmane.in/public/images/logo.ico"}
+    {"name": "twitter:card", "content": "summary"},
+    {"name": "twitter:url", "content": "https://explain.bookmane.in/*"},
+    {"name": "twitter:title", "content": "Explain"},
+    {"name": "twitter:description", "content": "We are happy to inform you that application explain is ready to serve you. Signup by clicking."},
+    {"name": "twitter:image", "content":  "https://explain.bookmane.in/public/images/logo.ico"}
 
-  ]}/>
-                    {/* <Helmet>
-                        <meta charSet="utf-8" />
+  ]}/> */}
+                    <Helmet>
+
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                        <meta name="theme-color" content="#000000" />
                         <meta name="twitter:card" content="summary" />
                         <meta name="twitter:url" content="https://explain.bookmane.in/*" />
                         <meta name="twitter:title" content="Explain activation" />
                         <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking." />
                         <meta name="twitter:image" content="https://explain.bookmane.in/public/images/logo.ico" />
-                    </Helmet> */}
+                        <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+
+
+                        <link rel="manifest" href="%PUBLIC_URL%/manifest.json"></link>
+                        <link rel="stylesheet" href="%PUBLIC_URL%/index.css"></link>
+                        <title>Explain</title>
+                    </Helmet>
                     <Navbar />
 
                     <div className="containerHome">
