@@ -3,7 +3,7 @@ var express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser');
 var helmet = require('helmet');
-var fs = require('fs');
+var fs  = require('fs');
 const socketIo = require("socket.io");
 const key = require('./config/keys')
 var ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -136,7 +136,7 @@ app.use(express.static('client/build'))
 app.get('/signin/*',(req,res)=>{
   console.log("signin Page visited");
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
-  fs.readFile(filePath, 'utf8', function (err,data) {
+  fs.readFile(filepath, 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
     }
