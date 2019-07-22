@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import BusyAction from './container/BusyAction';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
@@ -612,7 +612,7 @@ class NewHome extends Component {
             }
         }
         const activityDiv = (this.state.displayDetails) ? (
-            <div style={{ width: percentage, margin: "auto"}}>
+            <div style={{ width: percentage, margin: "auto" }}>
                 {shareRecord}
             </div>
         ) : (null);
@@ -662,11 +662,11 @@ class NewHome extends Component {
             }
             else if (this.props.inbox) {
                 feedDiv = (<div >
-                
+
                     <Activity userId={this.props.userId} />
-                   
-                  
-                   </div>)
+
+
+                </div>)
             }
             else {
 
@@ -736,14 +736,14 @@ class NewHome extends Component {
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
-                     <Helmet>
-                <meta charSet="utf-8" />
-                <meta name="twitter:card" content="summary"/>
-                <meta name="twitter:url" content="https://explain.bookmane.in/signin/*"/>
-                <meta name="twitter:title" content="Explain activation"/>
-                <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking."/>
-                <meta name="twitter:image" content="https://explain.bookmane.in/public/images/logoSmall.ico"/>
-            </Helmet>
+                    <Helmet>
+                        <meta charSet="utf-8" />
+                        <meta name="twitter:card" content="summary" />
+                        <meta name="twitter:url" content="https://explain.bookmane.in/*" />
+                        <meta name="twitter:title" content="Explain activation" />
+                        <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking." />
+                        <meta name="twitter:image" content="https://explain.bookmane.in/public/images/logo.ico" />
+                    </Helmet>
                     <Navbar />
 
                     <div className="containerHome">

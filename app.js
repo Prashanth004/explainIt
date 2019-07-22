@@ -118,7 +118,7 @@ var optionsForPeerjs = {
 } 
 // app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
 const peerserver = ExpressPeerServer(server, optionsForPeerjs);
-
+$GOT_IT = "https://explain.bookmane.in/signin/*">
 
 app.use('/peerjs', peerserver);
 
