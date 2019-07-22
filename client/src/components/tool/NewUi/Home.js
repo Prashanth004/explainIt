@@ -736,14 +736,23 @@ class NewHome extends Component {
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
-                    <Helmet>
+                      <Helmet
+           meta={[
+    {"property": "twitter:card", "content": "summary"},
+    {"property": "twitter:url", "content": "https://explain.bookmane.in/*"},
+    {"property": "twitter:title", "content": "Explain"},
+    {"property": "twitter:description", "content": "We are happy to inform you that application explain is ready to serve you. Signup by clicking."},
+    {"property": "twitter:image", "content":  "https://explain.bookmane.in/public/images/logo.ico"}
+
+  ]}/>
+                    {/* <Helmet>
                         <meta charSet="utf-8" />
                         <meta name="twitter:card" content="summary" />
                         <meta name="twitter:url" content="https://explain.bookmane.in/*" />
                         <meta name="twitter:title" content="Explain activation" />
                         <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking." />
                         <meta name="twitter:image" content="https://explain.bookmane.in/public/images/logo.ico" />
-                    </Helmet>
+                    </Helmet> */}
                     <Navbar />
 
                     <div className="containerHome">

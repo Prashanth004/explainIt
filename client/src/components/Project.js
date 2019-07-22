@@ -96,20 +96,17 @@ class Project extends Component {
      (this.props.isFetchDone) ? (
       (!this.props.failedToGet)?(
       <div>
-           <Helmet>
-                <meta charSet="utf-8" />
-                <meta name="twitter:card" content="player"/>
-                 <meta name="twitter:url" content="https://explain.bookmane.in/signin/*"></meta>
-                <meta name="twitter:title" content="Explain activation"/>
-                <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking."/>
-                <meta name="twitter:player" content="https://explain.bookmane.in/public/images/logoSmall.ico"/>
-                <meta name="twitter:player:width" content="300px"/>
-
-                <meta name="twitter:player:height" content="220px"/>
-
-               
-                twitter:player:width
-            </Helmet>
+           <Helmet
+           meta={[
+    {"property": "twitter:card", "content": "player"},
+    {"property": "twitter:url", "content": this.props.questionProject.videoPath},
+    {"property": "twitter:title", "content": "Explain explaination"},
+    {"property": "twitter:description", "content": this.props.questionProject.textexplain},
+    {"property": "twitter:player", "content":  this.props.questionProject.videoPath},
+    {"property": "twitter:player:width", "content":  "300px"},
+    {"property": "twitter:player:width", "content":  "220px"}
+  ]}/>
+             
       <Navbar
             page="project" />
      <div className="projectPageMainDiv">
