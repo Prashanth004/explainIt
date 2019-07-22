@@ -99,6 +99,7 @@ class Project extends Component {
            <Helmet>
                 <meta charSet="utf-8" />
                 <meta name="twitter:card" content="player"/>
+                {/* <meta name="twitter:url" content="https://explain.bookmane.in/signin/*"> */}
                 <meta name="twitter:title" content="Explain activation"/>
                 <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking."/>
                 <meta name="twitter:player" content="https://explain.bookmane.in/public/images/logoSmall.ico"/>
