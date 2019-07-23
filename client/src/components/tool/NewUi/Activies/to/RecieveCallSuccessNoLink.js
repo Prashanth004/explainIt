@@ -24,7 +24,7 @@ export default (props) => {
                 <span className="dateNew Notify">{activity.time.slice(8, 10)}  {config.monthPicker[date]}, {activity.time.slice(0, 4)}</span>
 
                     <div style={{ textAlign: "left" }}>
-                        <p>You were in call with <ImageContainer name={userData.userName} imgsrc={userData.profilePic}/>  for the topic <b>{activity.subject}</b> for <Timer time={timetaken}/></p>
+                        <p>You were in call with <ImageContainer name={userData.userName} imgsrc={userData.profilePic}/>  for the topic <b>{activity.subject}</b> for <Timer time={timetaken}/> minutes</p>
                         <p style={{fontSize:"12px",fontWeight:"normal"}}>The recording not saved due to network issues</p>
                     </div>
                     </div>

@@ -9,10 +9,10 @@ class VideoPlayer extends Component {
         this.props.fetchProjectbyIssue(issueId);
     }
   render() {
-      var videoDivStyle = {width:"100%",height:"100%"}
+      var videoDivStyle = {width:"100%"}
     return (
       <div style={videoDivStyle}>
-        <video width="100%" height="100%" src={this.props.questionProject.videofilepath}></video>
+        <video width="100%" height="100%"  autoplay src={this.props.questionProject.videofilepath}></video>
       </div>
     )
   }
