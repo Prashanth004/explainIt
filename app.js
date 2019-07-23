@@ -145,7 +145,7 @@ app.get('/signin/*',(req,res)=>{
   data = data.replace(/\$TW_URL/g, key.frontEndDomain);
   data = data.replace(/\$TW_TITLE/g,"Explain Activation");
   data = data.replace(/\$TW_DESCRIPTION/g,"We are happy to inform you that application explain is ready to serve you. Click to Siginin");
-  result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
+  result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
   res.send(result);               
 });
 
@@ -164,21 +164,43 @@ app.get('/project/:projectid', (req,res)=>{
             data = data.replace(/\$TW_URL/g, key.frontEndDomain);
             data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
             data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
-            result = data.replace(/\$TW_VIDEO/g, projects.videofilepath);
+            data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
+            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
+
             res.send(result);
         })
         .catch(error => {
-            data = data.replace(/\$TW_TYPE/g, 'player');
-            data = data.replace(/\$TW_URL/g, key.frontEndDomain);
-            data = data.replace(/\$TW_TITLE/g,"Explain");
-            data = data.replace(/\$TW_DESCRIPTION/g," Simplest way to share your screen. Better way to explain your thoughts. Get started now. Click to signup.");
-            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
-            res.send(result);
+          console.log("projects.videofilepath : ",projects.videofilepath)
+          data = data.replace(/\$TW_TYPE/g, 'player');
+          data = data.replace(/\$TW_URL/g, key.frontEndDomain);
+          data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
+          data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
+          data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
+          result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
+
+          res.send(result);
         })
  
 });
 })
-app.get('/', (req,res)=>{
+// app.get('/*', (req,res)=>{
+//   console.log("home page visited")
+//   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
+//   fs.readFile(filepath, 'utf8', function (err,data) {
+//     if (err) {
+//       return console.log(err);
+//     }
+//   data = data.replace(/\$TW_TYPE/g, 'summary');
+//   data = data.replace(/\$TW_URL/g, key.frontEndDomain);
+//   data = data.replace(/\$TW_TITLE/g,"Explain");
+//   data = data.replace(/\$TW_DESCRIPTION/g," Simplest way to share your screen. Better way to explain your thoughts. Get started now. Click to signup.");
+//   result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
+//   res.send(result);
+// });
+// })
+
+// app.use(express.static('client/build'))
+app.get('*', function(request, response) {
   console.log("home page visited")
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
@@ -191,13 +213,11 @@ app.get('/', (req,res)=>{
   data = data.replace(/\$TW_DESCRIPTION/g," Simplest way to share your screen. Better way to explain your thoughts. Get started now. Click to signup.");
   result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
   res.send(result);
-});
-})
+  });
 
-// app.use(express.static('client/build'))
-app.get('*', function(request, response) {
-  const filePath = path.resolve(__dirname,'client', './build', 'index.html');
-  response.sendFile(filePath);
+
+  // const filePath = path.resolve(__dirname,'client', 'build', 'index.html');
+  // response.sendFile(filePath);
 });
 
 

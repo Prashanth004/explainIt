@@ -21,7 +21,8 @@ import Project from './components/Project'
 import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
 import Info from './components/tool/NewUi/NewFloater/info'
-import inbox from './components/tool/NewUi/Inbox'
+import inbox from './components/tool/NewUi/Inbox';
+import VideoDisplay from './components/VideoDisplay'
 // import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
@@ -47,7 +48,7 @@ class App extends Component {
             <Route exact path ='/inbox/:userid' component={inbox}/>
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact path = '/admindash' component={adminDash} />
-            <Route exact path = '/video' component={video} />
+            <Route exact path = '/video/:projectid' component={VideoDisplay} />
             {/* <Route exact path ='/floater' component={floater}/> */}
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
