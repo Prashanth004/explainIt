@@ -162,10 +162,10 @@ app.get('/project/:projectid', (req,res)=>{
           console.log("projects.videofilepath : ",projects.videofilepath)
             data = data.replace(/\$TW_TYPE/g, 'player');
             data = data.replace(/\$TW_URL/g, key.frontEndDomain);
-            data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
+            data = data.replace(/\$TW_TITLE/g,"Explanation happened on Explain");
             data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
             data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
-            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
+            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logosmall.ico');
 
             res.send(result);
         })
@@ -173,10 +173,10 @@ app.get('/project/:projectid', (req,res)=>{
           console.log("projects.videofilepath : ",projects.videofilepath)
           data = data.replace(/\$TW_TYPE/g, 'player');
           data = data.replace(/\$TW_URL/g, key.frontEndDomain);
-          data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
+          data = data.replace(/\$TW_TITLE/g,"Explanation happened on Explain");
           data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
           data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
-          result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
+          result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logosmall.ico');
 
           res.send(result);
         })
