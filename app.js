@@ -132,7 +132,7 @@ server.on('disconnect', (client) => {
 
 
 // app.use('/', basic );
-app.use(express.static('client/build'));
+
 
 app.get('/signin/*',(req,res)=>{
   console.log("signin Page visited");
@@ -165,7 +165,7 @@ app.get('/project/:projectid', (req,res)=>{
             data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
             data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
             data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
-            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
+            result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
 
             res.send(result);
         })
@@ -176,7 +176,7 @@ app.get('/project/:projectid', (req,res)=>{
           data = data.replace(/\$TW_TITLE/g,"Explanation happend on Explain");
           data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
           data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
-          result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logoSmall.ico');
+          result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logo.ico');
 
           res.send(result);
         })
@@ -200,7 +200,7 @@ app.get('/project/:projectid', (req,res)=>{
 // })
 
 // app.use(express.static('client/build'))
-app.get('*', function(request, response) {
+app.get('/', function(req, res) {
   console.log("home page visited")
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
@@ -220,6 +220,12 @@ app.get('*', function(request, response) {
   // response.sendFile(filePath);
 });
 
+app.use(express.static('client/build'));
+
+app.get('*', function(request, response) {
+  const filePath = path.resolve(__dirname, 'client', 'build', 'index.html');
+  response.sendFile(filePath);
+});
 
 
 io.on("connection", socket => {
