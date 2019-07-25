@@ -31,7 +31,6 @@ class tweetSearch extends Component {
             selfShare: false,
             numberValue: 3,
             doneTweeting:false,
-            
 
         }
         this.testHandle = this.testHandle.bind(this);

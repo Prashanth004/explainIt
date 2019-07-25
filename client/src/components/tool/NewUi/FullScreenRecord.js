@@ -47,7 +47,6 @@ class FullScreenRecorder extends Component {
             currentAtionStatus: null,
             saveActivity: false,
             selfSave:false
-
         }
         this.downloadExtension = this.downloadExtension.bind(this);
         this.recordScreenStop = this.recordScreenStop.bind(this);
@@ -75,7 +74,7 @@ class FullScreenRecorder extends Component {
     timebar = () => { }
     startBar() {
         const self = this;
-        const { extSource, extOrigin, postStartCall } = this.props
+        const { extSource, extOrigin, postStartCall } = this.props;
         postStartCall(config.FULL_SCREEN_RECORD,
             extOrigin, null, extSource, this.state.recordTime, null);
         var timeAlotedNew = this.state.recordTime * 60
@@ -86,13 +85,10 @@ class FullScreenRecorder extends Component {
         this.timebar = setInterval(frame, 1000);
 
         function frame() {
-
             if (width >= 100 || !self.props.isFullScreenRecording) {
                 clearInterval(self.timebar);
             } else {
                 if (self.props.pauseState) {
-
-
                 } else {
                     width = width + (100 / timeAlotedNew);
                     progressbar.style.width = width + '%';
@@ -194,11 +190,11 @@ class FullScreenRecorder extends Component {
                 }
             }
             if (event.data.type === config.PAUSE_TO_WEB) {
-                self.pauseRecorder()
+                self.pauseRecorder();
                 return
             }
             if (event.data.type === config.RESUME_TO_WEB) {
-                self.resumeRecorder()
+                self.resumeRecorder();
                 return
             }
             if (event.data.type === config.PERMISSION_DENIED) {
@@ -206,7 +202,7 @@ class FullScreenRecorder extends Component {
             }
             else if (event.data.sourceId !== undefined) {
                 self.props.saveSourceId(event.data.sourceId)
-                self.startRecording()
+                self.startRecording();
             }
 
         }
@@ -270,8 +266,6 @@ class FullScreenRecorder extends Component {
     }
 
     receiveMessage() {
-
-        
         var source = this.props.extSource
         var origin = this.props.extOrigin
         const GET_SOURCE_ID = {

@@ -92,6 +92,13 @@ outline-style: none}
   background-color: #34a9ad;
 }
 
+.buttonLight:disabled,
+.buttonLight[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #f3f0f0;
+}
+
 a[href], input[type='submit'], input[type='image'], label[for],span, select, button, .pointer {
   cursor: pointer;
 }

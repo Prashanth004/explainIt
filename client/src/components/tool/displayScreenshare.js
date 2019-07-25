@@ -5,8 +5,10 @@ import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
 import Navbar from './NewUi/Navbar';
+import Feedback from './NewUi/feedback/feedback'
 import PreparingLink from './waitinForLink'
-import RetryText from './waitForretry'
+import RetryText from './waitForretry';
+import { getFeedBackValididty } from '../../actions/feedbackAction'
 import Countdown from 'react-countdown-now';
 import { registerCallToBrowser, registerEndToBrowser } from './NewUi/container/miscFunction';
 import browser from 'browser-detect';
@@ -149,7 +151,8 @@ window.close();
     }
     componentDidMount() {
         var self = this;
-        self.props.fullStartedSharing()
+        self.props.fullStartedSharing();
+        this.props.getFeedBackValididty(this.props.myProfileUserId);
         window.addEventListener("beforeunload", this.onUnload);
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
@@ -211,11 +214,11 @@ window.close();
                 self.shareScreen();
                 return
             }
-            if (event.data.sourceId !== undefined) {
-                self.props.saveSourceId(event.data.sourceId)
-                self.startCall()
-                return
-            }
+            // if (event.data.sourceId !== undefined) {
+            //     self.props.saveSourceId(event.data.sourceId)
+            //     self.startCall()
+            //     return
+            // }
         }
         if (window.addEventListener) {
             window.addEventListener("message", postMessageHandler, false);
@@ -237,7 +240,7 @@ window.close();
         socket.on('connect_timeout', function (err) {
         });
         socket.on("disconnect", () => {
-        })
+        });
         socket.io.on("connect_error", () => {
         })
 
@@ -714,7 +717,9 @@ window.close();
         const messageOfScreenShare = (!this.state.myscreenSharing) ? (null) :
             (<h4><b>Your screen is being shared</b></h4>)
 
-
+        const feedbackDiz = (!this.props.isLoggedIn)?(<Feedback />):(
+            !this.props.feedbackGiven?(<Feedback />):(null));
+       
         var displayLoginMessage = (!!this.props.isLoggedIn) ? (<div><p></p></div>) :
             (<div><p><b>Login in to explain to be able initiate screen shares</b></p>
                 <button onClick={this.openLogin} className="buttonDark btnGap">Login</button>
@@ -775,6 +780,7 @@ window.close();
                     <div className="postCalltextDisplay">
                         {displayMessage}
                         {displayLoginMessage}
+                        {feedbackDiz}
                     </div>
                 </div>
             )
@@ -845,9 +851,11 @@ const mapStateToProps = state => ({
     isMuted: state.call.isMuted,
     extSourceId: state.extension.sourceId,
     extOrigin: state.extension.origin,
-    floaterTime: state.floater.floaterTime
+    floaterTime: state.floater.floaterTime,
+    feedbackGiven: state.feedback.feedbackGiven
 })
 
-export default connect(mapStateToProps, { postEndCall,otherPeerMute,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+export default connect(mapStateToProps, { postEndCall,getFeedBackValididty,
+    otherPeerMute,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
 
 

@@ -760,7 +760,8 @@ validateTurn(iceServers){
         }
     }
     shareMyScreen() {
-        this.props.updateRemainingTime(this.props.currentTimeLeft)
+        this.props.updateRemainingTime(this.props.currentTimeLeft);
+        this.props.endSecondScreenShare();
         const { conn } = this.state
         const self = this
         this.setState({
@@ -1319,6 +1320,7 @@ validateTurn(iceServers){
                         <span><b>{this.props.CalluserName}</b> is currently involved in Sharing or Recording activity. Try again after some time.</span>
                         <br />
                         <span>You can record the screen and send</span>
+                        
                         <br />
                         <br />
                         <span className="hint--top" aria-label="Record call and send">
@@ -1331,6 +1333,8 @@ validateTurn(iceServers){
                 else {
                     linkElement = ((!this.state.onGoingCallEnded) ? (
                         <div>
+                            <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/dialing.mp3')}></audio>
+
                             <div className="waitMsg">
                                 <p>Waiting for <b>{this.props.twitterName}</b> to accept the Screen Share request, if not we can drop a recorded message</p>
                             </div>

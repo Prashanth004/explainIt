@@ -1,0 +1,8 @@
+.recorderContainer{
+    width:100%;
+    padding:15px;
+    border-style:solid;
+    border-width:0.8px;
+    border-color:rgba(34, 34, 34, 0.548);
+    border-radius:5px;
+}

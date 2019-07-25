@@ -12,7 +12,8 @@ import Login from './components/tool/NewUi/Login';
 import adminDash from './components/tool/NewUi/adminPages/adminroot'
 import NoMatch from './components/tool/NewUi/NoMatch'
 import Home from './components/tool/NewUi/Home'
-import video from './components/tool/NewUi/videoDisplay'
+import Feedback from './components/tool/NewUi/feedback/feedback'
+// import video from './components/tool/NewUi/videoDisplay'
 import Explainit from './components/tool/NewUi/Explain/ExplainPage'
 import google from './components/testGoogle';
 import Toggle from './components/tool/NewUi/NewFloater/closeFloater'
@@ -50,6 +51,7 @@ class App extends Component {
             <Route exact path = '/admindash' component={adminDash} />
             <Route exact path = '/video/:projectid' component={VideoDisplay} />
             {/* <Route exact path ='/floater' component={floater}/> */}
+            <Route exact path = '/feedback' component = {Feedback}/>
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
             <Route exact path = '/closefloater' component = {Toggle}/>

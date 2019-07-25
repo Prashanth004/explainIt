@@ -208,7 +208,8 @@ const mapStateToProps = state => ({
     timeAloted: state.call.noOfMinutes,
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
-    topicOfTheCall : state.call.topicOfTheCall
+    topicOfTheCall : state.call.topicOfTheCall,
+    
 })
 
 export default connect(mapStateToProps, {postStartCall,deacreaseTimer,showCanvas,increaseTimer, hideCanvas })(Call)

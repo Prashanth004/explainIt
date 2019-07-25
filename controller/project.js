@@ -130,7 +130,7 @@ if (!req.files) {
         });
     }
     else{
-            videopathName =   videopathName = config.domain + '/public/audio/' + req.files[0].filename 
+            videopathName =    config.domain + '/public/audio/' + req.files[0].filename 
             saveToDb(req,res,videopathName )
     }
     }

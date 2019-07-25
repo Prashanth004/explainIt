@@ -1,6 +1,6 @@
 import React from 'react';
 import './record.css';
-import Countdown from 'react-countdown-now';
+  import Countdown from 'react-countdown-now';
 
 
 export default (props) => {

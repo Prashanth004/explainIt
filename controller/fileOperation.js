@@ -6,6 +6,8 @@ var storage = multer.diskStorage({
         callback(null, 'public/audio');
     },
     filename: function (req, file, callback) {
+      console.log("file : ",file);
+      console.log("req.body.projectName : ", req.body.projectName)
         callback(null, req.body.projectName + file.originalname);
     }
 });
@@ -34,6 +36,7 @@ var upload = multer({
 
 
 exports.handleFiles = (req,res,next)=>{
+  console.log("req.body : ",req.body)
 upload(req, res, function (err) {
       if(err instanceof multer.MulterError){
         console.log("error happened ");
@@ -44,18 +47,19 @@ upload(req, res, function (err) {
           errorCode : config.ERROR_CODE_FILE_TOO_LARGE
         })
         else{
-          res.status(500).send({
-            success:0,
-            error:err
-          })
+          console.log("error : ",error)
+          // res.status(500).send({
+          //   success:0,
+          //   error:err
+          // })
         }
       }
       else if(err){
         console.log("error : ",err)
-        res.status(500).send({
-          success:0,
-          error:err
-        })
+        // res.status(500).send({
+        //   success:0,
+        //   error:err
+        // })
       }
       else{
         next()

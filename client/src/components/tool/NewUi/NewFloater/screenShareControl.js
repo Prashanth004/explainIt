@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // import '../../../css/call.css';
-import './record.css'
+import './record.css';
+import './record.css';
+  import Countdown from 'react-countdown-now';
 import { MdCallEnd } from "react-icons/md";
 import ScareenShare from './ScreenShareBtn'
 import {MdVolumeOff, MdVolumeUp } from "react-icons/md";
@@ -55,6 +57,7 @@ class ShareFloater extends Component {
         clearTimeout(this.updateRecordertime);
     }
     componentWillMount() {
+        console.log("mounting")
         var presentTime = null;
         var otherpersonProfilePic = null;
         var action = null;
@@ -366,12 +369,24 @@ class ShareFloater extends Component {
                     shareMyscreen={this.shareMyscreen}
                     floaterDisplay = {this.props.floaterDisplay} />
                    
-                    <Timer 
+                    {/* <Timer 
                     ReducedMinute = {this.ReducedMinute}
                     displayAddTimer = {this.state.displayAddTimer}
                     floaterTime = {this.props.floaterTime}
                     addExtraMinute = {this.addExtraMinute}
-                    renderer ={this.renderer}/>
+                    renderer ={this.renderer}/> */}
+
+
+<div className="timeDiv caller">
+  <div className="addTimer add"><span className="tmeBtns" onClick={this.addExtraMinute}>+</span></div>
+  <div style={{textAlign:'center'}}>
+      <Countdown
+          date={Date.now() + this.props.floaterTime * 60 * 1000}
+          renderer={this.renderer}
+      />
+  </div>
+  <div className="addTimer sub"><span className="tmeBtns" onClick={this.ReducedMinute}>-</span></div>
+</div>
                     {/* fontSize="13px" style={{ color: "white", marginTop:"10px" }} */}
                    
                     <div>

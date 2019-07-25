@@ -43,6 +43,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
+app.use(bodyParser.urlencoded({ extended: false }))
 // app.use(helmet())
 // app.use(helmet({
 //   frameguard: false
@@ -80,6 +81,7 @@ var adminRouter = require('./routes/admin')
 var activityRouter = require('./routes/activity')
 var referralRouter = require('./routes/referral');
 var contactRouter =  require('./routes/contact');
+var feebackRouter = require('./routes/feedback')
 // app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -110,7 +112,8 @@ app.use('/api/message',messageRouter);
 app.use('/api/tweetactions', tweetRouter);
 app.use('/api/activity',activityRouter);
 app.use('/api/referral',referralRouter);
-app.use('/api/contact',contactRouter)
+app.use('/api/contact',contactRouter);
+app.use('/api/feedback',feebackRouter)
 app.use("/public", express.static(__dirname + "/public"));
 app.use(logger('dev'));
 //peerjs for screen sharing

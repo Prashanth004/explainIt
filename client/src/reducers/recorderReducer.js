@@ -1,11 +1,13 @@
-import {SAVE_RECORDER,RESET_RECORDER,UPDATE_CURRENT_TIME_RECORDER,START_RECORDER,PAUSE_RECORDER,RESUME_RECORDER} from '../actions/types'
+import {SAVE_RECORDER,RESET_RECORDER,STOP_RECORDER,UPDATE_CURRENT_TIME_RECORDER,START_RECORDER,PAUSE_RECORDER,RESUME_RECORDER} from '../actions/types'
 
 
 const initialState = {
     otherPeerRecorder :null,
     pauseState:false,
     recorder:null,
-    currentTime:null
+    currentTime:null,
+    downLoadUrl:null,
+    blob:null
 }
 
 
@@ -34,6 +36,13 @@ export default function(state = initialState, action){
                 ...state,
                 currentTime:action.payload
             }
+        case STOP_RECORDER:
+            console.log("url in reducer : ",action.downLoadUrl)
+            return{
+                ...state,
+                downLoadUrl:action.downLoadUrl,
+                blob:action.blob
+            }
         
 
         case RESET_RECORDER :
@@ -42,7 +51,9 @@ export default function(state = initialState, action){
                 otherPeerRecorder :null,
                 pauseState:false,
                 recorder:null,
-                currentTime:null
+                currentTime:null,
+                downLoadUrl:null,
+                blob:null
             }
         case START_RECORDER:
             return{
