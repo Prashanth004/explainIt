@@ -1,4 +1,5 @@
-import {GET_PROFILE_DETAILS_ON_HOVER,GET_PROFILE_DETAILS_FAIL_ON_HOVER } from './types'
+import {GET_PROFILE_DETAILS_ON_HOVER,GET_PROFILE_DETAILS_FAIL_ON_HOVER,
+    SHOW_ACTIVITY,SHOW_PROFILE,HIDE_LABEL,HIDE_ACTIVITY,HIDE_PROFILE} from './types'
 import config from '../config/config';
 import axios from 'axios';
 
@@ -42,8 +43,6 @@ export const getProfileDetailsOnHover=(userId, profilePrivacy)=>(dispatch)=>{
                     project.public === "1"
                   
                 ))
-               
-
             }
           
            var myIssue = myProjects.filter(project=>(
@@ -95,6 +94,34 @@ export const getProfileDetailsOnHover=(userId, profilePrivacy)=>(dispatch)=>{
 
     })
 }
+
+
+export const showActivitynow =()=>(dispatch)=>{
+dispatch({
+    type:SHOW_ACTIVITY,
+})
+}
+export const hideActivity =()=>dispatch=>{
+    dispatch({
+        type:HIDE_ACTIVITY
+    })
+}
+export const hideProfile = ()=>dispatch=>{
+    dispatch({
+        type:HIDE_PROFILE
+    })
+}
+export const showProfileNow =()=>(dispatch)=>{
+    dispatch({
+        type:SHOW_PROFILE
+    })
+    }
+export const hideLabel = ()=>(dispatch)=>{
+    dispatch({
+        type:HIDE_LABEL
+    })
+}
+    
 
    
 

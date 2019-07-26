@@ -11,7 +11,6 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -234,7 +233,7 @@ class Navigationbar extends React.Component {
 
 
 
-    if ((this.props.Created || this.props.Participated || this.props.inbox) && !this.state.isViewPage) {
+    if ((this.props.Created || this.props.Participated || this.props.inbox) && !this.state.isViewPage && !(this.props.isSceenSharing ||this.props.callAction || this.props.isFullScreenRecording )) {
 
       navItem1 = (<button onClick={this.openCreated} style={createdStyle} className="noButtons navItm"><span>Created</span></button>);
       navItem2 = (<span><FiMail style={{ marginTop: "10px", marginLeft: "8px", fontSize: "30px", color: inboxColor }} onClick={this.props.openInbox} /></span>)
@@ -257,7 +256,7 @@ class Navigationbar extends React.Component {
       // </div>)
     }
 
-    else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated)) {
+    else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated && !(this.props.isSceenSharing ||this.props.callAction || this.props.isFullScreenRecording ))) {
 
       if ((this.props.Created || this.props.Participated)) {
         navItem1 = (<button onClick={this.openCreated} style={createdStyle} className="noButtons navItm"><span>Created</span></button>);
@@ -381,6 +380,7 @@ const mapStateToProps = state => ({
   profilePic: state.auth.profilePic,
   logoutSuccess: state.auth.logoutSuccess,
   userId: state.auth.id,
+  callAction: state.call.callAction,
   Home: state.nav.openHome,
   Created: state.nav.openCreated,
   inbox: state.nav.openInbox,

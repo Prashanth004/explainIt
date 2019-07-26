@@ -60,7 +60,7 @@ p{
     font-size:13px;
 }
 .activityContentWithDate{
-    width:90%;
+    width:380px;
     margin:auto;
     margin-top:-5px;
     display:grid;
@@ -73,21 +73,3 @@ p{
 }
 
 
-@media (min-width: 1000px) {
-    .activityContentWithDate{
-        width:75%;
-        margin:auto;
-        margin-top:-5px;
-    }
-}
-
-@media (min-width: 700px) {
-    .activityContentWithDate{
-        /* background-color: black; */
-         width:95%;
-         margin:auto;
-         margin-top:-5px;
-         /* display:grid; */
-          /* grid-template-columns: 10% 85% ; */
-    }
-}

@@ -11,6 +11,7 @@ export default (props) => {
   ("Screen record in progress. You can not share your screen till it is ended"))
 
   return (<div style={{padding:"20px"}}>
+    
  <Boldpara content={busyStatus}/>
   </div>)
 }

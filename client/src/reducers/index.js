@@ -12,7 +12,7 @@ import navReducer from './navReducer'
 import twitterApiReducer from './twitterApiReducer';
 import streamReducer from './streamReducer';
 import canvasActionsReducer from './canvasActionReducer'
-import profileHoverReducer from './profileHoverReducer'
+import profileCardReducer from './profileCardReducer'
 import secondScreenShareReducer from './secondShareReducer'
 import emailReducer from './emailReducer';
 import adminReducer from './adminReducer';
@@ -25,6 +25,7 @@ import userStoreReducer from './storeUserReducer';
 import modalReducer from './modalReducer';
 import contactReducers from './contactReducer';
 import feedBackReducer from './feedBackReducer';
+import realDialReducer from './redialReducer';
  
 export default combineReducers({
     email:emailReducer,
@@ -45,12 +46,13 @@ export default combineReducers({
     twitterApi:twitterApiReducer,
     stream:streamReducer,
     canvasActions:canvasActionsReducer,
-    profileHover:profileHoverReducer,
+    profileCard:profileCardReducer,
     secondScreenShare :secondScreenShareReducer,
     recorder : recorderReducer,
     floater:floaterReducer,
     userStore:userStoreReducer,
     modal:modalReducer,
     contact:contactReducers,
-    feedback : feedBackReducer
+    feedback : feedBackReducer,
+    redial : realDialReducer
 })

@@ -151,8 +151,8 @@ class Call extends Component {
         const {otherPersonName,topicOfTheCall,myscreenSharing} = this.props;
         const messageOfScreenShare = (!myscreenSharing) ? (null) :
             (
-            <div><h4><b>Your screen is being shared to {otherPersonName}  </b></h4>
-            <h5>Topic : {topicOfTheCall}</h5>
+            <div><p><b>Your screen is being shared to {otherPersonName}  </b></p>
+          
             </div>)
 
         const shouldDisplay = (!myscreenSharing) ? ("block") : ("none")
@@ -185,7 +185,7 @@ class Call extends Component {
 
                     </div>
                     <div>
-
+                    <p>Topic : {topicOfTheCall}</p>
                     </div>
                     <div>
                     </div>

@@ -4,8 +4,11 @@ import React from 'react';
 import config from '../../../../../config/config';
 import ImageContainer from '../imageContainer';
 import { FiPhoneMissed } from "react-icons/fi";
+import { connect } from 'react-redux';
+import PropType from 'prop-types';
+import {dialFromMissed} from '../../../../../actions/dialActions'
 
-export default (props) => {
+const CallFail = (props) => {
     const { userData, activity } = props
     var date = activity.time.slice(5, 7)
     return (
@@ -16,7 +19,11 @@ export default (props) => {
                     <span className="year">{activity.date.slice(0, 4)}</span>
                 </div> */}
             <div className="activityContent">
-                <div className="callIconDiv"> <FiPhoneMissed className="callIcon missed"/></div>
+                <div className="callIconDiv" > 
+                <span className="hint--top" aria-label={"dial "+userData.userName}>
+                    <FiPhoneMissed className="callIcon missed" onClick={()=>props.dialFromMissed(userData.userName)}/>
+                </span>
+                </div>
                 <div>
 
                     <span className="dateNew Notify">{activity.time.slice(8, 10)}  {config.monthPicker[date]}, {activity.time.slice(0, 4)}</span>
@@ -30,6 +37,18 @@ export default (props) => {
         </div>
     )
 }
+
+CallFail.PropType = {
+    dialFromMissed: PropType.func.isRequired,
+    addNewUser:PropType.func.isRequired
+};
+const mapStateToProps = state => ({
+    // userData : state.userStore.userData
+
+})
+export default connect(mapStateToProps, {dialFromMissed })(CallFail)
+
+
 
 
 

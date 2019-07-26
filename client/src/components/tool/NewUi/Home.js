@@ -3,7 +3,7 @@ import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
 // import { Helmet } from "react-helmet";
-import BusyAction from './container/BusyAction';
+// import BusyAction from './container/BusyAction';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
@@ -12,28 +12,19 @@ import CallNotification from './container/CallNotification';
 import Activity from './Activies/indexActivity'
 import DisplatCreated from './diaplyissues/DisplayCreated';
 import { cancelSuccess } from '../../../actions/issueActions'
-import Inboxfeed from './Inboxfeed';
 import { initGA, loadPageView } from './container/ReactGa';
-import Profile from './Profile'
 import { answerCall, missCall } from '../../../actions/callAction';
-
 import { getProfileDetails } from '../../../actions/profileAction';
-import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import { getTotalUnread } from '../../../actions/messageAction'
-import FullScreenShare from './enitreScreenShare'
-import FullScreenRecord from './FullScreenRecord'
 import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
-import { creatAnsProject } from '../../../actions/projectActions'
-import { confirmAlert } from 'react-confirm-alert';
+import { creatAnsProject } from '../../../actions/projectActions';
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import { Button, Modal, ModalBody } from 'reactstrap';
-// import { Spinner } from 'reactstrap';
+import {  Modal, ModalBody } from 'reactstrap';
 import { getAllContacts } from '../../../actions/contactAction'
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
-// import CopyToClipboard from '../CopytoClipboard'
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
@@ -68,7 +59,7 @@ class NewHome extends Component {
             displayLink: false,
             isHome: true,
             socket: null,
-            showDetails: false,
+           
             typeOfView: "list",
             displayDetails: false,
             reducedWidth: false,
@@ -83,39 +74,20 @@ class NewHome extends Component {
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
         this.toggleModalCreate = this.toggleModalCreate.bind(this)
-        this.toodleExplain = this.toodleExplain.bind(this);
         this.toggleCreatedIssue = this.toggleCreatedIssue.bind(this);
         this.toggleParticipatedIssue = this.toggleParticipatedIssue.bind(this);
-        this.closeParticipated = this.closeParticipated.bind(this);
-        this.reStoreDefault = this.reStoreDefault.bind(this);
-        this.handleConfirm = this.handleConfirm.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
-        // this.answerCall = this.answerCall.bind(this);
-        // this.rejectCall = this.rejectCall.bind(this);
-        this.openDtailsTab = this.openDtailsTab.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
         this.changeViewToGrid = this.changeViewToGrid.bind(this);
-        this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
-        this.recordFullScreen = this.recordFullScreen.bind(this);
-        this.toggleInbox = this.toggleInbox.bind(this);
         this.saveVideoData = this.saveVideoData.bind(this);
-        this.showInbox = this.showInbox.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
         this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
         this.informExtension = this.informExtension.bind(this);
 
     }
-    toggleDisplayLink() {
-        this.setState({
-            displayLink: !this.state.displayLink,
-            showDetails: false,
-            displayDetails: false
-        })
-    }
+
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
-        this.setState({ reducedLittleWidth: window.innerWidth <= 1000 });
+        this.setState({ reducedLittleWidth: window.innerWidth <= 1200 });
     }
 
 
@@ -137,21 +109,8 @@ class NewHome extends Component {
         }
 
     }
-    openDtailsTab() {
-        this.setState({
-            showDetails: !this.state.showDetails,
-            displayDetails: false,
-            displayLink: false
-        })
-    }
+    
 
-    closeParticipated() {
-        this.setState({
-            showProjects: false,
-            showParticipatedIssue: false,
-            showCreatedIssue: false,
-        })
-    }
 
 
     componentWillUnmount() {
@@ -200,18 +159,6 @@ class NewHome extends Component {
                 this.props.getTotalUnread()
             }
         })
-        // socket.on(config.REJECT_REPLY, data => {
-        //     if (this.props.userId === String(data.fromUserId)) {
-        //         // stopFlashingFunc();
-        //         this.props.answerCall();
-        //     }
-        // })
-        // socket.on(config.ACCEPT_SHARE_REQUEST, data => {
-        //     if (this.props.userId === String(data.fromUserId)) {
-        //         // stopFlashingFunc();
-        //         this.props.answerCall();
-        //     }
-        // })
         socket.on(config.END_WHILE_DIALING, data => {
             if (data.ToUserId === this.props.userId) {
                 this.setState({ endedCallFromOtherPeer: true })
@@ -270,9 +217,7 @@ class NewHome extends Component {
                     "fromUserId": data.fromUserId,
                     "toUserId": data.toUserId
                 })
-                // this.setState({
-                //     callerId: data.fromUserId
-                // })
+              
                 this.props.acceptCallDetails(
                     data.link,
                     data.fromEmail,
@@ -293,7 +238,6 @@ class NewHome extends Component {
         this.props.stillAuthenicated()
         console.log("mounting")
         this.props.getTotalUnread();
-        // io.connect(sURL, {transports:['websocket'], upgrade: false}, {'force new connection': true})
         const socket = socketIOClient(config.base_dir, { transports: ['websocket'] }, { origins: "*" });
         socket.on('reconnect_attempt', () => {
             socket.io.opts.transports = ['polling', 'websocket'];
@@ -303,27 +247,11 @@ class NewHome extends Component {
         })
 
     }
-    toodleExplain() {
-        localStorage.setItem("issueId", null)
-        this.setState({
-            openExplain: !this.state.openExplain,
-            showCreatedIssue: false,
-            showParticipatedIssue: false
-        })
-    }
-    toggleInbox() {
-        this.setState({
-            showProjects: true,
-            openExplain: false,
-            showDetails: false
-        })
-        this.handleConfirm()
-        this.props.openInbox()
-    }
+
     toggleCreatedIssue() {
         this.setState({
             showDetails: false,
-            displayDetails: false,
+            // displayDetails: false,
 
         })
 
@@ -336,7 +264,7 @@ class NewHome extends Component {
     toggleParticipatedIssue() {
         this.setState({
             showDetails: false,
-            displayDetails: false,
+            // displayDetails: false,
         })
         this.setState({
             showProjects: true,
@@ -344,66 +272,12 @@ class NewHome extends Component {
         })
         this.props.openParticipated()
     }
-    recordFullScreen() {
-        this.setState({
-            showDetails: false,
-            displayLink: false
-        })
-        if (!this.state.displayDetails) {
-            this.setState({
-                displayDetails: true
-            })
-            this.props.displayFullScrenRecord()
-        }
-        else {
-            this.setState({
-                displayDetails: false
-            })
-        }
-    }
+  
     toggleExplainerVideo() {
         this.setState({
             showExplainerVideo: !this.state.showExplainerVideo
         })
     }
-    showInbox() {
-        this.setState({
-            showDetails: false,
-            displayLink: false
-        })
-        if (!this.state.displayDetails) {
-            this.setState({
-                displayDetails: true
-            })
-            this.props.displayInox()
-        }
-        else {
-            this.setState({
-                displayDetails: false
-            })
-        }
-    }
-
-    shareFullScreenShare() {
-        this.setState({
-            showDetails: false,
-            displayLink: false
-        })
-        if (!this.state.displayDetails) {
-            this.setState({
-                displayDetails: true
-            })
-            localStorage.setItem('issueId', null)
-            this.props.displayFullScreShare()
-        }
-        else {
-            this.setState({
-                displayDetails: false
-            })
-        }
-    }
-
-
     toggleModalCreate = () => {
         if (this.props.isAauthenticated) {
             this.props.setIssueId(null)
@@ -431,53 +305,11 @@ class NewHome extends Component {
             });
         }
     }
-    // answerCall() {
-    //     window.open(this.props.callActionLink,'_self');
-    //     this.props.answerCall();
-    //     var socket = this.state.socket;
-
-    //     socket.emit(config.ACCEPT_SHARE_REQUEST, {
-    //         'fromUserId': this.props.userId,
-    //         'toUserId': this.props.callerId,
-    //         'message': config.REPLY_TO_SHARE_REQ
-    //     })
-    // }
-    // rejectCall() {
-    //     var socket = this.state.socket
-    //     socket.emit(config.REJECT_REPLY, {
-    //         'fromUserId': this.props.userId,
-    //         'toUserId': this.props.callerId,
-    //         'message': config.REPLY_TO_SHARE_REQ
-    //     })
-    //     this.props.answerCall();
-    // }
 
 
 
-    handleCancel() {
 
-    }
-    reStoreDefault = () => {
-        if (this.props.screenAction !== null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted) {
-            confirmAlert({
-                title: "Are you sure?",
-                message: "You won't be able to revert this!",
-                buttons: [
-                    {
-                        label: 'Yes',
-                        onClick: () => this.handleConfirm()
-                    },
-                    {
-                        label: 'No',
-                        onClick: () => this.handleCancel()
-                    }
-                ]
-            })
-        }
-        else {
-            this.handleConfirm()
-        }
-    }
+
     screenShareWindow() {
         var href = config.react_url + "/sharescreen"
         var width = window.innerHeight * (3 / 4),
@@ -493,16 +325,6 @@ class NewHome extends Component {
         window.open(url, 'explain', opts);
     }
 
-    handleConfirm() {
-        this.props.cancelAllMessageAction();
-        this.props.restAllToolValue();
-        this.props.resetValues();
-        this.props.cancelSuccess();
-        this.props.resetCallAction();
-        this.setState({
-            displayDetails: false
-        })
-    }
     explainTool = (e) => {
         if (this.props.isAauthenticated) {
             this.props.setIssueId(e.target.id)
@@ -528,7 +350,8 @@ class NewHome extends Component {
 
     render() {
         var issuepercentage = "59%";
-        var percentage = "45%";
+        var inboxColumn ="100%";
+        var inBoxLabelPos = null
 
         // var displayLinkDiv = null;
         var profileCardElement = null;
@@ -543,87 +366,14 @@ class NewHome extends Component {
         if (!this.state.isinformed && this.props.userId !== null) {
             this.informExtension();
         }
-        if (this.state.reducedWidth) {
-            issuepercentage = "100%"
-        }
-        if (this.props.screenAction === SCREEN_RECORD ||
-            this.props.screenAction === SCREEN_SHARE) {
-            percentage = "10%";
-        }
-        else {
-            if (this.props.screenAction === FULL_SCREEN_SHARE ||
-                this.props.screenAction === FULL_SCREEN_RECORD) {
 
-                if (this.state.reducedWidth || this.props.showCanvas || this.props.isSecondScreenSharing) {
-                    percentage = "100%";
-                    listGrid = null
-                }
-                else if (this.state.reducedLittleWidth) {
-                    percentage = "42%";
-                    listGrid = null
-                }
-                else {
-                    percentage = "30%";
-                }
-            }
-            else {
-                if (this.state.reducedWidth || this.props.showCanvas || this.props.isSecondScreenSharing) {
-                    percentage = "100%";
-                }
-                else {
-                    percentage = "30%";
-                }
-            }
-        }
-        var howtWorksBtn = (<div className="HowTWorksDiv">
-            <button className="buttonDark" onClick={this.props.toggleHowWorksModal}>How it works</button>
-        </div>)
 
-        var shareRecord = null
-        if (!this.props.inbox && !this.props.created && !this.props.participated) {
-            if (this.props.screenAction === FULL_SCREEN_RECORD) {
-                howtWorksBtn = null
-                shareRecord = (this.state.currentAtionStatus === null) ? (<FullScreenRecord
-                    socket={this.state.socket}
-                    closeImidiate={this.handleConfirm}
-                    reStoreDefault={this.reStoreDefault}
-                    savefile={this.saveVideoData}
-                />) : (<div className="LinkDisplay">
-                    <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
-                    <BusyAction action="record" currentAtionStatus={this.state.currentAtionStatus} />
-                </div>)
-            }
-            else if (this.props.screenAction === FULL_SCREEN_SHARE) {
-                howtWorksBtn = null
-                shareRecord = (this.state.currentAtionStatus === null) ? (<FullScreenShare
-                    toggleInbox={this.toggleInbox}
-                    socket={this.state.socket}
-                    closeImidiate={this.handleConfirm}
-                    reStoreDefault={this.reStoreDefault}
-                    savefile={this.saveVideoData}
-                />) : (<div className="LinkDisplay">
-                    <div className="topBtnsActivity"><Button close onClick={this.handleConfirm} /></div>
-                    <BusyAction action="share" currentAtionStatus={this.state.currentAtionStatus} />
-                </div>)
-            }
-            else {
-                shareRecord = (<Inboxfeed />)
-            }
-        }
-        const activityDiv = (this.state.displayDetails) ? (
-            <div style={{ width: percentage, margin: "auto" }}>
-                {shareRecord}
-            </div>
-        ) : (null);
+      
+
+      
+     
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
-        const details = (this.state.showDetails) ? (((this.props.inbox || this.props.created || this.props.participated) ? (
-            null
-        ) : (<Profile
-            openDtailsTab={this.openDtailsTab}
-            sharabeLink={sharabeLink}
-            isHome={this.state.isHome} />))
-
-        ) : (null)
+     
 
         const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo} />;
         // var self = this
@@ -640,7 +390,7 @@ class NewHome extends Component {
         deatilsModal = (<IssueDetils />)
 
         if (this.props.isAauthenticated) {
-            if (!this.props.incommingCall && (this.props.participated || this.props.created)) {
+            if (!this.props.incommingCall && (this.props.participated || this.props.created )) {
                 var participatedDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{ width: issuepercentage }} >
                         <div className="closeBtnHolder">
@@ -671,19 +421,25 @@ class NewHome extends Component {
 
             }
         }
+        if((this.props.inbox)&& !(this.props.isSceenSharing ||this.props.callAction || this.props.isFullScreenRecording || this.state.reducedLittleWidth ||this.state.reducedWidth)){
+            inboxColumn="30% 45% 20%";
+            inBoxLabelPos="fixed";
+        }
+      
+        if((this.props.isSceenSharing || this.props.isFullScreenRecording  ||this.props.callAction))
+        feedDiv = null;
 
 
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
-                this.props.isSceenSharing ||
-                this.props.callAction ||
-                this.props.isFullScreenRecording ||
+                // this.props.isSceenSharing ||
+                // this.props.callAction ||
+                // this.props.isFullScreenRecording ||
                 this.props.participated ||
-                this.props.inbox ||
                 this.props.created) {
                 profileCardElement = null;
-                howtWorksBtn = null
+                // howtWorksBtn = null
 
             }
             else if (this.props.userId !== null) {
@@ -693,39 +449,22 @@ class NewHome extends Component {
                     !this.props.created &&
                     !this.props.participated
                 ) {
-                    howtWorksBtn = null;
-                    // displayLinkDiv = (<div className="sharableLinkSection">
-                    //     <div className="topBtnsActivity">
-                    //     <Button close onClick={this.toggleDisplayLink} />
-                    //     </div>
-                    //     <br/>
-                    //     <p style={{fontWeight:"500"}}>Your shareable Profile Link</p>
-                    //     <CopyToClipboard sharablelink={sharabeLink} />
-                    // </div>)
+                    // howtWorksBtn = null;
+                  
                 }
-                else {
-                    // displayLinkDiv = null
-                }
+              
 
 
                 profileCardElement = (
-                    <div className="ProfileDiv">
                         <ProfileCard
+                            currentAtionStatus={this.state.currentAtionStatus}
                             isHome={this.state.isHome}
-                            toggleInbox={this.toggleInbox}
                             sharabeLink={sharabeLink}
-                            openDtailsTab={this.openDtailsTab}
+                            socket={this.state.socket}
                             userId={this.props.userId}
-                            shareFullScreenShare={this.shareFullScreenShare}
-                            showInbox={this.showInbox}
-                            recordFullScreen={this.recordFullScreen}
-                            toggleDisplayLink={this.toggleDisplayLink}
+                            saveVideoData={this.saveVideoData}
                             toggleCreatedIssue={this.toggleCreatedIssue}
-                            toggleParticipatedIssue={this.toggleParticipatedIssue} />
-                        {/* {displayLinkDiv} */}
-
-                    </div>
-                )
+                            toggleParticipatedIssue={this.toggleParticipatedIssue} />)
             }
         }
         else {
@@ -736,41 +475,24 @@ class NewHome extends Component {
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
                     
-                    {/* <Helmet>
-
-                        <meta charset="utf-8" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-                        <meta name="theme-color" content="#000000" />
-                        <meta name="twitter:card" content="summary" />
-                        <meta name="twitter:url" content="https://explain.bookmane.in/*" />
-                        <meta name="twitter:title" content="Explain activation" />
-                        <meta name="twitter:description" content="We are happy to inform you that application explain is ready to serve you. Signup by clicking." />
-                        <meta name="twitter:image" content="https://explain.bookmane.in/public/images/logo.ico" />
-                        <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
-
-
-                        <link rel="manifest" href="%PUBLIC_URL%/manifest.json"></link>
-                        <link rel="stylesheet" href="%PUBLIC_URL%/index.css"></link>
-                        <title>Explain</title>
-                    </Helmet> */}
-                    <Navbar />
+                 <Navbar />
 
                     <div className="containerHome">
                         {callNotificationDiv}
 
+                        
+                    <div style={{display:"grid",gridTemplateColumns:inboxColumn}}>
                         <div>
+                        <div className="ProfileDiv" style={{position:inBoxLabelPos}}>
                             {profileCardElement}
+                        </div>
+                        </div>
 
-                        </div >
-                        {activityDiv}
-                        <div>
                             {feedDiv}
                         </div>
-                        <div>
-                            {details}
-                        </div>
-                        {howtWorksBtn}
-                        {/* <DisplayContacts /> */}
+                      
+                        {/* {howtWorksBtn} */}
+                     
 
                     </div>
                     <Modal size='lg' centered={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
@@ -825,11 +547,8 @@ const mapStateToProps = state => ({
     twitterHandle: state.profile.twitterHandle,
     email: state.auth.email,
     userId: state.auth.id,
-    // callerName: state.call.userName,
     callerId: state.call.id,
-    // callerProfilePic: state.call.profilePic,
-    // callActionLink: state.call.link,
-    // incommingCall: state.call.incommingCall,
+    
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,
@@ -863,8 +582,6 @@ export default connect(mapStateToProps, {
     setIssueId,
     varifyEmail,
     getTotalUnread,
-    displayFullScrenRecord,
-    displayFullScreShare,
     creatAnsProject,
     cancelSuccess,
     clearAnswers, stillAuthenicated,

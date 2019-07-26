@@ -1,5 +1,5 @@
 .profileConatinerMain{
-    width:75%;
+    width:100%;
     background-color: white;
     margin:auto;
     /* background-color: white; */
@@ -33,14 +33,14 @@ padding:10px;
 
 @media (min-width: 700px) {
     .profileConatinerMain{
-        width:48%;
+        width:100%;
         }
     
 }
 
 @media (min-width: 1000px) {
     .profileConatinerMain{
-    width:30%;
+    width:100%;
     }
 
 

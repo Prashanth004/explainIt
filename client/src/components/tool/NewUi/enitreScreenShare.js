@@ -124,7 +124,6 @@ class ScreenRecorder extends Component {
         this.recordCallAfterShare = this.recordCallAfterShare.bind(this);
         this.shareMyScreen = this.shareMyScreen.bind(this);
         this.concatinateBlob = this.concatinateBlob.bind(this);
-        this.openSavedCall = this.openSavedCall.bind(this);
         this.triedCalling = this.triedCalling.bind(this);
         this.endWhileOngoinCall = this.endWhileOngoinCall.bind(this);
         this.muteAudio = this.muteAudio.bind(this);
@@ -211,7 +210,7 @@ class ScreenRecorder extends Component {
         navigator.mediaDevices.getUserMedia({ audio: true }).then(function (audioStream) {
             navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
                 if (config.CALL_LOGS)
-                    console.log("got audio and video streams")
+                    console.log("got audio and video streams");
                 var finalStream = new MediaStream();
                 var videoTracks = screenStream.getVideoTracks();
                 videoTracks.forEach(function (track) {
@@ -233,7 +232,7 @@ class ScreenRecorder extends Component {
                 })
             }).catch(err => {
                 if (config.CALL_LOGS)
-                    console.log("error ouucres : ", err)
+                    console.log("error ouucres : ", err);
             })
         });
     }
@@ -1146,11 +1145,7 @@ validateTurn(iceServers){
             'ToUserId': this.props.twitterUserId
         })
     }
-    openSavedCall() {
-
-        this.props.toggleInbox()
-        this.props.openCreated()
-    }
+ 
 
     sendLink() {
         const self = this;
