@@ -15,13 +15,15 @@ class SaveProjects extends Component {
             limitExce: false,
             empty: false,
             limitOfChar: null,
-            textValue: "",
+            textValue: this.props.topicOfTheCall,
             privatePublic: false,
-            callRecText: "Call"
+            callRecText: "Call",
+            updatedText : false
         }
         this.changeInputValue = this.changeInputValue.bind(this);
         this.SaveTopic = this.SaveTopic.bind(this);
         this.SaveTopicSave = this.SaveTopicSave.bind(this);
+        this.setTextValue =this.setTextValue.bind(this);
     }
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {
@@ -34,8 +36,11 @@ class SaveProjects extends Component {
                 callRecText: "Call"
             })
         }
+        console.log("this.props.topicOfTheCall : ",this.props.topicOfTheCall)
         this.setState({
-            limitOfChar: config.PROJECT_TEXT_LIMIT
+            limitOfChar: config.PROJECT_TEXT_LIMIT,
+           
+
         })
     }
 
@@ -87,6 +92,12 @@ class SaveProjects extends Component {
             })
         }
     }
+    setTextValue(){
+        this.setState({
+            textValue: this.props.topicOfTheCall,
+            updatedText:true
+        })
+    }
 
     changeInputValue(e) {
         var textValuetemp = this.state.textValue
@@ -111,6 +122,9 @@ class SaveProjects extends Component {
     render() {
         const recordDelf = (this.props.action === config.FULL_SCREEN_RECORD)?(<span style={{color:"rgba(141, 140, 140, 0.867)",fontSize:"12px"}} onClick={this.SaveTopicSave}>record and save</span>)
         :(null)
+        if(this.props.topicOfTheCall.length!==0 && !this.state.updatedText){
+            this.setTextValue()
+        }
 
         return (
         <div className="ActivityBelow">
@@ -140,6 +154,7 @@ SaveProjects.PropType = {
 const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
     explainBy: state.explain.explainBy,
+    topicOfTheCall:state.call.topicOfTheCall
 })
 
 export default connect(mapStateToProps, {saveTopicOfTheCall})(SaveProjects)

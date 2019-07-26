@@ -52,7 +52,7 @@ class Recorder extends Component {
         const GET_SOURCE_ID = { type: config.GET_SOURCE_ID_AUDIO_TAB }
         var self = this;
         console.log("extSource : ",extSourceId);
-        if (extSourceId === null) {
+      
             console.log("i am callinf extension")
             if (extSource !== null)
                 extSource.postMessage(GET_SOURCE_ID, extOrigin);
@@ -62,13 +62,7 @@ class Recorder extends Component {
                 window.addEventListener("message", this.postMessageHandler, false);
             else
                 window.attachEvent("onmessage", this.postMessageHandler);
-        }
-
-        else
-            self.startRecorder();
-
-
-    }
+       }
    
     startRecorder() {
         var constraints = null;

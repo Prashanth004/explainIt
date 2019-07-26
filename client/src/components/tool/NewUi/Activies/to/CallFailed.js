@@ -21,7 +21,7 @@ const CallFail = (props) => {
             <div className="activityContent">
                 <div className="callIconDiv" > 
                 <span className="hint--top" aria-label={"dial "+userData.userName}>
-                    <FiPhoneMissed className="callIcon missed" onClick={()=>props.dialFromMissed(userData.userName)}/>
+                    <FiPhoneMissed className="callIcon missed" onClick={()=>props.dialFromMissed(userData.userName,activity.subject)}/>
                 </span>
                 </div>
                 <div>

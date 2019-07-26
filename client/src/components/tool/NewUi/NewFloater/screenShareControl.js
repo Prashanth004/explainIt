@@ -15,7 +15,7 @@ import RecordFloater from './screenRecordControl';
 import { setTime, changeStateToMute, changeStateToUnmute, setDiplayOfFloater } from '../../../../actions/floaterAction';
 import { HideScreenSharebutton } from '../../../../actions/extensionAction'
 import { pauseRecording, resumeRecording } from '../../../../actions/recoderAction';
-import Timer from './timer'
+// import Timer from './timer'
 
 
 class ShareFloater extends Component {

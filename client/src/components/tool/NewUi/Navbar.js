@@ -205,29 +205,7 @@ class Navigationbar extends React.Component {
           </DropdownItem>
         </DropdownMenu>
       </UncontrolledDropdown>):null
-        // <div className="cardDropdown" >
-        //   <div className="profileImagesDiv">
-        //     <span>
-        //       <img alt="profilr pic" className="profileImages" onClick={this.toggleDropDown} src={this.props.profilePic}></img>
-        //     </span>
-        //   </div>
-        //   <div className="dropDownForOption drpLogout"
-        //     onMouseLeave={this.toggleDropDown} style={{ visibility: this.state.optionVisibe, width: "120px", minHeight: "40px", marginLeft: "-50px", marginTop: "3px" }}>
-        //     <div className="menuItem menuTwoParts" >
-        //       <div ><span onClick={this.logout}><FiPower /></span></div>
-        //       <div>
-        //         <span onClick={this.logout} className> Logout</span>
-        //       </div>
-        //     </div>
-        //     <div className="menuItem" >
-        //       <div ><span onClick={this.props.toggleHowWorksModal}></span></div>
-        //       <div>
-        //         <span onClick={this.props.toggleHowWorksModal} className> How it works</span>
-        //       </div>
-        //     </div>
 
-        //   </div>
-        // </div>) : (null)
 
     }
 
@@ -238,22 +216,7 @@ class Navigationbar extends React.Component {
       navItem1 = (<button onClick={this.openCreated} style={createdStyle} className="noButtons navItm"><span>Created</span></button>);
       navItem2 = (<span><FiMail style={{ marginTop: "10px", marginLeft: "8px", fontSize: "30px", color: inboxColor }} onClick={this.props.openInbox} /></span>)
       navItem3 = (<button onClick={this.openParticipated} style={partiStyle} className="noButtons navItm"><span>Participated</span></button>)
-      // centreNav = (<div className="navgation">
-      //   <div onClick={this.openCreated} className="normalNav">
-      //     <button style={createdStyle} className="noButtons"><span>Created</span></button>
-      //   </div>
-      //   <div className="logoCentre">
-      //   <div className="pImageContainer">
-      //         <span>
-      //           <FiMail style={{marginTop:"10px",marginLeft:"8px", fontSize:"30px", color:inboxColor}} onClick={this.props.openInbox}
-      //           />
-      //         </span>
 
-      //       </div>                </div>
-      //   <div className="normalNav">
-      //     <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
-      //   </div>
-      // </div>)
     }
 
     else if (this.state.isViewPage || (this.state.isProjectPage && !this.props.isAuthenticated && !(this.props.isSceenSharing ||this.props.callAction || this.props.isFullScreenRecording ))) {
@@ -269,25 +232,7 @@ class Navigationbar extends React.Component {
 
         </div>)
         navItem3 = (<button onClick={this.openParticipated} style={partiStyle} className="noButtons navItm"><span>Participated</span></button>)
-        // centreNav = (<div className="navgation">
-        //   <div onClick={this.openCreated} className="normalNav">
-        //     <button onClick={this.openCreated} style={createdStyle} className="noButtons"><span>Created</span></button>
-        //   </div>
-        //   <div className="logoCentre">
 
-        //     <div className="pImageContainer">
-        //       <span>
-        //         <img alt="profile pic" src={this.props.otherprofilePic}
-        //           onClick={this.props.openInbox}
-        //           className="labelProfilePicNav"></img>
-        //       </span>
-
-        //     </div>
-        //   </div>
-        //   <div className="normalNav">
-        //     <button onClick={this.openParticipated} style={partiStyle} className="noButtons"><span>Participated</span></button>
-        //   </div>
-        // </div>)
       }
       else {
       }
@@ -297,23 +242,7 @@ class Navigationbar extends React.Component {
 
       // centreNav = (<SearchBar />)
     }
-    // const content = (<div className="navBar">
-    //   <div className="logo">
-    //     {explainLogo}
 
-    //   </div>
-    //   <div >
-    //     {centreNav}
-
-    //   </div>
-    //   <div className="navItem">
-    //     <div></div>
-    //     <div>
-    //       {profileImage}
-    //     </div>
-
-    //   </div>
-    // </div>)
     const content = (<Navbar color="white" light expand="md">
       <NavbarBrand>
         <div className="logoContainer" onClick={this.openHome}>

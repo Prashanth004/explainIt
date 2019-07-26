@@ -38,6 +38,9 @@ class Profile extends Component {
         const editbtn = (this.props.openEdirProfile || this.props.bio.length === 0)?(null):(<span  className="hint--top edit" aria-label="Edit!">
         <FiEdit onClick={this.openEdit} className="edit" />
     </span>)
+    const onlyClose = (!this.props.isHome)?(<div className="topBtnsActivity">
+    <Button style={{margin:"-8px"}} close onClick={this.props.hideProfile} />
+    </div>):(null)
         const editOption = (this.props.isHome) ? (
         <div className="topBtnsActivity">
              <Button style={{margin:"-8px"}} close onClick={this.props.hideProfile} />
@@ -70,7 +73,7 @@ class Profile extends Component {
             ) : (null)
         ) : (null)
         const profileConatiner = (!this.props.openEdirProfile) ?
-            ((this.props.bio.length === 0)?
+            ((this.props.bio.length === 0 &&  this.props.isHome)?
                 (<div style={{width:"80%", margin:"auto"}}>
                 <p style={{fontWeight:"550"}}>Hi <a href={'https://twitter.com/' + this.props.twitterHandle}  rel="noopener noreferrer" target="_blank">{this.props.userName}</a>. Help people to know who you are. Write a short note about yourself.</p>
                 
@@ -133,7 +136,7 @@ class Profile extends Component {
             <div  style={{textAlign:"centre"}}>
                 <div className="profileConatinerMain">
                     {editOption}
-                   
+                   {onlyClose}
 
                     {profileConatiner}
                 </div>

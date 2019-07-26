@@ -1,4 +1,4 @@
-import {SECOND_SHARE_START,SECOND_SHARE_END } from '../actions/types'
+import {SECOND_SHARE_START,SECOND_SHARE_END,SECOND_SHARE_START_AGAIN } from '../actions/types'
 
 const initialState={
     secondScreenShareStarted :false,
@@ -23,6 +23,11 @@ export default function(state = initialState, action){
             secondScreenShareStarted :false,
             isSecondScreenSharing:false
         }
+        case SECOND_SHARE_START_AGAIN:
+            return{
+                ...state,
+                isSecondScreenSharing:true
+            }
         default:
         return{
             ...state

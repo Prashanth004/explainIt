@@ -69,7 +69,8 @@ class DisplayShare extends Component {
             connectionFailed: false,
             timeAloted: 3,
             blob: null,
-            myScreenStream:null
+            myScreenStream:null,
+            validatedFeedback:false
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -84,6 +85,7 @@ class DisplayShare extends Component {
         this.onUnload = this.onUnload.bind(this);
         this.increaseTime = this.increaseTime.bind(this);
         this.deacreaseTimer = this.deacreaseTimer.bind(this);
+        this.validateFeedback = this.validateFeedback.bind(this);
     }
     downloadExtension() {
         window.open(config.EXTENSION_URL)
@@ -149,10 +151,16 @@ window.close();
             event.returnValue = " "
         }
     }
+    validateFeedback(){
+        console.log("this.props.myProfileUserId : ",this.props.myProfileUserId)
+        this.props.getFeedBackValididty(this.props.myProfileUserId);
+        this.setState({validatedFeedback:true})
+    }
     componentDidMount() {
         var self = this;
         self.props.fullStartedSharing();
-        this.props.getFeedBackValididty(this.props.myProfileUserId);
+        console.log("this.props.myProfileUserId : ",this.props.myProfileUserId)
+       
         window.addEventListener("beforeunload", this.onUnload);
         const result = browser();
         if (config.ENVIRONMENT !== "test") {
@@ -214,11 +222,13 @@ window.close();
                 self.shareScreen();
                 return
             }
-            // if (event.data.sourceId !== undefined) {
-            //     self.props.saveSourceId(event.data.sourceId)
-            //     self.startCall()
-            //     return
-            // }
+            console.log("self.state.callEnded : ",self.state.callEnded)
+            if (event.data.sourceId !== undefined && !self.state.callEnded) {
+                console.log("reaching here")
+                self.props.saveSourceId(event.data.sourceId)
+                self.startCall()
+                return
+            }
         }
         if (window.addEventListener) {
             window.addEventListener("message", postMessageHandler, false);
@@ -673,6 +683,7 @@ window.close();
             }
         }
         navigator.mediaDevices.getUserMedia(constraints).then(function (screenStream) {
+            console.log("i reached here")
             self.setState({myScreenStream:screenStream})
             peer.call(self.state.peerIdFrmPeer, screenStream);
             self.setState({ secondVideoStream: screenStream });
@@ -700,9 +711,13 @@ window.close();
 
     render() {
         var callEndButton = null;
+
+        if(this.props.myProfileUserId!==null && !this.state.validatedFeedback){
+                this.validateFeedback()
+        }
         var selfCloseTimer = (this.state.selfClose) ? (<div>
        
-
+       
         </div>) : (null)
         var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<PreparingLink />) :
             ((!this.state.failedToSaveMessage && (this.state.sharablelink !== null || this.state.sharablelink !== undefined)) ?
@@ -717,8 +732,7 @@ window.close();
         const messageOfScreenShare = (!this.state.myscreenSharing) ? (null) :
             (<h4><b>Your screen is being shared</b></h4>)
 
-        const feedbackDiz = (!this.props.isLoggedIn)?(<Feedback />):(
-            !this.props.feedbackGiven?(<Feedback />):(null));
+        const feedbackDiz = (this.props.isLoggedIn)?(!this.props.feedbackGiven?(<Feedback />):(null)):(null);
        
         var displayLoginMessage = (!!this.props.isLoggedIn) ? (<div><p></p></div>) :
             (<div><p><b>Login in to explain to be able initiate screen shares</b></p>
@@ -771,7 +785,11 @@ window.close();
                   
                 </div>
             )
-            callEndButton = (!this.state.isInstalled)?(<button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button>):(null)
+            callEndButton = (!this.state.isInstalled)?(
+                <div>
+                    <button  className="buttonDark endCallNew" onClick={this.shareScreen}>share screen</button>
+            <button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button>
+            </div>):(null)
            
         }
         else if (this.state.callEnded) {
@@ -819,6 +837,10 @@ window.close();
             <div className="screenShareDiv">
                 {ShareElement}
                
+            </div>
+            <div>
+                    <button  className="buttonDark endCallNew" onClick={this.shareScreen}>share screen</button>
+            <button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button>
             </div>
             {callEndButton}
             {/* <button onClick={this.shareScreen}>share screen </button> */}

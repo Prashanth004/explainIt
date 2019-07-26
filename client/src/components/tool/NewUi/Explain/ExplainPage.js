@@ -28,6 +28,8 @@ class ExplainPage extends Component {
     }
 
     componentWillMount(){
+        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+        this.setState({ currentAtionStatus: currentAtionStatus })
         this.props.explainAuthentication();
         this.props.resetExplainAction();
         var source = this.props.extSource
@@ -45,11 +47,13 @@ class ExplainPage extends Component {
         this.props.resetIssueActions();
 
     }
+    // eslint-disable-next-line no-dupe-class-members
+
     componentWillUnmount(){
-        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
-        this.setState({ currentAtionStatus: currentAtionStatus })
+        
         this.props.resetExplainAction();
     }
+   
   
     reStoreDefault(){
         this.props.handleCloseModal();
@@ -76,6 +80,7 @@ class ExplainPage extends Component {
             <ExplainOptions
              socket={this.props.socket}
             widthDiv={widthDiv}
+            currentAtionStatus={this.state.currentAtionStatus}
             questionProject={this.props.questionProject}
             reStoreDefault={this.reStoreDefault}
             savefile={this.saveVideoData} />

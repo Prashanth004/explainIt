@@ -33,7 +33,7 @@ const initialState={
     noOfIncreaseInTime:0,
     currentTimeLeft : 3,
     noOfMinutes:3,
-    topicOfTheCall:"",
+    topicOfTheCall:"asas",
     peerId:null,
     touser:null,
     gotAllActivities:false,

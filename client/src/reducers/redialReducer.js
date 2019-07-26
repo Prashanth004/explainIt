@@ -14,7 +14,8 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 redialInitiated:true,
-                twitterHandle:action.twitterhandle
+                twitterHandle:action.twitterhandle,
+                subject:action.subject
             }
         case REDIAL_FAILED:
             return{
@@ -25,8 +26,9 @@ export default function(state = initialState, action){
             }
         case CANCEL_DIAL :
             return{
-                redialInitiated:false,
                 ...state,
+                redialInitiated:false,
+                
 
             }
         default:

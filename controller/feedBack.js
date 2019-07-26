@@ -99,9 +99,9 @@ exports.getAllFeedBack = (req,res)=>{
 
 exports.getMyFeedBack = (req,res)=>{
     console.log("req.params.id : ",req.params.id);
-    database.db.oneOrNone('select * from feedback where userid = $1',req.user.id)
+    database.db.manyOrNone('select * from feedback where userid = $1',req.user.id)
     .then(function(data){
-        // console.log("contacts : ",data)
+        console.log("data : ",data)
         if(data!==null)
             res.status(200).send({
                 success:1,

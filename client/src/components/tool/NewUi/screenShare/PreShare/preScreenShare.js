@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import InputNumber from '../../InputNumber';
 import AcceptTopic from '../../Saveproject';
+import {saveTopicOfTheCall} from '../../../../../actions/callAction'
 import TweetSuggest from '../../TweetSug';
 import {cancelDialedOption} from '../../../../../actions/dialActions'
 import config from '../../../../../config/config';
@@ -47,7 +48,10 @@ class tweetSearch extends Component {
             this.setState({ twitterHandle: this.props.sharehandle });
         else if( this.props.redialInitiated){
             this.setState({ twitterHandle : this.props.redialtwitterHandle});
+            console.log("updating the subject of the call")
+            this.props.saveTopicOfTheCall(this.props.redialSubject);
             this.props.cancelDialedOption();
+            this.props.turnRedialWrong();
         }
         else{
             this.setState({ twitterHandle :''})
@@ -245,12 +249,13 @@ const mapStateToProps = state => ({
     sharehandle: state.explain.sharehandle,
     OwnerTwitterHandle: state.auth.twitterHandle,
     redialInitiated : state.redial.redialInitiated,
-    redialtwitterHandle : state.redial.twitterHandle
+    redialtwitterHandle : state.redial.twitterHandle,
+    redialSubject : state.redial.subject
 
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle, getTwitterHandles,
     setNoOfMinutes, updateCurrentTime,cancelDialedOption,
-    getRecpientId, resetValues
+    getRecpientId, resetValues,saveTopicOfTheCall
 })(tweetSearch)
 

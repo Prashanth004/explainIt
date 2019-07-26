@@ -122,7 +122,7 @@ export const getFeedBackValididty = ()=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'));
     axios({
         method:'get',
-        url: config.base_dir + '/api/feedback/',
+        url: config.base_dir + '/api/feedback/user',
         headers: {
             "Authorization":token,
         }
@@ -130,11 +130,26 @@ export const getFeedBackValididty = ()=>(dispatch)=>{
         console.log("response.data : ",response.data)
         if(response.status===200 || response === 304)
         {   
-            if(response.data.success ===1)
-                dispatch({
-                    type : UPDATE_FEDDBACK_TEST,
-                    payload:true
-                }) 
+            if(response.data.success ===1){
+                console.log("feeedback actions : ",response.data.data.length)
+                console.log("feebac.data.data : ",response.data.data)
+                if(response.data.data.length > 0){
+                    console.log("feedback given")
+                    dispatch({
+                        type : UPDATE_FEDDBACK_TEST,
+                        payload:true
+                    })
+                }
+                else{
+                    dispatch({
+                        type : UPDATE_FEDDBACK_TEST,
+                        payload:false
+                    }) 
+                }
+            }
+
+              
+                
             else{
                 dispatch({
                     type : UPDATE_FEDDBACK_TEST,

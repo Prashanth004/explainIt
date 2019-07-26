@@ -111,6 +111,7 @@ class Project extends Component {
             page="project" />
      <div className="projectPageMainDiv">
       <div className="projectContainer">
+        <br />
       <IssueCard 
       socket={this.state.socket}
       itsHome={(this.props.home === config.HOME)?true:false}

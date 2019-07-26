@@ -56,6 +56,7 @@ class NewHome extends Component {
             socket: null,
             displayDetails:false,
             endedCallFromOtherPeer: false,
+            currentAtionStatus: null,
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -73,11 +74,18 @@ class NewHome extends Component {
         this.toggleInbox = this.toggleInbox.bind(this);
         this.saveVideoData = this.saveVideoData.bind(this);
         this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
-        this.recordFullScreen =  this.recordFullScreen.bind(this)
+        this.recordFullScreen =  this.recordFullScreen.bind(this);
+        this.reloadPage = this.reloadPage.bind(this);
     }
     
-    reloadPage() {
-        window.location.reload();
+    reloadPage(event) {
+        if (event.key === 'token') {
+            window.location.reload();
+        }
+        if (event.key === 'currentAction') {
+            const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+            this.setState({ currentAtionStatus: currentAtionStatus })
+        }
     }
     
 
@@ -172,8 +180,14 @@ class NewHome extends Component {
             window.attachEvent("onmessage", postMessageHandler);
         }
     }
+    componentWillUnmount(){
+     
+            window.removeEventListener('storage', this.reloadPage)
+    }
     componentWillMount() {
         this.props.stillAuthenicated();
+        const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+        this.setState({ currentAtionStatus: currentAtionStatus })
         const socket = socketIOClient(config.base_dir);
         this.setState({socket: socket })       
         if(this.props.match.params.encrTwitterHandle===null){
@@ -334,9 +348,10 @@ class NewHome extends Component {
     }
 
     render() {
-        
+        var sharabeLink = config.react_url + "/" + this.props.authTwitterHandle;
         if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
             this.props.history.push("/");
+        var homeProjects =null;
         var issuepercentage = "59%";
         var percentage="30%";
         var shareRecord = null;
@@ -395,7 +410,7 @@ class NewHome extends Component {
         onFailure={this.props.twitterAuthFailure} onSuccess={this.props.signInWithTwitter}
         requestTokenUrl={config.base_dir+"/api/twitter/auth/twitter/reverse"} />))
      
-            if (this.props.created) {
+            if (this.props.created ) {
                 var createdDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{width:issuepercentage}}>
                     <div className="closeBtnHolder">
@@ -450,30 +465,45 @@ class NewHome extends Component {
 
             }
             if (this.props.screenAction === SCREEN_RECORD ||
-                this.props.screenAction === SCREEN_SHARE || 
-                this.props.isSceenSharing ||
-                this.props.callAction ||
-                this.props.isFullScreenRecording ||
+                this.props.screenAction === SCREEN_SHARE ||
                 this.props.participated ||
                 this.props.created) {
-                var profileCardElement = null
+                var profileCardElement = null;
+                var homeProjects =null;
             }
             else {
               
                
                 if(this.props.userId!==null){
-                  profileCardElement = (
-                    <div className="ProfileDiv"><ProfileCard
-                    openDtailsTab={this.openDtailsTab}
+
+                    profileCardElement = (  <ProfileCard
+                    currentAtionStatus={this.state.currentAtionStatus}
                     isHome={this.state.isHome}
+                    sharabeLink={sharabeLink}
                     toggleInbox={this.toggleInbox}
-                    shareFullScreenShare={this.shareFullScreenShare}
-                    recordFullScreen={this.recordFullScreen}
+                    socket={this.state.socket}
                     userId={this.props.userId}
+                    saveVideoData={this.saveVideoData}
                     toggleCreatedIssue={this.toggleCreatedIssue}
-                    toggleParticipatedIssue={this.toggleParticipatedIssue} />
-                    </div>
-                )
+                    toggleParticipatedIssue={this.toggleParticipatedIssue} />);
+                homeProjects = ( <div className="issueContainer" style={{width:issuepercentage}}>
+    
+                <HomeProjects socket={this.state.socket} home={config.NOT_HOME}  issueArray={this.props.myissues} />
+            </div>)
+
+
+                //   profileCardElement = (
+                //     <div className="ProfileDiv"><ProfileCard
+                //     openDtailsTab={this.openDtailsTab}
+                //     isHome={this.state.isHome}
+                //     toggleInbox={this.toggleInbox}
+                //     shareFullScreenShare={this.shareFullScreenShare}
+                //     recordFullScreen={this.recordFullScreen}
+                //     userId={this.props.userId}
+                //     toggleCreatedIssue={this.toggleCreatedIssue}
+                //     toggleParticipatedIssue={this.toggleParticipatedIssue} />
+                //     </div>
+                // )
                 }
             }
     
@@ -499,19 +529,14 @@ class NewHome extends Component {
                     <div>
                         {feedDiv}
                     </div>
-                    <div>
-                        {activityDiv}
-                    </div>
-                    <div>
+                    
+                    {/* <div>
                         {details}
-                    </div>
+                    </div> */}
                     {/* <div>
                         <AddtoContact contactid = {this.props.userId} />
                     </div> */}
-                     <div className="issueContainer" style={{width:issuepercentage}}>
-      
-                    <HomeProjects socket={this.state.socket} home={config.NOT_HOME}  issueArray={this.props.myissues} />
-                </div>
+                    {/* {homeProjects} */}
                 </div>
            
 

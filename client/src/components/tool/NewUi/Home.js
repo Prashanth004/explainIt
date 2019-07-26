@@ -20,11 +20,11 @@ import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { creatAnsProject } from '../../../actions/projectActions';
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import {  Modal, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalBody } from 'reactstrap';
 import { getAllContacts } from '../../../actions/contactAction'
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
-import { SCREEN_SHARE, SCREEN_RECORD, FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
+import { SCREEN_SHARE, SCREEN_RECORD} from '../../../actions/types';
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
@@ -38,12 +38,11 @@ import ProfileCard from './ProfileCard'
 import IssueDisplay from './diaplyissues/DisplayIssues'
 import Content from './Content';
 import { varifyEmail } from '../../../actions/emailAction'
-
 import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
 
-import { openParticipated, openInbox, openCreated } from "../../../actions/navAction";
+import { openHome,openParticipated, openInbox, openCreated } from "../../../actions/navAction";
 import { cancelAllMessageAction } from '../../../actions/messageAction'
 
 
@@ -59,7 +58,6 @@ class NewHome extends Component {
             displayLink: false,
             isHome: true,
             socket: null,
-           
             typeOfView: "list",
             displayDetails: false,
             reducedWidth: false,
@@ -107,12 +105,7 @@ class NewHome extends Component {
             const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
             this.setState({ currentAtionStatus: currentAtionStatus })
         }
-
     }
-    
-
-
-
     componentWillUnmount() {
         window.removeEventListener('storage', this.reloadPage)
         window.removeEventListener("resize", this.resize());
@@ -130,13 +123,11 @@ class NewHome extends Component {
         loadPageView();
         this.props.getAllContacts();
         console.log("this.props.userId : ", this.props.userId);
-
         window.addEventListener('storage', this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
         var self = this
         function postMessageHandler(event) {
-
             if (event.data === 'rtcmulticonnection-extension-loaded') {
 
                 self.setState({
@@ -152,12 +143,11 @@ class NewHome extends Component {
         } else {
             window.attachEvent("onmessage", postMessageHandler);
         }
-
         var socket = this.state.socket
         socket.on(config.UPDATE_BADGE, data => {
-            if (data.userId === this.props.userId) {
+            if (data.userId === this.props.userId) 
                 this.props.getTotalUnread()
-            }
+            
         })
         socket.on(config.END_WHILE_DIALING, data => {
             if (data.ToUserId === this.props.userId) {
@@ -251,11 +241,6 @@ class NewHome extends Component {
     toggleCreatedIssue() {
         this.setState({
             showDetails: false,
-            // displayDetails: false,
-
-        })
-
-        this.setState({
             showProjects: true,
             openExplain: false
         })
@@ -264,9 +249,6 @@ class NewHome extends Component {
     toggleParticipatedIssue() {
         this.setState({
             showDetails: false,
-            // displayDetails: false,
-        })
-        this.setState({
             showProjects: true,
             openExplain: false
         })
@@ -293,8 +275,6 @@ class NewHome extends Component {
     togglemodal = (e) => {
         var idOfClicked = e.target.id;
         var classOfClicked = e.target.className
-
-
         if (classOfClicked !== "singleMember" && classOfClicked !== "sharableLink" && classOfClicked !== "linkElementSym" && classOfClicked !== "hint--top" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
             if (this.state.modal === false) {
                 this.props.clearAnswers(e.target.id)
@@ -305,10 +285,6 @@ class NewHome extends Component {
             });
         }
     }
-
-
-
-
 
     screenShareWindow() {
         var href = config.react_url + "/sharescreen"
@@ -352,8 +328,6 @@ class NewHome extends Component {
         var issuepercentage = "59%";
         var inboxColumn ="100%";
         var inBoxLabelPos = null
-
-        // var displayLinkDiv = null;
         var profileCardElement = null;
         var listGrid = (window.innerWidth >= 1000) ? (<div style={{ marginRight: "-80px", float: "right" }} >
             <span className="hint--top" aria-label="List View">
@@ -365,19 +339,9 @@ class NewHome extends Component {
         </div>) : (null);
         if (!this.state.isinformed && this.props.userId !== null) {
             this.informExtension();
-        }
-
-
-      
-
-      
-     
+        }     
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
-     
-
         const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo} />;
-        // var self = this
-
         var deatilsModal = null
         if (this.props.myissues !== null)
             var issuesCreated = (this.props.myissues)
@@ -411,7 +375,13 @@ class NewHome extends Component {
             }
             else if (this.props.inbox) {
                 feedDiv = (<div >
-
+                     <div className="topBtnsActivity" style={{paddingRight:"20px"}} >
+                        
+                         <Button close onClick={this.props.openHome} />
+                       
+                   
+                        </div>
+                  
                     <Activity userId={this.props.userId} />
 
 
@@ -425,7 +395,6 @@ class NewHome extends Component {
             inboxColumn="30% 45% 20%";
             inBoxLabelPos="fixed";
         }
-      
         if((this.props.isSceenSharing || this.props.isFullScreenRecording  ||this.props.callAction))
         feedDiv = null;
 
@@ -433,29 +402,13 @@ class NewHome extends Component {
         if (this.props.isAauthenticated) {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
-                // this.props.isSceenSharing ||
-                // this.props.callAction ||
-                // this.props.isFullScreenRecording ||
                 this.props.participated ||
                 this.props.created) {
                 profileCardElement = null;
-                // howtWorksBtn = null
 
             }
             else if (this.props.userId !== null) {
-                if (this.state.displayLink &&
-                    !this.props.incommingCall &&
-                    !this.props.inbox &&
-                    !this.props.created &&
-                    !this.props.participated
-                ) {
-                    // howtWorksBtn = null;
-                  
-                }
-              
-
-
-                profileCardElement = (
+               profileCardElement = (
                         <ProfileCard
                             currentAtionStatus={this.state.currentAtionStatus}
                             isHome={this.state.isHome}
@@ -467,33 +420,21 @@ class NewHome extends Component {
                             toggleParticipatedIssue={this.toggleParticipatedIssue} />)
             }
         }
-        else {
-            profileCardElement = (<Content />)
-        }
-
+      
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
-                    
                  <Navbar />
-
                     <div className="containerHome">
                         {callNotificationDiv}
-
-                        
                     <div style={{display:"grid",gridTemplateColumns:inboxColumn}}>
                         <div>
                         <div className="ProfileDiv" style={{position:inBoxLabelPos}}>
                             {profileCardElement}
                         </div>
                         </div>
-
                             {feedDiv}
                         </div>
-                      
-                        {/* {howtWorksBtn} */}
-                     
-
                     </div>
                     <Modal size='lg' centered={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
@@ -506,8 +447,6 @@ class NewHome extends Component {
                     {/* {iframe} */}
                 </div>
             ))) : (null)
-
-
     }
 }
 NewHome.PropType = {
@@ -557,15 +496,12 @@ const mapStateToProps = state => ({
     isFullScreenRecording: state.tools.isFullScreenRecording,
     showCanvas: state.canvasActions.showCanvas,
     issueId: state.issues.currentIssueId,
-    isSecondScreenSharing: state.secondScreenShare.isSecondScreenSharing,
     callAction: state.call.callAction,
     openHowItWorksModal: state.modal.openHowItWorksModal,
-    timeAllotedRecieve: state.call.timeAllotedRecieve,
-    topicOfTheCallRecieve: state.call.topicOfTheCallRecieve
 })
 
 export default connect(mapStateToProps, {
-    answerCall,
+    answerCall,openHome,
     openCreated,
     toggleHowWorksModal,
     resetCallAction,

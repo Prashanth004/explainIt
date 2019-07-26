@@ -56,7 +56,7 @@ class FeedBack extends Component {
         // const warning = 
         const { experienceValue,saveFeedBackInitiated, savedFeedBack,usabilityValue,noEntry, changeShareExperience, saveStaus, changeUability,userId,saveFeedback,
             changeSuggestion, sugValue, recordMode, discarded, saveRecording, discardRecorded, clickRecord } = this.props;
-        const warning = (noEntry)?(<span style={{color:"brown", fontSize:"11px"}}>No fields filled</span>):(null)
+        // const warning = (noEntry)?(<span style={{color:"brown", fontSize:"11px"}}>No fields filled</span>):(null)
         const recordDiv = recordMode ? (<Recorder
             save={saveRecording}
             discard={discardRecorded}
@@ -83,7 +83,7 @@ class FeedBack extends Component {
                             //   starRatedColor="blue"
                             changeRating={changeShareExperience}
                             numberOfStars={5}
-                            starDimension="30px"
+                            starDimension="25px"
                             starSpacing="2px"
                             name='rating'
                         />
@@ -95,7 +95,7 @@ class FeedBack extends Component {
                             //   starRatedColor="blue"
                             changeRating={changeUability}
                             numberOfStars={5}
-                            starDimension="30px"
+                            starDimension="25px"
                             starSpacing="2px"
                             name='rating'
                         />

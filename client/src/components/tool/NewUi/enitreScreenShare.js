@@ -15,7 +15,7 @@ import { openCreated } from '../../../actions/navAction'
 import { updateCurrentTime, setpeerId, answeredCall, updateRemainingTime, basicInfoCall, disableCallAction, callFailedUpdate, muteAudio, unMuteAudio } from '../../../actions/callAction'
 import { setStream } from '../../../actions/streamActions'
 import { saveSourceId } from "../../../actions/extensionAction";
-import { startSecodScreenShare, endSecondScreenShare } from '../../../actions/secondShareAction'
+import { startSecodScreenShare, endSecondScreenShare, startSecodScreenAgain} from '../../../actions/secondShareAction'
 import config from '../../../config/config';
 import { fromShareToRecord } from '../../../actions/messageAction'
 import '../../css/shareScreen.css';
@@ -701,12 +701,14 @@ validateTurn(iceServers){
                                 self.startScreenShareSend()
                         }
                     }
+                    
                     if (data.type === config.PEER_SHARE_SCREEN_REQUEST) {
                         if (data.otherPeerId === self.state.destkey) {
                             self.props.updateRemainingTime(self.props.currentTimeLeft)
                             const { extSource, extOrigin } = self.props
                             self.props.displayScreenSharebutton(extSource, extOrigin);
                             self.setState({ myscreenSharing: false });
+                            this.props.startSecodScreenAgain();
                             self.props.otherPeerShareScreen(extSource, extOrigin)
                         }
                     }
@@ -1283,6 +1285,7 @@ validateTurn(iceServers){
                 linkElement = (
                     <div>
                         <LinkDisplay
+                        turnRedialWrong={this.props.turnRedialWrong}
                             makeCallAction={this.makeCallAction}
                             closeImidiate={this.props.closeImidiate}
                             recordCallAfterShare={this.recordCallAfterShare}
@@ -1528,7 +1531,7 @@ export default connect(mapStateToProps, {
     disableCallAction,
     displayFullScrenRecord,
     displayScreenSharebutton,
-    sendTweet,
+    sendTweet,startSecodScreenAgain,
     callSuccessedUpate,
     cancelAllMessageAction,
     restAllToolValue,

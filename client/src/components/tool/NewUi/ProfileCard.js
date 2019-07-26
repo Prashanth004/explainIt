@@ -49,6 +49,7 @@ class ProfileCard extends Component {
         this.toggleInbox = this.toggleInbox.bind(this);
         this.resize = this.resize.bind(this);
         this.redial = this.redial.bind(this);
+        this.turnRedialWrong = this.turnRedialWrong.bind(this);
     }
 
     redial(){
@@ -82,6 +83,9 @@ class ProfileCard extends Component {
     componentDidMount(){
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
+        this.setState({redialed : false});
+    }
+    turnRedialWrong(){
         this.setState({redialed : false});
     }
     
@@ -120,9 +124,10 @@ class ProfileCard extends Component {
     }
     
     toggleInbox() {
-       
-        this.handleConfirm()
+        
         this.props.openInbox()
+        this.handleConfirm()
+      
     }
     startRecordScreen() {
         this.startAction()
@@ -215,7 +220,7 @@ class ProfileCard extends Component {
                         {notifyBadge}
                         <IconContext.Provider value={{ color: "#333", size: "29px", }}>
                             <div>
-                                <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />
+                                <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={()=>(this.props.isHome)?this.toggleInbox():this.props.toggleInbox()} />
                             </div>
                         </IconContext.Provider>
 
@@ -246,6 +251,7 @@ class ProfileCard extends Component {
                             savefile={this.props.saveVideoData}
                         />)
                     ):(this.props.screenAction === FULL_SCREEN_SHARE)?(<FullScreenShare
+                        turnRedialWrong={this.turnRedialWrong}
                         socket={this.props.socket}
                         closeImidiate={this.handleConfirm}
                         reStoreDefault={this.reStoreDefault}

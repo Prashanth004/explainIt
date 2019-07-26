@@ -53,10 +53,10 @@ const explainOption = (props) => {
             reStoreDefault={props.reStoreDefault}
             savefile={props.savefile}
         />):(<div className="LinkDisplay">
-        <div className="topBtnsActivity"><Button close onClick={props.reStoreDefault} /></div>
         <BusyAction action="share" currentAtionStatus={props.currentAtionStatus} />
     </div>)): (props.explainBy === config.RECORD_SCREEEN_EXPLAIN ? (
-        (props.currentAtionStatus === null)?(
+        (props.currentAtionStatus === null)?
+        (
             <div className="explainMain">
                 <div className="recorderConatainerPage" style={{ width: props.widthDiv }}>
                     <FullScreenRecord
@@ -67,9 +67,9 @@ const explainOption = (props) => {
                     />
                 </div>
             </div>):(<div className="LinkDisplay">
-        <div className="topBtnsActivity"><Button close onClick={props.reStoreDefault} /></div>
         <BusyAction action="record" currentAtionStatus={props.currentAtionStatus} />
-    </div>)) : (
+    </div>)
+    ) : (
                 <Refer questionProject={props.questionProject} />)))
 }
 
