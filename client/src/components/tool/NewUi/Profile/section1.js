@@ -2,6 +2,7 @@ import React from 'react';
 import TextArea from '../container/textArea';
 import './prfile.css';
 import { FiArrowRight } from "react-icons/fi";
+import '../Profile/prfile.css'
 
 export default (props) => {
     const {bioValue,changeBio,goodAtValue,changeGoodAt,SecTrans,worksValue,
@@ -43,7 +44,6 @@ export default (props) => {
                     <TextArea
                         textvalue={worksValue}
                         changeFunction={changeWorks} inputClass="inputboxes fullView" />
-                       
                         <div style={{textAlign:"center", marginTop:"10px"}}>
                         <button  className="nextButton" onClick={SecTrans}><FiArrowRight style={{fontSize:"18px", marginTop:"-3px"}}/></button>
                         </div>

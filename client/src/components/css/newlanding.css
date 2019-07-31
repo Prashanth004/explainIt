@@ -13,8 +13,9 @@
     padding: 40px 0pax 40px 0px;
 }
 .startShare{
-  margin-top:20px;
-  padding-top:15px;
+  /* background-color:yellow; */
+  /* margin-top:10px; */
+  /* padding-top:15px; */
   font-size:14px;
 }
 .handleInput{
@@ -26,6 +27,7 @@
   border-bottom-color: #dde2e2;
   background-color:white;
   color:rgb(112, 112, 112);
+  /* font-size:12px; */
   font-weight: 500;
 
 }
@@ -158,26 +160,7 @@ text-align: center;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
-.labelContainerMain{
-  padding:5px;
-  padding-top:34px;
-  height: 120px;
- 
-  border-style:solid;
-  border-color:#bebebe81;
-  border-width:1px;
-  padding-bottom:5px;
-  border-radius:5px;
-  /* width:100%; */
-  margin:auto;
-  margin-top:30px;
-  position:relative;
-  /* border-left-width:2.5px;
-  border-left-color:#34a9ad; */
-  /* background-color:#eee; */
-  background-color: white;
 
-}
 /* .labelContainerMain:hover{
 
 } */
@@ -193,6 +176,7 @@ text-align: center;
   /* align-items: center; */
   /* background-color: yellow; */
   margin:auto;
+  /* margin-top:4vh; */
 }
 .explainBtn{
  
@@ -223,6 +207,8 @@ margin-top:10px;
 }
 .displayNumber{
   color:black;
+  /* color:rgb(58, 57, 57); */
+  /* background-color: #185557; */
   text-align: center;
   font-size: 15px;
   margin-top:7px
@@ -300,7 +286,8 @@ margin-top:10px;
       /* min-height: 65vh; */
       margin:auto;
       text-align: center;
-      display:grid;
+      padding-top:20px;
+      /* display:grid; */
       /* background-color: purple; */
   }
   .year{
@@ -322,6 +309,7 @@ margin-top:10px;
   }
   .cardWithDate{
     width:100%;
+    /* width:650px; */
     margin-top:0px;
     margin:auto;
  
@@ -377,7 +365,7 @@ color:black;
  
     width:95%;
     margin:auto;
-       margin-top:20px;
+       /* margin-top:20px; */
     border-color:rgb(221, 220, 220);
     border-width:1px;
   }
@@ -437,6 +425,7 @@ color:black;
   
   a:hover {
     color: rgb(68, 68, 68);
+    /* color:#206f72; */
      text-decoration: none;
   }
   
@@ -444,10 +433,10 @@ color:black;
     /* color:blue; */
   /* } */
     .ActivityBelow{
-    width:80%;
+    width:100%;
     margin:auto;
     margin-top:0px;
-    padding-top:5px;
+    /* padding-top:5px; */
   
   }
   .rcrdAct{
@@ -460,7 +449,7 @@ color:black;
 
   .issueCard{
     padding-bottom:5px;
-    width:100%;
+    /* width:350px; */
     /* background-color:  rgb(252, 252, 252);; */
     /* background-color: red; */
     border-style:solid;
@@ -651,11 +640,7 @@ color:black;
       .sharableLinkSection{
         width:50%;
       }
-      .ProfileDiv{
-        /* width:85%; */
-        /* background-color: yellow; */
-        margin:auto;
-      }
+
       .Profilecard{
         width:60%;
       }
@@ -685,7 +670,7 @@ color:black;
    
 }
       .cardWithDate{
-        /* width:80%;  */
+        width:555px;
         margin:auto;
         margin-top:0px;
        
@@ -709,12 +694,7 @@ color:black;
 
       
      
-      .ProfileDiv{
-        /* width:60%; */
-        margin:auto;
-        /* background-color: yellow; */
-        /* background-color:orange */
-      }
+  
       .callNotification{
         width:30%;
         margin:auto;
@@ -752,8 +732,8 @@ color:black;
        
       }
       .cardWithDate{
-        /* width:80%; */
-        
+      
+        width:650px;
         margin:auto;
       
         margin-top:-2px;

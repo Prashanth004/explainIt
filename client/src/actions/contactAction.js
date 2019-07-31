@@ -1,7 +1,8 @@
 import axios from "axios";
 import config from '../config/config';
 import {STARTED_ADD_TO_CONTACT,ADD_TO_CONTACT_FAILED_OWN_CONT,
-    CONTACT_EXIST,CONTACT_DOESNT_EXIST,
+    CONTACT_EXIST,CONTACT_DOESNT_EXIST,UPDATE_CONTACT_SEACRCHED_INPUTBOX,
+    UPDAT_CONTACT_LIST,SWITCH_TO_ADD_TO_CONTACT,SWITCH_TO_CONTACT_LIST,
     GOT_ALL_CONTACTS,GOT_ALL_CONTACTS_FAILED,
     SUCCESS_ADDED_CONTACT,FAILED_TO_ADD_CONTACT} from './types'
 
@@ -70,9 +71,47 @@ export const getContactbyId = (contactid)=>(dispatch)=>{
     })
 }
 
+export const switchToAddtoContact = ()=>(dispatch)=>{
+    dispatch({
+        type:SWITCH_TO_ADD_TO_CONTACT
+    })
+}
+
+export const switchToContactList = ()=>(dispatch)=>{
+    dispatch({
+        type:SWITCH_TO_CONTACT_LIST
+    })
+}
+
+export const changeContactSearch =(textValue,contactList)=>dispatch=>{
+    const typedValueUpper = textValue.toUpperCase()
+    dispatch({
+        type:UPDATE_CONTACT_SEACRCHED_INPUTBOX,
+        payload:typedValueUpper
+    });
+    console.log("contactList : ",contactList);
+
+    var newcontactList = contactList.filter(contact=>
+        (contact.username.toUpperCase().includes(typedValueUpper))||
+        (contact.twitterhandle.toUpperCase().includes(typedValueUpper)));
+
+    dispatch({
+        type:UPDAT_CONTACT_LIST,
+        newContactList : newcontactList
+    })
+
+}
+
+export const updateContact = (newContactList) => (dispatch)=>{
+    dispatch({
+        type:UPDAT_CONTACT_LIST,
+        newContactList : newContactList
+    })
+}
+
 export const getAllContacts = ()=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'));
-    var payload =[];
+    var contactData =[];
         axios({
         method:'get',
         url:config.base_dir+'/api/contact/',
@@ -80,15 +119,33 @@ export const getAllContacts = ()=>(dispatch)=>{
             "Authorization":token,
         },
     }).then(response=>{
-        console.log("response : ",response)
+        console.log("response : ",response);
+        var promises = [];
         if(response.status === 200 || response.status ===204){
-            console.log(response.data.data)
-            payload.push(response.data.data)
-            dispatch({
-                type:GOT_ALL_CONTACTS,
-                data:response.data.data
+            contactData = response.data.data
+            var getUserDatils = new Promise(function(resolve, reject){
+                contactData.forEach(function(projects, index){
+               promises.push(axios.get(config.base_dir+'/api/users/id/'+projects.contactid))
             })
-        }
+            axios.all(promises).then(function(results) {
+               results.forEach(function(response, index) {
+                   if(response.status===200){
+                       const newTestJson = JSON.parse(JSON.stringify(contactData));
+                               newTestJson[index]['profilepic']=response.data.data.profilepic;
+                               newTestJson[index]['username']=response.data.data.username;
+                               newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
+                               contactData =newTestJson
+                   }
+               })
+                dispatch({
+                    type:GOT_ALL_CONTACTS,
+                    data:contactData
+                })
+            })
+        })
+        getUserDatils.then(function(ansProj){
+        })
+         }
     }).catch(error=>{
         dispatch({
             type:GOT_ALL_CONTACTS_FAILED,

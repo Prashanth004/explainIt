@@ -7,8 +7,10 @@ import IssueCard from './tool/NewUi/diaplyissues/issueCard'
 import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
-import {initGA,loadPageView} from './tool/NewUi/container/ReactGa';
-import {Helmet} from "react-helmet";
+import { initGA, loadPageView } from './tool/NewUi/container/ReactGa';
+// import { Helmet } from "react-helmet";
+import MobNav from './tool/NewUi/newNav/index';
+import Setting from './tool/NewUi/newNav/setting'
 import './css/newlanding.css';
 import Navbar from './tool/NewUi/Navbar';
 import { explainAuthentication } from '../actions/signinAction';
@@ -31,37 +33,45 @@ class Project extends Component {
       showModalExplain: false,
       showModalTwitterLogin: false,
       newIssueId: null,
-      reAtempte: false
+      reAtempte: false,
+      reducedWidth:false
     }
     this.reAtemptToFetch = this.reAtemptToFetch.bind(this)
-  }
+    this.resize = this.resize.bind(this);
+    }
+    resize() {
+        this.setState({ reducedWidth: window.innerWidth <= 700 });
+        
+    }
 
 
-  reAtemptToFetch=()=>{}
+  reAtemptToFetch = () => { }
   componentWillMount() {
-    this.props.explainAuthentication()
+    this.props.explainAuthentication();
     const socket = socketIOClient(config.base_dir);
     this.setState({
       socket: socket
     })
 
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resize());
     clearTimeout(this.reAtemptToFetch)
   }
   componentDidMount() {
+    this.setState({ reducedWidth: window.innerWidth <= 700 });
     initGA();
     loadPageView();
     const self = this
-
+    window.addEventListener("resize", this.resize.bind(this));
     var issueId = this.props.match.params.projectid;
-    this.reAtemptToFetch = setTimeout(()=>{
-      if(!self.state.reAtempte && self.props.failedToGet){
+    this.reAtemptToFetch = setTimeout(() => {
+      if (!self.state.reAtempte && self.props.failedToGet) {
         self.props.fetchProjectbyIssue(issueId);
       }
-    },25000)
+    }, 25000)
     var newIssueIdtemp = (localStorage.getItem('newIssueId'))
-    this.setState({ newIssueId : newIssueIdtemp})
+    this.setState({ newIssueId: newIssueIdtemp })
     this.props.clearAnswers(issueId)
     this.props.fetchProjectbyIssue(issueId);
     var socket = this.state.socket
@@ -91,12 +101,25 @@ class Project extends Component {
     }
   }
   render() {
-    const msgStyling = {margin:"auto",marginTop:"250px", width:"50%", textAlign:"center"}
-    return(this.props.authAction)?(
-     (this.props.isFetchDone) ? (
-      (!this.props.failedToGet)?(
-      <div>
-           {/* <Helmet
+    const msgStyling = { margin: "auto", marginTop: "250px", width: "50%", textAlign: "center" };
+    const nav=(this.state.reducedWidth)?(<MobNav page={config.PEOJECT_PAGE}/>):(<Navbar page={config.PEOJECT_PAGE}  />)
+    const project = (!this.props.setting)?(    <div className="projectPageMainDiv">
+    <div className="projectContainer">
+      <br />
+      <IssueCard
+        socket={this.state.socket}
+        itsHome={(this.props.home === config.HOME) ? true : false}
+        issue={this.props.questionProject}
+        explainTool={this.props.explainTool} />
+        
+    </div>
+
+  </div>):(<Setting  />)
+    return (this.props.authAction) ? (
+      (this.props.isFetchDone) ? (
+        (!this.props.failedToGet) ? (
+          <div>
+            {/* <Helmet
            meta={[
     {"property": "twitter:card", "content": "player"},
     {"property": "twitter:url", "content": this.props.questionProject.videoPath},
@@ -106,32 +129,20 @@ class Project extends Component {
     {"property": "twitter:player:width", "content":  "300px"},
     {"property": "twitter:player:width", "content":  "220px"}
   ]}/> */}
-             
-      <Navbar
-            page="project" />
-     <div className="projectPageMainDiv">
-      <div className="projectContainer">
-        <br />
-      <IssueCard 
-      socket={this.state.socket}
-      itsHome={(this.props.home === config.HOME)?true:false}
-      issue={this.props.questionProject}
-      explainTool={this.props.explainTool}/>
-      </div>
-     
-      </div>
-      </div>):((this.props.match.params.projectid === this.state.newIssueId)?(<div style={msgStyling}><h3>
-                <b>
-                Processing your video. Please wait or try after some time
+      {nav}
+        {project}
+          </div>) : ((this.props.match.params.projectid === this.state.newIssueId) ? (<div style={msgStyling}><h3>
+            <b>
+              Processing your video. Please wait or try after some time
                 </b>
-                </h3></div>):(<div style={msgStyling}>
-                    <h3><b>
-                     Project not found !
+          </h3></div>) : (<div style={msgStyling}>
+            <h3><b>
+              Project not found !
                       </b></h3>
-                      <p>It could either have got deleted or some prolem occured with saving the recorded content.</p>
-                  </div>
-                ))):(null)):(null)
-                
+            <p>It could either have got deleted or some prolem occured with saving the recorded content.</p>
+          </div>
+            ))) : (null)) : (null)
+
   }
 }
 Project.PropType = {
@@ -141,7 +152,7 @@ Project.PropType = {
   restAllToolValue: PropType.func.isRequired,
   resetValues: PropType.func.isRequired,
   saveExtensionDetails: PropType.func.isRequired,
-  saveReplyEmailOption :PropType.func.isRequired
+  saveReplyEmailOption: PropType.func.isRequired
 
 };
 const mapStateToProps = state => ({
@@ -151,8 +162,9 @@ const mapStateToProps = state => ({
   isFullScreenRecording: state.tools.isFullScreenRecording,
   failedToGet: state.projects.failedToGet,
   isFetchDone: state.projects.isFetchDone,
-  authAction:state.auth.authAction,
+  authAction: state.auth.authAction,
   isAuthenticated: state.auth.isAuthenticated,
+  setting:state.nav.openSetting,
 
 })
 

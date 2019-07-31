@@ -7,7 +7,8 @@ import '../activity.css';
 import CallSuccess  from './CallSuccess';
 import CallFail from './CallFailed';
 import Message from './Message';
-import RecordActivity from './recordedAct'
+import Explain from '../explainActivity'
+import RecordActivity from './recordedAct';
 import {addNewUser} from '../../../../../actions/storeUserAction'
 import { changeReadStatus } from '../../../../../actions/messageAction'
 
@@ -16,15 +17,17 @@ class ActivityMain extends Component {
         super(props)
         this.state = {
             userName: "",
-            profilePic: null
+            profilePic: null,
+           
         }
     }
+    // 
     componentDidMount() {
         const {activity,userData} = this.props;
-        
+      
         console.log(activity.unread)
         if(activity.unread === 1)
-            // this.props.changeReadStatus(activity.id)
+            this.props.changeReadStatus(activity.id)
 
         var token = JSON.parse(localStorage.getItem('token'))
         if(activity.touser!==null){
@@ -93,9 +96,15 @@ class ActivityMain extends Component {
         (<CallSuccess
              userData = {this.state}
              activity={this.props.activity} />):(
-                 (this.props.activity.activity!==config.SAVE_RECORD)?(<Message 
+                 (this.props.activity.activity!==config.SAVE_RECORD)?(
+                 (this.props.activity.activity===config.MESSAGE_ACTIVITY)?(<Message 
                     userData = {this.state}
-                    activity={this.props.activity}/>)
+                    activity={this.props.activity}/>):(
+                        <Explain 
+                        userData = {this.state}
+                        direction="from"
+                        activity={this.props.activity}/>
+                    ))
                     :(<RecordActivity 
                     activity={this.props.activity}/>)))
     

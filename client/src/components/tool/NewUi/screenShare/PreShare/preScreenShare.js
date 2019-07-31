@@ -213,7 +213,7 @@ class tweetSearch extends Component {
                 </p>
                 {spanElement}
                
-                <div className="TwiValidInfo">
+                <div className="TwiValidInfo" style={{width:"90%", margin:"auto"}}>
                     <AcceptTopic 
                     action={config.FULL_SCREEN_SHARE}
                     tweetTheMessage={this.testHandle} />
@@ -249,7 +249,7 @@ const mapStateToProps = state => ({
     sharehandle: state.explain.sharehandle,
     OwnerTwitterHandle: state.auth.twitterHandle,
     redialInitiated : state.redial.redialInitiated,
-    redialtwitterHandle : state.redial.twitterHandle,
+    redialtwitterHandle : state.redial.redialtwitterHandle,
     redialSubject : state.redial.subject
 
 })
@@ -258,4 +258,3 @@ export default connect(mapStateToProps, {
     setNoOfMinutes, updateCurrentTime,cancelDialedOption,
     getRecpientId, resetValues,saveTopicOfTheCall
 })(tweetSearch)
-

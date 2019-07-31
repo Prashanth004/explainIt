@@ -503,7 +503,9 @@ class ScreenRecorder extends Component {
 
     }
     componentWillUnmount() {
+        this.props.turnnotbusy(this.props.twitterUserId);
         // registerEndToBrowser();
+        registerEndToBrowser()
         window.removeEventListener("beforeunload", this.onUnload);
         // window.removeEventListener("message",this.postMessageHandler);
         // this.props.fullStopedSharing()
@@ -1135,7 +1137,9 @@ validateTurn(iceServers){
                 audioStream: null,
                 canvasStream: null,
                 call: null,
-                peercalled: false
+                peercalled: false,
+                doneTweeting: false,
+                doneCalling:false
             })
         }
     }
@@ -1341,7 +1345,7 @@ validateTurn(iceServers){
                                     action="waiting" callerImageUrl={this.props.profilePic}
                                     recieverImageUrl={this.props.twirecieverPrfilePic} />
                             </div>
-                            <button className="buttonLight" onClick={this.endWhileOngoinCall}>End send request</button>
+                            <button className="buttonLight" onClick={this.props.closeImidiate}>End send request</button>
                         </div>
                     ) : (<div>
                         <p><b>Share Request Ended.</b></p>

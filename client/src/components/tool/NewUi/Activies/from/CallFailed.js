@@ -6,17 +6,25 @@ import ImageContainer from '../imageContainer';
 import { FiPhoneMissed } from "react-icons/fi";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import { openHome} from '../../../../../actions/navAction'
+
 import {dialFromFail} from '../../../../../actions/dialActions'
+// import { fullStartedSharing } from '../../../../../actions/toolActions';
 
 const CallFailDialed =  (props) => {
     const { userData, activity } = props
-    var date = activity.time.slice(5, 7)
+    var date = activity.time.slice(5, 7);
+    const Redial = ()=>{
+        props.dialFromFail(userData.userName,activity.subject);
+        props.openHome();
+    }
+    
     return (
         <div className="activityContentWithDate">
             <div className="activityContent">
             <div className="callIconDiv" > 
                 <span className="hint--top" aria-label={"dial "+userData.userName}>
-                    <FiPhoneMissed className="callIcon missed" onClick={()=>props.dialFromFail(userData.userName,activity.subject)}/>
+                    <FiPhoneMissed className="callIcon missed" onClick={Redial}/>
                 </span>
                 </div>
                 {/* <div className="callIconDiv"> <FiPhoneMissed className="callIcon missed" /></div> */}
@@ -29,6 +37,7 @@ const CallFailDialed =  (props) => {
                     </div>
                 </div>
             </div>
+            {/* {screenShare} */}
         </div>
     )
 
@@ -40,9 +49,10 @@ CallFailDialed.PropType = {
 };
 const mapStateToProps = state => ({
     // userData : state.userStore.userData
-
+    openHome: PropType.func.isRequired,
+   
 })
-export default  connect(mapStateToProps, {dialFromFail })(CallFailDialed)
+export default  connect(mapStateToProps, {dialFromFail,openHome })(CallFailDialed)
 
 
 

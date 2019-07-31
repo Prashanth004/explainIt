@@ -1,4 +1,5 @@
-import {OPEN_HOME,OPEN_INBOX ,OPEN_CREATED,OPEN_PARTICIPATED} from './types'
+import {OPEN_HOME,OPEN_INBOX,OPEN_SETING,OPEN_SETTING,
+    OPEN_CREATED,OPEN_PARTICIPATED} from './types'
 
 
 export const openHome = ()=> (dispatch)=>{
@@ -19,5 +20,10 @@ export const openCreated = ()=> (dispatch)=>{
 export const openParticipated = ()=> (dispatch)=>{
     dispatch({
         type:OPEN_PARTICIPATED
+    })
+}
+export const openSettings =()=>(dispatch)=>{
+    dispatch({
+        type:OPEN_SETTING
     })
 }

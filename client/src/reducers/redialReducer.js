@@ -2,7 +2,7 @@ import {REDIAL_MISSED,REDIAL_FAILED,CANCEL_DIAL} from '../actions/types'
 
 
 const initialState = {
-    twitterHandle:null,
+    redialtwitterHandle:null,
     redialInitiated:false,
     subject:null
 }
@@ -14,14 +14,14 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 redialInitiated:true,
-                twitterHandle:action.twitterhandle,
+                redialtwitterHandle:action.twitterhandle,
                 subject:action.subject
             }
         case REDIAL_FAILED:
             return{
                 ...state,
                 redialInitiated:true,
-                twitterHandle:action.twitterHandle,
+                redialtwitterHandle:action.twitterhandle,
                 subject:action.subject
             }
         case CANCEL_DIAL :

@@ -3,9 +3,11 @@ import '../../css/displayProjectDetail.css'
 import config from '../../../config/config'
 import axios from 'axios';
 import Navbar from './Navbar';
+import { Button } from 'reactstrap'
 import ReactModal from 'react-modal';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import socketIOClient from "socket.io-client";
 import { setIssueId } from '../../../actions/issueActions';
 import TwitterLogin from './TwitterLogin'
 import { FiX } from "react-icons/fi";
@@ -85,7 +87,11 @@ class DisplayProjectDetail extends Component {
   }
   componentWillMount() {
     var self = this
-    var token = JSON.parse(localStorage.getItem('token'))
+    var token = JSON.parse(localStorage.getItem('token'));
+    const socket = socketIOClient(config.base_dir);
+    this.setState({
+      socket: socket
+    })
     axios({
       method: 'get',
       url: config.base_dir + '/api/project/issues/' + this.props.match.params.issueid,
@@ -99,7 +105,8 @@ class DisplayProjectDetail extends Component {
           allProjects.forEach(function (projects, index) {
             axios({
               method: 'get',
-              url: config.base_dir + '/api/users/email/' + projects.email,
+            
+              url: config.base_dir + '/api/users/id/' + projects.userid,
             }).then(response => {
               if (response.status === 200) {
                 const newTestJson = JSON.parse(JSON.stringify(allProjects));
@@ -129,6 +136,7 @@ class DisplayProjectDetail extends Component {
       })
   }
   render() {
+    console.log("this.state.questionProject :",this.state.questionProject)
     var video = null;
     var name = null;
     var profileImage = null;
@@ -187,7 +195,19 @@ class DisplayProjectDetail extends Component {
     else {
       explained = <p>No explainations yet. You can explain by clicking explainIt button</p>
     }
-   
+    const ExplainItDiv = (this.state.showModalExplain) ? (
+      <div>
+          <Button style={{ fontSize: "px", height: "35px", width: "35px" }} close onClick={this.reStoreDefault} />
+          <div className="ExplainItDivBottom">
+          <ExplainPage
+                   socket={this.state.socket}
+                 
+                   // issue={this.props.issue.issueid}
+                   questionProject={this.state.questionProject[0]}
+                    handleCloseModal={this.handleCloseModal} />
+          </div>
+      </div>
+  ) : (null)
 
     return (<div>
       <Navbar />
@@ -225,7 +245,7 @@ class DisplayProjectDetail extends Component {
 
               </ReactModal>
 
-              <ReactModal
+              {/* <ReactModal
                 isOpen={this.state.showModalExplain}
                 contentLabel="Minimal Modal Example"
                 className="ModalA"
@@ -238,10 +258,15 @@ class DisplayProjectDetail extends Component {
                     </span>
                   </div>
                   <ExplainPage
+                   socket={this.state.socket}
+                 
+                   // issue={this.props.issue.issueid}
+                   questionProject={this.state.questionProject[0]}
                     handleCloseModal={this.handleCloseModal} />
                 </div>
                 {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-              </ReactModal>
+              {/* </ReactModal>  */}
+              {ExplainItDiv}
             </div>
           </div>
         </div>

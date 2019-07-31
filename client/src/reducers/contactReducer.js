@@ -1,6 +1,6 @@
 import {STARTED_ADD_TO_CONTACT,ADD_TO_CONTACT_FAILED_OWN_CONT,
-    CONTACT_EXIST,CONTACT_DOESNT_EXIST,
-    GOT_ALL_CONTACTS,GOT_ALL_CONTACTS_FAILED,
+    CONTACT_EXIST,CONTACT_DOESNT_EXIST,UPDAT_CONTACT_LIST,
+    GOT_ALL_CONTACTS,GOT_ALL_CONTACTS_FAILED,UPDATE_CONTACT_SEACRCHED_INPUTBOX,
     SUCCESS_ADDED_CONTACT,FAILED_TO_ADD_CONTACT} from '../actions/types'
 // import { response } from 'express';
 
@@ -15,7 +15,9 @@ const initialState = {
     contactExist:false,
     fetchedContactInfo :false,
     mycontacts:[],
-    failedGettingAllContacts:false
+    failedGettingAllContacts:false,
+    newContactList : [],
+    contactInputBaxValue:""
 
 
 }
@@ -38,6 +40,11 @@ export default function(state = initialState, action){
                 doneAdding:true,
                 successAdded:true,
                 contactid:action.payload.contactid
+            }
+        case UPDATE_CONTACT_SEACRCHED_INPUTBOX:
+            return{
+                ...state,
+                contactInputBaxValue:action.payload
             }
         case CONTACT_EXIST:
             return{
@@ -78,6 +85,11 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 failedGettingAllContacts:true
+            }
+        case UPDAT_CONTACT_LIST:
+            return{
+                ...state,
+                newContactList : action.newContactList
             }
         default:
             return{

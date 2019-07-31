@@ -1,5 +1,5 @@
-import {GET_PROFILE_DETAILS_ON_HOVER,GET_PROFILE_DETAILS_FAIL_ON_HOVER,
-    SHOW_ACTIVITY,SHOW_PROFILE,HIDE_LABEL,HIDE_ACTIVITY,HIDE_PROFILE} from './types'
+import {GET_PROFILE_DETAILS_ON_HOVER,GET_PROFILE_DETAILS_FAIL_ON_HOVER,SHOW_CONTACTS,
+    SHOW_ACTIVITY,HIDE_CONTACTS,SHOW_PROFILE,HIDE_LABEL,HIDE_ACTIVITY,HIDE_PROFILE} from './types'
 import config from '../config/config';
 import axios from 'axios';
 
@@ -100,6 +100,18 @@ export const showActivitynow =()=>(dispatch)=>{
 dispatch({
     type:SHOW_ACTIVITY,
 })
+}
+
+export const showContactsAct = ()=>dispatch=>{
+    dispatch({
+        type:SHOW_CONTACTS
+    })
+    
+}
+export const hideContactAct = ()=>dispatch=>{
+    dispatch({
+        type:HIDE_CONTACTS
+    });
 }
 export const hideActivity =()=>dispatch=>{
     dispatch({

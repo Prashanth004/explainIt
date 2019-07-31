@@ -181,8 +181,9 @@ class issueCard extends Component {
                             if (response.status === 200) {
                                 allProjects[index]["profilepic"] = response.data.data.profilepic;
                                 allProjects[index]["username"] = response.data.data.username;
-                                allProjects[index]["twitterhandle"] = response.data.data.twitterhandle
-                                allProjects[index]['id'] = response.data.data.id
+                                allProjects[index]["twitterhandle"] = response.data.data.twitterhandle;
+                                allProjects[index]['id'] = response.data.data.id;
+                                allProjects[index]['active'] = response.data.data.online
                             }
                         })
                         var answerProject = allProjects.filter(project => project.isquestion !== "true")
@@ -227,9 +228,7 @@ class issueCard extends Component {
                         // issue={this.props.issue.issueid}
                         questionProject={this.state.questionProject[0]} />
                 </div>
-
             </div>
-
         ) : (null)
         const twitterBird = (this.state.publicStatus !== "private") ? (
             <span id={this.props.issue.issueid} className="hint--top" aria-label="Tweet it">

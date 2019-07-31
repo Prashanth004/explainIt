@@ -97,9 +97,9 @@ class DisplayIssue extends Component {
 
     render() {
         var issueItems = null;
-            // if(this.props.created){
-                if(this.props.myissues!==null)
-                    if(this.props.myissues.length===0)
+            if(this.props.created){
+                if(this.props.allprojects!==null)
+                    if(this.props.allprojects.length===0)
                         issueItems = (<div className="emptyIssues">
                         <h4>Empty</h4>
                         <br/>
@@ -120,7 +120,7 @@ class DisplayIssue extends Component {
                             issue={issue}
                             explainTool={this.props.explainTool}/>
                         ))
-                    // }
+                    }
             }
             else if(this.props.participated){
                 if(this.props.participatedIssues!==null)
@@ -164,6 +164,7 @@ const mapStateToProps = state => ({
  participated: state.nav.openParticipated,
     created: state.nav.openCreated,
     myissues: state.profile.myIssues,
+    allprojects:state.profile.allprojects,
     participatedIssues: state.profile.participatedIssue,
 })
 

@@ -33,7 +33,7 @@ const initialState={
     noOfIncreaseInTime:0,
     currentTimeLeft : 3,
     noOfMinutes:3,
-    topicOfTheCall:"asas",
+    topicOfTheCall:"",
     peerId:null,
     touser:null,
     gotAllActivities:false,
@@ -43,9 +43,7 @@ const initialState={
     callAction:false,
     newCall:true,
     isCallAnswered:false,
-    isMuted:false,
-    topicOfTheCallRecieve:null,
-    timeAllotedRecieve:null
+    isMuted:false
 }
 
 export default function(state= initialState, action){
@@ -170,9 +168,7 @@ export default function(state= initialState, action){
                 userName:action.payload.userName,
                 email:action.payload.email,
                 id: action.payload.id,
-                profilePic:action.payload.profilePic,
-                topicOfTheCallRecieve:action.payload.topicOfTheCall,
-                timeAllotedRecieve:action.payload.timeAlloted
+                profilePic:action.payload.profilePic                
             }
         case ANSWER_CALL:
             return {

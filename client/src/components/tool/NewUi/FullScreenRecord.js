@@ -20,7 +20,8 @@ import DownloadExt from './container/DownloadExt'
 import {
     fullStartedRecording,
     fullStopedRecording, discardAfterRecord
-} from '../../../actions/toolActions'
+} from '../../../actions/toolActions';
+import { explainSuccessedUpate } from '../../../actions/explainAction'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 
@@ -46,7 +47,8 @@ class FullScreenRecorder extends Component {
             recordTime: 3,
             currentAtionStatus: null,
             saveActivity: false,
-            selfSave:false
+            selfSave:false,
+            savedRecordActivity:false
         }
         this.downloadExtension = this.downloadExtension.bind(this);
         this.recordScreenStop = this.recordScreenStop.bind(this);
@@ -99,9 +101,18 @@ class FullScreenRecorder extends Component {
     }
 
     saveActivityJustRecord() {
-        //call the action to save activity
-        var subject = this.state.subjectOfMessage
-        this.props.saveRecordedMessage(this.props.sharablelink, this.props.callTopic, this.props.fromId, subject);
+        var subject = this.state.subjectOfMessage;
+        this.setState({savedRecordActivity:true})
+        if(this.props.explainBy !== null){
+            var sharablelink =  config.react_url+"/project/"+this.props.topicIssueId
+            console.log("this.props.shareid, this.props.callTopic, sharablelink : ",this.props.shareid, this.props.callTopic, sharablelink)
+            this.props.explainSuccessedUpate(this.props.shareid, this.props.callTopic, sharablelink);
+        }else{
+            this.props.saveRecordedMessage(sharablelink, this.props.callTopic, this.props.fromId, subject);
+        }
+        
+        // explainSuccessedUpate
+        // this.props.
     }
     startRecording() {
         var self = this;
@@ -408,11 +419,10 @@ class FullScreenRecorder extends Component {
     sendMessageLocal() {
         this.setState({ savedfuncCalled: true })
         var subject = this.state.subjectOfMessage
-
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic, this.props.fromId, this.props.twitterUserId, subject)
     }
     componentWillUnmount() {
-        // registerEndToBrowser();
+        registerEndToBrowser();
         clearInterval(this.timebar);
         this.props.resetRecorder()
         window.removeEventListener("beforeunload", this.onUnload)
@@ -478,10 +488,11 @@ class FullScreenRecorder extends Component {
             closeFunction={closeFunction}
             />):(null)
 
-        if (this.props.isSaved && !this.state.savedfuncCalled && this.props.twitterUserId !== null && !this.props.sendSuccess) {
+        if (this.props.isSaved && !this.state.saveBtnClicked && !this.state.savedfuncCalled && this.props.twitterUserId !== null && !this.props.sendSuccess) {
             this.sendMessageLocal()
         }
-
+        if (this.props.isSaved && this.state.saveBtnClicked && !this.state.savedRecordActivity)
+            this.saveActivityJustRecord()
         if (this.props.isFullRecordCompleted && !this.props.isSaved) {
             postShareElements = (<div className="postRecord">
                 {videoplayer}
@@ -500,13 +511,15 @@ class FullScreenRecorder extends Component {
             </div>);
         }
         else if (this.props.isSaved && this.state.saveBtnClicked) {
-            this.saveActivityJustRecord()
+            
             var cpyTpclipBrd = (this.props.explainBy !== config.null) ? (null) :
                 (<CopyToClipboard sharablelink={this.props.sharablelink} />)
-            postShareElements = (<div className="postRecord">
+            postShareElements = this.props.explainBy === config.null?(<div className="postRecord">
                 <span>Your recording has been saved successfully.
                You can access it with the link below and share the same</span>
                 {cpyTpclipBrd}
+            </div>):(<div className="postRecord">
+                <span>Your recording has been saved successfully</span>
             </div>)
             }
 
@@ -574,8 +587,11 @@ const mapStateToProps = state => ({
     recorder: state.recorder.recorder,
     timeAloted: state.call.noOfMinutes,
     explainBy: state.explain.explainBy,
+    callTopic: state.call.topicOfTheCall,
+    shareid:state.explain.shareid,
+    topicIssueId:state.explain.issueId,
     currentTime: state.recorder.currentTime
 })
 
-export default connect(mapStateToProps, { postStartCall, saveRecordedMessage, resetRecorder, pauseRecording, resumeRecording, startRecorder, updateCurrentTime, postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
+export default connect(mapStateToProps, { postStartCall,explainSuccessedUpate, saveRecordedMessage, resetRecorder, pauseRecording, resumeRecording, startRecorder, updateCurrentTime, postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
 

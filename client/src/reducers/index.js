@@ -26,6 +26,8 @@ import modalReducer from './modalReducer';
 import contactReducers from './contactReducer';
 import feedBackReducer from './feedBackReducer';
 import realDialReducer from './redialReducer';
+import timeInputReducer from './timerInputReducer';
+import topicInputReducer from './topicInputReducer';
  
 export default combineReducers({
     email:emailReducer,
@@ -54,5 +56,7 @@ export default combineReducers({
     modal:modalReducer,
     contact:contactReducers,
     feedback : feedBackReducer,
-    redial : realDialReducer
+    redial : realDialReducer,
+    time:timeInputReducer,
+    topic:topicInputReducer
 })

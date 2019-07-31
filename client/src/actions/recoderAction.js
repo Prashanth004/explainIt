@@ -1,4 +1,5 @@
-import {SAVE_RECORDER,RESET_RECORDER,STOP_RECORDER,UPDATE_CURRENT_TIME_RECORDER,PAUSE_RECORDER,START_RECORDER,RESUME_RECORDER} from './types'
+import {SAVE_RECORDER,RESET_RECORDER,STOP_RECORDER,PERRMISSION_DENIED,
+    UPDATE_CURRENT_TIME_RECORDER,PAUSE_RECORDER,START_RECORDER,RESUME_RECORDER} from './types'
 import config from '../config/config'
 export const saveRecorder = ()=>(dispatch)=>{
     dispatch({
@@ -23,6 +24,11 @@ export const resetRecorder = ()=>(dispatch)=>{
     dispatch({
         type:RESET_RECORDER,
     
+    })
+}
+export const permissionDeniedAction =() =>dispatch=>{
+    dispatch({
+        type:PERRMISSION_DENIED
     })
 }
 export const resumeRecording = (recorder)=>dispatch =>{

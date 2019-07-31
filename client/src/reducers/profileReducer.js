@@ -94,7 +94,8 @@ export default function(state=initialState, action){
                 participatedIssue : action.participatedIssue,
                 twitterHandle:action.twitterHandle,
                 goodat:action.goodat,
-                works:action.works
+                works:action.works,
+                allprojects:action.allprojects
 
             }
         case GET_PROFILE_DETAILS_FAIL:

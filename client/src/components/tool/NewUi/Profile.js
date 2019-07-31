@@ -7,7 +7,7 @@ import PropType from 'prop-types';
 import ProfileForm from './Profile/';
 import CopyToClipboard from '../CopytoClipboard'
 import { openEditProfile, closeEditProfile } from '../../../actions/profileAction'
-import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiEdit, FiTwitter,FiLink2 } from "react-icons/fi";
 class Profile extends Component {
     constructor(props) {
         super(props)
@@ -15,13 +15,19 @@ class Profile extends Component {
             isOpenEdit: false,
             openBasicFill:false,
             showDetails: false,
+            openLink:false
         }
         this.openEdit = this.openEdit.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
+        this.toggleProfile = this.toggleProfile.bind(this);
     }
+    
     componentWillMount(){
         if((this.props.bio === null||(this.props.bio).length===0) && this.props.isHome)
             this.setState({openBasicFill:true});
+    }
+    toggleProfile(){
+        this.setState({openLink :!this.state.openLink})
     }
     openEdit() {
         this.props.openEditProfile()
@@ -34,17 +40,28 @@ class Profile extends Component {
 
 
 
-
+        const linkDiv = (this.state.openLink)?(<div>
+            <span><b>My sharable Profile Link</b></span>
+                <CopyToClipboard sharablelink={this.props.sharabeLink} />
+                </div>
+            ):(null)
         const editbtn = (this.props.openEdirProfile || this.props.bio.length === 0)?(null):(<span  className="hint--top edit" aria-label="Edit!">
         <FiEdit onClick={this.openEdit} className="edit" />
     </span>)
+       const FiLink = (this.props.openEdirProfile || this.props.bio.length === 0)?(null):(<span  className="hint--top edit" aria-label="Profile Link">
+       <FiLink2 onClick={this.toggleProfile} className="edit" />
+   </span>)
     const onlyClose = (!this.props.isHome)?(<div className="topBtnsActivity">
     <Button style={{margin:"-8px"}} close onClick={this.props.hideProfile} />
     </div>):(null)
         const editOption = (this.props.isHome) ? (
         <div className="topBtnsActivity">
              <Button style={{margin:"-8px"}} close onClick={this.props.hideProfile} />
+             <div style={{width:"70px",display:"grid", gridTemplateColumns:"50% 50%"}}>
              {editbtn}
+             {FiLink}
+             </div>
+           
           </div>) : (null)
         const bio = (this.props.bio !== null) ? (
             (this.props.bio.length > 0) ? (
@@ -85,12 +102,8 @@ class Profile extends Component {
                         {bio}
                         {goodAtDiv}
                         {worksDiv}
-                        <div>
-                    <span><b>My sharable Profile Link</b></span>
-                        <CopyToClipboard sharablelink={this.props.sharabeLink} />
-                        </div>
-                        {/* <p><b>I charge {this.props.cost}$ a minute</b></p> */}
-                    </div>
+                        {linkDiv}
+                    </div> 
                     <div >
                         <div className="socialIcon"
                             style={{ visibility: ((this.props.githubLink !== null) ? ((this.props.githubLink.length !== 0) ? "visible" : "hidden") : "hidden") }}>

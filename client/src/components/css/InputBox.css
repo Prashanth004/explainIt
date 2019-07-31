@@ -18,6 +18,8 @@
     border-color:rgba(0, 0, 0, 0.356);
 }
 .inputNumberDiv{
+    width:100px;
+    /* background-color:rgb(138, 16, 16); */
     display:inline-block;
 }
 .spanElement{

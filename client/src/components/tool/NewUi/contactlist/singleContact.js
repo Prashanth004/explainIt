@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // import axios from 'axios';
 // import config from '../../../../config/config'
 // import PropType from 'prop-types';
-// import './contacts.css'
+import './contacts.css'
 import {addNewUser} from '../../../../actions/storeUserAction'
 
 
@@ -19,7 +19,10 @@ class cntactCard extends Component {
   render() {
     console.log("this.props.contactData : ",this.props.contactData);
     const {profilepic,twitterhandle,username} = this.props.contactData;
-   
+    // switch(state) {
+    //   default:
+    //       return null;
+    // }
     return (
       <div className="singleContact">
           <div className="contactImgContainer">

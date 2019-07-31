@@ -322,13 +322,15 @@
    }
  
 .loader {
-  border: 5px solid white;
+  
+  border: 3px solid #40a8ac;
   border-radius: 50%;
-  border-top: 5px solid #40a8ac;
-  width: 20px;
-  height: 20px;
+  border-top: 5px solid white;
+  width: 40px;
+  height: 40px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
+  margin:auto;
 }
 
 /* Safari */

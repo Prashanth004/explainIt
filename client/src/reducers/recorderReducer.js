@@ -1,4 +1,5 @@
-import {SAVE_RECORDER,RESET_RECORDER,STOP_RECORDER,UPDATE_CURRENT_TIME_RECORDER,START_RECORDER,PAUSE_RECORDER,RESUME_RECORDER} from '../actions/types'
+import {SAVE_RECORDER,RESET_RECORDER,STOP_RECORDER,PERRMISSION_DENIED,
+    UPDATE_CURRENT_TIME_RECORDER,START_RECORDER,PAUSE_RECORDER,RESUME_RECORDER} from '../actions/types'
 
 
 const initialState = {
@@ -7,7 +8,8 @@ const initialState = {
     recorder:null,
     currentTime:null,
     downLoadUrl:null,
-    blob:null
+    blob:null,
+    permissionDenied:false
 }
 
 
@@ -23,6 +25,11 @@ export default function(state = initialState, action){
                 ...state,
                 pauseState:true,
                 recorder:action.payload
+            }
+        case PERRMISSION_DENIED:
+            return{
+                ...state,
+                permissionDenied:true
             }
         case RESUME_RECORDER:
             return{
@@ -53,7 +60,8 @@ export default function(state = initialState, action){
                 recorder:null,
                 currentTime:null,
                 downLoadUrl:null,
-                blob:null
+                blob:null,
+                permissionDenied:false
             }
         case START_RECORDER:
             return{

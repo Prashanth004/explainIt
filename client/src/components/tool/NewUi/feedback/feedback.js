@@ -6,13 +6,15 @@ import { connect } from 'react-redux';
 import TextArea from '../container/textArea';
 // import Spinner  from '../container/lodingSmall';
 import StarRatings from 'react-star-ratings';
-import {  FiVideo } from "react-icons/fi";
+import { FiVideo } from "react-icons/fi";
 import Recorder from '../newRecorder/recording';
 import PropType from 'prop-types';
 import { restAllToolValue } from '../../../../actions/toolActions';
 import { resetRecorder } from '../../../../actions/recoderAction'
-import { changeShareExperience, changeUability,nothingfilled,
-     clickRecord, changeSuggestion, saveRecording, discardRecorded, resetFeedback,saveFeedback } from '../../../../actions/feedbackAction'
+import {
+    changeShareExperience, changeUability, nothingfilled,
+    clickRecord, changeSuggestion, saveRecording, discardRecorded, resetFeedback, saveFeedback
+} from '../../../../actions/feedbackAction'
 
 class FeedBack extends Component {
     constructor(props) {
@@ -23,19 +25,19 @@ class FeedBack extends Component {
         this.saveFile = this.saveFile.bind(this);
     }
 
-    saveFile(){
-        const {userId,experienceValue,nothingfilled,usabilityValue,sugValue,videoFilePath,saveFeedback} = this.props;
-        
-        console.log(experienceValue,usabilityValue,sugValue,videoFilePath);
-        if( experienceValue ===0 &&
-            usabilityValue ===0 &&
-            sugValue=== " " &&
-            videoFilePath===null){
-                nothingfilled()
-            }
-            else{
-                saveFeedback(userId,experienceValue,usabilityValue,sugValue,videoFilePath)
-            }
+    saveFile() {
+        const { userId, experienceValue, nothingfilled, usabilityValue, sugValue, videoFilePath, saveFeedback } = this.props;
+
+        console.log(experienceValue, usabilityValue, sugValue, videoFilePath);
+        if (experienceValue === 0 &&
+            usabilityValue === 0 &&
+            sugValue === " " &&
+            videoFilePath === null) {
+            nothingfilled()
+        }
+        else {
+            saveFeedback(userId, experienceValue, usabilityValue, sugValue, videoFilePath)
+        }
     }
     componentWillMount() {
         // this.props.restAllToolValue();
@@ -54,33 +56,33 @@ class FeedBack extends Component {
     }
     render() {
         // const warning = 
-        const { experienceValue,saveFeedBackInitiated, savedFeedBack,usabilityValue,noEntry, changeShareExperience, saveStaus, changeUability,userId,saveFeedback,
+        const { experienceValue, saveFeedBackInitiated, savedFeedBack, usabilityValue, noEntry, changeShareExperience, saveStaus, changeUability, userId, saveFeedback,
             changeSuggestion, sugValue, recordMode, discarded, saveRecording, discardRecorded, clickRecord } = this.props;
         // const warning = (noEntry)?(<span style={{color:"brown", fontSize:"11px"}}>No fields filled</span>):(null)
         const recordDiv = recordMode ? (<Recorder
             save={saveRecording}
             discard={discardRecorded}
             discarded={discarded}
-            saved={saveStaus} />) : ((!saveStaus ) ? (
+            saved={saveStaus} />) : ((!saveStaus) ? (
                 <span className="hint--top" aria-label="Record your isssue">
-                    <FiVideo style={{fontSize:"26px"}}onClick={clickRecord} />
-            {/* <button className="buttonDark" onClick={clickRecord}>Record screen and explain issue</button> */}
-            </span>) :
+                    <FiVideo style={{ fontSize: "26px" }} onClick={clickRecord} />
+                    {/* <button className="buttonDark" onClick={clickRecord}>Record screen and explain issue</button> */}
+                </span>) :
                 (<p>Recorded video attached !</p>));
-        const SubmitButton = (!saveFeedBackInitiated && !recordMode)?(
-           
-<button className="buttonLight"
-        onClick={this.saveFile} disabled={noEntry}
-        >Submit</button>
-        ):(null)
-        return (!savedFeedBack?(
+        const SubmitButton = (!saveFeedBackInitiated && !recordMode) ? (
+            <div>
+                <button className="buttonLight"
+                    onClick={this.saveFile} disabled={noEntry}>Submit</button>
+                <button className="buttonDark" onClick={this.props.closeFeedback}>Not now</button></div>
+        ) : (null)
+        return (!savedFeedBack ? (
             <div className="feedbackDiv">
                 <div className="rating">
                     <div>
                         <label>Call experience :</label>
                         <StarRatings
                             rating={experienceValue}
-                            //   starRatedColor="blue"
+                            starRatedColor="blue"
                             changeRating={changeShareExperience}
                             numberOfStars={5}
                             starDimension="25px"
@@ -92,7 +94,7 @@ class FeedBack extends Component {
                         <label>Ease of use :</label>
                         <StarRatings
                             rating={usabilityValue}
-                            //   starRatedColor="blue"
+                            starRatedColor="blue"
                             changeRating={changeUability}
                             numberOfStars={5}
                             starDimension="25px"
@@ -102,25 +104,25 @@ class FeedBack extends Component {
                     </div>
                 </div>
                 <br />
-                <label>Do you want anything to be included?</label>
-                <div style={{width:"60%",margin:"auto"}}>
-                <TextArea
-                    placeholder=""
-                    textvalue={sugValue}
-                    changeFunction={(e) => changeSuggestion(e.target.value)}
-                    enterPress={this.enterPress}
-                    textAlign="left"
-                    inputClass="inputboxes fullView" />
-                    </div>
+                <label>Help us improve. Your thoughts :</label>
+                <div style={{ width: "60%", margin: "auto" }}>
+                    <TextArea
+                        placeholder=""
+                        textvalue={sugValue}
+                        changeFunction={(e) => changeSuggestion(e.target.value)}
+                        enterPress={this.enterPress}
+                        textAlign="left"
+                        inputClass="inputboxes fullView" />
+                </div>
                 <br />
                 {recordDiv}
-                <br/> <br />
+                <br /> <br />
                 {SubmitButton}
-                <br/>
+                <br />
                 {/* {warning} */}
 
             </div>
-        ):(<div className="feedbackDiv">
+        ) : (<div className="feedbackDiv">
             <br />
             <br />
             <br />
@@ -144,8 +146,8 @@ FeedBack.PropType = {
     restAllToolValue: PropType.func.isRequired,
     resetRecorder: PropType.func.isRequired,
     resetFeedback: PropType.func.isRequired,
-    saveFeedback:PropType.func.isRequired,
-    nothingfilled:PropType.func.isRequired
+    saveFeedback: PropType.func.isRequired,
+    nothingfilled: PropType.func.isRequired
 };
 const mapStateToProps = state => ({
     experienceValue: state.feedback.experienceValue,
@@ -155,13 +157,15 @@ const mapStateToProps = state => ({
     discarded: state.feedback.discarded,
     saveStaus: state.feedback.saveStaus,
     userId: state.auth.id,
-    videoFilePath : state.feedback.videoFilePath,
-    savedFeedBack:state.feedback.savedFeedBack,
-    noEntry:state.feedback.noEntry
+    videoFilePath: state.feedback.videoFilePath,
+    savedFeedBack: state.feedback.savedFeedBack,
+    noEntry: state.feedback.noEntry
 })
-export default connect(mapStateToProps, { changeSuggestion, resetFeedback, resetRecorder,
-     saveFeedback,nothingfilled,
-    restAllToolValue, clickRecord, saveRecording, discardRecorded, changeShareExperience, changeUability })(FeedBack)
+export default connect(mapStateToProps, {
+    changeSuggestion, resetFeedback, resetRecorder,
+    saveFeedback, nothingfilled,
+    restAllToolValue, clickRecord, saveRecording, discardRecorded, changeShareExperience, changeUability
+})(FeedBack)
 
 
 

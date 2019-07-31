@@ -70,7 +70,8 @@ class DisplayShare extends Component {
             timeAloted: 3,
             blob: null,
             myScreenStream:null,
-            validatedFeedback:false
+            validatedFeedback:false,
+            openFeedback:true
         }
         this.closeConnection = this.closeConnection.bind(this);
         this.endCall = this.endCall.bind(this);
@@ -86,7 +87,9 @@ class DisplayShare extends Component {
         this.increaseTime = this.increaseTime.bind(this);
         this.deacreaseTimer = this.deacreaseTimer.bind(this);
         this.validateFeedback = this.validateFeedback.bind(this);
+        this.closeFeedback = this.closeFeedback.bind(this);
     }
+    closeFeedback(){this.setState({openFeedback:false})}
     downloadExtension() {
         window.open(config.EXTENSION_URL)
 
@@ -712,9 +715,9 @@ window.close();
     render() {
         var callEndButton = null;
 
-        if(this.props.myProfileUserId!==null && !this.state.validatedFeedback){
-                this.validateFeedback()
-        }
+        // if(this.props.myProfileUserId!==null && !this.state.validatedFeedback){
+                // this.validateFeedback()
+        // }
         var selfCloseTimer = (this.state.selfClose) ? (<div>
        
        
@@ -732,7 +735,7 @@ window.close();
         const messageOfScreenShare = (!this.state.myscreenSharing) ? (null) :
             (<h4><b>Your screen is being shared</b></h4>)
 
-        const feedbackDiz = (this.props.isLoggedIn)?(!this.props.feedbackGiven?(<Feedback />):(null)):(null);
+        const feedbackDiz = (this.props.isLoggedIn)?(this.state.openFeedback?(<Feedback closeFeedback={this.closeFeedback}/>):null):(null);
        
         var displayLoginMessage = (!!this.props.isLoggedIn) ? (<div><p></p></div>) :
             (<div><p><b>Login in to explain to be able initiate screen shares</b></p>
@@ -832,15 +835,16 @@ window.close();
             </div>
         ) : (null))
         return (<div style={{minHeight:"98vh"}}>
-             <Navbar />
+             <Navbar 
+              page="share"/>
             {precallActivity}
             <div className="screenShareDiv">
                 {ShareElement}
                
             </div>
             <div>
-                    <button  className="buttonDark endCallNew" onClick={this.shareScreen}>share screen</button>
-            <button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button>
+                    {/* <button  className="buttonDark endCallNew" onClick={this.shareScreen}>share screen</button>
+            <button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button> */}
             </div>
             {callEndButton}
             {/* <button onClick={this.shareScreen}>share screen </button> */}

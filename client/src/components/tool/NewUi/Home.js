@@ -4,6 +4,7 @@ import '../../css/NewSignin.css'
 import Navbar from './Navbar';
 // import { Helmet } from "react-helmet";
 // import BusyAction from './container/BusyAction';
+import Setting from './newNav/setting';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
@@ -24,19 +25,20 @@ import { Button, Modal, ModalBody } from 'reactstrap';
 import { getAllContacts } from '../../../actions/contactAction'
 import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
+import MobNav from './newNav/index'
 import { SCREEN_SHARE, SCREEN_RECORD} from '../../../actions/types';
 import { setIssueId } from '../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
 import PropType from 'prop-types';
-import { FiGrid, FiList } from "react-icons/fi";
+import { FiGrid,FiPhone, FiList } from "react-icons/fi";
 import { resetValues } from '../../../actions/twitterApiAction'
 import Swal from 'sweetalert2'
 import config from '../../../config/config';
 import { resetCallAction, getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './diaplyissues/DisplayIssues'
-import Content from './Content';
+// import Content from './Content';
 import { varifyEmail } from '../../../actions/emailAction'
 import { saveExtensionDetails } from "../../../actions/extensionAction";
 import { restAllToolValue } from "../../../actions/toolActions";
@@ -86,6 +88,12 @@ class NewHome extends Component {
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
         this.setState({ reducedLittleWidth: window.innerWidth <= 1200 });
+        if(window.innerWidth <= 700){
+            this.setState({issuepercentage:"100%"})
+        }else{
+            this.setState({issuepercentage:"59%"})
+        }
+
     }
 
 
@@ -325,11 +333,11 @@ class NewHome extends Component {
     }
 
     render() {
-        var issuepercentage = "59%";
+        const {issuepercentage} =  this.state;
         var inboxColumn ="100%";
         var inBoxLabelPos = null
         var profileCardElement = null;
-        var listGrid = (window.innerWidth >= 1000) ? (<div style={{ marginRight: "-80px", float: "right" }} >
+        var listGrid = (window.innerWidth >= 1000) ? (<div style={{position:"fixed",top:"90px",right:"30px"}} >
             <span className="hint--top" aria-label="List View">
                 <FiList onClick={this.changeViewToList} className="listView" />
             </span>
@@ -352,6 +360,28 @@ class NewHome extends Component {
             socket={this.state.socket} />)
 
         deatilsModal = (<IssueDetils />)
+        if (this.props.isAauthenticated) {
+            if (this.props.screenAction === SCREEN_RECORD ||
+                this.props.screenAction === SCREEN_SHARE ||
+                this.props.participated ||
+                this.props.setting ||
+                this.props.created) {
+                profileCardElement = null;
+
+            }
+            else if (this.props.userId !== null) {
+               profileCardElement = (
+                        <ProfileCard
+                            currentAtionStatus={this.state.currentAtionStatus}
+                            isHome={this.state.isHome}
+                            sharabeLink={sharabeLink}
+                            socket={this.state.socket}
+                            userId={this.props.userId}
+                            saveVideoData={this.saveVideoData}
+                            toggleCreatedIssue={this.toggleCreatedIssue}
+                            toggleParticipatedIssue={this.toggleParticipatedIssue} />)
+            }
+        }
 
         if (this.props.isAauthenticated) {
             if (!this.props.incommingCall && (this.props.participated || this.props.created )) {
@@ -374,18 +404,22 @@ class NewHome extends Component {
 
             }
             else if (this.props.inbox) {
+                profileCardElement = null
                 feedDiv = (<div >
-                     <div className="topBtnsActivity" style={{paddingRight:"20px"}} >
+                     <div className="topBtnsActivity" style={{paddingRight:"80px"}} >
                         
-                         <Button close onClick={this.props.openHome} />
+                         {/* <Button close onClick={this.props.openHome} /> */}
                        
                    
                         </div>
-                  
+                   
                     <Activity userId={this.props.userId} />
 
 
                 </div>)
+            }
+            else if(this.props.setting){
+                feedDiv = (<Setting userId={this.props.userId} />)
             }
             else {
 
@@ -397,37 +431,17 @@ class NewHome extends Component {
         }
         if((this.props.isSceenSharing || this.props.isFullScreenRecording  ||this.props.callAction))
         feedDiv = null;
+        const nav=(this.state.reducedWidth)?(<MobNav page={config.HOME_PAGE}/>):(<Navbar reducedLittleWidth={this.state.reducedLittleWidth} />)
 
 
-        if (this.props.isAauthenticated) {
-            if (this.props.screenAction === SCREEN_RECORD ||
-                this.props.screenAction === SCREEN_SHARE ||
-                this.props.participated ||
-                this.props.created) {
-                profileCardElement = null;
-
-            }
-            else if (this.props.userId !== null) {
-               profileCardElement = (
-                        <ProfileCard
-                            currentAtionStatus={this.state.currentAtionStatus}
-                            isHome={this.state.isHome}
-                            sharabeLink={sharabeLink}
-                            socket={this.state.socket}
-                            userId={this.props.userId}
-                            saveVideoData={this.saveVideoData}
-                            toggleCreatedIssue={this.toggleCreatedIssue}
-                            toggleParticipatedIssue={this.toggleParticipatedIssue} />)
-            }
-        }
       
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
-                 <Navbar />
+                 {nav}
                     <div className="containerHome">
                         {callNotificationDiv}
-                    <div style={{display:"grid",gridTemplateColumns:inboxColumn}}>
+                    <div >
                         <div>
                         <div className="ProfileDiv" style={{position:inBoxLabelPos}}>
                             {profileCardElement}
@@ -435,15 +449,16 @@ class NewHome extends Component {
                         </div>
                             {feedDiv}
                         </div>
+                       
                     </div>
                     <Modal size='lg' centered={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
                     </Modal>
-                    <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
+                    {/* <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
                         <ModalBody className="modalBody">
                             {deatilsModal}
                         </ModalBody>
-                    </Modal>
+                    </Modal> */}
                     {/* {iframe} */}
                 </div>
             ))) : (null)
@@ -468,7 +483,8 @@ NewHome.PropType = {
     resetCallAction: PropType.func.isRequired,
     getProfileDetails: PropType.func.isRequired,
     getAllActivities: PropType.func.isRequired,
-    varifyEmail: PropType.func.isRequired
+    varifyEmail: PropType.func.isRequired,
+    
 };
 const mapStateToProps = state => ({
     doneVarification: state.email.doneVarification,
@@ -487,7 +503,7 @@ const mapStateToProps = state => ({
     email: state.auth.email,
     userId: state.auth.id,
     callerId: state.call.id,
-    
+    setting:state.nav.openSetting,
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
     created: state.nav.openCreated,

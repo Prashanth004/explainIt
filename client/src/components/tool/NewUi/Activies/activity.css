@@ -63,7 +63,9 @@ p{
     width:380px;
     margin:auto;
     margin-top:-5px;
-    display:grid;
+    /* background-color: red; */
+    padding:1px;
+    /* display:grid; */
    
     /* grid-template-columns: 20% 80% */
 }

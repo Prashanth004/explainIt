@@ -221,7 +221,7 @@ class tweetSearch extends Component {
                 </p>
                 {spanElement}
                
-                <div>
+                <div className="TwiValidInfo" style={{width:"90%", margin:"auto"}}>
                     <AcceptTopic 
                     action={config.FULL_SCREEN_RECORD}
                     selfSave = {this.selfSave}
@@ -267,6 +267,7 @@ export default connect(mapStateToProps, {
     setNoOfMinutes, updateCurrentTime,
     getRecpientId, resetValues
 })(tweetSearch)
+
 
 
 

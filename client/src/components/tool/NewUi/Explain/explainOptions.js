@@ -3,23 +3,23 @@ import config from '../../../../config/config'
 import { connect } from 'react-redux';
 import FullScreenShare from '../enitreScreenShare';
 import FullScreenRecord from '../FullScreenRecord';
-import { IoIosBrowsers } from "react-icons/io";
+// import { IoIosBrowsers } from "react-icons/io";
 import { explainByShare, explainByRecord, explainByRefer } from '../../../../actions/explainAction';
 import Refer from './refer';
 import BusyAction from '../container/BusyAction';
 import '../../../css/explainit.css';
-import { Button } from 'reactstrap';
-import { FiUsers, FiVideo } from "react-icons/fi";
+// import { Button } from 'reactstrap';
+import { FiUsers, FiCopy,FiVideo } from "react-icons/fi";
 
 
 const explainOption = (props) => {
 
     const { questionProject, myTwitterHandle } = props;
-    const condition = questionProject.twitterhandle !== myTwitterHandle
+    const condition = (questionProject.twitterhandle !== myTwitterHandle &&  questionProject.active)
     const gridTwoIt = (condition)?({}):({gridTemplateColumns: "50% 50%"})
     const screeShare = (condition) ? (<div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
     <span className="hint--top" aria-label="Get connnected, share screen and explain!">
-        <IoIosBrowsers style={{ fontSize: "28px" }} onClick={() => props.explainByShare(questionProject.twitterhandle)} />
+        <FiCopy style={{ fontSize: "28px" }} onClick={() => props.explainByShare(questionProject.twitterhandle)} />
     </span> </div>) : (null);
     //     const referDiv = (condition)?(  <span className="hint--top" aria-label="Refer to other!">
     //     <FiUsers style={{ fontSize: "25px" }} onClick={() => props.explainByRefer()} />
@@ -33,7 +33,7 @@ const explainOption = (props) => {
                
                 <div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
                     <span className="hint--top" aria-label="Record screen and explain!">
-                        <FiVideo style={{ fontSize: "28px" }} onClick={() => props.explainByRecord(questionProject.twitterhandle)} />
+                        <FiVideo style={{ fontSize: "28px" }} onClick={() => props.explainByRecord(questionProject.twitterhandle, questionProject.id,questionProject.issueid)} />
                     </span>
                 </div>
 

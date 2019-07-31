@@ -59,6 +59,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     }).then((response1) => {
         var myProjects =null;
         if (response1.status === 200 || response1.status === 304) {
+            console.log("response1.data.data.online : ",response1.data.data.online)
             email = (response1.data.data.email===null)?(""):(response1.data.data.email);
             userName = (response1.data.data.username===null)?(""):(response1.data.data.username);
             profilepic = (response1.data.data.profilepic===null)?(""):(response1.data.data.profilepic);
@@ -128,7 +129,8 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                     profilePic: profilepic,
                     noParticipated: noOfparticipation,
                     noCreated: noOdprojectsCreated,
-                    onlineStatus:onlineStatus
+                    onlineStatus:onlineStatus,
+                    allprojects:myProjects
                 })
             }).catch((error) => {
                 dispatch({

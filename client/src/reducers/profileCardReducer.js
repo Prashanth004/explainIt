@@ -1,5 +1,5 @@
-import {GET_PROFILE_DETAILS_ON_HOVER,HIDE_ACTIVITY,
-    SHOW_ACTIVITY,SHOW_PROFILE,HIDE_LABEL,HIDE_PROFILE,
+import {GET_PROFILE_DETAILS_ON_HOVER,HIDE_ACTIVITY,SHOW_CONTACTS,
+    SHOW_ACTIVITY,SHOW_PROFILE,HIDE_LABEL,HIDE_PROFILE,HIDE_CONTACTS,
     GET_PROFILE_DETAILS_FAIL_ON_HOVER} from '../actions/types'
 
 const initialState = {
@@ -16,6 +16,7 @@ const initialState = {
     showProfile:false,
     showActivity:false,
     hodeLabel:false,
+    showContacts:false
   
 }
 
@@ -42,11 +43,23 @@ export default function(state=initialState, action){
             return{
                 showProfile:false,
                 showActivity:true,
+                showContacts:false
+            }
+        case SHOW_CONTACTS:
+            return{
+                showProfile:false,
+                showActivity:false,
+                showContacts:true
+            }
+        case HIDE_CONTACTS:
+            return{
+                showContacts:false
             }
         case SHOW_PROFILE :
             return{
                 showProfile:true,
                 showActivity:false,
+                showContacts:false
             }
         case HIDE_LABEL:
             return{

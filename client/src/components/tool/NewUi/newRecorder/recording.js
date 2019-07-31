@@ -6,7 +6,7 @@ import browser from 'browser-detect';
 import RecordRTC from 'recordrtc';
 import { setStream } from '../../../../actions/streamActions';
 import { fullStartedRecording, fullStopedRecording } from '../../../../actions/toolActions'
-import { pauseRecording, resetRecorder, resumeRecording, startRecorder, stopRecorder } from '../../../../actions/recoderAction'
+import { pauseRecording, resetRecorder, resumeRecording, startRecorder, stopRecorder,permissionDeniedAction } from '../../../../actions/recoderAction'
 import { registerRecordToBrowser, registerEndToBrowser } from '../container/miscFunction'
 import PropType from 'prop-types';
 
@@ -18,6 +18,7 @@ class Recorder extends Component {
         this.pauseRecorder = this.pauseRecorder.bind(this);
         this.resumeRecorder = this.resumeRecorder.bind(this);
         this.stopRecording = this.stopRecording.bind(this);
+        this.onUnload = this.onUnload.bind(this);
     }
     componentWillMount() {
 
@@ -39,6 +40,8 @@ class Recorder extends Component {
         }
         else if (event.data.type === config.PERMISSION_DENIED) {
             self.setState({ permissonDenied: true });
+            self.permissionDeniedAction()
+
         }
         else if (event.data.sourceId !== undefined) {
             self.props.saveSourceId(event.data.sourceId);
@@ -46,11 +49,24 @@ class Recorder extends Component {
         }
 
     }
+    componentWillUnmount(){
+        registerEndToBrowser();
+        this.props.resetRecorder()
+        window.removeEventListener("beforeunload", this.onUnload)
+        this.props.fullStopedRecording()
+        var audioStream = this.state.audioStream;
+        var screenStream = this.state.screenStream;
+        if (audioStream !== null && screenStream !== null) {
+            audioStream.stop();
+            screenStream.stop();
+        }
+    }
  
     componentDidMount() {
         const { extSource, extOrigin, extSourceId } = this.props;
         const GET_SOURCE_ID = { type: config.GET_SOURCE_ID_AUDIO_TAB }
         var self = this;
+        window.addEventListener("beforeunload", this.onUnload);
         console.log("extSource : ",extSourceId);
       
             console.log("i am callinf extension")
@@ -118,6 +134,16 @@ class Recorder extends Component {
                 pauseRecording(recorder);
             }
     }
+    onUnload(event) {
+        registerEndToBrowser();
+        if (this.props.isFullScreenRecording) {
+            const { extSource, extOrigin, postEndCall } = this.props;
+            postEndCall(config.END_SCREED_RECORD_FROM_WEB, extSource, extOrigin);
+            this.recordScreenStop();
+            event.returnValue = " "
+        }
+        else { }
+    }
     resumeRecorder() {
         const { recorder, resumeRecording } = this.props;
         this.updateTime()
@@ -145,14 +171,17 @@ class Recorder extends Component {
     }
     render() {
 
-        const { isFullScreenRecording, isFullRecordCompleted, downLoadUrl, saved, discarded, blob } = this.props;
+        const { isFullScreenRecording,permissionDenied, isFullRecordCompleted, downLoadUrl, saved, discarded, blob } = this.props;
         console.log("downloadUrl : ", downLoadUrl)
         const Content = (isFullRecordCompleted ? (!((saved || discarded)) ? ((this.props.downLoadUrl !== null) ? (<div>
             <video width="100%" src={this.props.downLoadUrl} controls></video>
             <button className="buttonDark" onClick={() => this.props.save(blob)}>Accept </button>
             <button className="buttonDark" onClick={this.props.discard}>Discard</button>
         </div>) : (<p>Preparing to preview</p>)) : (saved ? (<p>Saved Successfully</p>) : (null))) : (
-                isFullScreenRecording ? (<p>Recording your screen</p>) : (<p>Preparing to record</p>)
+                isFullScreenRecording ? (<p>Recording your screen</p>) : (!permissionDenied?(<p>Preparing to record</p>):
+                (<div><p>Permission Denied</p>
+                <button className="buttonDark"onClick={this.props.discard} >Close</button>
+                </div>))
             ))
         return (<div className="recorderContainer">
             {Content}
@@ -176,7 +205,8 @@ const mapStateToProps = state => ({
     extSourceId: state.extension.sourceId,
     audioStream: state.stream.audioStream,
     screenStream: state.stream.screenStream,
-    finalStream: state.stream.finalStream
+    finalStream: state.stream.finalStream,
+    permissionDenied:state.recorder.permissionDenied
 })
 
 export default connect(mapStateToProps, {

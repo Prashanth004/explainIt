@@ -2,28 +2,31 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import Toggle from 'react-toggle';
+import Cotactlist from './contactlist/contactsDisplay';
 import BusyAction from './container/BusyAction';
 import Profile from './Profile';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import {  FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
-import {showActivitynow,hideActivity,hideProfile,showProfileNow} from '../../../actions/ProfileCardAction';
+import {showActivitynow,hideContactAct,showContactsAct,hideActivity,hideProfile,showProfileNow} from '../../../actions/ProfileCardAction';
 import FullScreenShare from './enitreScreenShare'
 import FullScreenRecord from './FullScreenRecord';
 import { Button } from 'reactstrap';
 import '../../css/toggle.css';
-
+import '../../css/profile.css';
+import { registerEndToBrowser } from './container/miscFunction'
+import {resetVisitTwitterAction} from '../../../actions/visitProfileAction'
 import { confirmAlert } from 'react-confirm-alert';
 import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
-import { FiVideo, FiMail, FiCopy } from "react-icons/fi";
+import { FiVideo, FiMail,FiPhone, FiCopy } from "react-icons/fi";
 import { resetCallAction } from '../../../actions/callAction'
 import { resetIssueActions, resetProjectActions } from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
 import { getAllActivities } from '../../../actions/callAction';
 import { getAllReferral } from '../../../actions/referral'
-import NotificationBadge from 'react-notification-badge';
-import { Effect } from 'react-notification-badge';
+// import NotificationBadge from 'react-notification-badge';
+// import { Effect } from 'react-notification-badge';
 import config from '../../../config/config'
 import { setIssueIdToNull } from '../../../actions/issueActions'
 import { getProfileDetails } from '../../../actions/profileAction';
@@ -32,7 +35,7 @@ import { cancelAllMessageAction } from '../../../actions/messageAction'
 import { restAllToolValue } from "../../../actions/toolActions";
 import { resetValues } from '../../../actions/twitterApiAction';
 import { IconContext } from "react-icons";
-import {  openInbox } from "../../../actions/navAction";
+import {  openInbox,openCreated } from "../../../actions/navAction";
 
 
 class ProfileCard extends Component {
@@ -61,13 +64,17 @@ class ProfileCard extends Component {
     }
     reStoreDefault = () => {
         if (this.props.screenAction !== null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted) {
+            
             confirmAlert({
                 title: "Are you sure?",
                 message: "You won't be able to revert this!",
                 buttons: [
                     {
                         label: 'Yes',
-                        onClick: () => this.handleConfirm()
+                        onClick: () => {
+                            this.handleConfirm();
+                            registerEndToBrowser();
+                        }
                     },
                     {
                         label: 'No',
@@ -90,13 +97,16 @@ class ProfileCard extends Component {
     }
     
     handleConfirm() {
+      
         this.props.hideActivity();
         this.props.cancelAllMessageAction();
         this.props.restAllToolValue();
         this.props.resetValues();
         this.props.cancelSuccess();
         this.props.resetCallAction();
-       
+        if(this.props.isHome){
+            this.props.resetVisitTwitterAction();
+        }
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
@@ -130,18 +140,23 @@ class ProfileCard extends Component {
       
     }
     startRecordScreen() {
+        if(!this.props.showActivity || (this.props.showActivity && this.props.screenAction === FULL_SCREEN_SHARE)){
         this.startAction()
         this.props.JustRecord();
         this.props.setIssueIdToNull();
         this.props.displayFullScrenRecord()
         this.props.showActivitynow();
+        }
 
     }
     startSharingScreen() {
-        this.startAction()
-        this.props.showActivitynow();
-        this.props.displayFullScreShare();
-        this.props.resetProjectActions();
+        if(!this.props.showActivity || (this.props.showActivity && this.props.screenAction === FULL_SCREEN_RECORD)){
+            this.startAction()
+            this.props.showActivitynow();
+            this.props.displayFullScreShare();
+            this.props.resetProjectActions();
+        }
+       
     }
 
 
@@ -149,24 +164,28 @@ class ProfileCard extends Component {
         window.open("https://twitter.com/" + this.props.twitterHandle, '_blank')
     }
     render() {
-          var percentage = "380px";
-          if(this.props.redialInitiated && !this.state.redialed){
-              this.redial();
-            
-          }
-       
+        var percentage = "380px";
+        if(this.props.redialInitiated && !this.state.redialed)
+            this.redial();
+        const mailIcon =(this.props.isHome)?( <FiPhone style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />)
+        :( <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.props.openCreated} />)
         if (this.props.screenAction === FULL_SCREEN_SHARE ||
-            this.props.screenAction === FULL_SCREEN_RECORD) {
-
-            if (this.props.showCanvas || this.props.isSecondScreenSharing) {
+            this.props.screenAction === FULL_SCREEN_RECORD) 
+                if (this.props.showCanvas || this.props.isSecondScreenSharing) 
                 percentage = "100%";
-                
-            }
-           
-        }
-               
-
-        const {showActivity,showProfile} = this.props;
+        console.log("his.props.onlineStatus : ",this.props.onlinestatus)
+        const condition = !this.props.isHome && !this.props.onlinestatus;
+        const gridTwoIt = (condition)?({gridTemplateColumns: "30% 27% 27% 16%"}):({});
+        const shareIcon = (condition)?(null):(<div className="profileLabelBtn">
+        <span className="hint--top" aria-label="Share Screen">
+            <IconContext.Provider value={{ color: "#206f72", size: "24px" }}>
+                <div>
+                    < FiCopy style={{ marginTop: "2.5px" }} onClick={this.startSharingScreen} />
+                </div>
+            </IconContext.Provider>
+        </span>
+    </div>)
+        const {showActivity,showProfile,showContacts,hideContactAct,showContactsAct} = this.props;
         const defaultToggle = (this.props.onlinestatus) ? true : false;
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
             : ('Online - people can send you share request')
@@ -180,13 +199,13 @@ class ProfileCard extends Component {
             />
         </span>) : (null);
         if (this.props.userId === this.props.profileId) {
-            notifyBadge = (<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y} />
-            )
+            // notifyBadge = (<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y} />
+            // )
         }
 
         var label =   (<div className="labelContainerMain">
 
-        <div className="gridLay">
+        <div className="gridLay" style={gridTwoIt}>
             <div className="pImageContainer">
                 <span className="hint--top" aria-label="double tap for details">
                     <img alt="profile pic" src={this.props.profilePic}
@@ -194,18 +213,10 @@ class ProfileCard extends Component {
                         className="labelProfilePic"></img>
                 </span>
             </div>
-            <div className="screenShareBtnLabel">
-                <span className="hint--top" aria-label="Share Screen">
-                    <IconContext.Provider value={{ color: "#333", size: "25px" }}>
-                        <div>
-                            < FiCopy style={{ marginTop: "1.5px" }} onClick={this.startSharingScreen} />
-                        </div>
-                    </IconContext.Provider>
-                </span>
-            </div>
-            <div className="RecordBtnLabel">
+            {shareIcon}
+            <div className="profileLabelBtn">
                 <span className="hint--top" aria-label="Record Screen">
-                    <IconContext.Provider value={{ color: "#333", size: "29px" }}>
+                    <IconContext.Provider value={{ color: "#206f72", size: "27px" }}>
                         <div>
                             <FiVideo style={{ marginTop: "1.5px" }} onClick={this.startRecordScreen} />
                         </div>
@@ -214,13 +225,14 @@ class ProfileCard extends Component {
 
                 </span>
             </div>
-            <div className="drago">
+            <div className="profileLabelBtn">
                 <div >
                     <span className="hint--top" aria-label="Activities!">
-                        {notifyBadge}
-                        <IconContext.Provider value={{ color: "#333", size: "29px", }}>
+                        {/* {notifyBadge} */}
+                        <IconContext.Provider value={{ color: "#206f72", size: "25px", }}>
                             <div>
-                                <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={()=>(this.props.isHome)?this.toggleInbox():this.props.toggleInbox()} />
+                               {mailIcon}
+                                {/* onClick={!showContacts?showContactsAct:hideContactAct} */}
                             </div>
                         </IconContext.Provider>
 
@@ -267,13 +279,16 @@ class ProfileCard extends Component {
         const profile = (showProfile)?(<Profile
                 sharabeLink={this.props.sharabeLink}
                 isHome={this.props.isHome} />):(null)
-    
+        const contactList = showContacts?(<Cotactlist />):(null)
          
           return (this.props.donefetchingProfile) ? (<div style={{width:percentage, margin:"auto"}}>
               {label}
             <div >
                 {shareRecord}
             </div>
+            <div>
+                        {contactList}   
+                        </div>
                    
                     <div>
                 {profile}
@@ -315,14 +330,13 @@ const mapStateToProps = state => ({
     twitterHandle: state.profile.twitterHandle,
     showActivity:state.profileCard.showActivity,
     showProfile : state.profileCard.showProfile,
+    showContacts:state.profileCard.showContacts,
     isSecondScreenSharing: state.secondScreenShare.isSecondScreenSharing,
     showCanvas: state.canvasActions.showCanvas,
     isSceenSharing: state.tools.isFullScreenSharing,
     callAction: state.call.callAction,
     isFullScreenRecording: state.tools.isFullScreenRecording,
     redialInitiated : state.redial.redialInitiated
-
-
 })
 
 export default connect(mapStateToProps, {
@@ -330,8 +344,8 @@ export default connect(mapStateToProps, {
     resetCallAction,hideActivity,hideProfile,showProfileNow,
     setIssueIdToNull, cancelSuccess, cancelAllMessageAction,
     resetValues, restAllToolValue,toggleHowWorksModal,openInbox,
-    changeOnlinestatus,
-    getAllActivities,
+    changeOnlinestatus,resetVisitTwitterAction,openCreated,
+    getAllActivities,showContactsAct,hideContactAct,
     getAllReferral,
     resetProjectActions,
     showActivitynow,

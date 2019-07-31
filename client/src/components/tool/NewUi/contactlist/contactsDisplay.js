@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import SingleContact from './singleContact';
-// import ContactSearch from './contactSearch'
-// import './contacts.css';
+import ContactSearch from './contactSearch';
+import { Button } from 'reactstrap'
+import './contacts.css';
 // import {  ADD_TO_LIST, CONTACT_LIST} from '../../../../actions/contactAction'
-import { FiUserPlus } from "react-icons/fi";
+// import { FiUserPlus } from "react-icons/fi";
+import {hideContactAct} from '../../../../actions/ProfileCardAction';
+
 
  class DisplayContacts extends Component {
     constructor(props){
@@ -13,24 +16,25 @@ import { FiUserPlus } from "react-icons/fi";
     }
     
   render() {
-    const {searchedContacts}= this.props;
-      const contacts = (searchedContacts!==undefined)?(searchedContacts.map(data=>(<SingleContact contactData={data}/>))):(null);
-       // switch(state) {
-    //   default:
-    //       return null;
-    // }
-    return (
-      <div className="contactContainer">
-        {/* <ContactSearch /> */}
-        <button className="buttonDark addToContactBtn"><FiUserPlus style={{fontSize:"16px", marginTop:"-5px"}}/>  Create New Contact   </button>
-        {contacts}
-      </div>
-    )
+    // hideContactAct
+    console.log("searchedContacts : ",this.props.searchedContacts)
+    const {searchedContacts,mycontacts,contactInputBaxValue,hideContactAct}= this.props;
+      const contacts = (searchedContacts!==undefined)?
+      (contactInputBaxValue.length!==0?(searchedContacts.map(data=>(<SingleContact contactData={data}/>))):(
+        mycontacts.map(data=>(<SingleContact contactData={data}/>)))):(null)
+    return (<div className="contactContainer">
+        <div className="topBtnsActivity"><Button close onClick={hideContactAct} /></div>
+          <ContactSearch />
+          {/* <button className="buttonDark addToContactBtn"><FiUserPlus style={{fontSize:"16px", marginTop:"-5px"}}/>  Create New Contact   </button> */}
+          {contacts}
+        </div>)
   }
 }
 
 const mapStateToProps = state => ({
-  searchedContacts:state.contact.searchedContacts
+  searchedContacts:state.contact.newContactList,
+  mycontacts:state.contact.mycontacts,
+  contactInputBaxValue:state.contact.contactInputBaxValue
 })
-export default connect(mapStateToProps,{})(DisplayContacts)
+export default connect(mapStateToProps,{hideContactAct})(DisplayContacts)
 

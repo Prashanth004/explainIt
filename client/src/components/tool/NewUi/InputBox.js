@@ -30,7 +30,7 @@ export default class componentName extends Component {
   
     return (
       <div>
-         <div style={{width:"60%", margin:"auto"}}>
+         <div style={{width:"100%", margin:"auto"}}>
          <TextArea
                         textvalue={textValue}
                         changeFunction={changeInputValue} 

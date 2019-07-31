@@ -1,10 +1,12 @@
-import {OPEN_HOME,OPEN_INBOX,OPEN_CREATED,OPEN_PARTICIPATED} from '../actions/types'
+import {OPEN_HOME,OPEN_SETTING,OPEN_INBOX,OPEN_CREATED,OPEN_PARTICIPATED} from '../actions/types'
 
 const initialState={
     openHome:false,
     openCreated:false,
     openParticipated:false,
-    openInbox:false
+    openInbox:false,
+    openSetting:false
+    
 }
 
 export default function(state=initialState, action){
@@ -15,7 +17,17 @@ export default function(state=initialState, action){
                 openHome:true,
                 openCreated:false,
                 openParticipated:false,
-                openInbox:false
+                openInbox:false,
+                openSetting:false
+            }
+        case OPEN_SETTING:
+            return{
+                ...state,
+                openSetting:true,
+                openHome:false,
+                openCreated:false,
+                openParticipated:false,
+                openInbox:false,
             }
         case OPEN_CREATED:
             return{
@@ -23,7 +35,8 @@ export default function(state=initialState, action){
                 openHome:false,
                 openCreated:true,
                 openParticipated:false,
-                openInbox:false
+                openInbox:false,
+                openSetting:false
             }
         case OPEN_INBOX:
         return{
@@ -31,7 +44,8 @@ export default function(state=initialState, action){
             openHome:false,
             openCreated:false,
             openParticipated:false,
-            openInbox:true
+            openInbox:true,
+            openSetting:false
         }
         case OPEN_PARTICIPATED:
             return{
@@ -39,7 +53,8 @@ export default function(state=initialState, action){
                 openHome:false,
                 openCreated:false,
                 openParticipated:true,
-                openInbox:false
+                openInbox:false,
+                openSetting:false
             }
         default:
             return{

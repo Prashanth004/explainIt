@@ -4,7 +4,9 @@ import config from '../config/config';
 
 const initialState ={
     explainBy:config.null,
-    sharehandle:null
+    sharehandle:null,
+    issueId:null,
+    shareid:null
 }
 
 export default function(state = initialState, action){
@@ -13,7 +15,9 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 explainBy:config.RECORD_SCREEEN_EXPLAIN ,
-                sharehandle:action.payload
+                sharehandle:action.payload.twitterhandle,
+                shareid :action.payload.twitterid,
+                issueId:action.payload.issueId
             }
         case EXPLAIN_BY_REFER:
             return{

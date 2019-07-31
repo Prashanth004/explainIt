@@ -69,7 +69,9 @@ const conf = {
     SEND_SHARABLE_LINK:"sendSharableLink",
     CALL_FAILED:"callFailed",
     CALL_SUCCESSFULL:"callSuccessful",
+    EXPLAIN_SUCCESS : "explainSuccess",
     MESSAGE_ACTIVITY:"messageActivity",
+    EXPLAIN_ACTIVITY:"explainActivity",
     FROM_USER_ADMIN_ID:"1090895508699176960",
     monthPicker : {
         "01": "Jan",
@@ -113,8 +115,7 @@ const conf = {
     SERVER_SHARING : "serverSharing",
     SELF_CLOSE_TIME:1,
     ERROR_CODE_FILE_TOO_LARGE:413,
-    SCREEN_SHARE_PAGE:"screenSharePage",
-    VISIT_PROFILE_PAGE:"visitProfilePage",
+    
     END_SCREED_RECORD_FROM_WEB:"endScreenRecordFromWEb",
     END_CALL_RECIEVER_FROM_FLOATER:"endCallReceiverFromFLoater",
     END_CALL_RECEIVER_TO_EXTENSION : "endCallReceiverToExtension",
@@ -160,9 +161,7 @@ const conf = {
     SCREEN_SHARE_ENDED_INFO:"Screen Share ended",//done
     PAUSED_RECORDER_INFO:"Paused Recorder",//done
     RESUMED_RECORDER_INFO:"Resumes Rcorder",//done
-
     SAVE_RECORD:"saveRecording",
-    
     DECREASE_MINUTE_TO_WEB_SITE:"decreaseMinuteToWebSite",
     DECREASE_MIUTE_FROM_FLOATER:"decreaseMinuteFromWebsite",
     DECREASE_MINUTE_TO_FLOATER:"decreaseMinuteToFloater",
@@ -176,7 +175,13 @@ const conf = {
     INCOMING_CALL_AUDIO_STOP:"incomingCallAudioStop",
     OTHER_PEER_MUTE_UNMUTE_FROM_WEB:"otherPeerMuteUnmute",
     OTHER_PEER_MUTE_UNMUTE_FROM_FLOATER : "otherPersoneMutedUnmutedToFloater",
-    MUTE_UMMUTE:"MUTE_UMMUTE"
+    MUTE_UMMUTE:"MUTE_UMMUTE",
+    HOME_PAGE:"home",
+    SCREEN_SHARE_PAGE:"screenSharePage",
+    VISIT_PROFILE_PAGE:"visitProfile",
+    PEOJECT_PAGE : "projectPage",
+    ISSUE_PAGE:"issuePage"
+
 
 
 

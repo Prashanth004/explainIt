@@ -11,9 +11,61 @@ border-radius:5px;
 color:rgba(51, 51, 51, 0.938);
 padding:10px;
 }
+.profileLabelBtn{
+    margin-top: 13px;
+    width:35px;
+    height:35px
+}
+.topSymbolMain{
+    width:100%;
+    height:10px;
+    margin-top:5px;
+    /* text-align: right; */
+}
+
+.labelContainerMain{
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:5px;
+    height: 80px;
+   
+    border-style:solid;
+    border-color:#bebebe81;
+    border-width:1px;
+    padding-bottom:5px;
+    
+    border-radius:5px;
+    /* width:100%; */
+    margin:auto;
+    /* margin-top:30px; */
+    position:relative;
+    /* border-left-width:2.5px;
+    border-left-color:#34a9ad; */
+    /* background-color:#eee; */
+    background-color: white;
+  
+  }
 .socialIcon{
     padding:5px;
     display:inline-block;
+}
+.gridLay{
+    display:grid;
+    /* padding-top:5px; */
+    grid-template-columns:30% 18% 18% 18% 16%; 
+}
+.pImageContainer{
+    padding-left:15px;
+    margin-top:5px;
+    text-align: left;
+}
+ 
+.labelProfilePic{
+    /* margin-top:-8px; */
+    width:60px;
+    height:60px;
+  
+    border-radius:50%;
 }
 
 .bio{

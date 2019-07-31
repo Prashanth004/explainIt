@@ -19,13 +19,12 @@ class displayTopBtns extends Component {
             toolTipValue: "private",
             optionVisibe: "hidden",
             toolTipsimple: "public",
-
-            // visible
         }
         this.changeToggle = this.changeToggle.bind(this);
         this.onOptClick = this.onOptClick.bind(this);
         this.openEditModal = this.openEditModal.bind(this);
         this.toggleDisplayLink = this.toggleDisplayLink.bind(this);
+        this.openProfile = this.openProfile.bind(this);
     }
     componentDidMount() {
         if (Number(this.props.issue.public)) {
@@ -44,6 +43,9 @@ class displayTopBtns extends Component {
             })
             this.props.changepublicStatus("private")
         }
+    }
+    openProfile() {
+        window.open(config.react_url+"/@"+this.props.questionProject.twitterhandle)
     }
     onOptClick() {
         if (this.state.optionVisibe === "hidden")
@@ -90,11 +92,10 @@ class displayTopBtns extends Component {
 
     render() {
         var date = this.props.issue.time.slice(5, 7);
-        // <span style={datStyleYear}>{props.date.slice(8, 10)} {config.monthPicker[date]}</span>
-        //             <br />
-        //             <span style={datStyleDay}>{props.date.slice(0, 4)}</span>
-
         var profilePic = null;
+        var profiletwitterHandle = null;
+        var profileName = null;
+
         const defaultToggle = (Number(this.props.issue.public) === 1) ? true : false
 
         const createdMenuItems = (this.props.participated || !this.props.itsHome) ? (null) : (
@@ -138,13 +139,10 @@ class displayTopBtns extends Component {
         </div>)
         if (this.props.questionProject !== undefined) {
             profilePic = this.props.questionProject.profilepic
-            var profileName = this.props.questionProject.username
-            // var profiletwitterHandle = this.props.questionProject.twitterhandle
-
+            profileName = this.props.questionProject.username
+            profiletwitterHandle = this.props.questionProject.twitterhandle
         }
-        else {
-            profilePic = null
-        }
+        
 
 
         const deleteDiv = (
@@ -183,7 +181,9 @@ class displayTopBtns extends Component {
                     <div className="seconBandTop">
                         <div className="profileCardDiv">
                             <div className="cardProfilePicDiv">
-                                <img alt="button" src={profilePic}className="cardProfilePic"/>
+                                <span>
+                                <img alt="button" onClick={this.openProfile}src={profilePic}className="cardProfilePic"/>
+                                </span>
                             </div>
                             <div className="cardProfileName">
                                 <h5 ><b>{profileName}</b></h5>

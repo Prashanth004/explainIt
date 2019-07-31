@@ -100,14 +100,17 @@ if (!req.files) {
         commands = [
             'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename +' '+req.files[0].filename+'audio.mp3',
             'ffmpeg -i '+ __dirname + '\\..\\public\\audio\\' + req.files[1].filename +' -i '+req.files[0].filename+'audio.mp3 -filter_complex amerge -c:a libmp3lame -q:a 4 '+ req.files[1].filename +'audiofinal.mp3',
-            'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename +' -i '+ req.files[1].filename +'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv'
+            'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename +' -i '+ req.files[1].filename +'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mkv',
+            'ffmpeg -i ' +  __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mkv -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@'+ req.user.twitterhandle +':x=10:y=60 '+ __dirname + '\\..\\public\\audio\\' + req.body.projectName+ '_wat_final.mkv'
         ]
+        // y=H-th-10
         }
         else {
             commands = [
                 'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename +' '+req.files[0].filename+'audio.mp3',
                 'ffmpeg -i '+ __dirname + '\/..\/public\/audio\/' + req.files[1].filename +' -i '+req.files[0].filename+'audio.mp3 -filter_complex amerge -c:a libmp3lame -q:a 4 '+ req.files[1].filename +'audiofinal.mp3',
-                'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename +' -i '+ req.files[1].filename +'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv'
+                'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename +' -i '+ req.files[1].filename +'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv',
+                'ffmpeg -i ' +  __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@'+ req.user.twitterhandle +':x=10:y=60 '+ __dirname + '\/..\/public\/audio\/' + req.body.projectName+ '_wat_final.mkv'
             ]
         }
         shell.series(commands, function(err){
@@ -117,8 +120,11 @@ if (!req.files) {
                 fs.unlink(__dirname+'/../'+ req.files[1].filename +'audiofinal.mp3', (err)=>{
                     if(err) console.log("err : ",err)
                 })
+                fs.unlink(__dirname+'/../public/audio/'+ req.body.projectName + '_final.mkv', (err)=>{
+                    if(err) console.log("err : ",err)
+                })
             if(!err){
-                videopathName = config.domain + '/public/audio/' + req.body.projectName + '_final.mkv'
+                videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv'
                 saveToDb(req,res, videopathName )
                 
 //adonsdovjn

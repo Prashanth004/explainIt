@@ -139,7 +139,7 @@ class SaveProjects extends Component {
                 />
                 <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>{this.props.action ===config.FULL_SCREEN_RECORD?"Start Recording":"Send Request"}</button>
                 <br/>
-                {recordDelf}
+                {/* {recordDelf} */}
             </div>
              
          )
@@ -158,6 +158,5 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {saveTopicOfTheCall})(SaveProjects)
-
 
 

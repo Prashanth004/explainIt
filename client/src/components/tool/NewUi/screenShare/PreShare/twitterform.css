@@ -1,0 +1,42 @@
+/* style={{width:"80px", margin:"auto"}} */
+.twitterPic{
+    width:90px;
+    height:90px;
+    margin:auto;
+    /* border-style:solid; */
+    border-radius:50%;
+    text-align: center;
+    /* border-color:#40a8ac; */
+    border-width:1px;
+    /* background-color: red; */
+}
+/* style={{height:"35px",display:"grid", gridTemplateColumns:"20% 80%", backgroundColor:"blue"}} */
+
+.timerDivTwitter{
+    /* height: 35px; */
+    margin-top: 10px;
+    display:grid;
+    grid-template-columns: 20% 80%;
+    /* background-color: blue */
+}
+.twitterImage{
+border-radius:50%;
+margin-top:7.5px;
+}
+.loader {
+    margin-top:25px;
+    border: 3px solid #40a8ac;
+    border-radius: 50%;
+    border-top: 5px solid white;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+ .twitterHandleInputBox{
+     margin:auto;
+    margin-top:30px;
+    /* background-color: #40a8ac; */
+    width:70px;
+    /* margin:auto */
+  }

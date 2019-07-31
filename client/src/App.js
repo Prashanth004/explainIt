@@ -19,10 +19,12 @@ import google from './components/testGoogle';
 import Toggle from './components/tool/NewUi/NewFloater/closeFloater'
 import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
+import newNav from './components/tool/NewUi/newNav/index'
 import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
 import Info from './components/tool/NewUi/NewFloater/info'
 import inbox from './components/tool/NewUi/Inbox';
+import Setting from './components/tool/NewUi/newNav/setting'
 import VideoDisplay from './components/VideoDisplay'
 // import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
@@ -41,6 +43,7 @@ class App extends Component {
           <Route path ="/share/:callerid" component= {DisplayShare}/>
           <Route path ="/share/newuser/:twitterhandle/:callerid" component= {DisplayShare}/>
             <Route exact path ="/application" component={Home}/>
+            <Route exact path = "/setting" component={Setting}/>
             <Route path="/screenShareFloater" component={ScreenShareFloater}/>
             <Route exact path='/signin/:twitterhandle' component={Login} />
             <Route exact path='/explainIt' component={Explainit} />
@@ -59,8 +62,11 @@ class App extends Component {
             {/* <Route exaxt path ='/emailvarify' component={emailvarify}/> */}
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />
+            <Route exact path = '/newNav' component = {newNav} />
             <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>
+         
             <Route component={NoMatch} />
+          
             </Switch>
           </BrowserRouter>
         </div>

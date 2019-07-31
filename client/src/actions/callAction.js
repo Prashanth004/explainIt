@@ -257,7 +257,6 @@ export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
     })
     .catch(err=>{
         console.log("error in saving the call fail details : ", err)
-  
     })
 }
 

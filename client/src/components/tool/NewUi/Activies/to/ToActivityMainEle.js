@@ -9,6 +9,7 @@ import CallFail from './CallFailed';
 import Message from './Message';
 import {addNewUser} from '../../../../../actions/storeUserAction'
 import { changeReadStatus } from '../../../../../actions/messageAction'
+import Explain from '../explainActivity'
 
 class ActivityMain extends Component {
     constructor(props) {
@@ -82,9 +83,16 @@ class ActivityMain extends Component {
         (<CallSuccess
              userData = {this.state}
              activity={this.props.activity} />):(
+                 this.props.activity.activity === config.MESSAGE_ACTIVITY?(
                 <Message 
                     userData = {this.state}
-                    activity={this.props.activity}/>))
+                    activity={this.props.activity}/>):(
+                        <Explain 
+                        userData = {this.state}
+                        direction="to"
+                        activity={this.props.activity}/>
+                       
+                    )))
     return (
         <div>
             {activitiesElements}

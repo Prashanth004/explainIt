@@ -4,12 +4,13 @@ import Profile from './Profile';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './diaplyissues/DisplayIssues';
 // import { FiGrid,FiList } from "react-icons/fi";
+import MobNav from './newNav/index'
 import { acceptCallDetails } from '../../../actions/callAction';
 import Navbar from './Navbar';
 import HomeProjects from './diaplyissues/displayVisitCards'
 import { missCall } from '../../../actions/callAction';
 import CallNotification from './container/CallNotification';
-// import AddtoContact from './contactlist/addToContact'
+import AddtoContact from './contactlist/addToContact'
 import FullScreenShare from './enitreScreenShare';
 import FullScreenRecord from './FullScreenRecord';
 import '../../css/NewSignin.css';
@@ -57,6 +58,7 @@ class NewHome extends Component {
             displayDetails:false,
             endedCallFromOtherPeer: false,
             currentAtionStatus: null,
+            reducedWidth:false,
         }
         this.togglemodal = this.togglemodal.bind(this)
         this.explainTool = this.explainTool.bind(this)
@@ -76,8 +78,12 @@ class NewHome extends Component {
         this.shareFullScreenShare = this.shareFullScreenShare.bind(this);
         this.recordFullScreen =  this.recordFullScreen.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
+        this.resize = this.resize.bind(this);
     }
-    
+    resize() {
+        this.setState({ reducedWidth: window.innerWidth <= 700 });
+        
+    }
     reloadPage(event) {
         if (event.key === 'token') {
             window.location.reload();
@@ -108,7 +114,9 @@ class NewHome extends Component {
     }
     componentDidMount() {
         var socket = this.state.socket;
+        this.setState({ reducedWidth: window.innerWidth <= 700 });
         var self = this;
+        window.addEventListener("resize", this.resize.bind(this));
         socket.on('connect_failed', function () {
         })
         socket.on('error', function (err) {
@@ -181,7 +189,8 @@ class NewHome extends Component {
         }
     }
     componentWillUnmount(){
-     
+
+            window.removeEventListener("resize", this.resize());
             window.removeEventListener('storage', this.reloadPage)
     }
     componentWillMount() {
@@ -352,12 +361,16 @@ class NewHome extends Component {
         if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
             this.props.history.push("/");
         var homeProjects =null;
-        var issuepercentage = "59%";
+        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+        var issuepercentage = "100%";
         var percentage="30%";
         var shareRecord = null;
+        const nav=(this.state.reducedWidth)?(<MobNav page={config.VISIT_PROFILE_PAGE}/>):(<Navbar  page={config.VISIT_PROFILE_PAGE}
+            twitterHandle={twiHand} />)
         const callNotificationDiv = (<CallNotification
             endedCallFromOtherPeer={this.state.endedCallFromOtherPeer}
-            socket={this.state.socket} />)
+            socket={this.state.socket} />);
+
         if(this.state.reducedWidth)
         percentage="90%";
 
@@ -467,9 +480,11 @@ class NewHome extends Component {
             if (this.props.screenAction === SCREEN_RECORD ||
                 this.props.screenAction === SCREEN_SHARE ||
                 this.props.participated ||
+                this.props.inbox ||
+                this.props.settings ||
                 this.props.created) {
                 var profileCardElement = null;
-                var homeProjects =null;
+                homeProjects =null;
             }
             else {
               
@@ -483,9 +498,7 @@ class NewHome extends Component {
                     toggleInbox={this.toggleInbox}
                     socket={this.state.socket}
                     userId={this.props.userId}
-                    saveVideoData={this.saveVideoData}
-                    toggleCreatedIssue={this.toggleCreatedIssue}
-                    toggleParticipatedIssue={this.toggleParticipatedIssue} />);
+                    saveVideoData={this.saveVideoData}/>);
                 homeProjects = ( <div className="issueContainer" style={{width:issuepercentage}}>
     
                 <HomeProjects socket={this.state.socket} home={config.NOT_HOME}  issueArray={this.props.myissues} />
@@ -508,14 +521,13 @@ class NewHome extends Component {
             }
     
         // var self = this
-        const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")
+        
         return (this.props.authAction)?(
             (!!this.props.fetchProfile)?(
             (!!this.props.isPresentInExplain)?(
             <div className="fullHome">
-                <Navbar
-                page="profile"
-                twitterHandle={twiHand} />
+                {nav}
+               
                 
                 <div className="containerHome">
                 {callNotificationDiv}
@@ -533,10 +545,10 @@ class NewHome extends Component {
                     {/* <div>
                         {details}
                     </div> */}
-                    {/* <div>
+                    <div>
                         <AddtoContact contactid = {this.props.userId} />
-                    </div> */}
-                    {/* {homeProjects} */}
+                    </div>
+                    {homeProjects}
                 </div>
            
 
@@ -589,12 +601,13 @@ const mapStateToProps = state => ({
     twitterHandle :state.profile.twitterHandle,
     authTwitterHandle:state.auth.twitterHandle,
     email: state.auth.email,
-
     userId: state.visitProfile.id,
     fetchProfile:state.visitProfile.fetchProfile,
     isPresentInExplain:state.visitProfile.isPresent,
     participated : state.nav.openParticipated,
     created : state.nav.openCreated,
+    inbox:state.nav.openInbox,
+    settings:state.nav.openSetting,
     authAction:state.auth.authAction,
     doneGettingId : state.twitterApi.doneFetching,
     twitterId : state.twitterApi.twitterId,
