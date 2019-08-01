@@ -47,7 +47,7 @@ const MobNav =  (props) => {
             <img src={require('../../../images/logo5.png')}width="25px" height="25px" alt="logo" style={{margin:"auto",marginTop:"5px"}}></img>
         </div>
         <div  style={divStyle}  onClick={page===config.HOME_PAGE?props.openInbox:null}>
-            <FiPhone style={{fontSize:"20px",margin:"auto",marginTop:"5px",color:(page==="home")?((props.Created)?"#40a8ac":"black"):"#ddd"}} />
+            <FiPhone style={{fontSize:"20px",margin:"auto",marginTop:"5px",color:(page==="home")?((props.inbox)?"#40a8ac":"black"):"#ddd"}} />
             
             </div>
             <div  style={divStyle} onClick={(page===config.HOME_PAGE||page===config.VISIT_PROFILE_PAGE)?props.openCreated:null}>

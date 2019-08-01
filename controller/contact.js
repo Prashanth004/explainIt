@@ -56,7 +56,7 @@ exports.getContactById = function(req,res){
                 data:data
             })
         else{
-            res.send(200).send({
+            res.status(200).send({
                 success:0,
                 data:null
             })

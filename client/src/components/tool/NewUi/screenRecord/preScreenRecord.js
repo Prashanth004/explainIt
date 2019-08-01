@@ -12,6 +12,7 @@ export default (props) => {
     />)) : (null)
 
     const recordingEle = (!permissonDenied) ? (<RecordFormInput
+        turnReRecordWrong={props.turnReRecordWrong}
         saveforSelf={saveforSelf}
         toggle = {toggle}/>) : (<div>
         <p>Permission denied to record the screen</p>

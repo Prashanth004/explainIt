@@ -483,6 +483,7 @@ class FullScreenRecorder extends Component {
             renderer ={this.renderer}
             recordTime ={this.state.recordTime}
             toggle ={this.toggle}
+            turnReRecordWrong={this.props.turnReRecordWrong}
             isFullScreenRecording = {this.props.isFullScreenRecording}
             permissonDenied = {this.state.permissonDenied}
             closeFunction={closeFunction}

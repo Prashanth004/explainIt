@@ -7,6 +7,7 @@ import '../activity.css';
 import CallSuccess  from './CallSuccess';
 import CallFail from './CallFailed';
 import Message from './Message';
+import AddActivity from '../addToContact'
 import {addNewUser} from '../../../../../actions/storeUserAction'
 import { changeReadStatus } from '../../../../../actions/messageAction'
 import Explain from '../explainActivity'
@@ -87,10 +88,14 @@ class ActivityMain extends Component {
                 <Message 
                     userData = {this.state}
                     activity={this.props.activity}/>):(
+                        this.props.activity.activity === config.ADD_NEW_CONTACT?
+                        (<AddActivity  userData = {this.state}
+                            direction="from"
+                            activity={this.props.activity}/>):(
                         <Explain 
                         userData = {this.state}
                         direction="to"
-                        activity={this.props.activity}/>
+                        activity={this.props.activity}/>)
                        
                     )))
     return (

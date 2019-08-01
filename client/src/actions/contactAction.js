@@ -134,6 +134,9 @@ export const getAllContacts = ()=>(dispatch)=>{
                                newTestJson[index]['profilepic']=response.data.data.profilepic;
                                newTestJson[index]['username']=response.data.data.username;
                                newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
+                               newTestJson[index]['goodat']=response.data.data.goodat;
+                               newTestJson[index]['online']=response.data.data.online;
+                               newTestJson[index]['busy']=response.data.data.busy;
                                contactData =newTestJson
                    }
                })
@@ -151,5 +154,29 @@ export const getAllContacts = ()=>(dispatch)=>{
             type:GOT_ALL_CONTACTS_FAILED,
             error:error
         })
+    })
+}
+
+export const addNewContactActivity =(touser)=>dispatch=>{
+    alert("psorting")
+    var token = JSON.parse(localStorage.getItem('token'));
+    var data={
+        touser:touser,
+        activity:config.ADD_NEW_CONTACT,
+        subject:null,
+        link:null,
+        duration:null,
+    }
+    axios({
+        method:'post',
+        url:config.base_dir+'/api/activity/',
+        headers:{
+            "Authorization":token,
+        },
+        data:data
+    }).then(data=>{
+        console.log("response of saving add to contact activity  : ",data)
+    }).catch(error=>{
+        console.log("error : ",error);
     })
 }

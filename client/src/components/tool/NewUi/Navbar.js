@@ -183,6 +183,13 @@ class Navigationbar extends React.Component {
           </DropdownMenu>
         </UncontrolledDropdown>) : null
     }
+    const Brand = (this.props.inbox || this.props.Created || this.props.Participated)?(null):
+    (
+    <span>
+      <img alt="open home" src={require('../../images/logo.png')}
+        width="100%"
+        height="100%"></img>
+    </span>)
     // navItem1 = (<button className="nextButton" style={homeColor} onClick={this.openHome}><FiHome style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>);
     // navItem2 = (<div> <span> {notifyBadge}<button className="nextButton" style={logsColor} onClick={this.props.openInbox}> <FiPhone style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button></span></div>)
     // navItem3 = (<button className="nextButton" style={createdColor} onClick={this.openCreated}><FiMail style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>)
@@ -217,13 +224,9 @@ class Navigationbar extends React.Component {
     }
     const content = (<Navbar color="white" light expand="md" style={{textAlign:"center"}}>
       <NavbarBrand >
-        <div className="logoContainer" onClick={this.openHome}>
-          <span>
-            <img alt="open home" src={require('../../images/logo.png')}
-              width="100%"
-              height="100%"></img>
-          </span>
-        </div>
+      <div className="logoContainer" onClick={this.openHome}>
+       {Brand}
+       </div>
       </NavbarBrand>
 
       <div  style={{display:'grid',gridTemplateColumns:"33% 33% 33%",width:"380px",margin:"auto"}}>

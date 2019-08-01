@@ -231,7 +231,7 @@ exports.saveMessage = function (req, res) {
                                 if (fromData) {
 
                                     var subject = "Message notification";
-                                    var htmlContent = "<p>You have got a new recorded message from @" + fromData.twitterhandle + ".</p><br/><p><a href='" + config.frontEndDomain + "'>click here</a> to view</p>"
+                                    var htmlContent = "<p>You have got a new recorded message from @" + fromData.twitterhandle + ".</p><br/><p><a href='" + req.body.link + "'>click here</a> to view</p>"
                                     userController.sendEmail(toData.email, subject, htmlContent)
                                 }
 

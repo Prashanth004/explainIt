@@ -72,6 +72,7 @@ const conf = {
     EXPLAIN_SUCCESS : "explainSuccess",
     MESSAGE_ACTIVITY:"messageActivity",
     EXPLAIN_ACTIVITY:"explainActivity",
+    ADD_NEW_CONTACT:"addnewContact",
     FROM_USER_ADMIN_ID:"1090895508699176960",
     monthPicker : {
         "01": "Jan",
@@ -180,7 +181,8 @@ const conf = {
     SCREEN_SHARE_PAGE:"screenSharePage",
     VISIT_PROFILE_PAGE:"visitProfile",
     PEOJECT_PAGE : "projectPage",
-    ISSUE_PAGE:"issuePage"
+    ISSUE_PAGE:"issuePage",
+
 
 
 

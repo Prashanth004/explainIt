@@ -4,6 +4,7 @@ import Profile from './Profile';
 import PageNotFount from './NoMatch';
 import DisplatCreated from './diaplyissues/DisplayIssues';
 // import { FiGrid,FiList } from "react-icons/fi";
+import Setting from './newNav/setting';
 import MobNav from './newNav/index'
 import { acceptCallDetails } from '../../../actions/callAction';
 import Navbar from './Navbar';
@@ -417,6 +418,7 @@ class NewHome extends Component {
                 self.reloadPage()
             }
         })
+        const setting = (this.props.settings)?(<Setting />):(null)
         var feedDiv = null;
         var loginButton = (this.props.isAauthenticated)?
         (null):((this.props.created || this.props.participated)? (null):(<TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/auth/twitter"}
@@ -537,7 +539,9 @@ class NewHome extends Component {
                     <div className="twitterBtnDiv">
                    {loginButton}
                     </div>
-
+                    <div>
+                        {setting}
+                    </div>
                     <div>
                         {feedDiv}
                     </div>

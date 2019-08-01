@@ -19,14 +19,14 @@ import {resetVisitTwitterAction} from '../../../actions/visitProfileAction'
 import { confirmAlert } from 'react-confirm-alert';
 import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
-import { FiVideo, FiMail,FiPhone, FiCopy } from "react-icons/fi";
+import { FiVideo, FiMail,FiPhone,FiUser, FiCopy } from "react-icons/fi";
 import { resetCallAction } from '../../../actions/callAction'
 import { resetIssueActions, resetProjectActions } from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
 import { getAllActivities } from '../../../actions/callAction';
 import { getAllReferral } from '../../../actions/referral'
-// import NotificationBadge from 'react-notification-badge';
-// import { Effect } from 'react-notification-badge';
+import NotificationBadge from 'react-notification-badge';
+import { Effect } from 'react-notification-badge';
 import config from '../../../config/config'
 import { setIssueIdToNull } from '../../../actions/issueActions'
 import { getProfileDetails } from '../../../actions/profileAction';
@@ -41,7 +41,7 @@ import {  openInbox,openCreated } from "../../../actions/navAction";
 class ProfileCard extends Component {
     constructor(props) {
         super(props);
-        this.state={reducedWidth : false,  reducedLittleWidth: false,redialed : false}
+        this.state={reducedWidth : false,rerecord:false,  reducedLittleWidth: false,redialed : false}
         this.openProfile = this.openProfile.bind(this);
         this.startSharingScreen = this.startSharingScreen.bind(this);
         this.startRecordScreen = this.startRecordScreen.bind(this);
@@ -52,12 +52,18 @@ class ProfileCard extends Component {
         this.toggleInbox = this.toggleInbox.bind(this);
         this.resize = this.resize.bind(this);
         this.redial = this.redial.bind(this);
+        this.rerecord = this.rerecord.bind(this);
         this.turnRedialWrong = this.turnRedialWrong.bind(this);
+        this.turnReRecordWrong = this.turnReRecordWrong.bind(this);
     }
 
     redial(){
         this.setState({redialed:true})
         this.startSharingScreen();
+    }
+    rerecord(){
+        this.setState({rerecord:true});
+        this.startRecordScreen();
     }
     handleCancel() {
 
@@ -94,6 +100,9 @@ class ProfileCard extends Component {
     }
     turnRedialWrong(){
         this.setState({redialed : false});
+    }
+    turnReRecordWrong(){
+        this.setState({rerecord:false});
     }
     
     handleConfirm() {
@@ -167,8 +176,10 @@ class ProfileCard extends Component {
         var percentage = "380px";
         if(this.props.redialInitiated && !this.state.redialed)
             this.redial();
-        const mailIcon =(this.props.isHome)?( <FiPhone style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />)
-        :( <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.props.openCreated} />)
+        if(this.props.reRecordInitiated && !this.state.rerecord)
+            this.rerecord()
+        // const mailIcon =(this.props.isHome)?( <FiPhone style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />)
+        // :( <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.props.openCreated} />)
         if (this.props.screenAction === FULL_SCREEN_SHARE ||
             this.props.screenAction === FULL_SCREEN_RECORD) 
                 if (this.props.showCanvas || this.props.isSecondScreenSharing) 
@@ -190,7 +201,7 @@ class ProfileCard extends Component {
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
             : ('Online - people can send you share request')
         var notifyBadge = null;
-        const onlineOffline = (this.props.isHome) ? (<span className="hint--top " aria-label={toolTipValue}>
+        const onlineOffline = (this.props.isHome) ? (<span className="hint--left " aria-label={toolTipValue}>
             <Toggle
                 defaultChecked={defaultToggle}
                 className='custom-classname'
@@ -199,8 +210,8 @@ class ProfileCard extends Component {
             />
         </span>) : (null);
         if (this.props.userId === this.props.profileId) {
-            // notifyBadge = (<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y} />
-            // )
+            notifyBadge = (<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y} />
+            )
         }
 
         var label =   (<div className="labelContainerMain">
@@ -228,10 +239,11 @@ class ProfileCard extends Component {
             <div className="profileLabelBtn">
                 <div >
                     <span className="hint--top" aria-label="Activities!">
-                        {/* {notifyBadge} */}
+                        {notifyBadge}
                         <IconContext.Provider value={{ color: "#206f72", size: "25px", }}>
                             <div>
-                               {mailIcon}
+                            <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={!this.props.isHome?this.props.openCreated:this.toggleInbox} />
+                               {/* {mailIcon} */}
                                 {/* onClick={!showContacts?showContactsAct:hideContactAct} */}
                             </div>
                         </IconContext.Provider>
@@ -241,6 +253,14 @@ class ProfileCard extends Component {
             </div>
             <div className="topSymbolMain">
                 {onlineOffline}
+                <br />
+               <div style={{margintop:"10px", marginRight:"10px"}}>
+                   <span className="hint--top" aria-label="Contacts!">
+                     
+               <FiUser onClick={this.props.showContactsAct} style={{fontSize:"18px",color:"#206f72"}}/>
+               </span>
+               </div>
+               
               
             </div>
             <div>
@@ -258,6 +278,7 @@ class ProfileCard extends Component {
                     (this.props.screenAction === FULL_SCREEN_RECORD?(
                         (<FullScreenRecord
                             socket={this.props.socket}
+                            turnReRecordWrong={this.turnReRecordWrong}
                             closeImidiate={this.handleConfirm}
                             reStoreDefault={this.reStoreDefault}
                             savefile={this.props.saveVideoData}
@@ -336,7 +357,8 @@ const mapStateToProps = state => ({
     isSceenSharing: state.tools.isFullScreenSharing,
     callAction: state.call.callAction,
     isFullScreenRecording: state.tools.isFullScreenRecording,
-    redialInitiated : state.redial.redialInitiated
+    redialInitiated : state.redial.redialInitiated,
+    reRecordInitiated :state.redial.reRecordInitiated
 })
 
 export default connect(mapStateToProps, {

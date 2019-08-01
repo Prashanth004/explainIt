@@ -5,7 +5,9 @@ import PropType from 'prop-types';
 import InputNumber from '../InputNumber';
 import AcceptTopic from '../Saveproject';
 import TweetSuggest from '../TweetSug';
+import {saveTopicOfTheCall} from '../../../../actions/callAction'
 import config from '../../../../config/config';
+import {cancelReRecordOption} from '../../../../actions/dialActions'
 import { setNoOfMinutes, updateCurrentTime } from '../../../../actions/callAction'
 import { NoInternet, InValidHandle, SelfShareInfo, NotPresentOnExplain } from './noInternet'
 import { getProfileByTwitterHandle } from "../../../../actions/visitProfileAction";
@@ -47,8 +49,13 @@ class tweetSearch extends Component {
 
         if (this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN)
             this.setState({ twitterHandle: this.props.sharehandle });
-        if(this.props.fromShareToRecord)
-        this.setState({twitterHandle : this.props.twitterHandle})
+        else if(this.props.fromShareToRecord)
+        this.setState({twitterHandle : this.props.twitterHandle});
+        else if( this.props.reRecordInitiated){
+                this.setState({ twitterHandle : this.props.redialtwitterHandle});
+                this.props.cancelReRecordOption();
+                this.props.turnReRecordWrong();
+        }
 
         resetValues();
         getTwitterHandles();
@@ -260,14 +267,15 @@ const mapStateToProps = state => ({
     explainBy: state.explain.explainBy,
     sharehandle: state.explain.sharehandle,
     OwnerTwitterHandle: state.auth.twitterHandle,
+    redialtwitterHandle : state.redial.redialtwitterHandle,
+    reRecordInitiated : state.redial.reRecordInitiated,
 
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle, getTwitterHandles,
-    setNoOfMinutes, updateCurrentTime,
-    getRecpientId, resetValues
+    setNoOfMinutes, updateCurrentTime,cancelReRecordOption,
+    getRecpientId, resetValues,saveTopicOfTheCall
 })(tweetSearch)
-
 
 
 
