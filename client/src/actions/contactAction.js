@@ -158,7 +158,6 @@ export const getAllContacts = ()=>(dispatch)=>{
 }
 
 export const addNewContactActivity =(touser)=>dispatch=>{
-    alert("psorting")
     var token = JSON.parse(localStorage.getItem('token'));
     var data={
         touser:touser,

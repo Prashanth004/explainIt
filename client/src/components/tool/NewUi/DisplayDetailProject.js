@@ -245,27 +245,7 @@ class DisplayProjectDetail extends Component {
 
               </ReactModal>
 
-              {/* <ReactModal
-                isOpen={this.state.showModalExplain}
-                contentLabel="Minimal Modal Example"
-                className="ModalA"
-                overlayClassName="OverlayA"
-              >
-                <div >
-                  <div onclick={this.handleCloseModal} className="closeModalBtn">
-                    <span>
-                      <FiX className="closeIcon" onClick={this.handleCloseModal} />
-                    </span>
-                  </div>
-                  <ExplainPage
-                   socket={this.state.socket}
-                 
-                   // issue={this.props.issue.issueid}
-                   questionProject={this.state.questionProject[0]}
-                    handleCloseModal={this.handleCloseModal} />
-                </div>
-                {/* <button onClick={this.handleCloseModal}>Close Modal</button> */}
-              {/* </ReactModal>  */}
+             
               {ExplainItDiv}
             </div>
           </div>

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import Toggle from 'react-toggle';
-import Cotactlist from './contactlist/contactsDisplay';
 import BusyAction from './container/BusyAction';
 import Profile from './Profile';
+import Cotactlist from './contactlist/contactsDisplay';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import {  FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
@@ -20,6 +20,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
 import { FiVideo, FiMail,FiPhone,FiUser, FiCopy } from "react-icons/fi";
+import { MdPermContactCalendar } from "react-icons/md";
 import { resetCallAction } from '../../../actions/callAction'
 import { resetIssueActions, resetProjectActions } from '../../../actions/projectActions'
 import { JustRecord } from '../../../actions/messageAction'
@@ -119,7 +120,7 @@ class ProfileCard extends Component {
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
-        this.setState({ reducedLittleWidth: window.innerWidth <= 1000 });
+        this.setState({ reducedLittleWidth: window.innerWidth <= 1200 });
     }
 
     componentWillMount() {
@@ -174,6 +175,8 @@ class ProfileCard extends Component {
     }
     render() {
         var percentage = "380px";
+        const contactBtn = !this.state.reducedLittleWidth?({ width:"380px",position:"fixed",top:"95px",right:"80px"}):({margintop:"10px", marginRight:"5px"});
+
         if(this.props.redialInitiated && !this.state.redialed)
             this.redial();
         if(this.props.reRecordInitiated && !this.state.rerecord)
@@ -195,7 +198,9 @@ class ProfileCard extends Component {
                 </div>
             </IconContext.Provider>
         </span>
-    </div>)
+    </div>);
+            const contactList = this.props.showContacts?(<Cotactlist />):(null)
+
         const {showActivity,showProfile,showContacts,hideContactAct,showContactsAct} = this.props;
         const defaultToggle = (this.props.onlinestatus) ? true : false;
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
@@ -254,10 +259,12 @@ class ProfileCard extends Component {
             <div className="topSymbolMain">
                 {onlineOffline}
                 <br />
-               <div style={{margintop:"10px", marginRight:"10px"}}>
+               {/* <div style={{margintop:"10px", marginRight:"5px"}}> */}
+               <div style={contactBtn}>
                    <span className="hint--top" aria-label="Contacts!">
                      
-               <FiUser onClick={this.props.showContactsAct} style={{fontSize:"18px",color:"#206f72"}}/>
+               <MdPermContactCalendar onClick={!showContacts?showContactsAct:hideContactAct} style={{fontSize:"25px",color:"#206f72"}}/>
+               
                </span>
                </div>
                
@@ -300,7 +307,6 @@ class ProfileCard extends Component {
         const profile = (showProfile)?(<Profile
                 sharabeLink={this.props.sharabeLink}
                 isHome={this.props.isHome} />):(null)
-        const contactList = showContacts?(<Cotactlist />):(null)
          
           return (this.props.donefetchingProfile) ? (<div style={{width:percentage, margin:"auto"}}>
               {label}
@@ -308,7 +314,7 @@ class ProfileCard extends Component {
                 {shareRecord}
             </div>
             <div>
-                        {contactList}   
+                        {/* {contactList}    */}
                         </div>
                    
                     <div>

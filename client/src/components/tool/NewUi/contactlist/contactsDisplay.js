@@ -20,14 +20,21 @@ import {hideContactAct} from '../../../../actions/ProfileCardAction';
     console.log("searchedContacts : ",this.props.searchedContacts)
     const {searchedContacts,mycontacts,contactInputBaxValue,hideContactAct}= this.props;
       const contacts = (searchedContacts!==undefined)?
-      (contactInputBaxValue.length!==0?(searchedContacts.map(data=>(<SingleContact contactData={data}/>))):(
-        mycontacts.map(data=>(<SingleContact contactData={data}/>)))):(null)
-    return (<div className="contactContainer">
+      (contactInputBaxValue.length!==0?(
+        searchedContacts.length!==0?(
+        searchedContacts.map(data=>(<SingleContact contactData={data}/>))):(<p>Not found</p>)):(
+        mycontacts.map(data=>(<SingleContact contactData={data}/>)))):(<p>Not found</p>)
+    return (mycontacts.length!==0?(<div className="contactContainer">
         <div className="topBtnsActivity"><Button close onClick={hideContactAct} /></div>
           <ContactSearch />
+      
           {/* <button className="buttonDark addToContactBtn"><FiUserPlus style={{fontSize:"16px", marginTop:"-5px"}}/>  Create New Contact   </button> */}
           {contacts}
-        </div>)
+        </div>):(<div className="contactContainer">
+        <div className="topBtnsActivity"><Button close onClick={hideContactAct} /></div>
+        <div className="noContacts">
+        <p>No contacts to display.</p>
+        <p>Visit profiles to add contacts</p></div></div>))
   }
 }
 

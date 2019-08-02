@@ -2,87 +2,60 @@ import React, { Component } from 'react'
 import '../../css/newlanding.css'
 import '../../css/NewSignin.css'
 import Navbar from './Navbar';
-// import { Helmet } from "react-helmet";
-// import BusyAction from './container/BusyAction';
+import Cotactlist from './contactlist/contactsDisplay';
 import Setting from './newNav/setting';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
+import {showContactsAct} from '../../../actions/ProfileCardAction';
+
 import EmailVarify from './emailvarify'
 import CallNotification from './container/CallNotification';
 import Activity from './Activies/indexActivity'
 import DisplatCreated from './diaplyissues/DisplayCreated';
-import { cancelSuccess } from '../../../actions/issueActions'
 import { initGA, loadPageView } from './container/ReactGa';
-import { answerCall, missCall } from '../../../actions/callAction';
+import { missCall } from '../../../actions/callAction';
 import { getProfileDetails } from '../../../actions/profileAction';
 import { getTotalUnread } from '../../../actions/messageAction'
 import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import { creatAnsProject } from '../../../actions/projectActions';
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import { Button, Modal, ModalBody } from 'reactstrap';
+import { Modal } from 'reactstrap';
 import { getAllContacts } from '../../../actions/contactAction'
-import IssueDetils from '../../issueModal'
 import { connect } from 'react-redux';
 import MobNav from './newNav/index'
-import { SCREEN_SHARE, SCREEN_RECORD} from '../../../actions/types';
 import { setIssueId } from '../../../actions/issueActions';
-import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
-import PropType from 'prop-types';
-import { FiGrid,FiPhone, FiList } from "react-icons/fi";
-import { resetValues } from '../../../actions/twitterApiAction'
-import Swal from 'sweetalert2'
+import { FiGrid, FiList } from "react-icons/fi";
 import config from '../../../config/config';
-import { resetCallAction, getAllActivities } from '../../../actions/callAction'
+import {  getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
 import IssueDisplay from './diaplyissues/DisplayIssues'
-// import Content from './Content';
 import { varifyEmail } from '../../../actions/emailAction'
 import { saveExtensionDetails } from "../../../actions/extensionAction";
-import { restAllToolValue } from "../../../actions/toolActions";
 import { acceptCallDetails } from '../../../actions/callAction';
-
-import { openHome,openParticipated, openInbox, openCreated } from "../../../actions/navAction";
-import { cancelAllMessageAction } from '../../../actions/messageAction'
-
 
 class NewHome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modal: false,
-            modalTool: false,
-            showCreatedIssue: false,
-            showParticipatedIssue: false,
-            showProjects: false,
-            displayLink: false,
             isHome: true,
             socket: null,
             typeOfView: "list",
-            displayDetails: false,
             reducedWidth: false,
-            callerId: null,
             endedCallFromOtherPeer: false,
-            newCall: true,
             reducedLittleWidth: false,
             currentAtionStatus: null,
             showExplainerVideo: false,
             isinformed: false
         }
-        this.togglemodal = this.togglemodal.bind(this)
-        this.explainTool = this.explainTool.bind(this)
-        this.toggleModalCreate = this.toggleModalCreate.bind(this)
-        this.toggleCreatedIssue = this.toggleCreatedIssue.bind(this);
-        this.toggleParticipatedIssue = this.toggleParticipatedIssue.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
         this.changeViewToGrid = this.changeViewToGrid.bind(this);
         this.saveVideoData = this.saveVideoData.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
         this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
         this.informExtension = this.informExtension.bind(this);
-
     }
 
     resize() {
@@ -93,9 +66,7 @@ class NewHome extends Component {
         }else{
             this.setState({issuepercentage:"59%"})
         }
-
     }
-
 
     saveVideoData(videoData, audioData, isPublic, text, action) {
         var condition = this.props.issueId == null || this.props.issueId === undefined
@@ -137,7 +108,6 @@ class NewHome extends Component {
         var self = this
         function postMessageHandler(event) {
             if (event.data === 'rtcmulticonnection-extension-loaded') {
-
                 self.setState({
                     source: event.source,
                     origin: event.origin,
@@ -155,7 +125,6 @@ class NewHome extends Component {
         socket.on(config.UPDATE_BADGE, data => {
             if (data.userId === this.props.userId) 
                 this.props.getTotalUnread()
-            
         })
         socket.on(config.END_WHILE_DIALING, data => {
             if (data.ToUserId === this.props.userId) {
@@ -164,21 +133,17 @@ class NewHome extends Component {
         })
         socket.on(config.ENDING_RING, data => {
             if (data.ToUserId === this.props.userId) {
-
                 socket.emit(config.ENDING_RING_ACK, {
                     "ToUserId": data.fromUserId
                 })
             }
         })
-
         socket.on(config.SAVED_NEW_PROJECT, data => {
 
             if (data.userId === this.props.userId) {
-
                 this.props.getProfileDetails(this.props.userId, config.SELF)
             }
         })
-
         socket.on(config.NEW_MESSAGE, data => {
 
             if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
@@ -201,8 +166,6 @@ class NewHome extends Component {
         socket.io.on("connect_error", () => {
             console.log("connection_error")
         })
-
-
         socket.on(config.LINK_TO_CALL, data => {
             console.log("recieving the call")
             self.setState({ endedCallFromOtherPeer: false })
@@ -215,7 +178,6 @@ class NewHome extends Component {
                     "fromUserId": data.fromUserId,
                     "toUserId": data.toUserId
                 })
-              
                 this.props.acceptCallDetails(
                     data.link,
                     data.fromEmail,
@@ -224,7 +186,6 @@ class NewHome extends Component {
                     data.fromProfilePic,
                     data.topicOfTheCall,
                     data.timeAloted
-
                 )
             }
         });
@@ -245,53 +206,11 @@ class NewHome extends Component {
         })
 
     }
-
-    toggleCreatedIssue() {
-        this.setState({
-            showDetails: false,
-            showProjects: true,
-            openExplain: false
-        })
-        this.props.openCreated()
-    }
-    toggleParticipatedIssue() {
-        this.setState({
-            showDetails: false,
-            showProjects: true,
-            openExplain: false
-        })
-        this.props.openParticipated()
-    }
   
     toggleExplainerVideo() {
         this.setState({
             showExplainerVideo: !this.state.showExplainerVideo
         })
-    }
-    toggleModalCreate = () => {
-        if (this.props.isAauthenticated) {
-            this.props.setIssueId(null)
-            localStorage.setItem("issueId", null)
-            window.open(config.react_url + '/explainIt', "_blank")
-        }
-        else {
-            Swal.fire(
-                'You should login'
-            )
-        }
-    }
-    togglemodal = (e) => {
-        var idOfClicked = e.target.id;
-        var classOfClicked = e.target.className
-        if (classOfClicked !== "singleMember" && classOfClicked !== "sharableLink" && classOfClicked !== "linkElementSym" && classOfClicked !== "hint--top" && classOfClicked !== "explainAnswer" && classOfClicked !== "displayPeople" && classOfClicked !== "likes" && classOfClicked !== "numberOfPeople" && idOfClicked !== "explainIt" && idOfClicked !== "audio" && idOfClicked !== "tweet" && idOfClicked !== "shareScreen" && idOfClicked !== "imageOfPeople" && classOfClicked !== "buttonDark explainItBtn") {
-            if (this.state.modal === false) {
-                this.props.clearAnswers(e.target.id)
-                this.props.fetchProjectbyIssue(e.target.id);
-            }
-            this.setState({
-                modal: !this.state.modal
-            });
-        }
     }
 
     screenShareWindow() {
@@ -309,18 +228,6 @@ class NewHome extends Component {
         window.open(url, 'explain', opts);
     }
 
-    explainTool = (e) => {
-        if (this.props.isAauthenticated) {
-            this.props.setIssueId(e.target.id)
-            localStorage.setItem("issueId", e.target.id)
-            window.open(config.react_url + '/explainIt', "_blank")
-        }
-        else {
-            Swal.fire(
-                'You should login'
-            )
-        }
-    }
     changeViewToList() {
         this.setState({
             typeOfView: "list"
@@ -334,8 +241,8 @@ class NewHome extends Component {
 
     render() {
         const {issuepercentage} =  this.state;
-        var inboxColumn ="100%";
-        var inBoxLabelPos = null
+        const profileCardGrid = (!this.state.reducedLittleWidth)?("30% 40% 30%"):("100%")
+        const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",}}><Cotactlist  /></div>):(null)
         var profileCardElement = null;
         var listGrid = (window.innerWidth >= 1000) ? (<div style={{position:"fixed",top:"90px",right:"30px"}} >
             <span className="hint--top" aria-label="List View">
@@ -350,7 +257,7 @@ class NewHome extends Component {
         }     
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo} />;
-        var deatilsModal = null
+       
         if (this.props.myissues !== null)
             var issuesCreated = (this.props.myissues)
         var feedDiv = null;
@@ -358,12 +265,9 @@ class NewHome extends Component {
         const callNotificationDiv = (<CallNotification
             endedCallFromOtherPeer={this.state.endedCallFromOtherPeer}
             socket={this.state.socket} />)
-
-        deatilsModal = (<IssueDetils />)
+    
         if (this.props.isAauthenticated) {
-            if (this.props.screenAction === SCREEN_RECORD ||
-                this.props.screenAction === SCREEN_SHARE ||
-                this.props.participated ||
+            if (this.props.participated ||
                 this.props.setting ||
                 this.props.created) {
                 profileCardElement = null;
@@ -377,9 +281,7 @@ class NewHome extends Component {
                             sharabeLink={sharabeLink}
                             socket={this.state.socket}
                             userId={this.props.userId}
-                            saveVideoData={this.saveVideoData}
-                            toggleCreatedIssue={this.toggleCreatedIssue}
-                            toggleParticipatedIssue={this.toggleParticipatedIssue} />)
+                            saveVideoData={this.saveVideoData}/>)
             }
         }
 
@@ -387,9 +289,7 @@ class NewHome extends Component {
             if (!this.props.incommingCall && (this.props.participated || this.props.created )) {
                 var participatedDiv = (this.state.typeOfView === "list") ? (
                     <div className="issueContainer" style={{ width: issuepercentage }} >
-                        <div className="closeBtnHolder">
-                        </div>
-                        <IssueDisplay socket={this.state.socket} togglemodal={this.togglemodal} home={config.HOME} explainTool={this.explainTool} />
+                        <IssueDisplay socket={this.state.socket}home={config.HOME}/>
                     </div>
                 ) : (<div className="issueContainer" style={{ width: "80%" }} >
 
@@ -401,21 +301,11 @@ class NewHome extends Component {
                     {listGrid}
                     {participatedDiv}
                 </div>)
-
             }
             else if (this.props.inbox) {
                 profileCardElement = null
                 feedDiv = (<div >
-                     <div className="topBtnsActivity" style={{paddingRight:"80px"}} >
-                        
-                         {/* <Button close onClick={this.props.openHome} /> */}
-                       
-                   
-                        </div>
-                   
                     <Activity userId={this.props.userId} />
-
-
                 </div>)
             }
             else if(this.props.setting){
@@ -425,16 +315,10 @@ class NewHome extends Component {
 
             }
         }
-        if((this.props.inbox)&& !(this.props.isSceenSharing ||this.props.callAction || this.props.isFullScreenRecording || this.state.reducedLittleWidth ||this.state.reducedWidth)){
-            inboxColumn="30% 45% 20%";
-            inBoxLabelPos="fixed";
-        }
+
         if((this.props.isSceenSharing || this.props.isFullScreenRecording  ||this.props.callAction))
         feedDiv = null;
         const nav=(this.state.reducedWidth)?(<MobNav page={config.HOME_PAGE}/>):(<Navbar reducedLittleWidth={this.state.reducedLittleWidth} />)
-
-
-      
         return (this.props.authAction && this.props.doneVarification) ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
             (!this.props.isVarified) ? (<EmailVarify />) : (
                 <div className="fullHome">
@@ -443,99 +327,49 @@ class NewHome extends Component {
                         {callNotificationDiv}
                     <div >
                         <div>
-                        <div className="ProfileDiv" style={{position:inBoxLabelPos}}>
-                            {profileCardElement}
+                        <div className="ProfileDiv" style={{display:"grid",gridTemplateColumns:profileCardGrid}}>
+                           <div></div>
+                            <div>{profileCardElement}</div>
+                            <div>
+                           <br/>
+                            {contactList}</div>
                         </div>
                         </div>
                             {feedDiv}
                         </div>
-                       
                     </div>
                     <Modal size='lg' centered={true} isOpen={this.props.openHowItWorksModal} toggle={this.props.toggleHowWorksModal} external={externalCloseBtn}>
                         <ExplinerVideoModal />
                     </Modal>
-                    {/* <Modal isOpen={this.state.modal} toggle={this.togglemodal} className={this.props.className} external={externalCloseBtn}>
-                        <ModalBody className="modalBody">
-                            {deatilsModal}
-                        </ModalBody>
-                    </Modal> */}
-                    {/* {iframe} */}
+                 
                 </div>
             ))) : (null)
     }
 }
-NewHome.PropType = {
-    issues: PropType.array.isRequired,
-    fetchProjectbyIssue: PropType.func.isRequired,
-    setIssueId: PropType.func.isRequired,
-    saveExtensionDetails: PropType.func.isRequired,
-    restAllToolValue: PropType.func.isRequired,
-    acceptCallDetails: PropType.func.isRequired,
-    answerCall: PropType.func.isRequired,
-    missCall: PropType.func.isRequired,
-    openParticipated: PropType.func.isRequired,
-    openCreated: PropType.func.isRequired,
-    cancelAllMessageAction: PropType.func.isRequired,
-    resetValues: PropType.func.isRequired,
-    creatAnsProject: PropType.func.isRequired,
-    openInbox: PropType.func.isRequired,
-    toggleHowWorksModal: PropType.func.isRequired,
-    resetCallAction: PropType.func.isRequired,
-    getProfileDetails: PropType.func.isRequired,
-    getAllActivities: PropType.func.isRequired,
-    varifyEmail: PropType.func.isRequired,
-    
-};
+
 const mapStateToProps = state => ({
     doneVarification: state.email.doneVarification,
     isVarified: state.email.isVarified,
     issues: state.issues.items,
-    screenAction: state.tools.screenAction,
-    isSharingCompleted: state.tools.isSharingCompleted,
-    isFullSharingCompleted: state.tools.isFullSharingCompleted,
-    newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
     profilePic: state.auth.profilePic,
-    userName: state.auth.userName,
     myissues: state.profile.myIssues,
     participatedIssues: state.profile.participatedIssue,
     twitterHandle: state.profile.twitterHandle,
-    email: state.auth.email,
     userId: state.auth.id,
-    callerId: state.call.id,
     setting:state.nav.openSetting,
     authAction: state.auth.authAction,
     participated: state.nav.openParticipated,
-    created: state.nav.openCreated,
     inbox: state.nav.openInbox,
     isSceenSharing: state.tools.isFullScreenSharing,
     isFullScreenRecording: state.tools.isFullScreenRecording,
-    showCanvas: state.canvasActions.showCanvas,
     issueId: state.issues.currentIssueId,
     callAction: state.call.callAction,
     openHowItWorksModal: state.modal.openHowItWorksModal,
+    showContacts:state.profileCard.showContacts,
 })
 
 export default connect(mapStateToProps, {
-    answerCall,openHome,
-    openCreated,
-    toggleHowWorksModal,
-    resetCallAction,
-    getAllActivities,
-    cancelAllMessageAction,
-    openParticipated,
-    missCall,
-    restAllToolValue,
-    acceptCallDetails,
-    saveExtensionDetails,
-    openInbox,
-    getProfileDetails,
-    fetchProjectbyIssue,
-    setIssueId,
-    varifyEmail,
-    getTotalUnread,
-    creatAnsProject,
-    cancelSuccess,
-    clearAnswers, stillAuthenicated,
-    resetValues, getAllContacts
+    toggleHowWorksModal,getAllActivities,missCall,acceptCallDetails, saveExtensionDetails,showContactsAct,
+    getProfileDetails,setIssueId,varifyEmail,getTotalUnread,creatAnsProject,stillAuthenicated, getAllContacts
 })(NewHome)

@@ -14,7 +14,6 @@ class AddToConatct extends Component {
         this.props.getContactbyId(this.props.contactid);
     }
     addContact =()=>{
-      alert("dvljfskj")
       const {contactid,addNewContactActivity,addtoContact} = this.props;
       addNewContactActivity(contactid);
       addtoContact(contactid);

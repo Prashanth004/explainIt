@@ -90,7 +90,7 @@ class ActivityMain extends Component {
                     activity={this.props.activity}/>):(
                         this.props.activity.activity === config.ADD_NEW_CONTACT?
                         (<AddActivity  userData = {this.state}
-                            direction="from"
+                            direction="to"
                             activity={this.props.activity}/>):(
                         <Explain 
                         userData = {this.state}

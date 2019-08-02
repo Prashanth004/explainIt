@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import axios from 'axios';
-// import config from '../../../../config/config'
-// import PropType from 'prop-types';
 import './contacts.css';
 import { FiCopy,FiVideo} from "react-icons/fi";
 import {addNewUser} from '../../../../actions/storeUserAction';
@@ -21,10 +18,11 @@ class cntactCard extends Component {
   render() {
     console.log("this.props.contactData : ",this.props.contactData);
     const {profilepic,username,twitterhandle,goodat} = this.props.contactData;
-    // switch(state) {
-    //   default:
-    //       return null;
-    // }
+    console.log("goodat : ",goodat)
+    console.log("goodat : ",typeof(goodat));
+    console.log("goodat : ",goodat.length)
+    const emptyGoodAt = (<p  className="contactHandle">Profile details incomplete</p>)
+    const gootAtDiv = (goodat!==null)?((goodat.length!==0)?( <p className="contactHandle"><b>Good at : </b>{goodat}</p>):(emptyGoodAt)):(emptyGoodAt)
     return (
       <div className="singleContact">
           <div className="contactImgContainer">
@@ -32,9 +30,7 @@ class cntactCard extends Component {
           </div>
           <div style={{textAlign:"left"}}>
           <span>{username} </span>
-          {/* <span className="contactHandle">@{twitterhandle}</span>
-          <br/> */}
-          <p className="contactHandle"><b>Good at : </b>{goodat}</p>
+          {gootAtDiv}
           </div>
           <div>
           <span className="hint--left" aria-label="Share Screen">

@@ -22,10 +22,12 @@ import Project from './components/Project'
 import newNav from './components/tool/NewUi/newNav/index'
 import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
+// import Acticities from './con'
 import Info from './components/tool/NewUi/NewFloater/info'
 import inbox from './components/tool/NewUi/Inbox';
 import Setting from './components/tool/NewUi/newNav/setting'
-import VideoDisplay from './components/VideoDisplay'
+import VideoDisplay from './components/VideoDisplay';
+import ChatInitiate from './components/tool/NewUi/chat/index'
 // import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
@@ -50,6 +52,7 @@ class App extends Component {
             <Route exact path='/google' component={google} />
             <Route exact path='/git' component = {git} />
             <Route exact path ='/inbox/:userid' component={inbox}/>
+            <Route exact path = "/chat" component = {ChatInitiate}/>
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact path = '/admindash' component={adminDash} />
             <Route exact path = '/video/:projectid' component={VideoDisplay} />
@@ -64,6 +67,7 @@ class App extends Component {
             <Route exact path = "/info" component = {Info} />
             <Route exact path = '/newNav' component = {newNav} />
             <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>
+           
          
             <Route component={NoMatch} />
           

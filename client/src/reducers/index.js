@@ -28,6 +28,7 @@ import feedBackReducer from './feedBackReducer';
 import realDialReducer from './redialReducer';
 import timeInputReducer from './timerInputReducer';
 import topicInputReducer from './topicInputReducer';
+import chatReducer from './chatReducer';
  
 export default combineReducers({
     email:emailReducer,
@@ -58,5 +59,6 @@ export default combineReducers({
     feedback : feedBackReducer,
     redial : realDialReducer,
     time:timeInputReducer,
-    topic:topicInputReducer
+    topic:topicInputReducer,
+    chat : chatReducer
 })

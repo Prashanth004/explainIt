@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 import config from '../../../config/config';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
@@ -186,9 +186,9 @@ class Navigationbar extends React.Component {
     const Brand = (this.props.inbox || this.props.Created || this.props.Participated)?(null):
     (
     <span>
-      <img alt="open home" src={require('../../images/logo.png')}
-        width="100%"
-        height="100%"></img>
+      <img alt="open home" src={require('../../images/logo5.png')}
+        width="35px"
+        height="35px"></img>
     </span>)
     // navItem1 = (<button className="nextButton" style={homeColor} onClick={this.openHome}><FiHome style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>);
     // navItem2 = (<div> <span> {notifyBadge}<button className="nextButton" style={logsColor} onClick={this.props.openInbox}> <FiPhone style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button></span></div>)
