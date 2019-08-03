@@ -61,7 +61,10 @@ class issueCard extends Component {
     }
     componentDidMount() {
         const self = this;
-        var socket = this.state.socket;
+        var socket = this.props.socket;
+        if(this.props.socket!==null){
+
+        
         socket.on(config.SAVED_NEW_PROJECT, data => {
             if (data.userId === this.props.userId) {
                 self.setState({
@@ -69,6 +72,7 @@ class issueCard extends Component {
                 })
             }
         })
+    }
         this.setState({
             thisProjectId: this.props.issue.projectid,
             textexplain: this.props.issue.textexplain
@@ -376,7 +380,7 @@ const mapStateToProps = state => ({
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
     isFullScreenRecording: state.tools.isFullScreenRecording,
-
+    socket:state.home.socket
 
 })
 

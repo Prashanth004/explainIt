@@ -55,7 +55,6 @@ class ScreenRecorder extends Component {
             CallAck: false,
             conn: null,
             destkey: null,
-            socket: null,
             peer: null,
             ringAck: false,
             peerId: null,
@@ -244,7 +243,7 @@ class ScreenRecorder extends Component {
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
         var self = this
         var peer = this.state.peer;
-        var socket = this.state.socket
+        var socket = this.props.socket
         this.setState({
             closedHere: true,
             manualClose: true
@@ -330,7 +329,7 @@ class ScreenRecorder extends Component {
         else {
             //  event.preventDefault();
         }
-        var socket = this.state.socket;
+        var socket = this.props.socket;
         socket.disconnect();
 
     }
@@ -372,24 +371,14 @@ class ScreenRecorder extends Component {
         } else {
             window.attachEvent("onmessage", this.postMessageHandler);
         }
-
+        if(socket!== null){
         socket.on(config.CALL_ACK_MESSAGE, data => {
-
-            // var userId = Number(data.recieverUserId);
-            // userId = bigInt(data.recieverUserId).value;
-            // self.setState({
-            //     // recieverProfilePic: data.recieverProfilePic,
-            //     // recieverProfileName: data.recieverProfileName,
-            //     recieverProfileId: userId
-            // })
             if (data.clientId === self.state.peerId) {
                 self.setState({
                     CallAck: true,
                 })
             }
         })
-
-
         socket.on(config.LINK_TO_CALL_ACK, data => {
             if (data.fromUserId === this.props.userId) {
                 this.setState({
@@ -481,6 +470,7 @@ class ScreenRecorder extends Component {
                 })
             }
         })
+    }
     }
     startConnectionTimer() {
         const { permissonDenied, onGoingCallEnded, recorder } = this.state;
@@ -630,7 +620,7 @@ validateTurn(iceServers){
 
         this.setState({
             peer: peer,
-            socket: this.props.socket,
+          
             currentAtionStatus: currentAtionStatus
         });
 
@@ -873,7 +863,7 @@ validateTurn(iceServers){
         var curTime = (minutes + (seconds / 60))
         if (curTime !== 3)
             this.props.updateCurrentTime(minutes + (seconds / 60))
-        var socket = this.state.socket
+        var socket = this.props.socket
         if (completed) {
             socket.emit(config.END_CALL, {
                 'peerId': this.state.peerId,
@@ -928,7 +918,7 @@ validateTurn(iceServers){
         this.setState({myscreenSharing: true});
         console.log("exceciting compWIllMount")
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
-        var socket = this.state.socket;
+        var socket = this.props.socket;
         var self = this
        
         this.setState({
@@ -1046,7 +1036,7 @@ validateTurn(iceServers){
                 })
             }
         }, 25000)
-        var socket = this.state.socket;
+        var socket = this.props.socket;
         if ((!this.props.busyStatus && this.props.onlineStatus)) {
             socket.emit(config.LINK_TO_CALL, {
                 'link': shareScreenLink,
@@ -1159,7 +1149,7 @@ validateTurn(iceServers){
 
         initiateSend();
         var issueId = JSON.parse(localStorage.getItem("issueId"));
-        const socket = this.state.socket;
+        const socket = this.props.socket;
         const { initialTime, noOfIncreaseInTime, currentTimeLeft } = this.props;
         var sharableLinkSaved = null;
         if (explainBy === config.null) {
@@ -1228,7 +1218,7 @@ validateTurn(iceServers){
                         shareMyScreen={this.shareMyScreen}
                         myscreenSharing={this.state.myscreenSharing}
                         videoStream={this.state.videoStream}
-                        socket={this.state.socket}
+                        socket={this.props.socket}
                         peerId={this.state.peerId}
                         renderer={this.renderer}
                         endCall={this.endCall}
@@ -1519,6 +1509,7 @@ const mapStateToProps = state => ({
     busyStatus: state.visitProfile.busyStatus,
     linkToAccess: state.projects.linkToAccess,
     explainBy: state.explain.explainBy,
+    socket:state.home.socket
 
     // secondScreenShareStarted:state.secondScreenShare.secondScreenShareStarted
 

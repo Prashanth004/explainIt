@@ -1,7 +1,7 @@
 import {OPEN_HOME,OPEN_SETTING,OPEN_INBOX,OPEN_CREATED,OPEN_PARTICIPATED} from '../actions/types'
 
 const initialState={
-    openHome:false,
+    openHome:true,
     openCreated:false,
     openParticipated:false,
     openInbox:false,

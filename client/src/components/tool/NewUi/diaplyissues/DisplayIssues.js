@@ -98,7 +98,7 @@ class DisplayIssue extends Component {
     render() {
         var issueItems = null;
             if(this.props.created){
-                if(this.props.allprojects!==null)
+                if(this.props.allprojects!==null && this.props.allprojects!== undefined)
                     if(this.props.allprojects.length===0)
                         issueItems = (<div className="emptyIssues">
                         <h4>Empty</h4>
@@ -109,10 +109,10 @@ class DisplayIssue extends Component {
                         </div>)
                     else{
                       
-                        issueItems =this.state.issueArray.map((issue, index) => (
+                        issueItems =this.props.myissues.map((issue, index) => (
                             <IssueCard 
                             key={index+1000}
-                            socket={this.props.socket}
+                           
                             itsHome={(this.props.home === config.HOME)?true:false}
                             deleteProjects={this.deleteProjects}
                             tweetWindow={this.tweetWindow}
@@ -136,7 +136,7 @@ class DisplayIssue extends Component {
                         <IssueCard 
                         key={index+1000}
                         itsHome={(this.props.home === config.HOME)?true:false}
-                        socket={this.props.socket}
+                     
                         deleteProjects={this.deleteProjects}
                         tweetWindow={this.tweetWindow}
                         handlePublicPrives={this.handlePublicPrives}
@@ -164,8 +164,9 @@ const mapStateToProps = state => ({
  participated: state.nav.openParticipated,
     created: state.nav.openCreated,
     myissues: state.profile.myIssues,
-    allprojects:state.profile.allprojects,
+    allprojects:state.profile.myIssues,
     participatedIssues: state.profile.participatedIssue,
+   
 })
 
 export default connect(mapStateToProps, {

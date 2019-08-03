@@ -3,7 +3,7 @@ import {CALL_DETAILS_ACCEPT,
     DECREASE_CALL_BY_MINUTE,
     SET_NUMBER_MINUTES,
     UPDATE_CURRENT_TIME,
-    SET_PEER_ID,
+    SET_PEER_ID,END_CALL_FROM_OTHER_PEER,
     ANSWERED_CALL,
     BASIC_INFO_OF_CALL,
     INITIATE_SEND,
@@ -43,7 +43,9 @@ const initialState={
     callAction:false,
     newCall:true,
     isCallAnswered:false,
-    isMuted:false
+    isMuted:false,
+    endedCallFromOtherEnd:false
+    
 }
 
 export default function(state= initialState, action){
@@ -64,6 +66,11 @@ export default function(state= initialState, action){
             return{
                 ...state,
                 isMuted:true
+            }
+        case END_CALL_FROM_OTHER_PEER :
+            return{
+                ...state,
+                endedCallFromOtherEnd:true
             }
         case UNMUTE_AUDIO:
                 return{
@@ -168,7 +175,8 @@ export default function(state= initialState, action){
                 userName:action.payload.userName,
                 email:action.payload.email,
                 id: action.payload.id,
-                profilePic:action.payload.profilePic                
+                profilePic:action.payload.profilePic,
+                endedCallFromOtherEnd:false                
             }
         case ANSWER_CALL:
             return {

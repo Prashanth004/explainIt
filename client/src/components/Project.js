@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 import './css/toggle.css';
 import IssueCard from './tool/NewUi/diaplyissues/issueCard'
 import config from '../config/config'
@@ -9,6 +9,8 @@ import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
 import { initGA, loadPageView } from './tool/NewUi/container/ReactGa';
 // import { Helmet } from "react-helmet";
+import {initiateSocket} from '../actions/homeAction';
+import CallNotification from './tool/NewUi/container/CallNotification';
 import MobNav from './tool/NewUi/newNav/index';
 import Setting from './tool/NewUi/newNav/setting'
 import './css/newlanding.css';
@@ -48,11 +50,11 @@ class Project extends Component {
   reAtemptToFetch = () => { }
   componentWillMount() {
     this.props.explainAuthentication();
-    const socket = socketIOClient(config.base_dir);
-    this.setState({
-      socket: socket
-    })
-
+    if(this.props.socket===null){
+      this.props.initiateSocket()
+    }
+   
+   
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.resize());
@@ -74,15 +76,18 @@ class Project extends Component {
     this.setState({ newIssueId: newIssueIdtemp })
     this.props.clearAnswers(issueId)
     this.props.fetchProjectbyIssue(issueId);
-    var socket = this.state.socket
-    socket.on(config.SAVED_NEW_PROJECT, data => {
-      if (data.userId === this.props.userId) {
-        self.setState({ showModalExplain: false });
-        self.setState({reAtempte: true })
-        clearTimeout(self.reAtemptToFetch)
-        this.props.fetchProjectbyIssue(this.props.match.params.projectid);
-      }
-    })
+    var socket = this.props.socket;
+    if(socket!==null){
+      socket.on(config.SAVED_NEW_PROJECT, data => {
+        if (data.userId === this.props.userId) {
+          self.setState({ showModalExplain: false });
+          self.setState({reAtempte: true })
+          clearTimeout(self.reAtemptToFetch)
+          this.props.fetchProjectbyIssue(this.props.match.params.projectid);
+        }
+      })
+    }
+   
     function postMessageHandler(event) {
       if (event.data === 'rtcmulticonnection-extension-loaded') {
         self.setState({
@@ -107,7 +112,7 @@ class Project extends Component {
     <div className="projectContainer">
       <br />
       <IssueCard
-        socket={this.state.socket}
+        socket={this.props.socket}
         itsHome={(this.props.home === config.HOME) ? true : false}
         issue={this.props.questionProject}
         explainTool={this.props.explainTool} />
@@ -130,6 +135,7 @@ class Project extends Component {
     {"property": "twitter:player:width", "content":  "220px"}
   ]}/> */}
       {nav}
+      <CallNotification />
         {project}
           </div>) : ((this.props.match.params.projectid === this.state.newIssueId) ? (<div style={msgStyling}><h3>
             <b>
@@ -165,7 +171,7 @@ const mapStateToProps = state => ({
   authAction: state.auth.authAction,
   isAuthenticated: state.auth.isAuthenticated,
   setting:state.nav.openSetting,
-
+  socket:state.home.socket
 })
 
 export default connect(mapStateToProps, {
@@ -176,7 +182,7 @@ export default connect(mapStateToProps, {
   resetLandingAction,
   explainIssue,
   restAllToolValue,
-  resetValues,
+  resetValues,initiateSocket,
   explainAuthentication,
   saveReplyEmailOption,
   setIssueId, fetchProjectbyIssue

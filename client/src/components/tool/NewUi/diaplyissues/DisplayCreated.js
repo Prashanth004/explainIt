@@ -82,7 +82,7 @@ else
           issueItems =this.state.issueArray.map((issue, index) => (
             <div   key={index+123456} className="createdCard">
              <IssueCard 
-              socket={this.props.socket}
+            socket={this.props.socket}
              deleteProjects={this.deleteProjects}
              projectId={this.state.projectId}
              itsHome={this.state.itsHome}
@@ -107,11 +107,12 @@ Displatcreaated.PropType = {
 
 };
 const mapStateToProps = state => ({
-
+  socket:state.home.socket
 })
 
 export default connect(mapStateToProps, {
-  deleteProjects, checkPublicValue
+  deleteProjects, checkPublicValue,
+  
 
 
 })(Displatcreaated)

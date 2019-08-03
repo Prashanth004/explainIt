@@ -22,7 +22,7 @@ import Project from './components/Project'
 import newNav from './components/tool/NewUi/newNav/index'
 import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
-// import Acticities from './con'
+import Acticities from './components/tool/NewUi/Posts'
 import Info from './components/tool/NewUi/NewFloater/info'
 import inbox from './components/tool/NewUi/Inbox';
 import Setting from './components/tool/NewUi/newNav/setting'
@@ -66,9 +66,10 @@ class App extends Component {
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />
             <Route exact path = '/newNav' component = {newNav} />
+            <Route exact path = "/activities" component = {Acticities} />
+            <Route exact path = "/:encrTwitterHandle/activities"component = {Acticities}/>
             <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>
-           
-         
+            
             <Route component={NoMatch} />
           
             </Switch>

@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import Toggle from 'react-toggle';
 import BusyAction from './container/BusyAction';
 import Profile from './Profile';
+import { Redirect} from 'react-router-dom';
 import Cotactlist from './contactlist/contactsDisplay';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
@@ -42,7 +43,9 @@ import {  openInbox,openCreated } from "../../../actions/navAction";
 class ProfileCard extends Component {
     constructor(props) {
         super(props);
-        this.state={reducedWidth : false,rerecord:false,  reducedLittleWidth: false,redialed : false}
+        this.state={ openInboxRed : false,reducedWidth : false,
+            rerecord:false,  reducedLittleWidth: false,
+            twoParts:false, twiHandle:null,redialed : false}
         this.openProfile = this.openProfile.bind(this);
         this.startSharingScreen = this.startSharingScreen.bind(this);
         this.startRecordScreen = this.startRecordScreen.bind(this);
@@ -56,6 +59,7 @@ class ProfileCard extends Component {
         this.rerecord = this.rerecord.bind(this);
         this.turnRedialWrong = this.turnRedialWrong.bind(this);
         this.turnReRecordWrong = this.turnReRecordWrong.bind(this);
+        this.openInboxLoc = this.openInboxLoc.bind(this);
     }
 
     redial(){
@@ -68,6 +72,12 @@ class ProfileCard extends Component {
     }
     handleCancel() {
 
+    }
+    openInboxLoc(){
+       
+            this.setState({openInboxRed:!this.state.openInboxRed})
+      
+       
     }
     reStoreDefault = () => {
         if (this.props.screenAction !== null && !this.props.isSharingCompleted && !this.props.isFullSharingCompleted) {
@@ -124,11 +134,21 @@ class ProfileCard extends Component {
     }
 
     componentWillMount() {
-        const { userId, profileId, getProfileDetails, getAllActivities, getAllReferral } = this.props
+        const { userId, profileId, getProfileDetails, getAllActivities, getAllReferral } = this.props;
+        const path = (window.location.pathname).split('/');
         if (userId === profileId)
             getProfileDetails(userId, config.SELF)
-        else
-            this.props.getProfileDetails(userId, config.VISIT_PROF)
+        else{
+            this.props.getProfileDetails(userId, config.VISIT_PROF);
+            console.log("path.lenght : ",path.length)
+            if(path.length===3){
+                this.setState({twoParts:false})
+            }
+            else{
+                this.setState({twoParts:true,twiHandle:(path[1])})
+            }
+        }
+           
         getAllActivities();
         getAllReferral()
     }
@@ -146,7 +166,7 @@ class ProfileCard extends Component {
     toggleInbox() {
         
         this.props.openInbox()
-        this.handleConfirm()
+        this.handleConfirm();
       
     }
     startRecordScreen() {
@@ -181,6 +201,7 @@ class ProfileCard extends Component {
             this.redial();
         if(this.props.reRecordInitiated && !this.state.rerecord)
             this.rerecord()
+      
         // const mailIcon =(this.props.isHome)?( <FiPhone style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />)
         // :( <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.props.openCreated} />)
         if (this.props.screenAction === FULL_SCREEN_SHARE ||
@@ -206,6 +227,11 @@ class ProfileCard extends Component {
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
             : ('Online - people can send you share request')
         var notifyBadge = null;
+        const contactBtnDiv =this.props.isHome?(<span className="hint--top" aria-label="Contacts!">
+                     
+        <MdPermContactCalendar onClick={!showContacts?showContactsAct:hideContactAct} style={{fontSize:"25px",color:"#206f72"}}/>
+        
+        </span>):(null)
         const onlineOffline = (this.props.isHome) ? (<span className="hint--left " aria-label={toolTipValue}>
             <Toggle
                 defaultChecked={defaultToggle}
@@ -247,7 +273,7 @@ class ProfileCard extends Component {
                         {notifyBadge}
                         <IconContext.Provider value={{ color: "#206f72", size: "25px", }}>
                             <div>
-                            <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={!this.props.isHome?this.props.openCreated:this.toggleInbox} />
+                            <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.openInboxLoc} />
                                {/* {mailIcon} */}
                                 {/* onClick={!showContacts?showContactsAct:hideContactAct} */}
                             </div>
@@ -261,11 +287,7 @@ class ProfileCard extends Component {
                 <br />
                {/* <div style={{margintop:"10px", marginRight:"5px"}}> */}
                <div style={contactBtn}>
-                   <span className="hint--top" aria-label="Contacts!">
-                     
-               <MdPermContactCalendar onClick={!showContacts?showContactsAct:hideContactAct} style={{fontSize:"25px",color:"#206f72"}}/>
-               
-               </span>
+              {contactBtnDiv}
                </div>
                
               
@@ -284,7 +306,7 @@ class ProfileCard extends Component {
         const shareRecord = showActivity?((this.props.currentAtionStatus === null)?
                     (this.props.screenAction === FULL_SCREEN_RECORD?(
                         (<FullScreenRecord
-                            socket={this.props.socket}
+                          
                             turnReRecordWrong={this.turnReRecordWrong}
                             closeImidiate={this.handleConfirm}
                             reStoreDefault={this.reStoreDefault}
@@ -292,7 +314,6 @@ class ProfileCard extends Component {
                         />)
                     ):(this.props.screenAction === FULL_SCREEN_SHARE)?(<FullScreenShare
                         turnRedialWrong={this.turnRedialWrong}
-                        socket={this.props.socket}
                         closeImidiate={this.handleConfirm}
                         reStoreDefault={this.reStoreDefault}
                         savefile={this.props.saveVideoData}
@@ -308,7 +329,7 @@ class ProfileCard extends Component {
                 sharabeLink={this.props.sharabeLink}
                 isHome={this.props.isHome} />):(null)
          
-          return (this.props.donefetchingProfile) ? (<div style={{width:percentage, margin:"auto"}}>
+          return ((!this.state.openInboxRed)?((this.props.donefetchingProfile) ? (<div style={{width:percentage, margin:"auto"}}>
               {label}
             <div >
                 {shareRecord}
@@ -320,7 +341,10 @@ class ProfileCard extends Component {
                     <div>
                 {profile}
             </div>
-            </div >
+            </div >): (null)):(this.props.isHome?(<Redirect push to={{ pathname: '../activities' }} />):(
+                !this.state.twoParts?(<Redirect push to={{ pathname: './activities' }} />):
+                (<Redirect push to={{ pathname: './'+this.state.twiHandle+'/activities' }} />))
+            ));
           
 
                     //   {shareRecord}
@@ -330,7 +354,7 @@ class ProfileCard extends Component {
         // </div>) */}
         // </div>
 
-        ) : (null);
+       
     }
 }
 
@@ -353,6 +377,7 @@ const mapStateToProps = state => ({
     noCreated: state.profile.noCreated,
     noParticipated: state.profile.noParticipated,
     profileId: state.auth.id,
+  
     onlinestatus: state.profile.onlineStatus,
     twitterHandle: state.profile.twitterHandle,
     showActivity:state.profileCard.showActivity,
@@ -364,7 +389,9 @@ const mapStateToProps = state => ({
     callAction: state.call.callAction,
     isFullScreenRecording: state.tools.isFullScreenRecording,
     redialInitiated : state.redial.redialInitiated,
-    reRecordInitiated :state.redial.reRecordInitiated
+    reRecordInitiated :state.redial.reRecordInitiated,
+    inbox:state.nav.openInbox
+   
 })
 
 export default connect(mapStateToProps, {

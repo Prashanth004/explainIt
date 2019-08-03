@@ -725,7 +725,7 @@ window.close();
         var sharableLinkMessage = (!this.state.gotSharableLink && !this.state.failedToSaveMessage) ? (<PreparingLink />) :
             ((!this.state.failedToSaveMessage && (this.state.sharablelink !== null || this.state.sharablelink !== undefined)) ?
                 (<div className="sharableLinkDiv">
-                    <span>Link to access you saved call : </span>
+                    <span>Link to access your saved call : </span>
                     <CopyToClipboard sharablelink={this.state.sharablelink} />
                 </div>) : (<div>
                     <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>

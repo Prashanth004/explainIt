@@ -1,30 +1,38 @@
 
 
-import React from 'react';
 import config from '../../../../../config/config';
 import ImageContainer from '../imageContainer';
 import { FiPhoneMissed } from "react-icons/fi";
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import PropType from 'prop-types';
-import { openHome} from '../../../../../actions/navAction'
-
+import { openHome} from '../../../../../actions/navAction';
+import React, { Component } from 'react'
 import {dialFromFail} from '../../../../../actions/dialActions'
-// import { fullStartedSharing } from '../../../../../actions/toolActions';
 
-const CallFailDialed =  (props) => {
-    const { userData, activity } = props
-    var date = activity.time.slice(5, 7);
-    const Redial = ()=>{
-        props.dialFromFail(userData.userName,activity.subject);
-        props.openHome();
+class CallFailDialed extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            oepnHemred : false
+        }
+        this.Redial = this.Redial.bind(this);
     }
-    
-    return (
+    Redial = ()=>{
+        const {userData,activity} = this.props;
+        this.props.dialFromFail(userData.userName,activity.subject);
+        this.setState({oepnHemred:true})
+    }
+  render() {
+    const { userData, activity } = this.props
+    var date = activity.time.slice(5, 7);
+
+    return (!this.state.oepnHemred?(
         <div className="activityContentWithDate">
             <div className="activityContent">
             <div className="callIconDiv" > 
                 <span className="hint--top" aria-label={"dial "+userData.userName}>
-                    <FiPhoneMissed className="callIcon missed" onClick={Redial}/>
+                    <FiPhoneMissed className="callIcon missed" onClick={this.Redial}/>
                 </span>
                 </div>
                 {/* <div className="callIconDiv"> <FiPhoneMissed className="callIcon missed" /></div> */}
@@ -39,20 +47,16 @@ const CallFailDialed =  (props) => {
             </div>
             {/* {screenShare} */}
         </div>
-    )
-
+    ):((<Redirect push to={"../application"} />)))
+  }
 }
-
-CallFailDialed.PropType = {
-    dialFromFail: PropType.func.isRequired,
-   
-};
 const mapStateToProps = state => ({
     // userData : state.userStore.userData
     openHome: PropType.func.isRequired,
    
 })
 export default  connect(mapStateToProps, {dialFromFail,openHome })(CallFailDialed)
+
 
 
 

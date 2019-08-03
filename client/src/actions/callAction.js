@@ -3,7 +3,7 @@ import {CALL_DETAILS_ACCEPT,
     SAVE_RECIEVER_DATA,
     INCREASE_CALL_BY_MINUTE,
     UPDATE_CURRENT_TIME,
-    SET_PEER_ID,
+    SET_PEER_ID,END_CALL_FROM_OTHER_PEER,
     INITIATE_SEND,
     ANSWERED_CALL,
     RESET_CALL_ACTIONS,
@@ -259,7 +259,11 @@ export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
         console.log("error in saving the call fail details : ", err)
     })
 }
-
+export const endCallfromOtherPeer = ()=>dispatch=>{
+    dispatch({
+        type:END_CALL_FROM_OTHER_PEER
+    })
+}
 export const missCall = () =>(dispatch)=>{
     dispatch({
         type:MISS_CALL

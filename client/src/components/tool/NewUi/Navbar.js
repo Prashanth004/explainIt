@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FiPhone, FiSettings, FiMail, FiHome } from "react-icons/fi";
 import '../../css/nav.css';
+import { Redirect} from 'react-router-dom';
 import {
   Collapse,
   Navbar,
@@ -35,7 +36,9 @@ class Navigationbar extends React.Component {
       isViewPage: false,
       isProjectPage: false,
       optionVisibe: "hidden",
-      isReceiver: false
+      isReceiver: false,
+      openHomeRed:false,
+      openHomeRedVisit:false
     };
     this.googleResponse = this.googleResponse.bind(this);
     this.handleGit = this.handleGit.bind(this);
@@ -81,16 +84,20 @@ class Navigationbar extends React.Component {
   componentWillMount() {
     const { stillAuthenicated, openHome, page } = this.props
     stillAuthenicated();
-    openHome()
+    // openHome()
 
     if (page !== undefined) {
-      if (page === config.VISIT_PROFILE_PAGE)
+      if (page === config.VISIT_PROFILE_PAGE){
         this.setState({ isViewPage: true });
+        console.log("view Page in nav bar")
+      }
+       
       if (page === config.PEOJECT_PAGE)
         this.setState({ isProjectPage: true });
       if (page === "share")
         this.setState({ isReceiver: true })
     }
+    
   }
   openParticipated() {
     this.props.openParticipated()
@@ -101,17 +108,30 @@ class Navigationbar extends React.Component {
     this.setState({ state: this.state });
   }
   openHome() {
-    var urlPath =window.location.pathname
-  
-    if (!(urlPath).includes('application') && !(urlPath).includes('share'))
+    var urlPath =window.location.pathname;
+    const {isViewPage}= this.state;
+    const {isSceenSharing,isFullScreenRecording,openHome}= this.props;
+    if((urlPath).includes('activities')){
+      if(!isViewPage)
+      this.setState({openHomeRed:true})
+      else
+      this.setState({openHomeRedVisit:true})
+      
+    }
+    else if (!(urlPath).includes('application') && !(urlPath).includes('share'))
       window.open(config.react_url + '/application', '_self')
     else {
-      if (this.props.isSceenSharing || this.props.isFullScreenRecording)
+      if (isSceenSharing || isFullScreenRecording)
         window.open(config.react_url + '/application', '_blank');
       else if ((urlPath).includes('share'))
         window.open(config.react_url + '/application', '_self')
-      else
-        this.props.openHome()
+      else{
+        openHome();
+        // this.props.history.push('/application');
+        // this.props.history.push("/new/url")
+        // window.open(config.react_url + '/application', '_self')
+      }
+        
     }
   }
 
@@ -142,7 +162,8 @@ class Navigationbar extends React.Component {
     });
   }
   render() {
-
+    const redirectComponent = (this.state.openHomeRed)?(<Redirect to={"../"} />):(this.state.openHomeRedVisit?(<Redirect to={"./"} />):(null));
+    
     var buttonColor = {
       borderColor: "white",
       backgroundColor: "#2b8b8f",
@@ -159,7 +180,7 @@ class Navigationbar extends React.Component {
     const notifyBadge = !this.state.isViewPage ? (<NotificationBadge count={this.props.totalUnread} />
     ) : (null)
     var profileImage = null;
-
+    
     if ((this.props.Created || this.props.Participated)
       && this.state.isViewPage
       && !this.props.isAuthenticated) {
@@ -196,18 +217,18 @@ class Navigationbar extends React.Component {
     if (!this.state.isViewPage && (this.props.Created || this.props.Participated || this.props.inbox) && !(this.state.isProjectPage || this.state.isReceiver || this.props.isSceenSharing || this.props.callAction || this.props.isFullScreenRecording)) {
       if (this.props.inbox) {
         navItem1=(<span onClick={this.props.openCreated}>Created</span>);
-        navItem2 = (<div><span><img src={require('../../images/logo5.png')} onClick={this.props.openHome} width="28px" height="28px" alt="home"></img></span></div>)
+        navItem2 = (<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px" height="28px" alt="home"></img></span></div>)
         navItem3=(<span onClick={this.props.openParticipated}>Participated</span>);
       }
       else if(this.props.Created){
-        navItem1=(<div><span><img src={require('../../images/logo5.png')} onClick={this.props.openHome}  width="28px"height="28px" alt="home"></img></span></div>);
+        navItem1=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome}  width="28px"height="28px" alt="home"></img></span></div>);
         navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
         navItem3=(<span onClick={this.props.openParticipated}>Participated</span>);
       }
       else if(this.props.Participated){
         navItem1=(<span onClick={this.props.openCreated}>Created</span>);
         navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
-        navItem3=(<div><span><img src={require('../../images/logo5.png')} onClick={this.props.openHome} width="28px"height="28px" alt="home"></img></span></div>);
+        navItem3=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px"height="28px" alt="home"></img></span></div>);
       }
     }
     else if (this.state.isProjectPage || this.state.isReceiver) {
@@ -218,7 +239,7 @@ class Navigationbar extends React.Component {
     else if (this.state.isViewPage && (this.props.Created || this.props.Participated || this.props.inbox) && !(this.state.isProjectPage || this.state.isReceiver || this.props.isSceenSharing || this.props.callAction || this.props.isFullScreenRecording)) {
    
       navItem1 = (<span onClick={this.props.openCreated} style={{color:this.props.Created?"#40a8ac":"black"}}>Created</span>);
-      navItem2 = (<div><span><img src={require('../../images/logo5.png')}onClick={this.props.openHome} width="28px" height="28px" alt="home"></img></span></div>)
+      navItem2 = (<div><span><img src={require('../../images/logo5.png')}onClick={this.openHome} width="28px" height="28px" alt="home"></img></span></div>)
       navItem3 = (<span onClick={this.props.openParticipated} style={{color:this.props.Participated?"#40a8ac":"black"}}>Participated</span>);
 
     }
@@ -249,11 +270,14 @@ class Navigationbar extends React.Component {
 
     return (
       <div>
+        {redirectComponent}
         {content}
       </div>
     );
   }
 }
+
+
 
 Navigationbar.PropType = {
   stillAuthenicated: PropType.func.isRequired,

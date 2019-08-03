@@ -29,6 +29,7 @@ import { fetchProjectbyIssue, clearAnswers } from '../../../actions/projectActio
 import { stillAuthenicated,twitterAuthFailure,signInWithTwitter } from '../../../actions/signinAction';
 import { getProfileDetails } from '../../../actions/profileAction'
 import PropType from 'prop-types';
+import {initiateSocket} from '../../../actions/homeAction'
 import Swal from 'sweetalert2'
 import config from '../../../config/config'
 import ProfileCard from './ProfileCard'
@@ -38,7 +39,7 @@ import {restAllToolValue} from "../../../actions/toolActions";
 import {cancelSuccess,fetchIssues} from "../../../actions/issueActions";
 import {getProfileByTwitterHandle,setVisitProfile} from "../../../actions/visitProfileAction";
 import {getRecpientId} from '../../../actions/twitterApiAction'
-import {openInbox, openParticipated,openCreated } from "../../../actions/navAction";
+import {openInbox, openParticipated,openCreated,openHome } from "../../../actions/navAction";
 import ProfileNotOnExplain from './ProfileNotOnTwitter/ProfileNotOnExplain'
 
 class NewHome extends Component {
@@ -118,50 +119,8 @@ class NewHome extends Component {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
         var self = this;
         window.addEventListener("resize", this.resize.bind(this));
-        socket.on('connect_failed', function () {
-        })
-        socket.on('error', function (err) {
-        });
-        socket.on('connect_timeout', function (err) {
-        });
-        socket.on("disconnect", () => {
-        })
-        socket.io.on("connect_error", () => {
-        });
-        
-        socket.on(config.LINK_TO_CALL, data => {
-            console.log("recieving the call")
-            self.setState({ endedCallFromOtherPeer: false })
-            setTimeout(() => {
-                self.props.missCall();
-            }, 18000)
-            localStorage.setItem("profilePic", data.fromProfilePic)
-            if (String(data.ToUserId) === this.props.profileid) {
-                socket.emit(config.LINK_TO_CALL_ACK, {
-                    "fromUserId": data.fromUserId,
-                    "toUserId": data.toUserId
-                })
-                // this.setState({
-                //     callerId: data.fromUserId
-                // })
-                this.props.acceptCallDetails(
-                    data.link,
-                    data.fromEmail,
-                    data.fromUserName,
-                    data.fromUserId,
-                    data.fromProfilePic,
-                    data.topicOfTheCall,
-                    data.timeAloted
-
-                )
-            }
-        });
-        socket.on(config.END_WHILE_DIALING, data => {
-            if (data.ToUserId === this.props.profileid) {
-                this.setState({ endedCallFromOtherPeer: true })
-            }
-        })
-        
+      
+     
     
 
         if(!this.props.isPresentInExplain){
@@ -195,6 +154,8 @@ class NewHome extends Component {
             window.removeEventListener('storage', this.reloadPage)
     }
     componentWillMount() {
+        this.props.openHome();
+        this.props.initiateSocket()
         this.props.stillAuthenicated();
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
         this.setState({ currentAtionStatus: currentAtionStatus })
@@ -626,4 +587,5 @@ const mapStateToProps = state => ({
 })
 
 // import {  } from '../../../actions/callAction';
-export default connect(mapStateToProps, {openInbox,missCall,acceptCallDetails,resetCallAction,creatAnsProject,setVisitProfile,twitterAuthFailure,displayFullScrenRecord, displayFullScreShare,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)
+export default connect(mapStateToProps, {openInbox,missCall,initiateSocket,
+    openHome,acceptCallDetails,resetCallAction,creatAnsProject,setVisitProfile,twitterAuthFailure,displayFullScrenRecord, displayFullScreShare,signInWithTwitter, restAllToolValue,getRecpientId, openCreated, openParticipated, getProfileByTwitterHandle,fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers, stillAuthenicated })(NewHome)

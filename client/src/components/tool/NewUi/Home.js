@@ -8,16 +8,15 @@ import { toggleHowWorksModal } from '../../../actions/modalAction'
 import ExplinerVideoModal from './container/explainerModal';
 import ExtCloseBtn from './container/modalExtButton'
 import {showContactsAct} from '../../../actions/ProfileCardAction';
-
 import EmailVarify from './emailvarify'
 import CallNotification from './container/CallNotification';
 import Activity from './Activies/indexActivity'
-import DisplatCreated from './diaplyissues/DisplayCreated';
+import {  openHome } from "../../../actions/navAction";
 import { initGA, loadPageView } from './container/ReactGa';
 import { missCall } from '../../../actions/callAction';
 import { getProfileDetails } from '../../../actions/profileAction';
 import { getTotalUnread } from '../../../actions/messageAction'
-import socketIOClient from "socket.io-client";
+import {initiateSocket} from '../../../actions/homeAction'
 import { Redirect } from 'react-router-dom';
 import { creatAnsProject } from '../../../actions/projectActions';
 import 'react-confirm-alert/src/react-confirm-alert.css'
@@ -27,24 +26,21 @@ import { connect } from 'react-redux';
 import MobNav from './newNav/index'
 import { setIssueId } from '../../../actions/issueActions';
 import { stillAuthenicated } from '../../../actions/signinAction';
-import { FiGrid, FiList } from "react-icons/fi";
+// import { FiGrid, FiList } from "react-icons/fi";
 import config from '../../../config/config';
 import {  getAllActivities } from '../../../actions/callAction'
 import ProfileCard from './ProfileCard'
-import IssueDisplay from './diaplyissues/DisplayIssues'
+// import IssueDisplay from './diaplyissues/DisplayIssues'
 import { varifyEmail } from '../../../actions/emailAction'
 import { saveExtensionDetails } from "../../../actions/extensionAction";
-import { acceptCallDetails } from '../../../actions/callAction';
 
 class NewHome extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isHome: true,
-            socket: null,
             typeOfView: "list",
             reducedWidth: false,
-            endedCallFromOtherPeer: false,
             reducedLittleWidth: false,
             currentAtionStatus: null,
             showExplainerVideo: false,
@@ -57,7 +53,6 @@ class NewHome extends Component {
         this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
         this.informExtension = this.informExtension.bind(this);
     }
-
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
         this.setState({ reducedLittleWidth: window.innerWidth <= 1200 });
@@ -67,7 +62,6 @@ class NewHome extends Component {
             this.setState({issuepercentage:"59%"})
         }
     }
-
     saveVideoData(videoData, audioData, isPublic, text, action) {
         var condition = this.props.issueId == null || this.props.issueId === undefined
         var issueId = (condition) ? null : this.props.issueId;
@@ -86,6 +80,7 @@ class NewHome extends Component {
         }
     }
     componentWillUnmount() {
+       
         window.removeEventListener('storage', this.reloadPage)
         window.removeEventListener("resize", this.resize());
     }
@@ -121,90 +116,39 @@ class NewHome extends Component {
         } else {
             window.attachEvent("onmessage", postMessageHandler);
         }
-        var socket = this.state.socket
-        socket.on(config.UPDATE_BADGE, data => {
-            if (data.userId === this.props.userId) 
-                this.props.getTotalUnread()
-        })
-        socket.on(config.END_WHILE_DIALING, data => {
-            if (data.ToUserId === this.props.userId) {
-                this.setState({ endedCallFromOtherPeer: true })
-            }
-        })
-        socket.on(config.ENDING_RING, data => {
-            if (data.ToUserId === this.props.userId) {
-                socket.emit(config.ENDING_RING_ACK, {
-                    "ToUserId": data.fromUserId
-                })
-            }
-        })
-        socket.on(config.SAVED_NEW_PROJECT, data => {
+        var socket = this.props.socket
+        if(socket!==null){
+            socket.on(config.UPDATE_BADGE, data => {
+                if (data.userId === this.props.userId) 
+                    this.props.getTotalUnread()
+            })
+            socket.on(config.SAVED_NEW_PROJECT, data => {
+    
+                if (data.userId === this.props.userId) {
+                    this.props.getProfileDetails(this.props.userId, config.SELF)
+                }
+            })
+            socket.on(config.NEW_MESSAGE, data => {
+                if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
+                    this.props.getTotalUnread();
+                    this.props.getAllActivities()
+                }
+            })
+        }
 
-            if (data.userId === this.props.userId) {
-                this.props.getProfileDetails(this.props.userId, config.SELF)
-            }
-        })
-        socket.on(config.NEW_MESSAGE, data => {
 
-            if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
-                this.props.getTotalUnread();
-                this.props.getAllActivities()
-            }
-        })
-        socket.on('connect_failed', function () {
-            console.log("connection failed : ")
-        })
-        socket.on('error', function (err) {
-            console.log("socket error : ", err)
-        });
-        socket.on('connect_timeout', function (err) {
-            console.log("socket onnection_timeout : ", err)
-        });
-        socket.on("disconnect", () => {
-            console.log("socket disconnected")
-        })
-        socket.io.on("connect_error", () => {
-            console.log("connection_error")
-        })
-        socket.on(config.LINK_TO_CALL, data => {
-            console.log("recieving the call")
-            self.setState({ endedCallFromOtherPeer: false })
-            setTimeout(() => {
-                this.props.missCall();
-            }, 18000)
-            localStorage.setItem("profilePic", data.fromProfilePic)
-            if (String(data.ToUserId) === this.props.userId) {
-                socket.emit(config.LINK_TO_CALL_ACK, {
-                    "fromUserId": data.fromUserId,
-                    "toUserId": data.toUserId
-                })
-                this.props.acceptCallDetails(
-                    data.link,
-                    data.fromEmail,
-                    data.fromUserName,
-                    data.fromUserId,
-                    data.fromProfilePic,
-                    data.topicOfTheCall,
-                    data.timeAloted
-                )
-            }
-        });
     }
     componentWillMount() {
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
         this.setState({ currentAtionStatus: currentAtionStatus })
-        this.props.varifyEmail()
+        this.props.varifyEmail();
+        this.props.initiateSocket()
         this.props.stillAuthenicated()
-        console.log("mounting")
+        console.log("mounting");
+        this.props.openHome();
         this.props.getTotalUnread();
-        const socket = socketIOClient(config.base_dir, { transports: ['websocket'] }, { origins: "*" });
-        socket.on('reconnect_attempt', () => {
-            socket.io.opts.transports = ['polling', 'websocket'];
-        });
-        this.setState({
-            socket: socket
-        })
-
+        // const socket = socketIOClient(config.base_dir, { transports: ['websocket'] }, { origins: "*" });
+      
     }
   
     toggleExplainerVideo() {
@@ -242,16 +186,16 @@ class NewHome extends Component {
     render() {
         const {issuepercentage} =  this.state;
         const profileCardGrid = (!this.state.reducedLittleWidth)?("30% 40% 30%"):("100%")
-        const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",}}><Cotactlist  /></div>):(null)
+        const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"5px"}}><Cotactlist  /></div>):(null)
         var profileCardElement = null;
-        var listGrid = (window.innerWidth >= 1000) ? (<div style={{position:"fixed",top:"90px",right:"30px"}} >
-            <span className="hint--top" aria-label="List View">
-                <FiList onClick={this.changeViewToList} className="listView" />
-            </span>
-            <span className="hint--top" aria-label="Grid View">
-                <FiGrid onClick={this.changeViewToGrid} className="gridView" />
-            </span>
-        </div>) : (null);
+        // var listGrid = (window.innerWidth >= 1000) ? (<div style={{position:"fixed",top:"90px",right:"30px"}} >
+        //     <span className="hint--top" aria-label="List View">
+        //         <FiList onClick={this.changeViewToList} className="listView" />
+        //     </span>
+        //     <span className="hint--top" aria-label="Grid View">
+        //         <FiGrid onClick={this.changeViewToGrid} className="gridView" />
+        //     </span>
+        // </div>) : (null);
         if (!this.state.isinformed && this.props.userId !== null) {
             this.informExtension();
         }     
@@ -262,16 +206,13 @@ class NewHome extends Component {
             var issuesCreated = (this.props.myissues)
         var feedDiv = null;
 
-        const callNotificationDiv = (<CallNotification
-            endedCallFromOtherPeer={this.state.endedCallFromOtherPeer}
-            socket={this.state.socket} />)
+        const callNotificationDiv = (<CallNotification />)
     
         if (this.props.isAauthenticated) {
             if (this.props.participated ||
                 this.props.setting ||
                 this.props.created) {
                 profileCardElement = null;
-
             }
             else if (this.props.userId !== null) {
                profileCardElement = (
@@ -279,41 +220,40 @@ class NewHome extends Component {
                             currentAtionStatus={this.state.currentAtionStatus}
                             isHome={this.state.isHome}
                             sharabeLink={sharabeLink}
-                            socket={this.state.socket}
                             userId={this.props.userId}
                             saveVideoData={this.saveVideoData}/>)
             }
         }
 
         if (this.props.isAauthenticated) {
-            if (!this.props.incommingCall && (this.props.participated || this.props.created )) {
-                var participatedDiv = (this.state.typeOfView === "list") ? (
-                    <div className="issueContainer" style={{ width: issuepercentage }} >
-                        <IssueDisplay socket={this.state.socket}home={config.HOME}/>
-                    </div>
-                ) : (<div className="issueContainer" style={{ width: "80%" }} >
+            // if (!this.props.incommingCall && (this.props.participated || this.props.created )) {
+            //     var participatedDiv = (this.state.typeOfView === "list") ? (
+            //         <div className="issueContainer" style={{ width: issuepercentage }} >
+            //             <IssueDisplay home={config.HOME}/>
+            //         </div>
+            //     ) : (<div className="issueContainer" style={{ width: "80%" }} >
 
-                    <div className="closeBtnHolder">
-                    </div>
-                    <DisplatCreated socket={this.state.socket} home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
-                </div>)
-                feedDiv = (<div>
-                    {listGrid}
-                    {participatedDiv}
-                </div>)
-            }
-            else if (this.props.inbox) {
-                profileCardElement = null
-                feedDiv = (<div >
-                    <Activity userId={this.props.userId} />
-                </div>)
-            }
-            else if(this.props.setting){
+            //         <div className="closeBtnHolder">
+            //         </div>
+            //         <DisplatCreated home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
+            //     </div>)
+            //     feedDiv = (<div>
+            //         {listGrid}
+            //         {participatedDiv}
+            //     </div>)
+            // }
+            // else if (this.props.inbox) {
+            //     profileCardElement = null
+            //     feedDiv = (<div >
+            //         <Activity userId={this.props.userId} />
+            //     </div>)
+            // }
+            if(this.props.setting){
                 feedDiv = (<Setting userId={this.props.userId} />)
             }
-            else {
+            // else {
 
-            }
+            // }
         }
 
         if((this.props.isSceenSharing || this.props.isFullScreenRecording  ||this.props.callAction))
@@ -367,9 +307,10 @@ const mapStateToProps = state => ({
     callAction: state.call.callAction,
     openHowItWorksModal: state.modal.openHowItWorksModal,
     showContacts:state.profileCard.showContacts,
+    socket:state.home.socket
 })
 
-export default connect(mapStateToProps, {
-    toggleHowWorksModal,getAllActivities,missCall,acceptCallDetails, saveExtensionDetails,showContactsAct,
+export default connect(mapStateToProps, {openHome,
+    toggleHowWorksModal,getAllActivities,missCall, saveExtensionDetails,showContactsAct,initiateSocket,
     getProfileDetails,setIssueId,varifyEmail,getTotalUnread,creatAnsProject,stillAuthenicated, getAllContacts
 })(NewHome)

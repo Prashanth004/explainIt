@@ -18,9 +18,8 @@ class cntactCard extends Component {
   render() {
     console.log("this.props.contactData : ",this.props.contactData);
     const {profilepic,username,twitterhandle,goodat} = this.props.contactData;
-    console.log("goodat : ",goodat)
-    console.log("goodat : ",typeof(goodat));
-    console.log("goodat : ",goodat.length)
+   
+   
     const emptyGoodAt = (<p  className="contactHandle">Profile details incomplete</p>)
     const gootAtDiv = (goodat!==null)?((goodat.length!==0)?( <p className="contactHandle"><b>Good at : </b>{goodat}</p>):(emptyGoodAt)):(emptyGoodAt)
     return (

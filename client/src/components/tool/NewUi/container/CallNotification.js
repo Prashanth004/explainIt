@@ -3,7 +3,9 @@ import { MdCallEnd, MdCall } from "react-icons/md";
 import { connect } from 'react-redux';
 import config from '../../../../config/config';
 import React, { Component } from 'react';
-import { answerCall, missCall } from '../../../../actions/callAction';
+import { answerCall, missCall,endCallfromOtherPeer } from '../../../../actions/callAction';
+import { acceptCallDetails } from '../../../../actions/callAction';
+
 
 class CallNotification extends Component {
     constructor(props) {
@@ -13,16 +15,53 @@ class CallNotification extends Component {
     }
     componentDidMount() {
         var socket = this.props.socket;
-        socket.on(config.REJECT_REPLY, data => {
-            if (this.props.userId === String(data.fromUserId)) {
-                this.props.answerCall();
-            }
-        })
-        socket.on(config.ACCEPT_SHARE_REQUEST, data => {
-            if (this.props.userId === String(data.fromUserId)) {
-                this.props.answerCall();
-            }
-        });
+        const {endCallfromOtherPeer,userId,missCall,
+            answerCall,acceptCallDetails}=this.props;
+        if(socket!==null){
+            socket.on(config.REJECT_REPLY, data => {
+                if (userId === String(data.fromUserId)) 
+                    answerCall();
+            })
+            socket.on(config.ACCEPT_SHARE_REQUEST, data => {
+                if (userId === String(data.fromUserId)) 
+                    answerCall();
+            });
+            socket.on(config.LINK_TO_CALL, data => {
+                console.log("recieving the call")
+                setTimeout(() => {
+                    missCall();
+                }, 18000)
+                localStorage.setItem("profilePic", data.fromProfilePic)
+                if (String(data.ToUserId) === userId) {
+                    socket.emit(config.LINK_TO_CALL_ACK, {
+                        "fromUserId": data.fromUserId,
+                        "toUserId": data.toUserId
+                    })
+                    acceptCallDetails(
+                        data.link,
+                        data.fromEmail,
+                        data.fromUserName,
+                        data.fromUserId,
+                        data.fromProfilePic,
+                        data.topicOfTheCall,
+                        data.timeAloted
+                    )
+                }
+            });
+            socket.on(config.END_WHILE_DIALING, data => {
+                if (data.ToUserId === userId) {
+                   endCallfromOtherPeer()
+                }
+            })
+            socket.on(config.ENDING_RING, data => {
+                if (data.ToUserId === userId) {
+                    socket.emit(config.ENDING_RING_ACK, {
+                        "ToUserId": data.fromUserId
+                    })
+                }
+            })
+        }
+
 
     }
     answerCall = () => {
@@ -87,8 +126,11 @@ const mapStateToProps = state => ({
     callerName: state.call.userName,
     userId: state.auth.id,
     callerId: state.call.id,
+    endedCallFromOtherEnd:state.call.endedCallFromOtherEnd,
+    socket:state.home.socket
 })
-export default connect(mapStateToProps, {answerCall, missCall})(CallNotification)
+export default connect(mapStateToProps, {answerCall,acceptCallDetails,endCallfromOtherPeer,
+     missCall})(CallNotification)
 
 
 

@@ -591,7 +591,9 @@ const mapStateToProps = state => ({
     callTopic: state.call.topicOfTheCall,
     shareid:state.explain.shareid,
     topicIssueId:state.explain.issueId,
-    currentTime: state.recorder.currentTime
+    currentTime: state.recorder.currentTime,
+  
+
 })
 
 export default connect(mapStateToProps, { postStartCall,explainSuccessedUpate, saveRecordedMessage, resetRecorder, pauseRecording, resumeRecording, startRecorder, updateCurrentTime, postEndCall, sendMessage, saveSourceId, showCanvas, hideCanvas, fullStartedRecording, setStream, discardAfterRecord, fullStopedRecording })(FullScreenRecorder)
