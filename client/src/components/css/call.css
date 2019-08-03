@@ -107,6 +107,7 @@
   }
   .statusBarCall{
       display:grid;
+      height:15px;
       grid-template-columns: 15% 70% 15%
   }
   

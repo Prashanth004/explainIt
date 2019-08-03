@@ -185,7 +185,7 @@ class NewHome extends Component {
 
     render() {
         const {issuepercentage} =  this.state;
-        const profileCardGrid = (!this.state.reducedLittleWidth)?("30% 40% 30%"):("100%")
+        const profileCardGrid = (!this.state.reducedLittleWidth)?(this.props.isSecondScreenSharing?"100%":"100%"):("100%")
         const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"5px"}}><Cotactlist  /></div>):(null)
         var profileCardElement = null;
         // var listGrid = (window.innerWidth >= 1000) ? (<div style={{position:"fixed",top:"90px",right:"30px"}} >
@@ -271,8 +271,8 @@ class NewHome extends Component {
                            <div></div>
                             <div>{profileCardElement}</div>
                             <div>
-                           <br/>
-                            {contactList}</div>
+                           
+                    {contactList}</div>
                         </div>
                         </div>
                             {feedDiv}

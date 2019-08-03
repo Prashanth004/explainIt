@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './contacts.css';
+import config from '../../../../config/config'
 import { FiCopy,FiVideo} from "react-icons/fi";
 import {addNewUser} from '../../../../actions/storeUserAction';
 import {dialFromFail,recordFromFail} from '../../../../actions/dialActions'
@@ -17,8 +18,10 @@ class cntactCard extends Component {
   
   render() {
     console.log("this.props.contactData : ",this.props.contactData);
-    const {profilepic,username,twitterhandle,goodat} = this.props.contactData;
-   
+    const {profilepic,username,twitterhandle,goodat,online} = this.props.contactData;
+    const shareIcon = online?( <span className="hint--left" aria-label="Share Screen">
+    <FiCopy onClick={()=>this.props.dialFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
+  </span>):(null)
    
     const emptyGoodAt = (<p  className="contactHandle">Profile details incomplete</p>)
     const gootAtDiv = (goodat!==null)?((goodat.length!==0)?( <p className="contactHandle"><b>Good at : </b>{goodat}</p>):(emptyGoodAt)):(emptyGoodAt)
@@ -28,13 +31,12 @@ class cntactCard extends Component {
               <img src={profilepic} width="100%" height="100%"  className="contactImage" alt="profilePic"></img>
           </div>
           <div style={{textAlign:"left"}}>
-          <span>{username} </span>
+            <a href={config.react_url+"/@"+twitterhandle}target="_blank"rel="noopener noreferrer" >
+          <span>{username} </span></a>
           {gootAtDiv}
           </div>
           <div>
-          <span className="hint--left" aria-label="Share Screen">
-            <FiCopy onClick={()=>this.props.dialFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
-          </span>
+         {shareIcon}
            <br/>
            <span className="hint--left" aria-label="Record screen and send">
             <FiVideo onClick={()=>this.props.recordFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>

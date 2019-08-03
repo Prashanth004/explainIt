@@ -45,7 +45,7 @@ class displayTopBtns extends Component {
         }
     }
     openProfile() {
-        window.open(config.react_url+"/@"+this.props.questionProject.twitterhandle)
+        window.open(config.react_url + "/@" + this.props.questionProject.twitterhandle)
     }
     onOptClick() {
         if (this.state.optionVisibe === "hidden")
@@ -142,7 +142,7 @@ class displayTopBtns extends Component {
             profileName = this.props.questionProject.username
             profiletwitterHandle = this.props.questionProject.twitterhandle
         }
-        
+
 
 
         const deleteDiv = (
@@ -176,13 +176,17 @@ class displayTopBtns extends Component {
             <div>
                 <div id={this.props.issue.issueid} className="topButtons">
                     <div className="cardDate">
-                    <span className="cardDateSpan" >{this.props.issue.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.time.slice(0, 4)}</span>
+                        <div >
+                            <span className="cardDateSpan" >{this.props.issue.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.time.slice(0, 4)}</span></div>
+                        <div></div>
+                        <div>
+                            {publicPrivate}</div>
                     </div>
                     <div className="seconBandTop">
                         <div className="profileCardDiv">
                             <div className="cardProfilePicDiv">
                                 <span>
-                                <img alt="button" onClick={this.openProfile}src={profilePic}className="cardProfilePic"/>
+                                    <img alt="button" onClick={this.openProfile} src={profilePic} className="cardProfilePic" />
                                 </span>
                             </div>
                             <div className="cardProfileName">

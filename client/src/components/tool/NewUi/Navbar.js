@@ -2,7 +2,7 @@
 import config from '../../../config/config';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import { FiPhone, FiSettings, FiMail, FiHome } from "react-icons/fi";
+import { FiPhone, FiSettings, FiArrowLeft, FiHome } from "react-icons/fi";
 import '../../css/nav.css';
 import { Redirect} from 'react-router-dom';
 import {
@@ -204,6 +204,7 @@ class Navigationbar extends React.Component {
           </DropdownMenu>
         </UncontrolledDropdown>) : null
     }
+    var navBack =null
     const Brand = (this.props.inbox || this.props.Created || this.props.Participated)?(null):
     (
     <span>
@@ -215,18 +216,19 @@ class Navigationbar extends React.Component {
     // navItem2 = (<div> <span> {notifyBadge}<button className="nextButton" style={logsColor} onClick={this.props.openInbox}> <FiPhone style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button></span></div>)
     // navItem3 = (<button className="nextButton" style={createdColor} onClick={this.openCreated}><FiMail style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>)
     if (!this.state.isViewPage && (this.props.Created || this.props.Participated || this.props.inbox) && !(this.state.isProjectPage || this.state.isReceiver || this.props.isSceenSharing || this.props.callAction || this.props.isFullScreenRecording)) {
+      navBack = (<span style={{fontSize:"23px"}}><FiArrowLeft onClick={this.openHome}  /></span>)
       if (this.props.inbox) {
-        navItem1=(<span onClick={this.props.openCreated}>Created</span>);
+        navItem1=(<span onClick={this.props.openCreated} style={{color:"rgba(42, 42, 42, 0.637)"}}>Created</span>);
         navItem2 = (<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px" height="28px" alt="home"></img></span></div>)
-        navItem3=(<span onClick={this.props.openParticipated}>Participated</span>);
+        navItem3=(<span onClick={this.props.openParticipated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
       }
       else if(this.props.Created){
         navItem1=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome}  width="28px"height="28px" alt="home"></img></span></div>);
         navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
-        navItem3=(<span onClick={this.props.openParticipated}>Participated</span>);
+        navItem3=(<span onClick={this.props.openParticipated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
       }
       else if(this.props.Participated){
-        navItem1=(<span onClick={this.props.openCreated}>Created</span>);
+        navItem1=(<span onClick={this.props.openCreated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Created</span>);
         navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
         navItem3=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px"height="28px" alt="home"></img></span></div>);
       }
@@ -237,19 +239,19 @@ class Navigationbar extends React.Component {
       navItem3 = null;
     }
     else if (this.state.isViewPage && (this.props.Created || this.props.Participated || this.props.inbox) && !(this.state.isProjectPage || this.state.isReceiver || this.props.isSceenSharing || this.props.callAction || this.props.isFullScreenRecording)) {
-   
-      navItem1 = (<span onClick={this.props.openCreated} style={{color:this.props.Created?"#40a8ac":"black"}}>Created</span>);
+      navBack = (<span style={{fontSize:"23px"}}><FiArrowLeft onClick={this.openHome}  /></span>)
+      navItem1 = (<span onClick={this.props.openCreated} style={{color:this.props.Created?"#40a8ac":"rgba(42, 42, 42, 0.637)"}}>Created</span>);
       navItem2 = (<div><span><img src={require('../../images/logo5.png')}onClick={this.openHome} width="28px" height="28px" alt="home"></img></span></div>)
-      navItem3 = (<span onClick={this.props.openParticipated} style={{color:this.props.Participated?"#40a8ac":"black"}}>Participated</span>);
+      navItem3 = (<span onClick={this.props.openParticipated} style={{color:this.props.Participated?"#40a8ac":"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
 
     }
-    const content = (<Navbar color="white" light expand="md" style={{textAlign:"center"}}>
+    const content = (<Navbar color="white" light expand="md" style={{textAlign:"center",height:"65px"}}>
       <NavbarBrand >
       <div className="logoContainer" onClick={this.openHome}>
        {Brand}
        </div>
       </NavbarBrand>
-
+      {navBack}
       <div  style={{display:'grid',gridTemplateColumns:"33% 33% 33%",width:"380px",margin:"auto"}}>
         <div>{navItem1}</div>
         <div>{navItem2}</div>

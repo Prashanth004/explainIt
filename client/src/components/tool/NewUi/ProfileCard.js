@@ -195,7 +195,7 @@ class ProfileCard extends Component {
     }
     render() {
         var percentage = "380px";
-        const contactBtn = !this.state.reducedLittleWidth?({ width:"380px",position:"fixed",top:"95px",right:"80px"}):({margintop:"10px", marginRight:"5px"});
+        const contactBtn = ({margintop:"10px", marginRight:"5px"});
 
         if(this.props.redialInitiated && !this.state.redialed)
             this.redial();
@@ -207,7 +207,7 @@ class ProfileCard extends Component {
         if (this.props.screenAction === FULL_SCREEN_SHARE ||
             this.props.screenAction === FULL_SCREEN_RECORD) 
                 if (this.props.showCanvas || this.props.isSecondScreenSharing) 
-                percentage = "100%";
+                percentage = "80%";
         console.log("his.props.onlineStatus : ",this.props.onlinestatus)
         const condition = !this.props.isHome && !this.props.onlinestatus;
         const gridTwoIt = (condition)?({gridTemplateColumns: "30% 27% 27% 16%"}):({});

@@ -2,3 +2,6 @@
     font-family: myFirstFont;
     src: url('/BebasNeue-Regular.otf');
   }
+body{
+  background-color:  #f9fafa;
+}

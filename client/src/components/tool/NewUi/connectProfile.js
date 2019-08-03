@@ -320,7 +320,7 @@ class NewHome extends Component {
 
     render() {
         var sharabeLink = config.react_url + "/" + this.props.authTwitterHandle;
-        if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle)
+        if(this.props.authTwitterHandle===this.props.match.params.encrTwitterHandle.replace("@",""))
             this.props.history.push("/");
         var homeProjects =null;
         const twiHand = this.props.match.params.encrTwitterHandle.replace("@","")

@@ -168,7 +168,7 @@ text-align: center;
   /* width:95%; */
 /* position:fixed; */
 /* top:80px; */
-  padding: 5px;
+  padding: 0px;
   /* background-color: #cae8ca;
   border: 2px solid #4CAF50; */
   /* left:10px; */
@@ -199,7 +199,7 @@ margin-top:10px;
 
 }
 .fullHome{
-  background-color: red;
+  /* background-color: red; */
   min-height:99.7vh;
   /* background-color: rgb(143, 205, 228); */
   /* background-color: #f4f8f8; */
@@ -286,7 +286,7 @@ margin-top:10px;
       /* min-height: 65vh; */
       margin:auto;
       text-align: center;
-      padding-top:20px;
+      padding-top:0px;
       /* display:grid; */
       /* background-color: purple; */
   }
