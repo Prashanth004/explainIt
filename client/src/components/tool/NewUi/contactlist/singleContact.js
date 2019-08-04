@@ -24,7 +24,7 @@ class cntactCard extends Component {
   </span>):(null)
    
     const emptyGoodAt = (<p  className="contactHandle">Profile details incomplete</p>)
-    const gootAtDiv = (goodat!==null)?((goodat.length!==0)?( <p className="contactHandle"><b>Good at : </b>{goodat}</p>):(emptyGoodAt)):(emptyGoodAt)
+    const gootAtDiv = (goodat!==null)?((goodat.length!==0)?( <div className="goodAt"><b>Good at : </b>{goodat}</div>):(emptyGoodAt)):(emptyGoodAt)
     return (
       <div className="singleContact">
           <div className="contactImgContainer">
@@ -35,9 +35,9 @@ class cntactCard extends Component {
           <span>{username} </span></a>
           {gootAtDiv}
           </div>
-          <div>
+          <div style={{padding:"5px", marginTop:"5px",display:"grid", gridTemplateColumns:"50% 50%"}}>
          {shareIcon}
-           <br/>
+          
            <span className="hint--left" aria-label="Record screen and send">
             <FiVideo onClick={()=>this.props.recordFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
             </span>

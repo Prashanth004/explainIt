@@ -216,22 +216,23 @@ class Navigationbar extends React.Component {
     // navItem2 = (<div> <span> {notifyBadge}<button className="nextButton" style={logsColor} onClick={this.props.openInbox}> <FiPhone style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button></span></div>)
     // navItem3 = (<button className="nextButton" style={createdColor} onClick={this.openCreated}><FiMail style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>)
     if (!this.state.isViewPage && (this.props.Created || this.props.Participated || this.props.inbox) && !(this.state.isProjectPage || this.state.isReceiver || this.props.isSceenSharing || this.props.callAction || this.props.isFullScreenRecording)) {
-      navBack = (<span style={{fontSize:"23px"}}><FiArrowLeft onClick={this.openHome}  /></span>)
-      if (this.props.inbox) {
-        navItem1=(<span onClick={this.props.openCreated} style={{color:"rgba(42, 42, 42, 0.637)"}}>Created</span>);
-        navItem2 = (<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px" height="28px" alt="home"></img></span></div>)
-        navItem3=(<span onClick={this.props.openParticipated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
-      }
-      else if(this.props.Created){
-        navItem1=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome}  width="28px"height="28px" alt="home"></img></span></div>);
-        navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
-        navItem3=(<span onClick={this.props.openParticipated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
-      }
-      else if(this.props.Participated){
-        navItem1=(<span onClick={this.props.openCreated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Created</span>);
-        navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
-        navItem3=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px"height="28px" alt="home"></img></span></div>);
-      }
+      navBack = (<button className="nextButton" style={homeColor} onClick={this.openHome}><FiArrowLeft style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>)
+      // if (this.props.inbox) {
+        // navBack = (<span><FiArrowLeft style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "20px" }} /></span>)
+        navItem1=(<span onClick={this.props.openCreated} style={{color:this.props.Created?"#40a8ac":"rgba(42, 42, 42, 0.837)"}}>Created</span>);
+        navItem2 = (<div><span><FiPhone onClick={this.props.openInbox} fontSize="22px"style={{color:this.props.inbox?"#40a8ac":"rgba(42, 42, 42, 0.837)"}} /></span></div>)
+        navItem3=(<span onClick={this.props.openParticipated}style={{color:this.props.Participated?"#40a8ac":"rgba(42, 42, 42, 0.937)"}}>Participated</span>);
+      // }
+      // else if(this.props.Created){
+      //   navItem1=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome}  width="28px"height="28px" alt="home"></img></span></div>);
+      //   navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
+      //   navItem3=(<span onClick={this.props.openParticipated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
+      // }
+      // else if(this.props.Participated){
+      //   navItem1=(<span onClick={this.props.openCreated}style={{color:"rgba(42, 42, 42, 0.637)"}}>Created</span>);
+      //   navItem2 = (<span ><FiPhone onClick={this.props.openInbox} fontSize="25px" /></span>)
+      //   navItem3=(<div><span><img src={require('../../images/logo5.png')} onClick={this.openHome} width="28px"height="28px" alt="home"></img></span></div>);
+      // }
     }
     else if (this.state.isProjectPage || this.state.isReceiver) {
       navItem1 = null;
@@ -239,7 +240,7 @@ class Navigationbar extends React.Component {
       navItem3 = null;
     }
     else if (this.state.isViewPage && (this.props.Created || this.props.Participated || this.props.inbox) && !(this.state.isProjectPage || this.state.isReceiver || this.props.isSceenSharing || this.props.callAction || this.props.isFullScreenRecording)) {
-      navBack = (<span style={{fontSize:"23px"}}><FiArrowLeft onClick={this.openHome}  /></span>)
+      navBack = (<button className="nextButton" style={homeColor} onClick={this.openHome}><FiArrowLeft style={{ marginTop: "-2px", marginLeft: "0px", fontSize: "18px" }} /></button>)
       navItem1 = (<span onClick={this.props.openCreated} style={{color:this.props.Created?"#40a8ac":"rgba(42, 42, 42, 0.637)"}}>Created</span>);
       navItem2 = (<div><span><img src={require('../../images/logo5.png')}onClick={this.openHome} width="28px" height="28px" alt="home"></img></span></div>)
       navItem3 = (<span onClick={this.props.openParticipated} style={{color:this.props.Participated?"#40a8ac":"rgba(42, 42, 42, 0.637)"}}>Participated</span>);
@@ -251,8 +252,9 @@ class Navigationbar extends React.Component {
        {Brand}
        </div>
       </NavbarBrand>
-      {navBack}
-      <div  style={{display:'grid',gridTemplateColumns:"33% 33% 33%",width:"380px",margin:"auto"}}>
+    
+      <div  style={{display:'grid',gridTemplateColumns:"15% 28.3% 28.3% 28.3%",width:"380px",margin:"auto"}}>
+        <div>{navBack}</div>
         <div>{navItem1}</div>
         <div>{navItem2}</div>
         <div> {navItem3}</div>

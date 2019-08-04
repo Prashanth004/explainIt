@@ -82,8 +82,8 @@ margin-top:-100px;
 
   .nextButton{
     border:solid;
-    width:38px;
-    height:38px;
+    width:15px;
+    height:15px;
     border-radius:50%;
     border-color:#2b8b8f;
     background-color: white;
@@ -100,7 +100,7 @@ margin-top:-100px;
 }
  
   .logoContainer{
-    width:125px;
+    width:65px;
     text-align: center;
     height:35px;
   }

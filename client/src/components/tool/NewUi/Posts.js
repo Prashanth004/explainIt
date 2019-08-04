@@ -15,15 +15,22 @@ import { openInbox, openCreated } from "../../../actions/navAction";
 import { getProfileDetails } from '../../../actions/profileAction';
 import MobNav from './newNav/index'
 import { getProfileByTwitterHandle, setVisitProfile } from "../../../actions/visitProfileAction";
-
+import {initiateSocket} from '../../../actions/homeAction'
 
 class Posts extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { typeOfView: "list", gotAllActivity: false, reducedWidth: false, reducedLittleWidth: false };
+        this.state = { typeOfView: "list",socketinitiated:false,
+         gotAllActivity: false, reducedWidth: false, reducedLittleWidth: false };
         this.resize = this.resize.bind(this);
         this.getAllActivitiesLoc = this.getAllActivitiesLoc.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
+        this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
+    }
+    initiateSocketLoc(){
+        console.log("initiating socket");
+        this.props.initiateSocket();
+        this.setState({socketinitiated : true});
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
@@ -91,9 +98,34 @@ class Posts extends React.Component {
         window.addEventListener('storage', this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
+        var socket = this.props.socket;
+        console.log("socket before if : ",socket);
+        if(socket!==null){
+        
+            socket.on(config.SAVED_NEW_PROJECT, data => {
+                console.log("getting all the stuff")
+                if (data.userId === this.props.userId) {
+                    this.props.getProfileDetails(this.props.userId, config.SELF)
+                }
+            })
+
+            socket.on(config.NEW_MESSAGE, data => {
+                console.log("getting all the stuff")
+                console.log("data.touser : ",data.touser);
+
+                console.log("data.fromuser : ",data.fromuser);
+                console.log("this.props.userId) : ",this.props.userId);
+                if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
+                  
+                    this.props.getAllActivities()
+                }
+            })
+        }
     }
     render() {
-
+        if(this.props.socket === null && !this.state.socketinitiated){
+            this.initiateSocketLoc();
+        }
         const issuepercentage = this.state.reducedWidth ? "100%" : "59%";
         var feedDiv = null;
         const callNotificationDiv = (<CallNotification />)
@@ -171,7 +203,8 @@ const mapStateToProps= state => ({
                         participatedIssues: state.profile.participatedIssue,
                         userId: state.auth.id,
                         Setting: state.nav.openSetting,
-                        gotAllActivities :state.call.gotAllActivities
+                        gotAllActivities :state.call.gotAllActivities,
+                        socket:state.home.socket
                     })
-export default connect(mapStateToProps,{openInbox,getAllActivities,openCreated,
+export default connect(mapStateToProps,{openInbox,getAllActivities,openCreated,initiateSocket,
       getProfileDetails,stillAuthenicated,getProfileByTwitterHandle,setVisitProfile})(Posts)
