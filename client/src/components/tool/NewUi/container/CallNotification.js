@@ -27,7 +27,6 @@ class CallNotification extends Component {
                     answerCall();
             });
             socket.on(config.LINK_TO_CALL, data => {
-                console.log("recieving the call")
                 setTimeout(() => {
                     missCall();
                 }, 18000)
@@ -85,7 +84,7 @@ class CallNotification extends Component {
         this.props.answerCall();
     }
     render() {
-        return (this.props.incommingCall && !this.props.endedCallFromOtherPeer) ? (
+        return (this.props.incommingCall && !this.props.endedCallFromOtherPeer && !this.props.endedCallFromOtherEnd) ? (
             <div className="callNotification">
                 <div>
                     <div className="CallCard">

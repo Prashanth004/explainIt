@@ -10,7 +10,7 @@ import Activity from './Activies/indexActivity';
 import Setting from './newNav/setting';
 import CallNotification from './container/CallNotification';
 import { stillAuthenicated } from '../../../actions/signinAction';
-import { getAllActivities } from '../../../actions/callAction'
+import { getAllActivities,addActivity } from '../../../actions/callAction'
 import { openInbox, openCreated } from "../../../actions/navAction";
 import { getProfileDetails } from '../../../actions/profileAction';
 import MobNav from './newNav/index'
@@ -28,7 +28,6 @@ class Posts extends React.Component {
         this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
     }
     initiateSocketLoc(){
-        console.log("initiating socket");
         this.props.initiateSocket();
         this.setState({socketinitiated : true});
     }
@@ -54,11 +53,8 @@ class Posts extends React.Component {
         window.removeEventListener("resize", this.resize());
     }
     componentWillMount() {
-        console.log(" var urlPath =window.location.pathname : ", window.location.pathname);
         var arrayDeCons = (window.location.pathname).split('/');
-        console.log("arrayDeCons : ", arrayDeCons);
         if (arrayDeCons[1] === "activities") {
-            console.log("it is home page")
             this.setState({ isHome: true })
             if (!this.props.created)
                 this.props.openInbox();
@@ -98,39 +94,35 @@ class Posts extends React.Component {
         window.addEventListener('storage', this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
-        var socket = this.props.socket;
-        console.log("socket before if : ",socket);
-        if(socket!==null){
+     
+        if(this.props.socket!==null){
         
-            socket.on(config.SAVED_NEW_PROJECT, data => {
-                console.log("getting all the stuff")
+            this.props.socket.on(config.SAVED_NEW_PROJECT, data => {
                 if (data.userId === this.props.userId) {
                     this.props.getProfileDetails(this.props.userId, config.SELF)
                 }
             })
 
-            socket.on(config.NEW_MESSAGE, data => {
-                console.log("getting all the stuff")
-                console.log("data.touser : ",data.touser);
+            this.props.socket.on(config.NEW_MESSAGE, data => {
 
-                console.log("data.fromuser : ",data.fromuser);
-                console.log("this.props.userId) : ",this.props.userId);
                 if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
                   
-                    this.props.getAllActivities()
+                    //this.props.getAllActivities()
+                    this.props.addActivity(data.data)
                 }
             })
         }
     }
     render() {
+       
         if(this.props.socket === null && !this.state.socketinitiated){
+
             this.initiateSocketLoc();
         }
         const issuepercentage = this.state.reducedWidth ? "100%" : "59%";
         var feedDiv = null;
         const callNotificationDiv = (<CallNotification />)
         const nav = (this.state.reducedWidth) ? (<MobNav page={!this.state.isHome ? config.VISIT_PROFILE_PAGE : config.HOME_PAGE} />) : (<Navbar page={!this.state.isHome ? config.VISIT_PROFILE_PAGE : config.HOME_PAGE} />)
-        console.log()
         if (this.props.allprojects === null && this.props.userId !== null && !this.state.gotAllActivity) {
             if (this.state.isHome)
                 this.getAllActivitiesLoc();
@@ -206,5 +198,5 @@ const mapStateToProps= state => ({
                         gotAllActivities :state.call.gotAllActivities,
                         socket:state.home.socket
                     })
-export default connect(mapStateToProps,{openInbox,getAllActivities,openCreated,initiateSocket,
+export default connect(mapStateToProps,{openInbox,getAllActivities,openCreated,initiateSocket,addActivity,
       getProfileDetails,stillAuthenicated,getProfileByTwitterHandle,setVisitProfile})(Posts)

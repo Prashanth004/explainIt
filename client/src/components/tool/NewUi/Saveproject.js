@@ -36,7 +36,6 @@ class SaveProjects extends Component {
                 callRecText: "Call"
             })
         }
-        console.log("this.props.topicOfTheCall : ",this.props.topicOfTheCall)
         this.setState({
             limitOfChar: config.PROJECT_TEXT_LIMIT,
            
@@ -120,8 +119,7 @@ class SaveProjects extends Component {
     }
 
     render() {
-        const recordDelf = (this.props.action === config.FULL_SCREEN_RECORD)?(<span style={{color:"rgba(141, 140, 140, 0.867)",fontSize:"12px"}} onClick={this.SaveTopicSave}>record and save</span>)
-        :(null)
+
         if(this.props.topicOfTheCall.length!==0 && !this.state.updatedText){
             this.setTextValue()
         }

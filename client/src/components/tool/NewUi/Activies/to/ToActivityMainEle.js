@@ -22,7 +22,6 @@ class ActivityMain extends Component {
     }
     componentDidMount() {
         const {activity,userData} = this.props
-        console.log(activity.unread)
         if(activity.unread === 1)
             this.props.changeReadStatus(activity.id)
         var token = JSON.parse(localStorage.getItem('token'))

@@ -12,7 +12,7 @@ import {CALL_DETAILS_ACCEPT,
     GET_ALL_ACTIVITES_FAILED,
     BASIC_INFO_OF_CALL,
     DISABLE_CALL_ACTION,
-    MUTE_AUDIO,
+    MUTE_AUDIO,ADD_NEW_ACTIVITY,
     UNMUTE_AUDIO,
     ADD_USER_TO_STORE,
     DECREASE_CALL_BY_MINUTE,
@@ -144,7 +144,6 @@ export const getAllActivities = (props)=>(dispatch)=>{
                 type:GET_ALL_ACTIVITES,
                 payload:response.data.data
             })
-            console.log("Activities :--- ",response.data.data);
             var i=0;
             response.data.data.forEach(function(element) {
                 // console.log(element);
@@ -156,15 +155,12 @@ export const getAllActivities = (props)=>(dispatch)=>{
                 return self.indexOf(value) === index
               }
               result2 = result1.filter(unique)
-            console.log("result2 : ",result2);
             result2.forEach(function(projects, index){
                     promises.push(axios.get(config.base_dir+'/api/users/id/'+projects))
                  })
                  axios.all(promises).then(function(results) {
                     results.forEach(function(response, index) {
-                        console.log("getting user Data : ",response)
                         if(response.status===200 || response.status === 304){
-                            console.log("adding to the stores : ",response.data.data)
                             const newItem = {
                                 'key': response.data.data.id,
                                 'data': response.data.data
@@ -257,6 +253,13 @@ export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
     })
     .catch(err=>{
         console.log("error in saving the call fail details : ", err)
+    })
+}
+export const addActivity = (activityObj)=>(dispatch)=>{
+    console.log("activityObj : ",activityObj)
+    dispatch({
+        type:ADD_NEW_ACTIVITY,
+        payload:activityObj
     })
 }
 export const endCallfromOtherPeer = ()=>dispatch=>{

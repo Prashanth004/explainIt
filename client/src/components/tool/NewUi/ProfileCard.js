@@ -5,7 +5,6 @@ import Toggle from 'react-toggle';
 import BusyAction from './container/BusyAction';
 import Profile from './Profile';
 import { Redirect} from 'react-router-dom';
-import Cotactlist from './contactlist/contactsDisplay';
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../actions/toolActions'
 import {  FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
@@ -20,7 +19,7 @@ import {resetVisitTwitterAction} from '../../../actions/visitProfileAction'
 import { confirmAlert } from 'react-confirm-alert';
 import { changeOnlinestatus } from '../../../actions/profileAction'
 import { cancelSuccess } from '../../../actions/issueActions';
-import { FiVideo, FiMail,FiPhone,FiUser, FiCopy } from "react-icons/fi";
+import { FiVideo, FiMail, FiCopy } from "react-icons/fi";
 import { MdPermContactCalendar } from "react-icons/md";
 import { resetCallAction } from '../../../actions/callAction'
 import { resetIssueActions, resetProjectActions } from '../../../actions/projectActions'
@@ -220,7 +219,6 @@ class ProfileCard extends Component {
             </IconContext.Provider>
         </span>
     </div>);
-            const contactList = this.props.showContacts?(<Cotactlist />):(null)
 
         const {showActivity,showProfile,showContacts,hideContactAct,showContactsAct} = this.props;
         const defaultToggle = (this.props.onlinestatus) ? true : false;

@@ -195,7 +195,6 @@ class ScreenRecorder extends Component {
             };
         }
         if (config.CALL_LOGS)
-            console.log("chorme media constraints : ", constraints)
         if (result.name === "firefox") {
             constraints = {
                 video: {
@@ -237,7 +236,6 @@ class ScreenRecorder extends Component {
     }
     endCall() {
         //one
-        console.log("end call called and is excecuted well")
         registerEndToBrowser();
         const { extSource, extOrigin } = this.props
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin)
@@ -248,7 +246,6 @@ class ScreenRecorder extends Component {
             closedHere: true,
             manualClose: true
         })
-        console.log("closed here is set to true")
         socket.emit(config.END_CALL, {
             'peerId': this.state.peerId,
             'timer-ended': false
@@ -321,7 +318,6 @@ class ScreenRecorder extends Component {
         // window.source.close();
 
         if (this.props.isSceenSharing) {
-            console.log("dskmflskfkln")
             this.endCall()
             event.returnValue = "Hellooww";
 
@@ -403,7 +399,6 @@ class ScreenRecorder extends Component {
         socket.on(config.ACCEPT_SHARE_REQUEST, data => {
             if (data.toUserId === this.props.userId) {
                 self.props.answeredCall();
-                console.log("accepting sceen share request")
                 self.setState({ clickedOnLink: true });
             }
         })
@@ -423,7 +418,6 @@ class ScreenRecorder extends Component {
         socket.on(config.END_CALL, data => {
 
             if (data.clientId === self.state.destkey) {
-                console.log("end call from the other end")
                 this.setState({ manualClose: true })
                 if (config.CALL_LOGS)
                     console.log(" socket endCall : ");
@@ -473,15 +467,10 @@ class ScreenRecorder extends Component {
     }
     }
     startConnectionTimer() {
-        const { permissonDenied, onGoingCallEnded, recorder } = this.state;
-        const { isSceenSharing } = this.props
+      
         this.setState({ startTimer: true });
         this.callConnectionDelayed = setTimeout(() => {
-            console.log(!permissonDenied, !isSceenSharing, !onGoingCallEnded);
-            console.log("this.state.permissonDenied : ", this.state.permissonDenied);
-            console.log("this.state.recorder : ", this.state.recorder)
-            console.log("this.props.isSceenSharing : ", this.props.isSceenSharing);
-            console.log("this.state.onGoingCallEnded : ", this.state.onGoingCallEnded)
+          
             if (!this.state.permissonDenied && this.state.recorder === null && !this.props.isSceenSharing && !this.state.onGoingCallEnded) {
                 registerEndToBrowser();
                 this.props.turnnotbusy(this.props.twitterUserId);
@@ -507,15 +496,11 @@ class ScreenRecorder extends Component {
     }
 
 validateTurn(iceServers){
-    var hasTurn = false;
     iceServers = JSON.parse(JSON.stringify(iceServers));
     iceServers.filter((server)=>{
       if (server && (server.urls || server.url)) {
         var urls = server.urls || server.url;
-        if (server.url && !server.urls) {
-          //utils.deprecated('RTCIceServer.url', 'RTCIceServer.urls');
-          console.log("url outdated use urls")
-        }
+
         var isString = typeof urls === 'string';
         if (isString) {
           urls = [urls];
@@ -527,7 +512,6 @@ validateTurn(iceServers){
             
   
           if (validTurn) {
-              console.log("turn present and valid")
         //    hasTurn = true;
             return true;
           }
@@ -545,7 +529,6 @@ validateTurn(iceServers){
     componentWillMount() {
         const { extSource, extOrigin } = this.props;
         var self = this;
-        console.log("exceciting compWIllMount")
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         const result = browser();
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
@@ -655,7 +638,6 @@ validateTurn(iceServers){
         })
 
         peer.on('connection', (conn) => {
-            console.log("PEEERJS : peerjs connection established")
             if (config.CALL_LOGS)
                 console.log("got the connection set")
             this.setState({ conn: conn })
@@ -705,9 +687,7 @@ validateTurn(iceServers){
                         }
                     }
                     if (data.type === config.MUTE_UMMUTE){
-                        console.log("MM got here in Caller side")
                         if (data.otherPeerId === self.state.destkey) {
-                            console.log("MM posting the mutestate to action page")
                           self.props.otherPeerMute(extSource, extOrigin,data.muteState);
                         }
                         // otherPeerMute
@@ -731,7 +711,6 @@ validateTurn(iceServers){
         })
 
         peer.on('disconnected', function () {
-            console.log("peer disconnected")
             if (!self.state.initiatedCloseCall) {
                 self.stopShare()
                 self.setState({
@@ -916,7 +895,6 @@ validateTurn(iceServers){
     retryCall() {
         const { extSource, extOrigin } = this.props;
         this.setState({myscreenSharing: true});
-        console.log("exceciting compWIllMount")
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         var socket = this.props.socket;
         var self = this
@@ -932,7 +910,6 @@ validateTurn(iceServers){
         this.props.retryCall()
         setTimeout(() => {
             if (self.state.retry && !self.state.clickedOnLink) {
-                console.log("retry time out ")
                 self.setState({
                     retryTimeOut: true
                 })
@@ -958,15 +935,13 @@ validateTurn(iceServers){
     }
 
     savefilePrivate() {
-        console.log("saving private files")
         const {blob,peerAudioBlob} =  this.state;
         const {callTopic} = this.props;
         this.setState({ saveinitiated: true })
        
         if(peerAudioBlob!==null){
             this.setState({ downloadUrlAudio: URL.createObjectURL(peerAudioBlob) });
-            console.log("video blob : ",blob);
-            console.log("peerAudioblob : ",peerAudioBlob)
+
             this.props.savefile(blob, peerAudioBlob, 0, callTopic, config.SERVER_SHARING)
             var peer = this.state.peer;
             if (peer !== null) {
@@ -1062,7 +1037,6 @@ validateTurn(iceServers){
     }
 
     stopShare() {
-        console.log("stop share screen")
         const { twitterUserId, endSecondScreenShare, saveVideoBlob,
             fullStopedSharing, isSceenSharing, extOrigin, disableCallAction,
             extSource,audioStream, screenStream,postEndCall } = this.props;
@@ -1071,9 +1045,7 @@ validateTurn(iceServers){
         registerEndToBrowser();
         window.scrollTo(0,-100)
         postEndCall(config.END_CALL_PEER_FROM_EXTNESION, extSource, extOrigin);
-        console.log("stopedSharing : ",stopedSharing)
         if (!stopedSharing || this.state.retryLimit> 0) {
-            console.log("sdfkn")
             this.setState({ stopedSharing: true })
 
             if (call != null)
@@ -1100,7 +1072,6 @@ validateTurn(iceServers){
             if(peerAudioRecorder!==null){
                 peerAudioRecorder.stopRecording(()=>{
                     var blob = peerAudioRecorder.getBlob();
-                    console.log("audo  blob : ",blob)
                     self.setState({
                         peerAudioBlob:blob,
                         peerAudioRecorder:null
@@ -1134,12 +1105,12 @@ validateTurn(iceServers){
         }
     }
     endWhileOngoinCall() {
-        const { socket } = this.state
+        const { socket } = this.props
         this.setState({ onGoingCallEnded: true })
         socket.emit(config.END_WHILE_DIALING, {
-
             'ToUserId': this.props.twitterUserId
         })
+        this.props.closeImidiate()
     }
  
 
@@ -1169,7 +1140,6 @@ validateTurn(iceServers){
         const tNumberOfIncrease = (typeof (numberOfIncrease) === "string") ? (Number(noOfIncreaseInTime)) : noOfIncreaseInTime
         const tCurrentTime = (typeof (currentTime) === "string") ? (Number(currentTimeLeft)) : currentTimeLeft;
         var duration = tInitialTime + tNumberOfIncrease - tCurrentTime;
-        console.log("duration in screen share place : ", duration);
         callSuccessedUpate(twitterUserId, callTopic, duration, sharableLinkSaved);
     }
     downloadExtension() {
@@ -1335,7 +1305,7 @@ validateTurn(iceServers){
                                     action="waiting" callerImageUrl={this.props.profilePic}
                                     recieverImageUrl={this.props.twirecieverPrfilePic} />
                             </div>
-                            <button className="buttonLight" onClick={this.props.closeImidiate}>End send request</button>
+                            <button className="buttonLight" onClick={ this.endWhileOngoinCall}>End send request</button>
                         </div>
                     ) : (<div>
                         <p><b>Share Request Ended.</b></p>

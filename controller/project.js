@@ -168,7 +168,8 @@ const saveToDbWithReferral =(req,res,videopathName, referralid)=>{
         database.db.one('select * from projects where projectid = $1', req.body.projectid)
             .then(data => {
                 res.io.emit(key.SAVED_NEW_PROJECT, {
-                    "userId": req.user.id
+                    "userId": req.user.id,
+                    "project" : data.data
                 })
                 res.status(201).send({
                     success: 1,
@@ -182,7 +183,6 @@ const saveToDbWithReferral =(req,res,videopathName, referralid)=>{
 }
 
 const saveToDb = (req, res, videopathName)=>{
-   console.log("req.user.data : ",(req.user.twitterhandle));
 if(req.body.isquestion === "false")  {
     database.db.manyOrNone('select * from referral where UPPER(referreetwitter) = $1 and issue = $2',[(req.user.twitterhandle).toUpperCase(), req.body.issueID])
     .then(referralData=>{

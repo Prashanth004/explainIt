@@ -14,24 +14,25 @@ class activityRoot extends Component {
     this.state = { allActivities: [] }
   }
   componentWillMount(){
-    //merge array
     const {referrals,activities} = this.props;
     const allacti =  referrals.concat(activities);
-
-    //sort affaray 
     allacti.sort(function compare(a, b) {
       var dateA = new Date(a.time);
       var dateB = new Date(b.time);
       return dateB-dateA ;
     });
-
-  //  console.log("all acti sorted : ",allacti)
-    // assign it to all activities
     this.setState({allActivities : allacti})
   }
+  componentWillReceiveProps (nextProps){
+    if(nextProps.newActivity){
+      this.state.allActivities.unshift(nextProps.newActivity);
+    }
+    else{
+      console.log("i am not working!!!!!!!!!!!!!!!!!!")
+    } 
+  }
   render() {
-    // console.log((this.state.allActivities));
-    // console.log((this.props.userId))
+  
     const { userId } = this.props;
     const {allActivities} = this.state;
     const activitiesEle = (allActivities).map((activity, index) =>
@@ -51,7 +52,8 @@ const mapStateToProps = function (state) {
   return {
     activities: state.call.activities,
     userId: state.auth.id,
-    referrals:state.referral.referrals
+    referrals:state.referral.referrals,
+    newActivity:state.call.newActivity
   }
 }
 

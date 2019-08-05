@@ -15,11 +15,15 @@ exports.addActivity = (req,res)=>{
     unread:unreadDefault
 }).then(data=>{
     
-    res.io.emit(config.NEW_MESSAGE, {
-        "fromuser":req.user.id,
-        "touser": req.body.touser
-       
+    database.db.oneOrNone('select * from activities where link = $1',req.body.link)
+    .then(data=>{
+        res.io.emit(config.NEW_MESSAGE, {
+            "touser": req.body.touser,
+            "fromuser":req.user.id,
+            "data" :data
+        })
     })
+  
     res.status(201).send({
         success:1,
         data:data

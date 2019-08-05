@@ -7,7 +7,7 @@ import {CALL_DETAILS_ACCEPT,
     ANSWERED_CALL,
     BASIC_INFO_OF_CALL,
     INITIATE_SEND,
-    MUTE_AUDIO,
+    MUTE_AUDIO,ADD_NEW_ACTIVITY,
     UNMUTE_AUDIO,
     RETRY_UPDATE_NO_OF_MINUTES,
     GET_ALL_ACTIVITES,
@@ -44,7 +44,8 @@ const initialState={
     newCall:true,
     isCallAnswered:false,
     isMuted:false,
-    endedCallFromOtherEnd:false
+    endedCallFromOtherEnd:false,
+    newActivity : {}
     
 }
 
@@ -62,6 +63,12 @@ export default function(state= initialState, action){
             gotAllActivities:true,
             activities:action.payload
         }
+        case ADD_NEW_ACTIVITY:
+          
+            return{
+                ...state,
+                newActivity : action.payload
+            }
         case MUTE_AUDIO:
             return{
                 ...state,
