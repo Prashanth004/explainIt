@@ -4,6 +4,8 @@
 .recordMainScreen{
     background-color: white;
     padding:10px;
+    width:380px;
+    margin:auto;
     border-radius:5px;
     border-style:solid;
     border-width:0.5px;

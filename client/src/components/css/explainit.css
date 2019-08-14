@@ -8,12 +8,17 @@
 .formContainerExplain{
     text-align: center;
 }
+
+.explainMain{
+    margin-top:40px;
+}
 .optionBtnPlacement{
     width:30%;
     height:55px;
     padding-top:7px;
     margin:auto;
-   border-style:solid;
+    margin-top:15px;
+   border-style:none;
    border-width:0.5px;
    border-radius:8px;
     display: grid;

@@ -33,7 +33,6 @@ class SaveProjects extends Component {
             this.props.sendButtonClick()
             this.props.savefilePrivate(this.props.topicOfTheCall);
     }
-
     render() {
         const shareOption = (!this.props.explainIssue && !this.props.selfSave) ? (
             <span className="hint--top" aria-label="Send Recording">
@@ -57,7 +56,7 @@ class SaveProjects extends Component {
                     </span>
                 </div>
                 ) : (!this.props.failedToSave ? ((this.props.fromShareToRecord || this.state.sendMessageClicked) ? 
-                    (<div><p>Sending the recording..</p></div>) :
+                    (<div><p>Sending the recording to <b>@{this.props.twitterHandle}</b></p></div>) :
                 (<div><p>Saving the recording..</p></div>)) : (
                     <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
                 ))
@@ -73,6 +72,7 @@ const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
     showInputBox: state.message.showTextAftRec,
     twitterUserId: state.twitterApi.twitterId,
+    twitterHandle:state.twitterApi.twitterHandle,
     fromShareToRecord: state.message.fromShareToRecord,
     explainIssue: state.message.explainIssue,
     failedToSave: state.issues.failedToSave,

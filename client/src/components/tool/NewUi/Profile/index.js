@@ -5,6 +5,7 @@ import PropType from 'prop-types';
 import Section1 from './section1';
 import Section2 from './section2';
 import {closeEditProfile, updateUserProfile } from '../../../../actions/profileAction';
+import {resetFeedback} from '../../../../actions/feedbackAction'
 
 class ProfileForm extends Component {
     constructor(props) {
@@ -26,7 +27,6 @@ class ProfileForm extends Component {
             angelListError: false,
             saveClicked: false,
             nextSetion:false
-            
         }
         this.changeBio = this.changeBio.bind(this);
         this.changeLinkedIn = this.changeLinkedIn.bind(this);
@@ -39,6 +39,7 @@ class ProfileForm extends Component {
         this.SecTrans = this.SecTrans.bind(this);
     }
     componentDidMount() {
+        this.props.resetFeedback()
         this.setState({
             bioValue: this.props.bio,
             linkedInValue: this.props.linkinLink,
@@ -54,6 +55,7 @@ class ProfileForm extends Component {
             worksValue: e.target.value,
             worksValueError: null
         })
+        console.log(this.state.worksValue.split(' '))
     }
     changeGoodAt(e){
         this.setState({
@@ -63,21 +65,15 @@ class ProfileForm extends Component {
     }
     SecTrans(){
         if (this.state.costValue < 0) {
-            this.setState({
-                costError: true
-            })
+            this.setState({costError: true})
         }
        else if(this.state.goodAtValue!==null)
         if (this.state.goodAtValue.length > 100) {
-            this.setState({
-                goodAtValueError: true
-            })
+            this.setState({ goodAtValueError: true})
         }
        else if(this.state.bioValue!==null)
         if (this.state.bioValue.length > 100) {
-            this.setState({
-                bioValueError: true
-            })
+            this.setState({bioValueError: true })
         }
         else
             this.setState({nextSetion:!this.state.nextSetion})
@@ -119,55 +115,65 @@ class ProfileForm extends Component {
             angelListError: null
         })
     }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.videoFilePath){
+            var worksValue = this.state.worksValue+" "+nextProps.videoFilePath
+            this.setState({worksValue:worksValue})
+        }
+    }
     uploadData() {
-        if(this.state.linkedInValue.length!==0){
-            const linkedInValue = (this.state.linkedInValue.includes('www.linkedin.com'))?
-            (this.state.linkedInValue):('https://www.linkedin.com/'+this.state.linkedInValue);
-            this.setState({linkedInValue:linkedInValue})
+        // if(this.state.linkedInValue.length!==0){
+        //     const linkedInValue = (this.state.linkedInValue.includes('www.linkedin.com'))?
+        //     (this.state.linkedInValue):('https://www.linkedin.com/'+this.state.linkedInValue);
+        //     this.setState({linkedInValue:linkedInValue})
            
-        }
-        if(this.state.gitHubValue.length!==0){
-            const gitHubValue = (this.state.gitHubValue.includes('github.com'))?
-            (this.state.gitHubValue):('https://github.com/'+this.state.gitHubValue);
-            this.setState({gitHubValue:gitHubValue})
-        }
+        // }
+        // if(this.state.gitHubValue.length!==0){
+        //     const gitHubValue = (this.state.gitHubValue.includes('github.com'))?
+        //     (this.state.gitHubValue):('https://github.com/'+this.state.gitHubValue);
+        //     this.setState({gitHubValue:gitHubValue})
+        // }
    
-        if(this.state.angelListValue.length!==0){
-            const angelListValue = (this.state.angelListValue.includes('angel.co'))?
-            (this.state.angelListValue):('https://angel.co/'+this.state.angelListValue);
-            this.setState({angelListValue:angelListValue})
+        // if(this.state.angelListValue.length!==0){
+        //     const angelListValue = (this.state.angelListValue.includes('angel.co'))?
+        //     (this.state.angelListValue):('https://angel.co/'+this.state.angelListValue);
+        //     this.setState({angelListValue:angelListValue})
+        // }
+        if (this.state.costValue < 0) {
+            this.setState({costError: true})
         }
-        
-     
-        setTimeout(()=>{
-            if(!this.state.angelListError &&
-                !this.state.gitHibError&&
-                !this.state.linkInerror &&
-                !this.state.goodAtValueError
-            ) {
-                this.setState({
-                    saveClicked: true
-                })
-                this.props.updateUserProfile(
-                    this.state.bioValue,
-                    this.state.costValue,
-                    this.state.linkedInValue,
-                    this.state.angelListValue,
-                    this.state.gitHubValue,
-                    this.state.goodAtValue,
-                    this.state.worksValue
-                )
-            }
-        },500)
-       
+       else if(this.state.goodAtValue!==null)
+        if (this.state.goodAtValue.length > 100) {
+            this.setState({ goodAtValueError: true})
+        }
+       else if(this.state.bioValue!==null)
+        if (this.state.bioValue.length > 100) {
+            this.setState({bioValueError: true })
+        }
+        else{
+            setTimeout(()=>{
+                    this.setState({
+                        saveClicked: true
+                    })
+                    this.props.updateUserProfile(
+                        this.state.bioValue,
+                        this.state.costValue,
+                        this.state.linkedInValue,
+                        this.state.angelListValue,
+                        this.state.gitHubValue,
+                        this.state.goodAtValue,
+                        this.state.worksValue
+                    )
+                
+            },500)
+        }
     }
 
     render() {
         return (this.state.saveClicked) ? (
             <div style={{ marginTop: "40px", textAlign:"centre", alignSelf:"centre"}}>
                 <h5>Updating.</h5>
-            </div>
-        ) :(!this.state.nextSetion)?(<Section1 
+            </div>) :(<Section1 
             SecTrans={this.SecTrans}
             bioValue={this.state.bioValue}
             changeBio = {this.changeBio}
@@ -177,20 +183,23 @@ class ProfileForm extends Component {
             changeWorks=  {this.changeWorks}
             bioValueError={this.state.bioValueError}
             closeEditProfile={this.props.closeEditProfile}
-            goodAtValueError={this.state.goodAtValueError}/>)
-            :(<Section2
-                SecTrans={this.SecTrans}
-                linkInerror={this.state.linkInerror}
-                linkedInValue={this.state.linkedInValue}
-                changeLinkedIn={this.changeLinkedIn}
-                gitHubValue={this.state.gitHubValue}
-                gitHibError={this.state.gitHibError}
-                changeGithub={this.changeGithub}
-                angelListError={this.state.angelListError}
-                angelListValue={this.state.angelListValue}
-                changeAngelList={this.changeAngelList}
-                closeEditProfile={this.props.closeEditProfile}
-                uploadData={this.uploadData}/>)
+            goodAtValueError={this.state.goodAtValueError}
+            uploadData={this.uploadData}/>)
+            // !this.state.nextSetion)?
+            
+            // :(<Section2
+            //     SecTrans={this.SecTrans}
+            //     linkInerror={this.state.linkInerror}
+            //     linkedInValue={this.state.linkedInValue}
+            //     changeLinkedIn={this.changeLinkedIn}
+            //     gitHubValue={this.state.gitHubValue}
+            //     gitHibError={this.state.gitHibError}
+            //     changeGithub={this.changeGithub}
+            //     angelListError={this.state.angelListError}
+            //     angelListValue={this.state.angelListValue}
+            //     changeAngelList={this.changeAngelList}
+            //     closeEditProfile={this.props.closeEditProfile}
+            //     uploadData={this.uploadData}/>)
     }
 }
 
@@ -206,10 +215,12 @@ const mapStateToProps = state => ({
     bio: state.profile.bio,
     linkinLink: state.profile.linkinLink,
     goodat:state.profile.goodat,
-    works:state.profile.works
+    works:state.profile.portfolio,
+    videoFilePath:state.feedback.videoFilePath,
+
 })
 
 export default connect(mapStateToProps, {
-    updateUserProfile,closeEditProfile
+    updateUserProfile,closeEditProfile,resetFeedback
 })(ProfileForm)
 

@@ -41,37 +41,41 @@ export default function(state=initialState, action){
             } 
         case SHOW_ACTIVITY:
             return{
+                ...state,
                 showProfile:false,
                 showActivity:true,
-                showContacts:false
             }
         case SHOW_CONTACTS:
             return{
-                showProfile:false,
-                showActivity:false,
+                ...state,
                 showContacts:true
             }
         case HIDE_CONTACTS:
             return{
+                ...state,
                 showContacts:false
             }
         case SHOW_PROFILE :
             return{
+                ...state,
                 showProfile:true,
                 showActivity:false,
                 showContacts:false
             }
         case HIDE_LABEL:
             return{
+                ...state,
                 hodeLabel:true,
             }
         case HIDE_ACTIVITY:
             return{
+                ...state,
             showProfile:false,
             showActivity:false,
         }
         case HIDE_PROFILE:
             return{
+                ...state,
                 showProfile:false,
                 showActivity:false,
             }

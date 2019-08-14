@@ -232,14 +232,14 @@ exports.turnNotBusy =(req,res)=>{
 
 exports.updateProfile = function (req, res) {
 
-    database.db.none('update users SET bio = $1, cost =$2, angellist =$3,linkedin =$4, github=$5,goodat=$6, works=$7 WHERE id = $8',
+    database.db.none('update users SET bio = $1, cost =$2, angellist =$3,linkedin =$4, github=$5,goodat=$6, portfolio=$7 WHERE id = $8',
         [req.body.bio,
         req.body.cost,
         req.body.angellist,
         req.body.linkedin,
         req.body.github,
         req.body.goodat,
-        req.body.works,
+        req.body.portfolio,
         req.user.id,
         ]).then(data => {
             database.db.oneOrNone('select * from users where id = $1', req.user.id)

@@ -17,7 +17,8 @@ const initialState = {
     mycontacts:[],
     failedGettingAllContacts:false,
     newContactList : [],
-    contactInputBaxValue:""
+    contactInputBaxValue:"",
+    
 
 
 }

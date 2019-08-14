@@ -4,6 +4,7 @@ import './feedback.css'
 import 'react-input-range/lib/css/index.css';
 import { connect } from 'react-redux';
 import TextArea from '../container/textArea';
+import config from '../../../../config/config';
 // import Spinner  from '../container/lodingSmall';
 import StarRatings from 'react-star-ratings';
 import { FiVideo } from "react-icons/fi";
@@ -23,20 +24,20 @@ class FeedBack extends Component {
         this.changeSlider = this.changeSlider.bind(this);
         this.changeRating = this.changeRating.bind(this);
         this.saveFile = this.saveFile.bind(this);
+        this.openHome = this.openHome.bind(this);
     }
 
     saveFile() {
         const { userId, experienceValue, nothingfilled, usabilityValue, sugValue, videoFilePath, saveFeedback } = this.props;
-
         console.log(experienceValue, usabilityValue, sugValue, videoFilePath);
         if (experienceValue === 0 &&
             usabilityValue === 0 &&
             sugValue === " " &&
             videoFilePath === null) {
-            nothingfilled()
+            nothingfilled();
         }
         else {
-            saveFeedback(userId, experienceValue, usabilityValue, sugValue, videoFilePath)
+            saveFeedback(userId, experienceValue, usabilityValue, sugValue, videoFilePath);
         }
     }
     componentWillMount() {
@@ -46,6 +47,9 @@ class FeedBack extends Component {
     }
     changeSlider(e) {
         this.setState({ sliderValue: e.target.value })
+    }
+    openHome(){
+        window.open(config.react_url+'/@'+this.props.authTwitterHandle,'_self')
     }
     enterPress() { }
 
@@ -73,7 +77,7 @@ class FeedBack extends Component {
             <div>
                 <button className="buttonLight"
                     onClick={this.saveFile} disabled={noEntry}>Submit</button>
-                <button className="buttonDark" onClick={this.props.closeFeedback}>Not now</button></div>
+                <button className="buttonDark" onClick={this.openHome}>Not now</button></div>
         ) : (null)
         return (!savedFeedBack ? (
             <div className="feedbackDiv">
@@ -82,7 +86,7 @@ class FeedBack extends Component {
                         <label>Call experience :</label>
                         <StarRatings
                             rating={experienceValue}
-                            starRatedColor="blue"
+                            starRatedColor="#D4AF37"
                             changeRating={changeShareExperience}
                             numberOfStars={5}
                             starDimension="25px"
@@ -94,7 +98,7 @@ class FeedBack extends Component {
                         <label>Ease of use :</label>
                         <StarRatings
                             rating={usabilityValue}
-                            starRatedColor="blue"
+                            starRatedColor="#D4AF37"
                             changeRating={changeUability}
                             numberOfStars={5}
                             starDimension="25px"
@@ -157,6 +161,7 @@ const mapStateToProps = state => ({
     discarded: state.feedback.discarded,
     saveStaus: state.feedback.saveStaus,
     userId: state.auth.id,
+    authTwitterHandle: state.auth.twitterHandle,
     videoFilePath: state.feedback.videoFilePath,
     savedFeedBack: state.feedback.savedFeedBack,
     noEntry: state.feedback.noEntry

@@ -4,7 +4,7 @@ import {CALL_DETAILS_ACCEPT,
     INCREASE_CALL_BY_MINUTE,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,END_CALL_FROM_OTHER_PEER,
-    INITIATE_SEND,
+    INITIATE_SEND,LOAD_MORE_ACTIVITY,
     ANSWERED_CALL,
     RESET_CALL_ACTIONS,
     RETRY_UPDATE_NO_OF_MINUTES,
@@ -140,26 +140,46 @@ export const getAllActivities = (props)=>(dispatch)=>{
         },
     }).then(response=>{
         if(response.status === 200 || response.status === 304){
-            dispatch({
-                type:GET_ALL_ACTIVITES,
-                payload:response.data.data
+            axios({
+                methos:'get',
+                url:config.base_dir+'/api/referral/',
+                headers: {
+                    "Authorization":token,
+                }
             })
+            .then(response1=>{
+                const referrals = response1.data.data;
+                const activities =response.data.data;
+                const allacti =  referrals.concat(activities);
+                allacti.sort(function compare(a, b) {
+                  var dateA = new Date(a.time);
+                  var dateB = new Date(b.time);
+                  return dateB-dateA ;
+                });
+                  dispatch({
+                    type:GET_ALL_ACTIVITES,
+                    payload:allacti
+                })
+
             var i=0;
             response.data.data.forEach(function(element) {
-                // console.log(element);
                 result1[i] = element.fromuser;
-                result1[i+1] =element.fromuser;
+                result1[i+1] =element.touser;
                 i=i+2;
               });
               const unique = (value, index, self) => {
-                return self.indexOf(value) === index
+                return (self.indexOf(value) === index && value!==null)
               }
-              result2 = result1.filter(unique)
+              console.log("result1 : ",result1)
+              result2 = result1.filter(unique);
+              result2 = result2.filter(el=>el!==null);
+              console.log("result2 : ",result2);
             result2.forEach(function(projects, index){
                     promises.push(axios.get(config.base_dir+'/api/users/id/'+projects))
                  })
                  axios.all(promises).then(function(results) {
                     results.forEach(function(response, index) {
+                        console.log("response : ",response)
                         if(response.status===200 || response.status === 304){
                             const newItem = {
                                 'key': response.data.data.id,
@@ -172,36 +192,25 @@ export const getAllActivities = (props)=>(dispatch)=>{
                         }
                     })
                  })
-            // var getEmails = new Promise(function(resolve, reject){
-            //     allProjects.forEach(function(projects, index){
-            //     promises.push(axios.get(config.base_dir+'/api/users/id/'+projects.userid))
-            //  })
-            //  axios.all(promises).then(function(results) {
-            //     results.forEach(function(response, index) {
-            //         if(response.status===200){
-            //             const newTestJson = JSON.parse(JSON.stringify(allProjects));
-            //                     newTestJson[index]['profilepic']=response.data.data.profilepic;
-            //                     newTestJson[index]['username']=response.data.data.username;
-            //                     newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
-            //                     allProjects =newTestJson
-            //         }
-            //     })
-            //     questProject =  allProjects.find(preojects=> preojects.isquestion ==="true");
-            //     answerProject = allProjects.filter(project => project.isquestion !=="true")
-            //     dispatch({
-            //         type: FETCH_PROJ_BY_ISSUE,
-            //         questProject: questProject,
-            //         answerProject: answerProject
-            //     })
-            //  })
-            // addNewUser()
+        }).catch(error=>{
+            console.log("error")
+        })
 
         }
+        
+   
     }).catch(error=>{
         dispatch({
             type:GET_ALL_ACTIVITES_FAILED,
             payload:error
         })
+    })
+}
+
+export const loadMoreActivities = ()=>(dispatch)=>
+{
+    dispatch({
+        type:LOAD_MORE_ACTIVITY,
     })
 }
 export const callSuccessedUpate = (touser, topic, duration, link)=>{
@@ -256,7 +265,6 @@ export const callFailedUpdate = ( touser, topic)=>(dispatch)=>{
     })
 }
 export const addActivity = (activityObj)=>(dispatch)=>{
-    console.log("activityObj : ",activityObj)
     dispatch({
         type:ADD_NEW_ACTIVITY,
         payload:activityObj

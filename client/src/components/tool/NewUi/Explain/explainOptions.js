@@ -13,13 +13,13 @@ import { FiUsers, FiCopy,FiVideo } from "react-icons/fi";
 
 
 const explainOption = (props) => {
-
+    console.log("question project : ",props.explainByRecord)
     const { questionProject, myTwitterHandle } = props;
     const condition = (questionProject.twitterhandle !== myTwitterHandle &&  questionProject.active)
     const gridTwoIt = (condition)?({}):({gridTemplateColumns: "50% 50%"})
     const screeShare = (condition) ? (<div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
     <span className="hint--top" aria-label="Get connnected, share screen and explain!">
-        <FiCopy style={{ fontSize: "28px" }} onClick={() => props.explainByShare(questionProject.twitterhandle)} />
+        <FiCopy style={{ fontSize: "22px" }} onClick={() => props.explainByShare(questionProject.twitterhandle,questionProject.textexplain)} />
     </span> </div>) : (null);
     //     const referDiv = (condition)?(  <span className="hint--top" aria-label="Refer to other!">
     //     <FiUsers style={{ fontSize: "25px" }} onClick={() => props.explainByRefer()} />
@@ -33,13 +33,13 @@ const explainOption = (props) => {
                
                 <div className="RecordBtnLabel" style={{ textAlign: "center", margin: "auto", backgroundColor: "transparent" }}>
                     <span className="hint--top" aria-label="Record screen and explain!">
-                        <FiVideo style={{ fontSize: "28px" }} onClick={() => props.explainByRecord(questionProject.twitterhandle, questionProject.id,questionProject.issueid)} />
+                        <FiVideo style={{ fontSize: "22px" }} onClick={() => props.explainByRecord(questionProject.twitterhandle, questionProject.id,questionProject.issueid,questionProject.textexplain)} />
                     </span>
                 </div>
 
                 <div className="RecordBtnLabel" style={{ margin: "auto", backgroundColor: "transparent" }}>
                     <span className="hint--top" aria-label="Refer to other!">
-                        <FiUsers style={{ fontSize: "25px" }} onClick={() => props.explainByRefer()} />
+                        <FiUsers style={{ fontSize: "19px" }} onClick={() => props.explainByRefer()} />
                     </span>
 
                 </div>
@@ -47,18 +47,22 @@ const explainOption = (props) => {
             </div>
         </div>
     ) : (props.explainBy === config.SHARE_SCREEN_EXPALIN ?
-        ((props.currentAtionStatus === null)?(<FullScreenShare
+        ((props.currentAtionStatus === null)?(
+            <div className="explainMain">
+            <div className="recorderConatainerPage animated slideInUp fast" style={{ width: props.widthDiv }}><FullScreenShare
             socket={props.socket}
             closeImidiate={props.reStoreDefault}
             reStoreDefault={props.reStoreDefault}
             savefile={props.savefile}
-        />):(<div className="LinkDisplay">
+        />
+         </div>
+            </div>):(<div className="LinkDisplay">
         <BusyAction action="share" currentAtionStatus={props.currentAtionStatus} />
     </div>)): (props.explainBy === config.RECORD_SCREEEN_EXPLAIN ? (
         (props.currentAtionStatus === null)?
         (
             <div className="explainMain">
-                <div className="recorderConatainerPage" style={{ width: props.widthDiv }}>
+                <div className="recorderConatainerPage animated slideInUp fast" style={{ width: props.widthDiv }}>
                     <FullScreenRecord
                         socket={props.socket}
                         closeImidiate={props.reStoreDefault}
@@ -69,10 +73,14 @@ const explainOption = (props) => {
             </div>):(<div className="LinkDisplay">
         <BusyAction action="record" currentAtionStatus={props.currentAtionStatus} />
     </div>)
-    ) : (
-                <Refer questionProject={props.questionProject} />)))
+    ) : (            <div className="explainMain">
+    <div className="recorderConatainerPage animated slideInUp fast" >
+                <Refer questionProject={props.questionProject} 
+                questioProjectArray={props.questioProjectArray}/>
+                </div>
+                </div>)))
 }
-
+// animated slideInUp fast
 const mapStateToProps = function (state) {
     return {
         explainBy: state.explain.explainBy,

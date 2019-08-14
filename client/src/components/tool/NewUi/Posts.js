@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Navbar from './Navbar';
+import { getAllReferral } from '../../../actions/referral'
+import { Helmet } from "react-helmet";
 import DisplatCreated from './diaplyissues/DisplayCreated';
 import { Redirect } from 'react-router-dom';
 import IssueDisplay from './diaplyissues/DisplayIssues';
@@ -10,34 +12,64 @@ import Activity from './Activies/indexActivity';
 import Setting from './newNav/setting';
 import CallNotification from './container/CallNotification';
 import { stillAuthenicated } from '../../../actions/signinAction';
-import { getAllActivities,addActivity } from '../../../actions/callAction'
+import { getAllActivities, addActivity } from '../../../actions/callAction'
 import { openInbox, openCreated } from "../../../actions/navAction";
-import { getProfileDetails } from '../../../actions/profileAction';
+import { addNewAnswerProject,getProfileDetails  } from '../../../actions/profileAction';
 import MobNav from './newNav/index'
-import { getProfileByTwitterHandle, setVisitProfile } from "../../../actions/visitProfileAction";
-import {initiateSocket} from '../../../actions/homeAction'
+import {  setVisitProfile } from "../../../actions/visitProfileAction";
+import { initiateSocket,validateTwitterHandle } from '../../../actions/homeAction'
 
 class Posts extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { typeOfView: "list",socketinitiated:false,
-         gotAllActivity: false, reducedWidth: false, reducedLittleWidth: false };
+        this.state = {
+            typeOfView: "list", testHandleStarted:false,
+            socketinitiated: false,handleValidated:false,
+            gotAllActivity: false, reducedWidth: false, reducedLittleWidth: false
+        };
         this.resize = this.resize.bind(this);
-        this.getAllActivitiesLoc = this.getAllActivitiesLoc.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
         this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
+        this.testHandle = this.testHandle.bind(this);
     }
-    initiateSocketLoc(){
+    initiateSocketLoc() {
         this.props.initiateSocket();
-        this.setState({socketinitiated : true});
+        console.log("initialting sockets")
+        this.setState({ socketinitiated: true });
+    }
+
+    testHandle(){
+        this.setState({testHandleStarted:true});
+        var arrayDeCons = (window.location.pathname).split('/');
+        const twiHand = arrayDeCons[1].replace("@", "");
+        console.log("twiHand : ",twiHand);
+        console.log("this.props.authTwitterHandle : ",this.props.authTwitterHandle)
+        if(twiHand === this.props.authTwitterHandle){
+            this.setState({ isHome: true })
+                            if(this.props.allprojects === null || this.props.gotAllActivities){
+                                this.props.getAllActivities();
+                                this.props.getProfileDetails(this.props.userId, config.SELF);
+                            }
+                            this.props.openInbox();
+        }
+        else{
+            this.setState({ isHome: false })
+                        this.props.getProfileDetails(this.props.profileid, config.VISIT_PROF);
+                        this.props.setVisitProfile(twiHand);
+                        localStorage.setItem("peerId", JSON.stringify(twiHand))
+                        this.props.openCreated();
+        }   
+      
+        this.setState({handleValidated:true}) 
+        console.log("making handle valid is true")
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
         this.setState({ reducedLittleWidth: window.innerWidth <= 1200 });
         if (window.innerWidth <= 700) {
-            this.setState({ issuepercentage: "100%" })
+            this.setState({ issuepercentage: "100%" });
         } else {
-            this.setState({ issuepercentage: "59%" })
+            this.setState({ issuepercentage: "59%" });
         }
     }
     changeViewToList() {
@@ -53,87 +85,72 @@ class Posts extends React.Component {
         window.removeEventListener("resize", this.resize());
     }
     componentWillMount() {
-        var arrayDeCons = (window.location.pathname).split('/');
-        if (arrayDeCons[1] === "activities") {
-            this.setState({ isHome: true })
-            if (!this.props.created)
-                this.props.openInbox();
-        }
-        else {
-            const twiHand = arrayDeCons[1].replace("@", "");
-            this.setState({ isHome: false })
-            this.props.openCreated();
-            this.props.setVisitProfile(twiHand);
-            this.props.getProfileByTwitterHandle(twiHand)
-            localStorage.setItem("peerId", JSON.stringify(twiHand))
-        }
-
+       
         this.props.stillAuthenicated()
-
-
+        this.props.validateTwitterHandle(window.location.pathname.split('/')[1].replace('@',''))
     }
 
 
-
-    getAllActivitiesLoc() {
-        this.props.getAllActivities();
-        if (this.state.isHome)
-            this.props.getProfileDetails(this.props.userId, config.SELF);
-        else
-            this.props.getProfileDetails(this.props.profileid, config.VISIT_PROF);
-        this.setState({ gotAllActivity: true })
-    }
     reloadPage(event) {
         if (event.key === 'token') {
             window.location.reload();
         }
-
     }
-    componentDidMount() {
-
-        window.addEventListener('storage', this.reloadPage)
-        window.addEventListener("resize", this.resize.bind(this));
-        this.resize();
-     
-        if(this.props.socket!==null){
-        
-            this.props.socket.on(config.SAVED_NEW_PROJECT, data => {
+    componentWillReceiveProps(nextProps){
+        // const self = this;
+        if(nextProps.socket){
+            console.log("iinitialting sockets right way")
+            nextProps.socket.on(config.SAVED_NEW_PROJECT, data => {
                 if (data.userId === this.props.userId) {
-                    this.props.getProfileDetails(this.props.userId, config.SELF)
+                    console.log("new projectdata : ",data)
+                  
                 }
             })
-
-            this.props.socket.on(config.NEW_MESSAGE, data => {
-
+            nextProps.socket.on(config.NEW_MESSAGE, data => {
+                console.log("new message")
                 if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
-                  
-                    //this.props.getAllActivities()
+                    console.log("new message to me")
                     this.props.addActivity(data.data)
                 }
             })
         }
     }
-    render() {
+    componentDidMount() {
+        window.addEventListener('storage', this.reloadPage)
+        window.addEventListener("resize", this.resize.bind(this));
+        
        
-        if(this.props.socket === null && !this.state.socketinitiated){
-
-            this.initiateSocketLoc();
+        this.resize();
+        if (this.props.socket !== null) {
+            this.props.socket.on(config.SAVED_NEW_PROJECT, data => {
+                if (data.userId === this.props.userId) {
+                    this.props.getProfileDetails(this.props.userId, config.SELF)
+                }
+            })
+            this.props.socket.on(config.NEW_MESSAGE, data => {
+                console.log("new message")
+                if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
+                    console.log("new message to me")
+                    //this.props.getAllActivities()
+                    this.props.addActivity(data.data)
+                }
+            })
+          
         }
+    }
+    render() {
+        if(this.props.donValidationHandle && !this.state.testHandleStarted && this.props.authAction) 
+            this.testHandle()
+        if (this.props.socket === null && !this.state.socketinitiated)
+            this.initiateSocketLoc();
         const issuepercentage = this.state.reducedWidth ? "100%" : "59%";
-        var feedDiv = null;
         const callNotificationDiv = (<CallNotification />)
         const nav = (this.state.reducedWidth) ? (<MobNav page={!this.state.isHome ? config.VISIT_PROFILE_PAGE : config.HOME_PAGE} />) : (<Navbar page={!this.state.isHome ? config.VISIT_PROFILE_PAGE : config.HOME_PAGE} />)
-        if (this.props.allprojects === null && this.props.userId !== null && !this.state.gotAllActivity) {
-            if (this.state.isHome)
-                this.getAllActivitiesLoc();
-            else if (this.props.profileid !== null) {
-                this.getAllActivitiesLoc();
-            }
-        }
-        if (this.props.myissues !== null)
-            var issuesCreated = (this.props.myissues)
 
-        var listGrid = (window.innerWidth >= 1000) ? (<div style={{ position: "fixed", top: "90px", right: "30px" }} >
+
+        const issuesCreated = (this.props.myissues !== null) ? (this.props.myissues) : ([])
+
+        const listGrid = (window.innerWidth >= 1000) ? (<div style={{ position: "fixed", top: "90px", right: "30px" }} >
             <span className="hint--top" aria-label="List View">
                 <FiList onClick={this.changeViewToList} className="listView" />
             </span>
@@ -141,62 +158,81 @@ class Posts extends React.Component {
                 <FiGrid onClick={this.changeViewToList} className="gridView" />
             </span>
         </div>) : (null);
-        if ((this.props.participated || this.props.created)) {
-            var participatedDiv = (this.state.typeOfView === "list") ? (
 
-                <div className="issueContainer" style={{ width: issuepercentage }} >
-                    <IssueDisplay home={config.HOME} />
-                </div>
-            ) : (<div className="issueContainer" style={{ width: "80%" }} >
+
+        const participatedDiv = (this.props.participated || this.props.created) ? (
+            (this.state.typeOfView === "list") ? (<div className="issueContainer" style={{ width: issuepercentage }} >
+                <IssueDisplay home={config.HOME} />
+            </div>) : (<div className="issueContainer" style={{ width: "80%" }} >
 
                 <div className="closeBtnHolder">
                 </div>
                 <DisplatCreated home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
-            </div>)
-            feedDiv = (<div>
-                {listGrid}
+            </div>)) : (null)
+        const feedDiv = (this.props.participated || this.props.created) ?
+            (<div>
+                {/* {listGrid} */}
                 {participatedDiv}
-            </div>)
-        }
-
-        else if (this.props.inbox) {
-            feedDiv = (<div >
+            </div>) : (this.props.inbox ? (<div>
                 <Activity userId={this.props.userId} />
-            </div>)
-        }
-        else if (this.props.Setting) {
-            feedDiv = (<Setting userId={this.props.userId} />)
-        }
+            </div>) : (this.props.Setting ? (<Setting userId={this.props.userId} />) : (null)))
 
 
-        return (this.props.authAction ? ((!this.props.isAauthenticated) ? (<Redirect to={"../"} />) : (
-            ((this.props.gotAllActivities) ? (
-                <div>
-                    {nav}
-                    <div className="containerHome">
-                        {callNotificationDiv}
-                        </div >
-
-                            {feedDiv}
+        return (this.props.authAction ? (this.state.handleValidated?(
+            (this.props.isAauthenticated) ? (
+                ((this.props.gotAllActivities || !this.state.isHome)&& this.props.donefetching) ? (
+                    <div>
+                        {nav}
+                        <Helmet>
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+                        </Helmet>
+                        <div className="containerHome">
+                            {callNotificationDiv}
                         </div>
-                        ):(null)))):(null))
-                    }
-                }
-const mapStateToProps= state => ({
-                            myissues: state.profile.myIssues,
-                        participated: state.nav.openParticipated,
-                        inbox: state.nav.openInbox,
-                        authAction: state.auth.authAction,
-                        isAauthenticated: state.auth.isAuthenticated,
-                        home:state.nav.openHome,
-                        profileid: state.visitProfile.id,
-                        created: state.nav.openCreated,
-                        allprojects:state.profile.myIssues,
-                        participatedIssues: state.profile.participatedIssue,
-                        userId: state.auth.id,
-                        Setting: state.nav.openSetting,
-                        gotAllActivities :state.call.gotAllActivities,
-                        socket:state.home.socket
-                    })
-export default connect(mapStateToProps,{openInbox,getAllActivities,openCreated,initiateSocket,addActivity,
-      getProfileDetails,stillAuthenicated,getProfileByTwitterHandle,setVisitProfile})(Posts)
+    
+                        {feedDiv}
+                    </div>
+                ) : (null)) :((this.props.donefetching) ? (
+                    <div>
+                        {nav}
+                        <Helmet>
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+                        </Helmet>
+                        <div className="containerHome">
+                            {callNotificationDiv}
+                        </div>
+    
+                        {feedDiv}
+                    </div>
+                ) : (null)) 
+           ):(null)
+            
+            ): (null))
+    }
+}
+const mapStateToProps = state => ({
+    myissues: state.profile.myIssues,
+    participated: state.nav.openParticipated,
+    inbox: state.nav.openInbox,
+    authAction: state.auth.authAction,
+    isAauthenticated: state.auth.isAuthenticated,
+    home: state.nav.openHome,
+    profileid: state.home.id,
+    created: state.nav.openCreated,
+    allprojects: state.profile.myIssues,
+    participatedIssues: state.profile.participatedIssue,
+    userId: state.auth.id,
+    authTwitterHandle: state.auth.twitterHandle,
+    Setting: state.nav.openSetting,
+    gotAllActivities: state.call.gotAllActivities,
+    socket: state.home.socket,
+    donValidationHandle: state.home.donValidationHandle,
+    isPresentInExplain: state.home.presentOnExplain,
+    profilePresentOnTwitter: state.home.presentOnTwitter,
+   donefetching:state.profile.donefetching,
+    
+})
+export default connect(mapStateToProps, {
+    openInbox, getAllActivities, openCreated,getProfileDetails , initiateSocket, addActivity, getAllReferral,
+    addNewAnswerProject, stillAuthenicated, validateTwitterHandle, setVisitProfile
+})(Posts)

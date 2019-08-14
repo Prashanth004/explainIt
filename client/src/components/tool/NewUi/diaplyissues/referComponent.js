@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import axios from 'axios';
 import config from '../../../../config/config';
 import { connect } from 'react-redux';
-import {addNewUser} from '../../../../actions/storeUserAction'
+import {addNewUser} from '../../../../actions/storeUserAction';
+import ImageContainer from '../Activies/imageContainer'
 
 class referralComp extends Component {
     constructor(props){
@@ -59,7 +60,8 @@ class referralComp extends Component {
   render() {
     return (
       <div>
-        <span><b>referred by <a href={config.react_url+'/@'+this.state.twitterHandle}>@{this.state.twitterHandle}</a></b></span>
+        <span>referred by <ImageContainer name={this.state.twitterHandle}imgsrc={this.state.profilePic}/> </span>
+        {/* <a href={config.react_url+'/@'+this.state.twitterHandle}>@{this.state.twitterHandle}</a> */}
       </div>
     )
   }

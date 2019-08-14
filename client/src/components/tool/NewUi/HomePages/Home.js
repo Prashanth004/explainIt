@@ -1,38 +1,34 @@
 import React, { Component } from 'react'
-import '../../css/newlanding.css'
-import '../../css/NewSignin.css'
-import Navbar from './Navbar';
-import Cotactlist from './contactlist/contactsDisplay';
-import Setting from './newNav/setting';
-import { toggleHowWorksModal } from '../../../actions/modalAction'
-import ExplinerVideoModal from './container/explainerModal';
-import ExtCloseBtn from './container/modalExtButton'
-import {showContactsAct} from '../../../actions/ProfileCardAction';
-import EmailVarify from './emailvarify'
-import CallNotification from './container/CallNotification';
-import Activity from './Activies/indexActivity'
-import {  openHome } from "../../../actions/navAction";
-import { initGA, loadPageView } from './container/ReactGa';
-import { missCall } from '../../../actions/callAction';
-import { getProfileDetails } from '../../../actions/profileAction';
-import { getTotalUnread } from '../../../actions/messageAction'
-import {initiateSocket} from '../../../actions/homeAction'
+import '../../../css/newlanding.css'
+import '../../../css/NewSignin.css'
+import Navbar from '../Navbar';
+import Cotactlist from '../contactlist/contactsDisplay';
+import Setting from '../newNav/setting';
+import { toggleHowWorksModal } from '../../../../actions/modalAction'
+import ExplinerVideoModal from '../container/explainerModal';
+import ExtCloseBtn from '../container/modalExtButton'
+import {showContactsAct} from '../../../../actions/ProfileCardAction';
+import EmailVarify from '../emailvarify'
+import CallNotification from '../container/CallNotification';
+import {  openHome } from "../../../../actions/navAction";
+import { initGA, loadPageView } from '../container/ReactGa';
+import { getProfileDetails } from '../../../../actions/profileAction';
+import { getTotalUnread } from '../../../../actions/messageAction'
+import {initiateSocket} from '../../../../actions/homeAction'
 import { Redirect } from 'react-router-dom';
-import { creatAnsProject } from '../../../actions/projectActions';
+import { creatAnsProject } from '../../../../actions/projectActions';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import { Modal } from 'reactstrap';
-import { getAllContacts } from '../../../actions/contactAction'
+import { getAllContacts } from '../../../../actions/contactAction'
 import { connect } from 'react-redux';
-import MobNav from './newNav/index'
-import { setIssueId } from '../../../actions/issueActions';
-import { stillAuthenicated } from '../../../actions/signinAction';
-// import { FiGrid, FiList } from "react-icons/fi";
-import config from '../../../config/config';
-import {  getAllActivities } from '../../../actions/callAction'
-import ProfileCard from './ProfileCard'
-// import IssueDisplay from './diaplyissues/DisplayIssues'
-import { varifyEmail } from '../../../actions/emailAction'
-import { saveExtensionDetails } from "../../../actions/extensionAction";
+import MobNav from '../newNav/index'
+import { setIssueId } from '../../../../actions/issueActions';
+import { stillAuthenicated } from '../../../../actions/signinAction';
+import config from '../../../../config/config';
+import {  getAllActivities } from '../../../../actions/callAction'
+import ProfileCard from '../ProfileCard'
+import { varifyEmail } from '../../../../actions/emailAction'
+import { saveExtensionDetails } from "../../../../actions/extensionAction";
 
 class NewHome extends Component {
     constructor(props) {
@@ -46,8 +42,7 @@ class NewHome extends Component {
             showExplainerVideo: false,
             isinformed: false
         }
-        this.changeViewToList = this.changeViewToList.bind(this);
-        this.changeViewToGrid = this.changeViewToGrid.bind(this);
+       
         this.saveVideoData = this.saveVideoData.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
         this.toggleExplainerVideo = this.toggleExplainerVideo.bind(this);
@@ -147,7 +142,6 @@ class NewHome extends Component {
         console.log("mounting");
         this.props.openHome();
         this.props.getTotalUnread();
-        // const socket = socketIOClient(config.base_dir, { transports: ['websocket'] }, { origins: "*" });
       
     }
   
@@ -157,45 +151,16 @@ class NewHome extends Component {
         })
     }
 
-    screenShareWindow() {
-        var href = config.react_url + "/sharescreen"
-        var width = window.innerHeight * (3 / 4),
-            height = window.innerHeight * (3 / 4),
-            top = 10,
-            left = 10,
-            url = href,
-            opts = 'status=1' +
-                ',width=' + width +
-                ',height=' + height +
-                ',top=' + top +
-                ',left=' + left;
-        window.open(url, 'explain', opts);
-    }
 
-    changeViewToList() {
-        this.setState({
-            typeOfView: "list"
-        })
-    }
-    changeViewToGrid() {
-        this.setState({
-            typeOfView: "grid"
-        })
-    }
+
 
     render() {
-        const {issuepercentage} =  this.state;
-        const profileCardGrid = (!this.state.reducedLittleWidth)?(this.props.isSecondScreenSharing?"100%":"100%"):("100%")
-        const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"5px"}}><Cotactlist  /></div>):(null)
+        // const profileCardGrid = (!this.state.reducedLittleWidth)?(this.props.isSecondScreenSharing?"100%":"100%"):("100%")
+        const profileCardGrid = (!this.state.reducedLittleWidth)?("33% 33% 33%"):("100%")
+
+        const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"0px"}}><Cotactlist  /></div>):(null)
         var profileCardElement = null;
-        // var listGrid = (window.innerWidth >= 1000) ? (<div style={{position:"fixed",top:"90px",right:"30px"}} >
-        //     <span className="hint--top" aria-label="List View">
-        //         <FiList onClick={this.changeViewToList} className="listView" />
-        //     </span>
-        //     <span className="hint--top" aria-label="Grid View">
-        //         <FiGrid onClick={this.changeViewToGrid} className="gridView" />
-        //     </span>
-        // </div>) : (null);
+
         if (!this.state.isinformed && this.props.userId !== null) {
             this.informExtension();
         }     
@@ -203,7 +168,6 @@ class NewHome extends Component {
         const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo} />;
        
         if (this.props.myissues !== null)
-            var issuesCreated = (this.props.myissues)
         var feedDiv = null;
 
         const callNotificationDiv = (<CallNotification />)
@@ -226,34 +190,10 @@ class NewHome extends Component {
         }
 
         if (this.props.isAauthenticated) {
-            // if (!this.props.incommingCall && (this.props.participated || this.props.created )) {
-            //     var participatedDiv = (this.state.typeOfView === "list") ? (
-            //         <div className="issueContainer" style={{ width: issuepercentage }} >
-            //             <IssueDisplay home={config.HOME}/>
-            //         </div>
-            //     ) : (<div className="issueContainer" style={{ width: "80%" }} >
 
-            //         <div className="closeBtnHolder">
-            //         </div>
-            //         <DisplatCreated home={config.HOME} issueArray={(this.props.participated) ? this.props.participatedIssues : issuesCreated} />
-            //     </div>)
-            //     feedDiv = (<div>
-            //         {listGrid}
-            //         {participatedDiv}
-            //     </div>)
-            // }
-            // else if (this.props.inbox) {
-            //     profileCardElement = null
-            //     feedDiv = (<div >
-            //         <Activity userId={this.props.userId} />
-            //     </div>)
-            // }
             if(this.props.setting){
                 feedDiv = (<Setting userId={this.props.userId} />)
             }
-            // else {
-
-            // }
         }
 
         if((this.props.isSceenSharing || this.props.isFullScreenRecording  ||this.props.callAction))
@@ -311,6 +251,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {openHome,
-    toggleHowWorksModal,getAllActivities,missCall, saveExtensionDetails,showContactsAct,initiateSocket,
+    toggleHowWorksModal,getAllActivities,saveExtensionDetails,showContactsAct,initiateSocket,
     getProfileDetails,setIssueId,varifyEmail,getTotalUnread,creatAnsProject,stillAuthenicated, getAllContacts
 })(NewHome)

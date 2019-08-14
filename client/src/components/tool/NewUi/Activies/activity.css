@@ -11,7 +11,10 @@
     border-color:#dde2e286;
     border-left-width:1.5px;
     border-left-color:#34a9ad;
-    
+    /* white-space: nowrap;  */
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+    word-wrap: break-word;
     display:grid;
     /* box-shadow: 0px 0px 5px 2px rgba(82, 81, 81, 0.02);  */
     /* box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068); */
@@ -29,6 +32,36 @@
    margin-right:90%;
  
   
+}
+.notionDiv{
+    display: grid;
+     grid-template-columns: 15% 85%;
+   
+    margin: auto;
+    
+}
+.notionMain{
+    margin:auto;
+    /* background-color: #34a9ad; */
+    text-align: center;
+}
+.activitiesWithSymbols{
+    /* min-height : "90vh"; */
+    /* background-color: blue; */
+    width:90%;
+    text-align:"center";
+    margin:auto; 
+}
+.notionBox{
+    text-align: left;
+    width: 380px;
+    padding:10px;
+    border-style:solid;
+    border-width:1px;
+    border-color:rgb(177, 177, 177);
+    border-radius:3px;
+    margin:auto;
+    margin-top:10px;
 }
 .callIconDiv{
     padding-top:20px;
@@ -72,6 +105,22 @@ p{
 .activityContent:hover{
     box-shadow: 5px 5px 7px 0.5px rgba(82, 81, 81, 0.034); 
 /* background-color:  #eee; */
+}
+
+
+@media (min-width: 1000px) {
+    .activitiesWithSymbols{
+        display:grid;
+        grid-template-columns: 28% 44% 28%;
+    }
+    .notionMain{
+       
+        position: fixed;
+    }
+    .notionBox{
+        width: 280px;
+    }
+
 }
 
 

@@ -4,7 +4,10 @@ import config from '../../config/config'
 import '../css/screenRecorder.css'
 import '../css/shareScreen.css';
 import '../css/call.css';
+import { validateTwitterHandle } from '../../actions/homeAction';
+
 import Navbar from './NewUi/Navbar';
+import CallNotification from './NewUi/container/CallNotification';
 import Feedback from './NewUi/feedback/feedback'
 import PreparingLink from './waitinForLink'
 import RetryText from './waitForretry';
@@ -20,7 +23,6 @@ import PropType from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { postStartCall, addExtraTimerfromReciever, decreaseTimerfromReciever, postEndCall, displayScreenSharebutton, refreshExtension } from '../../actions/extensionAction'
 import { stillAuthenicated } from '../../actions/signinAction';
-import { getProfileByTwitterHandle } from "../../actions/visitProfileAction";
 import { setTime } from '../../actions/floaterAction';
 
 import {
@@ -837,6 +839,7 @@ window.close();
         return (<div style={{minHeight:"98vh"}}>
              <Navbar 
               page="share"/>
+              <CallNotification localSocket={this.state.socket}/>
             {precallActivity}
             <div className="screenShareDiv">
                 {ShareElement}
@@ -855,7 +858,7 @@ window.close();
 DisplayShare.PropType = {
     answerCall: PropType.func.isRequired,
     stillAuthenicated: PropType.func.isRequired,
-    getProfileByTwitterHandle: PropType.isRequired,
+    validateTwitterHandle: PropType.isRequired,
     saveSourceId: PropType.isRequired,
     saveExtensionDetails: PropType.func.isRequired,
     postStartCall: PropType.func.isRequired,
@@ -871,7 +874,7 @@ const mapStateToProps = state => ({
     myProfileName: state.auth.userName,
     myProfileUserId: state.auth.id,
     mytwitterHandle:state.auth.twitterHandle,
-    peerProfilePic: state.visitProfile.profilePic,
+    peerProfilePic: state.home.profilePic,
     isLoggedIn: state.auth.isAuthenticated,
     extSource: state.extension.source,
     isMuted: state.call.isMuted,
@@ -882,6 +885,6 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, { postEndCall,getFeedBackValididty,
-    otherPeerMute,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, getProfileByTwitterHandle, stillAuthenicated })(DisplayShare)
+    otherPeerMute,otherPeerShareScreen,fullStartedSharing, fullStopedSharing, setTime, decreaseTimerfromReciever, muteAudio, unMuteAudio, displayScreenSharebutton, addExtraTimerfromReciever, refreshExtension, postStartCall, saveExtensionDetails, saveSourceId, answerCall, validateTwitterHandle, stillAuthenicated })(DisplayShare)
 
 

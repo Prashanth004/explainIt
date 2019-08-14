@@ -25,7 +25,7 @@ import {hideContactAct} from '../../../../actions/ProfileCardAction';
         searchedContacts.map(data=>(<SingleContact contactData={data}/>))):(<p>Not found</p>)):(
         mycontacts.map(data=>(<SingleContact contactData={data}/>)))):(<p>Not found</p>)
     return (mycontacts.length!==0?(<div className="contactContainer">
-        <div className="topBtnsActivity"><Button close onClick={hideContactAct} /></div>
+        {/* <div className="topBtnsActivity"><Button close onClick={hideContactAct} /></div> */}
           <ContactSearch />
       
           {/* <button className="buttonDark addToContactBtn"><FiUserPlus style={{fontSize:"16px", marginTop:"-5px"}}/>  Create New Contact   </button> */}

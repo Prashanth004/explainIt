@@ -1,7 +1,7 @@
 import React from 'react';
 import { FiArrowLeft, FiSave } from "react-icons/fi";
 import './prfile.css';
-import { FiGithub, FiLinkedin, FiEdit, FiTwitter } from "react-icons/fi";
+import { FiGithub, FiLinkedin } from "react-icons/fi";
 
 
 

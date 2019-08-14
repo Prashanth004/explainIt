@@ -2,6 +2,12 @@
 .floaterContainerTans{
   background-color:rgba(255, 255, 255, 0);
 }
+.callTopicDisplay{
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
 .screenShareFloat .tooltiptextChrome{
     visibility: hidden;
     background-color: white;

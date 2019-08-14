@@ -158,8 +158,6 @@ class tweetSearch extends Component {
             isVisitProfile, numberValue, emptyNumber, maxTimeForVideo } = this.state;
         const { doneFetching,
             fetchProfile, isPresentInExplain, twitterHandleValid } = this.props;
-
-
         if (doneFetching && !doneTweeting && fetchProfile && !noInternet && !selfShare && !!isPresentInExplain)
             this.updateInfo()
         const spanElement = ((limitExce) ? (
@@ -175,13 +173,26 @@ class tweetSearch extends Component {
             <span className="spanElement">Cant be empty</span>
         ) : (emptyUserName ? (
             <span className="spanElement">User name cant be empty</span>
-        ) : (null))))
+        ) : (null))));
+
+        const nameForReciever = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN) ? (<span>
+           <TweetSuggest
+                    onChange={this.updateTwitterHandleBox}
+                    placeholder="@Twitter handle"
+                    classOfInput="handleInput"
+                    tweetTextvalue={twitterHandle}
+                    classOfMenu="screeShareMenu"
+                /></span>) : (<span>@{twitterHandle}</span>);
 
 
-
+        const AcceptTopicDiv = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN)?(
+            <div className="TwiValidInfo" style={{width:"90%", margin:"auto"}}>
+                    <AcceptTopic 
+                    action={config.FULL_SCREEN_SHARE}
+                    tweetTheMessage={this.testHandle} />
+                </div>):(<button className="buttonLight" onClick={this.testHandle}>Share Screen</button>);
 
         const validatinginfo = (tweetTested && !doneTweeting) ? (
-
             (doneFetching && fetchProfile) ?
                 (noInternet ? (<NoInternet />) : ((!twitterHandleValid ? (<InValidHandle />) :
                     (selfShare ? (<SelfShareInfo changeTweetStateNeg={this.changeTweetStateNeg} />) :
@@ -195,13 +206,7 @@ class tweetSearch extends Component {
         // && !noInternet && !selfShare && isPresentInExplain
         const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain || selfShare ||noInternet )) ?(null):(<div>
             <div className="startShare">
-                <p style={{ fontSize: "13px", fontWeight: "500" }}>Screen share with  <TweetSuggest
-                    onChange={this.updateTwitterHandleBox}
-                    placeholder="@Twitter handle"
-                    classOfInput="handleInput"
-                    tweetTextvalue={twitterHandle}
-                    classOfMenu="screeShareMenu"
-                /> for<InputNumber
+                <p style={{ fontSize: "13px", fontWeight: "500" }}>Screen share with {nameForReciever} for<InputNumber
                         empty={emptyNumber}
                         emptyUserName={emptyUserName}
                         limitOfChar={maxTimeForVideo}
@@ -213,14 +218,11 @@ class tweetSearch extends Component {
                 </p>
                 {spanElement}
                
-                <div className="TwiValidInfo" style={{width:"90%", margin:"auto"}}>
-                    <AcceptTopic 
-                    action={config.FULL_SCREEN_SHARE}
-                    tweetTheMessage={this.testHandle} />
-                </div>
+                {AcceptTopicDiv}
             </div>
            
-        </div>)
+        </div>);
+        
 
         return (<div>{mainContainer }
          {validatinginfo}</div>)

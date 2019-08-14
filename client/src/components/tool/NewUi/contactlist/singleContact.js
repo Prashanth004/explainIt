@@ -18,13 +18,13 @@ class cntactCard extends Component {
   
   render() {
     console.log("this.props.contactData : ",this.props.contactData);
-    const {profilepic,username,twitterhandle,goodat,online} = this.props.contactData;
+    const {profilepic,username,twitterhandle,bio,online} = this.props.contactData;
     const shareIcon = online?( <span className="hint--left" aria-label="Share Screen">
     <FiCopy onClick={()=>this.props.dialFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
   </span>):(null)
    
-    const emptyGoodAt = (<p  className="contactHandle">Profile details incomplete</p>)
-    const gootAtDiv = (goodat!==null)?((goodat.length!==0)?( <div className="goodAt"><b>Good at : </b>{goodat}</div>):(emptyGoodAt)):(emptyGoodAt)
+    const emptyGoodAt = (<p className="contactHandle">Profile details incomplete</p>)
+    const gootAtDiv = (bio!==null)?((bio.length!==0)?( <div className="goodAt"><b>Status : </b>{bio}</div>):(emptyGoodAt)):(emptyGoodAt)
     return (
       <div className="singleContact">
           <div className="contactImgContainer">
@@ -35,13 +35,14 @@ class cntactCard extends Component {
           <span>{username} </span></a>
           {gootAtDiv}
           </div>
-          <div style={{padding:"5px", marginTop:"5px",display:"grid", gridTemplateColumns:"50% 50%"}}>
+          {/* <span style={{fontSize:"12px", color:"#333",marginTop:"-15px"}}>@{twitterhandle}</span> */}
+          {/* <div style={{padding:"5px", marginTop:"5px",display:"grid", gridTemplateColumns:"50% 50%"}}>
          {shareIcon}
           
            <span className="hint--left" aria-label="Record screen and send">
             <FiVideo onClick={()=>this.props.recordFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
             </span>
-          </div>
+          </div> */}
       
       </div>
     )

@@ -184,7 +184,7 @@ class Call extends Component {
                             renderer={this.props.renderer}/>
 
                     </div>
-                    <div>
+                    <div className="callTopicDisplay">
                     <p>Topic : {topicOfTheCall}</p>
                     </div>
                     <div>

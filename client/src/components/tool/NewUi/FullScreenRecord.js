@@ -48,7 +48,10 @@ class FullScreenRecorder extends Component {
             currentAtionStatus: null,
             saveActivity: false,
             selfSave:false,
-            savedRecordActivity:false
+            savedRecordActivity:false,
+            mobile:false,
+            firefox:false,
+            chrome:true
         }
         this.downloadExtension = this.downloadExtension.bind(this);
         this.recordScreenStop = this.recordScreenStop.bind(this);
@@ -102,17 +105,17 @@ class FullScreenRecorder extends Component {
 
     saveActivityJustRecord() {
         var subject = this.state.subjectOfMessage;
+        // var sharablelink =  config.react_url+"/project/"+this.props.topicIssueId
         this.setState({savedRecordActivity:true})
-        if(this.props.explainBy !== null){
-            var sharablelink =  config.react_url+"/project/"+this.props.topicIssueId
-            console.log("this.props.shareid, this.props.callTopic, sharablelink : ",this.props.shareid, this.props.callTopic, sharablelink)
-            this.props.explainSuccessedUpate(this.props.shareid, this.props.callTopic, sharablelink);
-        }else{
-            this.props.saveRecordedMessage(sharablelink, this.props.callTopic, this.props.fromId, subject);
-        }
-        
-        // explainSuccessedUpate
-        // this.props.
+        // if(this.props.explainBy !== null){
+        //     var sharablelink =  config.react_url+"/project/"+this.props.topicIssueId
+        //     console.log("this.props.shareid, this.props.callTopic, sharablelink : ",this.props.shareid, this.props.callTopic, sharablelink)
+        //     this.props.explainSuccessedUpate(this.props.shareid, this.props.callTopic, sharablelink);
+        // }else{
+        this.props.sendMessage(this.props.sharablelink, this.props.callTopic, this.props.fromId, this.props.twitterUserId, subject)
+
+            // this.props.saveRecordedMessage(sharablelink, this.props.callTopic, this.props.fromId, subject);
+        // }
     }
     startRecording() {
         var self = this;
@@ -399,6 +402,12 @@ class FullScreenRecorder extends Component {
 
         localStorage.setItem('timer', JSON.stringify(config.RECORD_TIME))
         const result = browser();
+        if(result.mobile){
+            self.setState({
+                mobile:true,
+                chrome:false
+            })
+        }
         if (config.ENVIRONMENT !== "test") {
             if (result.name === "chrome") {
 
@@ -410,9 +419,25 @@ class FullScreenRecorder extends Component {
                 };
                 img.onerror = function () {
                     self.setState({
-                        isInstalled: false
+                        isInstalled: false,
+                        chrome:true,
                     })
                 };
+            }
+            else if(result.name === "firefox"){
+                self.setState({
+                    chrome:false,
+                    firefox:true})
+            }
+            else if(result.mobile){
+                self.setState({
+                    mobile:true,
+                    chrome:false
+                })
+            }
+            else{
+                console.log("browser : ",result.name);
+                self.setState({ chrome:false});
             }
         }
     }
@@ -541,8 +566,9 @@ class FullScreenRecorder extends Component {
 
         }
 
-        return (this.state.isInstalled) ? (
-            (<div className="recordMainScreen" >
+        return (!this.state.mobile)?(
+            (this.state.isInstalled) ? (
+            this.state.chrome?((<div className="recordMainScreen"  >
                 {closeBtn}
                 <div style={{ paddingTop: "10px" }}>
                     {recordingElements}
@@ -551,8 +577,10 @@ class FullScreenRecorder extends Component {
             </div>)
         ) : (<div>
             <DownloadExt />
-        </div>
-            )
+        </div>)):((this.state.firefox)?(<div>{closeBtn}  <p>We don't support this browser for now.</p></div>):
+        (<p>We dont support this browser for now</p>)
+            
+        )):(<div>{closeBtn}Please use desktop version to continue</div>)
     }
 }
 FullScreenRecorder.PropType = {

@@ -33,6 +33,7 @@ class ActivityMain extends Component {
         if(activity.touser!==null){
             var newData = userData.filter(user=>user.key === activity.touser);
             if(newData.length ===0){
+               
                 // newDate = localStorage.getItem
                 axios({
                     method: 'get',

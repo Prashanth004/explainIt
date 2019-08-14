@@ -1,13 +1,19 @@
-import { GET_PROFILE_DETAILS,
-     GET_PROFILE_DETAILS_FAIL,
+import { GET_PROFILE_DETAILS,SAVED_RECORDING,
+         GET_PROFILE_DETAILS_FAIL,
      UPDATE_USER_PROFILE_FAILED,
-     OPEN_EDIT_PROFILE,
-     CLOSE_EDIT_PROFILE,
+     OPEN_EDIT_PROFILE,ADD_NEW_ANSWER_PROJECT,
+     CLOSE_EDIT_PROFILE,ADD_MORE_CREATED,
      CHANGE_ONLINE_STATUS,
      CHANGE_ONLINE_STATUS_FAILED,
      UPDATE_USER_PROFILE } from './types'
 import config from '../config/config';
 import axios from 'axios';
+import rn from 'random-number'
+var options = {
+    min: -1000000
+    , max: 10000000
+    , integer: true
+}
 
 export const changeOnlinestatus = (status)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'));
@@ -47,7 +53,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     var linkinLink = null;
     var githubLink = null;
     var goodat = null;
-    var works = null;
+    var portfolio = null;
     var onlineStatus = null;
 
     axios({
@@ -71,7 +77,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
             linkinLink = (response1.data.data.linkedin===null)?(""):(response1.data.data.linkedin);
             githubLink = (response1.data.data.github===null)?(""):(response1.data.data.github);
             goodat=(response1.data.data.goodat===null)?(""):(response1.data.data.goodat);
-            works=response1.data.data.works;
+            portfolio=(response1.data.data.portfolio===null)?(""):(response1.data.data.portfolio);
             onlineStatus=response1.data.data.online
             axios({
                 method: 'get',
@@ -122,7 +128,7 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
                     linkinLink : linkinLink,
                     githubLink : githubLink,
                     goodat:goodat,
-                    works:works,
+                    portfolio:portfolio,
                     twitterHandle: twitterHandle,
                     myIssue: myIssue,
                     participatedIssue: participated,
@@ -153,6 +159,17 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
 
     })
 }
+export const addNewAnswerProject=(project)=>(dispatch)=>{
+    alert("adding new peoject")
+    dispatch({
+        type:ADD_NEW_ANSWER_PROJECT,
+        payload:project
+    })
+}
+
+export const addMoreCreated = ()=>(dispatch)=>{
+    dispatch({type:ADD_MORE_CREATED})
+}
 export const openEditProfile=()=>(dispatch)=>{
     dispatch({
         type:OPEN_EDIT_PROFILE
@@ -163,7 +180,7 @@ export const closeEditProfile=()=>(dispatch)=>{
         type:CLOSE_EDIT_PROFILE
     })
 }
-export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works)=>(dispatch)=>{
+export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,portfolio)=>(dispatch)=>{
     var token = JSON.parse(localStorage.getItem('token'))
     
    
@@ -174,7 +191,7 @@ export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works
         linkedin:linkedin,
         github:github,
         goodat:goodat,
-        works:works
+        portfolio:portfolio
       };
       let axiosConfig = {
         headers: {
@@ -195,7 +212,7 @@ export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works
                 linkinLink : response.data.data.linkedin,
                 githubLink : response.data.data.github,
                 goodat:response.data.data.goodat,
-                works:response.data.data.works
+                portfolio:response.data.data.portfolio
             })
         }
         else{
@@ -210,8 +227,94 @@ export const updateUserProfile=(bio, cost,linkedin,angellist,github,goodat,works
             type:UPDATE_USER_PROFILE_FAILED
         })
     })
+}
+export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,isquestion,issueIdFrmCpm,isPublic,action )=> (dispatch) =>{
+    var rand = rn(options);
+    var rand2 = rn(options);
+    var today = new Date();
+    var date = today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate();
+    var time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
+    localStorage.setItem('newIssueId', JSON.stringify(rand2))
 
+    dispatch({
+        type:SAVED_RECORDING,
+        filepath :  config.react_url + '/portfolio/'+rand2
+    });
 
+    console.log("blob : ",videoData)
+    var videoFile = new File([videoData], 'video.mkv', {
+        type: 'video/mkv'
+    });
+    console.log("video Data : ",videoFile)
+    if(action === config.SERVER_SHARING)
+    var AudioFile = new File([audioData], 'audio.mp3',{
+        type:'audio/mp3'
+    })
+
+   var issueID
+   var token = JSON.parse(localStorage.getItem('token'))
+    if(isquestion === "false"){
+      
+        issueID = issueIdFrmCpm
+    }
+    else{
+        issueID = rand2
+    }
+    if(issueID === undefined ){
+        isquestion = "true";
+        issueID = rand2
+    }
+    var fd = new FormData();
+    var projectName = issueID+"_"+date+"_"+time+"_"+rand2
+    if(action === config.SERVER_SHARING){
+        fd.append('imageData', imgData);
+        fd.append('projectName', projectName);
+        fd.append('videoData', videoFile);
+        fd.append('videoData', AudioFile);
+        fd.append('issueID',issueID);
+        fd.append('textExplain',textExplain);
+        fd.append('isquestion',isquestion);
+        fd.append('public', isPublic);
+        fd.append('action',config.SERVER_SHARING);
+        fd.append('projectid',rand)
+    }
+    else{
+        fd.append('imageData', imgData);
+        fd.append('projectName', projectName);
+        fd.append('videoData', videoFile);
+        fd.append('issueID',issueID);
+        fd.append('textExplain',textExplain);
+        fd.append('isquestion',isquestion);
+        fd.append('public', isPublic);
+        fd.append('projectid',rand);
+        fd.append('action',config.SERVER_RECORDING);
+    }
+   
+    axios({
+        method:'post',
+        url: config.base_dir + '/api/project/file',
+        headers: {
+            "Authorization":token,
+        },
+        data: fd,
+       
+        onUploadProgress: (progressEvent) => {
+            var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+               console.log("Progress:-"+percentCompleted);
+        }
+    }).then(response => {
+        if(response.status===201)
+        {
+            if(response.data.data.isquestion){
+           
+            }
+           
+        }
+       
+    }).catch(error=>{
+        
+        console.log("error : ",error.response)
+    })
 }
 
 

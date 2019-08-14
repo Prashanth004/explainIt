@@ -41,11 +41,6 @@ export const getRecpientId = (twitterHandle,userid) =>(dispatch)=>{
     }).catch(err=>{
         console.log("error : ", err)
     })
-
-
-
-
-
 }
 
 export const getTwitterHandles=()=>(dispatch)=>{
@@ -118,4 +113,6 @@ export const resetValues =()=> (dispatch)=>{
         type:RESET_TWITTER_API_VALUES
     })
 }
+
+
   

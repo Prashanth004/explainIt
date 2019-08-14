@@ -1,0 +1,45 @@
+.cont:hover{
+    background-color: #ddd;
+
+}
+.cont{
+    
+    display:grid;
+    grid-template-columns: 25% 75%;
+    padding: 7x;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 0.5px;
+    width: 100%;
+  
+    margin-top: 2px;
+    text-align: center;
+    border-color: #ddd;
+    /* background-color: blueviolet; */
+
+}
+.referContactContain{
+    width: 30%;
+    margin-left:30%;
+    height:240px;
+    overflow: auto;
+}
+.formContainerExplain{
+    /* background-color: #ddd; */
+    text-align: center;
+}
+.referInput{
+    border-style:none;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+}
+.referInput:focus{
+    outline:none;
+}
+.contactDrop{
+    width:30px;
+    height:30px;
+    border-radius: 50%;
+}
+
+ 

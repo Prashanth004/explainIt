@@ -1,87 +1,71 @@
-// import React, { Component } from 'react'
-// import TweetSuggest from '../../TweetSug';
-// import { connect } from 'react-redux';
-// import { FiArrowRight } from "react-icons/fi";
-// // import Spinner  from '../../container/lodingSmall';
-// import { getRecpientId, } from '../../../../../actions/twitterApiAction';
-// import './twitterform.css'
-
-// import { getProfileByTwitterHandle,shareToSelfAction,strtedTweetTest,
-//     noInternetAction,updateTwitterHandle,emptyTwitterHandle } from "../../../../../actions/visitProfileAction";
-
-// class twitterpichandle extends Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             isVisitProfile: false,
-//             emptyUserName: false,
-//             gotuserSuccessful:false
-//         }
-//         this.testHandle = this.testHandle.bind(this);
-//         this.updateInfo = this.updateInfo.bind(this);
-//     }
-//     updateInfo(){
-//         this.setState({
-//             gotuserSuccessful:true
-//         })
-//     }
-   
-
-//   render() {
+import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import config from '../../../../config/config';
+import { resetValues } from '../../../../actions/twitterApiAction'
+import {resetLandingAction } from '../../../../actions/landingAction'
+import {saveReferral} from '../../../../actions/referral'
+class tweetToRefer extends Component {
+    constructor(props){
+        super(props)
+        this.state={
+            tweeted:false
+        }
+        this.tweeTRefer = this.tweeTRefer.bind(this);
+        this.reRefer = this.reRefer.bind(this);
+    }
+ 
+    tweeTRefer = ()=>{
+        this.setState({tweeted:true})
+        var issueId = JSON.parse(localStorage.getItem('issueId'))
+        var sharableURL = config.react_url + '/project/' + issueId;
+        var text = 'Hi @'+this.props.twitterHandleValue+', I thought you could be the best fit to solve or explain this problem to @'+this.props.questionProject.twitterhandle+'. Thanks for checking it out.';
+        var encSharableURL = encodeURI(sharableURL);
+        var encText = encodeURI(text);
+        var href = "https://twitter.com/intent/tweet?text=" + encText + "&url=" + encSharableURL
+        var width = 650,
+            height = 350,
+            top = window.innerHeight / 8,
+            left = window.innerWidth / 4,
+            url = href,
+            opts = 'status=1' +
+                ',width=' + width +
+                ',height=' + height +
+                ',top=' + top +
+                ',left=' + left;
+        window.open(url, 'twitter', opts);
+        this.props.saveReferral(this.props.questionProject.id,this.props.id,this.props.twitterHandleValue,issueId)
+    }
   
-//     const {  doneTweeting, noInternet, gotuserSuccessful,selfShare} = this.state;
-//     const { doneFetching,testedTweet,
-//         fetchProfile, isPresentInExplain, twitterHandle,updateTwitterHandle} = this.props;
-
-//     const goBtn = (twitterHandle.length>0)?(
-//         // <div style={{textAlign:"center", marginTop:"10px"}}>
-//         // <button  className="nextButton" onClick={this.testHandle}></button>
-//         <FiArrowRight  onClick={this.testHandle} style={{fontSize:"18px", marginTop:"-3px"}}/>
-//        ):null
-//     // if (doneFetching && !doneTweeting && fetchProfile && !noInternet && !selfShare && !!isPresentInExplain &&!gotuserSuccessful)
-//     // this.updateInfo();
-//     const twiterPic =!testedTweet?
-//     (<div className="twitterHandleInputBox">
-     
-//             {goBtn}
-           
-    
-//   </div>):(gotuserSuccessful?(<img src={this.props.profilePic} width="75px" heiight="75px" className="twitterImage" alt="img"></img>
-//   ):(<div className="loader"></div>))
-// //     return (
-// //         <div className="twitterPic">
-// //   {twiterPic}
-// //         </div> 
-// //       )
-//         return( )
-//   }
-// }
-
-
-// const mapStateToProps = state => ({
-//     doneFetching: state.twitterApi.doneFetching,
-//     fetchProfile: state.visitProfile.fetchProfile,
-//     userId: state.auth.id,
-//     userName: state.visitProfile.userName,
-//     twitterHandle:state.visitProfile.twitterHandle,
-//     visitedTiwtterHandle: state.visitProfile.visitedTiwtterHandle,
-//     profilePic:state.visitProfile.profilePic,
-//     onlineStatus: state.visitProfile.onlineStatus,
-//     busyStatus: state.visitProfile.busyStatus,
-//     isPresentInExplain: state.visitProfile.isPresent,
-//     explainBy: state.explain.explainBy,
-//     sharehandle: state.explain.sharehandle,
-//     OwnerTwitterHandle: state.auth.twitterHandle,
-//     redialInitiated : state.redial.redialInitiated,
-//     redialtwitterHandle : state.redial.twitterHandle,
-//     redialSubject : state.redial.subject,
-//     testedTweet:state.visitProfile.testedTweet
+    reRefer(){
+        this.props.resetLandingAction();
+        this.props.resetValues();
+    }
    
+   
+  render() {
+      if(!this.state.tweeted ){
+        
+            this.tweeTRefer()
+         
+           
+      }
+    return (
+      <div>
+          <h5>Thanks for refering.</h5>
+              <h5>You will be rewarded</h5>
+          <span style={{color:"blue", fontSize:"12px"}} onClick={this.reRefer}>Refer again to another</span>
+      </div>
+    )
+  }
+}
 
-// })
-// export default connect(mapStateToProps, {
-//     getProfileByTwitterHandle,strtedTweetTest,
-//     getRecpientId, emptyTwitterHandle,
-//     shareToSelfAction,noInternetAction,updateTwitterHandle ,
-    
-// })(twitterpichandle)
+const mapStateToProps = function(state) {
+    return {
+      twitterHandleValue:state.landing.twitterHandleValue,
+      clicked: state.landing.isClicked,
+      inValidTwitterHandle:state.landing.inValidTwitterHandle,
+      id:state.auth.id
+    }
+  }
+  
+  export default connect(mapStateToProps,{resetValues,saveReferral,resetLandingAction})(tweetToRefer);

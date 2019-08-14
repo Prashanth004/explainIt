@@ -5,6 +5,8 @@ import CopyToClipboard from '../../CopytoClipboard'
 import config from '../../../../config/config';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import { Button } from 'reactstrap'
+import { FiArrowLeft } from "react-icons/fi";
+import { CSSTransition } from 'react-transition-group';
 import '../../../css/toggle.css';
 import { resetExplainAction } from '../../../../actions/explainAction'
 import { saveReplyEmailOption } from '../../../../actions/emailAction'
@@ -23,7 +25,8 @@ import { openEditModal, closeEditModal } from '../../../../actions/projectAction
 import { cancelAllMessageAction } from '../../../../actions/messageAction';
 import { restAllToolValue } from "../../../../actions/toolActions";
 import { resetValues } from '../../../../actions/twitterApiAction'
-import { resetLandingAction } from '../../../../actions/landingAction'
+import { resetLandingAction } from '../../../../actions/landingAction';
+import { getAllContacts } from '../../../../actions/contactAction'
 class issueCard extends Component {
     constructor(props) {
         super(props)
@@ -38,7 +41,7 @@ class issueCard extends Component {
             thisProjectId: null,
             textexplain: "",
             accessToDbDone: false,
-            socket : null
+            socket: null
         }
         this.changeVideo = this.changeVideo.bind(this);
         this.openEditReason = this.openEditReason.bind(this);
@@ -62,28 +65,31 @@ class issueCard extends Component {
     componentDidMount() {
         const self = this;
         var socket = this.props.socket;
-        if(this.props.socket!==null){
+        if (this.props.socket !== null) {
 
-        
-        socket.on(config.SAVED_NEW_PROJECT, data => {
-            if (data.userId === this.props.userId) {
-                self.setState({
-                    state:self.state
-                })
-            }
-        })
-    }
+
+            socket.on(config.SAVED_NEW_PROJECT, data => {
+                if (data.userId === this.props.userId) {
+                    self.setState({
+                        state: self.state
+                    })
+                }
+            })
+        }
         this.setState({
             thisProjectId: this.props.issue.projectid,
             textexplain: this.props.issue.textexplain
         })
-        var test = this.videoExplain
-        test.addEventListener("mouseenter", function (event) {
-            test.setAttribute("controls", "");
-        })
-        test.addEventListener("mouseleave", function () {
-            test.removeAttribute("controls");
-        })
+        var test = this.videoExplain;
+        if(test!==undefined){
+            test.addEventListener("mouseenter", function (event) {
+                test.setAttribute("controls", "");
+            })
+            test.addEventListener("mouseleave", function () {
+                test.removeAttribute("controls");
+            })
+        }
+       
     }
     handleOpenModal(e) {
         if (this.props.isAauthenticated) {
@@ -129,21 +135,21 @@ class issueCard extends Component {
 
     }
     handleCloseModal() {
-        
+
         if (this.props.isFullScreenRecording) {
-        var source = this.props.extSource
-        var origin = this.props.extOrigin
-        const END_RECORD_TIME_END = {
-            type: config.END_RECORD_TIMEOUT
+            var source = this.props.extSource
+            var origin = this.props.extOrigin
+            const END_RECORD_TIME_END = {
+                type: config.END_RECORD_TIMEOUT
+            }
+            if (this.props.extSource !== null) {
+                source.postMessage(END_RECORD_TIME_END, origin);
+            }
+            else {
+                window.postMessage(END_RECORD_TIME_END, origin);
+            }
         }
-        if (this.props.extSource !== null) {
-            source.postMessage(END_RECORD_TIME_END, origin);
-        }
-        else {
-            window.postMessage(END_RECORD_TIME_END, origin);
-        }
-    }
-    this.setState({ showModalExplain: false });
+        this.setState({ showModalExplain: false });
         this.setState({ showModalTwitterLogin: false });
         this.props.cancelAllMessageAction();
         this.props.resetValues();
@@ -159,10 +165,35 @@ class issueCard extends Component {
             }
         }
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.newAnswerProject) {
+            // if(nextProps.newAnswerProject.userid!==undefined){
+            //     var token = JSON.parse(localStorage.getItem('token'));
+            //     const answerProject = nextProps.newAnswerProject;
+            //     axios({
+            //         method: 'get',
+            //         url: config.base_dir + '/api/users/id/' +nextProps.newAnswerProject.userid,
+            //         headers: {
+            //             "Authorization": token,
+            //         }
+            //     })
+            //     .then(response=>{
+            //         answerProject["profilepic"] = response.data.data.profilepic;
+            //         answerProject["username"] = response.data.data.username;
+            //         answerProject["twitterhandle"] = response.data.data.twitterhandle;
+            //         answerProject['id'] = response.data.data.id;
+            //         answerProject['active'] = response.data.data.online;
+            //         this.state.answerProjects.unshift(nextProps.answerProject);
+            //     })
+            // }
+
+        }
+    }
 
     componentWillMount() {
         var self = this;
-        this.setState({socket:this.props.socket})
+        this.props.getAllContacts();
+        this.setState({ socket: this.props.socket })
         var token = JSON.parse(localStorage.getItem('token'))
         axios({
             method: 'get',
@@ -211,25 +242,31 @@ class issueCard extends Component {
 
     }
     render() {
+        const closeButtton = (this.props.explainBy !== config.null) ?
+            (<span><FiArrowLeft style={{ fontSize: "17px", marginTop: "20px", color: "rgb(56, 56, 56)" }} close onClick={this.reStoreDefault} /></span>) :
+            (<Button close onClick={this.reStoreDefault} />)
+
+
+
         const displayTopButtons = (this.state.accessToDbDone)
             ? (<DisplayIssueTopBtns
                 openEditReason={this.openEditReason}
                 changepublicStatus={this.changepublicStatus}
                 issue={this.props.issue}
                 questionProject={this.state.questionProject[0]}
-            
                 handlePublicPrives={this.props.handlePublicPrives}
                 tweetWindow={this.props.tweetWindow}
                 deleteProjects={this.props.deleteProjects}
                 itsHome={this.props.itsHome} />) : (null)
         const ExplainItDiv = (this.state.showModalExplain) ? (
-            <div>
-                <Button style={{ fontSize: "px", height: "35px", width: "35px" }} close onClick={this.reStoreDefault} />
+            <div style={{ width: "92%", margin: "auto" }}>
+                {closeButtton}
                 <div className="ExplainItDivBottom">
                     <ExplainPage
-                       socket={this.state.socket}
+                        socket={this.state.socket}
                         handleCloseModal={this.reStoreDefault}
                         // issue={this.props.issue.issueid}
+                        questioProjectArray={this.state.questionProject}
                         questionProject={this.state.questionProject[0]} />
                 </div>
             </div>
@@ -253,27 +290,35 @@ class issueCard extends Component {
             </div>
 
         ) : (null);
-       
-        const bottomDiv = (!this.state.showModalExplain) ?
-        (<div className="explainAnswerDiv">
-            <div></div>
-            <div id={this.props.issue.issueid} className="explainAnswer">
-                {bottomImages}
-                <div className="twitterContainer">
-                    {tweetOption}
-                </div>
-                <div className="explainIt">
-                    <button id={this.props.issue.issueid} className="buttonLight explainItBtn"  style={{color:"white"}} onClick={this.handleOpenModal}>Explain it</button>
-                </div>
-            </div>
-            <div></div>
-        </div>
-       ) : (null)
 
-     
+        const bottomDiv = (!this.state.showModalExplain && !this.state.showAllPeople) ?
+            (<div className="explainAnswerDiv">
+                <div></div>
+                <div id={this.props.issue.issueid} className="explainAnswer">
+                    {bottomImages}
+                    <div className="twitterContainer">
+                        {tweetOption}
+                    </div>
+                    <div className="explainIt">
+                        <button id={this.props.issue.issueid} className="buttonLight explainItBtn" style={{ color: "white" }} onClick={this.handleOpenModal}>Explain it</button>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+            ) : (this.state.showAllPeople ? (
+
+                <ExplainedStories
+                    closeStoried={this.toggleAllPeopleList}
+                    DetailsOfPeople={this.state.DetailsOfPeople}
+                />
+            ) : (null))
+
+
         return (<div className="cardWithDate">
-           
+
+
             <div key={this.props.issue.issueid} className="issueCard">
+
                 <div className="orginCard">
                     {displayTopButtons}
                     <div className="cardMiddleSection">
@@ -282,24 +327,47 @@ class issueCard extends Component {
                             <div className="copyDisplay" id={"clipboard_" + this.props.issue.issueid} style={{ display: "none" }}>
                                 <CopyToClipboard sharablelink={config.react_url + '/project/' + this.props.issue.issueid} />
                             </div>
-                        
+                            {/* <div>
+                                <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
+                                    className="cardExplainText">
+                                    <p style={{ fontSize: "12px", fontColor: "#333" }} id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
+                                </div>
+                                <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
+                                    <video id={this.props.issue.issueid}
+                                        autoPlay={true}
+                                        muted
+                                        className="explainVideo"
+                                        ref={vid => this.videoExplain = vid}
+                                        width="100%" height="100%" src={this.props.issue.videofilepath} ></video>
+                                </div></div> */}
                             <div id={this.props.issue.issueid} onClick={this.props.togglemodal}
                                 className="cardExplainText">
-                                <p  style={{fontSize:"12px",fontColor:"#333"}}id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
+                                <p style={{ fontSize: "12px", fontColor: "#333" }} id={"text_" + this.props.issue.projectid} >{this.props.issue.textexplain}</p>
                             </div>
-                            <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
-                                <video id={this.props.issue.issueid}
-                                    autoPlay={true}
-                                    muted
-                                    className="explainVideo"
-                                    ref={vid => this.videoExplain = vid}
-                                    width="100%" height="100%" src={this.props.issue.videofilepath} ></video>
-                            </div>
+                            <CSSTransition in={(!this.state.showAllPeople && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN
+                                && this.props.explainBy !== config.SHARE_SCREEN_EXPALIN 
+                                && this.props.explainBy !== config.REFER_EXPLAIN)|| (this.props.issue.textexplain!==this.props.topicOfTheCall && !this.state.showAllPeople)} timeout={200} unmountOnExit classNames="pageSliderRight">
+                                <div>
+
+
+                                    <div id={this.props.issue.issueid} onClick={this.props.togglemodal} className="questionImg">
+                                        <video id={this.props.issue.issueid}
+                                            autoPlay={true}
+                                            muted
+                                            className="explainVideo"
+                                            ref={vid => this.videoExplain = vid}
+                                            width="100%" height="100%" src={this.props.issue.videofilepath} ></video>
+                                    </div></div>
+                            </CSSTransition>
                         </div>
                     </div>
+
+
                     {bottomDiv}
+
+
                 </div>
-              
+
 
                 <ReactModal
                     isOpen={this.state.showModalTwitterLogin}
@@ -336,29 +404,29 @@ class issueCard extends Component {
                             initailText={this.state.textexplain}
                             projectId={this.state.thisProjectId} />
                     </div>
-
                 </ReactModal>
 
-                <ReactModal
+                {/* {/* </ReactModal> */}
+
+                {/* <ReactModal
                     isOpen={this.state.showAllPeople}
                     className="ModalA stories"
                     overlayClassName="OverlayA">
-                    <div >
-                        {/* <div onclick={this.toggleAllPeopleList} className="closeModalBtn">
+                    <div > */}
+                {/* <div onclick={this.toggleAllPeopleList} className="closeModalBtn">
                             <span>
                                 <FiX className="closeIcon" onClick={this.toggleAllPeopleList} />
                             </span>
                         </div> */}
-                        <ExplainedStories
+                {/* <ExplainedStories
                         closeStoried ={this.toggleAllPeopleList}
                             DetailsOfPeople={this.state.DetailsOfPeople}
                         />
                     </div>
-                </ReactModal>
+                </ReactModal> */}
 
 
                 {ExplainItDiv}
-
 
             </div>
         </div>)
@@ -380,12 +448,15 @@ const mapStateToProps = state => ({
     extSource: state.extension.source,
     extOrigin: state.extension.origin,
     isFullScreenRecording: state.tools.isFullScreenRecording,
-    socket:state.home.socket
+    socket: state.home.socket,
+    explainBy: state.explain.explainBy,
+    newAnswerProject: state.profile.newAnswerProject,
+    topicOfTheCall: state.call.topicOfTheCall
 
 })
 
 export default connect(mapStateToProps, {
-    setIssueId,
+    setIssueId, getAllContacts,
     resetLandingAction,
     cancelAllMessageAction,
     restAllToolValue,

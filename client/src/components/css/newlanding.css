@@ -312,6 +312,8 @@ margin-top:10px;
     /* width:650px; */
     margin-top:0px;
     margin:auto;
+    padding-bottom:20px;
+    background-color:#40a8ac;
  
   }
   .date{
@@ -453,12 +455,15 @@ color:black;
     /* background-color:  rgb(252, 252, 252);; */
     /* background-color: red; */
     border-style:solid;
+    min-height: 510px;
     border-width:0.5px;
     border-color:#dde2e2;
     margin-top:10px;
     background-color: white;
     border-radius:2px;
-    
+  
+    border-top-right-radius: 7px;
+    border-top-left-radius:7px;
     border-bottom-style:solid;
     border-bottom-width:1px;
     border-bottom-color: rgba(8, 8, 32, 0.137);
@@ -515,6 +520,57 @@ color:black;
     width:100%;
   }
 
+
+  .my-node-enter {
+    opacity: 0;
+    transform: scale(0.9);
+
+  }
+  .my-node-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+  .my-node-exit {
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  .my-node-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms;
+  }
+/* 
+  .pageSliderLeft-enter {
+    transform: translate3d(100%, 0, 0);
+  }
+  .pageSliderLeft-enter.pageSliderLeft-enter-active {
+    transform: translate3d(0, 0, 0);
+    transition: all 600ms;
+  }
+  .pageSliderLeft-exit {
+    transform: translate3d(0, 0, 0);
+  }
+  .pageSliderLeft-exit.pageSliderLeft-exit-active {
+    transform: translate3d(100%, 0, 0);
+    transition: all 600ms;
+  }
+   */
+   .pageSliderRight-enter {
+    transform: translate3d(-100%, 0, 0);
+  }
+  .pageSliderRight-enter.pageSliderRight-enter-active {
+    transform: translate3d(0, 0, 0);
+    transition: all 600ms;
+  }
+  .pageSliderRight-exit {
+    transform: translate3d(0, 0, 0);
+  }
+  .pageSliderRight-exit.pageSliderRight-exit-active {
+    transform: translate3d(-100%, 0, 0);
+    transition: all 600ms;
+  }  
+
   .cardAudio{
    text-align:center;
   }
@@ -542,6 +598,7 @@ color:black;
   }
 
   .emptyIssues{
+    min-height: 90vh;
     text-align: center;
     padding:20px;
   }
@@ -617,6 +674,7 @@ color:black;
     }
     .btn-twitter:link, .btn-twitter:visited {
       color: #fff; 
+      /* color: rgb(56, 56, 56);  */
     }
     .btn-twitter:active, .btn-twitter:hover {
       background: #0075a2;
@@ -671,9 +729,11 @@ color:black;
 }
       .cardWithDate{
         width:555px;
+       
         margin:auto;
         margin-top:0px;
-       
+        border-radius: 7px;
+        border-radius: 7px;
        
       }
     

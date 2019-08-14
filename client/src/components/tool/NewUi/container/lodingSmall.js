@@ -2,5 +2,5 @@ import React from 'react'
 import './loading.css'
 
 export default () => {
-  return (<div className="loader"></div>)
+  return (<div className="loadersmall"></div>)
 }

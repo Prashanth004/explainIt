@@ -135,6 +135,7 @@ export const getAllContacts = ()=>(dispatch)=>{
                                newTestJson[index]['username']=response.data.data.username;
                                newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
                                newTestJson[index]['goodat']=response.data.data.goodat;
+                               newTestJson[index]['bio']=response.data.data.bio;
                                newTestJson[index]['online']=response.data.data.online;
                                newTestJson[index]['busy']=response.data.data.busy;
                                contactData =newTestJson

@@ -100,6 +100,7 @@ class ScreenRecorder extends Component {
             startTimer: false,
             peerAudioRecorder:null,
             firefox:false,
+            mobile:false,
             chrome:true
         }
         this.renderer = this.renderer.bind(this);
@@ -532,7 +533,14 @@ validateTurn(iceServers){
         this.props.refreshExtension(config.FULL_SCREEN_SHARE, extSource, extOrigin);
         const result = browser();
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
+        if(result.mobile){
+            self.setState({
+                mobile:true,
+                chrome:false
+            })
+        }
         if (config.ENVIRONMENT !== "test") {
+          
             if (result.name === "chrome") {
                 var img;
                 this.setState({ chrome:true})
@@ -547,6 +555,12 @@ validateTurn(iceServers){
                 self.setState({
                     chrome:false,
                     firefox:true})
+            }
+            else if(result.mobile){
+                self.setState({
+                    mobile:true,
+                    chrome:false
+                })
             }
             else{
                 console.log("browser : ",result.name);
@@ -1402,11 +1416,11 @@ validateTurn(iceServers){
 
             </div>)
 
-        return (this.state.chrome)?((this.state.isInstalled) ? (
+        return (!this.state.mobile)?((this.state.chrome)?((this.state.isInstalled) ? (
             (this.state.currentAtionStatus === null) ?
             (<div>
                     {audioWarning}
-                    <div className="LinkDisplay">
+                    <div className="LinkDisplay" >
                         {closeBtn}
                         {linkElement}
                         {shareTimeElements}
@@ -1414,13 +1428,13 @@ validateTurn(iceServers){
                         <audio id="video" ref={a => this.videoTag = a} srcobject=" " ></audio>
                     </div>
                 </div>) :
-                (<div className="LinkDisplay">
+                (<div className="LinkDisplay" style={{borderStyle:(this.props.explainBy!== config.RECORD_SCREEEN_EXPLAIN && this.props.explainBy!== config.SHARE_SCREEN_EXPALIN)?"block":"none"}}>
                     {closeBtn}
                     <BusyAction currentAtionStatus={this.state.currentAtionStatus} />
                 </div>)) : (<div ><DownloadExt  downloadExtension={this.downloadExtension}/></div>)):
                 ((this.state.firefox)?(<div> {closeBtn} <p>We don't support Firefox browser for now.</p></div>):(<div>
                     {closeBtn}  <p>We don't support this browser for now.</p>
-                </div>))
+                </div>))):(<div> {closeBtn} <p>Please use the desktop version</p></div>)
     }
 }
 ScreenRecorder.PropType = {

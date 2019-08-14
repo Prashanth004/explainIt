@@ -25,11 +25,7 @@ class MobNav extends Component {
         const { page } = this.props;
         if (page === config.HOME_PAGE) {
             this.props.openHome();
-            if (!this.props.Setting){
-                this.setState({ openHomeRed: true, openInboxRed: false })
-            }else if(  (window.location.pathname).includes('activities')){
-                this.setState({ openHomeRed: true, openInboxRed: false })
-            }
+            this.setState({ openHomeRed: true, openInboxRed: false })
         }
         else {
             this.props.openHome();
@@ -63,8 +59,8 @@ class MobNav extends Component {
     }
     render() {
         console.log("this.props.page : ", this.props.page)
-        const openHomeDiv = this.state.openHomeRed ? (<Redirect push to={'./application'} />) : (null);
-        const openInboxDiv = this.state.openInboxRed ? (<Redirect push to={'./activities'} />) : (null)
+        const openHomeDiv = this.state.openHomeRed ? (<Redirect push to={'../@'+this.props.authTwitterHandle+'/'} />) : (null);
+        const openInboxDiv = this.state.openInboxRed ? (<Redirect push to={'./@'+this.props.authTwitterHandle+'/activities'} />) : (null)
         const { page } = this.props;
         const divStyle = {
             textAlign: "center",
@@ -119,7 +115,8 @@ const mapStateToProps = state => ({
     Created: state.nav.openCreated,
     inbox: state.nav.openInbox,
     Participated: state.nav.openParticipated,
-    Setting: state.nav.openSetting
+    Setting: state.nav.openSetting,
+    authTwitterHandle: state.auth.twitterHandle,
 
 })
 export default connect(mapStateToProps, { openHome, openSettings, openInbox, openCreated, openParticipated })(MobNav)

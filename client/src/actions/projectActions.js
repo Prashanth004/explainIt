@@ -206,8 +206,11 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
     })
 }
 export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,isquestion,issueIdFrmCpm,isPublic,action )=> (dispatch) =>{
-    var rand = rn(options)
-    var rand2 = rn(options)
+    var rand = rn(options);
+    var rand2 = rn(options);
+    var today = new Date();
+    var date = today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate();
+    var time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
     localStorage.setItem('newIssueId', JSON.stringify(rand2))
     dispatch({
         type:UPDATE_LINK,
@@ -237,7 +240,7 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         issueID = rand2
     }
     var fd = new FormData();
-    var projectName = config.dataTime
+    var projectName = issueID+"_"+date+"_"+time+"_"+rand2
     if(action === config.SERVER_SHARING){
         fd.append('imageData', imgData);
         fd.append('projectName', projectName);

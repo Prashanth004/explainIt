@@ -1,23 +1,35 @@
 
 var database = require('../app')
 
-
+var config = require('../config/keys')
 
 
 exports.createReferral = (req,res)=>{
-    database.db.oneOrNone('insert into referral (problemowner, referrer, referreetwitter, issue)'+
-    'values(${problemowner},${referrer}, ${referreetwitter},${issue})',
+    database.db.one('insert into referral (problemowner, referrer, referreetwitter,referreeid, issue)'+
+    'values(${problemowner},${referrer}, ${referreetwitter}, ${referreeid},${issue}) RETURNING id',
     {
         problemowner:req.body.problemOwner,
         referrer:req.body.referrer,
         referreetwitter:req.body.referreetwitter,
+        referreeid:req.body.referreeid,
         issue:req.body.issue
     }).then(data=>{
+        console.log("data : ",data)
         res.status(201).send({
             success:1,
             data:data
         })
+        database.db.one('select * from referral where id = $1',data.id)
+        .then(data1=>{
+            console.log("data : ",data1)
+            res.io.emit(config.NEW_MESSAGE, {
+                "touser": data1.referrer,
+                "fromuser":data1.problemowner,
+                "data" :data1
+            })
+        })
     }).catch(error=>{
+        console.log("referal saving error : ",)
         res.status(500).send({
             success:0,
             error:error

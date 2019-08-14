@@ -3,7 +3,7 @@
 import React from 'react';
 import config from '../../../../../config/config'
 import ImageContainer from '../imageContainer';
-import { FiMessageSquare } from "react-icons/fi";
+import { FiVideo } from "react-icons/fi";
 export default (props) => {
         const {activity, userData} = props
         var date = activity.time.slice(5, 7)
@@ -11,7 +11,7 @@ export default (props) => {
             <div className="activityContentWithDate">
                 <div className="activityContent">
                 {/* <div className="callIconDiv">  <FiPhoneOutgoing  className="callIcon" /></div> */}
-                <div className="callIconDiv"> <FiMessageSquare   className="callIcon msg" /></div>
+                <div className="callIconDiv"> <FiVideo   className="callIcon msg" /></div>
                 <div>
                 
                 <span className="dateNew Notify">{activity.time.slice(8, 10)}  {config.monthPicker[date]}, {activity.time.slice(0, 4)}</span>

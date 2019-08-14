@@ -1,8 +1,8 @@
 import {GET_PROFILE_DETAILS,
     UPDATE_USER_PROFILE,
     UPDATE_USER_PROFILE_FAILED,
-    OPEN_EDIT_PROFILE,
-    CLOSE_EDIT_PROFILE,
+    OPEN_EDIT_PROFILE,ADD_NEW_ANSWER_PROJECT,
+    CLOSE_EDIT_PROFILE,ADD_MORE_CREATED,
     CHANGE_ONLINE_STATUS,
     GET_PROFILE_DETAILS_FAIL} from '../actions/types';
 
@@ -28,8 +28,13 @@ const initialState = {
     linkinLink : "",
     githubLink : "",
     goodat:"",
-    works:"",
+    portfolio:"",
     onlineStatus:0,
+    newAnswerProject:{},
+
+    noLoadMoreCreated:0,
+    totalNoLoadMoreCreated:0,
+    activeFiveCreated:[]
   
 }
 
@@ -47,9 +52,14 @@ export default function(state=initialState, action){
                 linkinLink : action.linkinLink,
                 githubLink : action.githubLink,
                 goodat:action.goodat,
-                works:action.works,
+                portfolio:action.portfolio,
                 twitterHandle:action.twitterHandle
 
+            }
+        case ADD_NEW_ANSWER_PROJECT:
+            return{
+                ...state,
+                newAnswerProject:action.payload
             }
         case CHANGE_ONLINE_STATUS:
         return{
@@ -75,6 +85,7 @@ export default function(state=initialState, action){
         }
         
         case GET_PROFILE_DETAILS:
+            const noOfLoadCre = Math.floor((action.myIssue.length)/3)
             return {
                 ...state,
                 donefetching:true,
@@ -94,8 +105,18 @@ export default function(state=initialState, action){
                 participatedIssue : action.participatedIssue,
                 twitterHandle:action.twitterHandle,
                 goodat:action.goodat,
-                works:action.works,
-                allprojects:action.allprojects
+                portfolio:action.portfolio,
+                allprojects:action.allprojects,
+                totalNoLoadMoreCreated:noOfLoadCre
+
+            }
+        case ADD_MORE_CREATED:
+            const upatedNuber = state.noLoadMoreCreated + 1;
+            const fiveActi =  state.myIssues.slice((upatedNuber*3),(upatedNuber*3)+3)
+            return{
+                ...state,
+                noLoadMoreCreated:upatedNuber,
+                activeFiveCreated:fiveActi
 
             }
         case GET_PROFILE_DETAILS_FAIL:

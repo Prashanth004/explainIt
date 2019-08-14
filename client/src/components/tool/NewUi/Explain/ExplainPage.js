@@ -7,6 +7,8 @@ import {cancelSuccess} from '../../../../actions/issueActions'
 import TwitterLogin from 'react-twitter-auth';
 import ExplainOptions from './explainOptions'
 import { connect } from 'react-redux';
+import browser from 'browser-detect';
+import {FiArrowLeft} from "react-icons/fi";
 import { explainAuthentication } from '../../../../actions/signinAction';
 import {resetIssueActions} from '../../../../actions/projectActions'
 import config from '../../../../config/config'
@@ -16,20 +18,26 @@ import '../../../css/ExplainpPage.css'
 import PropType from 'prop-types';
 import { creatAnsProject } from '../../../../actions/projectActions';
 import { saveExtensionDetails} from "../../../../actions/extensionAction";
+import {resetAllReferralAction} from '../../../../actions/referral';
 class ExplainPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
             twitterHandle:null,
-            currentAtionStatus:false
+            currentAtionStatus:false,
+            mobile:false
         }
         this.saveVideoData = this.saveVideoData.bind(this);
         this.reStoreDefault = this.reStoreDefault.bind(this);
     }
 
     componentWillMount(){
+        const result = browser();
+        if(result.mobile){
+            this.setState({ mobile:true})
+        }
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
-        this.setState({ currentAtionStatus: currentAtionStatus })
+        this.setState({ currentAtionStatus: currentAtionStatus });
         this.props.explainAuthentication();
         this.props.resetExplainAction();
         var source = this.props.extSource
@@ -45,6 +53,7 @@ class ExplainPage extends Component {
         this.props.resetValues();
         this.props.cancelSuccess();
         this.props.resetIssueActions();
+        this.props.resetAllReferralAction();
 
     }
     // eslint-disable-next-line no-dupe-class-members
@@ -68,6 +77,7 @@ class ExplainPage extends Component {
 
     render() {
         var widthDiv = null;
+        const {mobile} = this.state;
         if (this.props.showCanvas) {
             widthDiv = "95%";
         }
@@ -76,17 +86,20 @@ class ExplainPage extends Component {
         }
        
         return (this.props.authAction)?((this.props.isAuthenticated)?
-        (<div className="explainItBackgroung">
+        (!mobile?(<div className="explainItBackgroung">
             <ExplainOptions
              socket={this.props.socket}
             widthDiv={widthDiv}
             currentAtionStatus={this.state.currentAtionStatus}
             questionProject={this.props.questionProject}
+            questioProjectArray={this.props.questioProjectArray}
             reStoreDefault={this.reStoreDefault}
             savefile={this.saveVideoData} />
-            </div>):
+            </div>):(<div> <FiArrowLeft  onClick={this.reStoreDefault} />
+            <p>Please use the desktop version to continue</p>
+            </div>)):
             (<div>
-                <Button close onClick={this.reStoreDefault} />
+                <FiArrowLeft  onClick={this.reStoreDefault} />
                 <div className="requestLogin">
                 <h3>You need to Login</h3>
                 <TwitterLogin className="buttonDark twitterButton" loginUrl={config.base_dir+"/api/twitter/visit/auth/twitter"}
@@ -128,7 +141,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, { 
     saveExtensionDetails, 
     cancelAllMessageAction,
-    restAllToolValue,
+    restAllToolValue,resetAllReferralAction,
     explainAuthentication,
     resetExplainAction,
     resetValues,

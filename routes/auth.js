@@ -29,9 +29,6 @@ var sendToken = function (req, res) {
 
 
 router.post('/auth/twitter/reverse', function (req, res) {
-  
-
-
     var qs = require('querystring')
         , oauth =
         {
@@ -80,16 +77,12 @@ router.post('/auth/twitter/', function (req, res, next) {
             req.body['oauth_token'] = parsedBody.oauth_token;
             req.body['oauth_token_secret'] = parsedBody.oauth_token_secret;
             req.body['user_id'] = parsedBody.user_id;
-
-
-
             next();
         })
 },  passport.authenticate('twitter-token'), function (req, res, next) {
     if (!req.user) {
         return res.send(401, 'User Not Authenticated');
     }
-
     // prepare token for API
     req.auth = {
         id: req.user.id,
@@ -99,7 +92,6 @@ router.post('/auth/twitter/', function (req, res, next) {
         data: req.user.date,
         payment: req.user.payment,
     };
-
     return next();
 }, generateToken, sendToken)
 
@@ -118,7 +110,6 @@ router.post('/visit/auth/twitter/reverse/:twitterhandle', function (req, res) {
         , url = 'https://api.twitter.com/oauth/request_token'
         ;
     request.post({ url: url, oauth: oauth }, function (err, r, body) {
-
         if (err) {
             return res.send(500, { message: err.message });
         }

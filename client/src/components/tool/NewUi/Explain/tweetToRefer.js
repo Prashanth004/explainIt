@@ -15,8 +15,10 @@ class tweetToRefer extends Component {
     }
  
     tweeTRefer = ()=>{
-        this.setState({tweeted:true})
-        var issueId = JSON.parse(localStorage.getItem('issueId'))
+        this.setState({tweeted:true});
+        console.log("this.props.questionProject : ",this.props.questionProject)
+        var issueId = this.props.questionProject.issueid;
+        console.log("issueid : ",issueId)
         var sharableURL = config.react_url + '/project/' + issueId;
         var text = 'Hi @'+this.props.twitterHandleValue+', I thought you could be the best fit to solve or explain this problem to @'+this.props.questionProject.twitterhandle+'. Thanks for checking it out.';
         var encSharableURL = encodeURI(sharableURL);
@@ -33,7 +35,7 @@ class tweetToRefer extends Component {
                 ',top=' + top +
                 ',left=' + left;
         window.open(url, 'twitter', opts);
-        this.props.saveReferral(this.props.questionProject.id,this.props.id,this.props.twitterHandleValue,issueId)
+        this.props.saveReferral(this.props.questionProject.id,this.props.id,this.props.twitterHandleValue,this.props.VisitorId,issueId)
     }
   
     reRefer(){
@@ -61,10 +63,10 @@ class tweetToRefer extends Component {
 
 const mapStateToProps = function(state) {
     return {
-      twitterHandleValue:state.landing.twitterHandleValue,
-      clicked: state.landing.isClicked,
-      inValidTwitterHandle:state.landing.inValidTwitterHandle,
-      id:state.auth.id
+  
+      id:state.auth.id,
+      twitterId :state.twitterApi.twitterId,
+      twitterHandleValue: state.referral.twitterHandleValue,
     }
   }
   

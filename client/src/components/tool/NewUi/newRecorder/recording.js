@@ -6,7 +6,7 @@ import browser from 'browser-detect';
 import RecordRTC from 'recordrtc';
 import { setStream } from '../../../../actions/streamActions';
 import { fullStartedRecording, fullStopedRecording } from '../../../../actions/toolActions'
-import { pauseRecording, resetRecorder, resumeRecording, startRecorder, stopRecorder,permissionDeniedAction } from '../../../../actions/recoderAction'
+import { pauseRecording, resetRecorder, resumeRecording, startRecorder, stopRecorder, permissionDeniedAction } from '../../../../actions/recoderAction'
 import { registerRecordToBrowser, registerEndToBrowser } from '../container/miscFunction'
 import PropType from 'prop-types';
 
@@ -49,37 +49,37 @@ class Recorder extends Component {
         }
 
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         registerEndToBrowser();
         this.props.resetRecorder()
         window.removeEventListener("beforeunload", this.onUnload)
         this.props.fullStopedRecording()
-        var audioStream = this.state.audioStream;
-        var screenStream = this.state.screenStream;
-        if (audioStream !== null && screenStream !== null) {
-            audioStream.stop();
-            screenStream.stop();
-        }
+        // var audioStream = this.state.audioStream;
+        // var screenStream = this.state.screenStream;
+        // if (audioStream !== null && screenStream !== null) {
+        //     audioStream.stop();
+        //     screenStream.stop();
+        // }
     }
- 
+
     componentDidMount() {
         const { extSource, extOrigin, extSourceId } = this.props;
         const GET_SOURCE_ID = { type: config.GET_SOURCE_ID_AUDIO_TAB }
         var self = this;
         window.addEventListener("beforeunload", this.onUnload);
-        console.log("extSource : ",extSourceId);
-      
-            console.log("i am callinf extension")
-            if (extSource !== null)
-                extSource.postMessage(GET_SOURCE_ID, extOrigin);
-            else
-                window.postMessage(GET_SOURCE_ID, '*');
-            if (window.addEventListener)
-                window.addEventListener("message", this.postMessageHandler, false);
-            else
-                window.attachEvent("onmessage", this.postMessageHandler);
-       }
-   
+        console.log("extSource : ", extSourceId);
+
+        console.log("i am callinf extension")
+        if (extSource !== null)
+            extSource.postMessage(GET_SOURCE_ID, extOrigin);
+        else
+            window.postMessage(GET_SOURCE_ID, '*');
+        if (window.addEventListener)
+            window.addEventListener("message", this.postMessageHandler, false);
+        else
+            window.attachEvent("onmessage", this.postMessageHandler);
+    }
+
     startRecorder() {
         var constraints = null;
         registerRecordToBrowser();
@@ -112,7 +112,7 @@ class Recorder extends Component {
         }
         navigator.mediaDevices.getUserMedia({ audio: true }).then((audioStream) => {
             navigator.mediaDevices.getUserMedia(constraints).then((screenStream) => {
-                console.log("Streams : ",audioStream)
+                console.log("Streams : ", audioStream)
                 var finalStream = new MediaStream();
                 var videoTracks = screenStream.getVideoTracks();
                 var audioTracks = audioStream.getAudioTracks();
@@ -171,17 +171,22 @@ class Recorder extends Component {
     }
     render() {
 
-        const { isFullScreenRecording,permissionDenied, isFullRecordCompleted, downLoadUrl, saved, discarded, blob } = this.props;
+        const { isFullScreenRecording, permissionDenied, isFullRecordCompleted, downLoadUrl, saved, discarded, blob } = this.props;
         console.log("downloadUrl : ", downLoadUrl)
-        const Content = (isFullRecordCompleted ? (!((saved || discarded)) ? ((this.props.downLoadUrl !== null) ? (<div>
-            <video width="100%" src={this.props.downLoadUrl} controls></video>
-            <button className="buttonDark" onClick={() => this.props.save(blob)}>Accept </button>
-            <button className="buttonDark" onClick={this.props.discard}>Discard</button>
-        </div>) : (<p>Preparing to preview</p>)) : (saved ? (<p>Saved Successfully</p>) : (null))) : (
-                isFullScreenRecording ? (<p>Recording your screen</p>) : (!permissionDenied?(<p>Preparing to record</p>):
-                (<div><p>Permission Denied</p>
-                <button className="buttonDark"onClick={this.props.discard} >Close</button>
-                </div>))
+        const Content = (isFullRecordCompleted ?
+            (!((saved || discarded)) ?
+                ((this.props.downLoadUrl !== null) ?
+                    (<div>
+                        <video width="100%" src={this.props.downLoadUrl} controls></video>
+                        <button className="buttonDark" onClick={() => this.props.save(blob)}>Accept </button>
+                        <button className="buttonDark" onClick={this.props.discard}>Discard</button>
+                    </div>) : (<p>Preparing to preview</p>)) :
+                (saved ? (<p>Saved Successfully</p>) : (null)))
+            :(isFullScreenRecording ?
+                    (<p>Recording your screen</p>) : (!permissionDenied ? (<p>Preparing to record</p>) :
+                        (<div><p>Permission Denied</p>
+                            <button className="buttonDark" onClick={this.props.discard} >Close</button>
+                        </div>))
             ))
         return (<div className="recorderContainer">
             {Content}
@@ -206,7 +211,7 @@ const mapStateToProps = state => ({
     audioStream: state.stream.audioStream,
     screenStream: state.stream.screenStream,
     finalStream: state.stream.finalStream,
-    permissionDenied:state.recorder.permissionDenied
+    permissionDenied: state.recorder.permissionDenied
 })
 
 export default connect(mapStateToProps, {

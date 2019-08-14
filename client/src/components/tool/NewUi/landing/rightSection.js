@@ -20,7 +20,9 @@ export default class componentName extends Component {
   render() {
     return (   
     <div className="onboardSection">
+      <div className="narrowLoginDiv">
       <LogoContainer />
+      
       <br />
       <br/>
       {/* <div> */}
@@ -40,6 +42,7 @@ export default class componentName extends Component {
         <Modal  size='lg' centered ={true} isOpen={this.state.showExplainerVideo} toggle={this.toggleExplainerVideo} external={<ExtCloseBtn toggle={this.toggleExplainerVideo}/>}>
                       <ExplinerVideoModal />
               </Modal>
+              </div>
       </div>
 
    

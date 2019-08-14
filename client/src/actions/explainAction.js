@@ -1,7 +1,7 @@
-import {EXPLIN_BY_RECORD,EXPLIN_BY_SHARE, RESET_EXPLAIN_ACTIONS, EXPLAIN_BY_REFER} from './types'
+import {EXPLIN_BY_RECORD,EXPLIN_BY_SHARE,SAVE_TOPIC_OF_THE_CALL, RESET_EXPLAIN_ACTIONS, EXPLAIN_BY_REFER} from './types'
 import config from '../config/config';
 import axios from 'axios';
-export const explainByRecord = (twitterhandle, twitterid, issueId)=>(dispatch)=>{
+export const explainByRecord = (twitterhandle, twitterid, issueId,topic)=>(dispatch)=>{
 
     dispatch({
         type:EXPLIN_BY_RECORD,
@@ -11,11 +11,19 @@ export const explainByRecord = (twitterhandle, twitterid, issueId)=>(dispatch)=>
             issueId
         }
     })
+    dispatch({
+        type:SAVE_TOPIC_OF_THE_CALL,
+        payload:topic
+    })
 }
-export const explainByShare =(twitterhandle)=>dispatch=>{
+export const explainByShare =(twitterhandle,topic)=>dispatch=>{
     dispatch({
         type:EXPLIN_BY_SHARE,
         payload:twitterhandle
+    });
+    dispatch({
+        type:SAVE_TOPIC_OF_THE_CALL,
+        payload:topic
     })
 }
 export const explainByRefer = ()=>(dispatch)=>{

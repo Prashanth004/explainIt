@@ -11,16 +11,16 @@ import ScreenShareFloater from './components/tool/NewUi/NewFloater/screenShareCo
 import Login from './components/tool/NewUi/Login';
 import adminDash from './components/tool/NewUi/adminPages/adminroot'
 import NoMatch from './components/tool/NewUi/NoMatch'
-import Home from './components/tool/NewUi/Home'
+import Home from './components/tool/NewUi/HomePages/homeRoute'
 import Feedback from './components/tool/NewUi/feedback/feedback'
 // import video from './components/tool/NewUi/videoDisplay'
 import Explainit from './components/tool/NewUi/Explain/ExplainPage'
+import Portfolio from './components/tool/NewUi/Profile/Portfolio.js'
 import google from './components/testGoogle';
 import Toggle from './components/tool/NewUi/NewFloater/closeFloater'
 import DisplayShare from './components/tool/displayScreenshare'
 import Project from './components/Project'
 import newNav from './components/tool/NewUi/newNav/index'
-import visitProfile from './components/tool/NewUi/connectProfile'
 import git from './components/git'
 import Acticities from './components/tool/NewUi/Posts'
 import Info from './components/tool/NewUi/NewFloater/info'
@@ -44,7 +44,6 @@ class App extends Component {
           <Switch>
           <Route path ="/share/:callerid" component= {DisplayShare}/>
           <Route path ="/share/newuser/:twitterhandle/:callerid" component= {DisplayShare}/>
-            <Route exact path ="/application" component={Home}/>
             <Route exact path = "/setting" component={Setting}/>
             <Route path="/screenShareFloater" component={ScreenShareFloater}/>
             <Route exact path='/signin/:twitterhandle' component={Login} />
@@ -56,19 +55,18 @@ class App extends Component {
             <Route exact path='/project/:projectid' component={Project}/>
             <Route exact path = '/admindash' component={adminDash} />
             <Route exact path = '/video/:projectid' component={VideoDisplay} />
-            {/* <Route exact path ='/floater' component={floater}/> */}
             <Route exact path = '/feedback' component = {Feedback}/>
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
             <Route exact path = '/closefloater' component = {Toggle}/>
             <Route exact path = '/testspeed' component={InternetSpeed}/>
-            {/* <Route exaxt path ='/emailvarify' component={emailvarify}/> */}
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />
             <Route exact path = '/newNav' component = {newNav} />
-            <Route exact path = "/activities" component = {Acticities} />
+            <Route exact path ='/portfolio/:projectid' component={Portfolio}/>
+            {/* <Route exact path = "/activities" component = {Acticities} /> */}
             <Route exact path = "/:encrTwitterHandle/activities"component = {Acticities}/>
-            <Route exact path = "/:encrTwitterHandle"component = {visitProfile}/>
+            <Route exact path = "/:encrTwitterHandle"component = {Home}/>
             
             <Route component={NoMatch} />
           

@@ -5,11 +5,11 @@ import PropType from 'prop-types';
 import InputNumber from '../InputNumber';
 import AcceptTopic from '../Saveproject';
 import TweetSuggest from '../TweetSug';
-import {saveTopicOfTheCall} from '../../../../actions/callAction'
+import { saveTopicOfTheCall } from '../../../../actions/callAction'
 import config from '../../../../config/config';
-import {cancelReRecordOption} from '../../../../actions/dialActions'
+import { cancelReRecordOption } from '../../../../actions/dialActions'
 import { setNoOfMinutes, updateCurrentTime } from '../../../../actions/callAction'
-import { NoInternet, InValidHandle, SelfShareInfo, NotPresentOnExplain } from './noInternet'
+import { NoInternet, InValidHandle, NotPresentOnExplain } from './noInternet'
 import { getProfileByTwitterHandle } from "../../../../actions/visitProfileAction";
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../../actions/twitterApiAction'
 // import { type } from 'os';
@@ -32,7 +32,7 @@ class tweetSearch extends Component {
             noInternet: false,
             selfShare: false,
             numberValue: 3,
-            doneTweeting:false,
+            doneTweeting: false,
 
         }
         this.testHandle = this.testHandle.bind(this);
@@ -49,17 +49,17 @@ class tweetSearch extends Component {
 
         if (this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN)
             this.setState({ twitterHandle: this.props.sharehandle });
-        else if(this.props.fromShareToRecord)
-        this.setState({twitterHandle : this.props.twitterHandle});
-        else if( this.props.reRecordInitiated){
-                this.setState({ twitterHandle : this.props.redialtwitterHandle});
-                this.props.cancelReRecordOption();
-                this.props.turnReRecordWrong();
+        else if (this.props.fromShareToRecord)
+            this.setState({ twitterHandle: this.props.twitterHandle });
+        else if (this.props.reRecordInitiated) {
+            this.setState({ twitterHandle: this.props.redialtwitterHandle });
+            this.props.cancelReRecordOption();
+            this.props.turnReRecordWrong();
         }
 
         resetValues();
         getTwitterHandles();
-        this.setState({ maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT,doneTweeting:false })
+        this.setState({ maxTimeForVideo: config.MAX_VIDEO_TIME_LIMIT, doneTweeting: false })
     }
 
     testHandle() {
@@ -142,7 +142,7 @@ class tweetSearch extends Component {
         // this.props.updateCurrentTime(Number(e.target.value))
     }
 
-    selfSave(){
+    selfSave() {
         this.props.toggle(this.state.numberValue);
         this.props.saveforSelf();
     }
@@ -154,16 +154,19 @@ class tweetSearch extends Component {
         this.props.toggle(this.state.numberValue)
     }
     render() {
-    
-        const { emptyUserName, empty, noText, negNumber, limitExce} = this.state;
+
+
+        // {nameForReciever}
+
+        const { emptyUserName, empty, noText, negNumber, limitExce } = this.state;
 
         const { twitterHandle, tweetTested, doneTweeting, noInternet,
             isVisitProfile, numberValue, emptyNumber, maxTimeForVideo } = this.state;
         const { doneFetching,
             fetchProfile, isPresentInExplain, twitterHandleValid } = this.props;
-            console.log(this.state.doneTweeting,fetchProfile)
+        console.log(this.state.doneTweeting, fetchProfile)
 
-        if (doneFetching && tweetTested && !doneTweeting && fetchProfile && !noInternet  && !!isPresentInExplain)
+        if (doneFetching && tweetTested && !doneTweeting && fetchProfile && !noInternet && !!isPresentInExplain)
             this.updateInfo()
         const spanElement = ((limitExce) ? (
             <span className="spanElement" >Maximum duration for the call is {maxTimeForVideo} minutes</span>
@@ -181,14 +184,33 @@ class tweetSearch extends Component {
         ) : (null))))
 
 
+        const nameForReciever = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN) ? (<span>
+            send to <TweetSuggest
+                onChange={this.updateTwitterHandleBox}
+                placeholder="@Twitter handle"
+                classOfInput="handleInput"
+                tweetTextvalue={twitterHandle}
+                classOfMenu="screeShareMenu"
+            /></span>) : (<span>send to @{twitterHandle}</span>);
+        const AcceptTopicDiv = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN) ? (
+            <div className="TwiValidInfo" style={{ width: "90%", margin: "auto" }}>
+                <AcceptTopic
+                    action={config.FULL_SCREEN_RECORD}
+                    selfSave={this.selfSave}
+                    tweetTheMessage={this.testHandle} />
+            </div>
+        ) : (<button className="buttonLight" onClick={this.testHandle}>Record Screen</button>);
+
+
+
 
 
         const validatinginfo = (tweetTested && !doneTweeting) ? (
 
             (doneFetching && fetchProfile) ?
-                (noInternet ? (<NoInternet   changeTweetStateNeg={this.changeTweetStateNeg} />) : 
-                ((!twitterHandleValid ? (<InValidHandle   changeTweetStateNeg={this.changeTweetStateNeg}/>) :
-                   
+                (noInternet ? (<NoInternet changeTweetStateNeg={this.changeTweetStateNeg} />) :
+                    ((!twitterHandleValid ? (<InValidHandle changeTweetStateNeg={this.changeTweetStateNeg} />) :
+
                         (!isPresentInExplain ? (<NotPresentOnExplain
                             changeTweetStateNeg={this.changeTweetStateNeg}
                             isVisitProfile={isVisitProfile}
@@ -197,25 +219,19 @@ class tweetSearch extends Component {
                             sharablelink={this.props.shareScreenLink}
                         />) : (null))))) : (<p className="info">checking handle validity</p>)) : (null)
         // && !noInternet && !selfShare && isPresentInExplain
-        const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain      ||noInternet )) ?(null):(<div>
+        const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain || noInternet)) ? (null) : (<div>
             <div className="startShare">
                 <p style={{ fontSize: "13px", fontWeight: "500" }}>Record for <InputNumber
-                        empty={emptyNumber}
-                        emptyUserName={emptyUserName}
-                        limitOfChar={maxTimeForVideo}
-                        limitExce={limitExce}
-                        changeInputValue={this.changeImputNumber}
-                        textValue={numberValue}
-                        negNumber={negNumber}
-                        noText={noText} />, send to <TweetSuggest
-                        onChange={this.updateTwitterHandleBox}
-                        placeholder="@Twitter handle"
-                        classOfInput="handleInput"
-                        tweetTextvalue={twitterHandle}
-                        classOfMenu="screeShareMenu"
-                    />
+                    empty={emptyNumber}
+                    emptyUserName={emptyUserName}
+                    limitOfChar={maxTimeForVideo}
+                    limitExce={limitExce}
+                    changeInputValue={this.changeImputNumber}
+                    textValue={numberValue}
+                    negNumber={negNumber}
+                    noText={noText} /> {nameForReciever}
 
-{/* empty={emptyNumber}
+                    {/* empty={emptyNumber}
 //                     emptyUserName={emptyUserName}
 //                     limitOfChar={maxTimeForVideo}
 //                     limitExce={limitExce}
@@ -227,20 +243,17 @@ class tweetSearch extends Component {
 
                 </p>
                 {spanElement}
-               
-                <div className="TwiValidInfo" style={{width:"90%", margin:"auto"}}>
-                    <AcceptTopic 
-                    action={config.FULL_SCREEN_RECORD}
-                    selfSave = {this.selfSave}
-                    tweetTheMessage={this.testHandle} />
-                   
-                </div>
-            </div>
-           
-        </div>)
 
-        return (<div>{mainContainer }
-         {validatinginfo}</div>)
+                {AcceptTopicDiv}
+
+            </div>
+
+        </div>)
+        const preRecording = (this.state.doneTweeting ? (<p>Preparing to record</p>) : (null))
+
+        return (<div>{mainContainer}
+            {validatinginfo}
+            {preRecording}</div>)
     }
 }
 
@@ -267,14 +280,14 @@ const mapStateToProps = state => ({
     explainBy: state.explain.explainBy,
     sharehandle: state.explain.sharehandle,
     OwnerTwitterHandle: state.auth.twitterHandle,
-    redialtwitterHandle : state.redial.redialtwitterHandle,
-    reRecordInitiated : state.redial.reRecordInitiated,
+    redialtwitterHandle: state.redial.redialtwitterHandle,
+    reRecordInitiated: state.redial.reRecordInitiated,
 
 })
 export default connect(mapStateToProps, {
     getProfileByTwitterHandle, getTwitterHandles,
-    setNoOfMinutes, updateCurrentTime,cancelReRecordOption,
-    getRecpientId, resetValues,saveTopicOfTheCall
+    setNoOfMinutes, updateCurrentTime, cancelReRecordOption,
+    getRecpientId, resetValues, saveTopicOfTheCall
 })(tweetSearch)
 
 

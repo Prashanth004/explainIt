@@ -4,7 +4,7 @@ import React from 'react';
 import config from '../../../../../config/config';
 import ImageContainer from '../imageContainer';
 import Timer from '../timer';
-import { FiPhoneIncoming } from "react-icons/fi";
+import { FiCopy } from "react-icons/fi";
 
 export default (props) => {
     const {activity, userData} = props
@@ -19,7 +19,7 @@ export default (props) => {
                 </div> */}
                 <div className="activityContent">
                     
-                <div className="callIconDiv"> <FiPhoneIncoming className="callIcon" /></div>
+                <div className="callIconDiv"> <FiCopy className="callIcon" /></div>
                 <div>
                 <span className="dateNew Notify">{activity.time.slice(8, 10)}  {config.monthPicker[date]}, {activity.time.slice(0, 4)}</span>
 

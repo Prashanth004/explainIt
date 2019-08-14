@@ -7,6 +7,8 @@ import IssueCard from './tool/NewUi/diaplyissues/issueCard'
 import config from '../config/config'
 import { setIssueId } from '../actions/issueActions';
 import './css/project.css';
+import { getAllReferral } from '../actions/referral'
+
 import { initGA, loadPageView } from './tool/NewUi/container/ReactGa';
 // import { Helmet } from "react-helmet";
 import {initiateSocket} from '../actions/homeAction';
@@ -36,10 +38,16 @@ class Project extends Component {
       showModalTwitterLogin: false,
       newIssueId: null,
       reAtempte: false,
-      reducedWidth:false
+      reducedWidth:false,
+      socketinitiated:false,
     }
     this.reAtemptToFetch = this.reAtemptToFetch.bind(this)
-    this.resize = this.resize.bind(this);
+    this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
+    }
+    initiateSocketLoc() {
+        this.props.initiateSocket();
+        console.log("initialting sockets")
+        this.setState({ socketinitiated: true });
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
@@ -49,17 +57,32 @@ class Project extends Component {
 
   reAtemptToFetch = () => { }
   componentWillMount() {
+    this.props.getAllReferral();
     this.props.explainAuthentication();
     if(this.props.socket===null){
       this.props.initiateSocket()
     }
    
-   
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.resize());
-    clearTimeout(this.reAtemptToFetch)
+    clearTimeout(this.reAtemptToFetch);
   }
+  componentWillReceiveProps(nextProps){
+    const self = this;
+    if(nextProps.socket){
+        console.log("iinitialting sockets right way")
+        nextProps.socket.on(config.SAVED_NEW_PROJECT, data => {
+          if (data.userId === this.props.userId) {
+            self.setState({ showModalExplain: false });
+            self.setState({reAtempte: true })
+            clearTimeout(self.reAtemptToFetch)
+            this.props.fetchProjectbyIssue(this.props.match.params.projectid);
+          }
+        })
+    }
+
+}
   componentDidMount() {
     this.setState({ reducedWidth: window.innerWidth <= 700 });
     initGA();
@@ -106,6 +129,8 @@ class Project extends Component {
     }
   }
   render() {
+    if (this.props.socket === null && !this.state.socketinitiated)
+    this.initiateSocketLoc();
     const msgStyling = { margin: "auto", marginTop: "250px", width: "50%", textAlign: "center" };
     const nav=(this.state.reducedWidth)?(<MobNav page={config.PEOJECT_PAGE}/>):(<Navbar page={config.PEOJECT_PAGE}  />)
     const project = (!this.props.setting)?(    <div className="projectPageMainDiv">
@@ -175,7 +200,7 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-  clearAnswers,
+  clearAnswers,getAllReferral,
   saveExtensionDetails,
   cancelAllMessageAction,
   resetExplainAction,

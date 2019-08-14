@@ -73,8 +73,8 @@ class ProfileCard extends Component {
 
     }
     openInboxLoc(){
-       
-            this.setState({openInboxRed:!this.state.openInboxRed})
+        this.handleConfirm()
+        this.setState({openInboxRed:!this.state.openInboxRed})
       
        
     }
@@ -139,13 +139,13 @@ class ProfileCard extends Component {
             getProfileDetails(userId, config.SELF)
         else{
             this.props.getProfileDetails(userId, config.VISIT_PROF);
-            console.log("path.lenght : ",path.length)
-            if(path.length===3){
-                this.setState({twoParts:false})
-            }
-            else{
-                this.setState({twoParts:true,twiHandle:(path[1])})
-            }
+            console.log("path.lenght : ",path.length);
+        }
+        if(path.length===3){
+            this.setState({twoParts:false})
+        }
+        else{
+            this.setState({twoParts:true,twiHandle:(path[1])})
         }
            
         getAllActivities();
@@ -300,28 +300,31 @@ class ProfileCard extends Component {
         this.props.isFullScreenRecording ){
             label = null;
         }
-
+       
         const shareRecord = showActivity?((this.props.currentAtionStatus === null)?
-                    (this.props.screenAction === FULL_SCREEN_RECORD?(
-                        (<FullScreenRecord
-                          
-                            turnReRecordWrong={this.turnReRecordWrong}
+                    (this.props.isAauthenticated?((this.props.screenAction === FULL_SCREEN_RECORD?(
+                            (<FullScreenRecord
+                                turnReRecordWrong={this.turnReRecordWrong}
+                                closeImidiate={this.handleConfirm}
+                                reStoreDefault={this.reStoreDefault}
+                                savefile={this.props.saveVideoData}
+                            />)
+                        ):(this.props.screenAction === FULL_SCREEN_SHARE)?(<FullScreenShare
+                            turnRedialWrong={this.turnRedialWrong}
                             closeImidiate={this.handleConfirm}
                             reStoreDefault={this.reStoreDefault}
                             savefile={this.props.saveVideoData}
-                        />)
-                    ):(this.props.screenAction === FULL_SCREEN_SHARE)?(<FullScreenShare
-                        turnRedialWrong={this.turnRedialWrong}
-                        closeImidiate={this.handleConfirm}
-                        reStoreDefault={this.reStoreDefault}
-                        savefile={this.props.saveVideoData}
-                    />):(null)):
-                    (<div className="LinkDisplay">
+                        />):(null))):(<div className="LinkDisplay">
+                        <div className="topBtnsActivity">
+                            <Button close onClick={this.handleConfirm} />
+                            </div>
+                       <p>You need to signin to proceed</p>
+                        </div>)):(<div className="LinkDisplay">
                     <div className="topBtnsActivity">
                         <Button close onClick={this.handleConfirm} />
                         </div>
                     <BusyAction action="share" closeImidiate={this.handleConfirm} currentAtionStatus={this.props.currentAtionStatus} />
-                    </div>)):(null)
+                    </div>)):(null);
         
         const profile = (showProfile)?(<Profile
                 sharabeLink={this.props.sharabeLink}
@@ -339,8 +342,7 @@ class ProfileCard extends Component {
                     <div>
                 {profile}
             </div>
-            </div >): (null)):(this.props.isHome?(<Redirect push to={{ pathname: '../activities' }} />):(
-                !this.state.twoParts?(<Redirect push to={{ pathname: './activities' }} />):
+            </div >): (null)):((!this.state.twoParts?(<Redirect push to={{ pathname: './activities' }} />):
                 (<Redirect push to={{ pathname: './'+this.state.twiHandle+'/activities' }} />))
             ));
           
@@ -375,7 +377,7 @@ const mapStateToProps = state => ({
     noCreated: state.profile.noCreated,
     noParticipated: state.profile.noParticipated,
     profileId: state.auth.id,
-  
+    isAauthenticated: state.auth.isAuthenticated,
     onlinestatus: state.profile.onlineStatus,
     twitterHandle: state.profile.twitterHandle,
     showActivity:state.profileCard.showActivity,

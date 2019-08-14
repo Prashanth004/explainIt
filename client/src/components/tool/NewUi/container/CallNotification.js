@@ -14,24 +14,31 @@ class CallNotification extends Component {
         this.rejectCall = this.rejectCall.bind(this);
     }
     componentDidMount() {
-        var socket = this.props.socket;
-        const {endCallfromOtherPeer,userId,missCall,
+        const self = this;
+        var socket = (this.props.localSocket!==null || this.props.localSocket!==undefined)?((this.props.socket!==null)?this.props.socket:(this.props.localSocket)):(this.props.socket);
+        const {endCallfromOtherPeer,missCall,
             answerCall,acceptCallDetails}=this.props;
-        if(socket!==null){
+        console.log("this.props.localSocket : ",this.props.localSocket);
+        console.log("socket in call notification : ,",socket)
+        if(socket!==null || socket!== undefined){
+            console.log("the compiler reached here atleast omce while executing the file")
             socket.on(config.REJECT_REPLY, data => {
-                if (userId === String(data.fromUserId)) 
+                if (self.props.userId === String(data.fromUserId)) 
                     answerCall();
             })
             socket.on(config.ACCEPT_SHARE_REQUEST, data => {
-                if (userId === String(data.fromUserId)) 
+                if (self.props.userId === String(data.fromUserId)) 
                     answerCall();
             });
             socket.on(config.LINK_TO_CALL, data => {
+                console.log("incoming call")
                 setTimeout(() => {
                     missCall();
                 }, 18000)
-                localStorage.setItem("profilePic", data.fromProfilePic)
-                if (String(data.ToUserId) === userId) {
+                localStorage.setItem("profilePic", data.fromProfilePic);
+                console.log("incomingdata with call : ", data);
+                console.log("useid : ",self.props.userId);
+                if (String(data.ToUserId) ===self.props.userId) {
                     socket.emit(config.LINK_TO_CALL_ACK, {
                         "fromUserId": data.fromUserId,
                         "toUserId": data.toUserId
@@ -48,26 +55,26 @@ class CallNotification extends Component {
                 }
             });
             socket.on(config.END_WHILE_DIALING, data => {
-                if (data.ToUserId === userId) {
+                if (data.ToUserId === self.props.userId) {
                    endCallfromOtherPeer()
                 }
             })
             socket.on(config.ENDING_RING, data => {
-                if (data.ToUserId === userId) {
+                if (data.ToUserId === self.props.userId) {
                     socket.emit(config.ENDING_RING_ACK, {
                         "ToUserId": data.fromUserId
                     })
                 }
             })
         }
+        
 
 
     }
     answerCall = () => {
         window.open(this.props.callActionLink, '_self');
         this.props.answerCall();
-        var socket = this.props.socket;
-
+        var socket = (this.props.localSocket!==null || this.props.localSocket!==undefined)?((this.props.socket!==null)?this.props.socket:(this.props.localSocket)):(this.props.socket);
         socket.emit(config.ACCEPT_SHARE_REQUEST, {
             'fromUserId': this.props.userId,
             'toUserId': this.props.callerId,
@@ -75,7 +82,7 @@ class CallNotification extends Component {
         })
     }
     rejectCall = () => {
-        var socket = this.props.socket
+        var socket = (this.props.localSocket!==null || this.props.localSocket!==undefined)?((this.props.socket!==null)?this.props.socket:(this.props.localSocket)):(this.props.socket);
         socket.emit(config.REJECT_REPLY, {
             'fromUserId': this.props.userId,
             'toUserId': this.props.callerId,

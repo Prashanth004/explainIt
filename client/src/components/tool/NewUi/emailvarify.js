@@ -45,6 +45,9 @@ class EmailVarify extends Component {
         invalidOTP:false
     })
  } 
+ tryAgain(){
+     this.setState({submitPressed:false})
+ }
 
 
 
@@ -120,8 +123,10 @@ class EmailVarify extends Component {
                     <br/>
                     <button className="buttonLight" onClick={this.resend}>Resend</button>
                 </div>
-            ):(
-                <h4>Sending passcode to your mail</h4>
+            ):(!this.props.failedOtp?(<h4>Sending passcode to your mail</h4>):
+                (<div><h4>Email sent Failed</h4>
+                    <button className="buttonLight" onClick={this.tryAgain}>Try again</button>
+                    </div>)
             )
         ):(this.state.submitPressed)?(
             <ConfirmEmail 
@@ -196,6 +201,7 @@ const mapStateToProps = state => ({
     doneVarification : state.email.doneVarification,
     isVarified:state.email.isVarified,
     otpSent:state.email.sentOtp,
+    failedOtp:state.email.failedOtp,
     profileActivated:state.email.profileActivated,
     reSentOtp:state.email.reSentOtp,
     reSendOtpFailed:state.email.reSendOtpFailed,

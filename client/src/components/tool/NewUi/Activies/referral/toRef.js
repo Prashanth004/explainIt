@@ -28,7 +28,8 @@ class Fromref extends Component {
                     "Authorization": token,
                 }
             }).then(res => {
-                // console.log("res1 : ", res.data.data)
+                console.log("res1 : ", res.data.data)
+                if(res.data.data!==null){
                 if (res.status === 200 || res.status === 304) {
                     this.setState({
                         referrerOwnerTwitterhandle: res.data.data.twitterhandle,
@@ -36,6 +37,7 @@ class Fromref extends Component {
                     })
                     this.props.addNewUser(res.data.data)
                 }
+            }
             })
         }
         else {
@@ -64,10 +66,10 @@ class Fromref extends Component {
     }
     render() {
         const { referralAct } = this.props;
-        var date = referralAct.time.slice(5, 7)
+        console.log("referralAct : ",referralAct)
+        var date = (referralAct.time!==undefined)?(referralAct.time.slice(5, 7)):null
         const { referrerOwnerTwitterhandle, referrerOwnerProfilePic, topicName } = this.state
-        return (
-
+        return (referralAct.time!==undefined)?(
             <div className="activityContentWithDate">
                 <div className="activityContent">
                     <div className="callIconDiv"> <FiUsers className="callIcon" /></div>
@@ -82,7 +84,7 @@ class Fromref extends Component {
                 </div>
             </div>
 
-        )
+        ):(null);
     }
 }
 const mapStateToProps = state => ({

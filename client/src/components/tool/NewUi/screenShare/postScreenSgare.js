@@ -134,7 +134,6 @@ const savingProcessDiv = (!props.isSaved)?(
     <div>
       <div className="DisconMessage">
                 {MessageDisconnected}
-
             </div>
     </div>
   )

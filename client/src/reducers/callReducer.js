@@ -1,7 +1,7 @@
 import {CALL_DETAILS_ACCEPT,
     SAVE_RECIEVER_DATA,
     DECREASE_CALL_BY_MINUTE,
-    SET_NUMBER_MINUTES,
+    SET_NUMBER_MINUTES,LOAD_MORE_ACTIVITY,
     UPDATE_CURRENT_TIME,
     SET_PEER_ID,END_CALL_FROM_OTHER_PEER,
     ANSWERED_CALL,
@@ -45,7 +45,12 @@ const initialState={
     isCallAnswered:false,
     isMuted:false,
     endedCallFromOtherEnd:false,
-    newActivity : {}
+    newActivity : {},
+    activeTen:[],
+    numberOfLoadMore:0,
+    nunerOfScrollLimit:0
+
+
     
 }
 
@@ -61,7 +66,9 @@ export default function(state= initialState, action){
         return{
             ...state,
             gotAllActivities:true,
-            activities:action.payload
+            activities:action.payload,
+            activeTen : action.payload.slice(0,15),
+            nunerOfScrollLimit:Math.floor((action.payload).length/15)
         }
         case ADD_NEW_ACTIVITY:
           
@@ -69,6 +76,16 @@ export default function(state= initialState, action){
                 ...state,
                 newActivity : action.payload
             }
+        case LOAD_MORE_ACTIVITY:
+            const updateedNumber = (state.numberOfLoadMore)+1;
+            const tenActi = state.activities.slice(updateedNumber*15,(updateedNumber*15)+15);
+
+            return{
+                ...state,
+                activeTen:tenActi,
+                numberOfLoadMore:updateedNumber,
+            }
+
         case MUTE_AUDIO:
             return{
                 ...state,

@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { stillAuthenicated } from '../../../../actions/signinAction';
 
 const mobLanding = (props) => {
-props.stillAuthenicated();
+    props.stillAuthenicated();
     return (props.authAction) ? ((!props.isAuthenticated ? (
-        
+
         <div className="landingMainContainMain">
             <div className="topBlock">
                 {/* <div>
@@ -18,22 +18,22 @@ props.stillAuthenicated();
                     </div>
                 </div> */}
                 <br />
-                  
-                    <br />
-                    <div className="logoEmailNew">
-                        <img alt="logo" height="100%" width="100%" src={require('../../../images/logo5.png')} />
-                    </div>
-                 
-                    <br />
-                    <h1>
-                        Explain
-                    </h1>
-                    
-                    <br />
-                    {/* <Form /> */}
+
+                <br />
+                <div className="logoEmailNew">
+                    <img alt="logo" height="100%" width="100%" src={require('../../../images/logo5.png')} />
                 </div>
 
-            
+                <br />
+                <h1>
+                    Explain
+                    </h1>
+
+                <br />
+                {/* <Form /> */}
+            </div>
+
+
 
             <br />
             <br />
@@ -145,11 +145,11 @@ props.stillAuthenicated();
         </div>
 
 
-    
-    ) :((<Redirect to={{ pathname: './application' }} />)))) :
-    ( <div style={{paddingTop:"150px"}}>
-      <div class="fluct"></div>
-    </div>)
+
+    ) : ((<Redirect to={{ pathname: './application' }} />)))) :
+        (<div style={{ paddingTop: "150px" }}>
+            <div class="fluct"></div>
+        </div>)
 
 
 
@@ -158,16 +158,15 @@ props.stillAuthenicated();
 
 const mapStateToProps = function (state) {
     return {
-      isAuthenticated: state.auth.isAuthenticated,
-      authAction: state.auth.authAction,
-      doneVarification : state.email.doneVarification,
-      isVarified:state.email.isVarified,
+        isAuthenticated: state.auth.isAuthenticated,
+        authAction: state.auth.authAction,
+        doneVarification: state.email.doneVarification,
+        isVarified: state.email.isVarified,
     }
-  }
-  
-  export default connect(mapStateToProps, {stillAuthenicated })(mobLanding);
-  
-  
-  
-  
-  
+}
+
+export default connect(mapStateToProps, { stillAuthenicated })(mobLanding);
+
+
+
+

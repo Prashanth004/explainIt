@@ -160,27 +160,27 @@ app.get('/project/:projectid', (req,res)=>{
     if (err) {
       return console.log(err);
     }
-    database.one('select * from projects where issueid = $1', req.params.projectid)
+    database.manyOrNone('select * from projects where issueid = $1', req.params.projectid)
         .then(projects => {
-          console.log("projects.videofilepath : ",projects.videofilepath)
+          console.log("projects.videofilepath : ",projects[0].videofilepath)
             data = data.replace(/\$TW_TYPE/g, 'player');
             data = data.replace(/\$TW_URL/g, key.frontEndDomain);
             data = data.replace(/\$TW_TITLE/g,"Explanation happened on Explain");
-            data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
+            data = data.replace(/\$TW_DESCRIPTION/g,projects[0].textexplain);
             data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
             result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logosmall.ico');
 
             res.send(result);
         })
         .catch(error => {
-          console.log("projects.videofilepath : ",projects.videofilepath)
+          console.log("eror : ",error)
+          // console.log("projects.videofilepath : ",projects.videofilepath)
           data = data.replace(/\$TW_TYPE/g, 'player');
           data = data.replace(/\$TW_URL/g, key.frontEndDomain);
           data = data.replace(/\$TW_TITLE/g,"Explanation happened on Explain");
-          data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
+          // data = data.replace(/\$TW_DESCRIPTION/g,projects.textexplain);
           data = data.replace(/\$TW_VIDEO/g, key.frontEndDomain+'/video/'+req.params.projectid);
           result = data.replace(/\$TW_IMAGE/g, 'https://explain.bookmane.in/public/images/logosmall.ico');
-
           res.send(result);
         })
  

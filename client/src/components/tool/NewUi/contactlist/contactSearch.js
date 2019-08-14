@@ -8,7 +8,7 @@ const seachComponent =  (props) => {
     const {changeContactSearch,mycontacts} =props
   return (
     <div className="contactSearchBarDiv">
-      <div style={{width:"100%",marginBottom:"10px"}}>
+      <div style={{marginBottom:"10px",  backgroundColor: "#f9fafa"}}>
           <input className="contactSearch"onChange={(e)=>changeContactSearch(e.target.value,mycontacts)}type="text" placeholder="Search contacts"></input>
       </div >
      

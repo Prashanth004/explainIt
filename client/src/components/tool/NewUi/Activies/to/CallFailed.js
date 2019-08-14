@@ -52,7 +52,7 @@
 
 import config from '../../../../../config/config';
 import ImageContainer from '../imageContainer';
-import { FiPhoneMissed } from "react-icons/fi";
+import { FiCopy } from "react-icons/fi";
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropType from 'prop-types';
@@ -82,7 +82,7 @@ class CallFailDialed extends Component {
             <div className="activityContent">
             <div className="callIconDiv" > 
                 <span className="hint--top" aria-label={"dial "+userData.userName}>
-                    <FiPhoneMissed className="callIcon missed" onClick={this.Redial}/>
+                    <FiCopy color="rgb(185, 15, 15)" className="callIcon missed" onClick={this.Redial}/>
                 </span>
                 </div>
                 {/* <div className="callIconDiv"> <FiPhoneMissed className="callIcon missed" /></div> */}
@@ -97,7 +97,7 @@ class CallFailDialed extends Component {
             </div>
             {/* {screenShare} */}
         </div>
-    ):((<Redirect push to={"../application"} />)))
+    ):((<Redirect push to={"../"} />)))
   }
 }
 const mapStateToProps = state => ({

@@ -47,14 +47,14 @@
     border-color:#34a4a8;
     border-width:0.5px;
     border-style:solid;
-    height:50px;
-    font-size:18px;
+    height:38px;
+    font-size:17px;
     border-radius:25px;
     padding-left:20px;
     padding-right:20px;
 }
 .twitterButton:hover{
-    background-color:white;
+    background-color:#f8ffff;
 }
 .buttonDiv{
     align-items: center;

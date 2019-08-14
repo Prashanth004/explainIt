@@ -80,70 +80,89 @@ exports.saveProject = function (req, res) {
     var videopathName = null;
     var commands = null;
     // console.log(req.user)
-if (!req.files) {
+    if (!req.files) {
         return res.status(451).send({
             success: 0,
-            msg:"no file found in the request"
+            msg: "no file found in the request"
         })
     }
     else if (req.files) {
-        if(typeof req.fileSizeError != "undefined") {
+        console.log("req.files : ", req.files)
+        if (typeof req.fileSizeError != "undefined") {
             res.status(413).send({
-                "success":0,
-                "error":"File too large"});// to display filesize error
+                "success": 0,
+                "error": "File too large"
+            });// to display filesize error
         } else {
-     
-        if(req.body.action === key.SERVER_SHARING)
-        {
-        if(key.DEV_ENV)
-        {
-        commands = [
-            'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename +' '+req.files[0].filename+'audio.mp3',
-            'ffmpeg -i '+ __dirname + '\\..\\public\\audio\\' + req.files[1].filename +' -i '+req.files[0].filename+'audio.mp3 -filter_complex amerge -c:a libmp3lame -q:a 4 '+ req.files[1].filename +'audiofinal.mp3',
-            'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename +' -i '+ req.files[1].filename +'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mkv',
-            'ffmpeg -i ' +  __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mkv -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@'+ req.user.twitterhandle +':x=10:y=60 '+ __dirname + '\\..\\public\\audio\\' + req.body.projectName+ '_wat_final.mkv'
-        ]
-        // y=H-th-10
-        }
-        else {
-            commands = [
-                'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename +' '+req.files[0].filename+'audio.mp3',
-                'ffmpeg -i '+ __dirname + '\/..\/public\/audio\/' + req.files[1].filename +' -i '+req.files[0].filename+'audio.mp3 -filter_complex amerge -c:a libmp3lame -q:a 4 '+ req.files[1].filename +'audiofinal.mp3',
-                'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename +' -i '+ req.files[1].filename +'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv',
-                'ffmpeg -i ' +  __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@'+ req.user.twitterhandle +':x=10:y=60 '+ __dirname + '\/..\/public\/audio\/' + req.body.projectName+ '_wat_final.mkv'
-            ]
-        }
-        shell.series(commands, function(err){
-                fs.unlink(__dirname+'/../'+ req.files[0].filename +'audio.mp3', (err)=>{
-                    if(err) console.log("err : ",err)
-                })
-                fs.unlink(__dirname+'/../'+ req.files[1].filename +'audiofinal.mp3', (err)=>{
-                    if(err) console.log("err : ",err)
-                })
-                fs.unlink(__dirname+'/../public/audio/'+ req.body.projectName + '_final.mkv', (err)=>{
-                    if(err) console.log("err : ",err)
-                })
-            if(!err){
-                videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv'
-                saveToDb(req,res, videopathName )
-                
-//adonsdovjn
+
+            if (req.body.action === key.SERVER_SHARING) {
+                if (key.DEV_ENV) {
+                    commands = [
+                        'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename + ' ' + req.files[0].filename + 'audio.mp3',
+                        'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[1].filename + ' -i ' + req.files[0].filename + 'audio.mp3 -filter_complex amerge -c:a libmp3lame -q:a 4 ' + req.files[1].filename + 'audiofinal.mp3',
+                        'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename + ' -i ' + req.files[1].filename + 'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mkv',
+                        'ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_final.mkv -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@' + req.user.twitterhandle + ':x=10:y=60 ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_wat_final.mkv'
+                    ]
+                }
+                else {
+                    commands = [
+                        'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename + ' ' + req.files[0].filename + 'audio.mp3',
+                        'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[1].filename + ' -i ' + req.files[0].filename + 'audio.mp3 -filter_complex amerge -c:a libmp3lame -q:a 4 ' + req.files[1].filename + 'audiofinal.mp3',
+                        'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename + ' -i ' + req.files[1].filename + 'audiofinal.mp3 -map 0:v -map 1:a -c copy -y ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv',
+                        'ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_final.mkv -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@' + req.user.twitterhandle + ':x=10:y=60 ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_wat_final.mkv'
+                    ]
+                }
+                shell.series(commands, function (err) {
+                    fs.unlink(__dirname + '/../' + req.files[0].filename + 'audio.mp3', (err) => {
+                        if (err) console.log("err : ", err)
+                    })
+                    fs.unlink(__dirname + '/../' + req.files[1].filename + 'audiofinal.mp3', (err) => {
+                        if (err) console.log("err : ", err)
+                    })
+                    fs.unlink(__dirname + '/../public/audio/' + req.body.projectName + '_final.mkv', (err) => {
+                        if (err) console.log("err : ", err)
+                    })
+                    fs.unlink(__dirname + '/../public/audio/' + req.files[0].filename, (err) => {
+                        if (err) console.log("err : ", err)
+                    })
+                    fs.unlink(__dirname + '/../public/audio/' + req.files[1].filename, (err) => {
+                        if (err) console.log("err : ", err)
+                    })
+                    if (!err) {
+                        videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv'
+                        saveToDb(req, res, videopathName)
+
+                        //adonsdovjn
+                    }
+                    else {
+                        console.log("error : ", err)
+                        res.status(500).send({ success: 0, msg: err })
+                    }
+                });
             }
-            else{
-                console.log("error : ",err)
-                res.status(500).send({ success: 0, msg: err })
+            else {
+                if (key.DEV_ENV) {
+                    commands = ['ffmpeg -i ' + __dirname + '\\..\\public\\audio\\' + req.files[0].filename + ' -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@' + req.user.twitterhandle + ':x=10:y=60 ' + __dirname + '\\..\\public\\audio\\' + req.body.projectName + '_wat_final.mkv']
+                } else {
+                    commands = ['ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename + ' -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@' + req.user.twitterhandle + ':x=10:y=60 ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_wat_final.mkv']
+                } shell.series(commands, function (err) {
+                    fs.unlink(__dirname + '/../public/audio/' + req.files[0].filename, (err) => {
+                        if (err) console.log("err : ", err)
+                    })
+                    if (!err) {
+                        videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv'
+                        saveToDb(req, res, videopathName)
+                    } else {
+                        console.log("error : ", err)
+                        res.status(500).send({ success: 0, msg: err })
+                    }
+                })
             }
-        });
+        }
     }
-    else{
-            videopathName =    config.domain + '/public/audio/' + req.files[0].filename 
-            saveToDb(req,res,videopathName )
-    }
-    }
-}
 }
 
-const saveToDbWithReferral =(req,res,videopathName, referralid)=>{
+const saveToDbWithReferral = (req, res, videopathName, referralid) => {
 
     var rand2 = rn(options)
     // const issueID = (req.body.isquestion == "true" || req.body.issueID == null) ?
@@ -152,59 +171,60 @@ const saveToDbWithReferral =(req,res,videopathName, referralid)=>{
     var rand = rn(options)
 
     database.db.oneOrNone('insert into projects(name,userid, projectid,  textExplain ,issueid,isquestion, imgurl,videofilepath,public,referralid)' +
-    'values(${name},${userid}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public},${referralid})',
-    {
-        name: req.body.projectName,
-        userid: req.user.id,
-        projectid: req.body.projectid,
-        imgurl: imgurl,
-        textExplain: req.body.textExplain,
-        isquestion: req.body.isquestion,
-        issueid: req.body.issueID,
-        videofilepath: videopathName,
-        public: Number(req.body.public),
-        referralid:referralid
-    }).then((response) => {
-        database.db.one('select * from projects where projectid = $1', req.body.projectid)
-            .then(data => {
-                res.io.emit(key.SAVED_NEW_PROJECT, {
-                    "userId": req.user.id,
-                    "project" : data.data
-                })
-                res.status(201).send({
-                    success: 1,
-                    data: data
-                })
+        'values(${name},${userid}, ${projectid},${textExplain},${issueid},${isquestion},${imgurl},${videofilepath},${public},${referralid})',
+        {
+            name: req.body.projectName,
+            userid: req.user.id,
+            projectid: req.body.projectid,
+            imgurl: imgurl,
+            textExplain: req.body.textExplain,
+            isquestion: req.body.isquestion,
+            issueid: req.body.issueID,
+            videofilepath: videopathName,
+            public: Number(req.body.public),
+            referralid: referralid
+        }).then((response) => {
+            database.db.one('select * from projects where projectid = $1', req.body.projectid)
+                .then(data => {
+                    console.log("creating projects : ", data)
+                    res.io.emit(key.SAVED_NEW_PROJECT, {
+                        "userId": req.user.id,
+                        "project": data
+                    })
+                    res.status(201).send({
+                        success: 1,
+                        data: data
+                    })
+                }).catch(error => { console.log("error : ", error) })
+        }).catch((err) => {
+            console.log("error : ", err)
+            res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
+        })
+}
+
+const saveToDb = (req, res, videopathName) => {
+    if (req.body.isquestion === "false") {
+        database.db.manyOrNone('select * from referral where UPPER(referreetwitter) = $1 and issue = $2', [(req.user.twitterhandle).toUpperCase(), req.body.issueID])
+            .then(referralData => {
+                if (referralData.length !== 0) {
+                    saveToDbWithReferral(req, res, videopathName, referralData[0].id);
+                }
+                else {
+                    saveToDbWithReferral(req, res, videopathName, null);
+                }
             })
-    }).catch((err) => {
-        console.log("error : ", err)
-        res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
-    })
-}
+            .catch(err => {
+                console.log("error : ", err)
+                saveToDbWithReferral(req, res, videopathName, null);
+            })
+    }
+    else {
+        saveToDbWithReferral(req, res, videopathName, null);
+    }
 
-const saveToDb = (req, res, videopathName)=>{
-if(req.body.isquestion === "false")  {
-    database.db.manyOrNone('select * from referral where UPPER(referreetwitter) = $1 and issue = $2',[(req.user.twitterhandle).toUpperCase(), req.body.issueID])
-    .then(referralData=>{
-        if(referralData.length!==0){
-            saveToDbWithReferral(req,res,videopathName, referralData[0].id);
-        }
-        else{
-            saveToDbWithReferral(req,res,videopathName, null);
-        }
-    })
-    .catch(err=>{
-        console.log("error : ",err)
-        saveToDbWithReferral(req,res,videopathName, null);
-    })
-}   
-else{
-    saveToDbWithReferral(req,res,videopathName, null);
-}
-           
 
-        
-        
+
+
 
 
 
@@ -273,14 +293,14 @@ exports.retrieveItems = function (req, res) {
         )
 
 }
-exports.getProjectByUser = (req,res)=>{
-    database.db.manyOrNone('select * from projects where userid = $1 ORDER BY time ASC',req.user.id)
-    .then(data => {
-        res.status(200).send({ success: 1, data: data })
-    })
-    .catch(error => {
-        res.status(500).send({ success: 0, msg: error })
-    })
+exports.getProjectByUser = (req, res) => {
+    database.db.manyOrNone('select * from projects where userid = $1 ORDER BY time ASC', req.user.id)
+        .then(data => {
+            res.status(200).send({ success: 1, data: data })
+        })
+        .catch(error => {
+            res.status(500).send({ success: 0, msg: error })
+        })
 }
 exports.getAllProject = function (req, res) {
     database.db.manyOrNone('select * from projects ORDER BY time ASC')
@@ -295,7 +315,7 @@ exports.getAllProject = function (req, res) {
 }
 exports.getIssueById = function (req, res) {
 
-    database.db.one('select * from projects where issueid = $1 and isquestion =$2', [req.params.id,"true"])
+    database.db.one('select * from projects where issueid = $1 and isquestion =$2', [req.params.id, "true"])
         .then(projects => {
 
             res.status(200).send({
@@ -332,8 +352,7 @@ exports.getProjectById = function (req, res) {
 exports.getAllProjectByIssue = function (req, res) {
     database.db.manyOrNone('select * from projects where issueid = $1 ORDER BY time ASC', req.params.issueid)
         .then(projects => {
-            if(projects.length !== 0)
-            {
+            if (projects.length !== 0) {
                 if (projects) {
                     res.status(200).send({
                         success: 1,
@@ -341,19 +360,19 @@ exports.getAllProjectByIssue = function (req, res) {
                     })
                 }
             }
-            else{
+            else {
                 res.status(500).send({
-                    success:0,
-                    errors:err
+                    success: 0,
+                    errors: err
                 })
             }
-           
+
 
         })
-        .catch(err=>{
+        .catch(err => {
             res.status(500).send({
-                success:0,
-                errors:err
+                success: 0,
+                errors: err
             })
         })
 }

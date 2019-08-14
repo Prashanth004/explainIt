@@ -1,15 +1,15 @@
 .profileConatinerMain{
     width:100%;
-    background-color: white;
+    /* background-color: #43a8ac; */
     margin:auto;
-    /* background-color: white; */
+    /* margin-top:20px; */
+    background-color: white;
     border-style:solid;
     border-color:#bebebe81;
-    padding:15px;
     border-width:1px;
-border-radius:5px;
+border-radius:4px;
 color:rgba(51, 51, 51, 0.938);
-padding:10px;
+/* padding:10px; */
 }
 .profileLabelBtn{
     margin-top: 13px;
@@ -28,20 +28,13 @@ padding:10px;
     padding-right:15px;
     padding-top:5px;
     height: 80px;
-   
     border-style:solid;
     border-color:#bebebe81;
     border-width:1px;
     padding-bottom:5px;
-    
     border-radius:5px;
-    /* width:100%; */
     margin:auto;
-    /* margin-top:30px; */
     position:relative;
-    /* border-left-width:2.5px;
-    border-left-color:#34a9ad; */
-    /* background-color:#eee; */
     background-color: white;
   
   }
@@ -71,11 +64,36 @@ padding:10px;
 .bio{
     width:80%;
     margin:auto;
-    margin-top:20px;
+    margin-top:-2px;
     color:rgba(51, 51, 51, 0.815);
+    /* color:rgba(51, 51, 51, 0.589); */
     font-size:14px;
-    text-align: justify;
+    text-align: left;
+    
     /* background-color: red; */
+}
+
+.infoSection{
+    padding:2px;
+    word-wrap: break-word;
+    border-bottom-style:solid;
+    border-bottom-width:0.5px;
+    border-bottom-color:#02424665;
+}
+.topProfileDiv{
+    min-height:30px;
+    margin-top:-0.5px;
+    border-top-right-radius:4px;
+    border-top-left-radius:4px;
+    padding-right:10px;
+    padding-left:10px;
+    padding-top:5px;
+    color:black;
+    border-bottom-style:solid;
+    background-color: white;
+    border-color:#43a8ac;
+    border-width:1px;
+
 }
 .edit{
     float:left;

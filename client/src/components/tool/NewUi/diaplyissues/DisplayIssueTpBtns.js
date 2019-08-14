@@ -93,7 +93,6 @@ class displayTopBtns extends Component {
     render() {
         var date = this.props.issue.time.slice(5, 7);
         var profilePic = null;
-        var profiletwitterHandle = null;
         var profileName = null;
 
         const defaultToggle = (Number(this.props.issue.public) === 1) ? true : false
@@ -140,7 +139,6 @@ class displayTopBtns extends Component {
         if (this.props.questionProject !== undefined) {
             profilePic = this.props.questionProject.profilepic
             profileName = this.props.questionProject.username
-            profiletwitterHandle = this.props.questionProject.twitterhandle
         }
 
 
@@ -149,7 +147,7 @@ class displayTopBtns extends Component {
             <div className="cardDropdown" >
                 <div >
                     <span>
-                        <GoChevronDown onClick={this.onOptClick} />
+                        <GoChevronDown color="#007074"onClick={this.onOptClick} />
                     </span>
                 </div>
                 <div className="dropDownForOption drpOpt"
@@ -179,8 +177,10 @@ class displayTopBtns extends Component {
                         <div >
                             <span className="cardDateSpan" >{this.props.issue.time.slice(8, 10)}  {config.monthPicker[date]}, {this.props.issue.time.slice(0, 4)}</span></div>
                         <div></div>
-                        <div>
-                            {publicPrivate}</div>
+                        <div style={{textAlign:"right"}}>
+                            {/* {publicPrivate} */}
+                            {deleteDiv}
+                            </div>
                     </div>
                     <div className="seconBandTop">
                         <div className="profileCardDiv">
@@ -189,14 +189,14 @@ class displayTopBtns extends Component {
                                     <img alt="button" onClick={this.openProfile} src={profilePic} className="cardProfilePic" />
                                 </span>
                             </div>
-                            <div className="cardProfileName">
-                                <h5 ><b>{profileName}</b></h5>
+                            <div className="cardProfileNameDiv">
+                                <span style={{fontSize:"15px",color:"#046366"}}>{profileName}</span>
                             </div>
                             <div></div>
                         </div>
                         <div id={this.props.issue.issueid} className="cardtwitterHolder">
 
-                            {deleteDiv}
+                            {/* {deleteDiv} */}
                         </div>
                     </div>
                 </div >

@@ -27,7 +27,7 @@ class landingPage extends Component {
       <div>
         <RightSection />
       </div>
-    </div>) :((<Redirect to={{ pathname: './application' }} />)))) :
+    </div>) :((<Redirect to={{ pathname: './@'+this.props.authTwitterHandle }} />)))) :
       ( <div style={{paddingTop:"150px"}}>
         <div className="fluct"></div>
       </div>)
@@ -42,6 +42,7 @@ const mapStateToProps = function (state) {
     activeStatus:state.auth.activeStatus,
     doneVarification : state.email.doneVarification,
     isVarified:state.email.isVarified,
+    authTwitterHandle: state.auth.twitterHandle,
 
   }
 }
