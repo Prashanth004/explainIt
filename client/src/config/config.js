@@ -32,6 +32,7 @@ const conf = {
     // EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
     // EXTENSION_ID:"egfmgeokjijeefalgllckhldjgjkgenc",
     EXTENSION_ID:"ljknohkmbbnpfpcpgaihbmiagabhinhl",
+    
     EXTENSION_URL:"https://chrome.google.com/webstore/detail/explain/ljknohkmbbnpfpcpgaihbmiagabhinhl?authuser=2",
     SECRET : "thebookmaneisawesomeiguess",
     LINK_TO_CALL: "linkTocall",
@@ -106,7 +107,7 @@ const conf = {
     RECORD_SCREEEN_EXPLAIN:"recordScreenExpalin",
     REFER_EXPLAIN:"referExplain",
     SHARE_SCREEN_EXPALIN:"shareScreenExplain",
-    ENVIRONMENT:"test",
+    ENVIRONMENT:"prod",
     DEV_ENV:true,
     CALL_LOGS:true,
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",

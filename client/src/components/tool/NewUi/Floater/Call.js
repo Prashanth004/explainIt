@@ -4,7 +4,6 @@ import Form from '../../Form';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import { showCanvas, hideCanvas } from '../../../../actions/canvasAction';
-import ProfileCard from '../ProfileHover'
 class Call extends Component {
     constructor(props) {
         super(props)
@@ -23,20 +22,11 @@ class Call extends Component {
 
     }
     render() {
-        var ProfileHover = null
         const messageOfScreenShare =(!this.props.myscreenSharing)?(<h4><b>Screen of other peer</b></h4>):
         (<h4><b>Your screen is being shared</b></h4>)
        
         const shouldDisplay=(!this.props.myscreenSharing)?("block"):("none")
-        
 
-        if (this.props.otherPersonProfileId !== null) {
-            ProfileHover = (<ProfileCard
-                userId={this.props.otherPersonProfileId} />)
-        }
-        else {
-            ProfileHover = null
-        }
         var showCanv = (this.state.showCanvas) ? (
             <div className="canvToolDivCall">
                 <Form onRef={ref => (this.child = ref)} />
@@ -59,20 +49,13 @@ class Call extends Component {
             <div className="callDiv">
                 <div className="statusBarCall">
                     <div className="timerDiv">
-                       
                     </div>
                     <div>
-
                     </div>
                     <div>
-                        {/* <p onClick={this.toggleCanvas}>Canvas</p> */}
                     </div>
-
                 </div>
                 {showCanv}
-
-
-
             </div>
         )
     }

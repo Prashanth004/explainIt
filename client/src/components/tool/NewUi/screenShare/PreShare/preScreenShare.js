@@ -11,7 +11,6 @@ import { setNoOfMinutes, updateCurrentTime } from '../../../../../actions/callAc
 import { NoInternet, InValidHandle, SelfShareInfo, NotPresentOnExplain } from './noInternet'
 import { getProfileByTwitterHandle } from "../../../../../actions/visitProfileAction";
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../../../actions/twitterApiAction'
-// import { type } from 'os';
 
 class tweetSearch extends Component {
     constructor(props) {
@@ -48,7 +47,6 @@ class tweetSearch extends Component {
             this.setState({ twitterHandle: this.props.sharehandle });
         else if( this.props.redialInitiated){
             this.setState({ twitterHandle : this.props.redialtwitterHandle});
-            console.log("updating the subject of the call")
             this.props.saveTopicOfTheCall(this.props.redialSubject);
             this.props.cancelDialedOption();
             this.props.turnRedialWrong();
@@ -106,10 +104,8 @@ class tweetSearch extends Component {
     }
     changeImputNumber(e) {
         var noOfMinutestemp = e.target.value;
-        console.log("noOfMinutestemp : ", noOfMinutestemp.length)
 
         if (!Number.isInteger(Number(noOfMinutestemp))) {
-            console.log('a', Number.isInteger(Number(noOfMinutestemp)))
             this.setState({
                 noText: true
             })

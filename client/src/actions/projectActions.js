@@ -216,11 +216,9 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         type:UPDATE_LINK,
         payload : rand2
     })
-    console.log("blob : ",videoData)
     var videoFile = new File([videoData], 'video.mkv', {
         type: 'video/mkv'
     });
-    console.log("video Data : ",videoFile)
     if(action === config.SERVER_SHARING)
     var AudioFile = new File([audioData], 'audio.mp3',{
         type:'audio/mp3'

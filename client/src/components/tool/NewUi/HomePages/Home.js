@@ -91,7 +91,6 @@ class NewHome extends Component {
         initGA();
         loadPageView();
         this.props.getAllContacts();
-        console.log("this.props.userId : ", this.props.userId);
         window.addEventListener('storage', this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
@@ -139,10 +138,16 @@ class NewHome extends Component {
         this.props.varifyEmail();
         this.props.initiateSocket()
         this.props.stillAuthenicated()
-        console.log("mounting");
         this.props.openHome();
         this.props.getTotalUnread();
       
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.userId){
+            if (!this.state.isinformed && nextProps.userId !== null) {
+                this.informExtension();
+            }   
+        }
     }
   
     toggleExplainerVideo() {
@@ -161,9 +166,7 @@ class NewHome extends Component {
         const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"0px"}}><Cotactlist  /></div>):(null)
         var profileCardElement = null;
 
-        if (!this.state.isinformed && this.props.userId !== null) {
-            this.informExtension();
-        }     
+         
         var sharabeLink = config.react_url + "/" + this.props.twitterHandle
         const externalCloseBtn = <ExtCloseBtn toggle={this.toggleExplainerVideo} />;
        

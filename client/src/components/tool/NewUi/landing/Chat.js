@@ -18,12 +18,7 @@ export default () => {
       <Chatleft chatText="Example: Imagine you are on stackoverflow, code is there, what if someone really explains it online to you, give you a clear understanding, and the helper is rewarded for his time."/>
       <Chatleft chatText="We want to work with creators/tinkerers , help them gain more mileage, invent tools / apps that help them focus on creations, by giving them support systems that value their time and skillset."/>
       <Chatleft chatText="Lets get started!!!"/>
-      {/* <Chatright chatText="Moving our way back up the right side indented. Uses .round and .right-in"/>
- 
-      <Chatright chatText="Moving our way back up the right side indented. Uses .round and .right-in"/>
-      <Chatleft chatText="Moving our way back up the right side indented. Uses .round and .right-in"/>
-      <Chatright chatText="Moving our way back up the right side indented. Uses .round and .right-in"/>
-      <Chatleft chatText="Moving our way back up the right side indented. Uses .round and .right-in"/> */}
+    
      
     </div>
   )

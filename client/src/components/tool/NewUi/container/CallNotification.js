@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 import { answerCall, missCall,endCallfromOtherPeer } from '../../../../actions/callAction';
 import { acceptCallDetails } from '../../../../actions/callAction';
 
-
 class CallNotification extends Component {
     constructor(props) {
         super(props);
@@ -18,10 +17,7 @@ class CallNotification extends Component {
         var socket = (this.props.localSocket!==null || this.props.localSocket!==undefined)?((this.props.socket!==null)?this.props.socket:(this.props.localSocket)):(this.props.socket);
         const {endCallfromOtherPeer,missCall,
             answerCall,acceptCallDetails}=this.props;
-        console.log("this.props.localSocket : ",this.props.localSocket);
-        console.log("socket in call notification : ,",socket)
         if(socket!==null || socket!== undefined){
-            console.log("the compiler reached here atleast omce while executing the file")
             socket.on(config.REJECT_REPLY, data => {
                 if (self.props.userId === String(data.fromUserId)) 
                     answerCall();
@@ -31,13 +27,10 @@ class CallNotification extends Component {
                     answerCall();
             });
             socket.on(config.LINK_TO_CALL, data => {
-                console.log("incoming call")
                 setTimeout(() => {
                     missCall();
                 }, 18000)
                 localStorage.setItem("profilePic", data.fromProfilePic);
-                console.log("incomingdata with call : ", data);
-                console.log("useid : ",self.props.userId);
                 if (String(data.ToUserId) ===self.props.userId) {
                     socket.emit(config.LINK_TO_CALL_ACK, {
                         "fromUserId": data.fromUserId,
@@ -100,7 +93,6 @@ class CallNotification extends Component {
                                 <img alt="caller profile Pic" className="callerProfileImageElement" src={this.props.callerProfilePic} />
                             </div>
                             <br />
-                            {/* <audio style={{ display: "none" }} autoPlay loop src={require('../../../audio/simple_beep.mp3')}></audio> */}
                         </div>
                         <div style={{ padding: "15px", textAlign: "left", paddingTop: "5px" }}>
                             <p><b>{this.props.callerName} </b>is trying to share screen with you for <b>{this.props.timeAllotedRecieve}</b> minutes on topic <b>{this.props.topicOfTheCallRecieve}</b></p>

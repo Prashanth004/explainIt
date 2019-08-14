@@ -219,7 +219,6 @@ export const varifyEmail=()=>(dispatch)=>{
             })
         }
         else{
-            console.log(":sknasflnd")
             dispatch({
                 type:VARIFY_ACTIVATED_FAILED,
             })

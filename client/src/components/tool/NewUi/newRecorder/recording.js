@@ -54,22 +54,13 @@ class Recorder extends Component {
         this.props.resetRecorder()
         window.removeEventListener("beforeunload", this.onUnload)
         this.props.fullStopedRecording()
-        // var audioStream = this.state.audioStream;
-        // var screenStream = this.state.screenStream;
-        // if (audioStream !== null && screenStream !== null) {
-        //     audioStream.stop();
-        //     screenStream.stop();
-        // }
     }
 
     componentDidMount() {
-        const { extSource, extOrigin, extSourceId } = this.props;
+        const { extSource, extOrigin} = this.props;
         const GET_SOURCE_ID = { type: config.GET_SOURCE_ID_AUDIO_TAB }
-        var self = this;
         window.addEventListener("beforeunload", this.onUnload);
-        console.log("extSource : ", extSourceId);
 
-        console.log("i am callinf extension")
         if (extSource !== null)
             extSource.postMessage(GET_SOURCE_ID, extOrigin);
         else
@@ -112,7 +103,6 @@ class Recorder extends Component {
         }
         navigator.mediaDevices.getUserMedia({ audio: true }).then((audioStream) => {
             navigator.mediaDevices.getUserMedia(constraints).then((screenStream) => {
-                console.log("Streams : ", audioStream)
                 var finalStream = new MediaStream();
                 var videoTracks = screenStream.getVideoTracks();
                 var audioTracks = audioStream.getAudioTracks();
@@ -160,8 +150,7 @@ class Recorder extends Component {
             recorder.stopRecording(function () {
                 var blob = recorder.getBlob();
                 var downLoadUrl = URL.createObjectURL(blob);
-                console.log("blob : ", blob);
-                console.log("downLoadUrl : ", downLoadUrl)
+            
                 stopRecorder(downLoadUrl, blob)
             });
         if (audioStream !== null) audioStream.stop();
@@ -171,8 +160,7 @@ class Recorder extends Component {
     }
     render() {
 
-        const { isFullScreenRecording, permissionDenied, isFullRecordCompleted, downLoadUrl, saved, discarded, blob } = this.props;
-        console.log("downloadUrl : ", downLoadUrl)
+        const { isFullScreenRecording, permissionDenied, isFullRecordCompleted, saved, discarded, blob } = this.props;
         const Content = (isFullRecordCompleted ?
             (!((saved || discarded)) ?
                 ((this.props.downLoadUrl !== null) ?
@@ -215,7 +203,7 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-    stopRecorder, postStartCall, saveSourceId, setStream, fullStartedRecording,
+    stopRecorder, postStartCall, saveSourceId, setStream, permissionDeniedAction,fullStartedRecording,
     fullStopedRecording, pauseRecording, resumeRecording, startRecorder, resetRecorder
 })(Recorder)
 

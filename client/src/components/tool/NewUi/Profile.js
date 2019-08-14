@@ -7,7 +7,7 @@ import PropType from 'prop-types';
 import ProfileForm from './Profile/';
 import CopyToClipboard from '../CopytoClipboard'
 import { openEditProfile, closeEditProfile } from '../../../actions/profileAction'
-import { FiGithub, FiLinkedin, FiEdit, FiTwitter, FiLink2 } from "react-icons/fi";
+import {  FiEdit, FiLink2 } from "react-icons/fi";
 class Profile extends Component {
     constructor(props) {
         super(props)
@@ -74,7 +74,10 @@ class Profile extends Component {
                     {FiLink}
                 </div>
 
-            </div>) : (null)
+            </div>) : (<div className="topProfileDiv">
+            <Button style={{ margin: "-8px" }} close onClick={this.props.hideProfile} />
+
+            </div>)
         const bio = (this.props.bio !== null) ? (
             (this.props.bio.length > 0) ? (
                 <div className="infoSection">

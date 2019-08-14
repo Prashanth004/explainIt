@@ -3,17 +3,14 @@ import config from '../../../../config/config'
 import { connect } from 'react-redux';
 import FullScreenShare from '../enitreScreenShare';
 import FullScreenRecord from '../FullScreenRecord';
-// import { IoIosBrowsers } from "react-icons/io";
 import { explainByShare, explainByRecord, explainByRefer } from '../../../../actions/explainAction';
 import Refer from './refer';
 import BusyAction from '../container/BusyAction';
 import '../../../css/explainit.css';
-// import { Button } from 'reactstrap';
 import { FiUsers, FiCopy,FiVideo } from "react-icons/fi";
 
 
 const explainOption = (props) => {
-    console.log("question project : ",props.explainByRecord)
     const { questionProject, myTwitterHandle } = props;
     const condition = (questionProject.twitterhandle !== myTwitterHandle &&  questionProject.active)
     const gridTwoIt = (condition)?({}):({gridTemplateColumns: "50% 50%"})
@@ -21,9 +18,7 @@ const explainOption = (props) => {
     <span className="hint--top" aria-label="Get connnected, share screen and explain!">
         <FiCopy style={{ fontSize: "22px" }} onClick={() => props.explainByShare(questionProject.twitterhandle,questionProject.textexplain)} />
     </span> </div>) : (null);
-    //     const referDiv = (condition)?(  <span className="hint--top" aria-label="Refer to other!">
-    //     <FiUsers style={{ fontSize: "25px" }} onClick={() => props.explainByRefer()} />
-    // </span>):(null);
+
     return (props.explainBy === config.null) ? (
         <div>
 
@@ -43,7 +38,6 @@ const explainOption = (props) => {
                     </span>
 
                 </div>
-                {/* <button onClick={()=>props.explainByRefer()}>Refer to explain</button> */}
             </div>
         </div>
     ) : (props.explainBy === config.SHARE_SCREEN_EXPALIN ?
@@ -80,7 +74,6 @@ const explainOption = (props) => {
                 </div>
                 </div>)))
 }
-// animated slideInUp fast
 const mapStateToProps = function (state) {
     return {
         explainBy: state.explain.explainBy,

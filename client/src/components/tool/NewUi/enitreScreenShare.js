@@ -196,6 +196,7 @@ class ScreenRecorder extends Component {
             };
         }
         if (config.CALL_LOGS)
+            console.log("calling firefox")
         if (result.name === "firefox") {
             constraints = {
                 video: {
@@ -313,18 +314,15 @@ class ScreenRecorder extends Component {
             AudioPlyr.pause();
     }
 
-    onUnload(event) { // the method that will be used for both add and remove event
+    onUnload(event) {
         registerEndToBrowser();
         this.props.turnnotbusy(this.props.twitterUserId);
-        // window.source.close();
-
         if (this.props.isSceenSharing) {
             this.endCall()
             event.returnValue = "Hellooww";
 
         }
         else {
-            //  event.preventDefault();
         }
         var socket = this.props.socket;
         socket.disconnect();
@@ -484,11 +482,8 @@ class ScreenRecorder extends Component {
     }
     componentWillUnmount() {
         this.props.turnnotbusy(this.props.twitterUserId);
-        // registerEndToBrowser();
         registerEndToBrowser()
         window.removeEventListener("beforeunload", this.onUnload);
-        // window.removeEventListener("message",this.postMessageHandler);
-        // this.props.fullStopedSharing()
         clearTimeout(this.saveBlobtimeOut);
         clearTimeout(this.CloseCallIfNotDone);
         clearTimeout(this.callEndBeforeRecieve);
@@ -506,19 +501,9 @@ validateTurn(iceServers){
         if (isString) {
           urls = [urls];
         }
-        urls = urls.filter((url)=>{
-          var validTurn = url.indexOf('turn:') === 0 &&
+        urls = urls.filter((url)=>(url.indexOf('turn:') === 0 &&
               url.indexOf('transport=udp') !== -1 &&
-              url.indexOf('turn:[') === -1 
-            
-  
-          if (validTurn) {
-        //    hasTurn = true;
-            return true;
-          }
-        //   return url.indexOf('stun:') === 0 && edgeVersion >= 14393 &&
-        //       url.indexOf('?transport=udp') === -1;
-        });
+              url.indexOf('turn:[') === -1 ))
   
         delete server.url;
         server.urls = isString ? urls[0] : urls;
@@ -712,6 +697,7 @@ validateTurn(iceServers){
         });
         peer.on('error', function (error) {
             if (config.CALL_LOGS) {
+               
                 if (!self.state.initiatedCloseCall) {
                     self.stopShare()
                     self.setState({

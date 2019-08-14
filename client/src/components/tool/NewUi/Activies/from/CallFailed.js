@@ -36,7 +36,6 @@ class CallFailDialed extends Component {
                     <FiCopy color="rgb(185, 15, 15)" className="callIcon missed" onClick={this.Redial}/>
                 </span>
                 </div>
-                {/* <div className="callIconDiv"> <FiPhoneMissed className="callIcon missed" /></div> */}
                 <div>
                 <span className="dateNew Notify">{activity.time.slice(8, 10)}  {config.monthPicker[date]}, {activity.time.slice(0, 4)}</span>
                     <div style={{ textAlign: "left" }}>
@@ -46,13 +45,11 @@ class CallFailDialed extends Component {
                     </div>
                 </div>
             </div>
-            {/* {screenShare} */}
         </div>
     ):((<Redirect push to={"../"} />)))
   }
 }
 const mapStateToProps = state => ({
-    // userData : state.userStore.userData
     openHome: PropType.func.isRequired,
    
 })

@@ -29,7 +29,6 @@ class FeedBack extends Component {
 
     saveFile() {
         const { userId, experienceValue, nothingfilled, usabilityValue, sugValue, videoFilePath, saveFeedback } = this.props;
-        console.log(experienceValue, usabilityValue, sugValue, videoFilePath);
         if (experienceValue === 0 &&
             usabilityValue === 0 &&
             sugValue === " " &&
@@ -59,10 +58,8 @@ class FeedBack extends Component {
         });
     }
     render() {
-        // const warning = 
-        const { experienceValue, saveFeedBackInitiated, savedFeedBack, usabilityValue, noEntry, changeShareExperience, saveStaus, changeUability, userId, saveFeedback,
+        const { experienceValue, saveFeedBackInitiated, savedFeedBack, usabilityValue, noEntry, changeShareExperience, saveStaus, changeUability, 
             changeSuggestion, sugValue, recordMode, discarded, saveRecording, discardRecorded, clickRecord } = this.props;
-        // const warning = (noEntry)?(<span style={{color:"brown", fontSize:"11px"}}>No fields filled</span>):(null)
         const recordDiv = recordMode ? (<Recorder
             save={saveRecording}
             discard={discardRecorded}
@@ -70,7 +67,6 @@ class FeedBack extends Component {
             saved={saveStaus} />) : ((!saveStaus) ? (
                 <span className="hint--top" aria-label="Record your isssue">
                     <FiVideo style={{ fontSize: "26px" }} onClick={clickRecord} />
-                    {/* <button className="buttonDark" onClick={clickRecord}>Record screen and explain issue</button> */}
                 </span>) :
                 (<p>Recorded video attached !</p>));
         const SubmitButton = (!saveFeedBackInitiated && !recordMode) ? (
@@ -123,7 +119,6 @@ class FeedBack extends Component {
                 <br /> <br />
                 {SubmitButton}
                 <br />
-                {/* {warning} */}
 
             </div>
         ) : (<div className="feedbackDiv">

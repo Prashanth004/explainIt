@@ -10,7 +10,6 @@ export default (props) => {
         return (
             <div className="activityContentWithDate">
                 <div className="activityContent">
-                {/* <div className="callIconDiv">  <FiPhoneOutgoing  className="callIcon" /></div> */}
                 <div className="callIconDiv"> <FiVideo   className="callIcon msg" /></div>
                 <div>
                 

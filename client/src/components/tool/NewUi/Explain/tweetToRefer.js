@@ -16,9 +16,7 @@ class tweetToRefer extends Component {
  
     tweeTRefer = ()=>{
         this.setState({tweeted:true});
-        console.log("this.props.questionProject : ",this.props.questionProject)
         var issueId = this.props.questionProject.issueid;
-        console.log("issueid : ",issueId)
         var sharableURL = config.react_url + '/project/' + issueId;
         var text = 'Hi @'+this.props.twitterHandleValue+', I thought you could be the best fit to solve or explain this problem to @'+this.props.questionProject.twitterhandle+'. Thanks for checking it out.';
         var encSharableURL = encodeURI(sharableURL);

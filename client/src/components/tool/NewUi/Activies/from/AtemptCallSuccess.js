@@ -4,14 +4,12 @@ import React from 'react';
 import config from '../../../../../config/config';
 import ImageContainer from '../imageContainer';
 import Timer from '../timer';
-// import { FiPhoneOutgoing } from "react-icons/fi";
 import { FiCopy } from "react-icons/fi";
 
 export default (props) => {
     const { activity, userData } = props
     var date = activity.time.slice(5, 7)
     var timetaken = activity.duration;
-    // const minutes = ()
     return (
         <div className="activityContentWithDate">
 

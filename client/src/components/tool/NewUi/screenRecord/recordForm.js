@@ -12,7 +12,6 @@ import { setNoOfMinutes, updateCurrentTime } from '../../../../actions/callActio
 import { NoInternet, InValidHandle, NotPresentOnExplain } from './noInternet'
 import { getProfileByTwitterHandle } from "../../../../actions/visitProfileAction";
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../../actions/twitterApiAction'
-// import { type } from 'os';
 
 class tweetSearch extends Component {
     constructor(props) {
@@ -106,10 +105,8 @@ class tweetSearch extends Component {
     }
     changeImputNumber(e) {
         var noOfMinutestemp = e.target.value;
-        console.log("noOfMinutestemp : ", noOfMinutestemp.length)
 
         if (!Number.isInteger(Number(noOfMinutestemp))) {
-            console.log('a', Number.isInteger(Number(noOfMinutestemp)))
             this.setState({
                 noText: true
             })
@@ -138,8 +135,6 @@ class tweetSearch extends Component {
             })
         }
         this.setState({ numberValue: noOfMinutestemp })
-        // this.props.setNoOfMinutes(Number(e.target.value))
-        // this.props.updateCurrentTime(Number(e.target.value))
     }
 
     selfSave() {
@@ -156,15 +151,12 @@ class tweetSearch extends Component {
     render() {
 
 
-        // {nameForReciever}
-
         const { emptyUserName, empty, noText, negNumber, limitExce } = this.state;
 
         const { twitterHandle, tweetTested, doneTweeting, noInternet,
             isVisitProfile, numberValue, emptyNumber, maxTimeForVideo } = this.state;
         const { doneFetching,
             fetchProfile, isPresentInExplain, twitterHandleValid } = this.props;
-        console.log(this.state.doneTweeting, fetchProfile)
 
         if (doneFetching && tweetTested && !doneTweeting && fetchProfile && !noInternet && !!isPresentInExplain)
             this.updateInfo()
@@ -177,13 +169,10 @@ class tweetSearch extends Component {
         ) : emptyNumber ? (
             <span className="spanElement" >Duration of the call to be number of minutes only</span>
         ) : ((empty) ? (
-
             <span className="spanElement">Cant be empty</span>
         ) : (emptyUserName ? (
             <span className="spanElement">User name cant be empty</span>
         ) : (null))))
-
-
         const nameForReciever = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN) ? (<span>
             send to <TweetSuggest
                 onChange={this.updateTwitterHandleBox}
@@ -200,13 +189,7 @@ class tweetSearch extends Component {
                     tweetTheMessage={this.testHandle} />
             </div>
         ) : (<button className="buttonLight" onClick={this.testHandle}>Record Screen</button>);
-
-
-
-
-
         const validatinginfo = (tweetTested && !doneTweeting) ? (
-
             (doneFetching && fetchProfile) ?
                 (noInternet ? (<NoInternet changeTweetStateNeg={this.changeTweetStateNeg} />) :
                     ((!twitterHandleValid ? (<InValidHandle changeTweetStateNeg={this.changeTweetStateNeg} />) :
@@ -218,7 +201,6 @@ class tweetSearch extends Component {
                             source={config.SCREEN_SHARE_PAGE}
                             sharablelink={this.props.shareScreenLink}
                         />) : (null))))) : (<p className="info">checking handle validity</p>)) : (null)
-        // && !noInternet && !selfShare && isPresentInExplain
         const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain || noInternet)) ? (null) : (<div>
             <div className="startShare">
                 <p style={{ fontSize: "13px", fontWeight: "500" }}>Record for <InputNumber
@@ -230,17 +212,6 @@ class tweetSearch extends Component {
                     textValue={numberValue}
                     negNumber={negNumber}
                     noText={noText} /> {nameForReciever}
-
-                    {/* empty={emptyNumber}
-//                     emptyUserName={emptyUserName}
-//                     limitOfChar={maxTimeForVideo}
-//                     limitExce={limitExce}
-//                     changeInputValue={this.changeImputNumber}
-//                     textValue={numberValue}
-//                     negNumber={negNumber}
-//                     noText={noText} / */}
-
-
                 </p>
                 {spanElement}
 

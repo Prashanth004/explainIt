@@ -4,10 +4,9 @@ import Navbar from './Navbar';
 import { getAllReferral } from '../../../actions/referral'
 import { Helmet } from "react-helmet";
 import DisplatCreated from './diaplyissues/DisplayCreated';
-import { Redirect } from 'react-router-dom';
 import IssueDisplay from './diaplyissues/DisplayIssues';
 import config from '../../../config/config';
-import { FiGrid, FiList } from "react-icons/fi";
+// import { FiGrid, FiList } from "react-icons/fi";
 import Activity from './Activies/indexActivity';
 import Setting from './newNav/setting';
 import CallNotification from './container/CallNotification';
@@ -34,7 +33,6 @@ class Posts extends React.Component {
     }
     initiateSocketLoc() {
         this.props.initiateSocket();
-        console.log("initialting sockets")
         this.setState({ socketinitiated: true });
     }
 
@@ -42,8 +40,6 @@ class Posts extends React.Component {
         this.setState({testHandleStarted:true});
         var arrayDeCons = (window.location.pathname).split('/');
         const twiHand = arrayDeCons[1].replace("@", "");
-        console.log("twiHand : ",twiHand);
-        console.log("this.props.authTwitterHandle : ",this.props.authTwitterHandle)
         if(twiHand === this.props.authTwitterHandle){
             this.setState({ isHome: true })
                             if(this.props.allprojects === null || this.props.gotAllActivities){
@@ -61,7 +57,6 @@ class Posts extends React.Component {
         }   
       
         this.setState({handleValidated:true}) 
-        console.log("making handle valid is true")
     }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
@@ -99,17 +94,13 @@ class Posts extends React.Component {
     componentWillReceiveProps(nextProps){
         // const self = this;
         if(nextProps.socket){
-            console.log("iinitialting sockets right way")
             nextProps.socket.on(config.SAVED_NEW_PROJECT, data => {
                 if (data.userId === this.props.userId) {
-                    console.log("new projectdata : ",data)
                   
                 }
             })
             nextProps.socket.on(config.NEW_MESSAGE, data => {
-                console.log("new message")
                 if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
-                    console.log("new message to me")
                     this.props.addActivity(data.data)
                 }
             })
@@ -128,9 +119,7 @@ class Posts extends React.Component {
                 }
             })
             this.props.socket.on(config.NEW_MESSAGE, data => {
-                console.log("new message")
                 if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
-                    console.log("new message to me")
                     //this.props.getAllActivities()
                     this.props.addActivity(data.data)
                 }
@@ -150,14 +139,14 @@ class Posts extends React.Component {
 
         const issuesCreated = (this.props.myissues !== null) ? (this.props.myissues) : ([])
 
-        const listGrid = (window.innerWidth >= 1000) ? (<div style={{ position: "fixed", top: "90px", right: "30px" }} >
-            <span className="hint--top" aria-label="List View">
-                <FiList onClick={this.changeViewToList} className="listView" />
-            </span>
-            <span className="hint--top" aria-label="Grid View">
-                <FiGrid onClick={this.changeViewToList} className="gridView" />
-            </span>
-        </div>) : (null);
+        // const listGrid = (window.innerWidth >= 1000) ? (<div style={{ position: "fixed", top: "90px", right: "30px" }} >
+        //     <span className="hint--top" aria-label="List View">
+        //         <FiList onClick={this.changeViewToList} className="listView" />
+        //     </span>
+        //     <span className="hint--top" aria-label="Grid View">
+        //         <FiGrid onClick={this.changeViewToList} className="gridView" />
+        //     </span>
+        // </div>) : (null);
 
 
         const participatedDiv = (this.props.participated || this.props.created) ? (

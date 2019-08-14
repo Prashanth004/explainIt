@@ -1,7 +1,5 @@
 import React from 'react'
-import {
- FiZap, FiPhoneMissed, FiVideo,
-  FiPhoneIncoming, FiUsers, FiCopy, FiUserPlus
+import { FiVideo, FiUsers, FiCopy, FiUserPlus
 } from "react-icons/fi";
 import './activity.css'
 
@@ -59,22 +57,6 @@ export default () => {
 
 
     </div>
-
-    //              <FiPhoneMissed /><br/>
-    // <br/>
-    //  <br/>
-    // <br/>
-    // <br/>
-
-
-
-
-
-    // <p>Call not answered</p>
-    // 
-    // 
-    // 
-    // 
 
   )
 }

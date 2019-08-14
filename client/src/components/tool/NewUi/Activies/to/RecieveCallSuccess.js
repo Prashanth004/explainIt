@@ -12,11 +12,7 @@ export default (props) => {
         var timetaken = activity.duration
         return (
             <div className="activityContentWithDate">
-                {/* <div className="date">
-                    <span>{activity.date.slice(8, 10)} {config.monthPicker[date]}</span>
-                    <br />
-                    <span className="year">{activity.date.slice(0, 4)}</span>
-                </div> */}
+
                 <div className="activityContent">
                     
                 <div className="callIconDiv"> <FiCopy className="callIcon" /></div>

@@ -49,7 +49,6 @@ export const startRecorder = (recorder)=>dispatch=>{
 
 
 export const stopRecorder = (downLoadUrl,blob)=>(dispatch)=>{
-    console.log("reaching action page with url : ",downLoadUrl);
     dispatch({
         type:STOP_RECORDER,
         downLoadUrl : downLoadUrl,

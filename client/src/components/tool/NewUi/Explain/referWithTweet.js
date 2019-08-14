@@ -20,11 +20,5 @@ export default class ReferrByTweet extends Component {
   }
 }
 
-// const mapStateToProps = (state)=>{
-// return{
-//   VisitorId :state.visitProfile.id
-// }
-// }
 
-// export default connect(mapStateToProps, {})(Refer);
 

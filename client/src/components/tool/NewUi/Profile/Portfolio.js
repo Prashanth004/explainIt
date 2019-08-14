@@ -18,7 +18,6 @@ export default class componentName extends Component {
                 "Authorization": token,
             }
         }).then((response) => {
-            console.log("response : ",response)
             this.setState({
                 project: response.data.data[0]
             })

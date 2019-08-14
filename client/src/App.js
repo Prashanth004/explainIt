@@ -58,6 +58,7 @@ class App extends Component {
             <Route exact path = '/feedback' component = {Feedback}/>
             <Route exact path = "/saveditems" component={savedItems}/>
             <Route exact path = '/' component = {landing}/>
+            <Route exact path = '/application' component = {landing}/>
             <Route exact path = '/closefloater' component = {Toggle}/>
             <Route exact path = '/testspeed' component={InternetSpeed}/>
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>

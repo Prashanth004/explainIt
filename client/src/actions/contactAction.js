@@ -33,7 +33,6 @@ export const addtoContact=(contactId)=>dispatch=>{
             dispatch({type:ADD_TO_CONTACT_FAILED_OWN_CONT})
         }
         else{
-            console.log("i am hitiing here")
         }
     }).catch(error=>{
         dispatch({
@@ -89,7 +88,6 @@ export const changeContactSearch =(textValue,contactList)=>dispatch=>{
         type:UPDATE_CONTACT_SEACRCHED_INPUTBOX,
         payload:typedValueUpper
     });
-    console.log("contactList : ",contactList);
 
     var newcontactList = contactList.filter(contact=>
         (contact.username.toUpperCase().includes(typedValueUpper))||
@@ -119,7 +117,6 @@ export const getAllContacts = ()=>(dispatch)=>{
             "Authorization":token,
         },
     }).then(response=>{
-        console.log("response : ",response);
         var promises = [];
         if(response.status === 200 || response.status ===204){
             contactData = response.data.data
@@ -175,7 +172,6 @@ export const addNewContactActivity =(touser)=>dispatch=>{
         },
         data:data
     }).then(data=>{
-        console.log("response of saving add to contact activity  : ",data)
     }).catch(error=>{
         console.log("error : ",error);
     })

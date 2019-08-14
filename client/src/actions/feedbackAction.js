@@ -42,16 +42,13 @@ export const discardRecorded = ()=>dispatch=>{
 
 export const saveRecording = (blob)=>(dispatch)=>{
     var projectName = config.dataTime;
-    console.log("projectName : ", projectName)
     dispatch({
         type:SAVED_RECORDING,
         filepath :  config.base_dir + '/public/audio/'+ projectName+'video.mkv'
     });
-    console.log("blob : ",blob)
     var videoFile = new File([blob], 'video.mkv', {
         type: 'video/mkv'
     });
-    console.log("videoFile Name : ",videoFile)
     var fd = new FormData();
     fd.append('projectName', projectName);
     fd.append('videoData', videoFile);
@@ -72,7 +69,6 @@ export const saveRecording = (blob)=>(dispatch)=>{
     }).then(response=>{
         if(response.status===201)
         {   
-           console.log(response.data.data)
            
            
         }
@@ -84,7 +80,6 @@ export const saveRecording = (blob)=>(dispatch)=>{
 
 
 export const saveFeedback = (userid,experience,usability,suggestion,videofilepath)=>(dispatch)=>{
-    console.log("saving the values");
     dispatch({
         type:SAVE_FEEDBACK_INITIATED
     })
@@ -109,7 +104,6 @@ export const saveFeedback = (userid,experience,usability,suggestion,videofilepat
             dispatch({
                 type: SAVED_FEEDBACK
             })   
-         console.log("success full");  
            
         }
     }).catch(error=>{
@@ -127,14 +121,11 @@ export const getFeedBackValididty = ()=>(dispatch)=>{
             "Authorization":token,
         }
     }).then(response=>{
-        console.log("response.data : ",response.data)
         if(response.status===200 || response === 304)
         {   
             if(response.data.success ===1){
-                console.log("feeedback actions : ",response.data.data.length)
-                console.log("feebac.data.data : ",response.data.data)
+               
                 if(response.data.data.length > 0){
-                    console.log("feedback given")
                     dispatch({
                         type : UPDATE_FEDDBACK_TEST,
                         payload:true

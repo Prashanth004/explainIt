@@ -16,7 +16,6 @@ import {
 import { toggleHowWorksModal } from '../../../actions/modalAction'
 import '../../css/issueDetails.css';
 import { FiPower } from "react-icons/fi";
-// import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import { stillAuthenicated, signout } from '../../../actions/signinAction';
 import { signInWithGoogle, twitterAuthFailure, signInWithTwitter } from '../../../actions/signinAction';
@@ -79,7 +78,6 @@ class Navigationbar extends React.Component {
   componentWillMount() {
     const { stillAuthenicated, page } = this.props
     stillAuthenicated();
-    // openHome()
 
     if (page !== undefined) {
       if (page === config.VISIT_PROFILE_PAGE) {
@@ -165,7 +163,6 @@ class Navigationbar extends React.Component {
       backgroundColor: "#2b8b8f",
       color: "white"
     }
-    // var inboxStyle = null;
     const homeColor = this.props.Home ? buttonColor : null;
     var navItem1 = null;
     var navItem2 = null;
@@ -241,7 +238,7 @@ class Navigationbar extends React.Component {
 
 
       </div>
-      <div style={{ width: "150px", textAlign: "right" }} navbar>
+      <div style={{ width: "150px", textAlign: "right" }}>
 
         {profileImage}
       </div>

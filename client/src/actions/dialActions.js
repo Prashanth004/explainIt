@@ -26,7 +26,6 @@ dispatch({
 }
 
 export const cancelDialedOption = ()=>dispatch=>{
-    console.log("calcelling dialed action")
     dispatch({
         type:CANCEL_DIAL
     })

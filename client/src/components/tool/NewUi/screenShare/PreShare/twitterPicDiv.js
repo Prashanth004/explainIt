@@ -44,10 +44,7 @@ class tweetToRefer extends Component {
    
   render() {
       if(!this.state.tweeted ){
-        
             this.tweeTRefer()
-         
-           
       }
     return (
       <div>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import config from '../../../config/config'
-
 export default class componentName extends Component {
 
   constructor(props){
@@ -60,22 +59,21 @@ export default class componentName extends Component {
                           doneValidating:true,
                           validEmail:true
                         })
-                // axios.get("http://apilayer.net/api/check?access_key="+config.EXMAIL_VALIDATE_TOKEN+"&email="+email+"&smtp=1&format=1")
-                // .then((response)=>{
-                //   console.log("response : ",response)
-                //   if(!response.data.smtp_check){
-                //     this.setState({
-                //       invalidEmail:true,
-                //       doneValidating:true
-                //     })
-                //   }
-                //   else{
-                //     this.setState({
-                //       doneValidating:true,
-                //       validEmail:true
-                //     })
-                //   }
-                // })
+                axios.get("http://apilayer.net/api/check?access_key="+config.EXMAIL_VALIDATE_TOKEN+"&email="+email+"&smtp=1&format=1")
+                .then((response)=>{
+                  if(!response.data.smtp_check){
+                    this.setState({
+                      invalidEmail:true,
+                      doneValidating:true
+                    })
+                  }
+                  else{
+                    this.setState({
+                      doneValidating:true,
+                      validEmail:true
+                    })
+                  }
+                })
             }
           }
         })

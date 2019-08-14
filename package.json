@@ -12,7 +12,7 @@
   "dependencies": {
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
-    "concurrently": "^4.1.0",
+    "concurrently": "^4.1.1",
     "cookie-parser": "~1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.5",
@@ -23,17 +23,17 @@
     "express-session": "^1.15.6",
     "file-saver": "^2.0.0",
     "googleapis": "^39.2.0",
-    "helmet": "^3.18.0",
+    "helmet": "^3.20.0",
     "http-errors": "~1.6.2",
     "images-scraper": "^2.0.11",
     "jade": "~1.11.0",
     "kue": "^0.11.6",
     "loadtest": "^3.0.7",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "morgan": "~1.9.0",
-    "multer": "^1.4.1",
-    "nodemailer": "^6.1.1",
-    "npm": "^6.9.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.3.0",
+    "npm": "^6.10.3",
     "oauth-signature": "^1.5.0",
     "passport": "^0.4.0",
     "passport-github-token": "^2.1.0",
@@ -48,9 +48,9 @@
     "react-pose": "^4.0.7",
     "socket.io": "^2.2.0",
     "socket.io-redis": "^5.2.0",
-    "twilio": "^3.33.0",
+    "twilio": "^3.33.3",
     "twitter": "^1.7.1",
     "video-react": "^0.13.2",
-    "video.js": "^7.4.1"
+    "video.js": "^7.6.2"
   }
 }

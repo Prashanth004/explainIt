@@ -65,7 +65,6 @@ export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     }).then((response1) => {
         var myProjects =null;
         if (response1.status === 200 || response1.status === 304) {
-            console.log("response1.data.data.online : ",response1.data.data.online)
             email = (response1.data.data.email===null)?(""):(response1.data.data.email);
             userName = (response1.data.data.username===null)?(""):(response1.data.data.username);
             profilepic = (response1.data.data.profilepic===null)?(""):(response1.data.data.profilepic);
@@ -241,11 +240,9 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         filepath :  config.react_url + '/portfolio/'+rand2
     });
 
-    console.log("blob : ",videoData)
     var videoFile = new File([videoData], 'video.mkv', {
         type: 'video/mkv'
     });
-    console.log("video Data : ",videoFile)
     if(action === config.SERVER_SHARING)
     var AudioFile = new File([audioData], 'audio.mp3',{
         type:'audio/mp3'

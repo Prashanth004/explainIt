@@ -22,17 +22,13 @@ class Refer extends Component {
     componentWillReceiveProps (nextProps){
         const {doneFetching,fetchProfile,twitterHandleValid,isPresentInExplain,startToFetchTwitterId} = nextProps;
         if(nextProps.doneFetching || nextProps.fetchProfile || nextProps.twitterHandleValid){
-            console.log("doneFetching, fetchProfile, twitterHandleValid, isPresentInExplain",doneFetching, fetchProfile, twitterHandleValid, isPresentInExplain)
             if (doneFetching && fetchProfile && twitterHandleValid && startToFetchTwitterId)
                 if(isPresentInExplain)
                     this.validateCondition();
         }
     }
     validateCondition(conatct,contactId) {
-      
         const { twitterHandleValue } = this.props;
-        // this.setState({ validatesInfo: true });
-
             if(conatct)
                 this.props.saveReferral(this.props.questionProject.id, this.props.id, twitterHandleValue, contactId, this.props.questionProject.issueid);
            else{
@@ -57,7 +53,6 @@ class Refer extends Component {
         }
         else if (this.props.mycontacts.find(data => data.twitterhandle === twitterHandleValue)) {
             const contactId = this.props.mycontacts.filter(data=> data.twitterhandle === twitterHandleValue);
-            console.log("constactid : ",contactId[0].contactid);
             this.setState({viaContacts:true,contactId:contactId[0].contactid})
             this.validateCondition(true,contactId[0].contactid);
         }

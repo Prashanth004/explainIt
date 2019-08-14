@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import LandingWEb from './landing/landing';
-// import LandingMob from './landing2/landing'
 
 export default class componentName extends Component {
     constructor(props){
@@ -16,10 +15,6 @@ export default class componentName extends Component {
       }
   render() {
       return(<LandingWEb />)
-    // return ((!this.state.reducedWidth) ? (
-    //             <LandingWEb />) : (
-    //                 <LandingMob />
-    //             )       
-    // )
+
   }
 }

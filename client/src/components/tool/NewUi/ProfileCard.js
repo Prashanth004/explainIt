@@ -139,7 +139,6 @@ class ProfileCard extends Component {
             getProfileDetails(userId, config.SELF)
         else{
             this.props.getProfileDetails(userId, config.VISIT_PROF);
-            console.log("path.lenght : ",path.length);
         }
         if(path.length===3){
             this.setState({twoParts:false})
@@ -207,7 +206,6 @@ class ProfileCard extends Component {
             this.props.screenAction === FULL_SCREEN_RECORD) 
                 if (this.props.showCanvas || this.props.isSecondScreenSharing) 
                 percentage = "80%";
-        console.log("his.props.onlineStatus : ",this.props.onlinestatus)
         const condition = !this.props.isHome && !this.props.onlinestatus;
         const gridTwoIt = (condition)?({gridTemplateColumns: "30% 27% 27% 16%"}):({});
         const shareIcon = (condition)?(null):(<div className="profileLabelBtn">

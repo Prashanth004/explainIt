@@ -28,7 +28,6 @@ class Fromref extends Component {
                     "Authorization": token,
                 }
             }).then(res => {
-                // console.log("res1 : ", res.data.data)
                 if (res.status === 200 || res.status === 304) {
                     this.setState({
                         problemOwnerTwitterhandle: res.data.data.twitterhandle,
@@ -51,7 +50,6 @@ class Fromref extends Component {
                 "Authorization": token,
             }
         }).then(res2 => {
-            // console.log("res1 : ", res2.data.data)
             if (res2.status === 200 || res2.status === 304) {
                 this.setState({
                     topicName: res2.data.data.textexplain
@@ -72,15 +70,11 @@ class Fromref extends Component {
                     <div className="callIconDiv"> <FiUsers className="callIcon" /></div>
                     <div>
                         <span className="dateNew Notify">{referralAct.time.slice(8, 10)}  {config.monthPicker[date]}, {referralAct.time.slice(0, 4)}</span>
-                        {/* <p>Call with  for the topic <a href={activity.link}><b>{activity.subject}</b></a> for <b>{Math.floor(timetaken)}:
-             {Math.floor((timetaken - Math.floor(timetaken)) * 60)}</b></p> */}
+                        
                         <div style={{ textAlign: "left" }}>
                             <p>You referred <a href={config.react_url + '/@' + referralAct.referreetwitter.toLowerCase()}>@{referralAct.referreetwitter.toLowerCase()}</a> to solve issue with topic <a href={config.react_url + '/project/' + referralAct.issue}><b>{topicName}</b></a> for <ImageContainer name={problemOwnerTwitterhandle} imgsrc={problemOwnerProfilePic} /> </p>
                         </div>
                     </div>
-
-                    {/* <p>{problemOwnerTwitterhandle}{problemOwnerProfilePic}{topicName}</p> */}
-
                 </div>
             </div>
 

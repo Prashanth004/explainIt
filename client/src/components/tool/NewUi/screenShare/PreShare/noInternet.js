@@ -2,7 +2,6 @@ import React from 'react';
 import { FiArrowLeft } from "react-icons/fi";
 import ProfileNotOnExplain from "../../ProfileNotOnTwitter/ProfileNotOnExplain"
 import CopyToClipboard from '../../../CopytoClipboard';
-
 export const NoInternet = () => {
   return (<div>
     <p className="info">Please check the internet connectivity</p>
@@ -27,7 +26,6 @@ export const SelfShareInfo = (props)=>{
        </span>
        <div className="TwiValidInfo">
        <p style={{fontWeight:"500"}}>You have entered your own twitter handle</p>
-       {/* <p className="info">You have entered your twitter hanlde</p> */}
        </div>
    </div>)
 }

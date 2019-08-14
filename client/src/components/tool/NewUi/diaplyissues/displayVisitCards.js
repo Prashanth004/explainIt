@@ -1,5 +1,4 @@
 import React from 'react';
-import IssueCard from './issueCard';
 import config from '../../../../config/config';
 import CompactDesign from './compactDesign';
 

@@ -136,7 +136,6 @@ class DisplayProjectDetail extends Component {
       })
   }
   render() {
-    console.log("this.state.questionProject :",this.state.questionProject)
     var video = null;
     var name = null;
     var profileImage = null;

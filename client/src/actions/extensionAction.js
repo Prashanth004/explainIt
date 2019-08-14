@@ -130,9 +130,7 @@ export const refreshExtension = (action,source,origin)=>dispatch=>{
     }
 }
 export const otherPeerMute = (source,origin,muteState)=>dispatch=>{
-    // console.log("I am reacting action Page")
     const muteMsg =(muteState === "muted")?"Peer Muted":"Peer Unmuted";
-    // console.log("AP : muteMsg ",muteMsg)
     const refreshFloater = {
         type: config.OTHER_PEER_MUTE_UNMUTE_FROM_WEB,
         data: {

@@ -43,8 +43,7 @@ class Login extends Component {
         }
         this.props.stillAuthenicated()
        
-        // this.props.getProfileByTwitterHandle('cprashnth004');
-        // this.props.getRecpientId('cprashnth004');
+
 
 
     }

@@ -22,7 +22,6 @@ class ActivityMain extends Component {
            
         }
     }
-    // 
     componentDidMount() {
         const {activity,userData} = this.props;
       
@@ -34,7 +33,6 @@ class ActivityMain extends Component {
             var newData = userData.filter(user=>user.key === activity.touser);
             if(newData.length ===0){
                
-                // newDate = localStorage.getItem
                 axios({
                     method: 'get',
                     url: config.base_dir + "/api/users/id/" + activity.touser,
@@ -82,13 +80,11 @@ class ActivityMain extends Component {
 
         }
         else{
-            // console.log("activity.activity : ",activity)
         }
 
   
     }
   render() {
-    //   console.log("asfdmnskdj")
     const activitiesElements =(this.props.activity.activity===config.CALL_FAILED)?
     (<CallFail
         userData = {this.state}

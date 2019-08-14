@@ -5,10 +5,8 @@ import {TIMER_NO_TEXT,TIMER_LIMIT_EXCEDED,TIMER_UPDATE_TIME,
 
 export const changeTimer = (noOfMinutestemp)=>(dispatch)=>{
     // var noOfMinutestemp = e.target.value;
-    console.log("noOfMinutestemp : ", noOfMinutestemp.length)
 
     if (!Number.isInteger(Number(noOfMinutestemp))) {
-        console.log('a', Number.isInteger(Number(noOfMinutestemp)));
         dispatch({
             type : TIMER_NO_TEXT
         })

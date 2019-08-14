@@ -6,14 +6,6 @@ import config from '../../../../config/config'
 
 export default (props) => {
     const recrdsend=!props.saveinitiated?(<p>You can record the screen and send it</p>):(null);
-    // console.log(props.retry,!props.retryTimeOut,!props.noInternet)
-
-
-
-    //  const MessageDisconnected = (props.timerEnded)?(<div>
-    //     <p><b>Call ended as the time alloted ended</b></p>
-    //     {savingMsg}
-    // </div>):(null)
     var buttons = null;
     var noInternet = (props.noInternet)?("No Intenet conecticvity"):(null)
     const videoAudio = (<div>
@@ -55,7 +47,6 @@ const savingProcessDiv = (!props.isSaved)?(
     var MessageDisconnected = null;
 
     if (props.timerEnded) {
-        console.log("checking saving action")
         if (!props.saveinitiated && props.peerAudioBlob !== null && props.blob !== null) { props.savefilePrivate() }
         MessageDisconnected = (
             <div>
@@ -64,7 +55,6 @@ const savingProcessDiv = (!props.isSaved)?(
             </div>)
     }
     else if (props.showDisconectMessage && !props.closedHere && props.manualClose) {
-        console.log("checking saving action")
         if (!props.saveinitiated && props.peerAudioBlob !== null && props.blob !== null) { props.savefilePrivate() }
         MessageDisconnected = (<div>
             <p><b>Call ended from other peer</b></p>
@@ -121,7 +111,6 @@ const savingProcessDiv = (!props.isSaved)?(
         )
     }
     else {
-        console.log("checking saving action")
         if (!props.saveinitiated && props.peerAudioBlob !== null && props.blob !== null) { props.savefilePrivate() }
         MessageDisconnected = (<div>
             <p><b>Call ended</b></p>

@@ -105,17 +105,8 @@ class FullScreenRecorder extends Component {
 
     saveActivityJustRecord() {
         var subject = this.state.subjectOfMessage;
-        // var sharablelink =  config.react_url+"/project/"+this.props.topicIssueId
         this.setState({savedRecordActivity:true})
-        // if(this.props.explainBy !== null){
-        //     var sharablelink =  config.react_url+"/project/"+this.props.topicIssueId
-        //     console.log("this.props.shareid, this.props.callTopic, sharablelink : ",this.props.shareid, this.props.callTopic, sharablelink)
-        //     this.props.explainSuccessedUpate(this.props.shareid, this.props.callTopic, sharablelink);
-        // }else{
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic, this.props.fromId, this.props.twitterUserId, subject)
-
-            // this.props.saveRecordedMessage(sharablelink, this.props.callTopic, this.props.fromId, subject);
-        // }
     }
     startRecording() {
         var self = this;
@@ -473,7 +464,6 @@ class FullScreenRecorder extends Component {
                 pauseRecording(recorder);
             }
         }
-    //assign time
     updateTime() {
         var currentTime = JSON.parse(localStorage.getItem('curTime'));
         var time = (currentTime.minutes + (currentTime.seconds / 60));

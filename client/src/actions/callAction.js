@@ -170,16 +170,14 @@ export const getAllActivities = (props)=>(dispatch)=>{
               const unique = (value, index, self) => {
                 return (self.indexOf(value) === index && value!==null)
               }
-              console.log("result1 : ",result1)
+            
               result2 = result1.filter(unique);
               result2 = result2.filter(el=>el!==null);
-              console.log("result2 : ",result2);
             result2.forEach(function(projects, index){
                     promises.push(axios.get(config.base_dir+'/api/users/id/'+projects))
                  })
                  axios.all(promises).then(function(results) {
                     results.forEach(function(response, index) {
-                        console.log("response : ",response)
                         if(response.status===200 || response.status === 304){
                             const newItem = {
                                 'key': response.data.data.id,

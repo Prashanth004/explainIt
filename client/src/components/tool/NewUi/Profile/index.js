@@ -3,7 +3,6 @@ import '../../../css/ProfileForm.css';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import Section1 from './section1';
-import Section2 from './section2';
 import {closeEditProfile, updateUserProfile } from '../../../../actions/profileAction';
 import {resetFeedback} from '../../../../actions/feedbackAction'
 
@@ -55,7 +54,6 @@ class ProfileForm extends Component {
             worksValue: e.target.value,
             worksValueError: null
         })
-        console.log(this.state.worksValue.split(' '))
     }
     changeGoodAt(e){
         this.setState({
@@ -84,7 +82,7 @@ class ProfileForm extends Component {
             bioValueError: null
         })
         if (this.state.bioValue !== null) {
-            if (this.state.bioValue.length > 200) {
+            if (this.state.bioValue.length > 100) {
                 this.setState({
                     bioValueError: "cant exceed more than 200"
                 })
@@ -122,23 +120,7 @@ class ProfileForm extends Component {
         }
     }
     uploadData() {
-        // if(this.state.linkedInValue.length!==0){
-        //     const linkedInValue = (this.state.linkedInValue.includes('www.linkedin.com'))?
-        //     (this.state.linkedInValue):('https://www.linkedin.com/'+this.state.linkedInValue);
-        //     this.setState({linkedInValue:linkedInValue})
-           
-        // }
-        // if(this.state.gitHubValue.length!==0){
-        //     const gitHubValue = (this.state.gitHubValue.includes('github.com'))?
-        //     (this.state.gitHubValue):('https://github.com/'+this.state.gitHubValue);
-        //     this.setState({gitHubValue:gitHubValue})
-        // }
-   
-        // if(this.state.angelListValue.length!==0){
-        //     const angelListValue = (this.state.angelListValue.includes('angel.co'))?
-        //     (this.state.angelListValue):('https://angel.co/'+this.state.angelListValue);
-        //     this.setState({angelListValue:angelListValue})
-        // }
+
         if (this.state.costValue < 0) {
             this.setState({costError: true})
         }
@@ -185,21 +167,6 @@ class ProfileForm extends Component {
             closeEditProfile={this.props.closeEditProfile}
             goodAtValueError={this.state.goodAtValueError}
             uploadData={this.uploadData}/>)
-            // !this.state.nextSetion)?
-            
-            // :(<Section2
-            //     SecTrans={this.SecTrans}
-            //     linkInerror={this.state.linkInerror}
-            //     linkedInValue={this.state.linkedInValue}
-            //     changeLinkedIn={this.changeLinkedIn}
-            //     gitHubValue={this.state.gitHubValue}
-            //     gitHibError={this.state.gitHibError}
-            //     changeGithub={this.changeGithub}
-            //     angelListError={this.state.angelListError}
-            //     angelListValue={this.state.angelListValue}
-            //     changeAngelList={this.changeAngelList}
-            //     closeEditProfile={this.props.closeEditProfile}
-            //     uploadData={this.uploadData}/>)
     }
 }
 

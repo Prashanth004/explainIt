@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './contacts.css';
 import config from '../../../../config/config'
-import { FiCopy,FiVideo} from "react-icons/fi";
 import {addNewUser} from '../../../../actions/storeUserAction';
 import {dialFromFail,recordFromFail} from '../../../../actions/dialActions'
 
@@ -17,12 +16,7 @@ class cntactCard extends Component {
     }
   
   render() {
-    console.log("this.props.contactData : ",this.props.contactData);
-    const {profilepic,username,twitterhandle,bio,online} = this.props.contactData;
-    const shareIcon = online?( <span className="hint--left" aria-label="Share Screen">
-    <FiCopy onClick={()=>this.props.dialFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
-  </span>):(null)
-   
+    const {profilepic,username,twitterhandle,bio} = this.props.contactData;
     const emptyGoodAt = (<p className="contactHandle">Profile details incomplete</p>)
     const gootAtDiv = (bio!==null)?((bio.length!==0)?( <div className="goodAt"><b>Status : </b>{bio}</div>):(emptyGoodAt)):(emptyGoodAt)
     return (
@@ -35,15 +29,6 @@ class cntactCard extends Component {
           <span>{username} </span></a>
           {gootAtDiv}
           </div>
-          {/* <span style={{fontSize:"12px", color:"#333",marginTop:"-15px"}}>@{twitterhandle}</span> */}
-          {/* <div style={{padding:"5px", marginTop:"5px",display:"grid", gridTemplateColumns:"50% 50%"}}>
-         {shareIcon}
-          
-           <span className="hint--left" aria-label="Record screen and send">
-            <FiVideo onClick={()=>this.props.recordFromFail(twitterhandle,"")}style={{fontSize:"18px"}}/>
-            </span>
-          </div> */}
-      
       </div>
     )
   }
