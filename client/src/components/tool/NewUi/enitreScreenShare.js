@@ -647,8 +647,8 @@ validateTurn(iceServers){
                     console.log("requesting fot peerid on just made webRtc connection", conn)
                 conn.send({
                     data: "sendID",
-                    timer: this.props.timeAloted,
-                    profilePic: this.props.twirecieverPrfilePic
+                    timer: self.props.timeAloted,
+                    profilePic: self.props.profilePic
                 })
                 conn.on('error', (err) => {
                     if (config.CALL_LOGS) {
@@ -1160,7 +1160,7 @@ validateTurn(iceServers){
             }
         }
       
-        const audioWarning = (this.props.isSceenSharing && this.props.currentTimeLeft < 0.166) ? (<audio style={{ display: "none" }} autoPlay loop src={require('../../audio/time_out.wav')}></audio>) : (null)
+        const audioWarning = (this.props.isSceenSharing && this.props.currentTimeLeft < 0.166) ? (<audio style={{ display: "none" }} autoPlay   loop src={require('../../audio/time_out.wav')}></audio>) : (null)
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate
         var linkElement = null;
@@ -1295,7 +1295,7 @@ validateTurn(iceServers){
                 else {
                     linkElement = ((!this.state.onGoingCallEnded) ? (
                         <div>
-                            <audio style={{ display: "none" }} autoPlay loop src={require('../../audio/dialing.mp3')}></audio>
+                            <audio controls volume="0.1"     style={{ display: "none" }} autoPlay loop src={require('../../audio/dialing.mp3')}></audio>
 
                             <div className="waitMsg">
                                 <p>Waiting for <b>{this.props.twitterName}</b> to accept the Screen Share request, if not we can drop a recorded message</p>

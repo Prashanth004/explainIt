@@ -164,7 +164,6 @@ window.close();
     componentDidMount() {
         var self = this;
         self.props.fullStartedSharing();
-        console.log("this.props.myProfileUserId : ",this.props.myProfileUserId)
        
         window.addEventListener("beforeunload", this.onUnload);
         const result = browser();
@@ -458,13 +457,13 @@ window.close();
                     if (config.CALL_LOGS) {
 
                     }
-
+                    localStorage.setItem('profilePic', JSON.stringify(data.profilePic));
+                    self.props.setTime(data.timer)
                     conn.send({
                         type: config.MESSSAGE_FOR_CONNECTION_WITH_ID,
                         clientId: self.state.clientPeerid,
                     });
-                    localStorage.setItem('profilePic', JSON.stringify(data.profilePic));
-                    self.props.setTime(data.timer)
+                  
 
                 }
             })
@@ -496,10 +495,11 @@ window.close();
 
                     //     });
                     // }
-                }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000)
+                }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+                const pickture = (self.state.picture!==null)?(self.state.picture):JSON.parse(localStorage.getItem("profilePic"))
                 postStartCall(config.RECIEVER_SCREEN_SHARE,
                     self.props.extOrigin,
-                    self.state.picture,
+                    pickture,
                     self.props.extSource,
                     self.props.floaterTime,
                     null

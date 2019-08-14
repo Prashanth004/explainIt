@@ -57,7 +57,7 @@ class ShareFloater extends Component {
         clearTimeout(this.updateRecordertime);
     }
     componentWillMount() {
-        console.log("mounting")
+      
         var presentTime = null;
         var otherpersonProfilePic = null;
         var action = null;
@@ -227,8 +227,8 @@ class ShareFloater extends Component {
         var otherpersonProfilePic = null
         function postMessageHandler(event) {
             if (event.data.action === config.START_CALL) {
-                self.props.changeStateToUnmute()
-                
+                self.props.changeStateToUnmute();
+                console.log("event.data : ",event.data)
                 self.setState({
                     
                     callTabid: event.data.data.tabid,
@@ -243,7 +243,14 @@ class ShareFloater extends Component {
                 }
                 else if (event.data.data.action === config.RECIEVER_SCREEN_SHARE) {
                     otherpersonProfilePic = JSON.parse(localStorage.getItem("profilePic"));
-                    self.setState({ displayAddTimer: false,otherPersonPic: otherpersonProfilePic, })
+                    console.log("profile pic in floater from local storge : ",otherpersonProfilePic);
+                    console.log("profile pic in floater form extension : ",event.data.data.profilePic);
+                    const pic = ( otherpersonProfilePic=== null ||  otherpersonProfilePic=== undefined)?
+                    (event.data.data.profilePic):(otherpersonProfilePic);
+                    console.log("decided pic :",pic)
+
+                    
+                    self.setState({ displayAddTimer: false,otherPersonPic: pic })
                     localStorage.setItem('shareDisplay', JSON.stringify("block"));
                     self.props.setDiplayOfFloater("block");
                     self.props.setTime(event.data.data.timer);

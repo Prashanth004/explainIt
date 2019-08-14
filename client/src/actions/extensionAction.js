@@ -185,6 +185,7 @@ export const postStartCall = (action,origin,otherPersonPic,extSource,timeAloted,
     else{
         localStorage.setItem('shareDisplay',JSON.stringify("block"));
         localStorage.setItem('profilePic',JSON.stringify(otherPersonPic));
+        console.log("profile pic in extension action : ",otherPersonPic)
         callStart = {
             type:config.START_CALL,
             data:{
