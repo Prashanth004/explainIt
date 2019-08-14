@@ -716,6 +716,8 @@ window.close();
 
     render() {
         var callEndButton = null;
+        var navbar  =   <Navbar 
+        page="share"/>
 
         // if(this.props.myProfileUserId!==null && !this.state.validatedFeedback){
                 // this.validateFeedback()
@@ -794,7 +796,8 @@ window.close();
                 <div>
                     <button  className="buttonDark endCallNew" onClick={this.shareScreen}>share screen</button>
             <button className="buttonDark endCallNew" onClick={this.endCall}>End Call</button>
-            </div>):(null)
+            </div>):(null);
+             navbar  = null
            
         }
         else if (this.state.callEnded) {
@@ -837,8 +840,7 @@ window.close();
             </div>
         ) : (null))
         return (<div style={{minHeight:"98vh"}}>
-             <Navbar 
-              page="share"/>
+           {navbar}
               <CallNotification localSocket={this.state.socket}/>
             {precallActivity}
             <div className="screenShareDiv">

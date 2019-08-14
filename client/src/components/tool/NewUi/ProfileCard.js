@@ -202,8 +202,8 @@ class ProfileCard extends Component {
       
         // const mailIcon =(this.props.isHome)?( <FiPhone style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />)
         // :( <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.props.openCreated} />)
-        if (this.props.screenAction === FULL_SCREEN_SHARE ||
-            this.props.screenAction === FULL_SCREEN_RECORD) 
+        // if (this.props.screenAction === FULL_SCREEN_SHARE ||
+        //     this.props.screenAction === FULL_SCREEN_RECORD) 
                 if (this.props.showCanvas || this.props.isSecondScreenSharing) 
                 percentage = "80%";
         const condition = !this.props.isHome && !this.props.onlinestatus;

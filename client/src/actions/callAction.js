@@ -179,16 +179,21 @@ export const getAllActivities = (props)=>(dispatch)=>{
                  axios.all(promises).then(function(results) {
                     results.forEach(function(response, index) {
                         if(response.status===200 || response.status === 304){
-                            const newItem = {
-                                'key': response.data.data.id,
-                                'data': response.data.data
+                            if( response.data.data!==null){
+                                const newItem = {
+                                    'key': response.data.data.id,
+                                    'data': response.data.data
+                                }
+                                dispatch({
+                                    type: ADD_USER_TO_STORE,
+                                    payload: newItem
+                                })
                             }
-                            dispatch({
-                                type: ADD_USER_TO_STORE,
-                                payload: newItem
-                            })
+                           
                         }
                     })
+                 }).catch(error=>{
+                     console.log("error : ",error)
                  })
         }).catch(error=>{
             console.log("error")

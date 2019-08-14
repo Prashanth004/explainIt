@@ -119,20 +119,20 @@
   
   
   .shareVideoDisplay{
-      height:110vh;
+      height:95vh;
       width:100%;
       margin:auto;
       
   }
   .videoContainer{
       width:100%;
-      min-height:100vh;
+      min-height:97vh;
   }
   
   
   .VideoElementReciever{
       /* width:120%; */
-      height:107vh;
+      height:95vh;
       margin:auto;
       /* background-color: blue; */
       /* height:95vh; */

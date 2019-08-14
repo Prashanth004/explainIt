@@ -755,9 +755,9 @@ validateTurn(iceServers){
 
     peerCall() {
         clearTimeout(this.callConnectionDelayed);
-        const { twitterUserId, fullStartedSharing } = this.props
+        const { twitterUserId, fullStartedSharing,socket } = this.props
         const self = this;
-        const { socket, peer, destkey, finalStream } = this.state
+        const { peer, destkey, finalStream } = this.state
         var call = peer.call(destkey, finalStream);
         if (config.CALL_LOGS)
             console.log("Made peer call with other peer is and streams");

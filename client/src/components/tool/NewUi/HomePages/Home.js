@@ -161,7 +161,7 @@ class NewHome extends Component {
 
     render() {
         // const profileCardGrid = (!this.state.reducedLittleWidth)?(this.props.isSecondScreenSharing?"100%":"100%"):("100%")
-        const profileCardGrid = (!this.state.reducedLittleWidth)?("33% 33% 33%"):("100%")
+        const profileCardGrid = (!this.state.reducedLittleWidth)?(this.props.isSecondScreenSharing?"100%":"33% 33% 33%"):("100%")
 
         const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"0px"}}><Cotactlist  /></div>):(null)
         var profileCardElement = null;
@@ -236,6 +236,7 @@ const mapStateToProps = state => ({
     issues: state.issues.items,
     isAauthenticated: state.auth.isAuthenticated,
     profilePic: state.auth.profilePic,
+    isSecondScreenSharing: state.secondScreenShare.isSecondScreenSharing,
     myissues: state.profile.myIssues,
     participatedIssues: state.profile.participatedIssue,
     twitterHandle: state.profile.twitterHandle,
