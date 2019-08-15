@@ -138,6 +138,7 @@ class ScreenRecorder extends Component {
         this.callConnectionDelayed = this.callConnectionDelayed.bind(this);
         this.startConnectionTimer = this.startConnectionTimer.bind(this);
         this.saveAudioBlobtimeOut = this.saveAudioBlobtimeOut.bind(this);
+        this.startRecording = this.startRecording.bind(this);
     }
 
     muteAudio() {
@@ -773,6 +774,18 @@ validateTurn(iceServers){
                 });
             }
         }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+        self.saveAudioBlobtimeOut = setTimeout(() => {
+            const { peerAudioRecorder } = self.state;
+            if (peerAudioRecorder !== null) {
+                peerAudioRecorder.stopRecording(function () {
+                    var blob = peerAudioRecorder.getBlob();
+                    self.setState({
+                        peerAudioBlob:blob,
+                        peerAudioRecorder:null
+                    })
+                });
+            }
+        }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
     }
 
     peerCall() {
@@ -813,21 +826,10 @@ validateTurn(iceServers){
                 var peerAudioRecorder = RecordRTC(remoteStream, {
                     type: 'audio'
                 });
-                this.startRecording(recorder1,peerAudioRecorder)              
+                self.startRecording(recorder1,peerAudioRecorder)              
                 // peerAudioRecorder.startRecording();
                 // self.setState({peerAudioRecorder})
-                self.saveAudioBlobtimeOut = setTimeout(() => {
-                    const { peerAudioRecorder } = self.state;
-                    if (peerAudioRecorder !== null) {
-                        peerAudioRecorder.stopRecording(function () {
-                            var blob = peerAudioRecorder.getBlob();
-                            self.setState({
-                                peerAudioBlob:blob,
-                                peerAudioRecorder:null
-                            })
-                        });
-                    }
-                }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+              
             }
                 var audio = document.querySelector('#video');
                 audio.srcObject = remoteStream
