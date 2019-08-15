@@ -23,13 +23,13 @@ class MobNav extends Component {
     }
     openHomeLoc() {
         const { page } = this.props;
-        if (page === config.HOME_PAGE) {
+        // if (page === config.HOME_PAGE) {
             this.props.openHome();
-            this.setState({ openHomeRed: true, openInboxRed: false })
-        }
-        else {
-            this.props.openHome();
-        }
+            this.setState({ openHomeRed: true, openInboxRed: false });
+        // }
+        // else {
+        //     this.props.openHome();
+        // }
     }
 
     openInboxLoc() {
@@ -38,29 +38,26 @@ class MobNav extends Component {
             this.props.openInbox();
             if (!this.props.Created && !this.props.Created && !this.props.Setting){
                 this.setState({ openInboxRed: true, openHomeRed: false })
-               
             }
-               
         }
     }
     openCreatedLoc() {
 
         const { page } = this.props;
         this.props.openCreated();
-        if (page === config.HOME_PAGE) {
+        // if (page === config.HOME_PAGE) {
             if (!this.props.inbox && !this.props.Created && !this.props.Setting){
                 this.setState({ openInboxRed: true });
             }
-        }
-        else if (page === config.VISIT_PROFILE_PAGE) {
-            this.props.openCreated();
-        }
+        // }
+      
 
     }
     render() {
-        console.log("this.props.page : ", this.props.page)
-        const openHomeDiv = this.state.openHomeRed ? (<Redirect push to={'../@'+this.props.authTwitterHandle+'/'} />) : (null);
-        const openInboxDiv = this.state.openInboxRed ? (<Redirect push to={'./@'+this.props.authTwitterHandle+'/activities'} />) : (null)
+        console.log("this.props.page : ", this.props.page);
+        const path = (window.location.pathname).split('/');
+        const openHomeDiv = this.state.openHomeRed ? (<Redirect push to={'../@'+this.props.authTwitterHandle} />) : (null);
+        const openInboxDiv = this.state.openInboxRed ? (<Redirect push to={path.length ===2?'./@'+this.props.authTwitterHandle+'/activities':'../@'+this.props.authTwitterHandle+'/activities'} />) : (null)
         const { page } = this.props;
         const divStyle = {
             textAlign: "center",

@@ -27,7 +27,8 @@ import Info from './components/tool/NewUi/NewFloater/info'
 import inbox from './components/tool/NewUi/Inbox';
 import Setting from './components/tool/NewUi/newNav/setting'
 import VideoDisplay from './components/VideoDisplay';
-import ChatInitiate from './components/tool/NewUi/chat/index'
+import ChatInitiate from './components/tool/NewUi/chat/index';
+import sample from './components/tool/NewUi/HomePages/smaple';
 // import floater from './components/tool/NewUi/Floater/floater'
 import DetailsIsueView from './components/tool/NewUi/DisplayDetailProject';
 import savedItems from './components/tool/NewUi/Floater/savedIssues'
@@ -64,6 +65,7 @@ class App extends Component {
             <Route exact path = "/issue/:issueid" component={DetailsIsueView}/>
             <Route exact path = "/info" component = {Info} />
             <Route exact path = '/newNav' component = {newNav} />
+            <Route exact path ='/sample' component = {sample}/>
             <Route exact path ='/portfolio/:projectid' component={Portfolio}/>
             {/* <Route exact path = "/activities" component = {Acticities} /> */}
             <Route exact path = "/:encrTwitterHandle/activities"component = {Acticities}/>

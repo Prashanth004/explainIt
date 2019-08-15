@@ -753,6 +753,28 @@ validateTurn(iceServers){
     callConnectionDelayed = () => { };
     saveAudioBlobtimeOut = () => { };
 
+    startRecording(videoRecorder, audioRecorder){
+        var self = this;
+        audioRecorder.startRecording();
+        this.setState({peerAudioRecorder:audioRecorder});
+        videoRecorder.startRecording();
+        this.setState({ recorder: videoRecorder });
+        self.saveBlobtimeOut = setTimeout(() => {
+            const { recorder } = self.state;
+            if (recorder !== null) {
+                recorder.stopRecording(function () {
+                    var blob = recorder.getBlob();
+                    self.setState({
+                        downloadUrlVideo: URL.createObjectURL(blob),
+                        blob: blob,
+                        recorder: null
+                    });
+                    saveVideoBlob(blob);
+                });
+            }
+        }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+    }
+
     peerCall() {
         clearTimeout(this.callConnectionDelayed);
         const { twitterUserId, fullStartedSharing,socket } = this.props
@@ -765,23 +787,23 @@ validateTurn(iceServers){
             type: 'video'
         });
         if(self.state.retryLimit === 0 ){
-        recorder1.startRecording();
-        self.setState({ recorder: recorder1 });
+        // recorder1.startRecording();
+        // self.setState({ recorder: recorder1 });
             registerCallToBrowser();
-            self.saveBlobtimeOut = setTimeout(() => {
-                const { recorder } = self.state;
-                if (recorder !== null) {
-                    recorder.stopRecording(function () {
-                        var blob = recorder.getBlob();
-                        self.setState({
-                            downloadUrlVideo: URL.createObjectURL(blob),
-                            blob: blob,
-                            recorder: null
-                        });
-                        saveVideoBlob(blob);
-                    });
-                }
-            }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
+            // self.saveBlobtimeOut = setTimeout(() => {
+            //     const { recorder } = self.state;
+            //     if (recorder !== null) {
+            //         recorder.stopRecording(function () {
+            //             var blob = recorder.getBlob();
+            //             self.setState({
+            //                 downloadUrlVideo: URL.createObjectURL(blob),
+            //                 blob: blob,
+            //                 recorder: null
+            //             });
+            //             saveVideoBlob(blob);
+            //         });
+            //     }
+            // }, config.VIDEO_RECORDING_SAVE_LIMIT * 1000);
         }
         if (call) {
             call.on('stream', function (remoteStream) {
@@ -791,8 +813,9 @@ validateTurn(iceServers){
                 var peerAudioRecorder = RecordRTC(remoteStream, {
                     type: 'audio'
                 });
-                peerAudioRecorder.startRecording();
-                self.setState({peerAudioRecorder})
+                this.startRecording(recorder1,peerAudioRecorder)              
+                // peerAudioRecorder.startRecording();
+                // self.setState({peerAudioRecorder})
                 self.saveAudioBlobtimeOut = setTimeout(() => {
                     const { peerAudioRecorder } = self.state;
                     if (peerAudioRecorder !== null) {
