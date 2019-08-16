@@ -136,7 +136,7 @@ class NewHome extends Component {
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
         this.setState({ currentAtionStatus: currentAtionStatus })
         this.props.varifyEmail();
-        this.props.initiateSocket()
+        // this.props.initiateSocket()
         this.props.stillAuthenicated()
         this.props.openHome();
         this.props.getTotalUnread();

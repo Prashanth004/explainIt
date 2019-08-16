@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-// import socketIOClient from "socket.io-client";
+import socketIOClient from "socket.io-client";
 import './css/toggle.css';
 import IssueCard from './tool/NewUi/diaplyissues/issueCard'
 import config from '../config/config'
@@ -42,13 +42,13 @@ class Project extends Component {
       socketinitiated:false,
     }
     this.reAtemptToFetch = this.reAtemptToFetch.bind(this)
-    this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
+    // this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
     }
-    initiateSocketLoc() {
-        this.props.initiateSocket();
-        console.log("initialting sockets")
-        this.setState({ socketinitiated: true });
-    }
+    // initiateSocketLoc() {
+    //     this.props.initiateSocket();
+    //     console.log("initialting sockets")
+    //     this.setState({ socketinitiated: true });
+    // }
     resize() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
         
@@ -85,6 +85,17 @@ class Project extends Component {
 }
   componentDidMount() {
     this.setState({ reducedWidth: window.innerWidth <= 700 });
+    if( socket !==null){
+      if(!socket.connected){
+          const socketloc = socketIOClient(config.base_dir);
+          console.log("socket : ",socketloc)
+          this.props.initiateSocket(socketloc)
+      }
+  }else{
+      const socketloc = socketIOClient(config.base_dir);
+      console.log("socket : ",socketloc)
+      this.props.initiateSocket(socketloc)
+  }
     initGA();
     loadPageView();
     const self = this
@@ -129,8 +140,8 @@ class Project extends Component {
     }
   }
   render() {
-    if (this.props.socket === null && !this.state.socketinitiated)
-    this.initiateSocketLoc();
+    // if (this.props.socket === null && !this.state.socketinitiated)
+    // this.initiateSocketLoc();
     const msgStyling = { margin: "auto", marginTop: "250px", width: "50%", textAlign: "center" };
     const nav=(this.state.reducedWidth)?(<MobNav page={config.PEOJECT_PAGE}/>):(<Navbar page={config.PEOJECT_PAGE}  />)
     const project = (!this.props.setting)?(    <div className="projectPageMainDiv">

@@ -18,7 +18,6 @@ export default class componentName extends Component {
   render() {
     
     const {changeInputValue,empty,limitExce,limitOfChar,textValue,placeHolder} = this.props
-    console.log("limitOfChar : ",limitOfChar);
     const spanElement= (empty)?(
               <span className="spanElement">Topic can't be empty</span>
             ):((limitExce)?(

@@ -196,7 +196,7 @@ export const getAllActivities = (props)=>(dispatch)=>{
                      console.log("error : ",error)
                  })
         }).catch(error=>{
-            console.log("error")
+            console.log("error : ",error)
         })
 
         }

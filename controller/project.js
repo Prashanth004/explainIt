@@ -314,8 +314,8 @@ exports.getAllProject = function (req, res) {
 
 }
 exports.getIssueById = function (req, res) {
-
-    database.db.one('select * from projects where issueid = $1 and isquestion =$2', [req.params.id, "true"])
+    if(req.params.id!== undefined &&  req.params.id!== "undefined" ){
+        database.db.one('select * from projects where issueid = $1 and isquestion =$2', [req.params.id, "true"])
         .then(projects => {
 
             res.status(200).send({
@@ -324,16 +324,24 @@ exports.getIssueById = function (req, res) {
             })
         })
         .catch(error => {
-            console.log("error : ", error)
+            // console.log("error : ", error)
             res.status(500).send({
                 sucess: 0,
                 msg: error
             })
         })
+    }
+    else{
+        res.status(450).send({
+            sucess: 0,
+            msg: error
+        })
+    }
+
 }
 exports.getProjectById = function (req, res) {
-
-    database.db.one('select * from projects where projectid = $1 ', req.params.id)
+    if(req.params.id!==undefined || req.params.id!=="undefined" ){
+        database.db.one('select * from projects where projectid = $1 ', req.params.id)
         .then(projects => {
             res.status(200).send({
                 success: 1,
@@ -346,6 +354,14 @@ exports.getProjectById = function (req, res) {
                 msg: error
             })
         })
+    }
+    else{
+        res.status(450).send({
+            sucess: 0,
+            msg: "undefined id"
+        })
+    }
+    
 }
 
 

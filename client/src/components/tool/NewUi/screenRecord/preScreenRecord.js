@@ -21,7 +21,7 @@ export default (props) => {
     return(!isFullScreenRecording)?(
         <div className="btDiv">
             {recordingEle}
-        </div>
+         </div>
     ):(<div>
         <p>Recording screen</p>
         <TimerBar />

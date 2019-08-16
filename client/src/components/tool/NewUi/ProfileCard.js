@@ -160,7 +160,14 @@ class ProfileCard extends Component {
         this.props.resetCallAction();
         // this.props.toggleInbox();
     }
-    
+    componentWillReceiveProps(nextProps){
+    if(nextProps.redialInitiated || nextProps.reRecordInitiated){
+        if(nextProps.redialInitiated && !this.state.redialed)
+        this.redial();
+        if(nextProps.reRecordInitiated && !this.state.rerecord)
+        this.rerecord()
+    }
+    }
     toggleInbox() {
         
         this.props.openInbox()
@@ -195,10 +202,7 @@ class ProfileCard extends Component {
         var percentage = "380px";
         const contactBtn = ({margintop:"10px", marginRight:"5px"});
 
-        if(this.props.redialInitiated && !this.state.redialed)
-            this.redial();
-        if(this.props.reRecordInitiated && !this.state.rerecord)
-            this.rerecord()
+     
       
         // const mailIcon =(this.props.isHome)?( <FiPhone style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.toggleInbox} />)
         // :( <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.props.openCreated} />)

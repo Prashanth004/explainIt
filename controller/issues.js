@@ -49,6 +49,7 @@ var optionsRand = {
   }
 
   exports.getOneIssue = function(req,res){
+      console.log("isssue")
     database.db.oneOrNone('select * from issues  where id = $1',req.params.id)
     .then(data=>{
         res.status(200).send({

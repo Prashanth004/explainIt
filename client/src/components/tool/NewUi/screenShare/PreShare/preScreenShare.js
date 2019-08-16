@@ -182,7 +182,7 @@ class tweetSearch extends Component {
 
 
         const AcceptTopicDiv = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN)?(
-            <div className="TwiValidInfo" style={{width:"90%", margin:"auto"}}>
+            <div className="TwiValidInfo" style={{width:"80%", margin:"auto"}}>
                     <AcceptTopic 
                     action={config.FULL_SCREEN_SHARE}
                     tweetTheMessage={this.testHandle} />
@@ -210,7 +210,7 @@ class tweetSearch extends Component {
                         changeInputValue={this.changeImputNumber}
                         textValue={numberValue}
                         negNumber={negNumber}
-                        noText={noText} />
+                        noText={noText} /> mins <br/>
                 </p>
                 {spanElement}
                

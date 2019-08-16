@@ -560,7 +560,7 @@ class FullScreenRecorder extends Component {
             (this.state.isInstalled) ? (
             this.state.chrome?((<div className="recordMainScreen"  >
                 {closeBtn}
-                <div style={{ paddingTop: "10px" }}>
+                <div >
                     {recordingElements}
                 </div>
                 {postShareElements}

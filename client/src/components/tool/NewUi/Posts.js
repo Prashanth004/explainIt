@@ -16,25 +16,26 @@ import { openInbox, openCreated } from "../../../actions/navAction";
 import { addNewAnswerProject,getProfileDetails  } from '../../../actions/profileAction';
 import MobNav from './newNav/index'
 import {  setVisitProfile } from "../../../actions/visitProfileAction";
-import { initiateSocket,validateTwitterHandle } from '../../../actions/homeAction'
+import { initiateSocket,validateTwitterHandle } from '../../../actions/homeAction';
+import socketIOClient from "socket.io-client";
 
 class Posts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             typeOfView: "list", testHandleStarted:false,
-            socketinitiated: false,handleValidated:false,
+            handleValidated:false,
             gotAllActivity: false, reducedWidth: false, reducedLittleWidth: false
         };
         this.resize = this.resize.bind(this);
         this.changeViewToList = this.changeViewToList.bind(this);
-        this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
+        // this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
         this.testHandle = this.testHandle.bind(this);
     }
-    initiateSocketLoc() {
-        this.props.initiateSocket();
-        this.setState({ socketinitiated: true });
-    }
+    // initiateSocketLoc() {
+    //     this.props.initiateSocket();
+    //     this.setState({ socketinitiated: true });
+    // }
 
     testHandle(){
         this.setState({testHandleStarted:true});
@@ -105,12 +106,27 @@ class Posts extends React.Component {
                 }
             })
         }
+       
+        
     }
     componentDidMount() {
         window.addEventListener('storage', this.reloadPage)
         window.addEventListener("resize", this.resize.bind(this));
-        
-       
+        if(this.props.donValidationHandle && !this.state.testHandleStarted && this.props.authAction){
+            this.testHandle()
+        }
+        const {socket} = this.props;
+        if( socket !==null){
+            if(!socket.connected){
+                const socketloc = socketIOClient(config.base_dir);
+                console.log("socket : ",socketloc)
+                this.props.initiateSocket(socketloc)
+            }
+        }else{
+            const socketloc = socketIOClient(config.base_dir);
+            console.log("socket : ",socketloc)
+            this.props.initiateSocket(socketloc)
+        }
         this.resize();
         if (this.props.socket !== null) {
             this.props.socket.on(config.SAVED_NEW_PROJECT, data => {
@@ -128,10 +144,9 @@ class Posts extends React.Component {
         }
     }
     render() {
-        if(this.props.donValidationHandle && !this.state.testHandleStarted && this.props.authAction) 
-            this.testHandle()
-        if (this.props.socket === null && !this.state.socketinitiated)
-            this.initiateSocketLoc();
+       
+        // if (this.props.socket === null && !this.state.socketinitiated)
+        //     this.initiateSocketLoc();
         const issuepercentage = this.state.reducedWidth ? "100%" : "59%";
         const callNotificationDiv = (<CallNotification />)
         const nav = (this.state.reducedWidth) ? (<MobNav page={!this.state.isHome ? config.VISIT_PROFILE_PAGE : config.HOME_PAGE} />) : (<Navbar page={!this.state.isHome ? config.VISIT_PROFILE_PAGE : config.HOME_PAGE} />)

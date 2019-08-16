@@ -1,5 +1,4 @@
 
-import socketIOClient from "socket.io-client";
 import {
     CREATE_SOCKET, REDUCE_WIDTH, REDUCE_LITTLE_WIDTH, PROFLE_HANDLE_ON_EXPLAIN,
     PROFILE_NOT_PRESENT_ON_TWITTER, PROFILE_PRESENT_ON_TWITTER_NOT_EXPALIN
@@ -7,11 +6,13 @@ import {
 import config from '../config/config'
 import axios from 'axios'
 
-export const initiateSocket = () => (dispatch) => {
-    const socket = socketIOClient(config.base_dir, { origins: "*" });
-    socket.on('reconnect_attempt', () => {
-        socket.io.opts.transports = ['polling', 'websocket'];
-    });
+export const initiateSocket = (socket) => (dispatch) => {
+    console.log("initialtin sockets")
+   
+  
+    // socket.on('reconnect_attempt', () => {
+    //     socket.io.opts.transports = ['polling', 'websocket'];
+    // });
     socket.on('connect_failed', function () {
         console.log("connection failed : ")
     })
