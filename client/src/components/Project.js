@@ -59,9 +59,9 @@ class Project extends Component {
   componentWillMount() {
     this.props.getAllReferral();
     this.props.explainAuthentication();
-    if(this.props.socket===null){
-      this.props.initiateSocket()
-    }
+    // if(this.props.socket===null){
+    //   this.props.initiateSocket()
+    // }
    
   }
   componentWillUnmount() {
@@ -85,16 +85,19 @@ class Project extends Component {
 }
   componentDidMount() {
     this.setState({ reducedWidth: window.innerWidth <= 700 });
+    const {socket} = this.props;
     if( socket !==null){
       if(!socket.connected){
           const socketloc = socketIOClient(config.base_dir);
           console.log("socket : ",socketloc)
           this.props.initiateSocket(socketloc)
+          this.setState({ socketinitiated: true });
       }
   }else{
       const socketloc = socketIOClient(config.base_dir);
       console.log("socket : ",socketloc)
-      this.props.initiateSocket(socketloc)
+      this.props.initiateSocket(socketloc);
+      this.setState({ socketinitiated: true });
   }
     initGA();
     loadPageView();
@@ -110,7 +113,7 @@ class Project extends Component {
     this.setState({ newIssueId: newIssueIdtemp })
     this.props.clearAnswers(issueId)
     this.props.fetchProjectbyIssue(issueId);
-    var socket = this.props.socket;
+    // var socket = this.props.socket;
     if(socket!==null){
       socket.on(config.SAVED_NEW_PROJECT, data => {
         if (data.userId === this.props.userId) {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import DisplayIssueTopBtns from './DisplayIssueTpBtns'
 import ImagesOfExplainers from './DisplayExplained';
+
 import CopyToClipboard from '../../CopytoClipboard'
 import config from '../../../../config/config';
 import { confirmAlert } from 'react-confirm-alert'; // Import

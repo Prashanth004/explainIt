@@ -106,6 +106,13 @@ class Posts extends React.Component {
                 }
             })
         }
+        if(nextProps.donValidationHandle || nextProps.authAction){
+            if(nextProps.donValidationHandle && !this.state.testHandleStarted && nextProps.authAction){
+                this.testHandle()
+            }
+        }
+
+       
        
         
     }
@@ -116,6 +123,7 @@ class Posts extends React.Component {
             this.testHandle()
         }
         const {socket} = this.props;
+        console.log("socket : ",socket)
         if( socket !==null){
             if(!socket.connected){
                 const socketloc = socketIOClient(config.base_dir);
