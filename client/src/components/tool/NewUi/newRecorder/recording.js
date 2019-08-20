@@ -112,6 +112,7 @@ class Recorder extends Component {
                 setStream(audioStream, screenStream, finalStream);
                 recorder1.startRecording();
                 startRecorder(recorder1);
+                console.log("recording : ")
                 fullStartedRecording();
             });
         })

@@ -3,6 +3,7 @@ import '../../../css/newlanding.css';
 import Setting from '../newNav/setting';
 import MobNav from '../newNav/index'
 import Navbar from '../Navbar';
+import Cotactlist from '../contactlist/contactsDisplay';
 import { setVisitProfile } from "../../../../actions/visitProfileAction";
 import HomeProjects from '../diaplyissues/displayVisitCards'
 import CallNotification from '../container/CallNotification';
@@ -14,7 +15,7 @@ import TwitterLogin from 'react-twitter-auth';
 import { connect } from 'react-redux';
 import { setIssueId } from '../../../../actions/issueActions';
 import { fetchProjectbyIssue, clearAnswers } from '../../../../actions/projectActions';
-import {twitterAuthFailure, signInWithTwitter } from '../../../../actions/signinAction';
+import { twitterAuthFailure, signInWithTwitter } from '../../../../actions/signinAction';
 import { getProfileDetails } from '../../../../actions/profileAction'
 import PropType from 'prop-types';
 import config from '../../../../config/config'
@@ -135,27 +136,32 @@ class NewHome extends Component {
 
             }
         }
-        const addToContactDiv = (this.props.isAauthenticated)?( <AddtoContact contactid={this.props.userId} />):(null)
+        const addToContactDiv = (this.props.isAauthenticated) ? (<AddtoContact contactid={this.props.userId} />) : (null)
+        const contactList = this.props.showContacts?(<div style={{width:"380px",margin:"auto",marginTop:"0px"}}><Cotactlist  /></div>):(null)
 
         return (<div className="fullHome">
-                        {nav}
-                        <div className="containerHome">
-                        <CallNotification/>
-                            <div>
-                                {profileCardElement}
-                            </div>
-                            <div className="twitterBtnDiv">
-                                {loginButton}
-                            </div>
-                            <div>
-                                {setting}
-                            </div>
-                            <div>
-                               {addToContactDiv}
-                            </div>
-                            {homeProjects}
-                        </div>
-                    </div>)  
+            {nav}
+            <CallNotification />
+            <div className="containerHome" style={{ display: "grid", gridTemplateColumns: "33% 33% 33%" }}>
+               <div></div>
+               <div>
+                <div>
+                    {profileCardElement}
+                </div>
+                <div className="twitterBtnDiv">
+                    {loginButton}
+                </div>
+                <div>
+                    {setting}
+                </div>
+                <div>
+                    {addToContactDiv}
+                </div>
+                {homeProjects}
+                </div>
+                <div>{contactList}</div>
+            </div>
+        </div>)
     }
 }
 NewHome.PropType = {
@@ -175,6 +181,7 @@ NewHome.PropType = {
 };
 const mapStateToProps = state => ({
     issues: state.issues.items,
+    showContacts:state.profileCard.showContacts,
     screenAction: state.tools.screenAction,
     newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
@@ -195,5 +202,6 @@ const mapStateToProps = state => ({
     isFullScreenRecording: state.tools.isFullScreenRecording,
 })
 
-export default connect(mapStateToProps, {creatAnsProject,setVisitProfile,  twitterAuthFailure, displayFullScrenRecord, displayFullScreShare, signInWithTwitter, restAllToolValue,    fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers,
+export default connect(mapStateToProps, {
+    creatAnsProject, setVisitProfile, twitterAuthFailure, displayFullScrenRecord, displayFullScreShare, signInWithTwitter, restAllToolValue, fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers,
 })(NewHome)

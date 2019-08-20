@@ -4,10 +4,10 @@
 .recordMainScreen{
     background-color: white;
     padding:5px;
-    width:380px;
+    width:320px;
     margin:auto;
     border-radius:5px;
-    border-style:solid;
+    border-style:none;
     border-width:0.5px;
     border-color:#dde2e2;
     font-size:14px;

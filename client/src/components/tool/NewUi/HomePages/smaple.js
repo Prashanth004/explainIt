@@ -71,8 +71,10 @@ export const ShareDiv = () => {
 export default class componentName extends Component {
   constructor(props) {
     super(props);
-    this.state = { shareFromRecord:true,ShareFromChat:false,
-      hoverLeftArrow: false, hoverRightArrow: false, displayRecord: false, displayChat: false, displayShare: true };
+    this.state = {
+      shareFromRecord: true, ShareFromChat: false,
+      hoverLeftArrow: false, hoverRightArrow: false, displayRecord: false, displayChat: false, displayShare: true
+    };
     this.displayRecordAct = this.displayRecordAct.bind(this);
     this.displayChatAct = this.displayChatAct.bind(this);
     this.displayShareActFromRec = this.displayShareActFromRec.bind(this);
@@ -83,35 +85,39 @@ export default class componentName extends Component {
     this.setState({ displayRecord: true, displayChat: false, displayShare: false })
   }
   displayShareActFromRec() {
-    this.setState({ displayRecord: false, displayChat: false, displayShare: true,
-      shareFromRecord:true,ShareFromChat:false,})
+    this.setState({
+      displayRecord: false, displayChat: false, displayShare: true,
+      shareFromRecord: true, ShareFromChat: false,
+    })
   }
   displayShareActFromChat() {
-    this.setState({ displayRecord: false, displayChat: false, displayShare: true,
-      shareFromRecord:false,ShareFromChat:true, })
+    this.setState({
+      displayRecord: false, displayChat: false, displayShare: true,
+      shareFromRecord: false, ShareFromChat: true,
+    })
   }
   displayChatAct() {
     this.setState({ displayRecord: false, displayChat: true, displayShare: false })
   }
   render() {
-    const rightArrow = (!this.state.displayChat)?( <div style={{ width: "180px", margin: "auto", textAlign: "center" }} onClick={!this.state.displayRecord ? this.displayChatAct : this.displayShareActFromRec}>
-    <div >
-      <div style={{ width: "50px", margin: "auto", height: "50px", borderTopStyle: "solid", borderLeftStyle: "solid", transform: "rotate(135deg)" }}></div>
-    </div>
-  </div>):(<div></div>)
-  const leftArroe = (!this.state.displayRecord)?(<div style={{ width: "180px", margin: "auto", textAlign: "center" }} onClick={!this.state.displayChat ? this.displayRecordAct : this.displayShareActFromChat} >
-  <div style={{ width: "50px", margin: "auto", height: "50px", borderTopStyle: "solid", borderLeftStyle: "solid", transform: "rotate(-45deg)" }}></div>
-</div>):(<div></div>);
+    const rightArrow = (!this.state.displayChat) ? (<div style={{ width: "180px", margin: "auto", textAlign: "center" }} onClick={!this.state.displayRecord ? this.displayChatAct : this.displayShareActFromRec}>
+      <div >
+        <div style={{ width: "50px", margin: "auto", height: "50px", borderTopStyle: "solid", borderLeftStyle: "solid", transform: "rotate(135deg)" }}></div>
+      </div>
+    </div>) : (<div></div>)
+    const leftArroe = (!this.state.displayRecord) ? (<div style={{ width: "180px", margin: "auto", textAlign: "center" }} onClick={!this.state.displayChat ? this.displayRecordAct : this.displayShareActFromChat} >
+      <div style={{ width: "50px", margin: "auto", height: "50px", borderTopStyle: "solid", borderLeftStyle: "solid", transform: "rotate(-45deg)" }}></div>
+    </div>) : (<div></div>);
     const displayDiv = this.state.displayShare ? (
-      this.state.shareFromRecord?(<div className="storyContainer animated slideInRight faster">
-        <ShareDiv /></div>):(<div className="storyContainer animated slideInLeft faster">
-        <ShareDiv /></div>)) : (this.state.displayRecord ? (
-          <div className="storyContainer animated slideInLeft faster">
-            <RecordDiv />
-          </div>
-        ) : (<div className="storyContainer animated slideInRight faster"><ChatDiv /></div>))
+      this.state.shareFromRecord ? (<div className="storyContainer animated slideInRight faster">
+        <ShareDiv /></div>) : (<div className="storyContainer animated slideInLeft faster">
+          <ShareDiv /></div>)) : (this.state.displayRecord ? (
+            <div className="storyContainer animated slideInLeft faster">
+              <RecordDiv />
+            </div>
+          ) : (<div className="storyContainer animated slideInRight faster"><ChatDiv /></div>))
     return (
-      <div style={{ width:"70%", margin:"auto",minHeight: "95vh", paddingTop: "50px", display: "grid", gridTemplateColumns: "25% 50% 25%" }}>
+      <div style={{ width: "70%", margin: "auto", minHeight: "95vh", paddingTop: "50px", display: "grid", gridTemplateColumns: "25% 50% 25%" }}>
         <Helmet>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
         </Helmet>
@@ -119,7 +125,7 @@ export default class componentName extends Component {
         <div>
           {displayDiv}
         </div>
-       {rightArrow}
+        {rightArrow}
       </div>
     )
   }

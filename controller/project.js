@@ -27,11 +27,17 @@ id: rn(options),
                             success: 1,
                             data: data
                         })
+                    }).catch(error=>{
+                        console.log("projects : editReason : error : ",error)
+                        res.status(500).send({
+                            success:0,
+                            error: error
+                        })
                     })
 
             })
             .catch(err => {
-                console.log(err)
+                console.log("project.js : editReason : error : ",err)
                 res.status(500).send({
                     success: 1,
                     error: err
@@ -48,7 +54,7 @@ exports.updateProjectpublic = function (req, res) {
             })
         })
         .catch(err => {
-            console.log("error : ", err)
+            console.log("project.js updateProjectPublic : error : ", err)
             res.status(500).send({
                 success: 0,
                 msg: err
@@ -66,7 +72,7 @@ exports.updateProjectprivate = function (req, res) {
             })
         })
         .catch(err => {
-            console.log("error : ", err)
+            console.log("project.js : updateProjectPrivate : error : ", err)
             res.status(500).send({
                 success: 0,
                 msg: err
@@ -87,7 +93,6 @@ exports.saveProject = function (req, res) {
         })
     }
     else if (req.files) {
-        console.log("req.files : ", req.files)
         if (typeof req.fileSizeError != "undefined") {
             res.status(413).send({
                 "success": 0,
@@ -113,26 +118,31 @@ exports.saveProject = function (req, res) {
                     ]
                 }
                 shell.series(commands, function (err) {
-                    fs.unlink(__dirname + '/../' + req.files[0].filename + 'audio.mp3', (err) => {
-                        if (err) console.log("err : ", err)
-                    })
-                    fs.unlink(__dirname + '/../' + req.files[1].filename + 'audiofinal.mp3', (err) => {
-                        if (err) console.log("err : ", err)
-                    })
-                    fs.unlink(__dirname + '/../public/audio/' + req.body.projectName + '_final.mkv', (err) => {
-                        if (err) console.log("err : ", err)
-                    })
-                    fs.unlink(__dirname + '/../public/audio/' + req.files[0].filename, (err) => {
-                        if (err) console.log("err : ", err)
-                    })
-                    fs.unlink(__dirname + '/../public/audio/' + req.files[1].filename, (err) => {
-                        if (err) console.log("err : ", err)
-                    })
                     if (!err) {
+                        fs.unlink(__dirname + '/../' + req.files[0].filename + 'audio.mp3', (err) => {
+                            if (err) console.log("err : ", err)
+                        })
+                        fs.unlink(__dirname + '/../' + req.files[1].filename + 'audiofinal.mp3', (err) => {
+                            if (err) console.log("err : ", err)
+                        })
+                        fs.unlink(__dirname + '/../public/audio/' + req.body.projectName + '_final.mkv', (err) => {
+                            if (err) console.log("err : ", err)
+                        })
+                        fs.unlink(__dirname + '/../public/audio/' + req.files[0].filename, (err) => {
+                            if (err) console.log("err : ", err)
+                        })
+                        fs.unlink(__dirname + '/../public/audio/' + req.files[1].filename, (err) => {
+                            if (err) console.log("err : ", err)
+                        })
                         videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv'
-                        saveToDb(req, res, videopathName)
+                        try{
+                            saveToDb(req, res, videopathName)
+                        }
+                        catch(error){
+                            console.log("error : ",error)
+                        }
+                      
 
-                        //adonsdovjn
                     }
                     else {
                         console.log("error : ", err)
@@ -146,19 +156,29 @@ exports.saveProject = function (req, res) {
                 } else {
                     commands = ['ffmpeg -i ' + __dirname + '\/..\/public\/audio\/' + req.files[0].filename + ' -vf drawtext=fontfile=BebasNeue-Regular.ttf:fontcolor=white:shadowcolor=black:shadowx=3:shadowy=3:fontsize=25:text=@' + req.user.twitterhandle + ':x=10:y=60 ' + __dirname + '\/..\/public\/audio\/' + req.body.projectName + '_wat_final.mkv']
                 } shell.series(commands, function (err) {
-                    fs.unlink(__dirname + '/../public/audio/' + req.files[0].filename, (err) => {
-                        if (err) console.log("err : ", err)
-                    })
+                 
                     if (!err) {
-                        videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv'
-                        saveToDb(req, res, videopathName)
+                        fs.unlink(__dirname + '/../public/audio/' + req.files[0].filename, (err) => {
+                            if (err) console.log("err : ", err)
+                        })
+                        videopathName = config.domain + '/public/audio/' + req.body.projectName + '_wat_final.mkv';
+                        try{
+                            saveToDb(req, res, videopathName)
+                        }
+                        catch(error){
+                            console.log("error : ",error)
+                        }
                     } else {
                         console.log("error : ", err)
+                        
                         res.status(500).send({ success: 0, msg: err })
                     }
                 })
             }
         }
+    }
+    else{
+        res.status(500).send({ success: 0, msg: "bad happened" })
     }
 }
 
@@ -184,20 +204,26 @@ const saveToDbWithReferral = (req, res, videopathName, referralid) => {
             public: Number(req.body.public),
             referralid: referralid
         }).then((response) => {
-            database.db.one('select * from projects where projectid = $1', req.body.projectid)
-                .then(data => {
-                    console.log("creating projects : ", data)
-                    res.io.emit(key.SAVED_NEW_PROJECT, {
-                        "userId": req.user.id,
-                        "project": data
-                    })
-                    res.status(201).send({
-                        success: 1,
-                        data: data
-                    })
-                }).catch(error => { console.log("error : ", error) })
+            database.db.oneOrNone('select * from projects where projectid = $1', req.body.projectid)
+            .then(data => {
+                  
+                        res.io.emit(key.SAVED_NEW_PROJECT, {
+                            "userId": req.user.id,
+                            "project": data
+                        })
+                        res.status(201).send({
+                            success: 1,
+                            data: data
+                        })
+                }).catch(error => {
+                    console.log("project : saveToDbWithReferral : error : ", error)
+                    res.status(500).send({
+                        success:0,
+                        error:error
+                    });
+                })
         }).catch((err) => {
-            console.log("error : ", err)
+            console.log("project : saveToDbWithReferral : error : ", err)
             res.status(500).send({ success: 0, msg: "some error occured while saving you idea. Please try again agter some time" })
         })
 }
@@ -207,32 +233,26 @@ const saveToDb = (req, res, videopathName) => {
         database.db.manyOrNone('select * from referral where UPPER(referreetwitter) = $1 and issue = $2', [(req.user.twitterhandle).toUpperCase(), req.body.issueID])
             .then(referralData => {
                 if (referralData.length !== 0) {
+                    console.log("refer pesent")
                     saveToDbWithReferral(req, res, videopathName, referralData[0].id);
                 }
                 else {
+                    console.log("refer not pesent")
                     saveToDbWithReferral(req, res, videopathName, null);
                 }
-            })
-            .catch(err => {
-                console.log("error : ", err)
-                saveToDbWithReferral(req, res, videopathName, null);
+            }).catch(err => {
+               console.log("project.js : saveToDb : error : ",err);
+                res.status(500).send({
+                    success:0,
+                    error:error
+                })
+                // saveToDbWithReferral(req, res, videopathName, null);
             })
     }
     else {
+        console.log("refer not pesent question project")
         saveToDbWithReferral(req, res, videopathName, null);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 exports.storeItems = function (req, res) {
@@ -249,14 +269,20 @@ exports.storeItems = function (req, res) {
                     msg: "data successfullt stored"
                 })
             }).catch(err => {
-                console.log("not success full... error : " + err)
+                console.log("project.js : storeItems : error " + err)
                 res.status(500).send({
                     success: 0,
                     msg: err
                 })
             })
         }
-        )
+        ).catch(error=>{
+            console.log("project.js : storeItems : error " + error);
+            res.status(500).send({
+                success: 0,
+                msg:err
+            })
+        })
 }
 
 exports.deleteItems = function (req, res) {
@@ -268,7 +294,7 @@ exports.deleteItems = function (req, res) {
             })
         })
         .catch(err => {
-            console.log("error : ", err)
+            console.log("projects : deleteItems : error : ", err)
             res.status(500).send({
                 success: 0,
                 msg: err
@@ -284,7 +310,7 @@ exports.retrieveItems = function (req, res) {
                 msg: data
             })
         }).catch(err => {
-            console.log("not success full... error : " + err)
+            console.log("project.js : retrieveItems : error : " + err)
             res.status(500).send({
                 success: 0,
                 msg: err
@@ -297,8 +323,8 @@ exports.getProjectByUser = (req, res) => {
     database.db.manyOrNone('select * from projects where userid = $1 ORDER BY time ASC', req.user.id)
         .then(data => {
             res.status(200).send({ success: 1, data: data })
-        })
-        .catch(error => {
+        }).catch(error => {
+            console.log("project.js : getProjectByUser : error : ",error);
             res.status(500).send({ success: 0, msg: error })
         })
 }
@@ -306,8 +332,8 @@ exports.getAllProject = function (req, res) {
     database.db.manyOrNone('select * from projects ORDER BY time ASC')
         .then(data => {
             res.status(200).send({ success: 1, data: data })
-        })
-        .catch(error => {
+        }).catch(error => {
+            console.log("project.js : getAllProject : error : ",error)
             res.status(500).send({ success: 0, msg: error })
         })
 
@@ -322,9 +348,8 @@ exports.getIssueById = function (req, res) {
                 success: 1,
                 data: projects
             })
-        })
-        .catch(error => {
-            // console.log("error : ", error)
+        }).catch(error => {
+            console.log("project.js : getIssueById : error : ",error);
             res.status(500).send({
                 sucess: 0,
                 msg: error
@@ -349,6 +374,7 @@ exports.getProjectById = function (req, res) {
             })
         })
         .catch(error => {
+            console.log("project.js : getProjectById : error :",error);
             res.status(500).send({
                 sucess: 0,
                 msg: error
@@ -375,17 +401,22 @@ exports.getAllProjectByIssue = function (req, res) {
                         data: projects
                     })
                 }
+                else {
+                    res.status(500).send({
+                        success: 0
+                    })
+                }
             }
             else {
                 res.status(500).send({
-                    success: 0,
-                    errors: err
+                    success: 0
                 })
             }
 
 
         })
         .catch(err => {
+            console.log("project.js : getAllProjectByIssue :error :",err);
             res.status(500).send({
                 success: 0,
                 errors: err

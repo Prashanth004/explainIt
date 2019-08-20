@@ -4,6 +4,8 @@ import RecordRTC from 'recordrtc'
 import { Button } from 'reactstrap'
 // import bigInt from "big-integer";
 // import Peer from 'peerjs';
+import { FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
+
 import { resetValues } from '../../../actions/twitterApiAction'
 import Dummy from './dummy';
 import DownloadExt from './container/DownloadExt'
@@ -333,10 +335,15 @@ class ScreenRecorder extends Component {
         var self = this;
 
         if (event.data.sourceId !== undefined) {
-            if (config.CALL_LOGS)
+            console.log("self.props.screenAction : ",self.props.screenAction);
+            console.log("FULL_SCREEN_SHARE : ",FULL_SCREEN_SHARE);
+            // if(self.props.screenAction === FULL_SCREEN_SHARE){
+                if (config.CALL_LOGS)
                 console.log("recieved source id : ", event.data.sourceId)
             self.props.saveSourceId(event.data.sourceId)
             self.startScreenShareSend()
+           
+            // }
             return
         }
         if (event.data.type === config.PERMISSION_DENIED) {
@@ -466,6 +473,7 @@ class ScreenRecorder extends Component {
         })
     }
     }
+
     startConnectionTimer() {
       
         this.setState({ startTimer: true });
@@ -482,6 +490,7 @@ class ScreenRecorder extends Component {
 
     }
     componentWillUnmount() {
+        console.log("mouonting the enitre screen")
         this.props.turnnotbusy(this.props.twitterUserId);
         registerEndToBrowser()
         window.removeEventListener("beforeunload", this.onUnload);
@@ -567,36 +576,17 @@ validateTurn(iceServers){
                         {
                             "urls": "stun:global.stun:3478?transport=udp"
                         },
-            
+
                         {
-                            'urls': 'turn:139.59.5.116:3478?transport=udp',
-                            'credential': 'bookmane',
-                            'username': 'bookmane'
-            
-            
-                        },
-                        {
-                            'urls': 'turn:139.59.5.116:3478?transport=tcp',
+                            'urls': 'turn:167.71.230.132:5349?transport=udp',
                             'credential': 'bookmane',
                             'username': 'bookmane'
                         },
                         {
-                            'urls': 'turn:139.59.5.116:5349?transport=udp',
+                            'urls': 'turn:167.71.230.132:5349?transport=tcp',
                             'credential': 'bookmane',
                             'username': 'bookmane'
-                        },
-                        {
-                            'urls': 'turn:139.59.5.116:5349?transport=tcp',
-                            'credential': 'bookmane',
-                            'username': 'bookmane'
-                        },
-                      {
-                    "urls": [
-                    "turn:13.250.13.83:3478?transport=udp"
-                    ],
-                    "username": "YzYNCouZM1mhqhmseWk6",
-                    "credential": "YzYNCouZM1mhqhmseWk6"
-                    }]
+                        }]
             }
           
         })
@@ -1189,9 +1179,10 @@ validateTurn(iceServers){
         const closeFunction = (this.props.isSceenSharing) ? this.props.reStoreDefault :
             this.props.closeImidiate
         var linkElement = null;
-        const closeBtn = (this.props.isSceenSharing || this.props.explainBy !== config.null) ?
-            (null) : (((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
-                <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>))
+        // const closeBtn = (this.props.isSceenSharing || this.props.explainBy !== config.null) ?
+        //     (null) : (((this.state.doneCalling || this.state.answerFrmPeer) && !this.state.stopedSharing) ? (null) : (
+        //         <div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>))
+        const closeBtn = (this.props.isSharingCompleted)?(<div className="topBtnsActivity"><Button close onClick={closeFunction} /></div>):(null)
         if (this.props.isSceenSharing) {
 
             var recieverProfPic = (this.props.twirecieverPrfilePic === null) ?
@@ -1426,12 +1417,14 @@ validateTurn(iceServers){
                 </span>
 
             </div>)
+        const shareDivStyle=(this.props.isSharingCompleted || this.props.isSceenSharing)?
+        ({paddingTop:"0px"}):({paddingTop:"20px"})
 
         return (!this.state.mobile)?((this.state.chrome)?((this.state.isInstalled) ? (
             (this.state.currentAtionStatus === null) ?
             (<div>
                     {audioWarning}
-                    <div className="LinkDisplay" >
+                    <div className="LinkDisplay" style={shareDivStyle} >
                         {closeBtn}
                         {linkElement}
                         {shareTimeElements}
@@ -1504,7 +1497,8 @@ const mapStateToProps = state => ({
     busyStatus: state.visitProfile.busyStatus,
     linkToAccess: state.projects.linkToAccess,
     explainBy: state.explain.explainBy,
-    socket:state.home.socket
+    socket:state.home.socket,
+    screenAction: state.tools.screenAction,
 
     // secondScreenShareStarted:state.secondScreenShare.secondScreenShareStarted
 

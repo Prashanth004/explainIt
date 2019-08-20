@@ -22,6 +22,7 @@
     margin:auto;
     border-style:none;
     border-bottom-style:solid;
+    /* border-radius:5px; */
     border-bottom-width:1px;
     border-color:rgba(167, 167, 167, 0.5);
     background-color: white;

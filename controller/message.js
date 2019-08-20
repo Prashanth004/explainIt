@@ -23,7 +23,7 @@ exports.checkReplyInfo = (req, res) => {
                 else {
                     res.status(200).send({
                         success: 0,
-                       data:data
+                        data: data
                     })
                 }
             }
@@ -36,7 +36,7 @@ exports.checkReplyInfo = (req, res) => {
             }
         })
         .catch(err => {
-            console.log("error : ", err)
+            console.log("message.js : checkReplyInfo : error : ", err)
             res.status(200).send({
                 success: 0,
                 error: err
@@ -47,8 +47,8 @@ exports.checkReplyInfo = (req, res) => {
 
 exports.getUnreadNumber = (req, res) => {
     database.db.manyOrNone('select * from activities where unread =$1 and touser=$2',
-    [1, req.user.id])
-    .then(data=>{
+        [1, req.user.id])
+        .then(data => {
             if (data !== null) {
                 res.status(200).send({
                     success: 1,
@@ -63,6 +63,7 @@ exports.getUnreadNumber = (req, res) => {
             }
         })
         .catch(error => {
+            console.log("message.js : getUnreadNumber : error : ", error)
             res.status(500).send({
                 success: 0,
                 error: error
@@ -86,7 +87,7 @@ exports.changeUnread = (req, res) => {
 
         })
         .catch(error => {
-            console.log("error: ", error)
+            console.log("message.js : changeUnread: error ", error)
             res.status(500).send({
                 success: 0,
                 error: error
@@ -102,7 +103,7 @@ exports.replyaction = (req, res) => {
     var creatorUserName = "";
     var replierUserNamer = "";
     var replierTwitterhandle = "";
-        
+
     var MailSubject = "Notification for reply to your Recording"
     var issueId = req.body.issueid;
     //fetching project details
@@ -127,7 +128,7 @@ exports.replyaction = (req, res) => {
                                             subject + "'</p><br/> <a href='" + link + "'>click here</a>"
                                         userController.sendEmail(creatorEmail, MailSubject, htmlContent)
                                     }
-                                    else{
+                                    else {
                                         res.status(500).send({
                                             success: 0,
                                             msg: config.FAILED_TO_GET_REPLIER_DETAILS
@@ -135,7 +136,7 @@ exports.replyaction = (req, res) => {
                                     }
                                 })
                                 .catch(error => {
-                                    console.log("error : ", error)
+                                    console.log("message.js : replyActions : error : ", error)
                                     res.status(500).send({
                                         success: 0,
                                         error: error,
@@ -143,7 +144,7 @@ exports.replyaction = (req, res) => {
                                     })
                                 })
                         }
-                        else{
+                        else {
                             res.status(500).send({
                                 success: 0,
                                 msg: config.FAILED_TO_GET_CREATOR_DETAILS
@@ -151,7 +152,7 @@ exports.replyaction = (req, res) => {
                         }
                     })
                     .catch(error => {
-                        console.log("error : ", error)
+                        console.log("message.js : replyAction : select users form email : error : ", error)
                         res.status(500).send({
                             success: 0,
                             error: error,
@@ -159,16 +160,16 @@ exports.replyaction = (req, res) => {
                         })
                     })
             }
-            else{
+            else {
                 res.status(500).send({
                     success: 0,
-                   
+
                     msg: config.FAILED_TO_GET_ISSUE_DETAILS
                 })
             }
         })
         .catch(error => {
-            console.log("error : ", error)
+            console.log("message.js : replyAction : getProject of an issue : error : ", error)
             res.status(500).send({
                 success: 0,
                 error: error,
@@ -185,48 +186,31 @@ exports.saveMessage = function (req, res) {
     var rand = rn(options)
     var unreadDefault = 1
     let dateNow = new Date().toString()
-    database.db.oneOrNone('insert into activities (fromuser,touser,activity,subject,link,duration,unread)'+
-    'values (${fromuser},${touser},${activity}, ${subject}, ${link},${duration},${unread})',
-{
-    fromuser:req.user.id,
-    touser:req.body.touser,
-    activity:req.body.activity,
-    subject:req.body.subject,
-    link:req.body.link,
-    duration:null,
-    unread:unreadDefault
-}).then(data=>{
-    database.db.oneOrNone('select * from activities where link = $1',req.body.link)
-    .then(data=>{
-        res.io.emit(config.NEW_MESSAGE, {
-            "touser": req.body.touser,
-            "fromuser":req.user.id,
-            "data" :data
-        })
-    })
-  
-                res.status(201).send({
-                    success: 1,
-                    data: data
-                })
+    database.db.oneOrNone('insert into activities (fromuser,touser,activity,subject,link,duration,unread)' +
+        'values (${fromuser},${touser},${activity}, ${subject}, ${link},${duration},${unread}) RETURNING id',
+        {
+            fromuser: req.user.id,
+            touser: req.body.touser,
+            activity: req.body.activity,
+            subject: req.body.subject,
+            link: req.body.link,
+            duration: null,
+            unread: unreadDefault
+        }).then(data => {
+            database.db.oneOrNone('select * from activities where id = $1',data.id)
+                .then(data => {
+                    res.io.emit(config.NEW_MESSAGE, {
+                        "touser": req.body.touser,
+                        "fromuser": req.user.id,
+                        "data": data
+                    })
+                }).catch(error => { console.log("message.js : saveMessageerror : error ", error) });
 
-    // database.db.oneOrNone('insert into message (id,link,subject,fromuser, touser,unread)' +
-    //     'values(${id},${link},${subject}, ${fromuser}, ${touser},${unread})',
-    //     {
-    //         id: rand,
-    //         link: req.body.link,
-    //         subject: req.body.subject,
-    //         fromuser: req.body.fromUser,
-    //         touser: req.body.touser,
-    //         unread: 1
-    //     }).then(function (data) {
-    //         res.io.emit(config.NEW_MESSAGE, {
-    //             "touser": req.body.touser
-    //         })
-    //         res.status(201).send({
-    //             success: 1,
-    //             data: data
-    //         })
+            res.status(201).send({
+                success: 1,
+                data: data
+            })
+
             database.db.oneOrNone('select * from users where id = $1', req.body.touser)
                 .then(toData => {
                     if (toData) {
@@ -239,26 +223,44 @@ exports.saveMessage = function (req, res) {
                                     var htmlContent = "<p>You have got a new recorded message from @" + fromData.twitterhandle + ".</p><br/><p><a href='" + req.body.link + "'>click here</a> to view</p>"
                                     userController.sendEmail(toData.email, subject, htmlContent)
                                 }
+                                else {
+                                    res.status(500).send({
+                                        success: 0
+                                    })
+                                }
 
                             })
                             .catch(err => {
-                                console.log(err)
+                                console.log("message.js : saveMessage : error : ", err);
+                                res.status(500).send({
+                                    success: 0,
+                                    error: err
+                                })
                             })
+                    }
+                    else {
+                        res.status(500).send({
+                            success: 0
+                        })
                     }
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log("message.js : saveMessage : error : ", err);
+                    res.status(500).send({
+                        success: 0,
+                        error: err
+                    })
                 })
 
 
         }).catch(function (error) {
-            // console.log(error)
+            console.log("message.js : saveMessage : error : ", error)
             res.status(500).send({
                 success: 0,
                 error: error
             })
         })
-        
+
 
 }
 
@@ -271,20 +273,18 @@ exports.getMessage = function (req, res) {
                     data: data
                 })
             }
-            else{
+            else {
                 res.status(200).send({
                     success: 0,
-                    data: data
+    
                 })
             }
         }).catch(err => {
-            console.log("error : ", err)
-            if (err) {
+            console.log("message.js : getMessage : error : ", err)
                 res.status(500).send({
                     success: 0,
                     msg: err
-                })
-            }
+                });
         })
 
 }

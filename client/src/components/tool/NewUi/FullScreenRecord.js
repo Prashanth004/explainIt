@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
 
 import PreScreenRecord from './screenRecord/preScreenRecord'
 import RecordRTC from 'recordrtc';
@@ -109,6 +110,7 @@ class FullScreenRecorder extends Component {
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic, this.props.fromId, this.props.twitterUserId, subject)
     }
     startRecording() {
+        console.log("starting recording")
         var self = this;
         var constraints = null;
         registerRecordToBrowser();
@@ -156,10 +158,11 @@ class FullScreenRecorder extends Component {
                 var recorder1 = RecordRTC(finalStream, {
                     type: 'video'
                 });
-                self.props.setStream(audioStream, screenStream, finalStream)
+                self.props.setStream(audioStream, screenStream, finalStream);
+                console.log("started recording")
+                self.props.fullStartedRecording();
                 recorder1.startRecording();
                 self.props.startRecorder(recorder1);
-                self.props.fullStartedRecording();
                 self.setState({
                     audioStream: audioStream,
                     screenStream: screenStream,
@@ -189,6 +192,7 @@ class FullScreenRecorder extends Component {
         var self = this;
         window.addEventListener("beforeunload", this.onUnload);
         function postMessageHandler(event) {
+            console.log("event : ",event)
             if (event.data.type) {
                 if (event.data.type === config.END_RECORD_FROM_EXTENSION) {
                     self.recordScreenStop()
@@ -206,8 +210,14 @@ class FullScreenRecorder extends Component {
                 self.setState({ permissonDenied: true })
             }
             else if (event.data.sourceId !== undefined) {
+                console.log("self.props.screenAction : ",self.props.screenAction);
+                console.log("FULL_SCREEN_SHARE : ",FULL_SCREEN_RECORD);
+                // if(self.props.screenAction === FULL_SCREEN_RECORD){
+
+                console.log("event for recording: ",event)
                 self.props.saveSourceId(event.data.sourceId)
                 self.startRecording();
+                // }
             }
 
         }
@@ -285,6 +295,7 @@ class FullScreenRecorder extends Component {
     }
 
     toggle(time) {
+     
         this.setState({recordTime:time});
         var curTime = {
             'hours': 0,
@@ -558,7 +569,7 @@ class FullScreenRecorder extends Component {
 
         return (!this.state.mobile)?(
             (this.state.isInstalled) ? (
-            this.state.chrome?((<div className="recordMainScreen"  >
+            this.state.chrome?((<div className="recordMainScreen" style={{borderStyle:"none",margin:"none"}} >
                 {closeBtn}
                 <div >
                     {recordingElements}
@@ -610,7 +621,8 @@ const mapStateToProps = state => ({
     shareid:state.explain.shareid,
     topicIssueId:state.explain.issueId,
     currentTime: state.recorder.currentTime,
-  
+    screenAction: state.tools.screenAction,
+
 
 })
 

@@ -8,7 +8,8 @@ import TweetSuggest from '../../TweetSug';
 import {cancelDialedOption} from '../../../../../actions/dialActions'
 import config from '../../../../../config/config';
 import { setNoOfMinutes, updateCurrentTime } from '../../../../../actions/callAction'
-import { NoInternet, InValidHandle, SelfShareInfo, NotPresentOnExplain } from './noInternet'
+import { NoInternet, InValidHandle,  NotPresentOnExplain } from './noInternet';
+import {SelfShareInfo}  from './noInternet';
 import { getProfileByTwitterHandle } from "../../../../../actions/visitProfileAction";
 import { getRecpientId, getTwitterHandles, resetValues } from '../../../../../actions/twitterApiAction'
 
@@ -85,6 +86,7 @@ class tweetSearch extends Component {
     }
 
     updateTwitterHandleBox(e, value) {
+       
         this.setState({
             twitterHandle: value,
             selfShare: false,
@@ -99,6 +101,10 @@ class tweetSearch extends Component {
 
     changeTweetStateNeg() {
         this.setState({
+            tweetTested: false,
+            selfShare: false,
+            doneTweeting: true,
+            twitterHandle: '',
             tweetTested: false
         })
     }
@@ -156,20 +162,20 @@ class tweetSearch extends Component {
             fetchProfile, isPresentInExplain, twitterHandleValid } = this.props;
         if (doneFetching && !doneTweeting && fetchProfile && !noInternet && !selfShare && !!isPresentInExplain)
             this.updateInfo()
-        const spanElement = ((limitExce) ? (
+        const spanElement = ((limitExce) ? (<div>
             <span className="spanElement" >Maximum duration for the call is {maxTimeForVideo} minutes</span>
-        ) : (negNumber) ? (
+            </div>) : (negNumber) ? (<div>
             <span className="spanElement" >Duration of the call can not be negetive number or zero</span>
-        ) : noText ? (
+            </div>) : noText ? (<div>
             <span className="spanElement" >Duration of the call to be number of minutes only</span>
-        ) : emptyNumber ? (
+            </div>) : emptyNumber ? (<div>
             <span className="spanElement" >Duration of the call to be number of minutes only</span>
-        ) : ((empty) ? (
+            </div>) : ((empty) ? (<div>
 
             <span className="spanElement">Cant be empty</span>
-        ) : (emptyUserName ? (
+            </div>) : (emptyUserName ? (<div>
             <span className="spanElement">User name cant be empty</span>
-        ) : (null))));
+            </div>) : (null))));
 
         const nameForReciever = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN) ? (<span>
            <TweetSuggest
@@ -182,7 +188,8 @@ class tweetSearch extends Component {
 
 
         const AcceptTopicDiv = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN)?(
-            <div className="TwiValidInfo" style={{width:"80%", margin:"auto"}}>
+            <div style={{width:"85%", margin:"auto"}}>
+
                     <AcceptTopic 
                     action={config.FULL_SCREEN_SHARE}
                     tweetTheMessage={this.testHandle} />
@@ -191,7 +198,8 @@ class tweetSearch extends Component {
         const validatinginfo = (tweetTested && !doneTweeting) ? (
             (doneFetching && fetchProfile) ?
                 (noInternet ? (<NoInternet />) : ((!twitterHandleValid ? (<InValidHandle />) :
-                    (selfShare ? (<SelfShareInfo changeTweetStateNeg={this.changeTweetStateNeg} />) :
+                    (selfShare ? (<SelfShareInfo changeTweetStateNeg={this.changeTweetStateNeg}
+                        closeImidiate={this.props.closeImidiate} />) :
                         (!isPresentInExplain ? (<NotPresentOnExplain
                             changeTweetStateNeg={this.changeTweetStateNeg}
                             isVisitProfile={isVisitProfile}
@@ -202,7 +210,7 @@ class tweetSearch extends Component {
         // && !noInternet && !selfShare && isPresentInExplain
         const mainContainer = (tweetTested && !doneTweeting && doneFetching && fetchProfile && (!isPresentInExplain || selfShare ||noInternet )) ?(null):(<div>
             <div className="startShare">
-                <p style={{ fontSize: "13px", fontWeight: "500" }}>Screen share with {nameForReciever} for<InputNumber
+                <p style={{ fontSize: "13px", fontWeight: "600" }}>Screen share with {nameForReciever} for<InputNumber
                         empty={emptyNumber}
                         emptyUserName={emptyUserName}
                         limitOfChar={maxTimeForVideo}
@@ -213,7 +221,7 @@ class tweetSearch extends Component {
                         noText={noText} /> mins <br/>
                 </p>
                 {spanElement}
-               
+              
                 {AcceptTopicDiv}
             </div>
            

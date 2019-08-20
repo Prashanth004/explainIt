@@ -182,7 +182,7 @@ class tweetSearch extends Component {
                 classOfMenu="screeShareMenu"
             /></span>) : (<span>send to @{twitterHandle}</span>);
         const AcceptTopicDiv = (this.props.explainBy !== config.SHARE_SCREEN_EXPALIN && this.props.explainBy !== config.RECORD_SCREEEN_EXPLAIN) ? (
-            <div className="TwiValidInfo" style={{ width: "80%", margin: "auto" }}>
+            <div className="TwiValidInfo" style={{ width: "92%", margin: "auto" }}>
                 <AcceptTopic
                     action={config.FULL_SCREEN_RECORD}
                     selfSave={this.selfSave}

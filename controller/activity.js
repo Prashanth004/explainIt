@@ -22,14 +22,16 @@ exports.addActivity = (req,res)=>{
             "fromuser":req.user.id,
             "data" :data
         })
+    }).catch(error=>{
+        console.log("activity.js : addActivity : socket.emit : error : ",error);
+        return
     })
-  
     res.status(201).send({
         success:1,
         data:data
     })
 }).catch(error=>{
-    console.log("error : ",error)
+    console.log("activity.js : addActivity : error : ",error)
     res.status(500).send({
         success:0,
         error:error
@@ -45,7 +47,8 @@ exports.getAcitivies=(req,res)=>{
             data:data
         })
     }).catch(error=>{
-        console.log("error : ",error)
+        console.log("error : ",error);
+        console.log("activities : getActivities ");
         res.status(500).send({
             success:0,
             error:error
@@ -62,6 +65,7 @@ exports.getAllActivities=(req,res)=>{
         })
     })
     .catch(error=>{
+        console.log("activities.js : getAllActivities : error : ",error);
         res.status(500).send({
             success:0,
             error:error
@@ -77,6 +81,7 @@ exports.deleteActivity = (req,res)=>{
             data:data
         })
         .catch(error=>{
+            console.log("activity.js : deleteActivity : error : ",error);
             res.status(500).send({
                 success:0,
                 error:error

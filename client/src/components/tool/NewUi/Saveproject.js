@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import config from '../../../config/config'
 import InputBox from './InputBox';
-import {saveTopicOfTheCall} from '../../../actions/callAction'
-// import { FiSave, FiX } from "react-icons/fi";
+import { saveTopicOfTheCall } from '../../../actions/callAction'
+import { FiVideo, FiMail, FiCopy } from "react-icons/fi";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 
@@ -18,12 +18,12 @@ class SaveProjects extends Component {
             textValue: this.props.topicOfTheCall,
             privatePublic: false,
             callRecText: "Call",
-            updatedText : false
+            updatedText: false
         }
         this.changeInputValue = this.changeInputValue.bind(this);
         this.SaveTopic = this.SaveTopic.bind(this);
         this.SaveTopicSave = this.SaveTopicSave.bind(this);
-        this.setTextValue =this.setTextValue.bind(this);
+        this.setTextValue = this.setTextValue.bind(this);
     }
     componentDidMount() {
         if (this.props.shareOrRec === config.RECORDING) {
@@ -38,7 +38,7 @@ class SaveProjects extends Component {
         }
         this.setState({
             limitOfChar: config.PROJECT_TEXT_LIMIT,
-           
+
 
         })
     }
@@ -46,7 +46,7 @@ class SaveProjects extends Component {
     SaveTopic() {
         if (this.state.textValue !== null) {
             if ((this.state.textValue).length > 0) {
-                if ((this.state.textValue).length < 201) {
+                if ((this.state.textValue).length < config.PROJECT_TEXT_LIMIT) {
                     this.props.saveTopicOfTheCall(this.state.textValue)
                     this.props.tweetTheMessage()
                 }
@@ -70,7 +70,7 @@ class SaveProjects extends Component {
     SaveTopicSave() {
         if (this.state.textValue !== null) {
             if ((this.state.textValue).length > 0) {
-                if ((this.state.textValue).length < 201) {
+                if ((this.state.textValue).length < config.PROJECT_TEXT_LIMIT) {
                     this.props.saveTopicOfTheCall(this.state.textValue)
                     this.props.selfSave()
                 }
@@ -91,15 +91,16 @@ class SaveProjects extends Component {
             })
         }
     }
-    setTextValue(){
+    setTextValue() {
         this.setState({
             textValue: this.props.topicOfTheCall,
-            updatedText:true
+            updatedText: true
         })
     }
 
     changeInputValue(e) {
-        var textValuetemp = this.state.textValue
+        var textValuetemp = this.state.textValue;
+
         if (textValuetemp !== null && textValuetemp.length > this.state.limitOfChar) {
             this.setState({
                 limitExce: true
@@ -120,41 +121,52 @@ class SaveProjects extends Component {
 
     render() {
 
-        if(this.props.topicOfTheCall.length!==0 && !this.state.updatedText){
+        if (this.props.topicOfTheCall.length !== 0 && !this.state.updatedText) {
             this.setTextValue()
         }
+        const saveButton = this.props.action === config.FULL_SCREEN_RECORD ?
+            <span className="hint--top" aria-label="Record Screen">
+                <FiVideo style={{ fontSize: "22px" }} onClick={this.SaveTopic} />
+            </span>
+            :
+            <span className="hint--top" aria-label="Share Screen">
+                <FiCopy style={{ fontSize: "22px" }} onClick={this.SaveTopic} />
+            </span>
 
         return (
-        <div className="ActivityBelow">
-            <InputBox
+            <div className="ActivityBelow">
+                <InputBox
                     limitExce={this.state.limitExce}
                     empty={this.state.empty}
                     limitOfChar={this.state.limitOfChar}
                     changeInputValue={this.changeInputValue}
                     textValue={this.state.textValue}
-                    submit = {this.SaveTopic}
-                    placeHolder={(this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN) ?"Description" : (this.props.action === config.FULL_SCREEN_RECORD)?"Topic for the recording":"Topic for screen share"}
+                    submit={this.SaveTopic}
+                    placeHolder={(this.props.explainBy === config.SHARE_SCREEN_EXPALIN || this.props.explainBy === config.RECORD_SCREEEN_EXPLAIN) ? "Description" : (this.props.action === config.FULL_SCREEN_RECORD) ? "Topic for the recording" : "Topic for screen share"}
                 />
-                <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>{this.props.action ===config.FULL_SCREEN_RECORD?"Start Recording":"Share Screen"}</button>
-                <br/>
+                {saveButton}
+                {/* <button style={{ marginTop: "15px" }} className="buttonLight" onClick={this.SaveTopic}>{this.props.action ===config.FULL_SCREEN_RECORD?"Start Recording":"Share Screen"}</button> */}
+
+                <br />
                 {/* {recordDelf} */}
             </div>
-             
-         )
+
+        )
     }
 }
 
 
 SaveProjects.PropType = {
-    saveTopicOfTheCall :PropType.func.isRequired,
+    saveTopicOfTheCall: PropType.func.isRequired,
 
 };
 const mapStateToProps = state => ({
     isSaved: state.issues.successCreation,
     explainBy: state.explain.explainBy,
-    topicOfTheCall:state.call.topicOfTheCall
+    topicOfTheCall: state.call.topicOfTheCall,
+    callerTwitterHandle: state.auth.twitterHandle,
 })
 
-export default connect(mapStateToProps, {saveTopicOfTheCall})(SaveProjects)
+export default connect(mapStateToProps, { saveTopicOfTheCall })(SaveProjects)
 
 

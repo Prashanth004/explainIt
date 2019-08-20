@@ -45,8 +45,7 @@ exports.onBoardUser = function (req,res){
      }
       client.get('users/show.json', params, function(error,body ,response){
          if(error!==null){
-             console.log("error is happening here")
-             console.log("error : ",error)
+           console.log("user.js onBoardUser :  error : ",error);
             res.status(200).send({
                 success:0
             })
@@ -81,16 +80,20 @@ exports.onBoardUser = function (req,res){
                                     subject : config.WELCOME_SUBJECT,
                                     link: config.LINK_RECORDING,
                                     unread:1
-                                })
-                    }).then(data=>{
+                                }).then(data=>{
+
+                                }).catch("error : ",error)
                     }).catch(error=>{
-                        console.log("failed in adding activity : ",error)
+                        console.log("user.js : onBoardUser : error : ",err)
                     })
-                    .catch(error=>{
-                    })
+                  
+                }
+                else{
+                    console
                 }
             })
             .catch(err=>{
+                console.log("user.js : onBoardUser : error : ",err)
             })
         }
 })
@@ -122,7 +125,7 @@ exports.getBusyStatus = (req,res)=>{
         }
     })
     .catch(err=>{
-        console.log("error : ".err)
+        console.log("user.js : getBusyStatus : error :".err)
         res.status(500).send({
             success:0,
            msg:err
@@ -139,7 +142,7 @@ const UpdateBusy =(res,queryObj)=>{
         })
     })
     .catch(error=>{
-        console.log("error : ",error)
+        console.log("user.js : UpdateBusy : error : ",error)
         res.status(500).send({
             success:0,
             msg:error
@@ -148,9 +151,7 @@ const UpdateBusy =(res,queryObj)=>{
 }
 
 exports.turnBusy = (req,res)=>{
-    console.log("###################")
-    console.log("req.user.id : ", req.user.id);
-    console.log("req.body.recieverCallId : ",req.body.recieverCallId);
+   
     var query1 = {
         'sql':'update users SET busy = $1 WHERE id = $2',
         'data': [1, req.user.id]
@@ -166,17 +167,21 @@ exports.turnBusy = (req,res)=>{
         }
         database.db.oneOrNone(query1.sql,query1.data)
         .then(data=>{
-            console.log("change one to busy")
             database.db.oneOrNone(query2.sql,query2.data)
             .then(data=>{
-                console.log("change another one to busy")
                 res.status(202).send({
                     success:1
                 })
             })
+            .catch(error=>{
+                consnole.log("user.js : turnBusy : error : ",error);
+                res.status(500).send({
+                    success:0
+                })
+            })
         })
         .catch(error=>{
-            console.log("error : ",error)
+            console.log("user.js : turnBusy :  error : ",error)
             res.status(500).send({
                 success:0,
                 msg:error
@@ -212,9 +217,15 @@ exports.turnNotBusy =(req,res)=>{
                     success:1
                 })
             })
+            .catch(err=>{
+                console.log("user.js : turnNotBusy : error : ",err);
+                res.status(500).send({
+                    success:1
+                })
+            })
         })
         .catch(error=>{
-            console.log("error : ",error)
+            console.log("user.js : turnNotBusy : error : ",err);
             res.status(500).send({
                 success:0,
                 msg:error
@@ -258,6 +269,7 @@ exports.updateProfile = function (req, res) {
                     }
                 })
                 .catch(err => {
+                    console.log("user.js : updateProfile : error : ",err);
                     res.status(200).send({
                         success: 1,
                         data: req.user
@@ -266,6 +278,7 @@ exports.updateProfile = function (req, res) {
 
         })
         .catch(error => {
+            console.log("user.js : updateProfile : error : ",error)
             res.status(500).send({
                 sussecc: 0,
                 error: error
@@ -288,7 +301,7 @@ exports.getUserByEmail = function (req, res) {
                 })
             }
         }).catch(err => {
-            console.log("error : ", err)
+            console.log("user.js getUserByEmail : error : ", err)
             if (err) {
                 res.status(500).send({
                     success: 0,
@@ -299,10 +312,6 @@ exports.getUserByEmail = function (req, res) {
 }
 exports.getEmailStatus = (req, res) => {
     database.db.oneOrNone('select * from users where id = $1', req.user.id)
-    // res.status(200).send({
-    //     success: 1,
-    //     data: data
-    // })
         .then(data => {
             if (data) {
                 if (data.email!==null) {
@@ -326,7 +335,7 @@ exports.getEmailStatus = (req, res) => {
                
         })
         .catch(error => {
-            console.log("error : ",error)
+            console.log("user.js : getEmailStatus : ",error)
             res.status(500).send({
                 success: 0,
                 error: error
@@ -338,12 +347,15 @@ exports.getActivationStatus = (req, res) => {
         .then(data => {
             if (data) {
                 if (data!==null) {
-
                     res.status(200).send({
                         success: 1,
                         data: data
                     })
-
+                }
+                else{
+                    res.status(200).send({
+                        success: 0
+                    })
                 }
             }
             else
@@ -352,6 +364,7 @@ exports.getActivationStatus = (req, res) => {
                 })
         })
         .catch(error => {
+            console.log("user.js : getActivationStatus : error : ",error);
             res.status(500).send({
                 success: 0,
                 error: error
@@ -368,7 +381,7 @@ exports.updateOnlineStatus = (req, res) => {
             })
         })
         .catch(error => {
-            console.log("error : ", error)
+            console.log("user.js : updateOnlineStatus : error : ", error)
             res.status(500).send({
                 success: 0,
                 error: error
@@ -451,6 +464,11 @@ exports.resend = (req, res) => {
                 res.status(500).send({ success: 1, msg: 'A verification email has not been sent to ' + req.body.email + '.' })
             }
         })
+        .catch(error=>{
+            console.log("user.js : resend : error : ",error);
+            res.status(500).send({ success: 1, msg: 'A verification email has not been sent to ' + req.body.email + '.' })
+
+        })
 
 }
 exports.sendotp = (req, res) => {
@@ -477,6 +495,7 @@ exports.sendotp = (req, res) => {
             });
         })
         .catch(err => {
+            console.log("user.js : sendotp : error :  ",err);
             res.status(500).send({ msg: err.message });
         })
 
@@ -491,10 +510,9 @@ exports.emailActivation = (req, res) => {
             user.activation = 1;
             var token = createToken(user);
             res.json({ success: 1, token: 'JWT ' + token, user: req.user });
-
         })
         .catch(error => {
-            console.log(error)
+            console.log("user.js : emailActivation : error : ",error);
             res.status(500).send({
                 success: 0,
                 error: error
@@ -521,7 +539,7 @@ exports.getUserByTwitteHandle = function (req, res) {
                 })
             }
         }).catch(err => {
-            console.log("error : ", err)
+            console.log("user.js : getUserByTwitteHandle : error : ", err)
             if (err) {
                 res.status(500).send({
                     success: 0,
@@ -548,13 +566,11 @@ exports.getUserById = function (req, res) {
                 })
             }
         }).catch(err => {
-            console.log("error : ", err)
-            if (err) {
+            console.log("user.js : getUserById : error : ", err)
                 res.status(500).send({
                     success: 0,
                     msg: err
                 })
-            }
         })
 }
 
@@ -567,6 +583,7 @@ exports.activate = (req,res)=>{
         })
     })
     .catch(error=>{
+        console.log("user.js : activate : error : ",error)
         res.status(500).send({
             success:0,
             error:error
@@ -584,6 +601,7 @@ exports.deactivate = (req,res)=>{
         })
     })
     .catch(error=>{
+        console.log("user.js : deactivate : error : ",error);
         res.status(500).send({
             success:0,
             error:error
@@ -599,7 +617,7 @@ exports.getAllUsers = (req, res)=>{
             })
         })
         .catch(error => {
-            console.log("error : ",error)
+            console.log("user.js : getAllUsers : error : ",error)
             res.status(500).send({
                 success: 0,
                 error: error
@@ -640,7 +658,8 @@ exports.authenticate = function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err)
+            console.log("user.js : authenticate : error : ",err);
+            res.status(401).send({ success: 0, message: 'Authentication failed. Passwords did not match.' });
         })
 }
 
@@ -671,6 +690,7 @@ exports.createUser = function (req, res, next) {
                                 res.status(200).send({ "success": 1, msg: "successfully created" })
                             })
                             .catch((err) => {
+                                console.log("user.js : createUser : error : ",err);
                                 res.send({ success: 0, "err": err })
                             }
                             )
@@ -679,6 +699,10 @@ exports.createUser = function (req, res, next) {
                     else {
                         res.send({ success: 0, msg: "the email already exists" })
                     }
+                })
+                .catch(err=>{
+                    console.log("user.js : createUser : error : ",err)
+                    res.send({ success: 0, msg: "passwords do not match" })
                 })
 
         }

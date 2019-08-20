@@ -127,10 +127,9 @@ const peerserver = ExpressPeerServer(server, optionsForPeerjs);
 app.use('/peerjs', peerserver);
 
 peerserver.on('connection', (client) => { 
-  console.log("client : ",client)
+  console.log("peer client : ",client)
 });
 server.on('disconnect', (client) => { 
-  console.log("client : ",client)
 });
 
 
@@ -138,7 +137,6 @@ server.on('disconnect', (client) => {
 
 
 app.get('/signin/*',(req,res)=>{
-  console.log("signin Page visited");
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
     if (err) {
@@ -154,7 +152,6 @@ app.get('/signin/*',(req,res)=>{
 
 });
 app.get('/project/:projectid', (req,res)=>{
-  console.log("Project page visited")
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
     if (err) {
@@ -162,7 +159,6 @@ app.get('/project/:projectid', (req,res)=>{
     }
     database.manyOrNone('select * from projects where issueid = $1', req.params.projectid)
         .then(projects => {
-          console.log("projects.videofilepath : ",projects[0].videofilepath)
             data = data.replace(/\$TW_TYPE/g, 'player');
             data = data.replace(/\$TW_URL/g, key.frontEndDomain);
             data = data.replace(/\$TW_TITLE/g,"Explanation happened on Explain");
@@ -173,8 +169,7 @@ app.get('/project/:projectid', (req,res)=>{
             res.send(result);
         })
         .catch(error => {
-          console.log("eror : ",error)
-          // console.log("projects.videofilepath : ",projects.videofilepath)
+         
           data = data.replace(/\$TW_TYPE/g, 'player');
           data = data.replace(/\$TW_URL/g, key.frontEndDomain);
           data = data.replace(/\$TW_TITLE/g,"Explanation happened on Explain");
@@ -204,7 +199,6 @@ app.get('/project/:projectid', (req,res)=>{
 
 // app.use(express.static('client/build'))
 app.get('/', function(req, res) {
-  console.log("home page visited")
   const filepath = path.resolve(__dirname,'client', 'build', 'index.html');
   fs.readFile(filepath, 'utf8', function (err,data) {
     if (err) {
@@ -232,7 +226,7 @@ app.get('*', function(request, response) {
 
 
 io.on("connection", socket => {
-  console.log("new client conneted : ")
+  console.log("new socket client conneted : ")
  
     socket.on(key.LINK_TO_CALL,(data)=>{
     io.emit(key.LINK_TO_CALL, data); // Emitting a new message. It will be consumed by the client
@@ -300,7 +294,7 @@ io.on("connection", socket => {
       io.emit(key.RETRYCALL, data)
     })
   socket.on("disconnect", () => {
-    console.log("disconnected")
+    console.log(" socket disconnected")
   });
 });
 

@@ -22,10 +22,10 @@ import {hideContactAct} from '../../../../actions/ProfileCardAction';
           <ContactSearch />
           {contacts}
         </div>):(<div className="contactContainer">
-        <div className="topBtnsActivity"><Button close onClick={hideContactAct} /></div>
         <div className="noContacts">
         <p>No contacts to display.</p>
-        <p>Visit profiles to add contacts</p></div></div>))
+        {/* <p>Visit profiles to add contacts</p> */}
+        </div></div>))
   }
 }
 

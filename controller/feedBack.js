@@ -14,25 +14,25 @@ exports.saveFeedBackFiles =(req,res)=>{
     }
     else if (req.files) {
         if(typeof req.fileSizeError != "undefined") {
-            console.log("File too large")
             res.status(413).send({
                 "success":0,
                 "error":"File too large"});// to display filesize error
         } else {
-            console.log("sending the file values")
-            console.log(" req.files[0].filename : ",req.files[0].filename)
             videopathName =    config.domain + '/public/audio/' + req.files[0].filename ;
             res.status(201).send({
                 success:1,
                 filename : videopathName
             })
         }
-
+    }
+    else{
+        res.status(500).send({
+            success:0,
+        })
     }
 }
 
 exports.saveFeedBack = (req,res)=>{
-    console.log("req.body : ",req.body);
       database.db.oneOrNone('insert into feedback(userid,experience,usability, suggestion,videofilepath)' +
       'values(${userid},${experience},${usability},${suggestion},${videofilepath})',
       {
@@ -46,7 +46,7 @@ exports.saveFeedBack = (req,res)=>{
             success:1,
         })
     }).catch(error=>{
-        console.log("error : ",error)
+        console.log("feedbackjs : saveFeedBAck : error : ",error);
         res.status(500).send({
             success:0,
             error:error
@@ -55,7 +55,6 @@ exports.saveFeedBack = (req,res)=>{
 }
 
 exports.getFeedBackById = (req,res)=>{
-    console.log("req.params.id : ",req.params.id);
     database.db.oneOrNone('select * from feedback where id= $1',req.params.id)
     .then(function(data){
         console.log("contacts : ",data)
@@ -72,7 +71,7 @@ exports.getFeedBackById = (req,res)=>{
         }
     })
     .catch(function(error){
-        console.log("error : ",error)
+        console.log("feedback.js : getFeedBackById : error : ",error)
         res.status(500).send({
             success:0,
             error:error
@@ -89,7 +88,7 @@ exports.getAllFeedBack = (req,res)=>{
             data:data
         })
     }).catch(function(error){
-        console.log("error : ",error)
+        console.log("feedback.js : getAllFeedBack : error : ",error)
         res.status(500).send({
             success:0,
             error:error
@@ -98,7 +97,6 @@ exports.getAllFeedBack = (req,res)=>{
 }
 
 exports.getMyFeedBack = (req,res)=>{
-    console.log("req.params.id : ",req.params.id);
     database.db.manyOrNone('select * from feedback where userid = $1',req.user.id)
     .then(function(data){
         console.log("data : ",data)
@@ -115,7 +113,7 @@ exports.getMyFeedBack = (req,res)=>{
         }
     })
     .catch(function(error){
-        console.log("error : ",error)
+        console.log(" feedback.js : getMyFeedBack : error : ",error)
         res.status(500).send({
             success:0,
             error:error

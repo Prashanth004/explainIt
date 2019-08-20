@@ -37,10 +37,17 @@ var optionsRand = {
     
                     })
                     
+                }).catch(error=>{
+                    console.log("issue.js : saveIssue : error : ",error);
+                    res.status(500).send({
+                        success:0,
+                        error:error
+                    })
                 })
               
 
             }).catch((err)=>{
+                console.log("issue.js : saveIssue : error : ",err)
                 res.status(500).send({
                     success:0,
                     error:err
@@ -49,7 +56,6 @@ var optionsRand = {
   }
 
   exports.getOneIssue = function(req,res){
-      console.log("isssue")
     database.db.oneOrNone('select * from issues  where id = $1',req.params.id)
     .then(data=>{
         res.status(200).send({
@@ -57,6 +63,7 @@ var optionsRand = {
             msg:data
         })
   }).catch(function(err){
+      console.log("issue.js : getOneIssue : error : ",err);
       res.status(500).send({
           success:0,
           error: err
@@ -71,6 +78,7 @@ exports.getAllIssues = function (req, res) {
             res.status(200).send({success:1,data:data})
         })
         .catch(error =>{
+            console.log("issue.js : getAllIssues : error : ",error);
             res.status(500).send({success:0, msg:error})
         })
         

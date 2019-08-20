@@ -16,10 +16,9 @@ const client = new Twitter({
       client.get('users/show.json', params, function(error,body ,response){
 
          if(error!==null){
-             console.log("error : ",error)
+            console.log("tweetActions : getid : error : ",error)
             res.status(200).send({
                 success:0,
-               
             })
          }  
         
@@ -107,8 +106,6 @@ const client = new Twitter({
       });
   }
   exports.getUserDetails = (req,res)=>{
-      console.log("i reaching here");
-      console.log("req.params.twitterid : ",req.params.twitterid)
       database.db.manyOrNone('select * from usertwitter  where twitterid = $1',req.params.twitterid)
       .then(data=>{
           console

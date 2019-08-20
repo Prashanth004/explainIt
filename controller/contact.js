@@ -1,8 +1,5 @@
 var database = require('../app');
 exports.saveContact = function(req,res){
-   console.log("reaching herer")
-   console.log("req.user.id",req.user.id);
-   console.log("req.body.contactid",req.body.contactid);
     if(req.user.id === req.body.contactid){
         res.status(450).send({
             success:0,
@@ -22,6 +19,8 @@ exports.saveContact = function(req,res){
             success:1,
         })
     }).catch(error=>{
+        console.log("error : ",error);
+        console.log("contactjs : saveContact")
         res.status(500).send({
             success:0,
             error:error
@@ -37,7 +36,8 @@ exports.getAllContact = function(req,res){
             data:data
         })
     }).catch(function(error){
-        console.log("error : ",error)
+        console.log("error : ",error);
+        console.log("contactjs : getAllCOntacts")
         res.status(500).send({
             success:0,
             error:error
@@ -56,6 +56,7 @@ exports.getContactById = function(req,res){
                 data:data
             })
         else{
+
             res.status(200).send({
                 success:0,
                 data:null
@@ -63,7 +64,8 @@ exports.getContactById = function(req,res){
         }
     })
     .catch(function(error){
-        console.log("error : ",error)
+        console.log("error : ",error);
+        console.log("contactjs  : getContactById")
         res.status(500).send({
             success:0,
             error:error

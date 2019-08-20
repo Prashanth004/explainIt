@@ -6,10 +6,10 @@ const spanStyle={
   alignSelf:"right",
   textAlign:"right",
   float:"right",
-  color:"#333",
+  color:"#43a8ac",
   fontWeight:"200",
   marginTop:"-5px",
-  zIndex:"1000"
+  zIndex:"10000000"
 
 }
 
@@ -47,7 +47,6 @@ export default class componentName extends Component {
     OnInput(){
         this.textArea.style.height = 'auto';
         this.textArea.style.height = (this.textArea.scrollHeight) + 'px';
-
     }
   render() {
     const {textvalue,inputClass,placeholder,textAlign} = this.props;
@@ -56,8 +55,7 @@ export default class componentName extends Component {
     return (
       <div>
         <textarea
-       
-        rows = "auto"
+        rows = "1"
         ref={a => this.textArea = a}
          value={textvalue}
         onChange={this.changeText}

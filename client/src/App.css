@@ -60,6 +60,12 @@ div{
   margin-bottom:0px;
 }
 
+textarea::placeholder {  
+                  
+  /* Firefox, Chrome, Opera */ 
+  text-align: center; 
+} 
+
 a{
   color:white
 }

@@ -1,21 +1,20 @@
 .LinkDisplay{
+    min-height:180px;
+    border-style:none;
     width:100%;
     margin:auto;
     color:#333;
     font-size:14px;
     padding:0px;
-    /* min-height:60vh; */
+    padding-top:50px;
     background-color:  white;
     text-align: center;
     align-content: center;
     align-items: center;
     border-radius:5px;
-    border-style:solid;
-
+    /* border-style:solid; */
     border-width:0.5px;
     border-color: #bebebe81;
-    /* box-shadow: 0px 0px 5px 2px rgba(82, 81, 81, 0.02); */
-    /* box-shadow: 0px 0px 5px 0.5px rgba(95, 95, 95, 0.068); */
 }
 /* .LinkDisplay:hover{
     border-color:#8dc7c9;
@@ -62,8 +61,8 @@
 .DisconMessage{
     width:80%;
     margin:auto;
-    margin-top:10px;
-    padding-top:20px;
+    margin-top:5px;
+    padding-top:2px;
     font-size:14px;
     font-weight: 400;
 }

@@ -77,7 +77,7 @@ export default function(state=initialState, action){
             return{
                 ...state,
                 showProfile:false,
-                showActivity:false,
+                showActivity:true,
             }
 
         default :

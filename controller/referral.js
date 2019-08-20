@@ -14,22 +14,23 @@ exports.createReferral = (req,res)=>{
         referreeid:req.body.referreeid,
         issue:req.body.issue
     }).then(data=>{
-        console.log("data : ",data)
         res.status(201).send({
             success:1,
             data:data
         })
         database.db.one('select * from referral where id = $1',data.id)
         .then(data1=>{
-            console.log("data : ",data1)
             res.io.emit(config.NEW_MESSAGE, {
                 "touser": data1.referrer,
                 "fromuser":data1.problemowner,
                 "data" :data1
             })
         })
+        .catch(error=>{
+            console.log("referral.js : createReferral : error : ",error)
+        })
     }).catch(error=>{
-        console.log("referal saving error : ",)
+        console.log("referral.js : createReferral : error : ",error)
         res.status(500).send({
             success:0,
             error:error
@@ -46,7 +47,7 @@ exports.getReferralById = (req,res)=>{
         })
     })
     .catch(error => {
-        console.log("error : ", error)
+        console.log("referral.js : getReferralById : error : ", error)
         res.status(500).send({
             sucess: 0,
             msg: error
@@ -64,6 +65,7 @@ exports.gatAllReferral = (req,res) =>{
         })
     })
     .catch(error=>{
+        console.log("referral.js : gatAllReferral : error : ",error);
         res.state(500).send({
             success:0,
             error:error

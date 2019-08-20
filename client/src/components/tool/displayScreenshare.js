@@ -376,23 +376,14 @@ window.close();
                         {
                             "urls": "stun:global.stun:3478?transport=udp"
                         },
+
                         {
-                            'urls': 'turn:139.59.5.116:3478?transport=udp',
+                            'urls': 'turn:167.71.230.132:5349?transport=udp',
                             'credential': 'bookmane',
                             'username': 'bookmane'
                         },
                         {
-                            'urls': 'turn:139.59.5.116:3478?transport=tcp',
-                            'credential': 'bookmane',
-                            'username': 'bookmane'
-                        },
-                        {
-                            'urls': 'turn:139.59.5.116:5349?transport=udp',
-                            'credential': 'bookmane',
-                            'username': 'bookmane'
-                        },
-                        {
-                            'urls': 'turn:139.59.5.116:5349?transport=tcp',
+                            'urls': 'turn:167.71.230.132:5349?transport=tcp',
                             'credential': 'bookmane',
                             'username': 'bookmane'
                         }]

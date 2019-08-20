@@ -22,12 +22,34 @@ color:rgba(51, 51, 51, 0.938);
     margin-top:5px;
     /* text-align: right; */
 }
+.unfold{
+    
+        position: absolute;
+        width: 0;
+        height:0;
+        border-style: solid;
+        border-width: 1em 1em 0 0 ;
+        border-color: transparent #43a8ac transparent  transparent ;
+    
+}
+.fold{
+    border-top: solid #43a8ac 1.5em;
+  border-right: solid transparent 1.5em;
+  position: absolute;
+  bottom: -21px;
+  right: -16px;
+  width: 0px;
+  height: 0px;
+  /* -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+  -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.3); */
+  box-shadow: -2px -2px 4px 0px rgba(0,0,0,0.3);
+}
 
 .labelContainerMain{
     padding-left:15px;
     padding-right:15px;
     padding-top:5px;
-    height: 80px;
+    /* height: 80px; */
     border-style:solid;
     border-color:#bebebe81;
     border-width:1px;

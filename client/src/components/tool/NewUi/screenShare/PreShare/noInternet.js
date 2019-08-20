@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { FiArrowLeft } from "react-icons/fi";
 import ProfileNotOnExplain from "../../ProfileNotOnTwitter/ProfileNotOnExplain"
 import CopyToClipboard from '../../../CopytoClipboard';
@@ -15,17 +16,20 @@ export const InValidHandle = ()=>{
     </div>)
 }
 
+
 export const SelfShareInfo = (props)=>{
+
+
     return(<div>
         <span style={{
            float: "left",
            fontSize: "15px",
-           marginTop:"-35px"
+           marginTop:"-15px"
        }}>
-           <FiArrowLeft  onClick={props.changeTweetStateNeg} />
+           <FiArrowLeft  onClick={props.closeImidiate} />
        </span>
        <div className="TwiValidInfo">
-       <p style={{fontWeight:"500"}}>You have entered your own twitter handle</p>
+       <p style={{fontWeight:"500"}}>You have entered your own twitter handle</p>       
        </div>
    </div>)
 }
@@ -52,3 +56,5 @@ export const NotPresentOnExplain = (props) =>{
         </div>
     </div>)
 }
+
+

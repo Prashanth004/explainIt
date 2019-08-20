@@ -63,7 +63,7 @@ const Section1 = (props) => {
                         limit={200}
                         changeFunction={changeWorks} inputClass="inputboxes fullView" />
                         <div style={{textAlign:"center",fontSize:"12px",color:"rgba(51, 51, 51, 0.589)"}}>
-                            {recordDiv}
+                            {/* {recordDiv} */}
                         </div>
                         <div style={{textAlign:"center", marginTop:"10px"}}>
                     <button  className="nextButton" onClick={uploadData}><FiSave style={{fontSize:"18px", marginTop:"-3px"}}/></button>
