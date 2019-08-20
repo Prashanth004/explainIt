@@ -134,7 +134,7 @@ class SaveProjects extends Component {
             </span>
 
         return (
-            <div className="ActivityBelow">
+            <div className="ActivityBelow" style={{marginTop:"25px"}}>
                 <InputBox
                     limitExce={this.state.limitExce}
                     empty={this.state.empty}

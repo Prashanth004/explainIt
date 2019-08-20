@@ -567,21 +567,20 @@ class FullScreenRecorder extends Component {
 
         }
 
-        return (!this.state.mobile)?(
-            (this.state.isInstalled) ? (
-            this.state.chrome?((<div className="recordMainScreen" style={{borderStyle:"none",margin:"none"}} >
+        return (!this.state.mobile)?
+    this.state.chrome?(
+                (this.state.isInstalled) ? (<div className="recordMainScreen" style={{borderStyle:"none",margin:"none"}} >
                 {closeBtn}
                 <div >
                     {recordingElements}
                 </div>
                 {postShareElements}
-            </div>)
-        ) : (<div>
+            </div>) : (<div>
             <DownloadExt />
-        </div>)):((this.state.firefox)?(<div>{closeBtn}  <p>We don't support this browser for now.</p></div>):
+        </div>)) :((this.state.firefox)?(<div>{closeBtn}  <p>We don't support this browser for now.</p></div>):
         (<p>We dont support this browser for now</p>)
             
-        )):(<div>{closeBtn}Please use desktop version to continue</div>)
+        ):(<div>{closeBtn}Please use desktop version to continue</div>)
     }
 }
 FullScreenRecorder.PropType = {

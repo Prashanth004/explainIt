@@ -1,10 +1,10 @@
 import React from 'react'
 const DwnloadStyle = {
- borderStyle:"solid",
+ borderStyle:"none",
  borderWidth:"1px",
  borderRadius:"4px",
  borderColor:"#ddd",
- width:"380px",
+ width:"280px",
  margin:"auto",
  backgroundColor:"white",
  padding:"20px",
