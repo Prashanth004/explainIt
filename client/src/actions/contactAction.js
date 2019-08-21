@@ -160,6 +160,60 @@ export const getAllContacts = ()=>(dispatch)=>{
     })
 }
 
+export const getAllContactsById = (id)=>(dispatch)=>{
+    var token = JSON.parse(localStorage.getItem('token'));
+    var contactData =[];
+        axios({
+        method:'get',
+        url:config.base_dir+'/api/contact/id/'+id,
+        headers:{
+            "Authorization":token,
+        },
+    }).then(response=>{
+        var promises = [];
+        if(response.status === 200 || response.status ===204){
+            contactData = response.data.data
+            var getUserDatils = new Promise(function(resolve, reject){
+                contactData.forEach(function(projects, index){
+               promises.push(axios.get(config.base_dir+'/api/users/id/'+projects.contactid))
+            })
+            axios.all(promises).then(function(results) {
+               results.forEach(function(response, index) {
+                   if(response.status===200){
+                       const newTestJson = JSON.parse(JSON.stringify(contactData));
+                               newTestJson[index]['profilepic']=response.data.data.profilepic;
+                               newTestJson[index]['username']=response.data.data.username;
+                               newTestJson[index]['twitterhandle']=response.data.data.twitterhandle;
+                               newTestJson[index]['goodat']=response.data.data.goodat;
+                               newTestJson[index]['bio']=response.data.data.bio;
+                               newTestJson[index]['online']=response.data.data.online;
+                               newTestJson[index]['busy']=response.data.data.busy;
+                               contactData =newTestJson
+                   }
+               })
+                dispatch({
+                    type:GOT_ALL_CONTACTS,
+                    data:contactData
+                })
+            }).catch(error=>{
+                console.log("contactAction : getAllContacts : error : ",error);
+            })
+        })
+        getUserDatils.then(function(ansProj){
+        })
+        .catch(error=>{
+            console.log("error : ",error)
+        })
+         }
+    }).catch(error=>{
+        dispatch({
+            type:GOT_ALL_CONTACTS_FAILED,
+            error:error
+        })
+    })
+}
+
+
 export const addNewContactActivity =(touser)=>dispatch=>{
     var token = JSON.parse(localStorage.getItem('token'));
     var data={

@@ -39,7 +39,7 @@ class Fromref extends Component {
                 }
             }
             }).catch(error=>{
-                // console.log("toRef.js : ComponentDidMount : error : ",error)
+                console.log("toRef.js : ComponentDidMount : error : ",error)
             });
 
         }
@@ -64,7 +64,7 @@ class Fromref extends Component {
                 })
             }
         }).catch(error=>{
-            // console.log("fromRef : componentDidMount : error : ",error)
+            console.log("fromRef : componentDidMount : error : ",error)
         });
         
 

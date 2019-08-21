@@ -45,8 +45,24 @@ exports.getAllContact = function(req,res){
     })
 }
 
+exports.getAllContactById = function(req,res){
+    database.db.manyOrNone('select * from contacts where profileid = $1',req.params.id)
+    .then(data=>{
+        res.status(200).send({
+            success:1,
+            data:data
+        })
+    })
+    .catch(error=>{
+        console.log("contact.js : getAllContactById : error : ",error);
+        res.status(500).send({
+            success:0,
+            error:error
+        })
+    })
+}
+
 exports.getContactById = function(req,res){
-    console.log(" i ma reaching the right place")
     database.db.oneOrNone('select * from contacts where profileid = $1 and contactid =$2',[req.user.id,req.params.id])
     .then(function(data){
         console.log("contacts : ",data)

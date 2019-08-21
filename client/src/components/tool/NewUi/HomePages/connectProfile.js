@@ -9,6 +9,7 @@ import HomeProjects from '../diaplyissues/displayVisitCards'
 import CallNotification from '../container/CallNotification';
 import AddtoContact from '../contactlist/addToContact'
 import '../../../css/NewSignin.css';
+import {getAllContactsById} from '../../../../actions/contactAction'
 import { displayFullScrenRecord, displayFullScreShare } from '../../../../actions/toolActions'
 import { creatAnsProject } from '../../../../actions/projectActions'
 import TwitterLogin from 'react-twitter-auth';
@@ -31,6 +32,7 @@ class NewHome extends Component {
             isHome: false,
             currentAtionStatus: null,
             reducedWidth: false,
+            gotNewContact:false
         }
         this.saveVideoData = this.saveVideoData.bind(this);
         this.reloadPage = this.reloadPage.bind(this);
@@ -52,6 +54,7 @@ class NewHome extends Component {
     componentDidMount() {
         this.setState({ reducedWidth: window.innerWidth <= 700 });
         var self = this;
+        this.props.getAllContactsById(this.props.visitProfileid);
         window.addEventListener("resize", this.resize.bind(this));
         function postMessageHandler(event) {
             if (event.data.sourceId !== undefined) {
@@ -80,6 +83,15 @@ class NewHome extends Component {
         const currentAtionStatus = JSON.parse(localStorage.getItem('currentAction'));
         this.setState({ currentAtionStatus: currentAtionStatus });
         this.props.setVisitProfile(this.props.twiHand);
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.visitProfileid){
+            if(!this.state.gotNewContact){
+                this.props.getAllContactsById(nextProps.visitProfileid);
+                this.setState({gotNewContact:true})
+            }
+          
+        }
     }
 
 
@@ -186,6 +198,7 @@ const mapStateToProps = state => ({
     newissueIem: state.issues.newissueIem,
     isAauthenticated: state.auth.isAuthenticated,
     profileid: state.auth.id,
+    visitProfileid:state.home.id,
     profilePic: state.auth.profilePic,
     userName: state.auth.userName,
     myissues: state.profile.myIssues,
@@ -203,5 +216,5 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-    creatAnsProject, setVisitProfile, twitterAuthFailure, displayFullScrenRecord, displayFullScreShare, signInWithTwitter, restAllToolValue, fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers,
+    creatAnsProject, setVisitProfile, twitterAuthFailure, displayFullScrenRecord, getAllContactsById,displayFullScreShare, signInWithTwitter, restAllToolValue, fetchIssues, cancelSuccess, saveExtensionDetails, saveSourceId, fetchProjectbyIssue, setIssueId, getProfileDetails, clearAnswers,
 })(NewHome)

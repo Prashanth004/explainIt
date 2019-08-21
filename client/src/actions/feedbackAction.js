@@ -138,9 +138,7 @@ export const getFeedBackValididty = ()=>(dispatch)=>{
                     }) 
                 }
             }
-
-              
-                
+               
             else{
                 dispatch({
                     type : UPDATE_FEDDBACK_TEST,
