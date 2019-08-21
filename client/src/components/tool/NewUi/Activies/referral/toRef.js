@@ -19,7 +19,7 @@ class Fromref extends Component {
     componentDidMount() {
         const { referralAct, userData } = this.props;
         var token = JSON.parse(localStorage.getItem('token'));
-        console.log("refereal Act : ",referralAct)
+        // console.log("refereal Act : ",referralAct)
         var newData = userData.filter(user => user.key === referralAct.problemowner);
         if (newData.length === 0) {
             axios({
@@ -38,7 +38,9 @@ class Fromref extends Component {
                     this.props.addNewUser(res.data.data)
                 }
             }
-            }).catch(error=>{console.log("toRef.js : ComponentDidMount : error : ",error)});
+            }).catch(error=>{
+                // console.log("toRef.js : ComponentDidMount : error : ",error)
+            });
 
         }
         else {
@@ -47,7 +49,7 @@ class Fromref extends Component {
                 referrerOwnerProfilePic: newData[0].data.profilepic
             })
         }
-        console.log("activit : ",referralAct)
+        // console.log("activit : ",referralAct)
         axios({
             method: 'get',
             url: config.base_dir + "/api/project/" + referralAct.issue,
@@ -62,7 +64,8 @@ class Fromref extends Component {
                 })
             }
         }).catch(error=>{
-            console.log("fromRef : componentDidMount : error : ",error)});
+            // console.log("fromRef : componentDidMount : error : ",error)
+        });
         
 
 

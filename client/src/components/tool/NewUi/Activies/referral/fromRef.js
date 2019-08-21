@@ -18,7 +18,7 @@ class Fromref extends Component {
     }
     componentDidMount() {
         const { referralAct, userData } = this.props;
-        console.log("referalAct : ",referralAct);
+        // console.log("referalAct : ",referralAct);
         var token = JSON.parse(localStorage.getItem('token'))
         var newData = userData.filter(user => user.key === referralAct.problemowner);
         if (newData.length === 0) {
@@ -36,7 +36,9 @@ class Fromref extends Component {
                     })
                     this.props.addNewUser(res.data.data)
                 }
-            }).catch(error=>{console.log("fromRef.js : ComponentDidMount : error : ",error)});
+            }).catch(error=>{
+                // console.log("fromRef.js : ComponentDidMount : error : ",error)
+            });
         }
         else {
             this.setState({
@@ -57,7 +59,7 @@ class Fromref extends Component {
                 })
             }
         }).catch(error=>{
-            console.log("fromRef : componentDidMount : error : ",error)
+            // console.log("fromRef : componentDidMount : error : ",error)
         })
 
     }
