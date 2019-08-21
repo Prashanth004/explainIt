@@ -157,11 +157,13 @@ export const activateProfile=(email)=>(dispatch)=>{
                         dispatch({
                             type:ACTIVATED_PROFILE
                         })
+                    }).catch(error=>{
+                        console.log("error : ",error)
                     })
                 
             }
         }
-    })
+    }).catch(error=>{console.log("emailAction : activateProfile : error : ",error)})
 
 }
 export const varifyActivation=(twitterHandle)=>(dispatch)=>{

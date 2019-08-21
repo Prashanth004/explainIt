@@ -335,8 +335,7 @@ class ScreenRecorder extends Component {
         var self = this;
 
         if (event.data.sourceId !== undefined) {
-            console.log("self.props.screenAction : ",self.props.screenAction);
-            console.log("FULL_SCREEN_SHARE : ",FULL_SCREEN_SHARE);
+         
             // if(self.props.screenAction === FULL_SCREEN_SHARE){
                 if (config.CALL_LOGS)
                 console.log("recieved source id : ", event.data.sourceId)
@@ -490,7 +489,6 @@ class ScreenRecorder extends Component {
 
     }
     componentWillUnmount() {
-        console.log("mouonting the enitre screen")
         this.props.turnnotbusy(this.props.twitterUserId);
         registerEndToBrowser()
         window.removeEventListener("beforeunload", this.onUnload);

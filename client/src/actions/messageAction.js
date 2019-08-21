@@ -96,7 +96,7 @@ export const saveRecordedMessage = (link,callTopic,fromId,subject,)=>(dispatch)=
             "Authorization":token,
         }
       };
-      axios.post(config.base_dir+'/api/message', postData, axiosConfig).then(response=>{});
+      axios.post(config.base_dir+'/api/message', postData, axiosConfig).then(response=>{}).catch(error=>{console.log("error : ",error)});
 }
 
 export const sendMessage = (link,callTopic, fromId, ToId, subject)=>(dispatch)=>{
@@ -131,7 +131,7 @@ export const sendMessage = (link,callTopic, fromId, ToId, subject)=>(dispatch)=>
                 payload:true
             })
         }
-    })
+    }).catch(error=>{console.log("error : ",error)})
 
 }
 export const hideTextBoxAfterRecord=()=>(dispatch)=>{

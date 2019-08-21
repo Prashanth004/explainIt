@@ -203,6 +203,7 @@ export const getAllActivities = (props)=>(dispatch)=>{
         
    
     }).catch(error=>{
+        console.log("error : ",error)
         dispatch({
             type:GET_ALL_ACTIVITES_FAILED,
             payload:error

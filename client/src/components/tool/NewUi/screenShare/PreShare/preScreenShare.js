@@ -108,6 +108,15 @@ class tweetSearch extends Component {
             tweetTested: false
         })
     }
+    componentDidCatch(error, info) {
+        // Display fallback UI
+        console.log("error : ",error);
+        console.log("info : ",info);
+        // this.setState({ hasError: true });
+        // You can also log the error to an error reporting service
+        // logErrorToMyService(error, info);
+      }
+    
     changeImputNumber(e) {
         var noOfMinutestemp = e.target.value;
 

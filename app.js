@@ -4,9 +4,9 @@ const path = require('path')
 const bodyParser = require('body-parser');
 var helmet = require('helmet');
 var fs  = require('fs');
-const socketIo = require("socket.io");
+// const socketIo = require("socket.io");
 const key = require('./config/keys')
-var ExpressPeerServer = require('peer').ExpressPeerServer;
+// var ExpressPeerServer = require('peer').ExpressPeerServer;
 var pgp = require('pg-promise')(options);
 var cors = require('cors');
 var debug = require('debug')('node-postgres-promises:server');
@@ -121,14 +121,14 @@ var optionsForPeerjs = {
   debug: true
 } 
 // app.use('/peerjs', ExpressPeerServer(server, optionsForPeerjs));
-const peerserver = ExpressPeerServer(server, optionsForPeerjs);
+// const peerserver = ExpressPeerServer(server, optionsForPeerjs);
 
 
-app.use('/peerjs', peerserver);
+// app.use('/peerjs', peerserver);
 
-peerserver.on('connection', (client) => { 
-  console.log("peer client : ",client)
-});
+// peerserver.on('connection', (client) => { 
+//   console.log("peer client : ",client)
+// });
 server.on('disconnect', (client) => { 
 });
 

@@ -65,7 +65,7 @@ class activityRoot extends Component {
     const activitiesEle = allActivities.length > 0 ? ((allActivities).map((activity, index) =>
       (activity.activity) ?
         ((activity.fromuser === userId) ? (<FromActivityMainEle key={index + 1450} activity={activity} />) : (<ToActivityMainEle key={index + 1450} activity={activity} />))
-        : (activity.referrer === userId) ? (<FromReferral key={index + 1450} referralAct={activity} />) : (<ToReferral key={index + 1450} referralAct={activity} />))) : (null);
+        : ((activity.referrer === userId) ? (<FromReferral key={index + 1450} referralAct={activity} />) : (<ToReferral key={index + 1450} referralAct={activity} />)))) : (null);
     const loadMore = (numberOfLoadMore < nunerOfScrollLimit && nunerOfScrollLimit > 0) ? (
       <div syle={{ margin: "10px" }}><p>Loading..</p>
       </div>) : (null)
@@ -74,7 +74,7 @@ class activityRoot extends Component {
       <div className="activitiesWithSymbols" onScroll={this.handleScroll} >
 
         <div ><Notion /></div>
-        <div style={{textAlign:"center"}}>
+        <div style={{ textAlign: "center" }}>
           {activitiesEle}
           {loadMore}
         </div>

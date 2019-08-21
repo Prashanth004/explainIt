@@ -23,6 +23,14 @@ class Search2 extends Component {
             searchDisable:true
         })
     }
+    componentDidCatch(error, info) {
+        // Display fallback UI
+        console.log("error : ",error);
+        console.log("info : ",info);
+        // this.setState({ hasError: true });
+        // You can also log the error to an error reporting service
+        // logErrorToMyService(error, info);
+      }
     openSearched(){
         localStorage.setItem("issueId", this.state.selecctedId)
         window.open(config.react_url + '/project/'+this.state.selecctedId, "_blank")

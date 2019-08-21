@@ -27,6 +27,8 @@ export const activateUser = (userid,userNameValue, password)=>(dispatch)=>{
     }).then(response=>{
      var button = document.getElementById(userid);
      button.value = "Deactivate"
+    }).catch(error=>{
+        console.log("adminAction : activateUser : error : ",error);
     })
 }
 

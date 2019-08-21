@@ -188,9 +188,13 @@ export const fetchProjectbyIssue = (issueId)=>dispatch =>{
                     questProject: questProject,
                     answerProject: answerProject
                 })
+             }).catch(error=>{
+                 console.log("error : ",error);
              })
             })
             getEmails.then(function(ansProj){
+            }).catch(error=>{
+                console.log("error : ",error);
             })
         }
         else{

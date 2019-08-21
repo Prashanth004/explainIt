@@ -31,6 +31,7 @@ class Posts extends React.Component {
         this.changeViewToList = this.changeViewToList.bind(this);
         // this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
         this.testHandle = this.testHandle.bind(this);
+        this.initiateSocketLoc = this.initiateSocketLoc.bind(this);
     }
     // initiateSocketLoc() {
     //     this.props.initiateSocket();
@@ -112,28 +113,59 @@ class Posts extends React.Component {
             }
         }
 
-       
-       
-        
     }
-    componentDidMount() {
-        window.addEventListener('storage', this.reloadPage)
+  
+    initiateSocketLoc(){
+        const self = this;
+        var connectionOptions =  {
+          "force new connection" : true,
+          "reconnection": true,
+          "reconnectionDelay": 2000,                  //starts with 2 secs delay, then 4, 6, 8, until 60 where it stays forever until it reconnects
+          "reconnectionDelayMax" : 60000,             //1 minute maximum delay between connections
+          "reconnectionAttempts": "Infinity",         //to prevent dead clients, having the user to having to manually reconnect after a server restart.
+          "timeout" : 10000,                           //before connect_error and connect_timeout are emitted.
+          "transports" : ["websocket"]                //forces the transport to be only websocket. Server needs to be setup as well/
+      }
+        try{
+          const socketloc = socketIOClient(config.base_dir, connectionOptions);
+          socketloc.on('reconnect_attempt', () => {
+            socketloc.io.opts.transports = ['websocket'];
+          });
+          socketloc.on('connect_failed', function () {
+              console.log("connection failed : ")
+          })
+          socketloc.on('error', function (err) {
+              console.log("socket error : ", err)
+          });
+          socketloc.on('connect_timeout', function (err) {
+              console.log("socket onnection_timeout : ", err)
+          });
+          socketloc.on("disconnect", () => {
+              console.log("socket disconnected")
+          })
+          socketloc.io.on("connect_error", () => {
+              console.log("connection_error")
+          })
+          self.props.initiateSocket(socketloc)
+      }
+      catch(error){
+          console.log("error : ",error)
+      }
+      }
+        componentDidMount() {
+          this.setState({ reducedWidth: window.innerWidth <= 700 });
+          const {socket} = this.props;
+          if( socket !==null){
+              if(!socket.connected){
+                this.initiateSocketLoc();
+              }
+          }else{
+                this.initiateSocketLoc();
+              
+          }
         window.addEventListener("resize", this.resize.bind(this));
         if(this.props.donValidationHandle && !this.state.testHandleStarted && this.props.authAction){
             this.testHandle()
-        }
-        const {socket} = this.props;
-        console.log("socket : ",socket)
-        if( socket !==null){
-            if(!socket.connected){
-                const socketloc = socketIOClient(config.base_dir);
-                console.log("socket : ",socketloc)
-                this.props.initiateSocket(socketloc)
-            }
-        }else{
-            const socketloc = socketIOClient(config.base_dir);
-            console.log("socket : ",socketloc)
-            this.props.initiateSocket(socketloc)
         }
         this.resize();
         if (this.props.socket !== null) {

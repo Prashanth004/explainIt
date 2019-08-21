@@ -142,9 +142,14 @@ export const getAllContacts = ()=>(dispatch)=>{
                     type:GOT_ALL_CONTACTS,
                     data:contactData
                 })
+            }).catch(error=>{
+                console.log("contactAction : getAllContacts : error : ",error);
             })
         })
         getUserDatils.then(function(ansProj){
+        })
+        .catch(error=>{
+            console.log("error : ",error)
         })
          }
     }).catch(error=>{

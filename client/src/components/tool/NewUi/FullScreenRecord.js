@@ -110,7 +110,6 @@ class FullScreenRecorder extends Component {
         this.props.sendMessage(this.props.sharablelink, this.props.callTopic, this.props.fromId, this.props.twitterUserId, subject)
     }
     startRecording() {
-        console.log("starting recording")
         var self = this;
         var constraints = null;
         registerRecordToBrowser();
@@ -159,7 +158,6 @@ class FullScreenRecorder extends Component {
                     type: 'video'
                 });
                 self.props.setStream(audioStream, screenStream, finalStream);
-                console.log("started recording")
                 self.props.fullStartedRecording();
                 recorder1.startRecording();
                 self.props.startRecorder(recorder1);
@@ -192,7 +190,6 @@ class FullScreenRecorder extends Component {
         var self = this;
         window.addEventListener("beforeunload", this.onUnload);
         function postMessageHandler(event) {
-            console.log("event : ",event)
             if (event.data.type) {
                 if (event.data.type === config.END_RECORD_FROM_EXTENSION) {
                     self.recordScreenStop()
@@ -210,11 +207,7 @@ class FullScreenRecorder extends Component {
                 self.setState({ permissonDenied: true })
             }
             else if (event.data.sourceId !== undefined) {
-                console.log("self.props.screenAction : ",self.props.screenAction);
-                console.log("FULL_SCREEN_SHARE : ",FULL_SCREEN_RECORD);
-                // if(self.props.screenAction === FULL_SCREEN_RECORD){
-
-                console.log("event for recording: ",event)
+         
                 self.props.saveSourceId(event.data.sourceId)
                 self.startRecording();
                 // }
@@ -438,7 +431,6 @@ class FullScreenRecorder extends Component {
                 })
             }
             else{
-                console.log("browser : ",result.name);
                 self.setState({ chrome:false});
             }
         }

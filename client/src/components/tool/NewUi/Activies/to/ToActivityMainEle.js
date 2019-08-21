@@ -64,6 +64,8 @@ class ActivityMain extends Component {
                 }
                 
                 }
+            }).catch(error=>{
+                console.log("toActivityMainEle : componentWillMount : error : ",error);
             })
         }
         else{

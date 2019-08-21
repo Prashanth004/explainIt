@@ -26,7 +26,11 @@ export const signInWithGoogle = (tokenBlob) => (dispatch) => {
                         token: token,
                         payload: true
                     })
+                }).catch(error =>{
+                    console.log("error : ",error);
                 })
+            }).catch(error=>{
+                console.log("error : ",error)
             })
         })
         .catch(err => {
@@ -59,7 +63,11 @@ export const signInWithGitHub = (code) =>(dispatch)=>{
                         token: token,
                         payload: true
                     })
+                }).catch(error=>{
+                    console.log("error : ",error);
                 })
+            }).catch(error=>{
+                console.log("error : ",error)
             })
         })
         .catch(err => {
@@ -97,10 +105,14 @@ export const signInWithTwitter = (response) => (dispatch) => {
                 activeStatus : Number(body.user.activation)
             })
 
+        }).catch(error=>{
+            console.log("error : ",error);
         })
 
 
-    });
+    }).catch(error=>{
+        console.log("error : ",error)
+    })
 }
 
 export const twitterAuthFailure = (error) => (dispatch) => {

@@ -7,27 +7,9 @@ import config from '../config/config'
 import axios from 'axios'
 
 export const initiateSocket = (socket) => (dispatch) => {
-    console.log("initialtin sockets")
    
   
-    // socket.on('reconnect_attempt', () => {
-    //     socket.io.opts.transports = ['polling', 'websocket'];
-    // });
-    socket.on('connect_failed', function () {
-        console.log("connection failed : ")
-    })
-    socket.on('error', function (err) {
-        console.log("socket error : ", err)
-    });
-    socket.on('connect_timeout', function (err) {
-        console.log("socket onnection_timeout : ", err)
-    });
-    socket.on("disconnect", () => {
-        console.log("socket disconnected")
-    })
-    socket.io.on("connect_error", () => {
-        console.log("connection_error")
-    })
+  
     dispatch({
         type: CREATE_SOCKET,
         payload: {
@@ -111,8 +93,7 @@ export const validateTwitterHandle = (twitterHandle) => dispatch => {
         }
 
 
-    })
-        .catch(err => {
+    }).catch(err => {
             console.log("error : ", err)
         })
 

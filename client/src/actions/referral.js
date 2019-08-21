@@ -27,6 +27,8 @@ export const saveReferral = (problemOwner, referrer, referreetwitter,referreeid,
                 type:SAVE_REFERRAL
             })
         }
+    }).catch(error=>{
+        console.log("referral.js : saveReferral : error : ",error)
     })
 }
 

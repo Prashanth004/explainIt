@@ -191,11 +191,7 @@ class ProfileCard extends Component {
         this.handleConfirm();
 
     }
-    componentWillReceiveProps(nextProps) {
-        // if(nextProps.screenAction){
-        //     if(nextProps.screenAction===)
-        // }
-    }
+
     startRecordScreen() {
         if (!this.props.showActivity || (this.props.showActivity && this.props.screenAction === FULL_SCREEN_SHARE)) {
             this.startAction()
@@ -350,12 +346,14 @@ class ProfileCard extends Component {
         const profile = (showProfile) ? (<Profile
             sharabeLink={this.props.sharabeLink}
             isHome={this.props.isHome} />) : (null);
-        const fineShareFront = ((this.props.screenAction === FULL_SCREEN_SHARE)?(<FullScreenShare
+        const fineShareFront = ((this.props.screenAction === FULL_SCREEN_SHARE)?(
+        <FullScreenShare
                 turnRedialWrong={this.turnRedialWrong}
                 closeImidiate={this.handleConfirm}
                 reStoreDefault={this.reStoreDefault}
                 savefile={this.props.saveVideoData}
-            />):(null))
+            />
+            ):(null))
         const fineShareBack = (this.props.screenAction === FULL_SCREEN_RECORD) ?
             (<FullScreenRecord
                 turnReRecordWrong={this.turnReRecordWrong}
