@@ -20,8 +20,8 @@ const Section1 = (props) => {
         save={saveRecording}
         discard={discardRecorded}
         discarded={discarded}
-        saved={saveStaus} />) : ((!saveStaus) ? (<div atyle={{textAlign:"center"}}>
-            <span>Record your portfolio.</span><br/>
+        saved={saveStaus} />) :((!saveStaus) ? (<div atyle={{textAlign:"center"}}>
+            <span>Record to introduce yourself and show case your work.</span><br/>
             <span className="hint--top" aria-label="Record screen ">
                 <FiVideo style={{ fontSize: "20px" }} onClick={clickRecord} />
             </span></div>) :
@@ -44,8 +44,10 @@ const Section1 = (props) => {
                         textAlign="left"
                         inputClass="inputboxes fullView" />
                     {bioErrorDiv}
+                    <br/>
                        <span>What am I good at?</span>
                     <br/>
+
                     <TextArea
                      placeholder="Whats the best way you can help people"
                         textvalue={goodAtValue}
@@ -54,7 +56,7 @@ const Section1 = (props) => {
                         changeFunction={changeGoodAt}
                         inputClass="inputboxes fullView" />
                     {goodAtErrorDiv}
-
+                    <br/>
                     <span>Portfolio</span>
                     <br/>
                     <TextArea
@@ -62,9 +64,11 @@ const Section1 = (props) => {
                         textvalue={worksValue}
                         limit={200}
                         changeFunction={changeWorks} inputClass="inputboxes fullView" />
+                      <br/>
                         <div style={{textAlign:"center",fontSize:"12px",color:"rgba(51, 51, 51, 0.589)"}}>
-                            {/* {recordDiv} */}
+                            {recordDiv}
                         </div>
+                        <br/>
                         <div style={{textAlign:"center", marginTop:"10px"}}>
                     <button  className="nextButton" onClick={uploadData}><FiSave style={{fontSize:"18px", marginTop:"-3px"}}/></button>
                 </div>
@@ -74,6 +78,7 @@ const mapStateToProps = state => ({
     recordMode: state.feedback.recordMode,
     discarded: state.feedback.discarded,
     saveStaus: state.feedback.saveStaus,
+    profileVidoeLink: state.profile.profileVidoeLink
 })
 export default connect(mapStateToProps, {discardRecorded,clickRecord,creatAnsProject})(Section1)
 

@@ -51,6 +51,7 @@ export default function(state = initialState, action){
                 ...state,
                 newissueIem:action.payload,
                 sharablelink:config.react_url+"/project/"+action.payload.issueid,
+                videoPath : action.payload.videofilepath,
                 successCreation:true
             }
             case RESET_ISSUE_ACTION:

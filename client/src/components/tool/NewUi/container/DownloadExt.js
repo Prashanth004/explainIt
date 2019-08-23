@@ -14,7 +14,7 @@ const DwnloadStyle = {
 export default (props) => {
   return (
       <div style={DwnloadStyle}>
-                <h5>Please down the chrome extension to continue</h5>
+                <h5>Please download the chrome extension to continue</h5>
                 <button className="buttonLight" onClick={props.downloadExtension}>Download Extension</button>
             </div>
   )

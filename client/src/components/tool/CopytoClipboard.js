@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import '../css/copyToClipboard.css'
+import '../css/copyToClipboard.css';
+import { MdContentCopy } from "react-icons/md";
 
 class copyToClipboard extends Component {
     constructor(props){
@@ -36,13 +37,9 @@ class copyToClipboard extends Component {
                     {/* <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
                     Copy Link
                     </button> */}
-                    <div className="cpyNewBtn">
-                        <img alt="copy"src={require('../images/cpyNew.png')}
-                        width="100%"
-                        onClick={this.copyToClipboard}
-                        margintop="5px"
-                        height="100%"></img>
-                    </div>
+                  
+                    <MdContentCopy style={{fontSize:"17px"}} onClick={this.copyToClipboard}/>
+
             </span>
         
       </div>

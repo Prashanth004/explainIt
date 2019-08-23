@@ -109,7 +109,7 @@ const conf = {
     RECORD_SCREEEN_EXPLAIN:"recordScreenExpalin",
     REFER_EXPLAIN:"referExplain",
     SHARE_SCREEN_EXPALIN:"shareScreenExplain",
-    ENVIRONMENT:"prod",
+    ENVIRONMENT:"test",
     DEV_ENV:true,
     CALL_LOGS:true,
     ACCEPT_SHARE_REQUEST:"acceptShareRequest",

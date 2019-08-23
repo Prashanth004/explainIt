@@ -3,7 +3,7 @@ import { GET_PROFILE_DETAILS,SAVED_RECORDING,
      UPDATE_USER_PROFILE_FAILED,
      OPEN_EDIT_PROFILE,ADD_NEW_ANSWER_PROJECT,
      CLOSE_EDIT_PROFILE,ADD_MORE_CREATED,
-     CHANGE_ONLINE_STATUS,
+     CHANGE_ONLINE_STATUS,GET_PROFILE_VIDEO_LINK,
      CHANGE_ONLINE_STATUS_FAILED,
      UPDATE_USER_PROFILE } from './types'
 import config from '../config/config';
@@ -39,6 +39,24 @@ export const changeOnlinestatus = (status)=>(dispatch)=>{
             type:CHANGE_ONLINE_STATUS_FAILED
         })
     })
+}
+export const getProfileVideoLink = (projectId)=>dispatch=>{
+    var token = JSON.parse(localStorage.getItem('token'));
+    axios({
+        method: 'get',
+        url: config.base_dir + '/api/project/issues/' +projectId,
+        headers: {
+            "Authorization": token,
+        }
+    }).then((response) => {
+        dispatch({
+            type:GET_PROFILE_VIDEO_LINK,
+            payload : response.data.data[0].videofilepath
+        })
+    })
+        .catch(error => {
+            console.log("profileAction.js : getProfileVideoLink : error : ", error);
+        })
 }
 export const getProfileDetails = (userId, profilePrivacy) => (dispatch) => {
     var token = JSON.parse(localStorage.getItem('token'))

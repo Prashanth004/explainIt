@@ -64,7 +64,7 @@ module.exports = {
     MESSAGE_ACTIVITY:"messageActivity",
     FROM_USER_ADMIN_ID:"2591624137",
     WELCOME_SUBJECT:"Welcome. Demo to explain the application",
-    LINK_RECORDING:"https://explain.bookmane.in/project/7314612",
+    LINK_RECORDING:"https://explain.bookmane.in/project/-638886",
     SAVE_RECORD:"saveRecording",
     
 

@@ -114,9 +114,25 @@ class ProfileForm extends Component {
         })
     }
     componentWillReceiveProps(nextProps){
+       
         if(nextProps.videoFilePath){
-            var worksValue = this.state.worksValue+" "+nextProps.videoFilePath
-            this.setState({worksValue:worksValue})
+            console.log("this.state.worksValue : ",this.state.worksValue)
+            if(this.state.worksValue.includes('portfolio')){
+                var workLinks = this.state.worksValue.split(" ");
+                console.log("array or links : ",workLinks);
+                workLinks = workLinks.filter(work=>!work.includes('portfolio'));
+                console.log("array withput potfolio : ",workLinks);
+                workLinks = workLinks.join(" ");
+                console.log("sting form : ",workLinks);
+                var worksValue = workLinks+" "+nextProps.videoFilePath
+                console.log("final posrtfollio link : ",worksValue)
+                this.setState({worksValue:worksValue})
+            
+            }else{
+                var worksValue = this.state.worksValue+" "+nextProps.videoFilePath
+                this.setState({worksValue:worksValue})
+            }
+           
         }
     }
     uploadData() {

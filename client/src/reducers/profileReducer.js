@@ -1,5 +1,5 @@
 import {GET_PROFILE_DETAILS,
-    UPDATE_USER_PROFILE,
+    UPDATE_USER_PROFILE,GET_PROFILE_VIDEO_LINK,
     UPDATE_USER_PROFILE_FAILED,
     OPEN_EDIT_PROFILE,ADD_NEW_ANSWER_PROJECT,
     CLOSE_EDIT_PROFILE,ADD_MORE_CREATED,
@@ -31,7 +31,7 @@ const initialState = {
     portfolio:"",
     onlineStatus:0,
     newAnswerProject:{},
-
+    profileVidoeLink:null,
     noLoadMoreCreated:0,
     totalNoLoadMoreCreated:0,
     activeFiveCreated:[]
@@ -55,6 +55,11 @@ export default function(state=initialState, action){
                 portfolio:action.portfolio,
                 twitterHandle:action.twitterHandle
 
+            }
+        case GET_PROFILE_VIDEO_LINK:
+            return{
+                ...state,
+                profileVidoeLink:action.payload
             }
         case ADD_NEW_ANSWER_PROJECT:
             return{

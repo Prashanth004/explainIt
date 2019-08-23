@@ -216,7 +216,7 @@ class ProfileCard extends Component {
         window.open("https://twitter.com/" + this.props.twitterHandle, '_blank')
     }
     render() {
-        var percentage = "380px";
+        var percentage = "325px";
         const folding = (this.props.isSceenSharing ||
             this.props.callAction ||
             this.props.isFullScreenRecording) ? (null) : ((!this.state.fold) ? (
@@ -267,6 +267,11 @@ class ProfileCard extends Component {
         const toolTipValue = !this.props.onlinestatus ? ('Offline - people can not send you share request')
             : ('Online - people can send you share request')
         var notifyBadge = null;
+                if (this.props.userId === this.props.profileId) {
+            notifyBadge = (<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y} />
+            )
+        }
+
         const onlineOffline = (this.props.isHome) ? (<span className="hint--left " aria-label={toolTipValue}>
             <Toggle
                 defaultChecked={defaultToggle}
@@ -277,10 +282,10 @@ class ProfileCard extends Component {
         </span>) : (null);
         var label = this.props.isHome ? (<div>
             <div style={{ width: '100%', height: "35px", display: "grid", gridTemplateColumns: "25% 50% 25%" }}>
-                <div style={{ textAlign: "left" }}>           <span className="hint--top" aria-label="Activities!">
+                <div style={{ textAlign: "left" }}  onClick={this.openInboxLoc}>           <span className="hint--top" aria-label="Activities!">
                     {notifyBadge}
                     <IconContext.Provider value={{ color: "#206f72", size: "25px" }}>
-                        <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.openInboxLoc} />
+                        <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }}/>
                     </IconContext.Provider>
                 </span>
                 </div>
@@ -291,19 +296,12 @@ class ProfileCard extends Component {
             </div>
             <div style={{ margin: "auto" }}>
                 <span className="hint--top" aria-label="double tap for details">
-                    <img alt="profile pic" width="82px" height="82px" src={this.props.profilePic}
+                    <img alt="profile pic" width="62px" height="62px" src={this.props.profilePic}
                         onDoubleClick={this.props.showProfileNow} style={{ borderRadius: "50%" }}></img>
                     {/* className="labelProfilePic"></img> */}
                 </span>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "25% 50% 25%", marginTop: "20px" }}>
-                <div>
-                    {/* {contactBtnDiv} */}
-                </div>
-                <div></div>
-                <div>
-                </div>
-            </div>
+            
             <div style={{ width: "100%", height: "1px", backgroundColor: "#43a8ac", marginTop: "30px" }}></div>
             <div style={{ height: "15px", textAlign: "right", width: "100%" }}>
                 {contactBtnDiv}
@@ -318,10 +316,10 @@ class ProfileCard extends Component {
             <div style={{ width: "30%", margin: "auto", display: "grid", gridTemplateColumns: "35% 30% 35%", marginTop: "20px" }}>
               
                 
-                <div style={{ textAlign: "left" }}>           <span className="hint--top" aria-label="Activities!">
+                <div style={{ textAlign: "left" }}  onClick={this.openInboxLoc}>  <span className="hint--top" aria-label="Activities!">
                     {notifyBadge}
                     <IconContext.Provider value={{ color: "#206f72", size: "25px" }}>
-                        <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} onClick={this.openInboxLoc} />
+                        <FiMail style={{ marginTop: "-1px", marginLeft: "-3px" }} />
                     </IconContext.Provider>
                 </span>
                 </div>
@@ -338,10 +336,6 @@ class ProfileCard extends Component {
             label = null;
         }
 
-        if (this.props.userId === this.props.profileId) {
-            notifyBadge = (<NotificationBadge count={this.props.totalUnread} effect={Effect.ROTATE_Y} />
-            )
-        }
 
         const profile = (showProfile) ? (<Profile
             sharabeLink={this.props.sharabeLink}
@@ -396,7 +390,7 @@ class ProfileCard extends Component {
 
 
 
-        var labelDiv = (<div className="labelContainerMain" style={{ minHeight: "200px" }}>
+        var labelDiv = (<div className="labelContainerMain" style={{ minHeight: "120px" }}>
             <div style={{ testAlign: "center" }}>
 
                 {label}

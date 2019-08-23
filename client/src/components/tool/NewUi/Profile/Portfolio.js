@@ -21,7 +21,6 @@ export default class componentName extends Component {
             this.setState({
                 project: response.data.data[0]
             })
-           
         })
     }
   render() {

@@ -24,6 +24,10 @@ for letsencrypt kets and cret.pem
 pg_dump -U bookmane -d toolArchi > dump.sql
 
 
+scaling nodejs Nginx redis
+https://blog.jscrambler.com/scaling-node-js-socket-server-with-nginx-and-redis/
+
+
 SERVER
 sudo -u postgres -i
 psql
