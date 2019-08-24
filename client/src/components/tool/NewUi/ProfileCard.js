@@ -40,6 +40,9 @@ import ReactCardFlip from 'react-card-flip';
 import { openInbox, openCreated } from "../../../actions/navAction";
 
 
+  
+
+
 class ProfileCard extends Component {
     constructor(props) {
         super(props);
@@ -64,6 +67,7 @@ class ProfileCard extends Component {
         this.turnRedialWrong = this.turnRedialWrong.bind(this);
         this.turnReRecordWrong = this.turnReRecordWrong.bind(this);
         this.openInboxLoc = this.openInboxLoc.bind(this);
+        this.toggleProfile = this.toggleProfile.bind(this);
     }
     handleClick(e) {
         e.preventDefault();
@@ -191,6 +195,10 @@ class ProfileCard extends Component {
         this.handleConfirm();
 
     }
+    toggleProfile(){
+        this.startSharingScreen();
+        this.props.showProfileNow();
+    }
 
     startRecordScreen() {
         if (!this.props.showActivity || (this.props.showActivity && this.props.screenAction === FULL_SCREEN_SHARE)) {
@@ -297,7 +305,7 @@ class ProfileCard extends Component {
             <div style={{ margin: "auto" }}>
                 <span className="hint--top" aria-label="double tap for details">
                     <img alt="profile pic" width="62px" height="62px" src={this.props.profilePic}
-                        onDoubleClick={this.props.showProfileNow} style={{ borderRadius: "50%" }}></img>
+                        onDoubleClick={this.toggleProfile} style={{ borderRadius: "50%" }}></img>
                     {/* className="labelProfilePic"></img> */}
                 </span>
             </div>
@@ -309,7 +317,7 @@ class ProfileCard extends Component {
         </div>) : (<div><div style={{ margin: "auto", marginTop: "15px" }}>
             <span className="hint--top" aria-label="double tap for details">
                 <img alt="profile pic" width="82px" height="82px" src={this.props.profilePic}
-                    onDoubleClick={this.props.showProfileNow} style={{ borderRadius: "50%" }}></img>
+                    onDoubleClick={this.toggleProfile} style={{ borderRadius: "50%" }}></img>
                 {/* className="labelProfilePic"></img> */}
             </span>
         </div>
@@ -372,6 +380,7 @@ class ProfileCard extends Component {
                         <h5 style={{ color: "transparent", height: "1px", fontSize: "1px" }}>ScreenRecord</h5>
                         <IconContext.Provider value={{ color: "#206f72", size: "23px" }}>
                             {fineShareBack}
+                          
                         </IconContext.Provider>
                         {folding}
 

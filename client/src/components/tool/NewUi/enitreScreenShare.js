@@ -1229,6 +1229,7 @@ validateTurn(iceServers){
 
         if (this.props.isSharingCompleted && this.state.blob !== null && !this.state.clickedOnLink) {
             postShareElements = (<PostSharing
+                progressPercentage={this.props.progressPercentage}
                 noOfIncreaseInTime={this.props.noOfIncreaseInTime}
                 initialTime={this.props.initialTime}
                 retryCall={this.retryCall}
@@ -1309,7 +1310,7 @@ validateTurn(iceServers){
                 else {
                     linkElement = ((!this.state.onGoingCallEnded) ? (
                         <div>
-                            <audio controls volume="0.1"     style={{ display: "none" }} autoPlay loop src={require('../../audio/dialing.mp3')}></audio>
+                            <audio controls volume="0.1"     style={{ display: "none" }} autoPlay loop src={require('../../audio/simple_beep.mp3')}></audio>
 
                             <div className="waitMsg">
                                 <p>Waiting for <b>{this.props.twitterName}</b> to accept the Screen Share request, if not we can drop a recorded message</p>
@@ -1497,6 +1498,7 @@ const mapStateToProps = state => ({
     explainBy: state.explain.explainBy,
     socket:state.home.socket,
     screenAction: state.tools.screenAction,
+    progressPercentage:state.tools.progressPercentage
 
     // secondScreenShareStarted:state.secondScreenShare.secondScreenShareStarted
 

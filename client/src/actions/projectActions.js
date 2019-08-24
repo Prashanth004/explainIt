@@ -1,6 +1,6 @@
 import {
     FETCH_PROJ_BY_ISSUE,
-    AUTH_FAIL,
+    AUTH_FAIL,  PROGREESS_UPDATE,
     CLEAR_ANSWER,
     FILE_SIZE_TOO_LARGE,
     RESET_ISSUE_ACTION,
@@ -280,6 +280,10 @@ export const creatAnsProject = (textExplain, imgData, videoData, audioData, item
         onUploadProgress: (progressEvent) => {
             var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             console.log("Progress:-" + percentCompleted);
+                 dispatch({
+                   type:PROGREESS_UPDATE,
+                   payload:percentCompleted
+               })
         }
     }).then(response => {
         if (response.status === 201) {

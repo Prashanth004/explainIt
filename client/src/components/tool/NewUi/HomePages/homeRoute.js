@@ -70,6 +70,11 @@ class HomeRoute extends Component {
             const socketloc = socketIOClient(config.base_dir);
             this.props.initiateSocket(socketloc)
         }
+        // socket.on(config.NEW_MESSAGE, data => {
+        //     if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
+        //         this.props.addActivity(data.data)
+        //     }
+        // })
     }
     render() {
         const twiHand = this.props.match.params.encrTwitterHandle.replace("@", "")

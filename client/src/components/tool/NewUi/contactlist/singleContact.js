@@ -27,6 +27,7 @@ class cntactCard extends Component {
           <div style={{textAlign:"left"}}>
             <a href={config.react_url+"/@"+twitterhandle}target="_blank"rel="noopener noreferrer" >
           <span>{username} </span></a>
+          <div style={{marginTop:"-10px"}}><span style={{fontSize:"10px"}}>(@{twitterhandle})</span></div>
           {gootAtDiv}
           </div>
       </div>

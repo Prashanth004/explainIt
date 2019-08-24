@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { FiX, FiSend,FiSave } from "react-icons/fi";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+import  Progress  from './container/progressbar';
 import { sendEmail } from '../../../actions/emailAction'
 import { getTwitterHandles } from '../../../actions/twitterApiAction';
 
@@ -55,11 +56,13 @@ class SaveProjects extends Component {
                     }}>
                     </span>
                 </div>
-                ) : (!this.props.failedToSave ? ((this.props.fromShareToRecord || this.state.sendMessageClicked) ? 
-                    (<div><p>Sending the recording to <b>@{this.props.twitterHandle}</b></p></div>) :
+                ) : this.props.progressPercentage===100?((!this.props.failedToSave ? ((this.props.fromShareToRecord || this.state.sendMessageClicked) ? 
+                    (<div><p>Sending the recording to <b>@{this.props.twitterHandle}</b></p>
+                    
+                     </div>) :
                 (<div><p>Saving the recording..</p></div>)) : (
                     <span>Problen occured while saving. This incident will be reported and fixed as soo as possible.</span>
-                ))
+                ))):( <Progress value={this.props.progressPercentage}wordings="uploading.." />)
             )
     }
 }
@@ -76,7 +79,8 @@ const mapStateToProps = state => ({
     fromShareToRecord: state.message.fromShareToRecord,
     explainIssue: state.message.explainIssue,
     failedToSave: state.issues.failedToSave,
-    topicOfTheCall:state.call.topicOfTheCall
+    topicOfTheCall:state.call.topicOfTheCall,
+    progressPercentage:state.tools.progressPercentage
 
 })
 

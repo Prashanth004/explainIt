@@ -41,7 +41,7 @@ export const NotPresentOnExplain = (props) =>{
             fontSize: "15px",
             marginTop:"-35px"
         }}>
-            <FiArrowLeft onClick={props.closeImidiate} />
+            <FiArrowLeft  onClick={props.closeImidiate}  />
         </span>
         <div  className="TwiValidInfo" >
         <ProfileNotOnExplain

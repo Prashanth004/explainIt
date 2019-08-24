@@ -2,7 +2,7 @@ import {DISPLAY_SCREEN_SHARE,
     SCREEN_SHARE,
     DISPLAY_SCREEN_RECORD,
     SCREEN_RECORD,
-    INBOX,
+    INBOX,PROGREESS_UPDATE,
     DISPLAY_INBOX,
     START_SHARING,
     START_RECORDING,
@@ -33,7 +33,7 @@ const initialState ={
     isFullSharingCompleted:false,
     isFullScreenRecording:false,
     isFullRecordCompleted:false,
-
+    progressPercentage:0
 }
 
 export default (state=initialState, action)=>{
@@ -48,6 +48,11 @@ export default (state=initialState, action)=>{
                 ...state,
                 screenAction:SCREEN_RECORD,
             }
+        case PROGREESS_UPDATE:
+                return{
+                    ...state,
+                    progressPercentage:action.payload
+                }
         case DISPLAY_INBOX:
             return{
             screenAction:INBOX,
@@ -135,6 +140,7 @@ export default (state=initialState, action)=>{
                 isFullSharingCompleted:false,
                 isFullScreenRecording:false,
                 isFullRecordCompleted:false,
+                progressPercentage:0
             }
         default :
             return state

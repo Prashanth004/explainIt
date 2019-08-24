@@ -316,6 +316,10 @@ export const creatAnsProject =(textExplain, imgData, videoData,audioData,items,i
         onUploadProgress: (progressEvent) => {
             var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
                console.log("Progress:-"+percentCompleted);
+            //    dispatch({
+            //        type:PROGREESS_UPDATE,
+            //        payload:percentCompleted
+            //    })
         }
     }).then(response => {
         if(response.status===201)

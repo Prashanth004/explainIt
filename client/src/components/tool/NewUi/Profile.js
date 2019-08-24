@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { hideProfile } from '../../../actions/ProfileCardAction';
 import PropType from 'prop-types';
 import ProfileForm from './Profile/';
-import CopyToClipboard from '../CopytoClipboard'
+import CopyToClipboard from './container/copyToClipBoard'
 import { openEditProfile, closeEditProfile, getProfileVideoLink } from '../../../actions/profileAction'
 import { FiEdit,FiEdit2, FiLink2, FiLink } from "react-icons/fi";
 import axios from 'axios';
@@ -30,6 +30,11 @@ class Profile extends Component {
             var works = (nextProps.portfolio).split(" ");
             works = works.filter(element => element !== "");
             this.setState({ works: works });
+            var portfolioLinkLoc = works.filter(element => element.includes('portfolio'));
+            if (portfolioLinkLoc.length !== 0) {
+                this.props.getProfileVideoLink(portfolioLinkLoc[0].split('/')[4])
+            }
+    
         }
 
     }

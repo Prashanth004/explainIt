@@ -14,7 +14,7 @@ const conf = {
     token:token,
     googleClientId:"308795475823-1uvk577becdqe5dpekouia3juuu961f8.apps.googleusercontent.com",
 
-    explainerVideo : "https://explain.bookmane.in/public/audio/2019_7_8__15_43_44video.mkv",
+    explainerVideo : "https://explain.bookmane.in/public/audio/2246886_2019_8_23_12_56_27_2246886_wat_final.mkv",
     // peerHost:window.location.hostname,
     peerHost:"bookmane.in",
     // peerPort : 9000,

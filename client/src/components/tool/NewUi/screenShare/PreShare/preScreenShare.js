@@ -206,10 +206,11 @@ class tweetSearch extends Component {
 
         const validatinginfo = (tweetTested && !doneTweeting) ? (
             (doneFetching && fetchProfile) ?
-                (noInternet ? (<NoInternet />) : ((!twitterHandleValid ? (<InValidHandle />) :
+                (noInternet ? (<NoInternet   closeImidiate={this.props.closeImidiate} />) : ((!twitterHandleValid ? (<InValidHandle />) :
                     (selfShare ? (<SelfShareInfo changeTweetStateNeg={this.changeTweetStateNeg}
                         closeImidiate={this.props.closeImidiate} />) :
                         (!isPresentInExplain ? (<NotPresentOnExplain
+                            closeImidiate={this.props.closeImidiate} 
                             changeTweetStateNeg={this.changeTweetStateNeg}
                             isVisitProfile={isVisitProfile}
                             twitterhandle={twitterHandle}

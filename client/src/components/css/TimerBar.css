@@ -4,7 +4,7 @@ height:05px;
     width:100%;
 background-color: rgb(211, 207, 207);
 }
-.progress{
+.progressInnerBar{
     height:5px;
 background-color:rgb(6, 18, 128);
     width:0px;

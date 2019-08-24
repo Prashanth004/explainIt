@@ -7,7 +7,7 @@ export default () => {
   return (
     <div>
        <div className="progresDiv">
-                    <div  className="progress" id="pbar" ></div>
+                    <div  className="progressInnerBar" id="pbar" ></div>
                 </div>
     </div>
   )

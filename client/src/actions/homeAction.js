@@ -8,7 +8,12 @@ import axios from 'axios'
 
 export const initiateSocket = (socket) => (dispatch) => {
    
-  
+    // nextProps.socket.on(config.NEW_MESSAGE, data => {
+    //     console.log("added new Activit : ",data.data);
+    //     if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
+    //         this.props.addActivity(data.data)
+    //     }
+    // })
   
     dispatch({
         type: CREATE_SOCKET,

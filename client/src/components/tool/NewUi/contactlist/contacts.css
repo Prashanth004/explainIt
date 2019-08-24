@@ -12,7 +12,7 @@ border-color:#dde2e2;
 
 .singleContact{
     width:85%;
-    height: 60px;
+    min-height: 70px;
     margin:auto;
     margin-top:5px;
     margin-bottom:5px;

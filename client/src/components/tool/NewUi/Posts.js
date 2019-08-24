@@ -96,16 +96,17 @@ class Posts extends React.Component {
     componentWillReceiveProps(nextProps){
         // const self = this;
         if(nextProps.socket){
-            nextProps.socket.on(config.SAVED_NEW_PROJECT, data => {
-                if (data.userId === this.props.userId) {
+            // nextProps.socket.on(config.SAVED_NEW_PROJECT, data => {
+            //     if (data.userId === this.props.userId) {
                   
-                }
-            })
-            nextProps.socket.on(config.NEW_MESSAGE, data => {
-                if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
-                    this.props.addActivity(data.data)
-                }
-            })
+            //     }
+            // })
+            // nextProps.socket.on(config.NEW_MESSAGE, data => {
+            //     console.log("added new Activit : ",data.data);
+            //     if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
+            //         this.props.addActivity(data.data)
+            //     }
+            // })
         }
         if(nextProps.donValidationHandle || nextProps.authAction){
             if(nextProps.donValidationHandle && !this.state.testHandleStarted && nextProps.authAction){
@@ -177,6 +178,7 @@ class Posts extends React.Component {
             this.props.socket.on(config.NEW_MESSAGE, data => {
                 if (data.touser === (this.props.userId) || data.fromuser === (this.props.userId)) {
                     //this.props.getAllActivities()
+                    console.log("added new Activit : ",data.data);
                     this.props.addActivity(data.data)
                 }
             })

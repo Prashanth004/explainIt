@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { FULL_SCREEN_RECORD, FULL_SCREEN_SHARE } from '../../../actions/types';
-
 import PreScreenRecord from './screenRecord/preScreenRecord'
 import RecordRTC from 'recordrtc';
 import { pauseRecording, resetRecorder, resumeRecording, startRecorder } from '../../../actions/recoderAction'
@@ -555,6 +554,8 @@ class FullScreenRecorder extends Component {
         else if (this.props.isSaved && this.props.isFullRecordCompleted) {
             postShareElements = (<div>
                 <p>Sending the message. Please wait..</p>
+               
+                
             </div>)
 
         }
@@ -613,6 +614,7 @@ const mapStateToProps = state => ({
     topicIssueId:state.explain.issueId,
     currentTime: state.recorder.currentTime,
     screenAction: state.tools.screenAction,
+    progressPercentage: state.tools.progressPercentage
 
 
 })

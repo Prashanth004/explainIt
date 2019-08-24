@@ -2,7 +2,9 @@ import React from 'react';
 import CopyToClipboard from '../../CopytoClipboard';
 import { MdReplay } from "react-icons/md";
 import { FiX, FiVideo } from "react-icons/fi";
-import config from '../../../../config/config'
+import config from '../../../../config/config';
+import  Progress  from '../container/progressbar';
+
 
 export default (props) => {
     const recrdsend=!props.saveinitiated?(<p>You can record the screen and send it</p>):(null);
@@ -24,6 +26,7 @@ var videoTagWithAudio = (<div>
         <p>Link To access your recording.</p>
         {linkToAccess}
         <p>The call was initiated for {props.initialTime} minutes.You added {props.noOfIncreaseInTime} minutes to the call.</p>
+        <Progress value={props.progressPercentage}wordings="uploading.." />
     </div>
 </div>)
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import '../css/copyToClipboard.css'
 
 class copyToClipboard extends Component {
     constructor(props){
@@ -27,17 +26,15 @@ class copyToClipboard extends Component {
     }
   render() {
     return (
-      <div className="copyToCipboardDiv">
+      <div>
          
-      <input   ref={(textarea) => this.textArea = textarea} className="myInputClip" type="text"
+      <input style={{height:"20px", borderStyle:"none",borderBottomStyle:"solid",width:"90%",borderColor:"#195f61",borderWidth:"0.5px"}} ref={(textarea) => this.textArea = textarea}  type="text"
       onChange={this.changeCopyDiv}
        value={this.props.sharablelink}/>
                 <span className="hint--top" aria-label={this.state.copyStatus}>
-                    {/* <button className="buttonDark" id="afterSave" onClick={this.copyToClipboard}>
-                    Copy Link
-                    </button> */}
-                    <div className="cpyNewBtn">
-                        <img alt="copy"src={require('../images/cpyNew.png')}
+                   
+                    <div style={{width:"20px",height:"20px",marginTop:"-12px"}}>
+                        <img alt="copy"src={require('../../../images/cpyNew.png')}
                         width="100%"
                         onClick={this.copyToClipboard}
                         margintop="5px"

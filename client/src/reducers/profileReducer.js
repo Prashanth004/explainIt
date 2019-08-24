@@ -1,6 +1,6 @@
 import {GET_PROFILE_DETAILS,
     UPDATE_USER_PROFILE,GET_PROFILE_VIDEO_LINK,
-    UPDATE_USER_PROFILE_FAILED,
+    UPDATE_USER_PROFILE_FAILED,PROGREESS_UPDATE,
     OPEN_EDIT_PROFILE,ADD_NEW_ANSWER_PROJECT,
     CLOSE_EDIT_PROFILE,ADD_MORE_CREATED,
     CHANGE_ONLINE_STATUS,
@@ -56,6 +56,7 @@ export default function(state=initialState, action){
                 twitterHandle:action.twitterHandle
 
             }
+
         case GET_PROFILE_VIDEO_LINK:
             return{
                 ...state,
