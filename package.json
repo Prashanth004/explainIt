@@ -40,7 +40,7 @@
     "pg-promise": "^5.9.7",
     "random-number": "0.0.9",
     "react-pose": "^4.0.7",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.4.0",
     "twitter": "^1.7.1",
     "video-react": "^0.13.2",
     "video.js": "^7.4.1"
