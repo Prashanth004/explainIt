@@ -23,7 +23,7 @@
     "express-session": "^1.15.6",
     "file-saver": "^2.0.0",
     "http-errors": "~1.6.2",
-    "images-scraper": "^2.0.11",
+    "images-scraper": "^2.0.12",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "multer": "^1.4.1",
